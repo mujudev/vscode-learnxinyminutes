@@ -1,0 +1,1054 @@
+<h2>Python</h2>
+<p>Python was created by Guido van Rossum in the early 90s. It is now one of the<br>
+most popular languages in existence. I fell in love with Python for its<br>
+syntactic clarity. It's basically executable pseudocode.</p>
+<p>Note: This article applies to Python 3 specifically. Check out<br>
+<a href="http://learnxinyminutes.com/docs/pythonlegacy/" rel="nofollow">here</a> if you want to learn the<br>
+old Python 2.7</p>
+<div class="highlight highlight-source-python"><pre class="notranslate"><span class="pl-c"># Single line comments start with a number symbol.</span>
+
+<span class="pl-s">""" Multiline strings can be written</span>
+<span class="pl-s">    using three "s, and are often used</span>
+<span class="pl-s">    as documentation.</span>
+<span class="pl-s">"""</span>
+
+<span class="pl-c">####################################################</span>
+<span class="pl-c">## 1. Primitive Datatypes and Operators</span>
+<span class="pl-c">####################################################</span>
+
+<span class="pl-c"># You have numbers</span>
+<span class="pl-c1">3</span>  <span class="pl-c"># =&gt; 3</span>
+
+<span class="pl-c"># Math is what you would expect</span>
+<span class="pl-c1">1</span> <span class="pl-c1">+</span> <span class="pl-c1">1</span>   <span class="pl-c"># =&gt; 2</span>
+<span class="pl-c1">8</span> <span class="pl-c1">-</span> <span class="pl-c1">1</span>   <span class="pl-c"># =&gt; 7</span>
+<span class="pl-c1">10</span> <span class="pl-c1">*</span> <span class="pl-c1">2</span>  <span class="pl-c"># =&gt; 20</span>
+<span class="pl-c1">35</span> <span class="pl-c1">/</span> <span class="pl-c1">5</span>  <span class="pl-c"># =&gt; 7.0</span>
+
+<span class="pl-c"># Integer division rounds down for both positive and negative numbers.</span>
+<span class="pl-c1">5</span> <span class="pl-c1">//</span> <span class="pl-c1">3</span>       <span class="pl-c"># =&gt; 1</span>
+<span class="pl-c1">-</span><span class="pl-c1">5</span> <span class="pl-c1">//</span> <span class="pl-c1">3</span>      <span class="pl-c"># =&gt; -2</span>
+<span class="pl-c1">5.0</span> <span class="pl-c1">//</span> <span class="pl-c1">3.0</span>   <span class="pl-c"># =&gt; 1.0 # works on floats too</span>
+<span class="pl-c1">-</span><span class="pl-c1">5.0</span> <span class="pl-c1">//</span> <span class="pl-c1">3.0</span>  <span class="pl-c"># =&gt; -2.0</span>
+
+<span class="pl-c"># The result of division is always a float</span>
+<span class="pl-c1">10.0</span> <span class="pl-c1">/</span> <span class="pl-c1">3</span>  <span class="pl-c"># =&gt; 3.3333333333333335</span>
+
+<span class="pl-c"># Modulo operation</span>
+<span class="pl-c1">7</span> <span class="pl-c1">%</span> <span class="pl-c1">3</span>   <span class="pl-c"># =&gt; 1</span>
+<span class="pl-c"># i % j have the same sign as j, unlike C</span>
+<span class="pl-c1">-</span><span class="pl-c1">7</span> <span class="pl-c1">%</span> <span class="pl-c1">3</span>  <span class="pl-c"># =&gt; 2</span>
+
+<span class="pl-c"># Exponentiation (x**y, x to the yth power)</span>
+<span class="pl-c1">2</span><span class="pl-c1">**</span><span class="pl-c1">3</span>  <span class="pl-c"># =&gt; 8</span>
+
+<span class="pl-c"># Enforce precedence with parentheses</span>
+<span class="pl-c1">1</span> <span class="pl-c1">+</span> <span class="pl-c1">3</span> <span class="pl-c1">*</span> <span class="pl-c1">2</span>    <span class="pl-c"># =&gt; 7</span>
+(<span class="pl-c1">1</span> <span class="pl-c1">+</span> <span class="pl-c1">3</span>) <span class="pl-c1">*</span> <span class="pl-c1">2</span>  <span class="pl-c"># =&gt; 8</span>
+
+<span class="pl-c"># Boolean values are primitives (Note: the capitalization)</span>
+<span class="pl-c1">True</span>   <span class="pl-c"># =&gt; True</span>
+<span class="pl-c1">False</span>  <span class="pl-c"># =&gt; False</span>
+
+<span class="pl-c"># negate with not</span>
+<span class="pl-c1">not</span> <span class="pl-c1">True</span>   <span class="pl-c"># =&gt; False</span>
+<span class="pl-c1">not</span> <span class="pl-c1">False</span>  <span class="pl-c"># =&gt; True</span>
+
+<span class="pl-c"># Boolean Operators</span>
+<span class="pl-c"># Note "and" and "or" are case-sensitive</span>
+<span class="pl-c1">True</span> <span class="pl-c1">and</span> <span class="pl-c1">False</span>  <span class="pl-c"># =&gt; False</span>
+<span class="pl-c1">False</span> <span class="pl-c1">or</span> <span class="pl-c1">True</span>   <span class="pl-c"># =&gt; True</span>
+
+<span class="pl-c"># True and False are actually 1 and 0 but with different keywords</span>
+<span class="pl-c1">True</span> <span class="pl-c1">+</span> <span class="pl-c1">True</span> <span class="pl-c"># =&gt; 2</span>
+<span class="pl-c1">True</span> <span class="pl-c1">*</span> <span class="pl-c1">8</span>    <span class="pl-c"># =&gt; 8</span>
+<span class="pl-c1">False</span> <span class="pl-c1">-</span> <span class="pl-c1">5</span>   <span class="pl-c"># =&gt; -5</span>
+
+<span class="pl-c"># Comparison operators look at the numerical value of True and False</span>
+<span class="pl-c1">0</span> <span class="pl-c1">==</span> <span class="pl-c1">False</span>  <span class="pl-c"># =&gt; True</span>
+<span class="pl-c1">2</span> <span class="pl-c1">&gt;</span> <span class="pl-c1">True</span>    <span class="pl-c"># =&gt; True</span>
+<span class="pl-c1">2</span> <span class="pl-c1">==</span> <span class="pl-c1">True</span>   <span class="pl-c"># =&gt; False</span>
+<span class="pl-c1">-</span><span class="pl-c1">5</span> <span class="pl-c1">!=</span> <span class="pl-c1">False</span> <span class="pl-c"># =&gt; True</span>
+
+<span class="pl-c"># None, 0, and empty strings/lists/dicts/tuples/sets all evaluate to False.</span>
+<span class="pl-c"># All other values are True</span>
+<span class="pl-en">bool</span>(<span class="pl-c1">0</span>)     <span class="pl-c"># =&gt; False</span>
+<span class="pl-en">bool</span>(<span class="pl-s">""</span>)    <span class="pl-c"># =&gt; False</span>
+<span class="pl-en">bool</span>([])    <span class="pl-c"># =&gt; False</span>
+<span class="pl-en">bool</span>({})    <span class="pl-c"># =&gt; False</span>
+<span class="pl-en">bool</span>(())    <span class="pl-c"># =&gt; False</span>
+<span class="pl-en">bool</span>(<span class="pl-en">set</span>()) <span class="pl-c"># =&gt; False</span>
+<span class="pl-en">bool</span>(<span class="pl-c1">4</span>)     <span class="pl-c"># =&gt; True</span>
+<span class="pl-en">bool</span>(<span class="pl-c1">-</span><span class="pl-c1">6</span>)    <span class="pl-c"># =&gt; True</span>
+
+<span class="pl-c"># Using boolean logical operators on ints casts them to booleans for evaluation,</span>
+<span class="pl-c"># but their non-cast value is returned. Don't mix up with bool(ints) and bitwise</span>
+<span class="pl-c"># and/or (&amp;,|)</span>
+<span class="pl-en">bool</span>(<span class="pl-c1">0</span>)     <span class="pl-c"># =&gt; False</span>
+<span class="pl-en">bool</span>(<span class="pl-c1">2</span>)     <span class="pl-c"># =&gt; True</span>
+<span class="pl-c1">0</span> <span class="pl-c1">and</span> <span class="pl-c1">2</span>     <span class="pl-c"># =&gt; 0</span>
+<span class="pl-en">bool</span>(<span class="pl-c1">-</span><span class="pl-c1">5</span>)    <span class="pl-c"># =&gt; True</span>
+<span class="pl-en">bool</span>(<span class="pl-c1">2</span>)     <span class="pl-c"># =&gt; True</span>
+<span class="pl-c1">-</span><span class="pl-c1">5</span> <span class="pl-c1">or</span> <span class="pl-c1">0</span>     <span class="pl-c"># =&gt; -5</span>
+
+<span class="pl-c"># Equality is ==</span>
+<span class="pl-c1">1</span> <span class="pl-c1">==</span> <span class="pl-c1">1</span>  <span class="pl-c"># =&gt; True</span>
+<span class="pl-c1">2</span> <span class="pl-c1">==</span> <span class="pl-c1">1</span>  <span class="pl-c"># =&gt; False</span>
+
+<span class="pl-c"># Inequality is !=</span>
+<span class="pl-c1">1</span> <span class="pl-c1">!=</span> <span class="pl-c1">1</span>  <span class="pl-c"># =&gt; False</span>
+<span class="pl-c1">2</span> <span class="pl-c1">!=</span> <span class="pl-c1">1</span>  <span class="pl-c"># =&gt; True</span>
+
+<span class="pl-c"># More comparisons</span>
+<span class="pl-c1">1</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">10</span>  <span class="pl-c"># =&gt; True</span>
+<span class="pl-c1">1</span> <span class="pl-c1">&gt;</span> <span class="pl-c1">10</span>  <span class="pl-c"># =&gt; False</span>
+<span class="pl-c1">2</span> <span class="pl-c1">&lt;=</span> <span class="pl-c1">2</span>  <span class="pl-c"># =&gt; True</span>
+<span class="pl-c1">2</span> <span class="pl-c1">&gt;=</span> <span class="pl-c1">2</span>  <span class="pl-c"># =&gt; True</span>
+
+<span class="pl-c"># Seeing whether a value is in a range</span>
+<span class="pl-c1">1</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">2</span> <span class="pl-c1">and</span> <span class="pl-c1">2</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">3</span>  <span class="pl-c"># =&gt; True</span>
+<span class="pl-c1">2</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">3</span> <span class="pl-c1">and</span> <span class="pl-c1">3</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">2</span>  <span class="pl-c"># =&gt; False</span>
+<span class="pl-c"># Chaining makes this look nicer</span>
+<span class="pl-c1">1</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">2</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">3</span>  <span class="pl-c"># =&gt; True</span>
+<span class="pl-c1">2</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">3</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">2</span>  <span class="pl-c"># =&gt; False</span>
+
+<span class="pl-c"># (is vs. ==) is checks if two variables refer to the same object, but == checks</span>
+<span class="pl-c"># if the objects pointed to have the same values.</span>
+<span class="pl-s1">a</span> <span class="pl-c1">=</span> [<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span>]  <span class="pl-c"># Point a at a new list, [1, 2, 3, 4]</span>
+<span class="pl-s1">b</span> <span class="pl-c1">=</span> <span class="pl-s1">a</span>             <span class="pl-c"># Point b at what a is pointing to</span>
+<span class="pl-s1">b</span> <span class="pl-c1">is</span> <span class="pl-s1">a</span>            <span class="pl-c"># =&gt; True, a and b refer to the same object</span>
+<span class="pl-s1">b</span> <span class="pl-c1">==</span> <span class="pl-s1">a</span>            <span class="pl-c"># =&gt; True, a's and b's objects are equal</span>
+<span class="pl-s1">b</span> <span class="pl-c1">=</span> [<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span>]  <span class="pl-c"># Point b at a new list, [1, 2, 3, 4]</span>
+<span class="pl-s1">b</span> <span class="pl-c1">is</span> <span class="pl-s1">a</span>            <span class="pl-c"># =&gt; False, a and b do not refer to the same object</span>
+<span class="pl-s1">b</span> <span class="pl-c1">==</span> <span class="pl-s1">a</span>            <span class="pl-c"># =&gt; True, a's and b's objects are equal</span>
+
+<span class="pl-c"># Strings are created with " or '</span>
+<span class="pl-s">"This is a string."</span>
+<span class="pl-s">'This is also a string.'</span>
+
+<span class="pl-c"># Strings can be added too</span>
+<span class="pl-s">"Hello "</span> <span class="pl-c1">+</span> <span class="pl-s">"world!"</span>  <span class="pl-c"># =&gt; "Hello world!"</span>
+<span class="pl-c"># String literals (but not variables) can be concatenated without using '+'</span>
+<span class="pl-s">"Hello "</span> <span class="pl-s">"world!"</span>    <span class="pl-c"># =&gt; "Hello world!"</span>
+
+<span class="pl-c"># A string can be treated like a list of characters</span>
+<span class="pl-s">"Hello world!"</span>[<span class="pl-c1">0</span>]  <span class="pl-c"># =&gt; 'H'</span>
+
+<span class="pl-c"># You can find the length of a string</span>
+<span class="pl-en">len</span>(<span class="pl-s">"This is a string"</span>)  <span class="pl-c"># =&gt; 16</span>
+
+<span class="pl-c"># Since Python 3.6, you can use f-strings or formatted string literals.</span>
+<span class="pl-s1">name</span> <span class="pl-c1">=</span> <span class="pl-s">"Reiko"</span>
+<span class="pl-s">f"She said her name is <span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">name</span><span class="pl-kos">}</span></span>."</span> <span class="pl-c"># =&gt; "She said her name is Reiko"</span>
+<span class="pl-c"># Any valid Python expression inside these braces is returned to the string.</span>
+<span class="pl-s">f"<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">name</span><span class="pl-kos">}</span></span> is <span class="pl-s1"><span class="pl-kos">{</span><span class="pl-en">len</span>(<span class="pl-s1">name</span>)<span class="pl-kos">}</span></span> characters long."</span> <span class="pl-c"># =&gt; "Reiko is 5 characters long."</span>
+
+<span class="pl-c"># None is an object</span>
+<span class="pl-c1">None</span>  <span class="pl-c"># =&gt; None</span>
+
+<span class="pl-c"># Don't use the equality "==" symbol to compare objects to None</span>
+<span class="pl-c"># Use "is" instead. This checks for equality of object identity.</span>
+<span class="pl-s">"etc"</span> <span class="pl-c1">is</span> <span class="pl-c1">None</span>  <span class="pl-c"># =&gt; False</span>
+<span class="pl-c1">None</span> <span class="pl-c1">is</span> <span class="pl-c1">None</span>   <span class="pl-c"># =&gt; True</span>
+
+<span class="pl-c">####################################################</span>
+<span class="pl-c">## 2. Variables and Collections</span>
+<span class="pl-c">####################################################</span>
+
+<span class="pl-c"># Python has a print function</span>
+<span class="pl-en">print</span>(<span class="pl-s">"I'm Python. Nice to meet you!"</span>)  <span class="pl-c"># =&gt; I'm Python. Nice to meet you!</span>
+
+<span class="pl-c"># By default the print function also prints out a newline at the end.</span>
+<span class="pl-c"># Use the optional argument end to change the end string.</span>
+<span class="pl-en">print</span>(<span class="pl-s">"Hello, World"</span>, <span class="pl-s1">end</span><span class="pl-c1">=</span><span class="pl-s">"!"</span>)  <span class="pl-c"># =&gt; Hello, World!</span>
+
+<span class="pl-c"># Simple way to get input data from console</span>
+<span class="pl-s1">input_string_var</span> <span class="pl-c1">=</span> <span class="pl-en">input</span>(<span class="pl-s">"Enter some data: "</span>) <span class="pl-c"># Returns the data as a string</span>
+
+<span class="pl-c"># There are no declarations, only assignments.</span>
+<span class="pl-c"># Convention is to use lower_case_with_underscores</span>
+<span class="pl-s1">some_var</span> <span class="pl-c1">=</span> <span class="pl-c1">5</span>
+<span class="pl-s1">some_var</span>  <span class="pl-c"># =&gt; 5</span>
+
+<span class="pl-c"># Accessing a previously unassigned variable is an exception.</span>
+<span class="pl-c"># See Control Flow to learn more about exception handling.</span>
+<span class="pl-s1">some_unknown_var</span>  <span class="pl-c"># Raises a NameError</span>
+
+<span class="pl-c"># if can be used as an expression</span>
+<span class="pl-c"># Equivalent of C's '?:' ternary operator</span>
+<span class="pl-s">"yay!"</span> <span class="pl-k">if</span> <span class="pl-c1">0</span> <span class="pl-c1">&gt;</span> <span class="pl-c1">1</span> <span class="pl-k">else</span> <span class="pl-s">"nay!"</span>  <span class="pl-c"># =&gt; "nay!"</span>
+
+<span class="pl-c"># Lists store sequences</span>
+<span class="pl-s1">li</span> <span class="pl-c1">=</span> []
+<span class="pl-c"># You can start with a prefilled list</span>
+<span class="pl-s1">other_li</span> <span class="pl-c1">=</span> [<span class="pl-c1">4</span>, <span class="pl-c1">5</span>, <span class="pl-c1">6</span>]
+
+<span class="pl-c"># Add stuff to the end of a list with append</span>
+<span class="pl-s1">li</span>.<span class="pl-en">append</span>(<span class="pl-c1">1</span>)    <span class="pl-c"># li is now [1]</span>
+<span class="pl-s1">li</span>.<span class="pl-en">append</span>(<span class="pl-c1">2</span>)    <span class="pl-c"># li is now [1, 2]</span>
+<span class="pl-s1">li</span>.<span class="pl-en">append</span>(<span class="pl-c1">4</span>)    <span class="pl-c"># li is now [1, 2, 4]</span>
+<span class="pl-s1">li</span>.<span class="pl-en">append</span>(<span class="pl-c1">3</span>)    <span class="pl-c"># li is now [1, 2, 4, 3]</span>
+<span class="pl-c"># Remove from the end with pop</span>
+<span class="pl-s1">li</span>.<span class="pl-en">pop</span>()        <span class="pl-c"># =&gt; 3 and li is now [1, 2, 4]</span>
+<span class="pl-c"># Let's put it back</span>
+<span class="pl-s1">li</span>.<span class="pl-en">append</span>(<span class="pl-c1">3</span>)    <span class="pl-c"># li is now [1, 2, 4, 3] again.</span>
+
+<span class="pl-c"># Access a list like you would any array</span>
+<span class="pl-s1">li</span>[<span class="pl-c1">0</span>]   <span class="pl-c"># =&gt; 1</span>
+<span class="pl-c"># Look at the last element</span>
+<span class="pl-s1">li</span>[<span class="pl-c1">-</span><span class="pl-c1">1</span>]  <span class="pl-c"># =&gt; 3</span>
+
+<span class="pl-c"># Looking out of bounds is an IndexError</span>
+<span class="pl-s1">li</span>[<span class="pl-c1">4</span>]  <span class="pl-c"># Raises an IndexError</span>
+
+<span class="pl-c"># You can look at ranges with slice syntax.</span>
+<span class="pl-c"># The start index is included, the end index is not</span>
+<span class="pl-c"># (It's a closed/open range for you mathy types.)</span>
+<span class="pl-s1">li</span>[<span class="pl-c1">1</span>:<span class="pl-c1">3</span>]   <span class="pl-c"># Return list from index 1 to 3 =&gt; [2, 4]</span>
+<span class="pl-s1">li</span>[<span class="pl-c1">2</span>:]    <span class="pl-c"># Return list starting from index 2 =&gt; [4, 3]</span>
+<span class="pl-s1">li</span>[:<span class="pl-c1">3</span>]    <span class="pl-c"># Return list from beginning until index 3  =&gt; [1, 2, 4]</span>
+<span class="pl-s1">li</span>[::<span class="pl-c1">2</span>]   <span class="pl-c"># Return list selecting every second entry =&gt; [1, 4]</span>
+<span class="pl-s1">li</span>[::<span class="pl-c1">-</span><span class="pl-c1">1</span>]  <span class="pl-c"># Return list in reverse order =&gt; [3, 4, 2, 1]</span>
+<span class="pl-c"># Use any combination of these to make advanced slices</span>
+<span class="pl-c"># li[start:end:step]</span>
+
+<span class="pl-c"># Make a one layer deep copy using slices</span>
+<span class="pl-s1">li2</span> <span class="pl-c1">=</span> <span class="pl-s1">li</span>[:]  <span class="pl-c"># =&gt; li2 = [1, 2, 4, 3] but (li2 is li) will result in false.</span>
+
+<span class="pl-c"># Remove arbitrary elements from a list with "del"</span>
+<span class="pl-k">del</span> <span class="pl-s1">li</span>[<span class="pl-c1">2</span>]  <span class="pl-c"># li is now [1, 2, 3]</span>
+
+<span class="pl-c"># Remove first occurrence of a value</span>
+<span class="pl-s1">li</span>.<span class="pl-en">remove</span>(<span class="pl-c1">2</span>)  <span class="pl-c"># li is now [1, 3]</span>
+<span class="pl-s1">li</span>.<span class="pl-en">remove</span>(<span class="pl-c1">2</span>)  <span class="pl-c"># Raises a ValueError as 2 is not in the list</span>
+
+<span class="pl-c"># Insert an element at a specific index</span>
+<span class="pl-s1">li</span>.<span class="pl-en">insert</span>(<span class="pl-c1">1</span>, <span class="pl-c1">2</span>)  <span class="pl-c"># li is now [1, 2, 3] again</span>
+
+<span class="pl-c"># Get the index of the first item found matching the argument</span>
+<span class="pl-s1">li</span>.<span class="pl-en">index</span>(<span class="pl-c1">2</span>)  <span class="pl-c"># =&gt; 1</span>
+<span class="pl-s1">li</span>.<span class="pl-en">index</span>(<span class="pl-c1">4</span>)  <span class="pl-c"># Raises a ValueError as 4 is not in the list</span>
+
+<span class="pl-c"># You can add lists</span>
+<span class="pl-c"># Note: values for li and for other_li are not modified.</span>
+<span class="pl-s1">li</span> <span class="pl-c1">+</span> <span class="pl-s1">other_li</span>  <span class="pl-c"># =&gt; [1, 2, 3, 4, 5, 6]</span>
+
+<span class="pl-c"># Concatenate lists with "extend()"</span>
+<span class="pl-s1">li</span>.<span class="pl-en">extend</span>(<span class="pl-s1">other_li</span>)  <span class="pl-c"># Now li is [1, 2, 3, 4, 5, 6]</span>
+
+<span class="pl-c"># Check for existence in a list with "in"</span>
+<span class="pl-c1">1</span> <span class="pl-c1">in</span> <span class="pl-s1">li</span>  <span class="pl-c"># =&gt; True</span>
+
+<span class="pl-c"># Examine the length with "len()"</span>
+<span class="pl-en">len</span>(<span class="pl-s1">li</span>)  <span class="pl-c"># =&gt; 6</span>
+
+
+<span class="pl-c"># Tuples are like lists but are immutable.</span>
+<span class="pl-s1">tup</span> <span class="pl-c1">=</span> (<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>)
+<span class="pl-s1">tup</span>[<span class="pl-c1">0</span>]      <span class="pl-c"># =&gt; 1</span>
+<span class="pl-s1">tup</span>[<span class="pl-c1">0</span>] <span class="pl-c1">=</span> <span class="pl-c1">3</span>  <span class="pl-c"># Raises a TypeError</span>
+
+<span class="pl-c"># Note that a tuple of length one has to have a comma after the last element but</span>
+<span class="pl-c"># tuples of other lengths, even zero, do not.</span>
+<span class="pl-en">type</span>((<span class="pl-c1">1</span>))   <span class="pl-c"># =&gt; &lt;class 'int'&gt;</span>
+<span class="pl-en">type</span>((<span class="pl-c1">1</span>,))  <span class="pl-c"># =&gt; &lt;class 'tuple'&gt;</span>
+<span class="pl-en">type</span>(())    <span class="pl-c"># =&gt; &lt;class 'tuple'&gt;</span>
+
+<span class="pl-c"># You can do most of the list operations on tuples too</span>
+<span class="pl-en">len</span>(<span class="pl-s1">tup</span>)         <span class="pl-c"># =&gt; 3</span>
+<span class="pl-s1">tup</span> <span class="pl-c1">+</span> (<span class="pl-c1">4</span>, <span class="pl-c1">5</span>, <span class="pl-c1">6</span>)  <span class="pl-c"># =&gt; (1, 2, 3, 4, 5, 6)</span>
+<span class="pl-s1">tup</span>[:<span class="pl-c1">2</span>]          <span class="pl-c"># =&gt; (1, 2)</span>
+<span class="pl-c1">2</span> <span class="pl-c1">in</span> <span class="pl-s1">tup</span>         <span class="pl-c"># =&gt; True</span>
+
+<span class="pl-c"># You can unpack tuples (or lists) into variables</span>
+<span class="pl-s1">a</span>, <span class="pl-s1">b</span>, <span class="pl-s1">c</span> <span class="pl-c1">=</span> (<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>)  <span class="pl-c"># a is now 1, b is now 2 and c is now 3</span>
+<span class="pl-c"># You can also do extended unpacking</span>
+<span class="pl-s1">a</span>, <span class="pl-c1">*</span><span class="pl-s1">b</span>, <span class="pl-s1">c</span> <span class="pl-c1">=</span> (<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span>)  <span class="pl-c"># a is now 1, b is now [2, 3] and c is now 4</span>
+<span class="pl-c"># Tuples are created by default if you leave out the parentheses</span>
+<span class="pl-s1">d</span>, <span class="pl-s1">e</span>, <span class="pl-s1">f</span> <span class="pl-c1">=</span> <span class="pl-c1">4</span>, <span class="pl-c1">5</span>, <span class="pl-c1">6</span>  <span class="pl-c"># tuple 4, 5, 6 is unpacked into variables d, e and f</span>
+<span class="pl-c"># respectively such that d = 4, e = 5 and f = 6</span>
+<span class="pl-c"># Now look how easy it is to swap two values</span>
+<span class="pl-s1">e</span>, <span class="pl-s1">d</span> <span class="pl-c1">=</span> <span class="pl-s1">d</span>, <span class="pl-s1">e</span>  <span class="pl-c"># d is now 5 and e is now 4</span>
+
+
+<span class="pl-c"># Dictionaries store mappings from keys to values</span>
+<span class="pl-s1">empty_dict</span> <span class="pl-c1">=</span> {}
+<span class="pl-c"># Here is a prefilled dictionary</span>
+<span class="pl-s1">filled_dict</span> <span class="pl-c1">=</span> {<span class="pl-s">"one"</span>: <span class="pl-c1">1</span>, <span class="pl-s">"two"</span>: <span class="pl-c1">2</span>, <span class="pl-s">"three"</span>: <span class="pl-c1">3</span>}
+
+<span class="pl-c"># Note keys for dictionaries have to be immutable types. This is to ensure that</span>
+<span class="pl-c"># the key can be converted to a constant hash value for quick look-ups.</span>
+<span class="pl-c"># Immutable types include ints, floats, strings, tuples.</span>
+<span class="pl-s1">invalid_dict</span> <span class="pl-c1">=</span> {[<span class="pl-c1">1</span>,<span class="pl-c1">2</span>,<span class="pl-c1">3</span>]: <span class="pl-s">"123"</span>}  <span class="pl-c"># =&gt; Yield a TypeError: unhashable type: 'list'</span>
+<span class="pl-s1">valid_dict</span> <span class="pl-c1">=</span> {(<span class="pl-c1">1</span>,<span class="pl-c1">2</span>,<span class="pl-c1">3</span>):[<span class="pl-c1">1</span>,<span class="pl-c1">2</span>,<span class="pl-c1">3</span>]}   <span class="pl-c"># Values can be of any type, however.</span>
+
+<span class="pl-c"># Look up values with []</span>
+<span class="pl-s1">filled_dict</span>[<span class="pl-s">"one"</span>]  <span class="pl-c"># =&gt; 1</span>
+
+<span class="pl-c"># Get all keys as an iterable with "keys()". We need to wrap the call in list()</span>
+<span class="pl-c"># to turn it into a list. We'll talk about those later.  Note - for Python</span>
+<span class="pl-c"># versions &lt;3.7, dictionary key ordering is not guaranteed. Your results might</span>
+<span class="pl-c"># not match the example below exactly. However, as of Python 3.7, dictionary</span>
+<span class="pl-c"># items maintain the order at which they are inserted into the dictionary.</span>
+<span class="pl-en">list</span>(<span class="pl-s1">filled_dict</span>.<span class="pl-en">keys</span>())  <span class="pl-c"># =&gt; ["three", "two", "one"] in Python &lt;3.7</span>
+<span class="pl-en">list</span>(<span class="pl-s1">filled_dict</span>.<span class="pl-en">keys</span>())  <span class="pl-c"># =&gt; ["one", "two", "three"] in Python 3.7+</span>
+
+
+<span class="pl-c"># Get all values as an iterable with "values()". Once again we need to wrap it</span>
+<span class="pl-c"># in list() to get it out of the iterable. Note - Same as above regarding key</span>
+<span class="pl-c"># ordering.</span>
+<span class="pl-en">list</span>(<span class="pl-s1">filled_dict</span>.<span class="pl-en">values</span>())  <span class="pl-c"># =&gt; [3, 2, 1]  in Python &lt;3.7</span>
+<span class="pl-en">list</span>(<span class="pl-s1">filled_dict</span>.<span class="pl-en">values</span>())  <span class="pl-c"># =&gt; [1, 2, 3] in Python 3.7+</span>
+
+<span class="pl-c"># Check for existence of keys in a dictionary with "in"</span>
+<span class="pl-s">"one"</span> <span class="pl-c1">in</span> <span class="pl-s1">filled_dict</span>  <span class="pl-c"># =&gt; True</span>
+<span class="pl-c1">1</span> <span class="pl-c1">in</span> <span class="pl-s1">filled_dict</span>      <span class="pl-c"># =&gt; False</span>
+
+<span class="pl-c"># Looking up a non-existing key is a KeyError</span>
+<span class="pl-s1">filled_dict</span>[<span class="pl-s">"four"</span>]  <span class="pl-c"># KeyError</span>
+
+<span class="pl-c"># Use "get()" method to avoid the KeyError</span>
+<span class="pl-s1">filled_dict</span>.<span class="pl-en">get</span>(<span class="pl-s">"one"</span>)      <span class="pl-c"># =&gt; 1</span>
+<span class="pl-s1">filled_dict</span>.<span class="pl-en">get</span>(<span class="pl-s">"four"</span>)     <span class="pl-c"># =&gt; None</span>
+<span class="pl-c"># The get method supports a default argument when the value is missing</span>
+<span class="pl-s1">filled_dict</span>.<span class="pl-en">get</span>(<span class="pl-s">"one"</span>, <span class="pl-c1">4</span>)   <span class="pl-c"># =&gt; 1</span>
+<span class="pl-s1">filled_dict</span>.<span class="pl-en">get</span>(<span class="pl-s">"four"</span>, <span class="pl-c1">4</span>)  <span class="pl-c"># =&gt; 4</span>
+
+<span class="pl-c"># "setdefault()" inserts into a dictionary only if the given key isn't present</span>
+<span class="pl-s1">filled_dict</span>.<span class="pl-en">setdefault</span>(<span class="pl-s">"five"</span>, <span class="pl-c1">5</span>)  <span class="pl-c"># filled_dict["five"] is set to 5</span>
+<span class="pl-s1">filled_dict</span>.<span class="pl-en">setdefault</span>(<span class="pl-s">"five"</span>, <span class="pl-c1">6</span>)  <span class="pl-c"># filled_dict["five"] is still 5</span>
+
+<span class="pl-c"># Adding to a dictionary</span>
+<span class="pl-s1">filled_dict</span>.<span class="pl-en">update</span>({<span class="pl-s">"four"</span>:<span class="pl-c1">4</span>})  <span class="pl-c"># =&gt; {"one": 1, "two": 2, "three": 3, "four": 4}</span>
+<span class="pl-s1">filled_dict</span>[<span class="pl-s">"four"</span>] <span class="pl-c1">=</span> <span class="pl-c1">4</span>         <span class="pl-c"># another way to add to dict</span>
+
+<span class="pl-c"># Remove keys from a dictionary with del</span>
+<span class="pl-k">del</span> <span class="pl-s1">filled_dict</span>[<span class="pl-s">"one"</span>]  <span class="pl-c"># Removes the key "one" from filled dict</span>
+
+<span class="pl-c"># From Python 3.5 you can also use the additional unpacking options</span>
+{<span class="pl-s">'a'</span>: <span class="pl-c1">1</span>, <span class="pl-c1">**</span>{<span class="pl-s">'b'</span>: <span class="pl-c1">2</span>}}  <span class="pl-c"># =&gt; {'a': 1, 'b': 2}</span>
+{<span class="pl-s">'a'</span>: <span class="pl-c1">1</span>, <span class="pl-c1">**</span>{<span class="pl-s">'a'</span>: <span class="pl-c1">2</span>}}  <span class="pl-c"># =&gt; {'a': 2}</span>
+
+
+
+<span class="pl-c"># Sets store ... well sets</span>
+<span class="pl-s1">empty_set</span> <span class="pl-c1">=</span> <span class="pl-en">set</span>()
+<span class="pl-c"># Initialize a set with a bunch of values.</span>
+<span class="pl-s1">some_set</span> <span class="pl-c1">=</span> {<span class="pl-c1">1</span>, <span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span>}  <span class="pl-c"># some_set is now {1, 2, 3, 4}</span>
+
+<span class="pl-c"># Similar to keys of a dictionary, elements of a set have to be immutable.</span>
+<span class="pl-s1">invalid_set</span> <span class="pl-c1">=</span> {[<span class="pl-c1">1</span>], <span class="pl-c1">1</span>}  <span class="pl-c"># =&gt; Raises a TypeError: unhashable type: 'list'</span>
+<span class="pl-s1">valid_set</span> <span class="pl-c1">=</span> {(<span class="pl-c1">1</span>,), <span class="pl-c1">1</span>}
+
+<span class="pl-c"># Add one more item to the set</span>
+<span class="pl-s1">filled_set</span> <span class="pl-c1">=</span> <span class="pl-s1">some_set</span>
+<span class="pl-s1">filled_set</span>.<span class="pl-en">add</span>(<span class="pl-c1">5</span>)  <span class="pl-c"># filled_set is now {1, 2, 3, 4, 5}</span>
+<span class="pl-c"># Sets do not have duplicate elements</span>
+<span class="pl-s1">filled_set</span>.<span class="pl-en">add</span>(<span class="pl-c1">5</span>)  <span class="pl-c"># it remains as before {1, 2, 3, 4, 5}</span>
+
+<span class="pl-c"># Do set intersection with &amp;</span>
+<span class="pl-s1">other_set</span> <span class="pl-c1">=</span> {<span class="pl-c1">3</span>, <span class="pl-c1">4</span>, <span class="pl-c1">5</span>, <span class="pl-c1">6</span>}
+<span class="pl-s1">filled_set</span> <span class="pl-c1">&amp;</span> <span class="pl-s1">other_set</span>  <span class="pl-c"># =&gt; {3, 4, 5}</span>
+
+<span class="pl-c"># Do set union with |</span>
+<span class="pl-s1">filled_set</span> <span class="pl-c1">|</span> <span class="pl-s1">other_set</span>  <span class="pl-c"># =&gt; {1, 2, 3, 4, 5, 6}</span>
+
+<span class="pl-c"># Do set difference with -</span>
+{<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span>} <span class="pl-c1">-</span> {<span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">5</span>}  <span class="pl-c"># =&gt; {1, 4}</span>
+
+<span class="pl-c"># Do set symmetric difference with ^</span>
+{<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span>} <span class="pl-c1">^</span> {<span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">5</span>}  <span class="pl-c"># =&gt; {1, 4, 5}</span>
+
+<span class="pl-c"># Check if set on the left is a superset of set on the right</span>
+{<span class="pl-c1">1</span>, <span class="pl-c1">2</span>} <span class="pl-c1">&gt;=</span> {<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>} <span class="pl-c"># =&gt; False</span>
+
+<span class="pl-c"># Check if set on the left is a subset of set on the right</span>
+{<span class="pl-c1">1</span>, <span class="pl-c1">2</span>} <span class="pl-c1">&lt;=</span> {<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>} <span class="pl-c"># =&gt; True</span>
+
+<span class="pl-c"># Check for existence in a set with in</span>
+<span class="pl-c1">2</span> <span class="pl-c1">in</span> <span class="pl-s1">filled_set</span>   <span class="pl-c"># =&gt; True</span>
+<span class="pl-c1">10</span> <span class="pl-c1">in</span> <span class="pl-s1">filled_set</span>  <span class="pl-c"># =&gt; False</span>
+
+<span class="pl-c"># Make a one layer deep copy</span>
+<span class="pl-s1">filled_set</span> <span class="pl-c1">=</span> <span class="pl-s1">some_set</span>.<span class="pl-en">copy</span>()  <span class="pl-c"># filled_set is {1, 2, 3, 4, 5}</span>
+<span class="pl-s1">filled_set</span> <span class="pl-c1">is</span> <span class="pl-s1">some_set</span>        <span class="pl-c"># =&gt; False</span>
+
+
+<span class="pl-c">####################################################</span>
+<span class="pl-c">## 3. Control Flow and Iterables</span>
+<span class="pl-c">####################################################</span>
+
+<span class="pl-c"># Let's just make a variable</span>
+<span class="pl-s1">some_var</span> <span class="pl-c1">=</span> <span class="pl-c1">5</span>
+
+<span class="pl-c"># Here is an if statement. Indentation is significant in Python!</span>
+<span class="pl-c"># Convention is to use four spaces, not tabs.</span>
+<span class="pl-c"># This prints "some_var is smaller than 10"</span>
+<span class="pl-k">if</span> <span class="pl-s1">some_var</span> <span class="pl-c1">&gt;</span> <span class="pl-c1">10</span>:
+    <span class="pl-en">print</span>(<span class="pl-s">"some_var is totally bigger than 10."</span>)
+<span class="pl-k">elif</span> <span class="pl-s1">some_var</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">10</span>:    <span class="pl-c"># This elif clause is optional.</span>
+    <span class="pl-en">print</span>(<span class="pl-s">"some_var is smaller than 10."</span>)
+<span class="pl-k">else</span>:                  <span class="pl-c"># This is optional too.</span>
+    <span class="pl-en">print</span>(<span class="pl-s">"some_var is indeed 10."</span>)
+
+
+<span class="pl-s">"""</span>
+<span class="pl-s">For loops iterate over lists</span>
+<span class="pl-s">prints:</span>
+<span class="pl-s">    dog is a mammal</span>
+<span class="pl-s">    cat is a mammal</span>
+<span class="pl-s">    mouse is a mammal</span>
+<span class="pl-s">"""</span>
+<span class="pl-k">for</span> <span class="pl-s1">animal</span> <span class="pl-c1">in</span> [<span class="pl-s">"dog"</span>, <span class="pl-s">"cat"</span>, <span class="pl-s">"mouse"</span>]:
+    <span class="pl-c"># You can use format() to interpolate formatted strings</span>
+    <span class="pl-en">print</span>(<span class="pl-s">"{} is a mammal"</span>.<span class="pl-en">format</span>(<span class="pl-s1">animal</span>))
+
+<span class="pl-s">"""</span>
+<span class="pl-s">"range(number)" returns an iterable of numbers</span>
+<span class="pl-s">from zero up to (but excluding) the given number</span>
+<span class="pl-s">prints:</span>
+<span class="pl-s">    0</span>
+<span class="pl-s">    1</span>
+<span class="pl-s">    2</span>
+<span class="pl-s">    3</span>
+<span class="pl-s">"""</span>
+<span class="pl-k">for</span> <span class="pl-s1">i</span> <span class="pl-c1">in</span> <span class="pl-en">range</span>(<span class="pl-c1">4</span>):
+    <span class="pl-en">print</span>(<span class="pl-s1">i</span>)
+
+<span class="pl-s">"""</span>
+<span class="pl-s">"range(lower, upper)" returns an iterable of numbers</span>
+<span class="pl-s">from the lower number to the upper number</span>
+<span class="pl-s">prints:</span>
+<span class="pl-s">    4</span>
+<span class="pl-s">    5</span>
+<span class="pl-s">    6</span>
+<span class="pl-s">    7</span>
+<span class="pl-s">"""</span>
+<span class="pl-k">for</span> <span class="pl-s1">i</span> <span class="pl-c1">in</span> <span class="pl-en">range</span>(<span class="pl-c1">4</span>, <span class="pl-c1">8</span>):
+    <span class="pl-en">print</span>(<span class="pl-s1">i</span>)
+
+<span class="pl-s">"""</span>
+<span class="pl-s">"range(lower, upper, step)" returns an iterable of numbers</span>
+<span class="pl-s">from the lower number to the upper number, while incrementing</span>
+<span class="pl-s">by step. If step is not indicated, the default value is 1.</span>
+<span class="pl-s">prints:</span>
+<span class="pl-s">    4</span>
+<span class="pl-s">    6</span>
+<span class="pl-s">"""</span>
+<span class="pl-k">for</span> <span class="pl-s1">i</span> <span class="pl-c1">in</span> <span class="pl-en">range</span>(<span class="pl-c1">4</span>, <span class="pl-c1">8</span>, <span class="pl-c1">2</span>):
+    <span class="pl-en">print</span>(<span class="pl-s1">i</span>)
+
+<span class="pl-s">"""</span>
+<span class="pl-s">Loop over a list to retrieve both the index and the value of each list item:</span>
+<span class="pl-s">    0 dog</span>
+<span class="pl-s">    1 cat</span>
+<span class="pl-s">    2 mouse</span>
+<span class="pl-s">"""</span>
+<span class="pl-s1">animals</span> <span class="pl-c1">=</span> [<span class="pl-s">"dog"</span>, <span class="pl-s">"cat"</span>, <span class="pl-s">"mouse"</span>]
+<span class="pl-k">for</span> <span class="pl-s1">i</span>, <span class="pl-s1">value</span> <span class="pl-c1">in</span> <span class="pl-en">enumerate</span>(<span class="pl-s1">animals</span>):
+    <span class="pl-en">print</span>(<span class="pl-s1">i</span>, <span class="pl-s1">value</span>)
+
+<span class="pl-s">"""</span>
+<span class="pl-s">While loops go until a condition is no longer met.</span>
+<span class="pl-s">prints:</span>
+<span class="pl-s">    0</span>
+<span class="pl-s">    1</span>
+<span class="pl-s">    2</span>
+<span class="pl-s">    3</span>
+<span class="pl-s">"""</span>
+<span class="pl-s1">x</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span>
+<span class="pl-k">while</span> <span class="pl-s1">x</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">4</span>:
+    <span class="pl-en">print</span>(<span class="pl-s1">x</span>)
+    <span class="pl-s1">x</span> <span class="pl-c1">+=</span> <span class="pl-c1">1</span>  <span class="pl-c"># Shorthand for x = x + 1</span>
+
+<span class="pl-c"># Handle exceptions with a try/except block</span>
+<span class="pl-k">try</span>:
+    <span class="pl-c"># Use "raise" to raise an error</span>
+    <span class="pl-k">raise</span> <span class="pl-v">IndexError</span>(<span class="pl-s">"This is an index error"</span>)
+<span class="pl-k">except</span> <span class="pl-v">IndexError</span> <span class="pl-k">as</span> <span class="pl-s1">e</span>:
+    <span class="pl-k">pass</span>                 <span class="pl-c"># Refrain from this, provide a recovery (next example).</span>
+<span class="pl-k">except</span> (<span class="pl-v">TypeError</span>, <span class="pl-v">NameError</span>):
+    <span class="pl-k">pass</span>                 <span class="pl-c"># Multiple exceptions can be processed jointly.</span>
+<span class="pl-k">else</span>:                    <span class="pl-c"># Optional clause to the try/except block. Must follow</span>
+                         <span class="pl-c"># all except blocks.</span>
+    <span class="pl-en">print</span>(<span class="pl-s">"All good!"</span>)   <span class="pl-c"># Runs only if the code in try raises no exceptions</span>
+<span class="pl-k">finally</span>:                 <span class="pl-c"># Execute under all circumstances</span>
+    <span class="pl-en">print</span>(<span class="pl-s">"We can clean up resources here"</span>)
+
+<span class="pl-c"># Instead of try/finally to cleanup resources you can use a with statement</span>
+<span class="pl-k">with</span> <span class="pl-en">open</span>(<span class="pl-s">"myfile.txt"</span>) <span class="pl-k">as</span> <span class="pl-s1">f</span>:
+    <span class="pl-k">for</span> <span class="pl-s1">line</span> <span class="pl-c1">in</span> <span class="pl-s1">f</span>:
+        <span class="pl-en">print</span>(<span class="pl-s1">line</span>)
+
+<span class="pl-c"># Writing to a file</span>
+<span class="pl-s1">contents</span> <span class="pl-c1">=</span> {<span class="pl-s">"aa"</span>: <span class="pl-c1">12</span>, <span class="pl-s">"bb"</span>: <span class="pl-c1">21</span>}
+<span class="pl-k">with</span> <span class="pl-en">open</span>(<span class="pl-s">"myfile1.txt"</span>, <span class="pl-s">"w+"</span>) <span class="pl-k">as</span> <span class="pl-s1">file</span>:
+    <span class="pl-s1">file</span>.<span class="pl-en">write</span>(<span class="pl-en">str</span>(<span class="pl-s1">contents</span>))        <span class="pl-c"># writes a string to a file</span>
+
+<span class="pl-k">import</span> <span class="pl-s1">json</span>
+<span class="pl-k">with</span> <span class="pl-en">open</span>(<span class="pl-s">"myfile2.txt"</span>, <span class="pl-s">"w+"</span>) <span class="pl-k">as</span> <span class="pl-s1">file</span>:
+    <span class="pl-s1">file</span>.<span class="pl-en">write</span>(<span class="pl-s1">json</span>.<span class="pl-en">dumps</span>(<span class="pl-s1">contents</span>)) <span class="pl-c"># writes an object to a file</span>
+
+<span class="pl-c"># Reading from a file</span>
+<span class="pl-k">with</span> <span class="pl-en">open</span>(<span class="pl-s">'myfile1.txt'</span>, <span class="pl-s">"r+"</span>) <span class="pl-k">as</span> <span class="pl-s1">file</span>:
+    <span class="pl-s1">contents</span> <span class="pl-c1">=</span> <span class="pl-s1">file</span>.<span class="pl-en">read</span>()           <span class="pl-c"># reads a string from a file</span>
+<span class="pl-en">print</span>(<span class="pl-s1">contents</span>)
+<span class="pl-c"># print: {"aa": 12, "bb": 21}</span>
+
+<span class="pl-k">with</span> <span class="pl-en">open</span>(<span class="pl-s">'myfile2.txt'</span>, <span class="pl-s">"r+"</span>) <span class="pl-k">as</span> <span class="pl-s1">file</span>:
+    <span class="pl-s1">contents</span> <span class="pl-c1">=</span> <span class="pl-s1">json</span>.<span class="pl-en">load</span>(<span class="pl-s1">file</span>)       <span class="pl-c"># reads a json object from a file</span>
+<span class="pl-en">print</span>(<span class="pl-s1">contents</span>)
+<span class="pl-c"># print: {"aa": 12, "bb": 21}</span>
+
+
+<span class="pl-c"># Python offers a fundamental abstraction called the Iterable.</span>
+<span class="pl-c"># An iterable is an object that can be treated as a sequence.</span>
+<span class="pl-c"># The object returned by the range function, is an iterable.</span>
+
+<span class="pl-s1">filled_dict</span> <span class="pl-c1">=</span> {<span class="pl-s">"one"</span>: <span class="pl-c1">1</span>, <span class="pl-s">"two"</span>: <span class="pl-c1">2</span>, <span class="pl-s">"three"</span>: <span class="pl-c1">3</span>}
+<span class="pl-s1">our_iterable</span> <span class="pl-c1">=</span> <span class="pl-s1">filled_dict</span>.<span class="pl-en">keys</span>()
+<span class="pl-en">print</span>(<span class="pl-s1">our_iterable</span>)  <span class="pl-c"># =&gt; dict_keys(['one', 'two', 'three']). This is an object</span>
+                     <span class="pl-c"># that implements our Iterable interface.</span>
+
+<span class="pl-c"># We can loop over it.</span>
+<span class="pl-k">for</span> <span class="pl-s1">i</span> <span class="pl-c1">in</span> <span class="pl-s1">our_iterable</span>:
+    <span class="pl-en">print</span>(<span class="pl-s1">i</span>)  <span class="pl-c"># Prints one, two, three</span>
+
+<span class="pl-c"># However we cannot address elements by index.</span>
+<span class="pl-s1">our_iterable</span>[<span class="pl-c1">1</span>]  <span class="pl-c"># Raises a TypeError</span>
+
+<span class="pl-c"># An iterable is an object that knows how to create an iterator.</span>
+<span class="pl-s1">our_iterator</span> <span class="pl-c1">=</span> <span class="pl-en">iter</span>(<span class="pl-s1">our_iterable</span>)
+
+<span class="pl-c"># Our iterator is an object that can remember the state as we traverse through</span>
+<span class="pl-c"># it. We get the next object with "next()".</span>
+<span class="pl-en">next</span>(<span class="pl-s1">our_iterator</span>)  <span class="pl-c"># =&gt; "one"</span>
+
+<span class="pl-c"># It maintains state as we iterate.</span>
+<span class="pl-en">next</span>(<span class="pl-s1">our_iterator</span>)  <span class="pl-c"># =&gt; "two"</span>
+<span class="pl-en">next</span>(<span class="pl-s1">our_iterator</span>)  <span class="pl-c"># =&gt; "three"</span>
+
+<span class="pl-c"># After the iterator has returned all of its data, it raises a</span>
+<span class="pl-c"># StopIteration exception</span>
+<span class="pl-en">next</span>(<span class="pl-s1">our_iterator</span>)  <span class="pl-c"># Raises StopIteration</span>
+
+<span class="pl-c"># We can also loop over it, in fact, "for" does this implicitly!</span>
+<span class="pl-s1">our_iterator</span> <span class="pl-c1">=</span> <span class="pl-en">iter</span>(<span class="pl-s1">our_iterable</span>)
+<span class="pl-k">for</span> <span class="pl-s1">i</span> <span class="pl-c1">in</span> <span class="pl-s1">our_iterator</span>:
+    <span class="pl-en">print</span>(<span class="pl-s1">i</span>)  <span class="pl-c"># Prints one, two, three</span>
+
+<span class="pl-c"># You can grab all the elements of an iterable or iterator by call of list().</span>
+<span class="pl-en">list</span>(<span class="pl-s1">our_iterable</span>)  <span class="pl-c"># =&gt; Returns ["one", "two", "three"]</span>
+<span class="pl-en">list</span>(<span class="pl-s1">our_iterator</span>)  <span class="pl-c"># =&gt; Returns [] because state is saved</span>
+
+
+<span class="pl-c">####################################################</span>
+<span class="pl-c">## 4. Functions</span>
+<span class="pl-c">####################################################</span>
+
+<span class="pl-c"># Use "def" to create new functions</span>
+<span class="pl-k">def</span> <span class="pl-en">add</span>(<span class="pl-s1">x</span>, <span class="pl-s1">y</span>):
+    <span class="pl-en">print</span>(<span class="pl-s">"x is {} and y is {}"</span>.<span class="pl-en">format</span>(<span class="pl-s1">x</span>, <span class="pl-s1">y</span>))
+    <span class="pl-k">return</span> <span class="pl-s1">x</span> <span class="pl-c1">+</span> <span class="pl-s1">y</span>  <span class="pl-c"># Return values with a return statement</span>
+
+<span class="pl-c"># Calling functions with parameters</span>
+<span class="pl-en">add</span>(<span class="pl-c1">5</span>, <span class="pl-c1">6</span>)  <span class="pl-c"># =&gt; prints out "x is 5 and y is 6" and returns 11</span>
+
+<span class="pl-c"># Another way to call functions is with keyword arguments</span>
+<span class="pl-en">add</span>(<span class="pl-s1">y</span><span class="pl-c1">=</span><span class="pl-c1">6</span>, <span class="pl-s1">x</span><span class="pl-c1">=</span><span class="pl-c1">5</span>)  <span class="pl-c"># Keyword arguments can arrive in any order.</span>
+
+<span class="pl-c"># You can define functions that take a variable number of</span>
+<span class="pl-c"># positional arguments</span>
+<span class="pl-k">def</span> <span class="pl-en">varargs</span>(<span class="pl-c1">*</span><span class="pl-s1">args</span>):
+    <span class="pl-k">return</span> <span class="pl-s1">args</span>
+
+<span class="pl-en">varargs</span>(<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>)  <span class="pl-c"># =&gt; (1, 2, 3)</span>
+
+<span class="pl-c"># You can define functions that take a variable number of</span>
+<span class="pl-c"># keyword arguments, as well</span>
+<span class="pl-k">def</span> <span class="pl-en">keyword_args</span>(<span class="pl-c1">**</span><span class="pl-s1">kwargs</span>):
+    <span class="pl-k">return</span> <span class="pl-s1">kwargs</span>
+
+<span class="pl-c"># Let's call it to see what happens</span>
+<span class="pl-en">keyword_args</span>(<span class="pl-s1">big</span><span class="pl-c1">=</span><span class="pl-s">"foot"</span>, <span class="pl-s1">loch</span><span class="pl-c1">=</span><span class="pl-s">"ness"</span>)  <span class="pl-c"># =&gt; {"big": "foot", "loch": "ness"}</span>
+
+
+<span class="pl-c"># You can do both at once, if you like</span>
+<span class="pl-k">def</span> <span class="pl-en">all_the_args</span>(<span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>):
+    <span class="pl-en">print</span>(<span class="pl-s1">args</span>)
+    <span class="pl-en">print</span>(<span class="pl-s1">kwargs</span>)
+<span class="pl-s">"""</span>
+<span class="pl-s">all_the_args(1, 2, a=3, b=4) prints:</span>
+<span class="pl-s">    (1, 2)</span>
+<span class="pl-s">    {"a": 3, "b": 4}</span>
+<span class="pl-s">"""</span>
+
+<span class="pl-c"># When calling functions, you can do the opposite of args/kwargs!</span>
+<span class="pl-c"># Use * to expand tuples and use ** to expand kwargs.</span>
+<span class="pl-s1">args</span> <span class="pl-c1">=</span> (<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span>)
+<span class="pl-s1">kwargs</span> <span class="pl-c1">=</span> {<span class="pl-s">"a"</span>: <span class="pl-c1">3</span>, <span class="pl-s">"b"</span>: <span class="pl-c1">4</span>}
+<span class="pl-en">all_the_args</span>(<span class="pl-c1">*</span><span class="pl-s1">args</span>)            <span class="pl-c"># equivalent: all_the_args(1, 2, 3, 4)</span>
+<span class="pl-en">all_the_args</span>(<span class="pl-c1">**</span><span class="pl-s1">kwargs</span>)         <span class="pl-c"># equivalent: all_the_args(a=3, b=4)</span>
+<span class="pl-en">all_the_args</span>(<span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>)  <span class="pl-c"># equivalent: all_the_args(1, 2, 3, 4, a=3, b=4)</span>
+
+<span class="pl-c"># Returning multiple values (with tuple assignments)</span>
+<span class="pl-k">def</span> <span class="pl-en">swap</span>(<span class="pl-s1">x</span>, <span class="pl-s1">y</span>):
+    <span class="pl-k">return</span> <span class="pl-s1">y</span>, <span class="pl-s1">x</span>  <span class="pl-c"># Return multiple values as a tuple without the parenthesis.</span>
+                 <span class="pl-c"># (Note: parenthesis have been excluded but can be included)</span>
+
+<span class="pl-s1">x</span> <span class="pl-c1">=</span> <span class="pl-c1">1</span>
+<span class="pl-s1">y</span> <span class="pl-c1">=</span> <span class="pl-c1">2</span>
+<span class="pl-s1">x</span>, <span class="pl-s1">y</span> <span class="pl-c1">=</span> <span class="pl-en">swap</span>(<span class="pl-s1">x</span>, <span class="pl-s1">y</span>)     <span class="pl-c"># =&gt; x = 2, y = 1</span>
+<span class="pl-c"># (x, y) = swap(x,y)  # Again the use of parenthesis is optional.</span>
+
+<span class="pl-c"># global scope</span>
+<span class="pl-s1">x</span> <span class="pl-c1">=</span> <span class="pl-c1">5</span>
+
+<span class="pl-k">def</span> <span class="pl-en">set_x</span>(<span class="pl-s1">num</span>):
+    <span class="pl-c"># local scope begins here</span>
+    <span class="pl-c"># local var x not the same as global var x</span>
+    <span class="pl-s1">x</span> <span class="pl-c1">=</span> <span class="pl-s1">num</span>    <span class="pl-c"># =&gt; 43</span>
+    <span class="pl-en">print</span>(<span class="pl-s1">x</span>)   <span class="pl-c"># =&gt; 43</span>
+
+<span class="pl-k">def</span> <span class="pl-en">set_global_x</span>(<span class="pl-s1">num</span>):
+    <span class="pl-c"># global indicates that particular var lives in the global scope</span>
+    <span class="pl-k">global</span> <span class="pl-s1">x</span>
+    <span class="pl-en">print</span>(<span class="pl-s1">x</span>)   <span class="pl-c"># =&gt; 5</span>
+    <span class="pl-s1">x</span> <span class="pl-c1">=</span> <span class="pl-s1">num</span>    <span class="pl-c"># global var x is now set to 6</span>
+    <span class="pl-en">print</span>(<span class="pl-s1">x</span>)   <span class="pl-c"># =&gt; 6</span>
+
+<span class="pl-en">set_x</span>(<span class="pl-c1">43</span>)
+<span class="pl-en">set_global_x</span>(<span class="pl-c1">6</span>)
+<span class="pl-s">"""</span>
+<span class="pl-s">prints:</span>
+<span class="pl-s">    43</span>
+<span class="pl-s">    5</span>
+<span class="pl-s">    6</span>
+<span class="pl-s">"""</span>
+
+
+<span class="pl-c"># Python has first class functions</span>
+<span class="pl-k">def</span> <span class="pl-en">create_adder</span>(<span class="pl-s1">x</span>):
+    <span class="pl-k">def</span> <span class="pl-en">adder</span>(<span class="pl-s1">y</span>):
+        <span class="pl-k">return</span> <span class="pl-s1">x</span> <span class="pl-c1">+</span> <span class="pl-s1">y</span>
+    <span class="pl-k">return</span> <span class="pl-s1">adder</span>
+
+<span class="pl-s1">add_10</span> <span class="pl-c1">=</span> <span class="pl-en">create_adder</span>(<span class="pl-c1">10</span>)
+<span class="pl-en">add_10</span>(<span class="pl-c1">3</span>)   <span class="pl-c"># =&gt; 13</span>
+
+<span class="pl-c"># There are also anonymous functions</span>
+(<span class="pl-k">lambda</span> <span class="pl-s1">x</span>: <span class="pl-s1">x</span> <span class="pl-c1">&gt;</span> <span class="pl-c1">2</span>)(<span class="pl-c1">3</span>)                  <span class="pl-c"># =&gt; True</span>
+(<span class="pl-k">lambda</span> <span class="pl-s1">x</span>, <span class="pl-s1">y</span>: <span class="pl-s1">x</span> <span class="pl-c1">**</span> <span class="pl-c1">2</span> <span class="pl-c1">+</span> <span class="pl-s1">y</span> <span class="pl-c1">**</span> <span class="pl-c1">2</span>)(<span class="pl-c1">2</span>, <span class="pl-c1">1</span>)  <span class="pl-c"># =&gt; 5</span>
+
+<span class="pl-c"># There are built-in higher order functions</span>
+<span class="pl-en">list</span>(<span class="pl-en">map</span>(<span class="pl-s1">add_10</span>, [<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>]))          <span class="pl-c"># =&gt; [11, 12, 13]</span>
+<span class="pl-en">list</span>(<span class="pl-en">map</span>(<span class="pl-s1">max</span>, [<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>], [<span class="pl-c1">4</span>, <span class="pl-c1">2</span>, <span class="pl-c1">1</span>]))  <span class="pl-c"># =&gt; [4, 2, 3]</span>
+
+<span class="pl-en">list</span>(<span class="pl-en">filter</span>(<span class="pl-k">lambda</span> <span class="pl-s1">x</span>: <span class="pl-s1">x</span> <span class="pl-c1">&gt;</span> <span class="pl-c1">5</span>, [<span class="pl-c1">3</span>, <span class="pl-c1">4</span>, <span class="pl-c1">5</span>, <span class="pl-c1">6</span>, <span class="pl-c1">7</span>]))  <span class="pl-c"># =&gt; [6, 7]</span>
+
+<span class="pl-c"># We can use list comprehensions for nice maps and filters</span>
+<span class="pl-c"># List comprehension stores the output as a list (which itself may be nested).</span>
+[<span class="pl-en">add_10</span>(<span class="pl-s1">i</span>) <span class="pl-k">for</span> <span class="pl-s1">i</span> <span class="pl-c1">in</span> [<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>]]         <span class="pl-c"># =&gt; [11, 12, 13]</span>
+[<span class="pl-s1">x</span> <span class="pl-k">for</span> <span class="pl-s1">x</span> <span class="pl-c1">in</span> [<span class="pl-c1">3</span>, <span class="pl-c1">4</span>, <span class="pl-c1">5</span>, <span class="pl-c1">6</span>, <span class="pl-c1">7</span>] <span class="pl-k">if</span> <span class="pl-s1">x</span> <span class="pl-c1">&gt;</span> <span class="pl-c1">5</span>]  <span class="pl-c"># =&gt; [6, 7]</span>
+
+<span class="pl-c"># You can construct set and dict comprehensions as well.</span>
+{<span class="pl-s1">x</span> <span class="pl-k">for</span> <span class="pl-s1">x</span> <span class="pl-c1">in</span> <span class="pl-s">'abcddeef'</span> <span class="pl-k">if</span> <span class="pl-s1">x</span> <span class="pl-c1">not</span> <span class="pl-c1">in</span> <span class="pl-s">'abc'</span>}  <span class="pl-c"># =&gt; {'d', 'e', 'f'}</span>
+{<span class="pl-s1">x</span>: <span class="pl-s1">x</span><span class="pl-c1">**</span><span class="pl-c1">2</span> <span class="pl-k">for</span> <span class="pl-s1">x</span> <span class="pl-c1">in</span> <span class="pl-en">range</span>(<span class="pl-c1">5</span>)}  <span class="pl-c"># =&gt; {0: 0, 1: 1, 2: 4, 3: 9, 4: 16}</span>
+
+
+<span class="pl-c">####################################################</span>
+<span class="pl-c">## 5. Modules</span>
+<span class="pl-c">####################################################</span>
+
+<span class="pl-c"># You can import modules</span>
+<span class="pl-k">import</span> <span class="pl-s1">math</span>
+<span class="pl-en">print</span>(<span class="pl-s1">math</span>.<span class="pl-en">sqrt</span>(<span class="pl-c1">16</span>))  <span class="pl-c"># =&gt; 4.0</span>
+
+<span class="pl-c"># You can get specific functions from a module</span>
+<span class="pl-k">from</span> <span class="pl-s1">math</span> <span class="pl-k">import</span> <span class="pl-s1">ceil</span>, <span class="pl-s1">floor</span>
+<span class="pl-en">print</span>(<span class="pl-en">ceil</span>(<span class="pl-c1">3.7</span>))   <span class="pl-c"># =&gt; 4.0</span>
+<span class="pl-en">print</span>(<span class="pl-en">floor</span>(<span class="pl-c1">3.7</span>))  <span class="pl-c"># =&gt; 3.0</span>
+
+<span class="pl-c"># You can import all functions from a module.</span>
+<span class="pl-c"># Warning: this is not recommended</span>
+<span class="pl-k">from</span> <span class="pl-s1">math</span> <span class="pl-k">import</span> <span class="pl-c1">*</span>
+
+<span class="pl-c"># You can shorten module names</span>
+<span class="pl-k">import</span> <span class="pl-s1">math</span> <span class="pl-k">as</span> <span class="pl-s1">m</span>
+<span class="pl-s1">math</span>.<span class="pl-en">sqrt</span>(<span class="pl-c1">16</span>) <span class="pl-c1">==</span> <span class="pl-s1">m</span>.<span class="pl-en">sqrt</span>(<span class="pl-c1">16</span>)  <span class="pl-c"># =&gt; True</span>
+
+<span class="pl-c"># Python modules are just ordinary Python files. You</span>
+<span class="pl-c"># can write your own, and import them. The name of the</span>
+<span class="pl-c"># module is the same as the name of the file.</span>
+
+<span class="pl-c"># You can find out which functions and attributes</span>
+<span class="pl-c"># are defined in a module.</span>
+<span class="pl-k">import</span> <span class="pl-s1">math</span>
+<span class="pl-en">dir</span>(<span class="pl-s1">math</span>)
+
+<span class="pl-c"># If you have a Python script named math.py in the same</span>
+<span class="pl-c"># folder as your current script, the file math.py will</span>
+<span class="pl-c"># be loaded instead of the built-in Python module.</span>
+<span class="pl-c"># This happens because the local folder has priority</span>
+<span class="pl-c"># over Python's built-in libraries.</span>
+
+
+<span class="pl-c">####################################################</span>
+<span class="pl-c">## 6. Classes</span>
+<span class="pl-c">####################################################</span>
+
+<span class="pl-c"># We use the "class" statement to create a class</span>
+<span class="pl-k">class</span> <span class="pl-v">Human</span>:
+
+    <span class="pl-c"># A class attribute. It is shared by all instances of this class</span>
+    <span class="pl-s1">species</span> <span class="pl-c1">=</span> <span class="pl-s">"H. sapiens"</span>
+
+    <span class="pl-c"># Basic initializer, this is called when this class is instantiated.</span>
+    <span class="pl-c"># Note that the double leading and trailing underscores denote objects</span>
+    <span class="pl-c"># or attributes that are used by Python but that live in user-controlled</span>
+    <span class="pl-c"># namespaces. Methods(or objects or attributes) like: __init__, __str__,</span>
+    <span class="pl-c"># __repr__ etc. are called special methods (or sometimes called dunder</span>
+    <span class="pl-c"># methods). You should not invent such names on your own.</span>
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>, <span class="pl-s1">name</span>):
+        <span class="pl-c"># Assign the argument to the instance's name attribute</span>
+        <span class="pl-s1">self</span>.<span class="pl-s1">name</span> <span class="pl-c1">=</span> <span class="pl-s1">name</span>
+
+        <span class="pl-c"># Initialize property</span>
+        <span class="pl-s1">self</span>.<span class="pl-s1">_age</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span>
+
+    <span class="pl-c"># An instance method. All methods take "self" as the first argument</span>
+    <span class="pl-k">def</span> <span class="pl-en">say</span>(<span class="pl-s1">self</span>, <span class="pl-s1">msg</span>):
+        <span class="pl-en">print</span>(<span class="pl-s">"{name}: {message}"</span>.<span class="pl-en">format</span>(<span class="pl-s1">name</span><span class="pl-c1">=</span><span class="pl-s1">self</span>.<span class="pl-s1">name</span>, <span class="pl-s1">message</span><span class="pl-c1">=</span><span class="pl-s1">msg</span>))
+
+    <span class="pl-c"># Another instance method</span>
+    <span class="pl-k">def</span> <span class="pl-en">sing</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">return</span> <span class="pl-s">'yo... yo... microphone check... one two... one two...'</span>
+
+    <span class="pl-c"># A class method is shared among all instances</span>
+    <span class="pl-c"># They are called with the calling class as the first argument</span>
+    <span class="pl-en">@<span class="pl-s1">classmethod</span></span>
+    <span class="pl-k">def</span> <span class="pl-en">get_species</span>(<span class="pl-s1">cls</span>):
+        <span class="pl-k">return</span> <span class="pl-s1">cls</span>.<span class="pl-s1">species</span>
+
+    <span class="pl-c"># A static method is called without a class or instance reference</span>
+    <span class="pl-en">@<span class="pl-s1">staticmethod</span></span>
+    <span class="pl-k">def</span> <span class="pl-en">grunt</span>():
+        <span class="pl-k">return</span> <span class="pl-s">"*grunt*"</span>
+
+    <span class="pl-c"># A property is just like a getter.</span>
+    <span class="pl-c"># It turns the method age() into a read-only attribute of the same name.</span>
+    <span class="pl-c"># There's no need to write trivial getters and setters in Python, though.</span>
+    <span class="pl-en">@<span class="pl-s1">property</span></span>
+    <span class="pl-k">def</span> <span class="pl-en">age</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-s1">_age</span>
+
+    <span class="pl-c"># This allows the property to be set</span>
+    <span class="pl-en">@<span class="pl-s1">age</span>.<span class="pl-s1">setter</span></span>
+    <span class="pl-k">def</span> <span class="pl-en">age</span>(<span class="pl-s1">self</span>, <span class="pl-s1">age</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">_age</span> <span class="pl-c1">=</span> <span class="pl-s1">age</span>
+
+    <span class="pl-c"># This allows the property to be deleted</span>
+    <span class="pl-en">@<span class="pl-s1">age</span>.<span class="pl-s1">deleter</span></span>
+    <span class="pl-k">def</span> <span class="pl-en">age</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">del</span> <span class="pl-s1">self</span>.<span class="pl-s1">_age</span>
+
+
+<span class="pl-c"># When a Python interpreter reads a source file it executes all its code.</span>
+<span class="pl-c"># This __name__ check makes sure this code block is only executed when this</span>
+<span class="pl-c"># module is the main program.</span>
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">'__main__'</span>:
+    <span class="pl-c"># Instantiate a class</span>
+    <span class="pl-s1">i</span> <span class="pl-c1">=</span> <span class="pl-v">Human</span>(<span class="pl-s1">name</span><span class="pl-c1">=</span><span class="pl-s">"Ian"</span>)
+    <span class="pl-s1">i</span>.<span class="pl-en">say</span>(<span class="pl-s">"hi"</span>)                     <span class="pl-c"># "Ian: hi"</span>
+    <span class="pl-s1">j</span> <span class="pl-c1">=</span> <span class="pl-v">Human</span>(<span class="pl-s">"Joel"</span>)
+    <span class="pl-s1">j</span>.<span class="pl-en">say</span>(<span class="pl-s">"hello"</span>)                  <span class="pl-c"># "Joel: hello"</span>
+    <span class="pl-c"># i and j are instances of type Human; i.e., they are Human objects.</span>
+
+    <span class="pl-c"># Call our class method</span>
+    <span class="pl-s1">i</span>.<span class="pl-en">say</span>(<span class="pl-s1">i</span>.<span class="pl-en">get_species</span>())          <span class="pl-c"># "Ian: H. sapiens"</span>
+    <span class="pl-c"># Change the shared attribute</span>
+    <span class="pl-v">Human</span>.<span class="pl-s1">species</span> <span class="pl-c1">=</span> <span class="pl-s">"H. neanderthalensis"</span>
+    <span class="pl-s1">i</span>.<span class="pl-en">say</span>(<span class="pl-s1">i</span>.<span class="pl-en">get_species</span>())          <span class="pl-c"># =&gt; "Ian: H. neanderthalensis"</span>
+    <span class="pl-s1">j</span>.<span class="pl-en">say</span>(<span class="pl-s1">j</span>.<span class="pl-en">get_species</span>())          <span class="pl-c"># =&gt; "Joel: H. neanderthalensis"</span>
+
+    <span class="pl-c"># Call the static method</span>
+    <span class="pl-en">print</span>(<span class="pl-v">Human</span>.<span class="pl-en">grunt</span>())            <span class="pl-c"># =&gt; "*grunt*"</span>
+
+    <span class="pl-c"># Static methods can be called by instances too</span>
+    <span class="pl-en">print</span>(<span class="pl-s1">i</span>.<span class="pl-en">grunt</span>())                <span class="pl-c"># =&gt; "*grunt*"</span>
+
+    <span class="pl-c"># Update the property for this instance</span>
+    <span class="pl-s1">i</span>.<span class="pl-s1">age</span> <span class="pl-c1">=</span> <span class="pl-c1">42</span>
+    <span class="pl-c"># Get the property</span>
+    <span class="pl-s1">i</span>.<span class="pl-en">say</span>(<span class="pl-s1">i</span>.<span class="pl-s1">age</span>)                    <span class="pl-c"># =&gt; "Ian: 42"</span>
+    <span class="pl-s1">j</span>.<span class="pl-en">say</span>(<span class="pl-s1">j</span>.<span class="pl-s1">age</span>)                    <span class="pl-c"># =&gt; "Joel: 0"</span>
+    <span class="pl-c"># Delete the property</span>
+    <span class="pl-k">del</span> <span class="pl-s1">i</span>.<span class="pl-s1">age</span>
+    <span class="pl-c"># i.age                         # =&gt; this would raise an AttributeError</span>
+
+
+<span class="pl-c">####################################################</span>
+<span class="pl-c">## 6.1 Inheritance</span>
+<span class="pl-c">####################################################</span>
+
+<span class="pl-c"># Inheritance allows new child classes to be defined that inherit methods and</span>
+<span class="pl-c"># variables from their parent class.</span>
+
+<span class="pl-c"># Using the Human class defined above as the base or parent class, we can</span>
+<span class="pl-c"># define a child class, Superhero, which inherits the class variables like</span>
+<span class="pl-c"># "species", "name", and "age", as well as methods, like "sing" and "grunt"</span>
+<span class="pl-c"># from the Human class, but can also have its own unique properties.</span>
+
+<span class="pl-c"># To take advantage of modularization by file you could place the classes above</span>
+<span class="pl-c"># in their own files, say, human.py</span>
+
+<span class="pl-c"># To import functions from other files use the following format</span>
+<span class="pl-c"># from "filename-without-extension" import "function-or-class"</span>
+
+<span class="pl-k">from</span> <span class="pl-s1">human</span> <span class="pl-k">import</span> <span class="pl-v">Human</span>
+
+
+<span class="pl-c"># Specify the parent class(es) as parameters to the class definition</span>
+<span class="pl-k">class</span> <span class="pl-v">Superhero</span>(<span class="pl-v">Human</span>):
+
+    <span class="pl-c"># If the child class should inherit all of the parent's definitions without</span>
+    <span class="pl-c"># any modifications, you can just use the "pass" keyword (and nothing else)</span>
+    <span class="pl-c"># but in this case it is commented out to allow for a unique child class:</span>
+    <span class="pl-c"># pass</span>
+
+    <span class="pl-c"># Child classes can override their parents' attributes</span>
+    <span class="pl-s1">species</span> <span class="pl-c1">=</span> <span class="pl-s">'Superhuman'</span>
+
+    <span class="pl-c"># Children automatically inherit their parent class's constructor including</span>
+    <span class="pl-c"># its arguments, but can also define additional arguments or definitions</span>
+    <span class="pl-c"># and override its methods such as the class constructor.</span>
+    <span class="pl-c"># This constructor inherits the "name" argument from the "Human" class and</span>
+    <span class="pl-c"># adds the "superpower" and "movie" arguments:</span>
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>, <span class="pl-s1">name</span>, <span class="pl-s1">movie</span><span class="pl-c1">=</span><span class="pl-c1">False</span>,
+                 <span class="pl-s1">superpowers</span><span class="pl-c1">=</span>[<span class="pl-s">"super strength"</span>, <span class="pl-s">"bulletproofing"</span>]):
+
+        <span class="pl-c"># add additional class attributes:</span>
+        <span class="pl-s1">self</span>.<span class="pl-s1">fictional</span> <span class="pl-c1">=</span> <span class="pl-c1">True</span>
+        <span class="pl-s1">self</span>.<span class="pl-s1">movie</span> <span class="pl-c1">=</span> <span class="pl-s1">movie</span>
+        <span class="pl-c"># be aware of mutable default values, since defaults are shared</span>
+        <span class="pl-s1">self</span>.<span class="pl-s1">superpowers</span> <span class="pl-c1">=</span> <span class="pl-s1">superpowers</span>
+
+        <span class="pl-c"># The "super" function lets you access the parent class's methods</span>
+        <span class="pl-c"># that are overridden by the child, in this case, the __init__ method.</span>
+        <span class="pl-c"># This calls the parent class constructor:</span>
+        <span class="pl-en">super</span>().<span class="pl-en">__init__</span>(<span class="pl-s1">name</span>)
+
+    <span class="pl-c"># override the sing method</span>
+    <span class="pl-k">def</span> <span class="pl-en">sing</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">return</span> <span class="pl-s">'Dun, dun, DUN!'</span>
+
+    <span class="pl-c"># add an additional instance method</span>
+    <span class="pl-k">def</span> <span class="pl-en">boast</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">for</span> <span class="pl-s1">power</span> <span class="pl-c1">in</span> <span class="pl-s1">self</span>.<span class="pl-s1">superpowers</span>:
+            <span class="pl-en">print</span>(<span class="pl-s">"I wield the power of {pow}!"</span>.<span class="pl-en">format</span>(<span class="pl-s1">pow</span><span class="pl-c1">=</span><span class="pl-s1">power</span>))
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">'__main__'</span>:
+    <span class="pl-s1">sup</span> <span class="pl-c1">=</span> <span class="pl-v">Superhero</span>(<span class="pl-s1">name</span><span class="pl-c1">=</span><span class="pl-s">"Tick"</span>)
+
+    <span class="pl-c"># Instance type checks</span>
+    <span class="pl-k">if</span> <span class="pl-en">isinstance</span>(<span class="pl-s1">sup</span>, <span class="pl-v">Human</span>):
+        <span class="pl-en">print</span>(<span class="pl-s">'I am human'</span>)
+    <span class="pl-k">if</span> <span class="pl-en">type</span>(<span class="pl-s1">sup</span>) <span class="pl-c1">is</span> <span class="pl-v">Superhero</span>:
+        <span class="pl-en">print</span>(<span class="pl-s">'I am a superhero'</span>)
+
+    <span class="pl-c"># Get the Method Resolution search Order used by both getattr() and super()</span>
+    <span class="pl-c"># This attribute is dynamic and can be updated</span>
+    <span class="pl-en">print</span>(<span class="pl-v">Superhero</span>.<span class="pl-s1">__mro__</span>)    <span class="pl-c"># =&gt; (&lt;class '__main__.Superhero'&gt;,</span>
+                                <span class="pl-c"># =&gt; &lt;class 'human.Human'&gt;, &lt;class 'object'&gt;)</span>
+
+    <span class="pl-c"># Calls parent method but uses its own class attribute</span>
+    <span class="pl-en">print</span>(<span class="pl-s1">sup</span>.<span class="pl-en">get_species</span>())    <span class="pl-c"># =&gt; Superhuman</span>
+
+    <span class="pl-c"># Calls overridden method</span>
+    <span class="pl-en">print</span>(<span class="pl-s1">sup</span>.<span class="pl-en">sing</span>())           <span class="pl-c"># =&gt; Dun, dun, DUN!</span>
+
+    <span class="pl-c"># Calls method from Human</span>
+    <span class="pl-s1">sup</span>.<span class="pl-en">say</span>(<span class="pl-s">'Spoon'</span>)            <span class="pl-c"># =&gt; Tick: Spoon</span>
+
+    <span class="pl-c"># Call method that exists only in Superhero</span>
+    <span class="pl-s1">sup</span>.<span class="pl-en">boast</span>()                 <span class="pl-c"># =&gt; I wield the power of super strength!</span>
+                                <span class="pl-c"># =&gt; I wield the power of bulletproofing!</span>
+
+    <span class="pl-c"># Inherited class attribute</span>
+    <span class="pl-s1">sup</span>.<span class="pl-s1">age</span> <span class="pl-c1">=</span> <span class="pl-c1">31</span>
+    <span class="pl-en">print</span>(<span class="pl-s1">sup</span>.<span class="pl-s1">age</span>)              <span class="pl-c"># =&gt; 31</span>
+
+    <span class="pl-c"># Attribute that only exists within Superhero</span>
+    <span class="pl-en">print</span>(<span class="pl-s">'Am I Oscar eligible? '</span> <span class="pl-c1">+</span> <span class="pl-en">str</span>(<span class="pl-s1">sup</span>.<span class="pl-s1">movie</span>))
+
+<span class="pl-c">####################################################</span>
+<span class="pl-c">## 6.2 Multiple Inheritance</span>
+<span class="pl-c">####################################################</span>
+
+<span class="pl-c"># Another class definition</span>
+<span class="pl-c"># bat.py</span>
+<span class="pl-k">class</span> <span class="pl-v">Bat</span>:
+
+    <span class="pl-s1">species</span> <span class="pl-c1">=</span> <span class="pl-s">'Baty'</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>, <span class="pl-s1">can_fly</span><span class="pl-c1">=</span><span class="pl-c1">True</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">fly</span> <span class="pl-c1">=</span> <span class="pl-s1">can_fly</span>
+
+    <span class="pl-c"># This class also has a say method</span>
+    <span class="pl-k">def</span> <span class="pl-en">say</span>(<span class="pl-s1">self</span>, <span class="pl-s1">msg</span>):
+        <span class="pl-s1">msg</span> <span class="pl-c1">=</span> <span class="pl-s">'... ... ...'</span>
+        <span class="pl-k">return</span> <span class="pl-s1">msg</span>
+
+    <span class="pl-c"># And its own method as well</span>
+    <span class="pl-k">def</span> <span class="pl-en">sonar</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">return</span> <span class="pl-s">'))) ... ((('</span>
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">'__main__'</span>:
+    <span class="pl-s1">b</span> <span class="pl-c1">=</span> <span class="pl-v">Bat</span>()
+    <span class="pl-en">print</span>(<span class="pl-s1">b</span>.<span class="pl-en">say</span>(<span class="pl-s">'hello'</span>))
+    <span class="pl-en">print</span>(<span class="pl-s1">b</span>.<span class="pl-s1">fly</span>)
+
+
+<span class="pl-c"># And yet another class definition that inherits from Superhero and Bat</span>
+<span class="pl-c"># superhero.py</span>
+<span class="pl-k">from</span> <span class="pl-s1">superhero</span> <span class="pl-k">import</span> <span class="pl-v">Superhero</span>
+<span class="pl-k">from</span> <span class="pl-s1">bat</span> <span class="pl-k">import</span> <span class="pl-v">Bat</span>
+
+<span class="pl-c"># Define Batman as a child that inherits from both Superhero and Bat</span>
+<span class="pl-k">class</span> <span class="pl-v">Batman</span>(<span class="pl-v">Superhero</span>, <span class="pl-v">Bat</span>):
+
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>, <span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>):
+        <span class="pl-c"># Typically to inherit attributes you have to call super:</span>
+        <span class="pl-c"># super(Batman, self).__init__(*args, **kwargs)</span>
+        <span class="pl-c"># However we are dealing with multiple inheritance here, and super()</span>
+        <span class="pl-c"># only works with the next base class in the MRO list.</span>
+        <span class="pl-c"># So instead we explicitly call __init__ for all ancestors.</span>
+        <span class="pl-c"># The use of *args and **kwargs allows for a clean way to pass</span>
+        <span class="pl-c"># arguments, with each parent "peeling a layer of the onion".</span>
+        <span class="pl-v">Superhero</span>.<span class="pl-en">__init__</span>(<span class="pl-s1">self</span>, <span class="pl-s">'anonymous'</span>, <span class="pl-s1">movie</span><span class="pl-c1">=</span><span class="pl-c1">True</span>,
+                           <span class="pl-s1">superpowers</span><span class="pl-c1">=</span>[<span class="pl-s">'Wealthy'</span>], <span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>)
+        <span class="pl-v">Bat</span>.<span class="pl-en">__init__</span>(<span class="pl-s1">self</span>, <span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-s1">can_fly</span><span class="pl-c1">=</span><span class="pl-c1">False</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>)
+        <span class="pl-c"># override the value for the name attribute</span>
+        <span class="pl-s1">self</span>.<span class="pl-s1">name</span> <span class="pl-c1">=</span> <span class="pl-s">'Sad Affleck'</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">sing</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">return</span> <span class="pl-s">'nan nan nan nan nan batman!'</span>
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">'__main__'</span>:
+    <span class="pl-s1">sup</span> <span class="pl-c1">=</span> <span class="pl-v">Batman</span>()
+
+    <span class="pl-c"># Get the Method Resolution search Order used by both getattr() and super().</span>
+    <span class="pl-c"># This attribute is dynamic and can be updated</span>
+    <span class="pl-en">print</span>(<span class="pl-v">Batman</span>.<span class="pl-s1">__mro__</span>)       <span class="pl-c"># =&gt; (&lt;class '__main__.Batman'&gt;,</span>
+                                <span class="pl-c"># =&gt; &lt;class 'superhero.Superhero'&gt;,</span>
+                                <span class="pl-c"># =&gt; &lt;class 'human.Human'&gt;,</span>
+                                <span class="pl-c"># =&gt; &lt;class 'bat.Bat'&gt;, &lt;class 'object'&gt;)</span>
+
+    <span class="pl-c"># Calls parent method but uses its own class attribute</span>
+    <span class="pl-en">print</span>(<span class="pl-s1">sup</span>.<span class="pl-en">get_species</span>())    <span class="pl-c"># =&gt; Superhuman</span>
+
+    <span class="pl-c"># Calls overridden method</span>
+    <span class="pl-en">print</span>(<span class="pl-s1">sup</span>.<span class="pl-en">sing</span>())           <span class="pl-c"># =&gt; nan nan nan nan nan batman!</span>
+
+    <span class="pl-c"># Calls method from Human, because inheritance order matters</span>
+    <span class="pl-s1">sup</span>.<span class="pl-en">say</span>(<span class="pl-s">'I agree'</span>)          <span class="pl-c"># =&gt; Sad Affleck: I agree</span>
+
+    <span class="pl-c"># Call method that exists only in 2nd ancestor</span>
+    <span class="pl-en">print</span>(<span class="pl-s1">sup</span>.<span class="pl-en">sonar</span>())          <span class="pl-c"># =&gt; ))) ... (((</span>
+
+    <span class="pl-c"># Inherited class attribute</span>
+    <span class="pl-s1">sup</span>.<span class="pl-s1">age</span> <span class="pl-c1">=</span> <span class="pl-c1">100</span>
+    <span class="pl-en">print</span>(<span class="pl-s1">sup</span>.<span class="pl-s1">age</span>)              <span class="pl-c"># =&gt; 100</span>
+
+    <span class="pl-c"># Inherited attribute from 2nd ancestor whose default value was overridden.</span>
+    <span class="pl-en">print</span>(<span class="pl-s">'Can I fly? '</span> <span class="pl-c1">+</span> <span class="pl-en">str</span>(<span class="pl-s1">sup</span>.<span class="pl-s1">fly</span>)) <span class="pl-c"># =&gt; Can I fly? False</span>
+
+
+
+<span class="pl-c">####################################################</span>
+<span class="pl-c">## 7. Advanced</span>
+<span class="pl-c">####################################################</span>
+
+<span class="pl-c"># Generators help you make lazy code.</span>
+<span class="pl-k">def</span> <span class="pl-en">double_numbers</span>(<span class="pl-s1">iterable</span>):
+    <span class="pl-k">for</span> <span class="pl-s1">i</span> <span class="pl-c1">in</span> <span class="pl-s1">iterable</span>:
+        <span class="pl-k">yield</span> <span class="pl-s1">i</span> <span class="pl-c1">+</span> <span class="pl-s1">i</span>
+
+<span class="pl-c"># Generators are memory-efficient because they only load the data needed to</span>
+<span class="pl-c"># process the next value in the iterable. This allows them to perform</span>
+<span class="pl-c"># operations on otherwise prohibitively large value ranges.</span>
+<span class="pl-c"># NOTE: `range` replaces `xrange` in Python 3.</span>
+<span class="pl-k">for</span> <span class="pl-s1">i</span> <span class="pl-c1">in</span> <span class="pl-en">double_numbers</span>(<span class="pl-en">range</span>(<span class="pl-c1">1</span>, <span class="pl-c1">900000000</span>)):  <span class="pl-c"># `range` is a generator.</span>
+    <span class="pl-en">print</span>(<span class="pl-s1">i</span>)
+    <span class="pl-k">if</span> <span class="pl-s1">i</span> <span class="pl-c1">&gt;=</span> <span class="pl-c1">30</span>:
+        <span class="pl-k">break</span>
+
+<span class="pl-c"># Just as you can create a list comprehension, you can create generator</span>
+<span class="pl-c"># comprehensions as well.</span>
+<span class="pl-s1">values</span> <span class="pl-c1">=</span> (<span class="pl-c1">-</span><span class="pl-s1">x</span> <span class="pl-k">for</span> <span class="pl-s1">x</span> <span class="pl-c1">in</span> [<span class="pl-c1">1</span>,<span class="pl-c1">2</span>,<span class="pl-c1">3</span>,<span class="pl-c1">4</span>,<span class="pl-c1">5</span>])
+<span class="pl-k">for</span> <span class="pl-s1">x</span> <span class="pl-c1">in</span> <span class="pl-s1">values</span>:
+    <span class="pl-en">print</span>(<span class="pl-s1">x</span>)  <span class="pl-c"># prints -1 -2 -3 -4 -5 to console/terminal</span>
+
+<span class="pl-c"># You can also cast a generator comprehension directly to a list.</span>
+<span class="pl-s1">values</span> <span class="pl-c1">=</span> (<span class="pl-c1">-</span><span class="pl-s1">x</span> <span class="pl-k">for</span> <span class="pl-s1">x</span> <span class="pl-c1">in</span> [<span class="pl-c1">1</span>,<span class="pl-c1">2</span>,<span class="pl-c1">3</span>,<span class="pl-c1">4</span>,<span class="pl-c1">5</span>])
+<span class="pl-s1">gen_to_list</span> <span class="pl-c1">=</span> <span class="pl-en">list</span>(<span class="pl-s1">values</span>)
+<span class="pl-en">print</span>(<span class="pl-s1">gen_to_list</span>)  <span class="pl-c"># =&gt; [-1, -2, -3, -4, -5]</span>
+
+
+<span class="pl-c"># Decorators</span>
+<span class="pl-c"># In this example `beg` wraps `say`. If say_please is True then it</span>
+<span class="pl-c"># will change the returned message.</span>
+<span class="pl-k">from</span> <span class="pl-s1">functools</span> <span class="pl-k">import</span> <span class="pl-s1">wraps</span>
+
+
+<span class="pl-k">def</span> <span class="pl-en">beg</span>(<span class="pl-s1">target_function</span>):
+    <span class="pl-en">@<span class="pl-en">wraps</span>(<span class="pl-s1">target_function</span>)</span>
+    <span class="pl-k">def</span> <span class="pl-en">wrapper</span>(<span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>):
+        <span class="pl-s1">msg</span>, <span class="pl-s1">say_please</span> <span class="pl-c1">=</span> <span class="pl-en">target_function</span>(<span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>)
+        <span class="pl-k">if</span> <span class="pl-s1">say_please</span>:
+            <span class="pl-k">return</span> <span class="pl-s">"{} {}"</span>.<span class="pl-en">format</span>(<span class="pl-s1">msg</span>, <span class="pl-s">"Please! I am poor :("</span>)
+        <span class="pl-k">return</span> <span class="pl-s1">msg</span>
+
+    <span class="pl-k">return</span> <span class="pl-s1">wrapper</span>
+
+
+<span class="pl-en">@<span class="pl-s1">beg</span></span>
+<span class="pl-k">def</span> <span class="pl-en">say</span>(<span class="pl-s1">say_please</span><span class="pl-c1">=</span><span class="pl-c1">False</span>):
+    <span class="pl-s1">msg</span> <span class="pl-c1">=</span> <span class="pl-s">"Can you buy me a beer?"</span>
+    <span class="pl-k">return</span> <span class="pl-s1">msg</span>, <span class="pl-s1">say_please</span>
+
+
+<span class="pl-en">print</span>(<span class="pl-en">say</span>())                 <span class="pl-c"># Can you buy me a beer?</span>
+<span class="pl-en">print</span>(<span class="pl-en">say</span>(<span class="pl-s1">say_please</span><span class="pl-c1">=</span><span class="pl-c1">True</span>))  <span class="pl-c"># Can you buy me a beer? Please! I am poor :(</span></pre></div>
+<h3>Free Online</h3>
+<ul>
+<li><a href="https://automatetheboringstuff.com" rel="nofollow">Automate the Boring Stuff with Python</a></li>
+<li><a href="https://docs.python.org/3/" rel="nofollow">The Official Docs</a></li>
+<li><a href="https://docs.python-guide.org/en/latest/" rel="nofollow">Hitchhiker's Guide to Python</a></li>
+<li><a href="https://www.python-course.eu" rel="nofollow">Python Course</a></li>
+<li><a href="http://www.Kikodo.io" rel="nofollow">Free Interactive Python Course</a></li>
+<li><a href="https://realpython.com/learn/python-first-steps/" rel="nofollow">First Steps With Python</a></li>
+<li><a href="https://github.com/vinta/awesome-python">A curated list of awesome Python frameworks, libraries and software</a></li>
+<li><a href="https://sahandsaba.com/thirty-python-language-features-and-tricks-you-may-not-know.html" rel="nofollow">30 Python Language Features and Tricks You May Not Know About</a></li>
+<li><a href="https://www.python.org/dev/peps/pep-0008/" rel="nofollow">Official Style Guide for Python</a></li>
+<li><a href="https://cscircles.cemc.uwaterloo.ca/" rel="nofollow">Python 3 Computer Science Circles</a></li>
+<li><a href="https://www.diveintopython3.net/index.html" rel="nofollow">Dive Into Python 3</a></li>
+<li><a href="https://nbviewer.jupyter.org/gist/anonymous/5924718" rel="nofollow">A Crash Course in Python for Scientists</a></li>
+<li><a href="https://pythonbasics.org/" rel="nofollow">Python Tutorial for Intermediates</a></li>
+<li><a href="https://pythonpyqt.com/" rel="nofollow">Build a Desktop App with Python</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Louie Dinh", "http://pythonpracticeprojects.com"]
+- ["Steven Basart", "http://github.com/xksteven"]
+- ["Andre Polykanine", "https://github.com/Oire"]
+- ["Zachary Ferguson", "http://github.com/zfergus2"]
+- ["evuez", "http://github.com/evuez"]
+- ["Rommel Martinez", "https://ebzzry.io"]
+- ["Roberto Fernandez Diaz", "https://github.com/robertofd1995"]
+- ["caminsha", "https://github.com/caminsha"]
+- ["Stanislav Modrak", "https://stanislav.gq"]
+- ["John Paul Wohlscheid", "https://gitpi.us"]
+</code></pre>

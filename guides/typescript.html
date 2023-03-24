@@ -1,0 +1,302 @@
+<h2>TypeScript</h2>
+<p>TypeScript is a language that aims at easing development of large scale<br>
+applications written in JavaScript. TypeScript adds common concepts such as<br>
+classes, modules, interfaces, generics and (optional) static typing to<br>
+JavaScript. It is a superset of JavaScript: all JavaScript code is valid<br>
+TypeScript code so it can be added seamlessly to any project. The TypeScript<br>
+compiler emits JavaScript.</p>
+<p>This article will focus only on TypeScript extra syntax, as opposed to<br>
+<a href="/docs/javascript">JavaScript</a>.</p>
+<p>To test TypeScript's compiler, head to the<br>
+<a href="https://www.typescriptlang.org/play" rel="nofollow">Playground</a> where you will be able<br>
+to type code, have auto completion and directly see the emitted JavaScript.</p>
+<div class="highlight highlight-source-ts"><pre class="notranslate"><span class="pl-c">// There are 3 basic types in TypeScript</span>
+<span class="pl-k">let</span> <span class="pl-s1">isDone</span>: <span class="pl-smi">boolean</span> <span class="pl-c1">=</span> <span class="pl-c1">false</span><span class="pl-kos">;</span>
+<span class="pl-k">let</span> <span class="pl-s1">lines</span>: <span class="pl-smi">number</span> <span class="pl-c1">=</span> <span class="pl-c1">42</span><span class="pl-kos">;</span>
+<span class="pl-k">let</span> <span class="pl-s1">name</span>: <span class="pl-smi">string</span> <span class="pl-c1">=</span> <span class="pl-s">"Anders"</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// But you can omit the type annotation if the variables are derived</span>
+<span class="pl-c">// from explicit literals</span>
+<span class="pl-k">let</span> <span class="pl-s1">isDone</span> <span class="pl-c1">=</span> <span class="pl-c1">false</span><span class="pl-kos">;</span>
+<span class="pl-k">let</span> <span class="pl-s1">lines</span> <span class="pl-c1">=</span> <span class="pl-c1">42</span><span class="pl-kos">;</span>
+<span class="pl-k">let</span> <span class="pl-s1">name</span> <span class="pl-c1">=</span> <span class="pl-s">"Anders"</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// When it's impossible to know, there is the "Any" type</span>
+<span class="pl-k">let</span> <span class="pl-s1">notSure</span>: <span class="pl-smi">any</span> <span class="pl-c1">=</span> <span class="pl-c1">4</span><span class="pl-kos">;</span>
+<span class="pl-s1">notSure</span> <span class="pl-c1">=</span> <span class="pl-s">"maybe a string instead"</span><span class="pl-kos">;</span>
+<span class="pl-s1">notSure</span> <span class="pl-c1">=</span> <span class="pl-c1">false</span><span class="pl-kos">;</span> <span class="pl-c">// okay, definitely a boolean</span>
+
+<span class="pl-c">// Use const keyword for constants</span>
+<span class="pl-k">const</span> <span class="pl-s1">numLivesForCat</span> <span class="pl-c1">=</span> <span class="pl-c1">9</span><span class="pl-kos">;</span>
+<span class="pl-s1">numLivesForCat</span> <span class="pl-c1">=</span> <span class="pl-c1">1</span><span class="pl-kos">;</span> <span class="pl-c">// Error</span>
+
+<span class="pl-c">// For collections, there are typed arrays and generic arrays</span>
+<span class="pl-k">let</span> <span class="pl-s1">list</span>: <span class="pl-smi">number</span><span class="pl-kos">[</span><span class="pl-kos">]</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span><span class="pl-c1">1</span><span class="pl-kos">,</span> <span class="pl-c1">2</span><span class="pl-kos">,</span> <span class="pl-c1">3</span><span class="pl-kos">]</span><span class="pl-kos">;</span>
+<span class="pl-c">// Alternatively, using the generic array type</span>
+<span class="pl-k">let</span> <span class="pl-s1">list</span>: <span class="pl-smi">Array</span><span class="pl-kos">&lt;</span><span class="pl-smi">number</span><span class="pl-kos">&gt;</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span><span class="pl-c1">1</span><span class="pl-kos">,</span> <span class="pl-c1">2</span><span class="pl-kos">,</span> <span class="pl-c1">3</span><span class="pl-kos">]</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// For enumerations:</span>
+<span class="pl-k">enum</span> <span class="pl-smi">Color</span> <span class="pl-kos">{</span>
+  <span class="pl-c1">Red</span><span class="pl-kos">,</span>
+  <span class="pl-c1">Green</span><span class="pl-kos">,</span>
+  <span class="pl-c1">Blue</span><span class="pl-kos">,</span>
+<span class="pl-kos">}</span>
+<span class="pl-k">let</span> <span class="pl-s1">c</span>: <span class="pl-smi">Color</span> <span class="pl-c1">=</span> <span class="pl-smi">Color</span><span class="pl-kos">.</span><span class="pl-c1">Green</span><span class="pl-kos">;</span>
+<span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-en">log</span><span class="pl-kos">(</span><span class="pl-smi">Color</span><span class="pl-kos">[</span><span class="pl-s1">c</span><span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// "Green"</span>
+
+<span class="pl-c">// Lastly, "void" is used in the special case of a function returning nothing</span>
+<span class="pl-k">function</span> <span class="pl-en">bigHorribleAlert</span><span class="pl-kos">(</span><span class="pl-kos">)</span>: <span class="pl-smi"><span class="pl-k">void</span></span> <span class="pl-kos">{</span>
+  <span class="pl-en">alert</span><span class="pl-kos">(</span><span class="pl-s">"I'm a little annoying box!"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-c">// Functions are first class citizens, support the lambda "fat arrow" syntax and</span>
+<span class="pl-c">// use type inference</span>
+
+<span class="pl-c">// The following are equivalent, the same signature will be inferred by the</span>
+<span class="pl-c">// compiler, and same JavaScript will be emitted</span>
+<span class="pl-k">let</span> <span class="pl-en">f1</span> <span class="pl-c1">=</span> <span class="pl-k">function</span> <span class="pl-kos">(</span><span class="pl-s1">i</span>: <span class="pl-smi">number</span><span class="pl-kos">)</span>: <span class="pl-smi">number</span> <span class="pl-kos">{</span>
+  <span class="pl-k">return</span> <span class="pl-s1">i</span> <span class="pl-c1">*</span> <span class="pl-s1">i</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span><span class="pl-kos">;</span>
+<span class="pl-c">// Return type inferred</span>
+<span class="pl-k">let</span> <span class="pl-en">f2</span> <span class="pl-c1">=</span> <span class="pl-k">function</span> <span class="pl-kos">(</span><span class="pl-s1">i</span>: <span class="pl-smi">number</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+  <span class="pl-k">return</span> <span class="pl-s1">i</span> <span class="pl-c1">*</span> <span class="pl-s1">i</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span><span class="pl-kos">;</span>
+<span class="pl-c">// "Fat arrow" syntax</span>
+<span class="pl-k">let</span> <span class="pl-en">f3</span> <span class="pl-c1">=</span> <span class="pl-kos">(</span><span class="pl-s1">i</span>: <span class="pl-smi">number</span><span class="pl-kos">)</span>: <span class="pl-smi">number</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span>
+  <span class="pl-k">return</span> <span class="pl-s1">i</span> <span class="pl-c1">*</span> <span class="pl-s1">i</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span><span class="pl-kos">;</span>
+<span class="pl-c">// "Fat arrow" syntax with return type inferred</span>
+<span class="pl-k">let</span> <span class="pl-en">f4</span> <span class="pl-c1">=</span> <span class="pl-kos">(</span><span class="pl-s1">i</span>: <span class="pl-smi">number</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span>
+  <span class="pl-k">return</span> <span class="pl-s1">i</span> <span class="pl-c1">*</span> <span class="pl-s1">i</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span><span class="pl-kos">;</span>
+<span class="pl-c">// "Fat arrow" syntax with return type inferred, braceless means no return</span>
+<span class="pl-c">// keyword needed</span>
+<span class="pl-k">let</span> <span class="pl-en">f5</span> <span class="pl-c1">=</span> <span class="pl-kos">(</span><span class="pl-s1">i</span>: <span class="pl-smi">number</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-s1">i</span> <span class="pl-c1">*</span> <span class="pl-s1">i</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// Interfaces are structural, anything that has the properties is compliant with</span>
+<span class="pl-c">// the interface</span>
+<span class="pl-k">interface</span> <span class="pl-smi">Person</span> <span class="pl-kos">{</span>
+  <span class="pl-c1">name</span>: <span class="pl-smi">string</span><span class="pl-kos">;</span>
+  <span class="pl-c">// Optional properties, marked with a "?"</span>
+  <span class="pl-c1">age</span>?: <span class="pl-smi">number</span><span class="pl-kos">;</span>
+  <span class="pl-c">// And of course functions</span>
+  <span class="pl-c1">move</span><span class="pl-kos">(</span><span class="pl-kos">)</span>: <span class="pl-smi"><span class="pl-k">void</span></span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-c">// Object that implements the "Person" interface</span>
+<span class="pl-c">// Can be treated as a Person since it has the name and move properties</span>
+<span class="pl-k">let</span> <span class="pl-s1">p</span>: <span class="pl-smi">Person</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span> <span class="pl-c1">name</span>: <span class="pl-s">"Bobby"</span><span class="pl-kos">,</span> <span class="pl-en">move</span>: <span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span><span class="pl-kos">}</span> <span class="pl-kos">}</span><span class="pl-kos">;</span>
+<span class="pl-c">// Objects that have the optional property:</span>
+<span class="pl-k">let</span> <span class="pl-s1">validPerson</span>: <span class="pl-smi">Person</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span> <span class="pl-c1">name</span>: <span class="pl-s">"Bobby"</span><span class="pl-kos">,</span> <span class="pl-c1">age</span>: <span class="pl-c1">42</span><span class="pl-kos">,</span> <span class="pl-en">move</span>: <span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span><span class="pl-kos">}</span> <span class="pl-kos">}</span><span class="pl-kos">;</span>
+<span class="pl-c">// Is not a person because age is not a number</span>
+<span class="pl-k">let</span> <span class="pl-s1">invalidPerson</span>: <span class="pl-smi">Person</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span> <span class="pl-c1">name</span>: <span class="pl-s">"Bobby"</span><span class="pl-kos">,</span> <span class="pl-c1">age</span>: <span class="pl-c1">true</span> <span class="pl-kos">}</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// Interfaces can also describe a function type</span>
+<span class="pl-k">interface</span> <span class="pl-smi">SearchFunc</span> <span class="pl-kos">{</span>
+  <span class="pl-kos">(</span><span class="pl-s1">source</span>: <span class="pl-smi">string</span><span class="pl-kos">,</span> <span class="pl-s1">subString</span>: <span class="pl-smi">string</span><span class="pl-kos">)</span>: <span class="pl-smi">boolean</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span>
+<span class="pl-c">// Only the parameters' types are important, names are not important.</span>
+<span class="pl-k">let</span> <span class="pl-s1">mySearch</span>: <span class="pl-smi">SearchFunc</span><span class="pl-kos">;</span>
+<span class="pl-en">mySearch</span> <span class="pl-c1">=</span> <span class="pl-k">function</span> <span class="pl-kos">(</span><span class="pl-s1">src</span>: <span class="pl-smi">string</span><span class="pl-kos">,</span> <span class="pl-s1">sub</span>: <span class="pl-smi">string</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+  <span class="pl-k">return</span> <span class="pl-s1">src</span><span class="pl-kos">.</span><span class="pl-en">search</span><span class="pl-kos">(</span><span class="pl-s1">sub</span><span class="pl-kos">)</span> <span class="pl-c1">!=</span> <span class="pl-c1">-</span><span class="pl-c1">1</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// Classes - members are public by default</span>
+<span class="pl-k">class</span> <span class="pl-smi">Point</span> <span class="pl-kos">{</span>
+  <span class="pl-c">// Properties</span>
+  <span class="pl-c1">x</span>: <span class="pl-smi">number</span><span class="pl-kos">;</span>
+
+  <span class="pl-c">// Constructor - the public/private keywords in this context will generate</span>
+  <span class="pl-c">// the boiler plate code for the property and the initialization in the</span>
+  <span class="pl-c">// constructor.</span>
+  <span class="pl-c">// In this example, "y" will be defined just like "x" is, but with less code</span>
+  <span class="pl-c">// Default values are also supported</span>
+
+  <span class="pl-en">constructor</span><span class="pl-kos">(</span><span class="pl-s1">x</span>: <span class="pl-smi">number</span><span class="pl-kos">,</span> <span class="pl-k">public</span> <span class="pl-s1">y</span>: <span class="pl-smi">number</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">x</span> <span class="pl-c1">=</span> <span class="pl-s1">x</span><span class="pl-kos">;</span>
+  <span class="pl-kos">}</span>
+
+  <span class="pl-c">// Functions</span>
+  <span class="pl-en">dist</span><span class="pl-kos">(</span><span class="pl-kos">)</span>: <span class="pl-smi">number</span> <span class="pl-kos">{</span>
+    <span class="pl-k">return</span> <span class="pl-smi">Math</span><span class="pl-kos">.</span><span class="pl-en">sqrt</span><span class="pl-kos">(</span><span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">x</span> <span class="pl-c1">*</span> <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">x</span> <span class="pl-c1">+</span> <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">y</span> <span class="pl-c1">*</span> <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">y</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+  <span class="pl-kos">}</span>
+
+  <span class="pl-c">// Static members</span>
+  <span class="pl-k">static</span> <span class="pl-c1">origin</span> <span class="pl-c1">=</span> <span class="pl-k">new</span> <span class="pl-smi">Point</span><span class="pl-kos">(</span><span class="pl-c1">0</span><span class="pl-kos">,</span> <span class="pl-c1">0</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-c">// Classes can be explicitly marked as implementing an interface.</span>
+<span class="pl-c">// Any missing properties will then cause an error at compile-time.</span>
+<span class="pl-k">class</span> <span class="pl-smi">PointPerson</span> <span class="pl-k">implements</span> <span class="pl-smi">Person</span> <span class="pl-kos">{</span>
+  <span class="pl-c1">name</span>: <span class="pl-smi">string</span><span class="pl-kos">;</span>
+  <span class="pl-en">move</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span><span class="pl-kos">}</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-k">let</span> <span class="pl-s1">p1</span> <span class="pl-c1">=</span> <span class="pl-k">new</span> <span class="pl-smi">Point</span><span class="pl-kos">(</span><span class="pl-c1">10</span><span class="pl-kos">,</span> <span class="pl-c1">20</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-k">let</span> <span class="pl-s1">p2</span> <span class="pl-c1">=</span> <span class="pl-k">new</span> <span class="pl-smi">Point</span><span class="pl-kos">(</span><span class="pl-c1">25</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">//y will be 0</span>
+
+<span class="pl-c">// Inheritance</span>
+<span class="pl-k">class</span> <span class="pl-smi">Point3D</span> <span class="pl-k">extends</span> <span class="pl-smi">Point</span> <span class="pl-kos">{</span>
+  <span class="pl-en">constructor</span><span class="pl-kos">(</span><span class="pl-s1">x</span>: <span class="pl-smi">number</span><span class="pl-kos">,</span> <span class="pl-s1">y</span>: <span class="pl-smi">number</span><span class="pl-kos">,</span> <span class="pl-k">public</span> <span class="pl-s1">z</span>: <span class="pl-smi">number</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-smi">super</span><span class="pl-kos">(</span><span class="pl-s1">x</span><span class="pl-kos">,</span> <span class="pl-s1">y</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Explicit call to the super class constructor is mandatory</span>
+  <span class="pl-kos">}</span>
+
+  <span class="pl-c">// Overwrite</span>
+  <span class="pl-en">dist</span><span class="pl-kos">(</span><span class="pl-kos">)</span>: <span class="pl-smi">number</span> <span class="pl-kos">{</span>
+    <span class="pl-k">let</span> <span class="pl-s1">d</span> <span class="pl-c1">=</span> <span class="pl-smi">super</span><span class="pl-kos">.</span><span class="pl-en">dist</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-k">return</span> <span class="pl-smi">Math</span><span class="pl-kos">.</span><span class="pl-en">sqrt</span><span class="pl-kos">(</span><span class="pl-s1">d</span> <span class="pl-c1">*</span> <span class="pl-s1">d</span> <span class="pl-c1">+</span> <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">z</span> <span class="pl-c1">*</span> <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">z</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+  <span class="pl-kos">}</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-c">// Modules, "." can be used as separator for sub modules</span>
+module <span class="pl-smi">Geometry</span> <span class="pl-kos">{</span>
+  <span class="pl-k">export</span> <span class="pl-k">class</span> <span class="pl-smi">Square</span> <span class="pl-kos">{</span>
+    <span class="pl-en">constructor</span><span class="pl-kos">(</span><span class="pl-k">public</span> <span class="pl-s1">sideLength</span>: <span class="pl-smi">number</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span><span class="pl-kos">)</span> <span class="pl-kos">{</span><span class="pl-kos">}</span>
+    <span class="pl-en">area</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+      <span class="pl-k">return</span> <span class="pl-smi">Math</span><span class="pl-kos">.</span><span class="pl-en">pow</span><span class="pl-kos">(</span><span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">sideLength</span><span class="pl-kos">,</span> <span class="pl-c1">2</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+  <span class="pl-kos">}</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-k">let</span> <span class="pl-s1">s1</span> <span class="pl-c1">=</span> <span class="pl-k">new</span> <span class="pl-smi">Geometry</span><span class="pl-kos">.</span><span class="pl-c1">Square</span><span class="pl-kos">(</span><span class="pl-c1">5</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// Local alias for referencing a module</span>
+<span class="pl-k">import</span> <span class="pl-smi">G</span> <span class="pl-c1">=</span> <span class="pl-smi">Geometry</span><span class="pl-kos">;</span>
+
+<span class="pl-k">let</span> <span class="pl-s1">s2</span> <span class="pl-c1">=</span> <span class="pl-k">new</span> <span class="pl-smi">G</span><span class="pl-kos">.</span><span class="pl-c1">Square</span><span class="pl-kos">(</span><span class="pl-c1">10</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// Generics</span>
+<span class="pl-c">// Classes</span>
+<span class="pl-k">class</span> <span class="pl-smi">Tuple</span><span class="pl-c1">&lt;</span><span class="pl-smi">T1</span><span class="pl-kos">,</span> <span class="pl-smi">T2</span><span class="pl-c1">&gt;</span> <span class="pl-kos">{</span>
+  <span class="pl-en">constructor</span><span class="pl-kos">(</span><span class="pl-k">public</span> <span class="pl-s1">item1</span>: <span class="pl-smi">T1</span><span class="pl-kos">,</span> <span class="pl-k">public</span> <span class="pl-s1">item2</span>: <span class="pl-smi">T2</span><span class="pl-kos">)</span> <span class="pl-kos">{</span><span class="pl-kos">}</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-c">// Interfaces</span>
+<span class="pl-k">interface</span> <span class="pl-smi">Pair</span><span class="pl-c1">&lt;</span><span class="pl-smi">T</span><span class="pl-c1">&gt;</span> <span class="pl-kos">{</span>
+  <span class="pl-c1">item1</span>: <span class="pl-smi">T</span><span class="pl-kos">;</span>
+  <span class="pl-c1">item2</span>: <span class="pl-smi">T</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-c">// And functions</span>
+<span class="pl-k">let</span> <span class="pl-en">pairToTuple</span> <span class="pl-c1">=</span> <span class="pl-k">function</span> <span class="pl-c1">&lt;</span><span class="pl-smi">T</span><span class="pl-c1">&gt;</span><span class="pl-kos">(</span><span class="pl-s1">p</span>: <span class="pl-smi">Pair</span><span class="pl-kos">&lt;</span><span class="pl-smi">T</span><span class="pl-kos">&gt;</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+  <span class="pl-k">return</span> <span class="pl-k">new</span> <span class="pl-smi">Tuple</span><span class="pl-kos">(</span><span class="pl-s1">p</span><span class="pl-kos">.</span><span class="pl-c1">item1</span><span class="pl-kos">,</span> <span class="pl-s1">p</span><span class="pl-kos">.</span><span class="pl-c1">item2</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span><span class="pl-kos">;</span>
+
+<span class="pl-k">let</span> <span class="pl-s1">tuple</span> <span class="pl-c1">=</span> <span class="pl-en">pairToTuple</span><span class="pl-kos">(</span><span class="pl-kos">{</span> <span class="pl-c1">item1</span>: <span class="pl-s">"hello"</span><span class="pl-kos">,</span> <span class="pl-c1">item2</span>: <span class="pl-s">"world"</span> <span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// Including references to a definition file:</span>
+<span class="pl-c">/// &lt;reference path="jquery.d.ts" /&gt;</span>
+
+<span class="pl-c">// Template Strings (strings that use backticks)</span>
+<span class="pl-c">// String Interpolation with Template Strings</span>
+<span class="pl-k">let</span> <span class="pl-s1">name</span> <span class="pl-c1">=</span> <span class="pl-s">"Tyrone"</span><span class="pl-kos">;</span>
+<span class="pl-k">let</span> <span class="pl-s1">greeting</span> <span class="pl-c1">=</span> <span class="pl-s">`Hi <span class="pl-s1"><span class="pl-kos">${</span><span class="pl-s1">name</span><span class="pl-kos">}</span></span>, how are you?`</span><span class="pl-kos">;</span>
+<span class="pl-c">// Multiline Strings with Template Strings</span>
+<span class="pl-k">let</span> <span class="pl-s1">multiline</span> <span class="pl-c1">=</span> <span class="pl-s">`This is an example</span>
+<span class="pl-s">of a multiline string`</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// READONLY: New Feature in TypeScript 3.1</span>
+<span class="pl-k">interface</span> <span class="pl-smi">Person</span> <span class="pl-kos">{</span>
+  <span class="pl-k">readonly</span> <span class="pl-c1">name</span>: <span class="pl-smi">string</span><span class="pl-kos">;</span>
+  <span class="pl-k">readonly</span> <span class="pl-c1">age</span>: <span class="pl-smi">number</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-k">var</span> <span class="pl-s1">p1</span>: <span class="pl-smi">Person</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span> <span class="pl-c1">name</span>: <span class="pl-s">"Tyrone"</span><span class="pl-kos">,</span> <span class="pl-c1">age</span>: <span class="pl-c1">42</span> <span class="pl-kos">}</span><span class="pl-kos">;</span>
+<span class="pl-s1">p1</span><span class="pl-kos">.</span><span class="pl-c1">age</span> <span class="pl-c1">=</span> <span class="pl-c1">25</span><span class="pl-kos">;</span> <span class="pl-c">// Error, p1.age is read-only</span>
+
+<span class="pl-k">var</span> <span class="pl-s1">p2</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span> <span class="pl-c1">name</span>: <span class="pl-s">"John"</span><span class="pl-kos">,</span> <span class="pl-c1">age</span>: <span class="pl-c1">60</span> <span class="pl-kos">}</span><span class="pl-kos">;</span>
+<span class="pl-k">var</span> <span class="pl-s1">p3</span>: <span class="pl-smi">Person</span> <span class="pl-c1">=</span> <span class="pl-s1">p2</span><span class="pl-kos">;</span> <span class="pl-c">// Ok, read-only alias for p2</span>
+<span class="pl-s1">p3</span><span class="pl-kos">.</span><span class="pl-c1">age</span> <span class="pl-c1">=</span> <span class="pl-c1">35</span><span class="pl-kos">;</span> <span class="pl-c">// Error, p3.age is read-only</span>
+<span class="pl-s1">p2</span><span class="pl-kos">.</span><span class="pl-c1">age</span> <span class="pl-c1">=</span> <span class="pl-c1">45</span><span class="pl-kos">;</span> <span class="pl-c">// Ok, but also changes p3.age because of aliasing</span>
+
+<span class="pl-k">class</span> <span class="pl-smi">Car</span> <span class="pl-kos">{</span>
+  <span class="pl-k">readonly</span> <span class="pl-c1">make</span>: <span class="pl-smi">string</span><span class="pl-kos">;</span>
+  <span class="pl-k">readonly</span> <span class="pl-c1">model</span>: <span class="pl-smi">string</span><span class="pl-kos">;</span>
+  <span class="pl-k">readonly</span> <span class="pl-c1">year</span> <span class="pl-c1">=</span> <span class="pl-c1">2018</span><span class="pl-kos">;</span>
+
+  <span class="pl-en">constructor</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">make</span> <span class="pl-c1">=</span> <span class="pl-s">"Unknown Make"</span><span class="pl-kos">;</span> <span class="pl-c">// Assignment permitted in constructor</span>
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">model</span> <span class="pl-c1">=</span> <span class="pl-s">"Unknown Model"</span><span class="pl-kos">;</span> <span class="pl-c">// Assignment permitted in constructor</span>
+  <span class="pl-kos">}</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-k">let</span> <span class="pl-s1">numbers</span>: <span class="pl-smi">Array</span><span class="pl-kos">&lt;</span><span class="pl-smi">number</span><span class="pl-kos">&gt;</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span><span class="pl-c1">0</span><span class="pl-kos">,</span> <span class="pl-c1">1</span><span class="pl-kos">,</span> <span class="pl-c1">2</span><span class="pl-kos">,</span> <span class="pl-c1">3</span><span class="pl-kos">,</span> <span class="pl-c1">4</span><span class="pl-kos">]</span><span class="pl-kos">;</span>
+<span class="pl-k">let</span> <span class="pl-s1">moreNumbers</span>: <span class="pl-smi">ReadonlyArray</span><span class="pl-kos">&lt;</span><span class="pl-smi">number</span><span class="pl-kos">&gt;</span> <span class="pl-c1">=</span> <span class="pl-s1">numbers</span><span class="pl-kos">;</span>
+<span class="pl-s1">moreNumbers</span><span class="pl-kos">[</span><span class="pl-c1">5</span><span class="pl-kos">]</span> <span class="pl-c1">=</span> <span class="pl-c1">5</span><span class="pl-kos">;</span> <span class="pl-c">// Error, elements are read-only</span>
+<span class="pl-s1">moreNumbers</span><span class="pl-kos">.</span><span class="pl-en">push</span><span class="pl-kos">(</span><span class="pl-c1">5</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Error, no push method (because it mutates array)</span>
+<span class="pl-s1">moreNumbers</span><span class="pl-kos">.</span><span class="pl-c1">length</span> <span class="pl-c1">=</span> <span class="pl-c1">3</span><span class="pl-kos">;</span> <span class="pl-c">// Error, length is read-only</span>
+<span class="pl-s1">numbers</span> <span class="pl-c1">=</span> <span class="pl-s1">moreNumbers</span><span class="pl-kos">;</span> <span class="pl-c">// Error, mutating methods are missing</span>
+
+<span class="pl-c">// Tagged Union Types for modelling state that can be in one of many shapes</span>
+<span class="pl-k">type</span> <span class="pl-smi">State</span> <span class="pl-c1">=</span>
+  <span class="pl-c1">|</span> <span class="pl-kos">{</span> <span class="pl-c1">type</span>: <span class="pl-s">"loading"</span> <span class="pl-kos">}</span>
+  <span class="pl-c1">|</span> <span class="pl-kos">{</span> <span class="pl-c1">type</span>: <span class="pl-s">"success"</span><span class="pl-kos">;</span> <span class="pl-c1">value</span>: <span class="pl-smi">number</span> <span class="pl-kos">}</span>
+  <span class="pl-c1">|</span> <span class="pl-kos">{</span> <span class="pl-c1">type</span>: <span class="pl-s">"error"</span><span class="pl-kos">;</span> <span class="pl-c1">message</span>: <span class="pl-smi">string</span> <span class="pl-kos">}</span><span class="pl-kos">;</span>
+
+<span class="pl-k">declare</span> <span class="pl-k">const</span> <span class="pl-s1">state</span>: <span class="pl-smi">State</span><span class="pl-kos">;</span>
+<span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">state</span><span class="pl-kos">.</span><span class="pl-c1">type</span> <span class="pl-c1">===</span> <span class="pl-s">"success"</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+  <span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-en">log</span><span class="pl-kos">(</span><span class="pl-s1">state</span><span class="pl-kos">.</span><span class="pl-c1">value</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span> <span class="pl-k">else</span> <span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">state</span><span class="pl-kos">.</span><span class="pl-c1">type</span> <span class="pl-c1">===</span> <span class="pl-s">"error"</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+  <span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-en">error</span><span class="pl-kos">(</span><span class="pl-s1">state</span><span class="pl-kos">.</span><span class="pl-c1">message</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-c">// Template Literal Types</span>
+<span class="pl-c">// Use to create complex string types</span>
+<span class="pl-k">type</span> <span class="pl-smi">OrderSize</span> <span class="pl-c1">=</span> <span class="pl-s">"regular"</span> <span class="pl-c1">|</span> <span class="pl-s">"large"</span><span class="pl-kos">;</span>
+<span class="pl-k">type</span> <span class="pl-smi">OrderItem</span> <span class="pl-c1">=</span> <span class="pl-s">"Espresso"</span> <span class="pl-c1">|</span> <span class="pl-s">"Cappuccino"</span><span class="pl-kos">;</span>
+<span class="pl-k">type</span> <span class="pl-smi">Order</span> <span class="pl-c1">=</span> `A ${<span class="pl-smi">OrderSize</span><span class="pl-kos">}</span> ${<span class="pl-smi">OrderItem</span><span class="pl-kos">}</span>`<span class="pl-kos">;</span>
+
+<span class="pl-k">let</span> <span class="pl-s1">order1</span>: <span class="pl-smi">Order</span> <span class="pl-c1">=</span> <span class="pl-s">"A regular Cappuccino"</span><span class="pl-kos">;</span>
+<span class="pl-k">let</span> <span class="pl-s1">order2</span>: <span class="pl-smi">Order</span> <span class="pl-c1">=</span> <span class="pl-s">"A large Espresso"</span><span class="pl-kos">;</span>
+<span class="pl-k">let</span> <span class="pl-s1">order3</span>: <span class="pl-smi">Order</span> <span class="pl-c1">=</span> <span class="pl-s">"A small Espresso"</span><span class="pl-kos">;</span> <span class="pl-c">// Error</span>
+
+<span class="pl-c">// Iterators and Generators</span>
+
+<span class="pl-c">// for..of statement</span>
+<span class="pl-c">// iterate over the list of values on the object being iterated</span>
+<span class="pl-k">let</span> <span class="pl-s1">arrayOfAnyType</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span><span class="pl-c1">1</span><span class="pl-kos">,</span> <span class="pl-s">"string"</span><span class="pl-kos">,</span> <span class="pl-c1">false</span><span class="pl-kos">]</span><span class="pl-kos">;</span>
+<span class="pl-k">for</span> <span class="pl-kos">(</span><span class="pl-k">const</span> <span class="pl-s1">val</span> <span class="pl-k">of</span> <span class="pl-s1">arrayOfAnyType</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+  <span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-en">log</span><span class="pl-kos">(</span><span class="pl-s1">val</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// 1, "string", false</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-k">let</span> <span class="pl-s1">list</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span><span class="pl-c1">4</span><span class="pl-kos">,</span> <span class="pl-c1">5</span><span class="pl-kos">,</span> <span class="pl-c1">6</span><span class="pl-kos">]</span><span class="pl-kos">;</span>
+<span class="pl-k">for</span> <span class="pl-kos">(</span><span class="pl-k">const</span> <span class="pl-s1">i</span> <span class="pl-k">of</span> <span class="pl-s1">list</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+  <span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-en">log</span><span class="pl-kos">(</span><span class="pl-s1">i</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// 4, 5, 6</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-c">// for..in statement</span>
+<span class="pl-c">// iterate over the list of keys on the object being iterated</span>
+<span class="pl-k">for</span> <span class="pl-kos">(</span><span class="pl-k">const</span> <span class="pl-s1">i</span> <span class="pl-k">in</span> <span class="pl-s1">list</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+  <span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-en">log</span><span class="pl-kos">(</span><span class="pl-s1">i</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// 0, 1, 2</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-c">// Type Assertion</span>
+
+<span class="pl-k">let</span> <span class="pl-s1">foo</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span><span class="pl-kos">}</span><span class="pl-kos">;</span> <span class="pl-c">// Creating foo as an empty object</span>
+<span class="pl-s1">foo</span><span class="pl-kos">.</span><span class="pl-c1">bar</span> <span class="pl-c1">=</span> <span class="pl-c1">123</span><span class="pl-kos">;</span> <span class="pl-c">// Error: property 'bar' does not exist on `{}`</span>
+<span class="pl-s1">foo</span><span class="pl-kos">.</span><span class="pl-c1">baz</span> <span class="pl-c1">=</span> <span class="pl-s">"hello world"</span><span class="pl-kos">;</span> <span class="pl-c">// Error: property 'baz' does not exist on `{}`</span>
+
+<span class="pl-c">// Because the inferred type of foo is `{}` (an object with 0 properties), you</span>
+<span class="pl-c">// are not allowed to add bar and baz to it. However with type assertion,</span>
+<span class="pl-c">// the following will pass:</span>
+
+<span class="pl-k">interface</span> <span class="pl-smi">Foo</span> <span class="pl-kos">{</span>
+  <span class="pl-c1">bar</span>: <span class="pl-smi">number</span><span class="pl-kos">;</span>
+  <span class="pl-c1">baz</span>: <span class="pl-smi">string</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-k">let</span> <span class="pl-s1">foo</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span><span class="pl-kos">}</span> <span class="pl-k">as</span> <span class="pl-smi">Foo</span><span class="pl-kos">;</span> <span class="pl-c">// Type assertion here</span>
+<span class="pl-s1">foo</span><span class="pl-kos">.</span><span class="pl-c1">bar</span> <span class="pl-c1">=</span> <span class="pl-c1">123</span><span class="pl-kos">;</span>
+<span class="pl-s1">foo</span><span class="pl-kos">.</span><span class="pl-c1">baz</span> <span class="pl-c1">=</span> <span class="pl-s">"hello world"</span><span class="pl-kos">;</span></pre></div>
+<h2>Further Reading</h2>
+<ul>
+<li>[TypeScript Official website] (<a href="http://www.typescriptlang.org/" rel="nofollow">http://www.typescriptlang.org/</a>)</li>
+<li>[TypeScript language specifications] (<a href="https://github.com/microsoft/TypeScript/blob/main/doc/spec-ARCHIVED.md">https://github.com/microsoft/TypeScript/blob/main/doc/spec-ARCHIVED.md</a>)</li>
+<li>[Learn TypeScript] (<a href="https://learntypescript.dev/" rel="nofollow">https://learntypescript.dev/</a>)</li>
+<li>[Source Code on GitHub] (<a href="https://github.com/Microsoft/TypeScript">https://github.com/Microsoft/TypeScript</a>)</li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Philippe Vlérick", "https://github.com/pvlerick"]
+- ["Kiwimoe", "https://github.com/kiwimoe"]
+</code></pre>
