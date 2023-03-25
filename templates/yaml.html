@@ -1,0 +1,232 @@
+<h1>YAML</h1>
+<p>YAML is a data serialisation language designed to be directly writable and<br>
+readable by humans.</p>
+<p>It's a strict superset of JSON, with the addition of syntactically<br>
+significant newlines and indentation, like Python. Unlike Python, however,<br>
+YAML doesn't allow literal tab characters for indentation.</p>
+<div class="highlight highlight-source-yaml"><pre class="notranslate">---  <span class="pl-c"><span class="pl-c">#</span> document start</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Comments in YAML look like this.</span>
+<span class="pl-c"><span class="pl-c">#</span> YAML support single-line comments.</span>
+
+<span class="pl-c"><span class="pl-c">#</span>###############</span>
+<span class="pl-c"><span class="pl-c">#</span> SCALAR TYPES #</span>
+<span class="pl-c"><span class="pl-c">#</span>###############</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Our root object (which continues for the entire document) will be a map,</span>
+<span class="pl-c"><span class="pl-c">#</span> which is equivalent to a dictionary, hash or object in other languages.</span>
+<span class="pl-ent">key</span>: <span class="pl-s">value</span>
+<span class="pl-ent">another_key</span>: <span class="pl-s">Another value goes here.</span>
+<span class="pl-ent">a_number_value</span>: <span class="pl-c1">100</span>
+<span class="pl-ent">scientific_notation</span>: <span class="pl-c1">1e+12</span>
+<span class="pl-ent">hex_notation</span>: <span class="pl-c1">0x123</span>  <span class="pl-c"><span class="pl-c">#</span> evaluates to 291</span>
+<span class="pl-ent">octal_notation</span>: <span class="pl-c1">0123</span> <span class="pl-c"><span class="pl-c">#</span> evaluates to 83</span>
+
+<span class="pl-c"><span class="pl-c">#</span> The number 1 will be interpreted as a number, not a boolean. </span>
+<span class="pl-c"><span class="pl-c">#</span> If you want it to be interpreted as a boolean, use true.</span>
+<span class="pl-ent">boolean</span>: <span class="pl-c1">true</span>
+<span class="pl-ent">null_value</span>: <span class="pl-c1">null</span>
+<span class="pl-ent">another_null_value</span>: <span class="pl-c1">~</span>
+<span class="pl-ent">key with spaces</span>: <span class="pl-s">value</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Yes and No (doesn't matter the case) will be evaluated to boolean </span>
+<span class="pl-c"><span class="pl-c">#</span> true and false values respectively.</span>
+<span class="pl-c"><span class="pl-c">#</span> To use the actual value use single or double quotes.</span>
+<span class="pl-ent">no</span>: <span class="pl-s">no            </span><span class="pl-c"><span class="pl-c">#</span> evaluates to "false": false</span>
+<span class="pl-ent">yes</span>: <span class="pl-s">No           </span><span class="pl-c"><span class="pl-c">#</span> evaluates to "true": false</span>
+<span class="pl-ent">not_enclosed</span>: <span class="pl-s">yes </span><span class="pl-c"><span class="pl-c">#</span> evaluates to "not_enclosed": true</span>
+<span class="pl-ent">enclosed</span>: <span class="pl-s"><span class="pl-pds">"</span>yes<span class="pl-pds">"</span></span>   <span class="pl-c"><span class="pl-c">#</span> evaluates to "enclosed": yes</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Notice that strings don't need to be quoted. However, they can be.</span>
+<span class="pl-ent">however</span>: <span class="pl-s"><span class="pl-pds">'</span>A string, enclosed in quotes.<span class="pl-pds">'</span></span>
+<span class="pl-s"><span class="pl-pds">'</span><span class="pl-ent">Keys can be quoted too.</span><span class="pl-pds">'</span></span>: <span class="pl-s"><span class="pl-pds">"</span>Useful if you want to put a ':' in your key.<span class="pl-pds">"</span></span>
+<span class="pl-ent">single quotes</span>: <span class="pl-s"><span class="pl-pds">'</span>have <span class="pl-cce">''</span>one<span class="pl-cce">''</span> escape pattern<span class="pl-pds">'</span></span>
+<span class="pl-ent">double quotes</span>: <span class="pl-s"><span class="pl-pds">"</span>have many: <span class="pl-cce">\"</span>, <span class="pl-cce">\0</span>, <span class="pl-cce">\t</span>, <span class="pl-cce">\u263A</span>, <span class="pl-cce">\x0d\x0a</span> == <span class="pl-cce">\r\n</span>, and more.<span class="pl-pds">"</span></span>
+<span class="pl-c"><span class="pl-c">#</span> UTF-8/16/32 characters need to be encoded</span>
+<span class="pl-ent">Superscript two</span>: <span class="pl-s">\u00B2</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Special characters must be enclosed in single or double quotes</span>
+<span class="pl-ent">special_characters</span>: <span class="pl-s"><span class="pl-pds">"</span>[ John ] &amp; { Jane } - &lt;Doe&gt;<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> Multiple-line strings can be written either as a 'literal block' (using |), </span>
+<span class="pl-c"><span class="pl-c">#</span> or a 'folded block' (using '&gt;').</span>
+<span class="pl-c"><span class="pl-c">#</span> Literal block turn every newline within the string into a literal newline (\n).</span>
+<span class="pl-c"><span class="pl-c">#</span> Folded block removes newlines within the string.</span>
+<span class="pl-ent">literal_block</span>: <span class="pl-s">|</span>
+<span class="pl-s">  This entire block of text will be the value of the 'literal_block' key,</span>
+<span class="pl-s">  with line breaks being preserved.</span>
+<span class="pl-s"></span>
+<span class="pl-s">  The literal continues until de-dented, and the leading indentation is</span>
+<span class="pl-s">  stripped.</span>
+<span class="pl-s"></span>
+<span class="pl-s">      Any lines that are 'more-indented' keep the rest of their indentation -</span>
+<span class="pl-s">      these lines will be indented by 4 spaces.</span>
+<span class="pl-s"></span><span class="pl-ent">folded_style</span>: <span class="pl-s">&gt;</span>
+<span class="pl-s">  This entire block of text will be the value of 'folded_style', but this</span>
+<span class="pl-s">  time, all newlines will be replaced with a single space.</span>
+<span class="pl-s"></span>
+<span class="pl-s">  Blank lines, like above, are converted to a newline character.</span>
+<span class="pl-s"></span>
+<span class="pl-s">      'More-indented' lines keep their newlines, too -</span>
+<span class="pl-s">      this text will appear over two lines.</span>
+<span class="pl-s"></span>
+<span class="pl-s"></span><span class="pl-c"><span class="pl-c">#</span> |- and &gt;- removes the trailing blank lines (also called literal/block "strip")</span>
+<span class="pl-ent">literal_strip</span>: <span class="pl-s">|-</span>
+<span class="pl-s">  This entire block of text will be the value of the 'literal_block' key,</span>
+<span class="pl-s">  with trailing blank line being stripped.</span>
+<span class="pl-s"></span><span class="pl-ent">block_strip</span>: <span class="pl-s">&gt;-</span>
+<span class="pl-s">  This entire block of text will be the value of 'folded_style', but this</span>
+<span class="pl-s">  time, all newlines will be replaced with a single space and </span>
+<span class="pl-s">  trailing blank line being stripped.</span>
+<span class="pl-s"></span>
+<span class="pl-s"></span><span class="pl-c"><span class="pl-c">#</span> |+ and &gt;+ keeps trailing blank lines (also called literal/block "keep")</span>
+<span class="pl-ent">literal_keep</span>: <span class="pl-s">|+</span>
+<span class="pl-s">  This entire block of text will be the value of the 'literal_block' key,</span>
+<span class="pl-s">  with trailing blank line being kept.</span>
+<span class="pl-s"></span>
+<span class="pl-s"></span><span class="pl-ent">block_keep</span>: <span class="pl-s">&gt;+</span>
+<span class="pl-s">  This entire block of text will be the value of 'folded_style', but this</span>
+<span class="pl-s">  time, all newlines will be replaced with a single space and </span>
+<span class="pl-s">  trailing blank line being kept.</span>
+<span class="pl-s"></span>
+<span class="pl-s"></span><span class="pl-c"><span class="pl-c">#</span>###################</span>
+<span class="pl-c"><span class="pl-c">#</span> COLLECTION TYPES #</span>
+<span class="pl-c"><span class="pl-c">#</span>###################</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Nesting uses indentation. 2 space indent is preferred (but not required).</span>
+<span class="pl-ent">a_nested_map</span>:
+  <span class="pl-ent">key</span>: <span class="pl-s">value</span>
+  <span class="pl-ent">another_key</span>: <span class="pl-s">Another Value</span>
+  <span class="pl-ent">another_nested_map</span>:
+    <span class="pl-ent">hello</span>: <span class="pl-s">hello</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Maps don't have to have string keys.</span>
+<span class="pl-ent">0.25</span>: <span class="pl-s">a float key</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Keys can also be complex, like multi-line objects</span>
+<span class="pl-c"><span class="pl-c">#</span> We use ? followed by a space to indicate the start of a complex key.</span>
+<span class="pl-s">? |</span>
+  <span class="pl-s">This is a key</span>
+  <span class="pl-s">that has multiple lines</span>
+<span class="pl-s">: and this is its value</span>
+
+<span class="pl-c"><span class="pl-c">#</span> YAML also allows mapping between sequences with the complex key syntax</span>
+<span class="pl-c"><span class="pl-c">#</span> Some language parsers might complain</span>
+<span class="pl-c"><span class="pl-c">#</span> An example</span>
+<span class="pl-s">? - Manchester United</span>
+  - <span class="pl-s">Real Madrid</span>
+<span class="pl-s">: [ 2001-01-01, 2002-02-02 ]</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Sequences (equivalent to lists or arrays) look like this</span>
+<span class="pl-c"><span class="pl-c">#</span> (note that the '-' counts as indentation):</span>
+<span class="pl-ent">a_sequence</span>:
+  - <span class="pl-s">Item 1</span>
+  - <span class="pl-s">Item 2</span>
+  - <span class="pl-c1">0.5</span>  <span class="pl-c"><span class="pl-c">#</span> sequences can contain disparate types.</span>
+  - <span class="pl-s">Item 4</span>
+  - <span class="pl-ent">key</span>: <span class="pl-s">value</span>
+    <span class="pl-ent">another_key</span>: <span class="pl-s">another_value</span>
+  - <span class="pl-s">- This is a sequence</span>
+    - <span class="pl-s">inside another sequence</span>
+  - <span class="pl-s">- - Nested sequence indicators</span>
+      - <span class="pl-s">can be collapsed</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Since YAML is a superset of JSON, you can also write JSON-style maps and</span>
+<span class="pl-c"><span class="pl-c">#</span> sequences:</span>
+<span class="pl-ent">json_map</span>: <span class="pl-s">{ "key": "value" }</span>
+<span class="pl-ent">json_seq</span>: <span class="pl-s">[ 3, 2, 1, "takeoff" ]</span>
+<span class="pl-ent">and quotes are optional</span>: <span class="pl-s">{ key: [ 3, 2, 1, takeoff ] }</span>
+
+<span class="pl-c"><span class="pl-c">#</span>######################</span>
+<span class="pl-c"><span class="pl-c">#</span> EXTRA YAML FEATURES #</span>
+<span class="pl-c"><span class="pl-c">#</span>######################</span>
+
+<span class="pl-c"><span class="pl-c">#</span> YAML also has a handy feature called 'anchors', which let you easily duplicate</span>
+<span class="pl-c"><span class="pl-c">#</span> content across your document.</span>
+<span class="pl-c"><span class="pl-c">#</span> Anchors identified by &amp; character which define the value.</span>
+<span class="pl-c"><span class="pl-c">#</span> Aliases identified by * character which acts as "see above" command.</span>
+<span class="pl-c"><span class="pl-c">#</span> Both of these keys will have the same value:</span>
+<span class="pl-ent">anchored_content</span>: <span class="pl-s">&amp;anchor_name This string will appear as the value of two keys.</span>
+<span class="pl-ent">other_anchor</span>: <span class="pl-s">*anchor_name</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Anchors can be used to duplicate/inherit properties</span>
+<span class="pl-ent">base</span>: <span class="pl-s">&amp;base</span>
+  <span class="pl-ent">name</span>: <span class="pl-s">Everyone has same name</span>
+
+<span class="pl-c"><span class="pl-c">#</span> The regexp &lt;&lt; is called 'Merge Key Language-Independent Type'. It is used to</span>
+<span class="pl-c"><span class="pl-c">#</span> indicate that all the keys of one or more specified maps should be inserted</span>
+<span class="pl-c"><span class="pl-c">#</span> into the current map.</span>
+<span class="pl-c"><span class="pl-c">#</span> NOTE: If key already exists alias will not be merged</span>
+<span class="pl-ent">foo</span>:
+  <span class="pl-ent">&lt;&lt;</span>: <span class="pl-s">*base </span><span class="pl-c"><span class="pl-c">#</span> doesn't merge the anchor</span>
+  <span class="pl-ent">age</span>: <span class="pl-c1">10</span>
+  <span class="pl-ent">name</span>: <span class="pl-s">John</span>
+<span class="pl-ent">bar</span>:
+  <span class="pl-ent">&lt;&lt;</span>: <span class="pl-s">*base </span><span class="pl-c"><span class="pl-c">#</span> base anchor will be merged</span>
+  <span class="pl-ent">age</span>: <span class="pl-c1">20</span>
+
+<span class="pl-c"><span class="pl-c">#</span> foo and bar would also have name: Everyone has same name</span>
+
+<span class="pl-c"><span class="pl-c">#</span> YAML also has tags, which you can use to explicitly declare types.</span>
+<span class="pl-c"><span class="pl-c">#</span> Syntax: !![typeName] [value]</span>
+<span class="pl-ent">explicit_boolean</span>: <span class="pl-s">!!bool true</span>
+<span class="pl-ent">explicit_integer</span>: <span class="pl-s">!!int 42</span>
+<span class="pl-ent">explicit_float</span>: <span class="pl-s">!!float -42.24</span>
+<span class="pl-ent">explicit_string</span>: <span class="pl-s">!!str 0.5</span>
+<span class="pl-ent">explicit_datetime</span>: <span class="pl-s">!!timestamp 2022-11-17 12:34:56.78 +9</span>
+<span class="pl-ent">explicit_null</span>: <span class="pl-s">!!null null</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Some parsers implement language specific tags, like this one for Python's</span>
+<span class="pl-c"><span class="pl-c">#</span> complex number type.</span>
+<span class="pl-ent">python_complex_number</span>: <span class="pl-s">!!python/complex 1+2j</span>
+
+<span class="pl-c"><span class="pl-c">#</span> We can also use yaml complex keys with language specific tags</span>
+<span class="pl-s">? !!python/tuple [ 5, 7 ]</span>
+<span class="pl-s">: Fifty Seven</span>
+<span class="pl-c"><span class="pl-c">#</span> Would be {(5, 7): 'Fifty Seven'} in Python</span>
+
+<span class="pl-c"><span class="pl-c">#</span>###################</span>
+<span class="pl-c"><span class="pl-c">#</span> EXTRA YAML TYPES #</span>
+<span class="pl-c"><span class="pl-c">#</span>###################</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Strings and numbers aren't the only scalars that YAML can understand.</span>
+<span class="pl-c"><span class="pl-c">#</span> ISO-formatted date and datetime literals are also parsed.</span>
+<span class="pl-ent">datetime_canonical</span>: <span class="pl-s">2001-12-15T02:59:43.1Z</span>
+<span class="pl-ent">datetime_space_separated_with_time_zone</span>: <span class="pl-s">2001-12-14 21:59:43.10 -5</span>
+<span class="pl-ent">date_implicit</span>: <span class="pl-c1">2002-12-14</span>
+<span class="pl-ent">date_explicit</span>: <span class="pl-s">!!timestamp 2002-12-14</span>
+
+<span class="pl-c"><span class="pl-c">#</span> The !!binary tag indicates that a string is actually a base64-encoded</span>
+<span class="pl-c"><span class="pl-c">#</span> representation of a binary blob.</span>
+<span class="pl-ent">gif_file</span>: <span class="pl-s">!!binary |</span>
+  <span class="pl-s">R0lGODlhDAAMAIQAAP//9/X17unp5WZmZgAAAOfn515eXvPz7Y6OjuDg4J+fn5</span>
+  <span class="pl-s">OTk6enp56enmlpaWNjY6Ojo4SEhP/++f/++f/++f/++f/++f/++f/++f/++f/+</span>
+  <span class="pl-s">+f/++f/++f/++f/++f/++SH+Dk1hZGUgd2l0aCBHSU1QACwAAAAADAAMAAAFLC</span>
+  <span class="pl-s">AgjoEwnuNAFOhpEMTRiggcz4BNJHrv/zCFcLiwMWYNG84BwwEeECcgggoBADs=</span>
+
+<span class="pl-c"><span class="pl-c">#</span> YAML also has a set type, which looks like this:</span>
+<span class="pl-ent">set</span>:
+  <span class="pl-s">? item1</span>
+  <span class="pl-s">? item2</span>
+  <span class="pl-s">? item3</span>
+<span class="pl-ent">or</span>: <span class="pl-s">{ item1, item2, item3 }</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Sets are just maps with null values; the above is equivalent to:</span>
+<span class="pl-ent">set2</span>:
+  <span class="pl-ent">item1</span>: <span class="pl-c1">null</span>
+  <span class="pl-ent">item2</span>: <span class="pl-c1">null</span>
+  <span class="pl-ent">item3</span>: <span class="pl-c1">null</span>
+
+...  <span class="pl-c"><span class="pl-c">#</span> document end</span></pre></div>
+<h3>More Resources</h3>
+<ul>
+<li><a href="https://yaml.org/" rel="nofollow">YAML official website</a></li>
+<li><a href="http://www.yamllint.com/" rel="nofollow">Online YAML Validator</a></li>
+<li><a href="https://www.json2yaml.com/" rel="nofollow">JSON ⇆ YAML</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<ul>
+<li>[Leigh Brenecki, 'https://leigh.net.au']</li>
+<li>[Suhas SG, 'https://github.com/jargnar']</li>
+</ul>

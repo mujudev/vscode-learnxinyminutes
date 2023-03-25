@@ -1,0 +1,103 @@
+<h1>Ruby Ecosystem</h1>
+<p>People using Ruby generally have a way to install different Ruby versions,<br>
+manage their packages (or gems), and manage their gem dependencies.</p>
+<h2>Ruby Versions</h2>
+<p>Ruby was created by Yukihiro "Matz" Matsumoto, who remains somewhat of a<br>
+<a href="https://en.wikipedia.org/wiki/Benevolent_Dictator_for_Life" rel="nofollow">BDFL</a>, although<br>
+that is changing recently. As a result, the reference implementation of Ruby is<br>
+called MRI (Matz' Reference Implementation), and when you hear a Ruby version,<br>
+it is referring to the release version of MRI.</p>
+<p>New major versions of Ruby are traditionally released on Christmas Day. The current major version (25 December 2017) is 2.5. The most popular stable versions are 2.4.4 and 2.3.7 (both released 28 March 2018).</p>
+<h2>Ruby Managers</h2>
+<p>Some platforms have Ruby pre-installed or available as a package. Most rubyists<br>
+do not use these, or if they do, they only use them to bootstrap another Ruby<br>
+installer or implementation. Instead rubyists tend to install a Ruby manager to<br>
+install and switch between many versions of Ruby and their projects' Ruby<br>
+environments.</p>
+<p>The following are the popular Ruby environment managers:</p>
+<ul>
+<li><a href="https://rvm.io/" rel="nofollow">RVM</a> - Installs and switches between rubies. RVM also has<br>
+the concept of gemsets to isolate projects' environments completely.</li>
+<li><a href="https://github.com/sstephenson/ruby-build">ruby-build</a> - Only installs<br>
+rubies. Use this for finer control over your rubies' installations.</li>
+<li><a href="https://github.com/sstephenson/rbenv">rbenv</a> - Only switches between rubies.<br>
+Used with ruby-build.  Use this for finer control over how rubies load.</li>
+<li><a href="https://github.com/postmodern/chruby">chruby</a> - Only switches between rubies.<br>
+Similar in spirit to rbenv. Unopinionated about how rubies are installed.</li>
+</ul>
+<h2>Ruby Implementations</h2>
+<p>The Ruby ecosystem enjoys many different implementations of Ruby, each with<br>
+unique strengths and states of compatibility. To be clear, the different<br>
+implementations are written in different languages, but <em>they are all Ruby</em>.<br>
+Each implementation has special hooks and extra features, but they all run<br>
+normal Ruby files well. For instance, JRuby is written in Java, but you do<br>
+not need to know Java to use it.</p>
+<p>Very mature/compatible:</p>
+<ul>
+<li><a href="https://github.com/ruby/ruby">MRI</a> - Written in C, this is the reference implementation of Ruby. By<br>
+definition it is 100% compatible (with itself). All other rubies<br>
+maintain compatibility with MRI (see <a href="#rubyspec">RubySpec</a> below).</li>
+<li><a href="http://jruby.org/" rel="nofollow">JRuby</a> - Written in Java and Ruby, this robust implementation is quite fast.<br>
+Most importantly, JRuby's strength is JVM/Java interop, leveraging existing<br>
+JVM tools, projects, and languages.</li>
+<li><a href="http://rubini.us/" rel="nofollow">Rubinius</a> - Written primarily in Ruby itself with a C++ bytecode VM. Also<br>
+mature and fast. Because it is implemented in Ruby itself, it exposes many VM<br>
+features into rubyland.</li>
+</ul>
+<p>Medium mature/compatible:</p>
+<ul>
+<li><a href="http://maglev.github.io/" rel="nofollow">Maglev</a> - Built on top of Gemstone, a Smalltalk VM. Smalltalk has some<br>
+impressive tooling, and this project tries to bring that into Ruby<br>
+development.</li>
+<li><a href="http://www.rubymotion.com/" rel="nofollow">RubyMotion</a> - Brings Ruby to iOS development.</li>
+</ul>
+<p>Less mature/compatible:</p>
+<ul>
+<li><a href="http://topazruby.com/" rel="nofollow">Topaz</a> - Written in RPython (using the PyPy toolchain), Topaz is fairly young<br>
+and not yet compatible. It shows promise to be a high-performance Ruby<br>
+implementation.</li>
+<li><a href="http://ironruby.net/" rel="nofollow">IronRuby</a> - Written in C# targeting the .NET platform, work on IronRuby seems<br>
+to have stopped since Microsoft pulled their support.</li>
+</ul>
+<p>Ruby implementations may have their own release version numbers, but they always<br>
+target a specific version of MRI for compatibility. Many implementations have<br>
+the ability to enter different modes (for example, 1.8 or 1.9 mode) to specify<br>
+which MRI version to target.</p>
+<h2>RubySpec</h2>
+<p>Most Ruby implementations rely heavily on <a href="http://rubyspec.org/" rel="nofollow">RubySpec</a>. Ruby<br>
+has no official specification, so the community has written executable specs in<br>
+Ruby to test their implementations' compatibility with MRI.</p>
+<h2>RubyGems</h2>
+<p><a href="http://rubygems.org/" rel="nofollow">RubyGems</a> is a community-run package manager for Ruby.<br>
+RubyGems ships with Ruby, so there is no need to download it separately.</p>
+<p>Ruby packages are called "gems," and they can be hosted by the community at<br>
+RubyGems.org. Each gem contains its source code and some metadata, including<br>
+things like version, dependencies, author(s), and license(s).</p>
+<h2>Bundler</h2>
+<p><a href="http://bundler.io/" rel="nofollow">Bundler</a> is a gem dependency resolver. It uses a project's<br>
+Gemfile to find dependencies, and then fetches those dependencies' dependencies<br>
+recursively. It does this until all dependencies are resolved and downloaded, or<br>
+it will stop if a conflict has been found.</p>
+<p>Bundler will raise an error if it finds conflicting dependencies. For example,<br>
+if gem A requires version 3 or greater of gem Z, but gem B requires version 2,<br>
+Bundler will notify you of the conflict. This becomes extremely helpful as many<br>
+gems refer to other gems (which refer to other gems), which can form a large<br>
+dependency graph to resolve.</p>
+<h1>Testing</h1>
+<p>Testing is a large part of Ruby culture. Ruby comes with its own Unit-style<br>
+testing framework called minitest (Or TestUnit for Ruby version 1.8.x). There<br>
+are many testing libraries with different goals.</p>
+<ul>
+<li><a href="http://ruby-doc.org/stdlib-1.8.7/libdoc/test/unit/rdoc/Test/Unit.html" rel="nofollow">TestUnit</a> - Ruby 1.8's built-in "Unit-style" testing framework</li>
+<li><a href="http://ruby-doc.org/stdlib-2.0.0/libdoc/minitest/rdoc/MiniTest.html" rel="nofollow">minitest</a> - Ruby 1.9/2.0's built-in testing framework</li>
+<li><a href="http://rspec.info/" rel="nofollow">RSpec</a> - A testing framework that focuses on expressivity</li>
+<li><a href="http://cukes.info/" rel="nofollow">Cucumber</a> - A BDD testing framework that parses Gherkin formatted tests</li>
+</ul>
+<h2>Be Nice</h2>
+<p>The Ruby community takes pride in being an open, diverse, welcoming community.<br>
+Matz himself is extremely friendly, and the generosity of rubyists on the whole<br>
+is amazing.</p>
+<hr>
+<p>contributors:<br>
+- ["Jon Smock", "http://github.com/jonsmock"]<br>
+- ["Rafal Chmiel", "http://github.com/rafalchmiel"]</p>

@@ -1,0 +1,228 @@
+<h1>Statistical Computing with Python</h1>
+<p>This is a tutorial on how to do some typical statistical programming tasks using Python. It's intended for people basically familiar with Python and experienced at statistical programming in a language like R, Stata, SAS, SPSS, or MATLAB.</p>
+<div class="highlight highlight-source-python"><pre class="notranslate"><span class="pl-c"># 0. Getting set up ====</span>
+
+<span class="pl-s">""" To get started, pip install the following: jupyter, numpy, scipy, pandas,</span>
+<span class="pl-s">    matplotlib, seaborn, requests.</span>
+<span class="pl-s">        Make sure to do this tutorial in a Jupyter notebook so that you get</span>
+<span class="pl-s">    the inline plots and easy documentation lookup. The shell command to open </span>
+<span class="pl-s">    one is simply `jupyter notebook`, then click New -&gt; Python.</span>
+<span class="pl-s">"""</span>
+
+<span class="pl-c"># 1. Data acquisition ====</span>
+
+<span class="pl-s">""" One reason people choose Python over R is that they intend to interact a lot</span>
+<span class="pl-s">    with the web, either by scraping pages directly or requesting data through</span>
+<span class="pl-s">    an API. You can do those things in R, but in the context of a project</span>
+<span class="pl-s">    already using Python, there's a benefit to sticking with one language.</span>
+<span class="pl-s">"""</span>
+
+<span class="pl-k">import</span> <span class="pl-s1">requests</span>  <span class="pl-c"># for HTTP requests (web scraping, APIs)</span>
+<span class="pl-k">import</span> <span class="pl-s1">os</span>
+
+<span class="pl-c"># web scraping</span>
+<span class="pl-s1">r</span> <span class="pl-c1">=</span> <span class="pl-s1">requests</span>.<span class="pl-en">get</span>(<span class="pl-s">"https://github.com/adambard/learnxinyminutes-docs"</span>)
+<span class="pl-s1">r</span>.<span class="pl-s1">status_code</span>  <span class="pl-c"># if 200, request was successful</span>
+<span class="pl-s1">r</span>.<span class="pl-s1">text</span>  <span class="pl-c"># raw page source</span>
+<span class="pl-en">print</span>(<span class="pl-s1">r</span>.<span class="pl-s1">text</span>)  <span class="pl-c"># prettily formatted</span>
+<span class="pl-c"># save the page source in a file:</span>
+<span class="pl-s1">os</span>.<span class="pl-en">getcwd</span>()  <span class="pl-c"># check what's the working directory</span>
+<span class="pl-k">with</span> <span class="pl-en">open</span>(<span class="pl-s">"learnxinyminutes.html"</span>, <span class="pl-s">"wb"</span>) <span class="pl-k">as</span> <span class="pl-s1">f</span>:
+    <span class="pl-s1">f</span>.<span class="pl-en">write</span>(<span class="pl-s1">r</span>.<span class="pl-s1">text</span>.<span class="pl-en">encode</span>(<span class="pl-s">"UTF-8"</span>))
+
+<span class="pl-c"># downloading a csv</span>
+<span class="pl-s1">fp</span> <span class="pl-c1">=</span> <span class="pl-s">"https://raw.githubusercontent.com/adambard/learnxinyminutes-docs/master/"</span>
+<span class="pl-s1">fn</span> <span class="pl-c1">=</span> <span class="pl-s">"pets.csv"</span>
+<span class="pl-s1">r</span> <span class="pl-c1">=</span> <span class="pl-s1">requests</span>.<span class="pl-en">get</span>(<span class="pl-s1">fp</span> <span class="pl-c1">+</span> <span class="pl-s1">fn</span>)
+<span class="pl-en">print</span>(<span class="pl-s1">r</span>.<span class="pl-s1">text</span>)
+<span class="pl-k">with</span> <span class="pl-en">open</span>(<span class="pl-s1">fn</span>, <span class="pl-s">"wb"</span>) <span class="pl-k">as</span> <span class="pl-s1">f</span>:
+    <span class="pl-s1">f</span>.<span class="pl-en">write</span>(<span class="pl-s1">r</span>.<span class="pl-s1">text</span>.<span class="pl-en">encode</span>(<span class="pl-s">"UTF-8"</span>))
+
+<span class="pl-s">""" for more on the requests module, including APIs, see</span>
+<span class="pl-s">    http://docs.python-requests.org/en/latest/user/quickstart/</span>
+<span class="pl-s">"""</span>
+
+<span class="pl-c"># 2. Reading a CSV file ====</span>
+
+<span class="pl-s">""" Wes McKinney's pandas package gives you 'DataFrame' objects in Python. If</span>
+<span class="pl-s">    you've used R, you will be familiar with the idea of the "data.frame" already.</span>
+<span class="pl-s">"""</span>
+
+<span class="pl-k">import</span> <span class="pl-s1">pandas</span> <span class="pl-k">as</span> <span class="pl-s1">pd</span>
+<span class="pl-k">import</span> <span class="pl-s1">numpy</span> <span class="pl-k">as</span> <span class="pl-s1">np</span>
+<span class="pl-k">import</span> <span class="pl-s1">scipy</span> <span class="pl-k">as</span> <span class="pl-s1">sp</span>
+<span class="pl-s1">pets</span> <span class="pl-c1">=</span> <span class="pl-s1">pd</span>.<span class="pl-en">read_csv</span>(<span class="pl-s1">fn</span>)
+<span class="pl-s1">pets</span>
+<span class="pl-c">#        name  age  weight species</span>
+<span class="pl-c"># 0    fluffy    3      14     cat</span>
+<span class="pl-c"># 1  vesuvius    6      23    fish</span>
+<span class="pl-c"># 2       rex    5      34     dog</span>
+
+<span class="pl-s">""" R users: note that Python, like most C-influenced programming languages, starts</span>
+<span class="pl-s">    indexing from 0. R starts indexing at 1 due to Fortran influence.</span>
+<span class="pl-s">"""</span>
+
+<span class="pl-c"># two different ways to print out a column</span>
+<span class="pl-s1">pets</span>.<span class="pl-s1">age</span>
+<span class="pl-s1">pets</span>[<span class="pl-s">"age"</span>]
+
+<span class="pl-s1">pets</span>.<span class="pl-en">head</span>(<span class="pl-c1">2</span>)  <span class="pl-c"># prints first 2 rows</span>
+<span class="pl-s1">pets</span>.<span class="pl-en">tail</span>(<span class="pl-c1">1</span>)  <span class="pl-c"># prints last row</span>
+
+<span class="pl-s1">pets</span>.<span class="pl-s1">name</span>[<span class="pl-c1">1</span>]  <span class="pl-c"># 'vesuvius'</span>
+<span class="pl-s1">pets</span>.<span class="pl-s1">species</span>[<span class="pl-c1">0</span>]  <span class="pl-c"># 'cat'</span>
+<span class="pl-s1">pets</span>[<span class="pl-s">"weight"</span>][<span class="pl-c1">2</span>]  <span class="pl-c"># 34</span>
+
+<span class="pl-c"># in R, you would expect to get 3 rows doing this, but here you get 2:</span>
+<span class="pl-s1">pets</span>.<span class="pl-s1">age</span>[<span class="pl-c1">0</span>:<span class="pl-c1">2</span>]
+<span class="pl-c"># 0    3</span>
+<span class="pl-c"># 1    6</span>
+
+<span class="pl-en">sum</span>(<span class="pl-s1">pets</span>.<span class="pl-s1">age</span>) <span class="pl-c1">*</span> <span class="pl-c1">2</span>  <span class="pl-c"># 28</span>
+<span class="pl-en">max</span>(<span class="pl-s1">pets</span>.<span class="pl-s1">weight</span>) <span class="pl-c1">-</span> <span class="pl-en">min</span>(<span class="pl-s1">pets</span>.<span class="pl-s1">weight</span>)  <span class="pl-c"># 20</span>
+
+<span class="pl-s">""" If you are doing some serious linear algebra and number-crunching, you may</span>
+<span class="pl-s">    just want arrays, not DataFrames. DataFrames are ideal for combining columns</span>
+<span class="pl-s">    of different types.</span>
+<span class="pl-s">"""</span>
+
+<span class="pl-c"># 3. Charts ====</span>
+
+<span class="pl-k">import</span> <span class="pl-s1">matplotlib</span> <span class="pl-k">as</span> <span class="pl-s1">mpl</span>
+<span class="pl-k">import</span> <span class="pl-s1">matplotlib</span>.<span class="pl-s1">pyplot</span> <span class="pl-k">as</span> <span class="pl-s1">plt</span>
+<span class="pl-c1">%</span><span class="pl-s1">matplotlib</span> <span class="pl-s1">inline</span>
+
+<span class="pl-c"># To do data visualization in Python, use matplotlib</span>
+
+<span class="pl-s1">plt</span>.<span class="pl-en">hist</span>(<span class="pl-s1">pets</span>.<span class="pl-s1">age</span>);
+
+<span class="pl-s1">plt</span>.<span class="pl-en">boxplot</span>(<span class="pl-s1">pets</span>.<span class="pl-s1">weight</span>);
+
+<span class="pl-s1">plt</span>.<span class="pl-en">scatter</span>(<span class="pl-s1">pets</span>.<span class="pl-s1">age</span>, <span class="pl-s1">pets</span>.<span class="pl-s1">weight</span>)
+<span class="pl-s1">plt</span>.<span class="pl-en">xlabel</span>(<span class="pl-s">"age"</span>)
+<span class="pl-s1">plt</span>.<span class="pl-en">ylabel</span>(<span class="pl-s">"weight"</span>);
+
+<span class="pl-c"># seaborn sits atop matplotlib and makes plots prettier</span>
+
+<span class="pl-k">import</span> <span class="pl-s1">seaborn</span> <span class="pl-k">as</span> <span class="pl-s1">sns</span>
+
+<span class="pl-s1">plt</span>.<span class="pl-en">scatter</span>(<span class="pl-s1">pets</span>.<span class="pl-s1">age</span>, <span class="pl-s1">pets</span>.<span class="pl-s1">weight</span>)
+<span class="pl-s1">plt</span>.<span class="pl-en">xlabel</span>(<span class="pl-s">"age"</span>)
+<span class="pl-s1">plt</span>.<span class="pl-en">ylabel</span>(<span class="pl-s">"weight"</span>);
+
+<span class="pl-c"># there are also some seaborn-specific plotting functions</span>
+<span class="pl-c"># notice how seaborn automatically labels the x-axis on this barplot</span>
+<span class="pl-s1">sns</span>.<span class="pl-en">barplot</span>(<span class="pl-s1">pets</span>[<span class="pl-s">"age"</span>])
+
+<span class="pl-c"># R veterans can still use ggplot</span>
+<span class="pl-k">from</span> <span class="pl-s1">ggplot</span> <span class="pl-k">import</span> <span class="pl-c1">*</span>
+<span class="pl-en">ggplot</span>(<span class="pl-en">aes</span>(<span class="pl-s1">x</span><span class="pl-c1">=</span><span class="pl-s">"age"</span>,<span class="pl-s1">y</span><span class="pl-c1">=</span><span class="pl-s">"weight"</span>), <span class="pl-s1">data</span><span class="pl-c1">=</span><span class="pl-s1">pets</span>) <span class="pl-c1">+</span> <span class="pl-en">geom_point</span>() <span class="pl-c1">+</span> <span class="pl-en">labs</span>(<span class="pl-s1">title</span><span class="pl-c1">=</span><span class="pl-s">"pets"</span>)
+<span class="pl-c"># source: https://pypi.python.org/pypi/ggplot</span>
+
+<span class="pl-c"># there's even a d3.js port: https://github.com/mikedewar/d3py</span>
+
+<span class="pl-c"># 4. Simple data cleaning and exploratory analysis ====</span>
+
+<span class="pl-s">""" Here's a more complicated example that demonstrates a basic data</span>
+<span class="pl-s">    cleaning workflow leading to the creation of some exploratory plots</span>
+<span class="pl-s">    and the running of a linear regression.</span>
+<span class="pl-s">        The data set was transcribed from Wikipedia by hand. It contains</span>
+<span class="pl-s">    all the Holy Roman Emperors and the important milestones in their lives</span>
+<span class="pl-s">    (birth, death, coronation, etc.).</span>
+<span class="pl-s">        The goal of the analysis will be to explore whether a relationship</span>
+<span class="pl-s">    exists between emperor birth year and emperor lifespan.</span>
+<span class="pl-s">    data source: https://en.wikipedia.org/wiki/Holy_Roman_Emperor</span>
+<span class="pl-s">"""</span>
+
+<span class="pl-c"># load some data on Holy Roman Emperors</span>
+<span class="pl-s1">url</span> <span class="pl-c1">=</span> <span class="pl-s">"https://raw.githubusercontent.com/adambard/learnxinyminutes-docs/master/hre.csv"</span>
+<span class="pl-s1">r</span> <span class="pl-c1">=</span> <span class="pl-s1">requests</span>.<span class="pl-en">get</span>(<span class="pl-s1">url</span>)
+<span class="pl-s1">fp</span> <span class="pl-c1">=</span> <span class="pl-s">"hre.csv"</span>
+<span class="pl-k">with</span> <span class="pl-en">open</span>(<span class="pl-s1">fp</span>, <span class="pl-s">"wb"</span>) <span class="pl-k">as</span> <span class="pl-s1">f</span>:
+    <span class="pl-s1">f</span>.<span class="pl-en">write</span>(<span class="pl-s1">r</span>.<span class="pl-s1">text</span>.<span class="pl-en">encode</span>(<span class="pl-s">"UTF-8"</span>))
+
+<span class="pl-s1">hre</span> <span class="pl-c1">=</span> <span class="pl-s1">pd</span>.<span class="pl-en">read_csv</span>(<span class="pl-s1">fp</span>)
+
+<span class="pl-s1">hre</span>.<span class="pl-en">head</span>()
+<span class="pl-s">"""</span>
+<span class="pl-s">   Ix      Dynasty        Name        Birth             Death</span>
+<span class="pl-s">0 NaN  Carolingian   Charles I  2 April 742    28 January 814</span>
+<span class="pl-s">1 NaN  Carolingian     Louis I          778       20 June 840</span>
+<span class="pl-s">2 NaN  Carolingian   Lothair I          795  29 September 855</span>
+<span class="pl-s">3 NaN  Carolingian    Louis II          825     12 August 875</span>
+<span class="pl-s">4 NaN  Carolingian  Charles II  13 June 823     6 October 877</span>
+<span class="pl-s"></span>
+<span class="pl-s">       Coronation 1   Coronation 2 Ceased to be Emperor</span>
+<span class="pl-s">0   25 December 800            NaN       28 January 814</span>
+<span class="pl-s">1  11 September 813  5 October 816          20 June 840</span>
+<span class="pl-s">2       5 April 823            NaN     29 September 855</span>
+<span class="pl-s">3        Easter 850     18 May 872        12 August 875</span>
+<span class="pl-s">4   29 December 875            NaN        6 October 877</span>
+<span class="pl-s">"""</span>
+
+<span class="pl-c"># clean the Birth and Death columns</span>
+
+<span class="pl-k">import</span> <span class="pl-s1">re</span>  <span class="pl-c"># module for regular expressions</span>
+
+<span class="pl-s1">rx</span> <span class="pl-c1">=</span> <span class="pl-s1">re</span>.<span class="pl-en">compile</span>(<span class="pl-s">r'\d+$'</span>)  <span class="pl-c"># match trailing digits</span>
+
+<span class="pl-s">""" This function applies the regular expression to an input column (here Birth,</span>
+<span class="pl-s">    Death), flattens the resulting list, converts it to a Series object, and</span>
+<span class="pl-s">    finally converts the type of the Series object from string to integer. For</span>
+<span class="pl-s">    more information into what different parts of the code do, see:</span>
+<span class="pl-s">      - https://docs.python.org/2/howto/regex.html</span>
+<span class="pl-s">      - http://stackoverflow.com/questions/11860476/how-to-unlist-a-python-list</span>
+<span class="pl-s">      - http://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.html</span>
+<span class="pl-s">"""</span>
+
+<span class="pl-k">from</span> <span class="pl-s1">functools</span> <span class="pl-k">import</span> <span class="pl-s1">reduce</span>
+
+<span class="pl-k">def</span> <span class="pl-en">extractYear</span>(<span class="pl-s1">v</span>):
+    <span class="pl-k">return</span>(<span class="pl-s1">pd</span>.<span class="pl-v">Series</span>(<span class="pl-en">reduce</span>(<span class="pl-k">lambda</span> <span class="pl-s1">x</span>, <span class="pl-s1">y</span>: <span class="pl-s1">x</span> <span class="pl-c1">+</span> <span class="pl-s1">y</span>, <span class="pl-en">map</span>(<span class="pl-s1">rx</span>.<span class="pl-s1">findall</span>, <span class="pl-s1">v</span>), [])).<span class="pl-en">astype</span>(<span class="pl-s1">int</span>))
+
+<span class="pl-s1">hre</span>[<span class="pl-s">"BirthY"</span>] <span class="pl-c1">=</span> <span class="pl-en">extractYear</span>(<span class="pl-s1">hre</span>.<span class="pl-v">Birth</span>)
+<span class="pl-s1">hre</span>[<span class="pl-s">"DeathY"</span>] <span class="pl-c1">=</span> <span class="pl-en">extractYear</span>(<span class="pl-s1">hre</span>.<span class="pl-v">Death</span>)
+
+<span class="pl-c"># make a column telling estimated age</span>
+<span class="pl-s1">hre</span>[<span class="pl-s">"EstAge"</span>] <span class="pl-c1">=</span> <span class="pl-s1">hre</span>.<span class="pl-v">DeathY</span>.<span class="pl-en">astype</span>(<span class="pl-s1">int</span>) <span class="pl-c1">-</span> <span class="pl-s1">hre</span>.<span class="pl-v">BirthY</span>.<span class="pl-en">astype</span>(<span class="pl-s1">int</span>)
+
+<span class="pl-c"># simple scatterplot, no trend line, color represents dynasty</span>
+<span class="pl-s1">sns</span>.<span class="pl-en">lmplot</span>(<span class="pl-s">"BirthY"</span>, <span class="pl-s">"EstAge"</span>, <span class="pl-s1">data</span><span class="pl-c1">=</span><span class="pl-s1">hre</span>, <span class="pl-s1">hue</span><span class="pl-c1">=</span><span class="pl-s">"Dynasty"</span>, <span class="pl-s1">fit_reg</span><span class="pl-c1">=</span><span class="pl-c1">False</span>)
+
+<span class="pl-c"># use scipy to run a linear regression</span>
+<span class="pl-k">from</span> <span class="pl-s1">scipy</span> <span class="pl-k">import</span> <span class="pl-s1">stats</span>
+(<span class="pl-s1">slope</span>, <span class="pl-s1">intercept</span>, <span class="pl-s1">rval</span>, <span class="pl-s1">pval</span>, <span class="pl-s1">stderr</span>) <span class="pl-c1">=</span> <span class="pl-s1">stats</span>.<span class="pl-en">linregress</span>(<span class="pl-s1">hre</span>.<span class="pl-v">BirthY</span>, <span class="pl-s1">hre</span>.<span class="pl-v">EstAge</span>)
+<span class="pl-c"># code source: http://wiki.scipy.org/Cookbook/LinearRegression</span>
+
+<span class="pl-c"># check the slope</span>
+<span class="pl-s1">slope</span>  <span class="pl-c"># 0.0057672618839073328</span>
+
+<span class="pl-c"># check the R^2 value:</span>
+<span class="pl-s1">rval</span><span class="pl-c1">**</span><span class="pl-c1">2</span>  <span class="pl-c"># 0.020363950027333586</span>
+
+<span class="pl-c"># check the p-value</span>
+<span class="pl-s1">pval</span>  <span class="pl-c"># 0.34971812581498452</span>
+
+<span class="pl-c"># use seaborn to make a scatterplot and plot the linear regression trend line</span>
+<span class="pl-s1">sns</span>.<span class="pl-en">lmplot</span>(<span class="pl-s">"BirthY"</span>, <span class="pl-s">"EstAge"</span>, <span class="pl-s1">data</span><span class="pl-c1">=</span><span class="pl-s1">hre</span>)
+
+<span class="pl-s">""" For more information on seaborn, see</span>
+<span class="pl-s">      - http://web.stanford.edu/~mwaskom/software/seaborn/</span>
+<span class="pl-s">      - https://github.com/mwaskom/seaborn</span>
+<span class="pl-s">    For more information on SciPy, see</span>
+<span class="pl-s">      - http://wiki.scipy.org/SciPy</span>
+<span class="pl-s">      - http://wiki.scipy.org/Cookbook/</span>
+<span class="pl-s">    To see a version of the Holy Roman Emperors analysis using R, see</span>
+<span class="pl-s">      - http://github.com/e99n09/R-notes/blob/master/holy_roman_emperors_dates.R</span>
+<span class="pl-s">"""</span></pre></div>
+<p>If you want to learn more, get <em>Python for Data Analysis</em> by Wes McKinney. It's a superb resource and I used it as a reference when writing this tutorial.</p>
+<p>You can also find plenty of interactive IPython tutorials on subjects specific to your interests, like Cam Davidson-Pilon's <a href="http://camdavidsonpilon.github.io/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers/" title="Probabilistic Programming and Bayesian Methods for Hackers" rel="nofollow">Probabilistic Programming and Bayesian Methods for Hackers</a>.</p>
+<p>Some more modules to research:</p>
+<ul>
+<li>text analysis and natural language processing: nltk, <a href="http://www.nltk.org" rel="nofollow">http://www.nltk.org</a></li>
+<li>social network analysis: igraph, <a href="http://igraph.org/python/" rel="nofollow">http://igraph.org/python/</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["e99n09", "https://github.com/e99n09"]
+</code></pre>

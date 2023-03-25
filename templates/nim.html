@@ -1,0 +1,275 @@
+<h1>Nim</h1>
+<p>Nim (formerly Nimrod) is a statically typed, imperative programming language<br>
+that gives the programmer power without compromises on runtime efficiency.</p>
+<p>Nim is efficient, expressive, and elegant.</p>
+<div class="highlight highlight-source-nim"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> Single-line comments start with a #</span>
+
+<span class="pl-c"><span class="pl-c">#[</span></span>
+<span class="pl-c">  This is a multiline comment.</span>
+<span class="pl-c">  In Nim, multiline comments can be nested, beginning with <span class="pl-c"><span class="pl-c">#[</span></span></span>
+<span class="pl-c"><span class="pl-c">  ... and ending with <span class="pl-c">]#</span></span></span>
+<span class="pl-c"><span class="pl-c">]#</span></span>
+
+<span class="pl-c"><span class="pl-c">discard """</span></span>
+<span class="pl-c">This can also work as a multiline comment.</span>
+<span class="pl-c">Or for unparsable, broken code</span>
+<span class="pl-c"><span class="pl-c">"""</span></span>
+
+<span class="pl-k">var</span>                     <span class="pl-c"><span class="pl-c">#</span> Declare (and assign) variables,</span>
+  <span class="pl-smi">letter</span>: <span class="pl-k">char</span> <span class="pl-k">=</span> <span class="pl-c1">'n'</span>    <span class="pl-c"><span class="pl-c">#</span> with or without type annotations</span>
+  <span class="pl-smi">lang</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>N<span class="pl-pds">"</span></span> <span class="pl-k">&amp;</span> <span class="pl-s"><span class="pl-pds">"</span>im<span class="pl-pds">"</span></span>
+  <span class="pl-smi">nLength</span>: <span class="pl-k">int</span> <span class="pl-k">=</span> <span class="pl-v"><span class="pl-c1">len</span></span>(lang)
+  <span class="pl-smi">boat</span>: <span class="pl-k">float</span>
+  <span class="pl-smi">truth</span>: <span class="pl-k">bool</span> <span class="pl-k">=</span> <span class="pl-c1">false</span>
+
+<span class="pl-k">let</span>            <span class="pl-c"><span class="pl-c">#</span> Use let to declare and bind variables *once*.</span>
+  <span class="pl-smi">legs</span> <span class="pl-k">=</span> <span class="pl-c1">400</span>   <span class="pl-c"><span class="pl-c">#</span> legs is immutable.</span>
+  <span class="pl-smi">arms</span> <span class="pl-k">=</span> <span class="pl-c1">2_000</span> <span class="pl-c"><span class="pl-c">#</span> _ are ignored and are useful for long numbers.</span>
+  <span class="pl-smi">aboutPi</span> <span class="pl-k">=</span> <span class="pl-c1">3.15</span>
+
+<span class="pl-k">const</span>            <span class="pl-c"><span class="pl-c">#</span> Constants are computed at compile time. This provides</span>
+  <span class="pl-c1">debug</span> <span class="pl-k">=</span> <span class="pl-c1">true</span>   <span class="pl-c"><span class="pl-c">#</span> performance and is useful in compile time expressions.</span>
+  <span class="pl-c1">compileBadCode</span> <span class="pl-k">=</span> <span class="pl-c1">false</span>
+
+<span class="pl-k">when</span> compileBadCode:            <span class="pl-c"><span class="pl-c">#</span> `when` is a compile time `if`</span>
+  legs <span class="pl-k">=</span> legs <span class="pl-k">+</span> <span class="pl-c1">1</span>               <span class="pl-c"><span class="pl-c">#</span> This error will never be compiled.</span>
+  <span class="pl-k">const</span> <span class="pl-c1">input</span> <span class="pl-k">=</span> <span class="pl-v">readline</span>(<span class="pl-c1">stdin</span>) <span class="pl-c"><span class="pl-c">#</span> Const values must be known at compile time.</span>
+
+<span class="pl-k">discard</span> <span class="pl-c1">1</span> <span class="pl-k">&gt;</span> <span class="pl-c1">2</span> <span class="pl-c"><span class="pl-c">#</span> Note: The compiler will complain if the result of an expression</span>
+              <span class="pl-c"><span class="pl-c">#</span> is unused. `discard` bypasses this.</span>
+
+
+<span class="pl-c"><span class="pl-c">#</span></span>
+<span class="pl-c"><span class="pl-c">#</span> Data Structures</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> Tuples</span>
+
+<span class="pl-k">var</span>
+  <span class="pl-smi">child</span>: <span class="pl-k">tuple</span>[<span class="pl-v">name</span>: <span class="pl-k">string</span>, <span class="pl-v">age</span>: <span class="pl-k">int</span>]   <span class="pl-c"><span class="pl-c">#</span> Tuples have *both* field names</span>
+  <span class="pl-smi">today</span>: <span class="pl-k">tuple</span>[<span class="pl-v">sun</span>: <span class="pl-k">string</span>, <span class="pl-v">temp</span>: <span class="pl-k">float</span>] <span class="pl-c"><span class="pl-c">#</span> *and* order.</span>
+
+child <span class="pl-k">=</span> (name: <span class="pl-s"><span class="pl-pds">"</span>Rudiger<span class="pl-pds">"</span></span>, age: <span class="pl-c1">2</span>) <span class="pl-c"><span class="pl-c">#</span> Assign all at once with literal ()</span>
+today.sun <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Overcast<span class="pl-pds">"</span></span>            <span class="pl-c"><span class="pl-c">#</span> or individual fields.</span>
+today.temp <span class="pl-k">=</span> <span class="pl-c1">70.1</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Sequences</span>
+
+<span class="pl-k">var</span>
+  <span class="pl-smi">drinks</span>: <span class="pl-k">seq</span>[<span class="pl-k">string</span>]
+
+drinks <span class="pl-k">=</span> <span class="pl-k">@</span>[<span class="pl-s"><span class="pl-pds">"</span>Water<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Juice<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Chocolate<span class="pl-pds">"</span></span>] <span class="pl-c"><span class="pl-c">#</span> @[V1,..,Vn] is the sequence literal</span>
+
+drinks.<span class="pl-v"><span class="pl-c1">add</span></span>(<span class="pl-s"><span class="pl-pds">"</span>Milk<span class="pl-pds">"</span></span>)
+
+<span class="pl-k">if</span> <span class="pl-s"><span class="pl-pds">"</span>Milk<span class="pl-pds">"</span></span> <span class="pl-k">in</span> drinks:
+  <span class="pl-v"><span class="pl-c1">echo</span></span> <span class="pl-s"><span class="pl-pds">"</span>We have Milk and <span class="pl-pds">"</span></span>, drinks.<span class="pl-c1">len</span> <span class="pl-k">-</span> <span class="pl-c1">1</span>, <span class="pl-s"><span class="pl-pds">"</span> other drinks<span class="pl-pds">"</span></span>
+
+<span class="pl-k">let</span> <span class="pl-smi">myDrink</span> <span class="pl-k">=</span> drinks[<span class="pl-c1">2</span>]
+
+<span class="pl-c"><span class="pl-c">#</span></span>
+<span class="pl-c"><span class="pl-c">#</span> Defining Types</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> Defining your own types puts the compiler to work for you. It's what makes</span>
+<span class="pl-c"><span class="pl-c">#</span> static typing powerful and useful.</span>
+
+<span class="pl-k">type</span>
+  <span class="pl-en">Name</span> <span class="pl-k">=</span> <span class="pl-k">string</span> <span class="pl-c"><span class="pl-c">#</span> A type alias gives you a new type that is interchangeable</span>
+  <span class="pl-en">Age</span> <span class="pl-k">=</span> <span class="pl-k">int</span>     <span class="pl-c"><span class="pl-c">#</span> with the old type but is more descriptive.</span>
+  <span class="pl-en">Person</span> <span class="pl-k">=</span> <span class="pl-k">tuple</span>[<span class="pl-v">name</span>: <span class="pl-c1">Name</span>, <span class="pl-v">age</span>: <span class="pl-c1">Age</span>] <span class="pl-c"><span class="pl-c">#</span> Define data structures too.</span>
+  <span class="pl-en">AnotherSyntax</span> <span class="pl-k">=</span> <span class="pl-k">tuple</span>
+    fieldOne: <span class="pl-k">string</span>
+    secondField: <span class="pl-k">int</span>
+
+<span class="pl-k">var</span>
+  <span class="pl-smi">john</span>: <span class="pl-c1">Person</span> <span class="pl-k">=</span> (name: <span class="pl-s"><span class="pl-pds">"</span>John B.<span class="pl-pds">"</span></span>, age: <span class="pl-c1">17</span>)
+  <span class="pl-smi">newage</span>: <span class="pl-k">int</span> <span class="pl-k">=</span> <span class="pl-c1">18</span> <span class="pl-c"><span class="pl-c">#</span> It would be better to use Age than int</span>
+
+john.age <span class="pl-k">=</span> newage <span class="pl-c"><span class="pl-c">#</span> But still works because int and Age are synonyms</span>
+
+<span class="pl-k">type</span>
+  <span class="pl-en">Cash</span> <span class="pl-k">=</span> <span class="pl-k">distinct</span> <span class="pl-k">int</span>    <span class="pl-c"><span class="pl-c">#</span> `distinct` makes a new type incompatible with its</span>
+  <span class="pl-en">Desc</span> <span class="pl-k">=</span> <span class="pl-k">distinct</span> <span class="pl-k">string</span> <span class="pl-c"><span class="pl-c">#</span> base type.</span>
+
+<span class="pl-k">var</span>
+  <span class="pl-smi">money</span>: <span class="pl-c1">Cash</span> <span class="pl-k">=</span> <span class="pl-c1">100</span>.<span class="pl-c1">Cash</span> <span class="pl-c"><span class="pl-c">#</span> `.Cash` converts the int to our type</span>
+  <span class="pl-smi">description</span>: <span class="pl-c1">Desc</span>  <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Interesting<span class="pl-pds">"</span></span>.<span class="pl-c1">Desc</span>
+
+<span class="pl-k">when</span> compileBadCode:
+  john.age  <span class="pl-k">=</span> money        <span class="pl-c"><span class="pl-c">#</span> Error! age is of type int and money is Cash</span>
+  john.name <span class="pl-k">=</span> description  <span class="pl-c"><span class="pl-c">#</span> Compiler says: "No way!"</span>
+
+<span class="pl-c"><span class="pl-c">#</span></span>
+<span class="pl-c"><span class="pl-c">#</span> More Types and Data Structures</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> Enumerations allow a type to have one of a limited number of values</span>
+
+<span class="pl-k">type</span>
+  <span class="pl-en">Color</span> <span class="pl-k">=</span> <span class="pl-k">enum</span> cRed, cBlue, cGreen
+  <span class="pl-en">Direction</span> <span class="pl-k">=</span> <span class="pl-k">enum</span> <span class="pl-c"><span class="pl-c">#</span> Alternative formatting</span>
+    dNorth
+    dWest
+    dEast
+    dSouth
+<span class="pl-k">var</span>
+  <span class="pl-smi">orient</span> <span class="pl-k">=</span> dNorth <span class="pl-c"><span class="pl-c">#</span> `orient` is of type Direction, with the value `dNorth`</span>
+  <span class="pl-smi">pixel</span> <span class="pl-k">=</span> cGreen <span class="pl-c"><span class="pl-c">#</span> `pixel` is of type Color, with the value `cGreen`</span>
+
+<span class="pl-k">discard</span> dNorth <span class="pl-k">&gt;</span> dEast <span class="pl-c"><span class="pl-c">#</span> Enums are usually an "ordinal" type</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Subranges specify a limited valid range</span>
+
+<span class="pl-k">type</span>
+  <span class="pl-en">DieFaces</span> <span class="pl-k">=</span> <span class="pl-k">range</span>[<span class="pl-c1">1</span><span class="pl-k">..</span><span class="pl-c1">20</span>] <span class="pl-c"><span class="pl-c">#</span> Only an int from 1 to 20 is a valid value</span>
+<span class="pl-k">var</span>
+  <span class="pl-smi">my_roll</span>: <span class="pl-c1">DieFaces</span> <span class="pl-k">=</span> <span class="pl-c1">13</span>
+
+<span class="pl-k">when</span> compileBadCode:
+  my_roll <span class="pl-k">=</span> <span class="pl-c1">23</span> <span class="pl-c"><span class="pl-c">#</span> Error!</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Arrays</span>
+
+<span class="pl-k">type</span>
+  <span class="pl-en">RollCounter</span> <span class="pl-k">=</span> <span class="pl-k">array</span>[<span class="pl-c1">DieFaces</span>, <span class="pl-k">int</span>]  <span class="pl-c"><span class="pl-c">#</span> Arrays are fixed length and</span>
+  <span class="pl-en">DirNames</span> <span class="pl-k">=</span> <span class="pl-k">array</span>[<span class="pl-c1">Direction</span>, <span class="pl-k">string</span>] <span class="pl-c"><span class="pl-c">#</span> indexed by any ordinal type.</span>
+  <span class="pl-en">Truths</span> <span class="pl-k">=</span> <span class="pl-k">array</span>[<span class="pl-c1">42</span><span class="pl-k">..</span><span class="pl-c1">44</span>, <span class="pl-k">bool</span>]
+<span class="pl-k">var</span>
+  <span class="pl-smi">counter</span>: <span class="pl-c1">RollCounter</span>
+  <span class="pl-smi">directions</span>: <span class="pl-c1">DirNames</span>
+  <span class="pl-smi">possible</span>: <span class="pl-c1">Truths</span>
+
+possible <span class="pl-k">=</span> [<span class="pl-c1">false</span>, <span class="pl-c1">false</span>, <span class="pl-c1">false</span>] <span class="pl-c"><span class="pl-c">#</span> Literal arrays are created with [V1,..,Vn]</span>
+possible[<span class="pl-c1">42</span>] <span class="pl-k">=</span> <span class="pl-c1">true</span>
+
+directions[dNorth] <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Ahh. The Great White North!<span class="pl-pds">"</span></span>
+directions[dWest] <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>No, don't go there.<span class="pl-pds">"</span></span>
+
+my_roll <span class="pl-k">=</span> <span class="pl-c1">13</span>
+counter[my_roll] <span class="pl-k">+=</span> <span class="pl-c1">1</span>
+counter[my_roll] <span class="pl-k">+=</span> <span class="pl-c1">1</span>
+
+<span class="pl-k">var</span> <span class="pl-smi">anotherArray</span> <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">"</span>Default index<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>starts at<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span>]
+
+<span class="pl-c"><span class="pl-c">#</span> More data structures are available, including tables, sets, lists, queues,</span>
+<span class="pl-c"><span class="pl-c">#</span> and crit bit trees.</span>
+<span class="pl-c"><span class="pl-c">#</span> http://nim-lang.org/docs/lib.html#collections-and-algorithms</span>
+
+<span class="pl-c"><span class="pl-c">#</span></span>
+<span class="pl-c"><span class="pl-c">#</span> IO and Control Flow</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> `case`, `readLine()`</span>
+
+<span class="pl-v"><span class="pl-c1">echo</span></span> <span class="pl-s"><span class="pl-pds">"</span>Read any good books lately?<span class="pl-pds">"</span></span>
+<span class="pl-k">case</span> <span class="pl-v"><span class="pl-c1">readLine</span></span>(<span class="pl-c1">stdin</span>)
+<span class="pl-k">of</span> <span class="pl-s"><span class="pl-pds">"</span>no<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>No<span class="pl-pds">"</span></span>:
+  <span class="pl-v"><span class="pl-c1">echo</span></span> <span class="pl-s"><span class="pl-pds">"</span>Go to your local library.<span class="pl-pds">"</span></span>
+<span class="pl-k">of</span> <span class="pl-s"><span class="pl-pds">"</span>yes<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Yes<span class="pl-pds">"</span></span>:
+  <span class="pl-v"><span class="pl-c1">echo</span></span> <span class="pl-s"><span class="pl-pds">"</span>Carry on, then.<span class="pl-pds">"</span></span>
+<span class="pl-k">else</span>:
+  <span class="pl-v"><span class="pl-c1">echo</span></span> <span class="pl-s"><span class="pl-pds">"</span>That's great; I assume.<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> `while`, `if`, `continue`, `break`</span>
+
+<span class="pl-k">import</span> strutils <span class="pl-k">as</span> str <span class="pl-c"><span class="pl-c">#</span> http://nim-lang.org/docs/strutils.html</span>
+<span class="pl-v"><span class="pl-c1">echo</span></span> <span class="pl-s"><span class="pl-pds">"</span>I'm thinking of a number between 41 and 43. Guess which!<span class="pl-pds">"</span></span>
+<span class="pl-k">let</span> <span class="pl-smi">number</span>: <span class="pl-k">int</span> <span class="pl-k">=</span> <span class="pl-c1">42</span>
+<span class="pl-k">var</span>
+  <span class="pl-smi">raw_guess</span>: <span class="pl-k">string</span>
+  <span class="pl-smi">guess</span>: <span class="pl-k">int</span>
+<span class="pl-k">while</span> guess <span class="pl-k">!=</span> number:
+  raw_guess <span class="pl-k">=</span> <span class="pl-v"><span class="pl-c1">readLine</span></span>(<span class="pl-c1">stdin</span>)
+  <span class="pl-k">if</span> raw_guess <span class="pl-k">==</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>: <span class="pl-k">continue</span> <span class="pl-c"><span class="pl-c">#</span> Skip this iteration</span>
+  guess <span class="pl-k">=</span> str.<span class="pl-v">parseInt</span>(raw_guess)
+  <span class="pl-k">if</span> guess <span class="pl-k">==</span> <span class="pl-c1">1001</span>:
+    <span class="pl-v"><span class="pl-c1">echo</span></span>(<span class="pl-s"><span class="pl-pds">"</span>AAAAAAGGG!<span class="pl-pds">"</span></span>)
+    <span class="pl-k">break</span>
+  <span class="pl-k">elif</span> guess <span class="pl-k">&gt;</span> number:
+    <span class="pl-v"><span class="pl-c1">echo</span></span>(<span class="pl-s"><span class="pl-pds">"</span>Nope. Too high.<span class="pl-pds">"</span></span>)
+  <span class="pl-k">elif</span> guess <span class="pl-k">&lt;</span> number:
+    <span class="pl-v"><span class="pl-c1">echo</span></span>(guess, <span class="pl-s"><span class="pl-pds">"</span> is too low<span class="pl-pds">"</span></span>)
+  <span class="pl-k">else</span>:
+    <span class="pl-v"><span class="pl-c1">echo</span></span>(<span class="pl-s"><span class="pl-pds">"</span>Yeeeeeehaw!<span class="pl-pds">"</span></span>)
+
+<span class="pl-c"><span class="pl-c">#</span></span>
+<span class="pl-c"><span class="pl-c">#</span> Iteration</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+
+<span class="pl-k">for</span> i, elem <span class="pl-k">in</span> [<span class="pl-s"><span class="pl-pds">"</span>Yes<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>No<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Maybe so<span class="pl-pds">"</span></span>]: <span class="pl-c"><span class="pl-c">#</span> Or just `for elem in`</span>
+  <span class="pl-v"><span class="pl-c1">echo</span></span>(elem, <span class="pl-s"><span class="pl-pds">"</span> is at index: <span class="pl-pds">"</span></span>, i)
+
+<span class="pl-k">for</span> k, v <span class="pl-k">in</span> <span class="pl-v"><span class="pl-c1">items</span></span>(<span class="pl-k">@</span>[(person: <span class="pl-s"><span class="pl-pds">"</span>You<span class="pl-pds">"</span></span>, power: <span class="pl-c1">100</span>), (person: <span class="pl-s"><span class="pl-pds">"</span>Me<span class="pl-pds">"</span></span>, power: <span class="pl-c1">9000</span>)]):
+  <span class="pl-v"><span class="pl-c1">echo</span></span> v
+
+<span class="pl-k">let</span> <span class="pl-smi">myString</span> <span class="pl-k">=</span> <span class="pl-s">"""</span><span class="pl-s"></span>
+<span class="pl-s">an &lt;example&gt;</span>
+<span class="pl-s">`string` to</span>
+<span class="pl-s">play with</span>
+<span class="pl-s"></span><span class="pl-s">"""</span> <span class="pl-c"><span class="pl-c">#</span> Multiline raw string</span>
+
+<span class="pl-k">for</span> line <span class="pl-k">in</span> <span class="pl-v">splitLines</span>(myString):
+  <span class="pl-v"><span class="pl-c1">echo</span></span>(line)
+
+<span class="pl-k">for</span> i, c <span class="pl-k">in</span> myString:       <span class="pl-c"><span class="pl-c">#</span> Index and letter. Or `for j in` for just letter</span>
+  <span class="pl-k">if</span> i <span class="pl-k">mod</span> <span class="pl-c1">2</span> <span class="pl-k">==</span> <span class="pl-c1">0</span>: <span class="pl-k">continue</span> <span class="pl-c"><span class="pl-c">#</span> Compact `if` form</span>
+  <span class="pl-k">elif</span> c <span class="pl-k">==</span> <span class="pl-c1">'X'</span>: <span class="pl-k">break</span>
+  <span class="pl-k">else</span>: <span class="pl-v"><span class="pl-c1">echo</span></span>(c)
+
+<span class="pl-c"><span class="pl-c">#</span></span>
+<span class="pl-c"><span class="pl-c">#</span> Procedures</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+
+<span class="pl-k">type</span> <span class="pl-en">Answer</span> <span class="pl-k">=</span> <span class="pl-k">enum</span> aYes, aNo
+
+<span class="pl-k">proc</span> <span class="pl-en">ask</span>(<span class="pl-v">question</span>: <span class="pl-k">string</span>): <span class="pl-c1">Answer</span> <span class="pl-k">=</span>
+  <span class="pl-v"><span class="pl-c1">echo</span></span>(question, <span class="pl-s"><span class="pl-pds">"</span> (y/n)<span class="pl-pds">"</span></span>)
+  <span class="pl-k">while</span> <span class="pl-c1">true</span>:
+    <span class="pl-k">case</span> <span class="pl-v"><span class="pl-c1">readLine</span></span>(<span class="pl-c1">stdin</span>)
+<span class="pl-k">    of</span> <span class="pl-s"><span class="pl-pds">"</span>y<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Y<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>yes<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Yes<span class="pl-pds">"</span></span>:
+      <span class="pl-k">return</span> <span class="pl-c1">Answer</span>.aYes  <span class="pl-c"><span class="pl-c">#</span> Enums can be qualified</span>
+<span class="pl-k">    of</span> <span class="pl-s"><span class="pl-pds">"</span>n<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>N<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>no<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>No<span class="pl-pds">"</span></span>:
+      <span class="pl-k">return</span> <span class="pl-c1">Answer</span>.aNo
+    <span class="pl-k">else</span>: <span class="pl-v"><span class="pl-c1">echo</span></span>(<span class="pl-s"><span class="pl-pds">"</span>Please be clear: yes or no<span class="pl-pds">"</span></span>)
+
+<span class="pl-k">proc</span> <span class="pl-en">addSugar</span>(<span class="pl-v">amount</span>: <span class="pl-k">int</span> <span class="pl-k">=</span> <span class="pl-c1">2</span>) <span class="pl-k">=</span> <span class="pl-c"><span class="pl-c">#</span> Default amount is 2, returns nothing</span>
+  <span class="pl-v"><span class="pl-c1">assert</span></span>(amount <span class="pl-k">&gt;</span> <span class="pl-c1">0</span> <span class="pl-k">and</span> amount <span class="pl-k">&lt;</span> <span class="pl-c1">9000</span>, <span class="pl-s"><span class="pl-pds">"</span>Crazy Sugar<span class="pl-pds">"</span></span>)
+  <span class="pl-k">for</span> a <span class="pl-k">in</span> <span class="pl-c1">1</span><span class="pl-k">..</span>amount:
+    <span class="pl-v"><span class="pl-c1">echo</span></span>(a, <span class="pl-s"><span class="pl-pds">"</span> sugar...<span class="pl-pds">"</span></span>)
+
+<span class="pl-k">case</span> <span class="pl-v">ask</span>(<span class="pl-s"><span class="pl-pds">"</span>Would you like sugar in your tea?<span class="pl-pds">"</span></span>)
+<span class="pl-k">of</span> aYes:
+  <span class="pl-v">addSugar</span>(<span class="pl-c1">3</span>)
+<span class="pl-k">of</span> aNo:
+  <span class="pl-v"><span class="pl-c1">echo</span></span> <span class="pl-s"><span class="pl-pds">"</span>Oh do take a little!<span class="pl-pds">"</span></span>
+  <span class="pl-v">addSugar</span>()
+<span class="pl-c"><span class="pl-c">#</span> No need for an `else` here. Only `yes` and `no` are possible.</span>
+
+<span class="pl-c"><span class="pl-c">#</span></span>
+<span class="pl-c"><span class="pl-c">#</span> FFI</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> Because Nim compiles to C, FFI is easy:</span>
+
+<span class="pl-k">proc</span> <span class="pl-en">strcmp</span>(<span class="pl-v">a</span>, <span class="pl-v">b</span>: <span class="pl-k">cstring</span>): <span class="pl-k">cint</span> {.<span class="pl-e">importc</span>: "strcmp", nodecl.}
+
+<span class="pl-e">let</span> <span class="pl-e">cmp</span> = strcmp("C?", "Easy!")</pre></div>
+<p>Additionally, Nim separates itself from its peers with metaprogramming,<br>
+performance, and compile-time features.</p>
+<h2>Further Reading</h2>
+<ul>
+<li><a href="http://nim-lang.org" rel="nofollow">Home Page</a></li>
+<li><a href="http://nim-lang.org/download.html" rel="nofollow">Download</a></li>
+<li><a href="http://nim-lang.org/community.html" rel="nofollow">Community</a></li>
+<li><a href="http://nim-lang.org/question.html" rel="nofollow">FAQ</a></li>
+<li><a href="http://nim-lang.org/documentation.html" rel="nofollow">Documentation</a></li>
+<li><a href="http://nim-lang.org/docs/manual.html" rel="nofollow">Manual</a></li>
+<li><a href="http://nim-lang.org/docs/lib.html" rel="nofollow">Standard Library</a></li>
+<li><a href="http://rosettacode.org/wiki/Category:Nim" rel="nofollow">Rosetta Code</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Jason J. Ayala P.", "http://JasonAyala.com"]
+- ["Dennis Felsing", "http://felsin9.de/nnis/"]
+</code></pre>

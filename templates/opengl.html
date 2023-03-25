@@ -1,0 +1,646 @@
+<h1>OpenGL</h1>
+<p><strong>Open Graphics Library</strong> (<strong>OpenGL</strong>) is a cross-language cross-platform application programming interface<br>
+(API) for rendering 2D computer graphics and 3D vector graphics.<sup>[1]</sup> In this tutorial we will be<br>
+focusing on modern OpenGL from 3.3 and above, ignoring "immediate-mode", Displaylists and<br>
+VBO's without use of Shaders.<br>
+I will be using C++ with SFML for window, image and context creation aswell as GLEW<br>
+for modern OpenGL extensions, though there are many other librarys available.</p>
+<div class="highlight highlight-source-c++"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> Creating an SFML window and OpenGL basic setup.</span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>GL/glew.h<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>GL/gl.h<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>SFML/Graphics.h<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>iostream<span class="pl-pds">&gt;</span></span>
+
+<span class="pl-k">int</span> <span class="pl-en">main</span>() {
+    <span class="pl-c"><span class="pl-c">//</span> First we tell SFML how to setup our OpenGL context.</span>
+    sf::ContextSettings context{ <span class="pl-c1">24</span>,   <span class="pl-c"><span class="pl-c">//</span> depth buffer bits</span>
+                                  <span class="pl-c1">8</span>,   <span class="pl-c"><span class="pl-c">//</span> stencil buffer bits</span>
+                                  <span class="pl-c1">4</span>,   <span class="pl-c"><span class="pl-c">//</span> MSAA samples</span>
+                                  <span class="pl-c1">3</span>,   <span class="pl-c"><span class="pl-c">//</span> major opengl version</span>
+                                  <span class="pl-c1">3</span> }; <span class="pl-c"><span class="pl-c">//</span> minor opengl version</span>
+    <span class="pl-c"><span class="pl-c">//</span> Now we create the window, enable VSync</span>
+    <span class="pl-c"><span class="pl-c">//</span> and set the window active for OpenGL.</span>
+    sf::Window window{ sf::VideoMode{ <span class="pl-c1">1024</span>, <span class="pl-c1">768</span> },
+                       <span class="pl-s"><span class="pl-pds">"</span>opengl window<span class="pl-pds">"</span></span>,
+                       sf::<span class="pl-c1">Style</span>::Default,
+		       context };
+    window.<span class="pl-c1">setVerticalSyncEnabled</span>(<span class="pl-c1">true</span>);
+    window.<span class="pl-c1">setActive</span>(<span class="pl-c1">true</span>);
+    <span class="pl-c"><span class="pl-c">//</span> After that we initialise GLEW and check if an error occurred.</span>
+    GLenum error;
+    glewExperimental = GL_TRUE;
+    <span class="pl-k">if</span> ((err = <span class="pl-c1">glewInit</span>()) != GLEW_OK)
+        std::cout &lt;&lt; <span class="pl-c1">glewGetErrorString</span>(err) &lt;&lt; std::endl;
+    <span class="pl-c"><span class="pl-c">//</span> Here we set the color glClear will clear the buffers with.</span>
+    <span class="pl-c1">glClearColor</span>(<span class="pl-c1">0</span>.<span class="pl-c1">0f</span>,    <span class="pl-c"><span class="pl-c">//</span> red</span>
+                 <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>,    <span class="pl-c"><span class="pl-c">//</span> green</span>
+                 <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>,    <span class="pl-c"><span class="pl-c">//</span> blue</span>
+                 <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>);   <span class="pl-c"><span class="pl-c">//</span> alpha</span>
+    <span class="pl-c"><span class="pl-c">//</span> Now we can start the event loop, poll for events and draw objects.</span>
+    sf::Event event{ };
+    <span class="pl-k">while</span> (window.<span class="pl-c1">isOpen</span>()) {
+        <span class="pl-k">while</span> (window.<span class="pl-c1">pollEvent</span>(event)) {
+            <span class="pl-k">if</span> (event.<span class="pl-smi">type</span> == sf::Event::Closed)
+                window.<span class="pl-smi">close</span>;
+        }
+        <span class="pl-c"><span class="pl-c">//</span> Tell OpenGL to clear the color buffer</span>
+        <span class="pl-c"><span class="pl-c">//</span> and the depth buffer, this will clear our window.</span>
+        <span class="pl-c1">glClear</span>(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        <span class="pl-c"><span class="pl-c">//</span> Flip front- and backbuffer.</span>
+        window.<span class="pl-c1">display</span>();
+    }
+    <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+}</pre></div>
+<h2>Loading Shaders</h2>
+<p>After creating a window and our event loop we should create a function,<br>
+that sets up our shader program.</p>
+<div class="highlight highlight-source-c++"><pre class="notranslate">GLuint <span class="pl-en">createShaderProgram</span>(<span class="pl-k">const</span> std::string&amp; vertexShaderPath,
+                           <span class="pl-k">const</span> std::string&amp; fragmentShaderPath) {
+    <span class="pl-c"><span class="pl-c">//</span> Load the vertex shader source.</span>
+    std::stringstream ss{ };
+    std::string vertexShaderSource{ };
+    std::string fragmentShaderSource{ };
+    std::ifstream file{ vertexShaderPath };
+    <span class="pl-k">if</span> (file.<span class="pl-c1">is_open</span>()) {
+        ss &lt;&lt; file.<span class="pl-c1">rdbuf</span>();
+        vertexShaderSource = ss.<span class="pl-c1">str</span>();
+        file.<span class="pl-c1">close</span>();
+    }
+    <span class="pl-c"><span class="pl-c">//</span> Clear the stringstream and load the fragment shader source.</span>
+    ss.<span class="pl-c1">str</span>(std::string{ });
+    file.<span class="pl-c1">open</span>(fragmentShaderPath);
+    <span class="pl-k">if</span> (file.<span class="pl-c1">is_open</span>()) {
+        ss &lt;&lt; file.<span class="pl-c1">rdbuf</span>();
+        fragmentShaderSource = ss.<span class="pl-c1">str</span>();
+        file.<span class="pl-c1">close</span>();
+    }
+    <span class="pl-c"><span class="pl-c">//</span> Create the program.</span>
+    GLuint program = <span class="pl-c1">glCreateProgram</span>();
+    <span class="pl-c"><span class="pl-c">//</span> Create the shaders.</span>
+    GLuint vertexShader = <span class="pl-c1">glCreateShader</span>(GL_VERTEX_SHADER);
+    GLuint fragmentShader = <span class="pl-c1">glCreateShader</span>(GL_FRAGMENT_SHADER);
+    <span class="pl-c"><span class="pl-c">//</span> Now we can load the shader source into the shader objects and compile them.</span>
+    <span class="pl-c"><span class="pl-c">//</span> Because glShaderSource() wants a const char* const*,</span>
+    <span class="pl-c"><span class="pl-c">//</span> we must first create a const char* and then pass the reference.</span>
+    <span class="pl-k">const</span> <span class="pl-k">char</span>* cVertexSource = vertexShaderSource.<span class="pl-c1">c_str</span>();
+    <span class="pl-c1">glShaderSource</span>(vertexShader,     <span class="pl-c"><span class="pl-c">//</span> shader</span>
+                   <span class="pl-c1">1</span>,                <span class="pl-c"><span class="pl-c">//</span> number of strings</span>
+                   &amp;cVertexSource,   <span class="pl-c"><span class="pl-c">//</span> strings</span>
+                   <span class="pl-c1">nullptr</span>);         <span class="pl-c"><span class="pl-c">//</span> length of strings (nullptr for 1)</span>
+    <span class="pl-c1">glCompileShader</span>(vertexShader);
+    <span class="pl-c"><span class="pl-c">//</span> Now we have to do the same for the fragment shader.</span>
+    <span class="pl-k">const</span> <span class="pl-k">char</span>* cFragmentSource = fragmentShaderSource.<span class="pl-c1">c_str</span>();
+    <span class="pl-c1">glShaderSource</span>(fragmentShader, <span class="pl-c1">1</span>, &amp;cFragmentSource, <span class="pl-c1">nullptr</span>);
+    <span class="pl-c1">glCompileShader</span>(fragmentShader);
+    <span class="pl-c"><span class="pl-c">//</span> After attaching the source and compiling the shaders,</span>
+    <span class="pl-c"><span class="pl-c">//</span> we attach them to the program;</span>
+    <span class="pl-c1">glAttachShader</span>(program, vertexShader);
+    <span class="pl-c1">glAttachShader</span>(program, fragmentShader);
+    <span class="pl-c1">glLinkProgram</span>(program);
+    <span class="pl-c"><span class="pl-c">//</span> After linking the shaders we should detach and delete</span>
+    <span class="pl-c"><span class="pl-c">//</span> them to prevent memory leak.</span>
+    <span class="pl-c1">glDetachShader</span>(program, vertexShader);
+    <span class="pl-c1">glDetachShader</span>(program, fragmentShader);
+    <span class="pl-c1">glDeleteShader</span>(vertexShader);
+    <span class="pl-c1">glDeleteShader</span>(fragmentShader);
+    <span class="pl-c"><span class="pl-c">//</span> With everything done we can return the completed program.</span>
+    <span class="pl-k">return</span> program;
+}</pre></div>
+<p>If you want to check the compilation log you can add the following between <code class="notranslate">glCompileShader()</code> and <code class="notranslate">glAttachShader()</code>.</p>
+<div class="highlight highlight-source-c++"><pre class="notranslate">GLint logSize = <span class="pl-c1">0</span>;
+std::vector&lt;GLchar&gt; logText{ };
+<span class="pl-en">glGetShaderiv</span>(vertexShader,         <span class="pl-c"><span class="pl-c">//</span> shader</span>
+              GL_INFO_LOG_LENGTH,   <span class="pl-c"><span class="pl-c">//</span> requested parameter</span>
+              &amp;logSize);            <span class="pl-c"><span class="pl-c">//</span> return object</span>
+<span class="pl-k">if</span> (logSize &gt; <span class="pl-c1">0</span>) {
+    logText.<span class="pl-c1">resize</span>(logSize);
+    <span class="pl-c1">glGetShaderInfoLog</span>(vertexShader,      <span class="pl-c"><span class="pl-c">//</span> shader</span>
+                       logSize,           <span class="pl-c"><span class="pl-c">//</span> buffer length</span>
+                       &amp;logSize,          <span class="pl-c"><span class="pl-c">//</span> returned length</span>
+                       logText.<span class="pl-c1">data</span>());   <span class="pl-c"><span class="pl-c">//</span> buffer</span>
+    std::cout &lt;&lt; logText.<span class="pl-c1">data</span>() &lt;&lt; std::endl;
+}</pre></div>
+<p>The same is possible after <code class="notranslate">glLinkProgram()</code>, just replace <code class="notranslate">glGetShaderiv()</code> with <code class="notranslate">glGetProgramiv()</code><br>
+and <code class="notranslate">glGetShaderInfoLog()</code> with <code class="notranslate">glGetProgramInfoLog()</code>.</p>
+<div class="highlight highlight-source-c++"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> Now we can create a shader program with a vertex and a fragment shader.</span>
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+<span class="pl-en">glClearColor</span>(<span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>);
+
+GLuint program = createShaderProgram(<span class="pl-s"><span class="pl-pds">"</span>vertex.glsl<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>fragment.glsl<span class="pl-pds">"</span></span>);
+
+sf::Event event{ };
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+<span class="pl-c"><span class="pl-c">//</span> We also have to delete the program at the end of the application.</span>
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+    }
+    <span class="pl-en">glDeleteProgram</span>(program);	
+    <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+}
+<span class="pl-c"><span class="pl-c">//</span> ...</span></pre></div>
+<p>Ofcourse we have to create the vertex and fragment shader before we can load them,<br>
+so lets create two basic shaders.</p>
+<p><strong>Vertex Shader</strong></p>
+<div class="highlight highlight-source-glsl"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> Declare which version of GLSL we use.</span>
+<span class="pl-c"><span class="pl-c">//</span> Here we declare, that we want to use the OpenGL 3.3 version of GLSL.</span>
+<span class="pl-k">#version</span> <span class="pl-c1">330</span> core
+<span class="pl-c"><span class="pl-c">//</span> At attribute location 0 we want an input variable of type vec3,</span>
+<span class="pl-c"><span class="pl-c">//</span> that contains the position of the vertex.</span>
+<span class="pl-c"><span class="pl-c">//</span> Setting the location is optional, if you don't set it you can ask for the</span>
+<span class="pl-c"><span class="pl-c">//</span> location with glGetAttribLocation().</span>
+<span class="pl-k">layout</span>(location <span class="pl-k">=</span> <span class="pl-c1">0</span>) <span class="pl-k">in</span> <span class="pl-k">vec3</span> position;
+<span class="pl-c"><span class="pl-c">//</span> Every shader starts in it's main function.</span>
+<span class="pl-k">void</span> main() {
+    <span class="pl-c"><span class="pl-c">//</span> gl_Position is a predefined variable that holds</span>
+    <span class="pl-c"><span class="pl-c">//</span> the final vertex position.</span>
+    <span class="pl-c"><span class="pl-c">//</span> It consists of a x, y, z and w coordinate.</span>
+    <span class="pl-c1">gl_Position</span> <span class="pl-k">=</span> <span class="pl-k">vec4</span>(position, <span class="pl-c1">1.0</span>);
+}</pre></div>
+<p><strong>Fragment Shader</strong></p>
+<div class="highlight highlight-source-glsl"><pre class="notranslate"><span class="pl-k">#version</span> <span class="pl-c1">330</span> core
+<span class="pl-c"><span class="pl-c">//</span> The fragment shader does not have a predefined variable for</span>
+<span class="pl-c"><span class="pl-c">//</span> the vertex color, so we have to define a output vec4,</span>
+<span class="pl-c"><span class="pl-c">//</span> that holds the final vertex color.</span>
+<span class="pl-k">out</span> <span class="pl-k">vec4</span> outColor;
+
+<span class="pl-k">void</span> main() {
+    <span class="pl-c"><span class="pl-c">//</span> We simply set the output color to red.</span>
+    <span class="pl-c"><span class="pl-c">//</span> The parameters are red, green, blue and alpha.</span>
+    outColor <span class="pl-k">=</span> <span class="pl-k">vec4</span>(<span class="pl-c1">1.0</span>, <span class="pl-c1">0.0</span>, <span class="pl-c1">0.0</span>, <span class="pl-c1">1.0</span>);
+}</pre></div>
+<h2>VAO and VBO</h2>
+<p>Now we need to define some vertex position we can pass to our shaders. Lets define a simple 2D quad.</p>
+<div class="highlight highlight-source-c++"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> The vertex data is defined in a counter-clockwise way,</span>
+<span class="pl-c"><span class="pl-c">//</span> as this is the default front face.</span>
+std::vector&lt;<span class="pl-k">float</span>&gt; vertexData {
+    -<span class="pl-c1">0</span>.<span class="pl-c1">5f</span>,  <span class="pl-c1">0</span>.<span class="pl-c1">5f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>,
+    -<span class="pl-c1">0</span>.<span class="pl-c1">5f</span>, -<span class="pl-c1">0</span>.<span class="pl-c1">5f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>,
+     <span class="pl-c1">0</span>.<span class="pl-c1">5f</span>, -<span class="pl-c1">0</span>.<span class="pl-c1">5f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>,
+     <span class="pl-c1">0</span>.<span class="pl-c1">5f</span>,  <span class="pl-c1">0</span>.<span class="pl-c1">5f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>
+};
+<span class="pl-c"><span class="pl-c">//</span> If you want to use a clockwise definition, you can simply call</span>
+<span class="pl-en">glFrontFace</span>(GL_CW);
+<span class="pl-c"><span class="pl-c">//</span> Next we need to define a Vertex Array Object (VAO).</span>
+<span class="pl-c"><span class="pl-c">//</span> The VAO stores the current state while its active.</span>
+GLuint vao = <span class="pl-c1">0</span>;
+<span class="pl-en">glGenVertexArrays</span>(<span class="pl-c1">1</span>, &amp;vao);
+<span class="pl-en">glBindVertexArray</span>(vao);
+<span class="pl-c"><span class="pl-c">//</span> With the VAO active we can now create a Vertex Buffer Object (VBO).</span>
+<span class="pl-c"><span class="pl-c">//</span> The VBO stores our vertex data.</span>
+GLuint vbo = <span class="pl-c1">0</span>;
+<span class="pl-en">glGenBuffers</span>(<span class="pl-c1">1</span>, &amp;vbo);
+<span class="pl-en">glBindBuffer</span>(GL_ARRAY_BUFFER, vbo);
+<span class="pl-c"><span class="pl-c">//</span> For reading and copying there are also GL_*_READ and GL_*_COPY,</span>
+<span class="pl-c"><span class="pl-c">//</span> if your data changes more often use GL_DYNAMIC_* or GL_STREAM_*.</span>
+<span class="pl-en">glBufferData</span>(GL_ARRAY_BUFFER,     <span class="pl-c"><span class="pl-c">//</span> target buffer</span>
+             <span class="pl-k">sizeof</span>(vertexData[<span class="pl-c1">0</span>]) * vertexData.size(),   <span class="pl-c"><span class="pl-c">//</span> size</span>
+             vertexData.data(),   <span class="pl-c"><span class="pl-c">//</span> data</span>
+             GL_STATIC_DRAW);     <span class="pl-c"><span class="pl-c">//</span> usage</span>
+<span class="pl-c"><span class="pl-c">//</span> After filling the VBO link it to the location 0 in our vertex shader,</span>
+<span class="pl-c"><span class="pl-c">//</span> which holds the vertex position.</span>
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+<span class="pl-c"><span class="pl-c">//</span> To ask for the attribute location, if you haven't set it:</span>
+GLint posLocation = glGetAttribLocation(program, <span class="pl-s"><span class="pl-pds">"</span>position<span class="pl-pds">"</span></span>);
+<span class="pl-c"><span class="pl-c">//</span> ..</span>
+<span class="pl-en">glEnableVertexAttribArray</span>(<span class="pl-c1">0</span>);
+<span class="pl-en">glVertexAttribPointer</span>(<span class="pl-c1">0</span>, <span class="pl-c1">3</span>,       <span class="pl-c"><span class="pl-c">//</span> location and size</span>
+                      GL_FLOAT,   <span class="pl-c"><span class="pl-c">//</span> type of data</span>
+                      GL_FALSE,   <span class="pl-c"><span class="pl-c">//</span> normalized (always false for floats)</span>
+                      <span class="pl-c1">0</span>,          <span class="pl-c"><span class="pl-c">//</span> stride (interleaved arrays)</span>
+                      <span class="pl-c1">nullptr</span>);   <span class="pl-c"><span class="pl-c">//</span> offset (interleaved arrays)</span>
+<span class="pl-c"><span class="pl-c">//</span> Everything should now be saved in our VAO and we can unbind it and the VBO.</span>
+<span class="pl-en">glBindVertexArray</span>(<span class="pl-c1">0</span>);
+<span class="pl-en">glBindBuffer</span>(GL_ARRAY_BUFFER, <span class="pl-c1">0</span>);
+<span class="pl-c"><span class="pl-c">//</span> Now we can draw the vertex data in our render loop.</span>
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+<span class="pl-en">glClear</span>(GL_COLOR_BUFFER_BIT);
+<span class="pl-c"><span class="pl-c">//</span> Tell OpenGL we want to use our shader program.</span>
+<span class="pl-en">glUseProgram</span>(program);
+<span class="pl-c"><span class="pl-c">//</span> Binding the VAO loads the data we need.</span>
+<span class="pl-en">glBindVertexArray</span>(vao);
+<span class="pl-c"><span class="pl-c">//</span> We want to draw a quad starting at index 0 of the VBO using 4 indices.</span>
+<span class="pl-en">glDrawArrays</span>(GL_QUADS, <span class="pl-c1">0</span>, <span class="pl-c1">4</span>);
+<span class="pl-en">glBindVertexArray</span>(<span class="pl-c1">0</span>);
+window.display();
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+<span class="pl-c"><span class="pl-c">//</span> Ofcource we have to delete the allocated memory for the VAO and VBO at</span>
+<span class="pl-c"><span class="pl-c">//</span> the end of our application.</span>
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+<span class="pl-en">glDeleteBuffers</span>(<span class="pl-c1">1</span>, &amp;vbo);
+<span class="pl-en">glDeleteVertexArrays</span>(<span class="pl-c1">1</span>, &amp;vao);
+<span class="pl-en">glDeleteProgram</span>(program);
+<span class="pl-k">return</span> <span class="pl-c1">0</span>;
+<span class="pl-c"><span class="pl-c">//</span> ...</span></pre></div>
+<p>You can find the current code here: <a href="https://pastebin.com/W8jdmVHD" rel="nofollow">OpenGL - 1</a>.</p>
+<h2>More VBO's and Color</h2>
+<p>Let's create another VBO for some colors.</p>
+<div class="highlight highlight-source-c++"><pre class="notranslate">std::vector&lt;<span class="pl-k">float</span>&gt; colorData {
+    <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>,
+    <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>,
+    <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>,
+    <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>
+};</pre></div>
+<p>Next we can simply change some previous parameters to create a second VBO for our colors.</p>
+<div class="highlight highlight-source-c++"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> ...</span>
+GLuint vbo[<span class="pl-c1">2</span>];
+<span class="pl-en">glGenBuffers</span>(<span class="pl-c1">2</span>, vbo);
+<span class="pl-en">glBindBuffer</span>(GL_ARRAY_BUFFER, vbo[<span class="pl-c1">0</span>]);
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+<span class="pl-en">glDeleteBuffers</span>(<span class="pl-c1">2</span>, vbo);
+/ ...
+<span class="pl-c"><span class="pl-c">//</span> With these changes made we now have to load our color data into the new VBO</span>
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+<span class="pl-en">glVertexAttribPointer</span>(<span class="pl-c1">0</span>, <span class="pl-c1">3</span>, GL_FLOAT, GL_FALSE, <span class="pl-c1">0</span>, <span class="pl-c1">nullptr</span>);
+
+<span class="pl-en">glBindBuffer</span>(GL_ARRAY_BUFFER, vbo[<span class="pl-c1">1</span>]);
+<span class="pl-en">glBufferData</span>(GL_ARRAY_BUFFER, <span class="pl-k">sizeof</span>(colorData[<span class="pl-c1">0</span>]) * colorData.size(),
+             colorData.data(), GL_STATIC_DRAW);
+<span class="pl-en">glEnableVertexAttribArray</span>(<span class="pl-c1">1</span>);
+<span class="pl-en">glVertexAttribPointer</span>(<span class="pl-c1">1</span>, <span class="pl-c1">3</span>, GL_FLOAT, GL_FALSE, <span class="pl-c1">0</span>, <span class="pl-c1">nullptr</span>);
+
+<span class="pl-en">glBindVertexArray</span>(<span class="pl-c1">0</span>);  
+<span class="pl-c"><span class="pl-c">//</span> ...</span></pre></div>
+<p>Next we have to change our vertex shader to pass the color data to the fragment shader.<br><br>
+<strong>Vertex Shader</strong></p>
+<div class="highlight highlight-source-glsl"><pre class="notranslate"><span class="pl-k">#version</span> <span class="pl-c1">330</span> core
+
+<span class="pl-k">layout</span>(location <span class="pl-k">=</span> <span class="pl-c1">0</span>) <span class="pl-k">in</span> <span class="pl-k">vec3</span> position;
+<span class="pl-c"><span class="pl-c">//</span> The new location has to differ from any other input variable.</span>
+<span class="pl-c"><span class="pl-c">//</span> It is the same index we need to pass to</span>
+<span class="pl-c"><span class="pl-c">//</span> glEnableVertexAttribArray() and glVertexAttribPointer().</span>
+<span class="pl-k">layout</span>(location <span class="pl-k">=</span> <span class="pl-c1">1</span>) <span class="pl-k">in</span> <span class="pl-k">vec3</span> color;
+
+<span class="pl-k">out</span> <span class="pl-k">vec3</span> fColor;
+
+<span class="pl-k">void</span> main() {
+    fColor <span class="pl-k">=</span> color;
+    <span class="pl-c1">gl_Position</span> <span class="pl-k">=</span> <span class="pl-k">vec4</span>(position, <span class="pl-c1">1.0</span>);
+}</pre></div>
+<p><strong>Fragment Shader</strong></p>
+<div class="highlight highlight-source-glsl"><pre class="notranslate"><span class="pl-k">#version</span> <span class="pl-c1">330</span> core
+
+<span class="pl-k">in</span> <span class="pl-k">vec3</span> fColor;
+
+<span class="pl-k">out</span> <span class="pl-k">vec4</span> outColor;
+
+<span class="pl-k">void</span> main() {
+    outColor <span class="pl-k">=</span> <span class="pl-k">vec4</span>(fColor, <span class="pl-c1">1.0</span>);
+}</pre></div>
+<p>We define a new input variable <code class="notranslate">color</code> which represents our color data, this data<br>
+is passed on to <code class="notranslate">fColor</code>, which is an output variable of our vertex shader and<br>
+becomes an input variable for our fragment shader.<br>
+It is imporatant that variables passed between shaders have the exact same name<br>
+and type.</p>
+<h2>Handling VBO's</h2>
+<div class="highlight highlight-source-c++"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> If you want to completely clear and refill a VBO use glBufferData(),</span>
+<span class="pl-c"><span class="pl-c">//</span> just like we did before.</span>
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+<span class="pl-c"><span class="pl-c">//</span> There are two mains ways to update a subset of a VBO's data.</span>
+<span class="pl-c"><span class="pl-c">//</span> To update a VBO with existing data</span>
+std::vector&lt;<span class="pl-k">float</span>&gt; newSubData {
+	-<span class="pl-c1">0</span>.<span class="pl-c1">25f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">5f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>
+};
+<span class="pl-en">glBindBuffer</span>(GL_ARRAY_BUFFER, vbo[<span class="pl-c1">0</span>]);
+<span class="pl-en">glBufferSubData</span>(GL_ARRAY_BUFFER,      <span class="pl-c"><span class="pl-c">//</span> target buffer</span>
+                <span class="pl-c1">0</span>,                    <span class="pl-c"><span class="pl-c">//</span> offset</span>
+                <span class="pl-k">sizeof</span>(newSubData[<span class="pl-c1">0</span>]) * newSubData.size(),   <span class="pl-c"><span class="pl-c">//</span> size</span>
+                newSubData.data());   <span class="pl-c"><span class="pl-c">//</span> data</span>
+<span class="pl-c"><span class="pl-c">//</span> This would update the first three values in our vbo[0] buffer.</span>
+<span class="pl-c"><span class="pl-c">//</span> If you want to update starting at a specific location just set the second</span>
+<span class="pl-c"><span class="pl-c">//</span> parameter to that value and multiply by the types size.</span>
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+<span class="pl-c"><span class="pl-c">//</span> If you are streaming data, for example from a file,</span>
+<span class="pl-c"><span class="pl-c">//</span> it is faster to directly pass the data to the buffer.</span>
+<span class="pl-c"><span class="pl-c">//</span> Other access values are GL_READ_ONLY and GL_READ_WRITE.</span>
+<span class="pl-en">glBindBuffer</span>(GL_ARRAY_BUFFER, vbo[<span class="pl-c1">0</span>]);
+<span class="pl-c"><span class="pl-c">//</span> You can static_cast&lt;float*&gt;() the void* to be more safe.</span>
+<span class="pl-k">void</span>* <span class="pl-c1">Ptr</span> = glMapBuffer(GL_ARRAY_BUFFER,   <span class="pl-c"><span class="pl-c">//</span> buffer to map</span>
+                        GL_WRITE_ONLY);    <span class="pl-c"><span class="pl-c">//</span> access to buffer</span>
+<span class="pl-en">memcpy</span>(<span class="pl-c1">Ptr</span>, newSubData.data(), sizeof(newSubData[<span class="pl-c1">0</span>]) * newSubData.size());
+<span class="pl-c"><span class="pl-c">//</span> To copy to a specific location add a destination offset to memcpy().</span>
+<span class="pl-en">glUnmapBuffer</span>(GL_ARRAY_BUFFER);
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+<span class="pl-c"><span class="pl-c">//</span> There is also a way to copy data from one buffer to another,</span>
+<span class="pl-c"><span class="pl-c">//</span> If we have two VBO's vbo[0] and vbo[1], we can copy like so</span>
+<span class="pl-c"><span class="pl-c">//</span> You can also read from GL_ARRAY_BUFFER.</span>
+<span class="pl-en">glBindBuffer</span>(GL_COPY_READ_BUFFER, vbo[<span class="pl-c1">0</span>]);
+<span class="pl-c"><span class="pl-c">//</span> GL_COPY_READ_BUFFER and GL_COPY_WRITE_BUFFER are specifically for</span>
+<span class="pl-c"><span class="pl-c">//</span> copying buffer data.</span>
+<span class="pl-en">glBindBuffer</span>(GL_COPY_WRITE_BUFFER, vbo[<span class="pl-c1">1</span>]);
+<span class="pl-en">glCopyBufferSubData</span>(GL_COPY_READ_BUFFER,    <span class="pl-c"><span class="pl-c">//</span> read buffer</span>
+                    GL_COPY_WRITE_BUFFER,   <span class="pl-c"><span class="pl-c">//</span> write buffer</span>
+                    <span class="pl-c1">0</span>, <span class="pl-c1">0</span>,                   <span class="pl-c"><span class="pl-c">//</span> read and write offset</span>
+                    <span class="pl-k">sizeof</span>(vbo[<span class="pl-c1">0</span>]) * 3);    <span class="pl-c"><span class="pl-c">//</span> copy size</span>
+<span class="pl-c"><span class="pl-c">//</span> This will copy the first three elements from vbo[0] to vbo[1].</span></pre></div>
+<h2>Uniforms</h2>
+<p><strong>Fragment Shader</strong></p>
+<div class="highlight highlight-source-glsl"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> Uniforms are variables like in and out, however,</span>
+<span class="pl-c"><span class="pl-c">//</span> we can change them easily by passing new values with glUniform().</span>
+<span class="pl-c"><span class="pl-c">//</span> Lets define a time variable in our fragment shader.</span>
+<span class="pl-k">#version</span> <span class="pl-c1">330</span> core
+<span class="pl-c"><span class="pl-c">//</span> Unlike a in/out variable we can use a uniform in every shader,</span>
+<span class="pl-c"><span class="pl-c">//</span> without the need to pass it to the next one, they are global.</span>
+<span class="pl-c"><span class="pl-c">//</span> Don't use locations already used for attributes!</span>
+<span class="pl-c"><span class="pl-c">//</span> Uniform layout locations require OpenGL 4.3!</span>
+<span class="pl-k">layout</span>(location <span class="pl-k">=</span> <span class="pl-c1">10</span>) <span class="pl-k">uniform</span> <span class="pl-k">float</span> time;
+
+<span class="pl-k">in</span> <span class="pl-k">vec3</span> fColor;
+
+<span class="pl-k">out</span> <span class="pl-k">vec4</span> outColor;
+
+<span class="pl-k">void</span> main() {
+    <span class="pl-c"><span class="pl-c">//</span> Create a sine wave from 0 to 1 based on the time passed to the shader.</span>
+    <span class="pl-k">float</span> factor <span class="pl-k">=</span> (<span class="pl-c1">sin</span>(time <span class="pl-k">*</span> <span class="pl-c1">2</span>) <span class="pl-k">+</span> <span class="pl-c1">1</span>) <span class="pl-k">/</span> <span class="pl-c1">2</span>;
+    outColor <span class="pl-k">=</span> <span class="pl-k">vec4</span>(fColor.r <span class="pl-k">*</span> factor, fColor.g <span class="pl-k">*</span> factor, fColor.b <span class="pl-k">*</span> factor, <span class="pl-c1">1.0</span>);
+}</pre></div>
+<p>Back to our source code.</p>
+<div class="highlight highlight-source-c++"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> If we haven't set the layout location, we can ask for it.</span>
+GLint timeLocation = glGetUniformLocation(program, <span class="pl-s"><span class="pl-pds">"</span>time<span class="pl-pds">"</span></span>);
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+<span class="pl-c"><span class="pl-c">//</span> Also we should define a Timer counting the current time.</span>
+sf::Clock clock{ };
+<span class="pl-c"><span class="pl-c">//</span> In out render loop we can now update the uniform every frame.</span>
+    <span class="pl-c"><span class="pl-c">//</span> ...</span>
+    window.display();
+    <span class="pl-en">glUniform1f</span>(<span class="pl-c1">10</span>,   <span class="pl-c"><span class="pl-c">//</span> location</span>
+                clock.getElapsedTime().asSeconds());   <span class="pl-c"><span class="pl-c">//</span> data</span>
+}
+<span class="pl-c"><span class="pl-c">//</span> ...</span></pre></div>
+<p>With the time getting updated every frame the quad should now be changing from<br>
+fully colored to pitch black.<br>
+There are different types of glUniform() you can find simple documentation here:<br>
+<a href="https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glUniform.xhtml" rel="nofollow">glUniform - OpenGL Refpage</a></p>
+<h2>Indexing and IBO's</h2>
+<p>Element Array Buffers or more commonly Index Buffer Objects (IBO) allow us to use the<br>
+same vertex data again which makes drawing a lot easier and faster. here's an example:</p>
+<div class="highlight highlight-source-c++"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> Lets create a quad from two rectangles.</span>
+<span class="pl-c"><span class="pl-c">//</span> We can simply use the old vertex data from before.</span>
+<span class="pl-c"><span class="pl-c">//</span> First, we have to create the IBO.</span>
+<span class="pl-c"><span class="pl-c">//</span> The index is referring to the first declaration in the VBO.</span>
+std::vector&lt;<span class="pl-k">unsigned</span> <span class="pl-k">int</span>&gt; iboData {
+    <span class="pl-c1">0</span>, <span class="pl-c1">1</span>, <span class="pl-c1">2</span>,
+    <span class="pl-c1">0</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>
+};
+<span class="pl-c"><span class="pl-c">//</span> That's it, as you can see we could reuse 0 - the top left</span>
+<span class="pl-c"><span class="pl-c">//</span> and 2 - the bottom right.</span>
+<span class="pl-c"><span class="pl-c">//</span> Now that we have our data, we have to fill it into a buffer.</span>
+<span class="pl-c"><span class="pl-c">//</span> Note that this has to happen between the two glBindVertexArray() calls,</span>
+<span class="pl-c"><span class="pl-c">//</span> so it gets saved into the VAO.</span>
+GLuint ibo = <span class="pl-c1">0</span>;
+<span class="pl-en">glGenBufferrs</span>(<span class="pl-c1">1</span>, &amp;ibo);
+<span class="pl-en">glBindBuffer</span>(GL_ELEMENT_ARRAY_BUFFER, ibo);
+<span class="pl-en">glBufferData</span>(GL_ELEMENT_ARRAY_BUFFER, <span class="pl-k">sizeof</span>(iboData[<span class="pl-c1">0</span>]) * iboData.size(),
+             iboData.data(), GL_STATIC_DRAW);
+<span class="pl-c"><span class="pl-c">//</span> Next in our render loop, we replace glDrawArrays() with:</span>
+<span class="pl-en">glDrawElements</span>(GL_TRIANGLES, iboData.size(), GL_UNSIGNED_INT, nullptr);
+<span class="pl-c"><span class="pl-c">//</span> Remember to delete the allocated memory for the IBO.</span></pre></div>
+<p>You can find the current code here: <a href="https://pastebin.com/R3Z9ACDE" rel="nofollow">OpenGL - 2</a>.</p>
+<h2>Textures</h2>
+<p>To load out texture we first need a library that loads the data, for simplicity I will be<br>
+using SFML, however there are a lot of librarys for loading image data.</p>
+<div class="highlight highlight-source-c++"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> Lets save we have a texture called "my_tex.tga", we can load it with:</span>
+sf::Image image;
+image.loadFromFile(<span class="pl-s"><span class="pl-pds">"</span>my_tex.tga<span class="pl-pds">"</span></span>);
+<span class="pl-c"><span class="pl-c">//</span> We have to flip the texture around the y-Axis, because OpenGL's texture</span>
+<span class="pl-c"><span class="pl-c">//</span> origin is the bottom left corner, not the top left.</span>
+image.flipVertically();
+<span class="pl-c"><span class="pl-c">//</span> After loading it we have to create a OpenGL texture.</span>
+GLuint texture = <span class="pl-c1">0</span>;
+<span class="pl-en">glGenTextures</span>(<span class="pl-c1">1</span>, &amp;texture);
+<span class="pl-en">glBindTexture</span>(GL_TEXTURE_2D, texture);
+<span class="pl-c"><span class="pl-c">//</span> Specify what happens when the coordinates are out of range.</span>
+<span class="pl-en">glTexParameteri</span>(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+<span class="pl-en">glTexParameteri</span>(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+<span class="pl-c"><span class="pl-c">//</span> Specify the filtering if the object is very large.</span>
+<span class="pl-en">glTexParameteri</span>(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+<span class="pl-en">glTexParameteri</span>(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+<span class="pl-c"><span class="pl-c">//</span> Load the image data to the texture.</span>
+<span class="pl-en">glTexImage2D</span>(GL_TEXTURE_2D, <span class="pl-c1">0</span>, GL_RGBA, image.getSize().x, image.getSize().y,
+             0, GL_RGBA, GL_UNSIGNED_BYTE, image.getPixelsPtr());
+<span class="pl-c"><span class="pl-c">//</span> Unbind the texture to prevent modifications.</span>
+<span class="pl-en">glBindTexture</span>(GL_TEXTURE_2D, <span class="pl-c1">0</span>);
+<span class="pl-c"><span class="pl-c">//</span> Delete the texture at the end of the application.</span>
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+<span class="pl-en">glDeleteTextures</span>(<span class="pl-c1">1</span>, &amp;texture);</pre></div>
+<p>Ofcourse there are more texture formats than only 2D textures,<br>
+You can find further information on parameters here:<br>
+<a href="https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glBindTexture.xhtml" rel="nofollow">glBindTexture - OpenGL Refpage</a><br><br>
+<a href="https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glTexImage2D.xhtml" rel="nofollow">glTexImage2D - OpenGL Refpage</a><br><br>
+<a href="https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glTexParameter.xhtml" rel="nofollow">glTexParameter - OpenGL Refpage</a><br></p>
+<div class="highlight highlight-source-c++"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> With the texture created, we now have to specify the UV,</span>
+<span class="pl-c"><span class="pl-c">//</span> or in OpenGL terms ST coordinates.</span>
+std::vector&lt;<span class="pl-k">float</span>&gt; texCoords {
+    <span class="pl-c"><span class="pl-c">//</span> The texture coordinates have to match the triangles/quad</span>
+    <span class="pl-c"><span class="pl-c">//</span> definition.</span>
+    <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>,	   <span class="pl-c"><span class="pl-c">//</span> start at top-left</span>
+    <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>,	   <span class="pl-c"><span class="pl-c">//</span> go round counter-clockwise</span>
+    <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>,
+    <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>     <span class="pl-c"><span class="pl-c">//</span> end at top-right</span>
+};
+<span class="pl-c"><span class="pl-c">//</span> Now we increase the VBO's size again just like we did for the colors.</span>
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+GLuint vbo[<span class="pl-c1">3</span>];
+<span class="pl-en">glGenBuffers</span>(<span class="pl-c1">3</span>, vbo);
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+<span class="pl-en">glDeleteBuffers</span>(<span class="pl-c1">3</span>, vbo);
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+<span class="pl-c"><span class="pl-c">//</span> Load the texture coordinates into the new buffer.</span>
+<span class="pl-en">glBindBuffer</span>(GL_ARRAY_BUFFER, vbo[<span class="pl-c1">2</span>]);
+<span class="pl-en">glBufferData</span>(GL_ARRAY_BUFFER, <span class="pl-k">sizeof</span>(texCoords[<span class="pl-c1">0</span>]) * texCoords.size(),
+             texCoords.data(), GL_STATIC_DRAW);
+<span class="pl-en">glEnableVertexAttribArray</span>(<span class="pl-c1">2</span>);
+<span class="pl-en">glVertexAttribPointer</span>(<span class="pl-c1">2</span>, <span class="pl-c1">2</span>, GL_FLOAT, GL_FALSE, <span class="pl-c1">0</span>, <span class="pl-c1">nullptr</span>);
+<span class="pl-c"><span class="pl-c">//</span> Because the VAO does not store the texture we have to bind it before drawing.</span>
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+<span class="pl-en">glBindVertexArray</span>(vao);
+<span class="pl-en">glBindTexture</span>(GL_TEXTURE_2D, texture);
+<span class="pl-en">glDrawElements</span>(GL_TRIANGLES, iboData.size(), GL_UNSIGNED_INT, nullptr);
+<span class="pl-c"><span class="pl-c">//</span> ...</span></pre></div>
+<p>Change the shaders to pass the data to the fragment shader.<br></p>
+<p><strong>Vertex Shader</strong></p>
+<div class="highlight highlight-source-glsl"><pre class="notranslate"><span class="pl-k">#version</span> <span class="pl-c1">330</span> core
+
+<span class="pl-k">layout</span>(location <span class="pl-k">=</span> <span class="pl-c1">0</span>) <span class="pl-k">in</span> <span class="pl-k">vec3</span> position;
+<span class="pl-k">layout</span>(location <span class="pl-k">=</span> <span class="pl-c1">1</span>) <span class="pl-k">in</span> <span class="pl-k">vec3</span> color;
+<span class="pl-k">layout</span>(location <span class="pl-k">=</span> <span class="pl-c1">2</span>) <span class="pl-k">in</span> <span class="pl-k">vec2</span> texCoords;
+
+<span class="pl-k">out</span> <span class="pl-k">vec3</span> fColor;
+<span class="pl-k">out</span> <span class="pl-k">vec2</span> fTexCoords;
+
+<span class="pl-k">void</span> main() {
+    fColor <span class="pl-k">=</span> color;
+    fTexCoords <span class="pl-k">=</span> texCoords;
+    <span class="pl-c1">gl_Position</span> <span class="pl-k">=</span> <span class="pl-k">vec4</span>(position, <span class="pl-c1">1.0</span>);
+}</pre></div>
+<p><strong>Fragment Shader</strong></p>
+<div class="highlight highlight-source-glsl"><pre class="notranslate"><span class="pl-k">#version</span> <span class="pl-c1">330</span> core
+<span class="pl-c"><span class="pl-c">//</span> sampler2D represents our 2D texture.</span>
+<span class="pl-k">uniform</span> <span class="pl-k">sampler2D</span> tex;
+<span class="pl-k">uniform</span> <span class="pl-k">float</span> time;
+
+<span class="pl-k">in</span> <span class="pl-k">vec3</span> fColor;
+<span class="pl-k">in</span> <span class="pl-k">vec2</span> fTexCoords;
+
+<span class="pl-k">out</span> <span class="pl-k">vec4</span> outColor;
+
+<span class="pl-k">void</span> main() {
+    <span class="pl-c"><span class="pl-c">//</span> texture() loads the current texure data at the specified texture coords,</span>
+    <span class="pl-c"><span class="pl-c">//</span> then we can simply multiply them by our color.</span>
+    outColor <span class="pl-k">=</span> texture(tex, fTexCoords) <span class="pl-k">*</span> <span class="pl-k">vec4</span>(fColor, <span class="pl-c1">1.0</span>);
+}</pre></div>
+<p>You can find the current code here: <a href="https://pastebin.com/u3bcwM6q" rel="nofollow">OpenGL - 3</a></p>
+<h2>Matrix Transformation</h2>
+<p><strong>Vertex Shader</strong></p>
+<div class="highlight highlight-source-glsl"><pre class="notranslate"><span class="pl-k">#version</span> <span class="pl-c1">330</span> core
+
+<span class="pl-k">layout</span>(location <span class="pl-k">=</span> <span class="pl-c1">0</span>) <span class="pl-k">in</span> <span class="pl-k">vec3</span> position;
+<span class="pl-k">layout</span>(location <span class="pl-k">=</span> <span class="pl-c1">1</span>) <span class="pl-k">in</span> <span class="pl-k">vec3</span> color;
+<span class="pl-k">layout</span>(location <span class="pl-k">=</span> <span class="pl-c1">2</span>) <span class="pl-k">in</span> <span class="pl-k">vec2</span> texCoords;
+<span class="pl-c"><span class="pl-c">//</span> Create 2 4x4 matricies, 1 for the projection matrix</span>
+<span class="pl-c"><span class="pl-c">//</span> and 1 for the model matrix.</span>
+<span class="pl-c"><span class="pl-c">//</span> Because we draw in a static scene, we don't need a view matrix.</span>
+<span class="pl-k">uniform</span> <span class="pl-k">mat4</span> projection;
+<span class="pl-k">uniform</span> <span class="pl-k">mat4</span> model;
+
+<span class="pl-k">out</span> <span class="pl-k">vec3</span> fColor;
+<span class="pl-k">out</span> <span class="pl-k">vec2</span> fTexCoords;
+
+<span class="pl-k">void</span> main() {
+    fColor <span class="pl-k">=</span> color;
+    fTexCoords <span class="pl-k">=</span> texCoords;
+    <span class="pl-c"><span class="pl-c">//</span> Multiplay the position by the model matrix and then by the</span>
+    <span class="pl-c"><span class="pl-c">//</span> projection matrix.</span>
+    <span class="pl-c"><span class="pl-c">//</span> Beware order of multiplication for matricies!</span>
+    <span class="pl-c1">gl_Position</span> <span class="pl-k">=</span> projection <span class="pl-k">*</span> model <span class="pl-k">*</span> <span class="pl-k">vec4</span>(position, <span class="pl-c1">1.0</span>);
+}</pre></div>
+<p>In our source we now need to change the vertex data, create a model- and a projection matrix.</p>
+<div class="highlight highlight-source-c++"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> The new vertex data, counter-clockwise declaration.</span>
+std::vector&lt;<span class="pl-k">float</span>&gt; vertexData {  
+    <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>,   <span class="pl-c"><span class="pl-c">//</span> top left</span>
+    <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>,   <span class="pl-c"><span class="pl-c">//</span> bottom left</span>
+    <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>,   <span class="pl-c"><span class="pl-c">//</span> bottom right</span>
+    <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>    <span class="pl-c"><span class="pl-c">//</span> top right</span>
+};
+<span class="pl-c"><span class="pl-c">//</span> Request the location of our matricies.</span>
+GLint projectionLocation = glGetUniformLocation(program, <span class="pl-s"><span class="pl-pds">"</span>projection<span class="pl-pds">"</span></span>);
+GLint modelLocation = glGetUniformLocation(program, <span class="pl-s"><span class="pl-pds">"</span>model<span class="pl-pds">"</span></span>);
+<span class="pl-c"><span class="pl-c">//</span> Declaring the matricies.</span>
+<span class="pl-c"><span class="pl-c">//</span> Orthogonal matrix for a 1024x768 window.</span>
+std::vector&lt;<span class="pl-k">float</span>&gt; projection {  
+    <span class="pl-c1">0</span>.<span class="pl-c1">001953f</span>,       <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>,  <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>,
+         <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, -<span class="pl-c1">0</span>.<span class="pl-c1">002604f</span>,  <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>,
+         <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>,       <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, -<span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>,
+        -<span class="pl-c1">1</span>.<span class="pl-c1">0f</span>,       <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>,  <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>
+};
+<span class="pl-c"><span class="pl-c">//</span> Model matrix translating to x 50, y 50</span>
+<span class="pl-c"><span class="pl-c">//</span> and scaling to x 200, y 200.</span>
+std::vector&lt;<span class="pl-k">float</span>&gt; model {  
+    <span class="pl-c1">200</span>.<span class="pl-c1">0f</span>,   <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>,
+      <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">200</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>,
+      <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>,   <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>,
+     <span class="pl-c1">50</span>.<span class="pl-c1">0f</span>,  <span class="pl-c1">50</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>
+};
+<span class="pl-c"><span class="pl-c">//</span> Now we can send our calculated matricies to the program.</span>
+<span class="pl-en">glUseProgram</span>(program);
+<span class="pl-en">glUniformMatrix4fv</span>(projectionLocation,   <span class="pl-c"><span class="pl-c">//</span> location</span>
+                   <span class="pl-c1">1</span>,                    <span class="pl-c"><span class="pl-c">//</span> count</span>
+                   GL_FALSE,             <span class="pl-c"><span class="pl-c">//</span> transpose the matrix</span>
+                   projection.data());   <span class="pl-c"><span class="pl-c">//</span> data</span>
+<span class="pl-en">glUniformMatrix4fv</span>(modelLocation, <span class="pl-c1">1</span>, GL_FALSE, model.data());
+<span class="pl-en">glUseProgram</span>(<span class="pl-c1">0</span>);
+<span class="pl-c"><span class="pl-c">//</span> The glUniform*() calls have to be done, while the program is bound.</span></pre></div>
+<p>The application should now display the texture at the defined position and size.<br><br>
+You can find the current code here: <a href="https://pastebin.com/9ahpFLkY" rel="nofollow">OpenGL - 4</a></p>
+<div class="highlight highlight-source-c++"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> There are many math librarys for OpenGL, which create</span>
+<span class="pl-c"><span class="pl-c">//</span> matricies and vectors, the most used in C++ is glm (OpenGL Mathematics).</span>
+<span class="pl-c"><span class="pl-c">//</span> Its a header only library.</span>
+<span class="pl-c"><span class="pl-c">//</span> The same code using glm would look like:</span>
+glm::mat4 projection{ <span class="pl-c1">glm::ortho</span>(<span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1024</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">768</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>) };
+<span class="pl-en">glUniformMatrix4fv</span>(projectionLocation, <span class="pl-c1">1</span>, GL_FALSE,
+                   <span class="pl-en">glm::value_ptr</span>(projection));
+<span class="pl-c"><span class="pl-c">//</span> Initialise the model matrix to the identity matrix, otherwise every</span>
+<span class="pl-c"><span class="pl-c">//</span> multiplication would be 0.</span>
+glm::mat4 model{ <span class="pl-c1">1</span>.<span class="pl-c1">0f</span> };
+model = glm::translate(model, glm::vec3{ <span class="pl-c1">50</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">50</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span> });
+model = glm::scale(model, glm::vec3{ <span class="pl-c1">200</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">200</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span> });
+<span class="pl-en">glUniformMatrix4fv</span>(modelLocation, <span class="pl-c1">1</span>, GL_FALSE,
+                   <span class="pl-en">glm::value_ptr</span>(model));</pre></div>
+<h2>Geometry Shader</h2>
+<p>Geometry shaders were introduced in OpenGL 3.2, they can produce vertices<br>
+that are send to the rasterizer. They can also change the primitive type e.g.<br>
+they can take a point as an input and output other primitives.<br>
+Geometry shaders are inbetween the vertex and the fragment shader.</p>
+<p><strong>Vertex Shader</strong></p>
+<div class="highlight highlight-source-glsl"><pre class="notranslate"><span class="pl-k">#version</span> <span class="pl-c1">330</span> core
+
+<span class="pl-k">layout</span>(location <span class="pl-k">=</span> <span class="pl-c1">0</span>) <span class="pl-k">in</span> <span class="pl-k">vec3</span> position;
+<span class="pl-k">layout</span>(location <span class="pl-k">=</span> <span class="pl-c1">1</span>) <span class="pl-k">in</span> <span class="pl-k">vec3</span> color;
+<span class="pl-c"><span class="pl-c">//</span> Create an output interface block passed to the next shadaer stage.</span>
+<span class="pl-c"><span class="pl-c">//</span> Interface blocks can be used to structure data passed between shaders.</span>
+<span class="pl-k">out</span> VS_OUT {
+    <span class="pl-k">vec3</span> color;
+} vs_out;
+
+<span class="pl-k">void</span> main() {
+    vs_out.color <span class="pl-k">=</span> color
+    <span class="pl-c1">gl_Position</span> <span class="pl-k">=</span> <span class="pl-k">vec4</span>(position, <span class="pl-c1">1.0</span>);
+}</pre></div>
+<p><strong>Geometry Shader</strong></p>
+<div class="highlight highlight-source-glsl"><pre class="notranslate"><span class="pl-k">#version</span> <span class="pl-c1">330</span> core
+<span class="pl-c"><span class="pl-c">//</span> The geometry shader takes in points.</span>
+<span class="pl-k">layout</span>(points) <span class="pl-k">in</span>;
+<span class="pl-c"><span class="pl-c">//</span> It outputs a triangle every 3 vertices emitted.</span>
+<span class="pl-k">layout</span>(triangle_strip, max_vertices <span class="pl-k">=</span> <span class="pl-c1">3</span>) <span class="pl-k">out</span>;
+<span class="pl-c"><span class="pl-c">//</span> VS_OUT becomes an input variable in the geometry shader.</span>
+<span class="pl-c"><span class="pl-c">//</span> Every input to the geometry shader in treated as an array.</span>
+<span class="pl-k">in</span> VS_OUT {
+    <span class="pl-k">vec3</span> color;
+} gs_in[];
+<span class="pl-c"><span class="pl-c">//</span> Output color for the fragment shader.</span>
+<span class="pl-c"><span class="pl-c">//</span> You can also simply define color as 'out vec3 color',</span>
+<span class="pl-c"><span class="pl-c">//</span> If you don't want to use interface blocks.</span>
+<span class="pl-k">out</span> GS_OUT {
+    <span class="pl-k">vec3</span> color;
+} gs_out;
+
+<span class="pl-k">void</span> main() {
+    <span class="pl-c"><span class="pl-c">//</span> Each emit calls the fragment shader, so we set a color for each vertex.</span>
+    gs_out.color <span class="pl-k">=</span> <span class="pl-c1">mix</span>(gs_in[<span class="pl-c1">0</span>].color, <span class="pl-k">vec3</span>(<span class="pl-c1">1.0</span>, <span class="pl-c1">0.0</span>, <span class="pl-c1">0.0</span>), <span class="pl-c1">0.5</span>);
+    <span class="pl-c"><span class="pl-c">//</span> Move 0.5 units to the left and emit the new vertex.</span>
+    <span class="pl-c"><span class="pl-c">//</span> gl_in[] is the current vertex from the vertex shader, here we only</span>
+    <span class="pl-c"><span class="pl-c">//</span> use 0, because we are receiving points.</span>
+    <span class="pl-c1">gl_Position</span> <span class="pl-k">=</span> gl_in[<span class="pl-c1">0</span>].<span class="pl-c1">gl_Position</span> <span class="pl-k">+</span> <span class="pl-k">vec4</span>(<span class="pl-k">-</span><span class="pl-c1">0.5</span>, <span class="pl-c1">0.0</span>, <span class="pl-c1">0.0</span>, <span class="pl-c1">0.0</span>);
+    EmitVertex();
+    gs_out.color <span class="pl-k">=</span> <span class="pl-c1">mix</span>(gs_in[<span class="pl-c1">0</span>].color, <span class="pl-k">vec3</span>(<span class="pl-c1">0.0</span>, <span class="pl-c1">1.0</span>, <span class="pl-c1">0.0</span>), <span class="pl-c1">0.5</span>);
+    <span class="pl-c"><span class="pl-c">//</span> Move 0.5 units to the right and emit the new vertex.</span>
+    <span class="pl-c1">gl_Position</span> <span class="pl-k">=</span> gl_in[<span class="pl-c1">0</span>].<span class="pl-c1">gl_Position</span> <span class="pl-k">+</span> <span class="pl-k">vec4</span>(<span class="pl-c1">0.5</span>, <span class="pl-c1">0.0</span>, <span class="pl-c1">0.0</span>, <span class="pl-c1">0.0</span>);
+    EmitVertex();
+    gs_out.color <span class="pl-k">=</span> <span class="pl-c1">mix</span>(gs_in[<span class="pl-c1">0</span>].color, <span class="pl-k">vec3</span>(<span class="pl-c1">0.0</span>, <span class="pl-c1">0.0</span>, <span class="pl-c1">1.0</span>), <span class="pl-c1">0.5</span>);
+    <span class="pl-c"><span class="pl-c">//</span> Move 0.5 units up and emit the new vertex.</span>
+    <span class="pl-c1">gl_Position</span> <span class="pl-k">=</span> gl_in[<span class="pl-c1">0</span>].<span class="pl-c1">gl_Position</span> <span class="pl-k">+</span> <span class="pl-k">vec4</span>(<span class="pl-c1">0.0</span>, <span class="pl-c1">0.75</span>, <span class="pl-c1">0.0</span>, <span class="pl-c1">0.0</span>);
+    EmitVertex();
+    EndPrimitive();
+}</pre></div>
+<p><strong>Fragment Shader</strong></p>
+<div class="highlight highlight-source-glsl"><pre class="notranslate"><span class="pl-k">in</span> GS_OUT {
+    <span class="pl-k">vec3</span> color;
+} fs_in;
+
+<span class="pl-k">out</span> <span class="pl-k">vec4</span> outColor;
+
+<span class="pl-k">void</span> main() {
+    outColor <span class="pl-k">=</span> <span class="pl-k">vec4</span>(fs_in.color, <span class="pl-c1">1.0</span>);
+}</pre></div>
+<p>If you now store a single point with a single color in a VBO and draw them,<br>
+you should see a triangle, with your color mixed half way between<br>
+red, green and blue on each vertex.</p>
+<h2>Quotes</h2>
+<p><sup>[1]</sup><a href="https://en.wikipedia.org/wiki/OpenGL" rel="nofollow">OpenGL - Wikipedia</a></p>
+<h2>Books</h2>
+<ul>
+<li>OpenGL Superbible - Fifth Edition (covering OpenGL 3.3)</li>
+<li>OpenGL Programming Guide - Eighth Edition (covering OpenGL 4.3)</li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Simon Deitermann", "s.f.deitermann@t-online.de"]
+</code></pre>

@@ -1,0 +1,103 @@
+<h1>SQL</h1>
+<p>Structured Query Language (SQL) is an <a href="https://www.iso.org/standard/63555.html" rel="nofollow">ISO/IEC 9075</a> standard language for creating and working with databases stored in a set of tables. Implementations usually add their own extensions to the language; <a href="http://troels.arvin.dk/db/rdbms/" rel="nofollow">Comparison of different SQL implementations</a> is a good reference on product differences.</p>
+<p>Implementations typically provide a command line prompt where you can enter the commands shown here interactively, and they also offer a way to execute a series of these commands stored in a script file.  (Showing that you’re done with the interactive prompt is a good example of something that isn’t standardized--most SQL implementations support the keywords QUIT, EXIT, or both.)</p>
+<p>Several of these sample commands assume that the <a href="https://dev.mysql.com/doc/employee/en/" rel="nofollow">MySQL employee sample database</a> available on <a href="https://github.com/datacharmer/test_db">github</a> has already been loaded. The github files are scripts of commands, similar to the relevant commands below, that create and populate tables of data about a fictional company’s employees. The syntax for running these scripts will depend on the SQL implementation you are using. A utility that you run from the operating system prompt is typical.</p>
+<div class="highlight highlight-source-sql"><pre class="notranslate"><span class="pl-c"><span class="pl-c">--</span> Comments start with two hyphens. End each command with a semicolon.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> SQL is not case-sensitive about keywords. The sample commands here</span>
+<span class="pl-c"><span class="pl-c">--</span> follow the convention of spelling them in upper-case because it makes</span>
+<span class="pl-c"><span class="pl-c">--</span> it easier to distinguish them from database, table, and column names.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Create and delete a database. Database and table names are case-sensitive.</span>
+<span class="pl-k">CREATE</span> <span class="pl-k">DATABASE</span> <span class="pl-en">someDatabase</span>;
+<span class="pl-k">DROP</span> <span class="pl-k">DATABASE</span> someDatabase;
+
+<span class="pl-c"><span class="pl-c">--</span> List available databases.</span>
+SHOW DATABASES;
+
+<span class="pl-c"><span class="pl-c">--</span> Use a particular existing database.</span>
+USE employees;
+
+<span class="pl-c"><span class="pl-c">--</span> Select all rows and columns from the current database's departments table.</span>
+<span class="pl-c"><span class="pl-c">--</span> Default activity is for the interpreter to scroll the results on your screen.</span>
+<span class="pl-k">SELECT</span> <span class="pl-k">*</span> <span class="pl-k">FROM</span> departments;
+
+<span class="pl-c"><span class="pl-c">--</span> Retrieve all rows from the departments table,</span>
+<span class="pl-c"><span class="pl-c">--</span> but only the dept_no and dept_name columns.</span>
+<span class="pl-c"><span class="pl-c">--</span> Splitting up commands across lines is OK.</span>
+<span class="pl-k">SELECT</span> dept_no,
+       dept_name <span class="pl-k">FROM</span> departments;
+
+<span class="pl-c"><span class="pl-c">--</span> Retrieve all departments columns, but just 5 rows.</span>
+<span class="pl-k">SELECT</span> <span class="pl-k">*</span> <span class="pl-k">FROM</span> departments <span class="pl-k">LIMIT</span> <span class="pl-c1">5</span>;
+
+<span class="pl-c"><span class="pl-c">--</span> Retrieve dept_name column values from the departments</span>
+<span class="pl-c"><span class="pl-c">--</span> table where the dept_name value has the substring 'en'.</span>
+<span class="pl-k">SELECT</span> dept_name <span class="pl-k">FROM</span> departments <span class="pl-k">WHERE</span> dept_name <span class="pl-k">LIKE</span> <span class="pl-s"><span class="pl-pds">'</span>%en%<span class="pl-pds">'</span></span>;
+
+<span class="pl-c"><span class="pl-c">--</span> Retrieve all columns from the departments table where the dept_name</span>
+<span class="pl-c"><span class="pl-c">--</span> column starts with an 'S' and has exactly 4 characters after it.</span>
+<span class="pl-k">SELECT</span> <span class="pl-k">*</span> <span class="pl-k">FROM</span> departments <span class="pl-k">WHERE</span> dept_name <span class="pl-k">LIKE</span> <span class="pl-s"><span class="pl-pds">'</span>S____<span class="pl-pds">'</span></span>;
+
+<span class="pl-c"><span class="pl-c">--</span> Select title values from the titles table but don't show duplicates.</span>
+<span class="pl-k">SELECT DISTINCT</span> title <span class="pl-k">FROM</span> titles;
+
+<span class="pl-c"><span class="pl-c">--</span> Same as above, but sorted (case-sensitive) by the title values.</span>
+<span class="pl-k">SELECT DISTINCT</span> title <span class="pl-k">FROM</span> titles <span class="pl-k">ORDER BY</span> title;
+
+<span class="pl-c"><span class="pl-c">--</span> Show the number of rows in the departments table.</span>
+<span class="pl-k">SELECT</span> <span class="pl-c1">COUNT</span>(<span class="pl-k">*</span>) <span class="pl-k">FROM</span> departments;
+
+<span class="pl-c"><span class="pl-c">--</span> Show the number of rows in the departments table that</span>
+<span class="pl-c"><span class="pl-c">--</span> have 'en' as a substring of the dept_name value.</span>
+<span class="pl-k">SELECT</span> <span class="pl-c1">COUNT</span>(<span class="pl-k">*</span>) <span class="pl-k">FROM</span> departments <span class="pl-k">WHERE</span> dept_name <span class="pl-k">LIKE</span> <span class="pl-s"><span class="pl-pds">'</span>%en%<span class="pl-pds">'</span></span>;
+
+<span class="pl-c"><span class="pl-c">--</span> A JOIN of information from multiple tables: the titles table shows</span>
+<span class="pl-c"><span class="pl-c">--</span> who had what job titles, by their employee numbers, from what</span>
+<span class="pl-c"><span class="pl-c">--</span> date to what date. Retrieve this information, but instead of the</span>
+<span class="pl-c"><span class="pl-c">--</span> employee number, use the employee number as a cross-reference to</span>
+<span class="pl-c"><span class="pl-c">--</span> the employees table to get each employee's first and last name</span>
+<span class="pl-c"><span class="pl-c">--</span> instead. (And only get 10 rows.)</span>
+
+<span class="pl-k">SELECT</span> <span class="pl-c1">employees</span>.<span class="pl-c1">first_name</span>, <span class="pl-c1">employees</span>.<span class="pl-c1">last_name</span>,
+       <span class="pl-c1">titles</span>.<span class="pl-c1">title</span>, <span class="pl-c1">titles</span>.<span class="pl-c1">from_date</span>, <span class="pl-c1">titles</span>.<span class="pl-c1">to_date</span>
+<span class="pl-k">FROM</span> titles <span class="pl-k">INNER JOIN</span> employees <span class="pl-k">ON</span>
+       <span class="pl-c1">employees</span>.<span class="pl-c1">emp_no</span> <span class="pl-k">=</span> <span class="pl-c1">titles</span>.<span class="pl-c1">emp_no</span> <span class="pl-k">LIMIT</span> <span class="pl-c1">10</span>;
+
+<span class="pl-c"><span class="pl-c">--</span> List all the tables in all the databases. Implementations typically provide</span>
+<span class="pl-c"><span class="pl-c">--</span> their own shortcut command to do this with the database currently in use.</span>
+<span class="pl-k">SELECT</span> <span class="pl-k">*</span> <span class="pl-k">FROM</span> <span class="pl-c1">INFORMATION_SCHEMA</span>.<span class="pl-c1">TABLES</span>
+<span class="pl-k">WHERE</span> TABLE_TYPE<span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">'</span>BASE TABLE<span class="pl-pds">'</span></span>;
+
+<span class="pl-c"><span class="pl-c">--</span> Create a table called tablename1, with the two columns shown, for</span>
+<span class="pl-c"><span class="pl-c">--</span> the database currently in use. Lots of other options are available</span>
+<span class="pl-c"><span class="pl-c">--</span> for how you specify the columns, such as their datatypes.</span>
+<span class="pl-k">CREATE</span> <span class="pl-k">TABLE</span> <span class="pl-en">tablename1</span> (fname <span class="pl-k">VARCHAR</span>(<span class="pl-c1">20</span>), lname <span class="pl-k">VARCHAR</span>(<span class="pl-c1">20</span>));
+
+<span class="pl-c"><span class="pl-c">--</span> Insert a row of data into the table tablename1. This assumes that the</span>
+<span class="pl-c"><span class="pl-c">--</span> table has been defined to accept these values as appropriate for it.</span>
+<span class="pl-k">INSERT INTO</span> tablename1 <span class="pl-k">VALUES</span>(<span class="pl-s"><span class="pl-pds">'</span>Richard<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>Mutt<span class="pl-pds">'</span></span>);
+
+<span class="pl-c"><span class="pl-c">--</span> In tablename1, change the fname value to 'John'</span>
+<span class="pl-c"><span class="pl-c">--</span> for all rows that have an lname value of 'Mutt'.</span>
+<span class="pl-k">UPDATE</span> tablename1 <span class="pl-k">SET</span> fname<span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">'</span>John<span class="pl-pds">'</span></span> <span class="pl-k">WHERE</span> lname<span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">'</span>Mutt<span class="pl-pds">'</span></span>;
+
+<span class="pl-c"><span class="pl-c">--</span> Delete rows from the tablename1 table</span>
+<span class="pl-c"><span class="pl-c">--</span> where the lname value begins with 'M'.</span>
+<span class="pl-k">DELETE</span> <span class="pl-k">FROM</span> tablename1 <span class="pl-k">WHERE</span> lname <span class="pl-k">like</span> <span class="pl-s"><span class="pl-pds">'</span>M%<span class="pl-pds">'</span></span>;
+
+<span class="pl-c"><span class="pl-c">--</span> Delete all rows from the tablename1 table, leaving the empty table.</span>
+<span class="pl-k">DELETE</span> <span class="pl-k">FROM</span> tablename1;
+
+<span class="pl-c"><span class="pl-c">--</span> Remove the entire tablename1 table.</span>
+<span class="pl-k">DROP</span> <span class="pl-k">TABLE</span> tablename1;</pre></div>
+<h2>Further Reading</h2>
+<ul>
+<li><a href="https://www.codecademy.com/learn/learn-sql" rel="nofollow">Codecademy - SQL</a> A good introduction to SQL in a "learn by doing it" format.</li>
+<li><a href="https://www.db-book.com" rel="nofollow">Database System Concepts</a> book's Chapter 3 - Introduction to SQL has an in depth explanation of SQL concepts.</li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<ul>
+<li>["Bob DuCharme", "http://bobdc.com/"]</li>
+</ul>

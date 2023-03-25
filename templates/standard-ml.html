@@ -1,0 +1,477 @@
+<h1>Standard ML</h1>
+<p>Standard ML is a functional programming language with type inference and some<br>
+side-effects.  Some of the hard parts of learning Standard ML are: Recursion,<br>
+pattern matching, type inference (guessing the right types but never allowing<br>
+implicit type conversion). Standard ML is distinguished from Haskell by including<br>
+references, allowing variables to be updated.</p>
+<div class="highlight highlight-source-ocaml"><pre class="notranslate"><span class="pl-c"><span class="pl-c">(*</span> Comments in Standard ML begin with <span class="pl-c"><span class="pl-c">(*</span> and end with <span class="pl-c">*)</span></span>.  Comments can be</span>
+<span class="pl-c">   nested which means that all <span class="pl-c"><span class="pl-c">(*</span> tags must end with a <span class="pl-c">*)</span></span> tag.  This comment,</span>
+<span class="pl-c">   for example, contains two nested comments. <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> A Standard ML program consists of declarations, e.g. value declarations: <span class="pl-c">*)</span></span>
+val rent <span class="pl-k">=</span> <span class="pl-c1">1200</span>
+val phone_no <span class="pl-k">=</span> <span class="pl-c1">5551337</span>
+val pi <span class="pl-k">=</span> <span class="pl-c1">3.14159</span>
+val negative_number <span class="pl-k">=</span> ~<span class="pl-c1">15</span>  <span class="pl-c"><span class="pl-c">(*</span> Yeah, unary minus uses the 'tilde' symbol <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> Optionally, you can explicitly declare types. This is not necessary as</span>
+<span class="pl-c">   ML will automatically figure out the types of your values. <span class="pl-c">*)</span></span>
+val diameter <span class="pl-k">=</span> <span class="pl-c1">7926</span> : <span class="pl-k">int</span>
+val e <span class="pl-k">=</span> <span class="pl-c1">2.718</span> : real
+val name <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Bobby<span class="pl-pds">"</span></span> : <span class="pl-k">string</span>
+
+<span class="pl-c"><span class="pl-c">(*</span> And just as importantly, functions: <span class="pl-c">*)</span></span>
+fun is_large(x :<span class="pl-k"> int</span>) <span class="pl-k">=</span> <span class="pl-k">if</span> x <span class="pl-k">&gt;</span> <span class="pl-c1">37</span> <span class="pl-k">then</span> <span class="pl-c1">true</span> <span class="pl-k">else</span> <span class="pl-c1">false</span>
+
+<span class="pl-c"><span class="pl-c">(*</span> Floating-point numbers are called "reals". <span class="pl-c">*)</span></span>
+val tau <span class="pl-k">=</span> <span class="pl-c1">2.0</span> <span class="pl-k">*</span> pi         <span class="pl-c"><span class="pl-c">(*</span> You can multiply two reals <span class="pl-c">*)</span></span>
+val twice_rent <span class="pl-k">=</span> <span class="pl-c1">2</span> <span class="pl-k">*</span> rent  <span class="pl-c"><span class="pl-c">(*</span> You can multiply two ints <span class="pl-c">*)</span></span>
+<span class="pl-c"><span class="pl-c">(*</span> val meh = 1.25 * 10 <span class="pl-c">*)</span></span>  <span class="pl-c"><span class="pl-c">(*</span> But you can't multiply an int and a real <span class="pl-c">*)</span></span>
+val yeh <span class="pl-k">=</span> <span class="pl-c1">1.25</span> <span class="pl-k">*</span> (<span class="pl-c1">Real.</span>fromInt <span class="pl-c1">10</span>) <span class="pl-c"><span class="pl-c">(*</span> ...unless you explicitly convert</span>
+<span class="pl-c">                                      one or the other <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> +, - and * are overloaded so they work for both int and real. <span class="pl-c">*)</span></span>
+<span class="pl-c"><span class="pl-c">(*</span> The same cannot be said for division which has separate operators: <span class="pl-c">*)</span></span>
+val real_division <span class="pl-k">=</span> <span class="pl-c1">14.0</span> <span class="pl-k">/</span> <span class="pl-c1">4.0</span>  <span class="pl-c"><span class="pl-c">(*</span> gives 3.5 <span class="pl-c">*)</span></span>
+val int_division  <span class="pl-k">=</span> <span class="pl-c1">14</span> div <span class="pl-c1">4</span>    <span class="pl-c"><span class="pl-c">(*</span> gives 3, rounding down <span class="pl-c">*)</span></span>
+val int_remainder <span class="pl-k">=</span> <span class="pl-c1">14</span> <span class="pl-k">mod</span> <span class="pl-c1">4</span>    <span class="pl-c"><span class="pl-c">(*</span> gives 2, since 3*4 = 12 <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> ~ is actually sometimes a function (e.g. when put in front of variables) <span class="pl-c">*)</span></span>
+val negative_rent <span class="pl-k">=</span> ~(rent)  <span class="pl-c"><span class="pl-c">(*</span> Would also have worked if rent were a "real" <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> There are also booleans and boolean operators <span class="pl-c">*)</span></span>
+val got_milk <span class="pl-k">=</span> <span class="pl-c1">true</span>
+val got_bread <span class="pl-k">=</span> <span class="pl-c1">false</span>
+val has_breakfast <span class="pl-k">=</span> got_milk andalso got_bread  <span class="pl-c"><span class="pl-c">(*</span> 'andalso' is the operator <span class="pl-c">*)</span></span>
+val has_something <span class="pl-k">=</span> got_milk orelse got_bread   <span class="pl-c"><span class="pl-c">(*</span> 'orelse' is the operator <span class="pl-c">*)</span></span>
+val is_sad <span class="pl-k">=</span> <span class="pl-k">not</span>(has_something)                 <span class="pl-c"><span class="pl-c">(*</span> not is a function <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> Many values can be compared using equality operators: = and &lt;&gt; <span class="pl-c">*)</span></span>
+val pays_same_rent <span class="pl-k">=</span> (rent <span class="pl-k">=</span> <span class="pl-c1">1300</span>)  <span class="pl-c"><span class="pl-c">(*</span> false <span class="pl-c">*)</span></span>
+val is_wrong_phone_no <span class="pl-k">=</span> (phone_no <span class="pl-k">&lt;&gt;</span> <span class="pl-c1">5551337</span>)  <span class="pl-c"><span class="pl-c">(*</span> false <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> The operator &lt;&gt; is what most other languages call !=. <span class="pl-c">*)</span></span>
+<span class="pl-c"><span class="pl-c">(*</span> 'andalso' and 'orelse' are called &amp;&amp; and || in many other languages. <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> Actually, most of the parentheses above are unnecessary.  Here are some</span>
+<span class="pl-c">   different ways to say some of the things mentioned above: <span class="pl-c">*)</span></span>
+fun is_large x <span class="pl-k">=</span> x <span class="pl-k">&gt;</span> <span class="pl-c1">37</span>  <span class="pl-c"><span class="pl-c">(*</span> The parens above were necessary because of ': int' <span class="pl-c">*)</span></span>
+val is_sad <span class="pl-k">=</span> <span class="pl-k">not</span> has_something
+val pays_same_rent <span class="pl-k">=</span> rent <span class="pl-k">=</span> <span class="pl-c1">1300</span>  <span class="pl-c"><span class="pl-c">(*</span> Looks confusing, but works <span class="pl-c">*)</span></span>
+val is_wrong_phone_no <span class="pl-k">=</span> phone_no <span class="pl-k">&lt;&gt;</span> <span class="pl-c1">5551337</span>
+val negative_rent <span class="pl-k">=</span> <span class="pl-ent">~rent</span>  <span class="pl-c"><span class="pl-c">(*</span> ~ rent (notice the space) would also work <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> Parentheses are mostly necessary when grouping things: <span class="pl-c">*)</span></span>
+val some_answer <span class="pl-k">=</span> is_large (<span class="pl-c1">5</span> <span class="pl-k">+</span> <span class="pl-c1">5</span>)      <span class="pl-c"><span class="pl-c">(*</span> Without parens, this would break! <span class="pl-c">*)</span></span>
+<span class="pl-c"><span class="pl-c">(*</span> val some_answer = is_large 5 + 5 <span class="pl-c">*)</span></span>  <span class="pl-c"><span class="pl-c">(*</span> Read as: (is_large 5) + 5. Bad! <span class="pl-c">*)</span></span>
+
+
+<span class="pl-c"><span class="pl-c">(*</span> Besides booleans, ints and reals, Standard ML also has chars and strings: <span class="pl-c">*)</span></span>
+val foo <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Hello, World!<span class="pl-c1">\n</span><span class="pl-pds">"</span></span>  <span class="pl-c"><span class="pl-c">(*</span> The \n is the escape sequence for linebreaks <span class="pl-c">*)</span></span>
+val one_letter <span class="pl-k">=</span> #<span class="pl-s"><span class="pl-pds">"</span>a<span class="pl-pds">"</span></span>        <span class="pl-c"><span class="pl-c">(*</span> That funky syntax is just one character, a <span class="pl-c">*)</span></span>
+
+val combined <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Hello <span class="pl-pds">"</span></span> <span class="pl-k">^</span> <span class="pl-s"><span class="pl-pds">"</span>there, <span class="pl-pds">"</span></span> <span class="pl-k">^</span> <span class="pl-s"><span class="pl-pds">"</span>fellow!<span class="pl-c1">\n</span><span class="pl-pds">"</span></span>  <span class="pl-c"><span class="pl-c">(*</span> Concatenate strings <span class="pl-c">*)</span></span>
+
+val _ <span class="pl-k">=</span> print foo       <span class="pl-c"><span class="pl-c">(*</span> You can print things. We are not interested in the <span class="pl-c">*)</span></span>
+val _ <span class="pl-k">=</span> print combined  <span class="pl-c"><span class="pl-c">(*</span> result of this computation, so we throw it away. <span class="pl-c">*)</span></span>
+<span class="pl-c"><span class="pl-c">(*</span> val _ = print one_letter <span class="pl-c">*)</span></span>  <span class="pl-c"><span class="pl-c">(*</span> Only strings can be printed this way <span class="pl-c">*)</span></span>
+
+
+val bar <span class="pl-k">=</span> [ #<span class="pl-s"><span class="pl-pds">"</span>H<span class="pl-pds">"</span></span>, #<span class="pl-s"><span class="pl-pds">"</span>e<span class="pl-pds">"</span></span>, #<span class="pl-s"><span class="pl-pds">"</span>l<span class="pl-pds">"</span></span>, #<span class="pl-s"><span class="pl-pds">"</span>l<span class="pl-pds">"</span></span>, #<span class="pl-s"><span class="pl-pds">"</span>o<span class="pl-pds">"</span></span> ]  <span class="pl-c"><span class="pl-c">(*</span> SML also has lists! <span class="pl-c">*)</span></span>
+<span class="pl-c"><span class="pl-c">(*</span> val _ = print bar <span class="pl-c">*)</span></span>  <span class="pl-c"><span class="pl-c">(*</span> Lists are unfortunately not the same as strings <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> Fortunately they can be converted.  String is a library and implode and size</span>
+<span class="pl-c">   are functions available in that library that take strings as argument. <span class="pl-c">*)</span></span>
+val bob <span class="pl-k">=</span> <span class="pl-c1">String.</span>implode bar          <span class="pl-c"><span class="pl-c">(*</span> gives "Hello" <span class="pl-c">*)</span></span>
+val bob_char_count <span class="pl-k">=</span> <span class="pl-c1">String.</span>size bob  <span class="pl-c"><span class="pl-c">(*</span> gives 5 <span class="pl-c">*)</span></span>
+val _ <span class="pl-k">=</span> print (bob <span class="pl-k">^</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">\n</span><span class="pl-pds">"</span></span>)            <span class="pl-c"><span class="pl-c">(*</span> For good measure, add a linebreak <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> You can have lists of any kind <span class="pl-c">*)</span></span>
+val numbers <span class="pl-k">=</span> [<span class="pl-c1">1</span>, <span class="pl-c1">3</span>, <span class="pl-c1">3</span>, <span class="pl-c1">7</span>, <span class="pl-c1">229</span>, <span class="pl-c1">230</span>, <span class="pl-c1">248</span>]  <span class="pl-c"><span class="pl-c">(*</span> : int list <span class="pl-c">*)</span></span>
+val names <span class="pl-k">=</span> [ <span class="pl-s"><span class="pl-pds">"</span>Fred<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Jane<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Alice<span class="pl-pds">"</span></span> ]    <span class="pl-c"><span class="pl-c">(*</span> : string list <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> Even lists of lists of things <span class="pl-c">*)</span></span>
+val groups <span class="pl-k">=</span> [ [ <span class="pl-s"><span class="pl-pds">"</span>Alice<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Bob<span class="pl-pds">"</span></span> ],
+               [ <span class="pl-s"><span class="pl-pds">"</span>Huey<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Dewey<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Louie<span class="pl-pds">"</span></span> ],
+               [ <span class="pl-s"><span class="pl-pds">"</span>Bonnie<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Clyde<span class="pl-pds">"</span></span> ] ]     <span class="pl-c"><span class="pl-c">(*</span> : string list list <span class="pl-c">*)</span></span>
+
+val number_count <span class="pl-k">=</span> <span class="pl-c1">List.</span>length numbers     <span class="pl-c"><span class="pl-c">(*</span> gives 7 <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> You can put single values in front of lists of the same kind using</span>
+<span class="pl-c">   the :: operator, called "the cons operator" (known from Lisp). <span class="pl-c">*)</span></span>
+val more_numbers <span class="pl-k">=</span> <span class="pl-c1">13</span> :: numbers  <span class="pl-c"><span class="pl-c">(*</span> gives [13, 1, 3, 3, 7, ...] <span class="pl-c">*)</span></span>
+val more_groups  <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">"</span>Batman<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>Superman<span class="pl-pds">"</span></span>] :: groups
+
+<span class="pl-c"><span class="pl-c">(*</span> Lists of the same kind can be appended using the @ ("append") operator <span class="pl-c">*)</span></span>
+val guest_list <span class="pl-k">=</span> [ <span class="pl-s"><span class="pl-pds">"</span>Mom<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Dad<span class="pl-pds">"</span></span> ] <span class="pl-k">@</span> [ <span class="pl-s"><span class="pl-pds">"</span>Aunt<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Uncle<span class="pl-pds">"</span></span> ]
+
+<span class="pl-c"><span class="pl-c">(*</span> This could have been done with the "cons" operator.  It is tricky because the</span>
+<span class="pl-c">   left-hand-side must be an element whereas the right-hand-side must be a list</span>
+<span class="pl-c">   of those elements. <span class="pl-c">*)</span></span>
+val guest_list <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Mom<span class="pl-pds">"</span></span> :: <span class="pl-s"><span class="pl-pds">"</span>Dad<span class="pl-pds">"</span></span> :: [ <span class="pl-s"><span class="pl-pds">"</span>Aunt<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Uncle<span class="pl-pds">"</span></span> ]
+val guest_list <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Mom<span class="pl-pds">"</span></span> :: (<span class="pl-s"><span class="pl-pds">"</span>Dad<span class="pl-pds">"</span></span> :: (<span class="pl-s"><span class="pl-pds">"</span>Aunt<span class="pl-pds">"</span></span> :: (<span class="pl-s"><span class="pl-pds">"</span>Uncle<span class="pl-pds">"</span></span> :: <span class="pl-c1">[]</span>)))
+
+<span class="pl-c"><span class="pl-c">(*</span> If you have many lists of the same kind, you can concatenate them all <span class="pl-c">*)</span></span>
+val everyone <span class="pl-k">=</span> <span class="pl-c1">List.</span>concat groups  <span class="pl-c"><span class="pl-c">(*</span> [ "Alice", "Bob", "Huey", ... ] <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> A list can contain any (finite) number of values <span class="pl-c">*)</span></span>
+val lots <span class="pl-k">=</span> [ <span class="pl-c1">5</span>, <span class="pl-c1">5</span>, <span class="pl-c1">5</span>, <span class="pl-c1">6</span>, <span class="pl-c1">4</span>, <span class="pl-c1">5</span>, <span class="pl-c1">6</span>, <span class="pl-c1">5</span>, <span class="pl-c1">4</span>, <span class="pl-c1">5</span>, <span class="pl-c1">7</span>, <span class="pl-c1">3</span> ]  <span class="pl-c"><span class="pl-c">(*</span> still just an int list <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> Lists can only contain one kind of thing... <span class="pl-c">*)</span></span>
+<span class="pl-c"><span class="pl-c">(*</span> val bad_list = [ 1, "Hello", 3.14159 ] : ??? list <span class="pl-c">*)</span></span>
+
+
+<span class="pl-c"><span class="pl-c">(*</span> Tuples, on the other hand, can contain a fixed number of different things <span class="pl-c">*)</span></span>
+val person1 <span class="pl-k">=</span> (<span class="pl-s"><span class="pl-pds">"</span>Simon<span class="pl-pds">"</span></span>, <span class="pl-c1">28</span>, <span class="pl-c1">3.14159</span>)  <span class="pl-c"><span class="pl-c">(*</span> : string * int * real <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> You can even have tuples inside lists and lists inside tuples <span class="pl-c">*)</span></span>
+val likes <span class="pl-k">=</span> [ (<span class="pl-s"><span class="pl-pds">"</span>Alice<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>ice cream<span class="pl-pds">"</span></span>),
+              (<span class="pl-s"><span class="pl-pds">"</span>Bob<span class="pl-pds">"</span></span>,   <span class="pl-s"><span class="pl-pds">"</span>hot dogs<span class="pl-pds">"</span></span>),
+              (<span class="pl-s"><span class="pl-pds">"</span>Bob<span class="pl-pds">"</span></span>,   <span class="pl-s"><span class="pl-pds">"</span>Alice<span class="pl-pds">"</span></span>) ]     <span class="pl-c"><span class="pl-c">(*</span> : (string * string) list <span class="pl-c">*)</span></span>
+
+val mixup <span class="pl-k">=</span> [ (<span class="pl-s"><span class="pl-pds">"</span>Alice<span class="pl-pds">"</span></span>, <span class="pl-c1">39</span>),
+              (<span class="pl-s"><span class="pl-pds">"</span>Bob<span class="pl-pds">"</span></span>,   <span class="pl-c1">37</span>),
+              (<span class="pl-s"><span class="pl-pds">"</span>Eve<span class="pl-pds">"</span></span>,   <span class="pl-c1">41</span>) ]  <span class="pl-c"><span class="pl-c">(*</span> : (string * int) list <span class="pl-c">*)</span></span>
+
+val good_bad_stuff <span class="pl-k">=</span>
+  ([<span class="pl-s"><span class="pl-pds">"</span>ice cream<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>hot dogs<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>chocolate<span class="pl-pds">"</span></span>],
+   [<span class="pl-s"><span class="pl-pds">"</span>liver<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>paying the rent<span class="pl-pds">"</span></span> ])           <span class="pl-c"><span class="pl-c">(*</span> : string list * string list <span class="pl-c">*)</span></span>
+
+
+<span class="pl-c"><span class="pl-c">(*</span> Records are tuples with named slots <span class="pl-c">*)</span></span>
+
+val rgb <span class="pl-k">=</span> { r<span class="pl-k">=</span><span class="pl-c1">0.23</span>, g<span class="pl-k">=</span><span class="pl-c1">0.56</span>, b<span class="pl-k">=</span><span class="pl-c1">0.91</span> } <span class="pl-c"><span class="pl-c">(*</span> : {b:real, g:real, r:real} <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> You don't need to declare their slots ahead of time. Records with</span>
+<span class="pl-c">   different slot names are considered different types, even if their</span>
+<span class="pl-c">   slot value types match up. For instance... <span class="pl-c">*)</span></span>
+
+val <span class="pl-en">Hsl</span> <span class="pl-k">=</span> { <span class="pl-en">H</span><span class="pl-k">=</span><span class="pl-c1">310.3</span>, s<span class="pl-k">=</span><span class="pl-c1">0.51</span>, l<span class="pl-k">=</span><span class="pl-c1">0.23</span> } <span class="pl-c"><span class="pl-c">(*</span> : {H:real, l:real, s:real} <span class="pl-c">*)</span></span>
+val <span class="pl-en">Hsv</span> <span class="pl-k">=</span> { <span class="pl-en">H</span><span class="pl-k">=</span><span class="pl-c1">310.3</span>, s<span class="pl-k">=</span><span class="pl-c1">0.51</span>, v<span class="pl-k">=</span><span class="pl-c1">0.23</span> } <span class="pl-c"><span class="pl-c">(*</span> : {H:real, s:real, v:real} <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> ...trying to evaluate `Hsv = Hsl` or `rgb = Hsl` would give a type</span>
+<span class="pl-c">   error. While they're all three-slot records composed only of `real`s,</span>
+<span class="pl-c">   they each have different names for at least some slots. <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> You can use hash notation to get values out of tuples. <span class="pl-c">*)</span></span>
+
+val <span class="pl-en">H</span> <span class="pl-k">=</span> #<span class="pl-en">H</span> <span class="pl-en">Hsv</span> <span class="pl-c"><span class="pl-c">(*</span> : real <span class="pl-c">*)</span></span>
+val s <span class="pl-k">=</span> <span class="pl-k">#s</span> <span class="pl-en">Hsl</span> <span class="pl-c"><span class="pl-c">(*</span> : real <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> Functions! <span class="pl-c">*)</span></span>
+fun add_them (a, b) <span class="pl-k">=</span> a <span class="pl-k">+</span> b    <span class="pl-c"><span class="pl-c">(*</span> A simple function that adds two numbers <span class="pl-c">*)</span></span>
+val test_it <span class="pl-k">=</span> add_them (<span class="pl-c1">3</span>, <span class="pl-c1">4</span>)  <span class="pl-c"><span class="pl-c">(*</span> gives 7 <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> Larger functions are usually broken into several lines for readability <span class="pl-c">*)</span></span>
+fun thermometer temp <span class="pl-k">=</span>
+    <span class="pl-k">if</span> temp <span class="pl-k">&lt;</span> <span class="pl-c1">37</span>
+    <span class="pl-k">then</span> <span class="pl-s"><span class="pl-pds">"</span>Cold<span class="pl-pds">"</span></span>
+    <span class="pl-k">else</span> <span class="pl-k">if</span> temp <span class="pl-k">&gt;</span> <span class="pl-c1">37</span>
+         <span class="pl-k">then</span> <span class="pl-s"><span class="pl-pds">"</span>Warm<span class="pl-pds">"</span></span>
+         <span class="pl-k">else</span> <span class="pl-s"><span class="pl-pds">"</span>Normal<span class="pl-pds">"</span></span>
+
+val test_thermo <span class="pl-k">=</span> thermometer <span class="pl-c1">40</span>  <span class="pl-c"><span class="pl-c">(*</span> gives "Warm" <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> if-sentences are actually expressions and not statements/declarations.</span>
+<span class="pl-c">   A function body can only contain one expression.  There are some tricks</span>
+<span class="pl-c">   for making a function do more than just one thing, though. <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> A function can call itself as part of its result (recursion!) <span class="pl-c">*)</span></span>
+fun fibonacci n <span class="pl-k">=</span>
+    <span class="pl-k">if</span> n <span class="pl-k">=</span> <span class="pl-c1">0</span> <span class="pl-k">then</span> <span class="pl-c1">0</span> <span class="pl-k">else</span>                   <span class="pl-c"><span class="pl-c">(*</span> Base case <span class="pl-c">*)</span></span>
+    <span class="pl-k">if</span> n <span class="pl-k">=</span> <span class="pl-c1">1</span> <span class="pl-k">then</span> <span class="pl-c1">1</span> <span class="pl-k">else</span>                   <span class="pl-c"><span class="pl-c">(*</span> Base case <span class="pl-c">*)</span></span>
+    fibonacci (n <span class="pl-k">-</span> <span class="pl-c1">1</span>) <span class="pl-k">+</span> fibonacci (n <span class="pl-k">-</span> <span class="pl-c1">2</span>)  <span class="pl-c"><span class="pl-c">(*</span> Recursive case <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> Sometimes recursion is best understood by evaluating a function by hand:</span>
+<span class="pl-c"></span>
+<span class="pl-c"> fibonacci 4</span>
+<span class="pl-c">   ~&gt; fibonacci (4 - 1) + fibonacci (4 - 2)</span>
+<span class="pl-c">   ~&gt; fibonacci 3 + fibonacci 2</span>
+<span class="pl-c">   ~&gt; (fibonacci (3 - 1) + fibonacci (3 - 2)) + fibonacci 2</span>
+<span class="pl-c">   ~&gt; (fibonacci 2 + fibonacci 1) + fibonacci 2</span>
+<span class="pl-c">   ~&gt; ((fibonacci (2 - 1) + fibonacci (2 - 2)) + fibonacci 1) + fibonacci 2</span>
+<span class="pl-c">   ~&gt; ((fibonacci 1 + fibonacci 0) + fibonacci 1) + fibonacci 2</span>
+<span class="pl-c">   ~&gt; ((1 + fibonacci 0) + fibonacci 1) + fibonacci 2</span>
+<span class="pl-c">   ~&gt; ((1 + 0) + fibonacci 1) + fibonacci 2</span>
+<span class="pl-c">   ~&gt; (1 + fibonacci 1) + fibonacci 2</span>
+<span class="pl-c">   ~&gt; (1 + 1) + fibonacci 2</span>
+<span class="pl-c">   ~&gt; 2 + fibonacci 2</span>
+<span class="pl-c">   ~&gt; 2 + (fibonacci (2 - 1) + fibonacci (2 - 2))</span>
+<span class="pl-c">   ~&gt; 2 + (fibonacci (2 - 1) + fibonacci (2 - 2))</span>
+<span class="pl-c">   ~&gt; 2 + (fibonacci 1 + fibonacci 0)</span>
+<span class="pl-c">   ~&gt; 2 + (1 + fibonacci 0)</span>
+<span class="pl-c">   ~&gt; 2 + (1 + 0)</span>
+<span class="pl-c">   ~&gt; 2 + 1</span>
+<span class="pl-c">   ~&gt; 3  which is the 4th Fibonacci number, according to this definition</span>
+<span class="pl-c"></span>
+<span class="pl-c"> <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> A function cannot change the variables it can refer to.  It can only</span>
+<span class="pl-c">   temporarily shadow them with new variables that have the same names.  In this</span>
+<span class="pl-c">   sense, variables are really constants and only behave like variables when</span>
+<span class="pl-c">   dealing with recursion.  For this reason, variables are also called value</span>
+<span class="pl-c">   bindings. An example of this: <span class="pl-c">*)</span></span>
+
+val x <span class="pl-k">=</span> <span class="pl-c1">42</span>
+fun answer(question) <span class="pl-k">=</span>
+    <span class="pl-k">if</span> question <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>What is the meaning of life, the universe and everything?<span class="pl-pds">"</span></span>
+    <span class="pl-k">then</span> x
+    <span class="pl-k">else</span> raise <span class="pl-en">Fail</span> <span class="pl-s"><span class="pl-pds">"</span>I'm an exception. Also, I don't know what the answer is.<span class="pl-pds">"</span></span>
+val x <span class="pl-k">=</span> <span class="pl-c1">43</span>
+val hmm <span class="pl-k">=</span> answer <span class="pl-s"><span class="pl-pds">"</span>What is the meaning of life, the universe and everything?<span class="pl-pds">"</span></span>
+<span class="pl-c"><span class="pl-c">(*</span> Now, hmm has the value 42.  This is because the function answer refers to</span>
+<span class="pl-c">   the copy of x that was visible before its own function definition. <span class="pl-c">*)</span></span>
+
+
+<span class="pl-c"><span class="pl-c">(*</span> Functions can take several arguments by taking one tuples as argument: <span class="pl-c">*)</span></span>
+fun solve2 (a :<span class="pl-k"> real, b : real, c : real</span>) <span class="pl-k">=</span>
+    ((<span class="pl-ent">~b</span> <span class="pl-k">+</span> <span class="pl-c1">Math.</span>sqrt(b <span class="pl-k">*</span> b <span class="pl-k">-</span> <span class="pl-c1">4.0</span> <span class="pl-k">*</span> a <span class="pl-k">*</span> c)) <span class="pl-k">/</span> (<span class="pl-c1">2.0</span> <span class="pl-k">*</span> a),
+     (<span class="pl-ent">~b</span> <span class="pl-k">-</span> <span class="pl-c1">Math.</span>sqrt(b <span class="pl-k">*</span> b <span class="pl-k">-</span> <span class="pl-c1">4.0</span> <span class="pl-k">*</span> a <span class="pl-k">*</span> c)) <span class="pl-k">/</span> (<span class="pl-c1">2.0</span> <span class="pl-k">*</span> a))
+
+<span class="pl-c"><span class="pl-c">(*</span> Sometimes, the same computation is carried out several times. It makes sense</span>
+<span class="pl-c">   to save and re-use the result the first time. We can use "let-bindings": <span class="pl-c">*)</span></span>
+fun solve2 (a :<span class="pl-k"> real, b : real, c : real</span>) <span class="pl-k">=</span>
+    <span class="pl-k">let</span> <span class="pl-en">val</span> <span class="pl-v">discr</span>  <span class="pl-k">=</span> b <span class="pl-k">*</span> b <span class="pl-k">-</span> <span class="pl-c1">4.0</span> <span class="pl-k">*</span> a <span class="pl-k">*</span> c
+        val sqr <span class="pl-k">=</span> <span class="pl-c1">Math.</span>sqrt discr
+        val denom <span class="pl-k">=</span> <span class="pl-c1">2.0</span> <span class="pl-k">*</span> a
+    <span class="pl-k">in</span> ((<span class="pl-ent">~b</span> <span class="pl-k">+</span> sqr) <span class="pl-k">/</span> denom,
+        (<span class="pl-ent">~b</span> <span class="pl-k">-</span> sqr) <span class="pl-k">/</span> denom)
+    end
+
+
+<span class="pl-c"><span class="pl-c">(*</span> Pattern matching is a funky part of functional programming.  It is an</span>
+<span class="pl-c">   alternative to if-sentences.  The fibonacci function can be rewritten: <span class="pl-c">*)</span></span>
+fun fibonacci <span class="pl-c1">0</span> <span class="pl-k">=</span> <span class="pl-c1">0</span>  <span class="pl-c"><span class="pl-c">(*</span> Base case <span class="pl-c">*)</span></span>
+  <span class="pl-k">|</span> fibonacci <span class="pl-c1">1</span> <span class="pl-k">=</span> <span class="pl-c1">1</span>  <span class="pl-c"><span class="pl-c">(*</span> Base case <span class="pl-c">*)</span></span>
+  <span class="pl-k">|</span> fibonacci n <span class="pl-k">=</span> fibonacci (n <span class="pl-k">-</span> <span class="pl-c1">1</span>) <span class="pl-k">+</span> fibonacci (n <span class="pl-k">-</span> <span class="pl-c1">2</span>)  <span class="pl-c"><span class="pl-c">(*</span> Recursive case <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> Pattern matching is also possible on composite types like tuples, lists and</span>
+<span class="pl-c">   records. Writing "fun solve2 (a, b, c) = ..." is in fact a pattern match on</span>
+<span class="pl-c">   the one three-tuple solve2 takes as argument. Similarly, but less intuitively,</span>
+<span class="pl-c">   you can match on a list consisting of elements in it (from the beginning of</span>
+<span class="pl-c">   the list only). <span class="pl-c">*)</span></span>
+fun first_elem (x::xs) <span class="pl-k">=</span> x
+fun second_elem (x::y::xs) <span class="pl-k">=</span> y
+fun evenly_positioned_elems (odd::even::xs) <span class="pl-k">=</span> even::evenly_positioned_elems xs
+  <span class="pl-k">|</span> evenly_positioned_elems [odd] <span class="pl-k">=</span> <span class="pl-c1">[]</span>  <span class="pl-c"><span class="pl-c">(*</span> Base case: throw away <span class="pl-c">*)</span></span>
+  <span class="pl-k">|</span> evenly_positioned_elems <span class="pl-c1">[]</span>    <span class="pl-k">=</span> <span class="pl-c1">[]</span>  <span class="pl-c"><span class="pl-c">(*</span> Base case <span class="pl-c">*)</span></span>
+  
+<span class="pl-c"><span class="pl-c">(*</span> The case expression can also be used to pattern match and return a value <span class="pl-c">*)</span></span>
+datatype temp <span class="pl-k">=</span>
+      <span class="pl-en">C</span> of real
+    <span class="pl-k">|</span> <span class="pl-en">F</span> of real
+    
+<span class="pl-c"><span class="pl-c">(*</span>  Declaring a new C temp value...</span>
+<span class="pl-c">    val t: temp = C 45.0  <span class="pl-c">*)</span></span>
+
+fun temp_to_f t <span class="pl-k">=</span>
+    case t of
+      <span class="pl-en">C</span> x <span class="pl-k">=&gt;</span> x <span class="pl-k">*</span> (<span class="pl-c1">9.0</span> <span class="pl-k">/</span> <span class="pl-c1">5.0</span>) <span class="pl-k">+</span> <span class="pl-c1">32.0</span>
+    <span class="pl-k">|</span> <span class="pl-en">F</span> x <span class="pl-k">=&gt;</span> x
+
+<span class="pl-c"><span class="pl-c">(*</span> When matching on records, you must use their slot names, and you must bind</span>
+<span class="pl-c">   every slot in a record. The order of the slots doesn't matter though. <span class="pl-c">*)</span></span>
+
+fun rgbToTup {r, g, b} <span class="pl-k">=</span> (r, g, b)    <span class="pl-c"><span class="pl-c">(*</span> fn : {b:'a, g:'b, r:'c} -&gt; 'c * 'b * 'a <span class="pl-c">*)</span></span>
+fun mixRgbToTup {g, b, r} <span class="pl-k">=</span> (r, g, b) <span class="pl-c"><span class="pl-c">(*</span> fn : {b:'a, g:'b, r:'c} -&gt; 'c * 'b * 'a <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> If called with {r=0.1, g=0.2, b=0.3}, either of the above functions</span>
+<span class="pl-c">   would return (0.1, 0.2, 0.3). But it would be a type error to call them</span>
+<span class="pl-c">   with {r=0.1, g=0.2, b=0.3, a=0.4} <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> Higher order functions: Functions can take other functions as arguments.</span>
+<span class="pl-c">   Functions are just other kinds of values, and functions don't need names</span>
+<span class="pl-c">   to exist.  Functions without names are called "anonymous functions" or</span>
+<span class="pl-c">   lambda expressions or closures (since they also have a lexical scope). <span class="pl-c">*)</span></span>
+val is_large <span class="pl-k">=</span> (fn x <span class="pl-k">=&gt;</span> x <span class="pl-k">&gt;</span> <span class="pl-c1">37</span>)
+val add_them <span class="pl-k">=</span> fn (a,b) <span class="pl-k">=&gt;</span> a <span class="pl-k">+</span> b
+val thermometer <span class="pl-k">=</span>
+    fn temp <span class="pl-k">=&gt;</span> <span class="pl-k">if</span> temp <span class="pl-k">&lt;</span> <span class="pl-c1">37</span>
+               <span class="pl-k">then</span> <span class="pl-s"><span class="pl-pds">"</span>Cold<span class="pl-pds">"</span></span>
+               <span class="pl-k">else</span> <span class="pl-k">if</span> temp <span class="pl-k">&gt;</span> <span class="pl-c1">37</span>
+                    <span class="pl-k">then</span> <span class="pl-s"><span class="pl-pds">"</span>Warm<span class="pl-pds">"</span></span>
+                    <span class="pl-k">else</span> <span class="pl-s"><span class="pl-pds">"</span>Normal<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> The following uses an anonymous function directly and gives "ColdWarm" <span class="pl-c">*)</span></span>
+val some_result <span class="pl-k">=</span> (fn x <span class="pl-k">=&gt;</span> thermometer (x <span class="pl-k">-</span> <span class="pl-c1">5</span>) <span class="pl-k">^</span> thermometer (x <span class="pl-k">+</span> <span class="pl-c1">5</span>)) <span class="pl-c1">37</span>
+
+<span class="pl-c"><span class="pl-c">(*</span> Here is a higher-order function that works on lists (a list combinator) <span class="pl-c">*)</span></span>
+<span class="pl-c"><span class="pl-c">(*</span> map f l</span>
+<span class="pl-c">       applies f to each element of l from left to right, </span>
+<span class="pl-c">       returning the list of results. <span class="pl-c">*)</span></span>
+val readings <span class="pl-k">=</span> [ <span class="pl-c1">34</span>, <span class="pl-c1">39</span>, <span class="pl-c1">37</span>, <span class="pl-c1">38</span>, <span class="pl-c1">35</span>, <span class="pl-c1">36</span>, <span class="pl-c1">37</span>, <span class="pl-c1">37</span>, <span class="pl-c1">37</span> ]  <span class="pl-c"><span class="pl-c">(*</span> first an int list <span class="pl-c">*)</span></span>
+val opinions <span class="pl-k">=</span> <span class="pl-c1">List.</span>map thermometer readings <span class="pl-c"><span class="pl-c">(*</span> gives [ "Cold", "Warm", ... ] <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> And here is another one for filtering lists <span class="pl-c">*)</span></span>
+val warm_readings <span class="pl-k">=</span> <span class="pl-c1">List.</span>filter is_large readings  <span class="pl-c"><span class="pl-c">(*</span> gives [39, 38] <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> You can create your own higher-order functions, too.  Functions can also take</span>
+<span class="pl-c">   several arguments by "currying" them. Syntax-wise this means adding spaces</span>
+<span class="pl-c">   between function arguments instead of commas and surrounding parentheses. <span class="pl-c">*)</span></span>
+fun map f <span class="pl-c1">[]</span> <span class="pl-k">=</span> <span class="pl-c1">[]</span>
+  <span class="pl-k">|</span> map f (x::xs) <span class="pl-k">=</span> f(x) :: map f xs
+
+<span class="pl-c"><span class="pl-c">(*</span> map has type ('a -&gt; 'b) -&gt; 'a list -&gt; 'b list and is called polymorphic. <span class="pl-c">*)</span></span>
+<span class="pl-c"><span class="pl-c">(*</span> 'a is called a type variable. <span class="pl-c">*)</span></span>
+
+
+<span class="pl-c"><span class="pl-c">(*</span> We can declare functions as infix <span class="pl-c">*)</span></span>
+val plus <span class="pl-k">=</span> add_them   <span class="pl-c"><span class="pl-c">(*</span> plus is now equal to the same function as add_them <span class="pl-c">*)</span></span>
+infix plus            <span class="pl-c"><span class="pl-c">(*</span> plus is now an infix operator <span class="pl-c">*)</span></span>
+val seven <span class="pl-k">=</span> <span class="pl-c1">2</span> plus <span class="pl-c1">5</span>  <span class="pl-c"><span class="pl-c">(*</span> seven is now bound to 7 <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> Functions can also be made infix before they are declared <span class="pl-c">*)</span></span>
+infix minus
+fun x minus y <span class="pl-k">=</span> x <span class="pl-k">-</span> y <span class="pl-c"><span class="pl-c">(*</span> It becomes a little hard to see what's the argument <span class="pl-c">*)</span></span>
+val four <span class="pl-k">=</span> <span class="pl-c1">8</span> minus <span class="pl-c1">4</span>  <span class="pl-c"><span class="pl-c">(*</span> four is now bound to 4 <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> An infix function/operator can be made prefix with 'op' <span class="pl-c">*)</span></span>
+val n <span class="pl-k">=</span> op <span class="pl-k">+</span> (<span class="pl-c1">5</span>, <span class="pl-c1">5</span>)   <span class="pl-c"><span class="pl-c">(*</span> n is now 10 <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> 'op' is useful when combined with high order functions because they expect</span>
+<span class="pl-c">   functions and not operators as arguments. Most operators are really just</span>
+<span class="pl-c">   infix functions. <span class="pl-c">*)</span></span>
+<span class="pl-c"><span class="pl-c">(*</span> foldl f init [x1, x2, ..., xn]</span>
+<span class="pl-c">       returns</span>
+<span class="pl-c">       f(xn, ...f(x2, f(x1, init))...)</span>
+<span class="pl-c">       or init if the list is empty. <span class="pl-c">*)</span></span>
+val sum_of_numbers <span class="pl-k">=</span> foldl op<span class="pl-k">+</span> <span class="pl-c1">0</span> [<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span>, <span class="pl-c1">5</span>]
+
+
+<span class="pl-c"><span class="pl-c">(*</span> Datatypes are useful for creating both simple and complex structures <span class="pl-c">*)</span></span>
+datatype color <span class="pl-k">=</span> <span class="pl-en">Red</span> <span class="pl-k">|</span> <span class="pl-en">Green</span> <span class="pl-k">|</span> <span class="pl-en">Blue</span>
+
+<span class="pl-c"><span class="pl-c">(*</span> Here is a function that takes one of these as argument <span class="pl-c">*)</span></span>
+fun say(col) <span class="pl-k">=</span>
+    <span class="pl-k">if</span> col <span class="pl-k">=</span> <span class="pl-en">Red</span> <span class="pl-k">then</span> <span class="pl-s"><span class="pl-pds">"</span>You are red!<span class="pl-pds">"</span></span> <span class="pl-k">else</span>
+    <span class="pl-k">if</span> col <span class="pl-k">=</span> <span class="pl-en">Green</span> <span class="pl-k">then</span> <span class="pl-s"><span class="pl-pds">"</span>You are green!<span class="pl-pds">"</span></span> <span class="pl-k">else</span>
+    <span class="pl-k">if</span> col <span class="pl-k">=</span> <span class="pl-en">Blue</span> <span class="pl-k">then</span> <span class="pl-s"><span class="pl-pds">"</span>You are blue!<span class="pl-pds">"</span></span> <span class="pl-k">else</span>
+    raise <span class="pl-en">Fail</span> <span class="pl-s"><span class="pl-pds">"</span>Unknown color<span class="pl-pds">"</span></span>
+
+val _ <span class="pl-k">=</span> print (say(<span class="pl-en">Red</span>) <span class="pl-k">^</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">\n</span><span class="pl-pds">"</span></span>)
+
+<span class="pl-c"><span class="pl-c">(*</span> Datatypes are very often used in combination with pattern matching <span class="pl-c">*)</span></span>
+fun say <span class="pl-en">Red</span>   <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>You are red!<span class="pl-pds">"</span></span>
+  <span class="pl-k">|</span> say <span class="pl-en">Green</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>You are green!<span class="pl-pds">"</span></span>
+  <span class="pl-k">|</span> say <span class="pl-en">Blue</span>  <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>You are blue!<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> We did not include the match arm `say _ = raise Fail "Unknown color"`</span>
+<span class="pl-c">because after specifying all three colors, the pattern is exhaustive</span>
+<span class="pl-c">and redundancy is not permitted in pattern matching <span class="pl-c">*)</span></span>
+
+
+<span class="pl-c"><span class="pl-c">(*</span> Here is a binary tree datatype <span class="pl-c">*)</span></span>
+datatype 'a btree <span class="pl-k">=</span> <span class="pl-en">Leaf</span> of 'a
+                  <span class="pl-k">|</span> <span class="pl-en">Node</span> of 'a btree <span class="pl-k">*</span> 'a <span class="pl-k">*</span> 'a btree <span class="pl-c"><span class="pl-c">(*</span> three-arg constructor <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> Here is a binary tree <span class="pl-c">*)</span></span>
+val myTree <span class="pl-k">=</span> <span class="pl-en">Node</span> (<span class="pl-en">Leaf</span> <span class="pl-c1">9</span>, <span class="pl-c1">8</span>, <span class="pl-en">Node</span> (<span class="pl-en">Leaf</span> <span class="pl-c1">3</span>, <span class="pl-c1">5</span>, <span class="pl-en">Leaf</span> <span class="pl-c1">7</span>))
+
+<span class="pl-c"><span class="pl-c">(*</span> Drawing it, it might look something like...</span>
+<span class="pl-c"></span>
+<span class="pl-c">           8</span>
+<span class="pl-c">          / \</span>
+<span class="pl-c"> leaf -&gt; 9   5</span>
+<span class="pl-c">            / \</span>
+<span class="pl-c">   leaf -&gt; 3   7 &lt;- leaf</span>
+<span class="pl-c"> <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> This function counts the sum of all the elements in a tree <span class="pl-c">*)</span></span>
+fun count (<span class="pl-en">Leaf</span> n) <span class="pl-k">=</span> n
+  <span class="pl-k">|</span> count (<span class="pl-en">Node</span> (leftTree, n, rightTree)) <span class="pl-k">=</span> count leftTree <span class="pl-k">+</span> n <span class="pl-k">+</span> count rightTree
+
+val myTreeCount <span class="pl-k">=</span> count myTree  <span class="pl-c"><span class="pl-c">(*</span> myTreeCount is now bound to 32 <span class="pl-c">*)</span></span>
+
+
+<span class="pl-c"><span class="pl-c">(*</span> Exceptions! <span class="pl-c">*)</span></span>
+<span class="pl-c"><span class="pl-c">(*</span> Exceptions can be raised/thrown using the reserved word 'raise' <span class="pl-c">*)</span></span>
+fun calculate_interest(n) <span class="pl-k">=</span> <span class="pl-k">if</span> n <span class="pl-k">&lt;</span> <span class="pl-c1">0.0</span>
+                            <span class="pl-k">then</span> raise <span class="pl-en">Domain</span>
+                            <span class="pl-k">else</span> n <span class="pl-k">*</span> <span class="pl-c1">1.04</span>
+
+<span class="pl-c"><span class="pl-c">(*</span> Exceptions can be caught using "handle" <span class="pl-c">*)</span></span>
+val balance <span class="pl-k">=</span> calculate_interest ~<span class="pl-c1">180.0</span>
+              handle <span class="pl-en">Domain</span> <span class="pl-k">=&gt;</span> ~<span class="pl-c1">180.0</span>    <span class="pl-c"><span class="pl-c">(*</span> balance now has the value ~180.0 <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> Some exceptions carry extra information with them <span class="pl-c">*)</span></span>
+<span class="pl-c"><span class="pl-c">(*</span> Here are some examples of built-in exceptions <span class="pl-c">*)</span></span>
+fun failing_function <span class="pl-c1">[]</span>    <span class="pl-k">=</span> raise <span class="pl-en">Empty</span>  <span class="pl-c"><span class="pl-c">(*</span> used for empty lists <span class="pl-c">*)</span></span>
+  <span class="pl-k">|</span> failing_function [x]   <span class="pl-k">=</span> raise <span class="pl-en">Fail</span> <span class="pl-s"><span class="pl-pds">"</span>This list is too short!<span class="pl-pds">"</span></span>
+  <span class="pl-k">|</span> failing_function [x,y] <span class="pl-k">=</span> raise <span class="pl-en">Overflow</span>  <span class="pl-c"><span class="pl-c">(*</span> used for arithmetic <span class="pl-c">*)</span></span>
+  <span class="pl-k">|</span> failing_function xs    <span class="pl-k">=</span> raise <span class="pl-en">Fail</span> <span class="pl-s"><span class="pl-pds">"</span>This list is too long!<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> We can pattern match in 'handle' to make sure</span>
+<span class="pl-c">   a specific exception was raised, or grab the message <span class="pl-c">*)</span></span>
+val err_msg <span class="pl-k">=</span> failing_function [<span class="pl-c1">1</span>,<span class="pl-c1">2</span>] handle <span class="pl-en">Fail</span> _ <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>Fail was raised<span class="pl-pds">"</span></span>
+                                          <span class="pl-k">|</span> <span class="pl-en">Domain</span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>Domain was raised<span class="pl-pds">"</span></span>
+                                          <span class="pl-k">|</span> <span class="pl-en">Empty</span>  <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>Empty was raised<span class="pl-pds">"</span></span>
+                                          <span class="pl-k">|</span> _      <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>Unknown exception<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> err_msg now has the value "Unknown exception" because Overflow isn't</span>
+<span class="pl-c">   listed as one of the patterns -- thus, the catch-all pattern _ is used. <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> We can define our own exceptions like this <span class="pl-c">*)</span></span>
+<span class="pl-k">exception</span> <span class="pl-en">MyException</span>
+<span class="pl-k">exception</span> <span class="pl-en">MyExceptionWithMessage</span> of <span class="pl-k">string</span>
+<span class="pl-k">exception</span> <span class="pl-en">SyntaxError</span> of <span class="pl-k">string</span> <span class="pl-k">*</span> (<span class="pl-k">int</span> <span class="pl-k">*</span> <span class="pl-k">int</span>)
+
+<span class="pl-c"><span class="pl-c">(*</span> File I/O! <span class="pl-c">*)</span></span>
+<span class="pl-c"><span class="pl-c">(*</span> Write a nice poem to a file <span class="pl-c">*)</span></span>
+fun writePoem(filename) <span class="pl-k">=</span>
+    <span class="pl-k">let</span> <span class="pl-en">val</span> <span class="pl-v">file</span> <span class="pl-k">=</span> <span class="pl-c1">TextIO.</span>openOut(filename)
+        val _ <span class="pl-k">=</span> <span class="pl-c1">TextIO.</span>output(file, <span class="pl-s"><span class="pl-pds">"</span>Roses are red,<span class="pl-c1">\n</span>Violets are blue.<span class="pl-c1">\n</span><span class="pl-pds">"</span></span>)
+        val _ <span class="pl-k">=</span> <span class="pl-c1">TextIO.</span>output(file, <span class="pl-s"><span class="pl-pds">"</span>I have a gun.<span class="pl-c1">\n</span>Get in the van.<span class="pl-c1">\n</span><span class="pl-pds">"</span></span>)
+    <span class="pl-k">in</span> <span class="pl-c1">TextIO.</span>closeOut(file)
+    end
+
+<span class="pl-c"><span class="pl-c">(*</span> Read a nice poem from a file into a list of strings <span class="pl-c">*)</span></span>
+fun readPoem(filename) <span class="pl-k">=</span>
+    <span class="pl-k">let</span> <span class="pl-en">val</span> <span class="pl-v">file</span> <span class="pl-k">=</span> <span class="pl-c1">TextIO.</span>openIn filename
+        val poem <span class="pl-k">=</span> <span class="pl-c1">TextIO.</span>inputAll file
+        val _ <span class="pl-k">=</span> <span class="pl-c1">TextIO.</span>closeIn file
+    <span class="pl-k">in</span> <span class="pl-c1">String.</span>tokens (fn c <span class="pl-k">=&gt;</span> c <span class="pl-k">=</span> #<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">\n</span><span class="pl-pds">"</span></span>) poem
+    end
+
+val _ <span class="pl-k">=</span> writePoem <span class="pl-s"><span class="pl-pds">"</span>roses.txt<span class="pl-pds">"</span></span>
+val test_poem <span class="pl-k">=</span> readPoem <span class="pl-s"><span class="pl-pds">"</span>roses.txt<span class="pl-pds">"</span></span>  <span class="pl-c"><span class="pl-c">(*</span> gives [ "Roses are red,",</span>
+<span class="pl-c">                                                 "Violets are blue.",</span>
+<span class="pl-c">                                                 "I have a gun.",</span>
+<span class="pl-c">                                                 "Get in the van." ] <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> We can create references to data which can be updated <span class="pl-c">*)</span></span>
+val counter <span class="pl-k">=</span> <span class="pl-k">ref</span> <span class="pl-c1">0</span> <span class="pl-c"><span class="pl-c">(*</span> Produce a reference with the ref function <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> Assign to a reference with the assignment operator <span class="pl-c">*)</span></span>
+fun set_five reference <span class="pl-k">=</span> reference <span class="pl-k">:=</span> <span class="pl-c1">5</span>
+
+<span class="pl-c"><span class="pl-c">(*</span> Read a reference with the dereference operator <span class="pl-c">*)</span></span>
+fun equals_five reference <span class="pl-k">=</span> <span class="pl-k">!</span>reference <span class="pl-k">=</span> <span class="pl-c1">5</span>
+
+<span class="pl-c"><span class="pl-c">(*</span> We can use while loops for when recursion is messy <span class="pl-c">*)</span></span>
+fun decrement_to_zero r <span class="pl-k">=</span> <span class="pl-k">if</span> <span class="pl-k">!</span>r <span class="pl-k">&lt;</span> <span class="pl-c1">0</span>
+                          <span class="pl-k">then</span> r <span class="pl-k">:=</span> <span class="pl-c1">0</span>
+                          <span class="pl-k">else</span> <span class="pl-k">while</span> <span class="pl-k">!</span>r <span class="pl-k">&gt;</span><span class="pl-k">=</span> <span class="pl-c1">0</span> <span class="pl-k">do</span> r <span class="pl-k">:=</span> <span class="pl-k">!</span>r <span class="pl-k">-</span> <span class="pl-c1">1</span>
+
+<span class="pl-c"><span class="pl-c">(*</span> This returns the unit value (in practical terms, nothing, a 0-tuple) <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> To allow returning a value, we can use the semicolon to sequence evaluations <span class="pl-c">*)</span></span>
+fun decrement_ret x y <span class="pl-k">=</span> (x <span class="pl-k">:=</span> <span class="pl-k">!</span>x <span class="pl-k">-</span> <span class="pl-c1">1</span>; y)</pre></div>
+<h2>Further learning</h2>
+<ul>
+<li>Install an interactive compiler (REPL), for example<br>
+<a href="http://www.polyml.org/" rel="nofollow">Poly/ML</a>,<br>
+<a href="http://mosml.org" rel="nofollow">Moscow ML</a>,<br>
+<a href="http://smlnj.org/" rel="nofollow">SML/NJ</a>.</li>
+<li>Follow the Coursera course <a href="https://www.coursera.org/course/proglang" rel="nofollow">Programming Languages</a>.</li>
+<li>Read <em><a href="https://www.cl.cam.ac.uk/~lp15/MLbook/pub-details.html" rel="nofollow">ML for the Working Programmer</a></em> by Larry C. Paulson.</li>
+<li>Use <a href="http://stackoverflow.com/questions/tagged/sml" rel="nofollow">StackOverflow's sml tag</a>.</li>
+<li>Solve exercises on <a href="https://exercism.io/tracks/sml" rel="nofollow">Exercism.io's Standard ML track</a>.</li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Simon Shine", "https://simonshine.dk/"]
+- ["David Pedersen", "https://github.com/davidpdrsn"]
+- ["James Baker", "http://www.jbaker.io/"]
+- ["Leo Zovic", "http://langnostic.inaimathi.ca/"]
+- ["Chris Wilson", "http://sencjw.com/"]
+</code></pre>

@@ -1,0 +1,467 @@
+<h1>Go</h1>
+<p>Go was created out of the need to get work done. It's not the latest trend<br>
+in programming language theory, but it is a way to solve real-world<br>
+problems.</p>
+<p>It draws concepts from imperative languages with static typing.<br>
+It's fast to compile and fast to execute, it adds easy-to-understand<br>
+concurrency because multi-core CPUs are now common, and it's used successfully<br>
+in large codebases (~100 million loc at Google, Inc.).</p>
+<p>Go comes with a good standard library and a sizeable community.</p>
+<div class="highlight highlight-source-go"><pre class="notranslate"><span class="pl-c">// Single line comment</span>
+<span class="pl-c">/* Multi-</span>
+<span class="pl-c"> line comment */</span>
+
+ <span class="pl-c">/* A build tag is a line comment starting with // +build</span>
+<span class="pl-c">  and can be executed by go build -tags="foo bar" command.</span>
+<span class="pl-c">  Build tags are placed before the package clause near or at the top of the file</span>
+<span class="pl-c">  followed by a blank line or other line comments. */</span>
+<span class="pl-c">// +build prod, dev, test</span>
+
+<span class="pl-c">// A package clause starts every source file.</span>
+<span class="pl-c">// main is a special name declaring an executable rather than a library.</span>
+<span class="pl-k">package</span> main
+
+<span class="pl-c">// Import declaration declares library packages referenced in this file.</span>
+<span class="pl-k">import</span> (
+	<span class="pl-s">"fmt"</span>       <span class="pl-c">// A package in the Go standard library.</span>
+	<span class="pl-s">"io/ioutil"</span> <span class="pl-c">// Implements some I/O utility functions.</span>
+	<span class="pl-s">"math"</span>    <span class="pl-c">// Math library with local alias m.</span>
+	<span class="pl-s">"net/http"</span>  <span class="pl-c">// Yes, a web server!</span>
+	<span class="pl-s">"os"</span>        <span class="pl-c">// OS functions like working with the file system</span>
+	<span class="pl-s">"strconv"</span>   <span class="pl-c">// String conversions.</span>
+)
+
+<span class="pl-c">// A function definition. Main is special. It is the entry point for the</span>
+<span class="pl-c">// executable program. Love it or hate it, Go uses brace brackets.</span>
+<span class="pl-k">func</span> <span class="pl-en">main</span>() {
+	<span class="pl-c">// Println outputs a line to stdout.</span>
+	<span class="pl-c">// It comes from the package fmt.</span>
+	<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-s">"Hello world!"</span>)
+
+	<span class="pl-c">// Call another function within this package.</span>
+	<span class="pl-en">beyondHello</span>()
+}
+
+<span class="pl-c">// Functions have parameters in parentheses.</span>
+<span class="pl-c">// If there are no parameters, empty parentheses are still required.</span>
+<span class="pl-k">func</span> <span class="pl-en">beyondHello</span>() {
+	<span class="pl-k">var</span> <span class="pl-s1">x</span> <span class="pl-smi">int</span> <span class="pl-c">// Variable declaration. Variables must be declared before use.</span>
+	<span class="pl-s1">x</span> <span class="pl-c1">=</span> <span class="pl-c1">3</span>     <span class="pl-c">// Variable assignment.</span>
+	<span class="pl-c">// "Short" declarations use := to infer the type, declare, and assign.</span>
+	<span class="pl-s1">y</span> <span class="pl-c1">:=</span> <span class="pl-c1">4</span>
+	<span class="pl-s1">sum</span>, <span class="pl-s1">prod</span> <span class="pl-c1">:=</span> <span class="pl-en">learnMultiple</span>(<span class="pl-s1">x</span>, <span class="pl-s1">y</span>)        <span class="pl-c">// Function returns two values.</span>
+	<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-s">"sum:"</span>, <span class="pl-s1">sum</span>, <span class="pl-s">"prod:"</span>, <span class="pl-s1">prod</span>) <span class="pl-c">// Simple output.</span>
+	<span class="pl-en">learnTypes</span>()                            <span class="pl-c">// &lt; y minutes, learn more!</span>
+}
+
+<span class="pl-c">/* &lt;- multiline comment</span>
+<span class="pl-c">Functions can have parameters and (multiple!) return values.</span>
+<span class="pl-c">Here `x`, `y` are the arguments and `sum`, `prod` is the signature (what's returned).</span>
+<span class="pl-c">Note that `x` and `sum` receive the type `int`.</span>
+<span class="pl-c">*/</span>
+<span class="pl-k">func</span> <span class="pl-en">learnMultiple</span>(<span class="pl-s1">x</span>, <span class="pl-s1">y</span> <span class="pl-smi">int</span>) (<span class="pl-s1">sum</span>, <span class="pl-s1">prod</span> <span class="pl-smi">int</span>) {
+	<span class="pl-k">return</span> <span class="pl-s1">x</span> <span class="pl-c1">+</span> <span class="pl-s1">y</span>, <span class="pl-s1">x</span> <span class="pl-c1">*</span> <span class="pl-s1">y</span> <span class="pl-c">// Return two values.</span>
+}
+
+<span class="pl-c">// Some built-in types and literals.</span>
+<span class="pl-k">func</span> <span class="pl-en">learnTypes</span>() {
+	<span class="pl-c">// Short declaration usually gives you what you want.</span>
+	<span class="pl-s1">str</span> <span class="pl-c1">:=</span> <span class="pl-s">"Learn Go!"</span> <span class="pl-c">// string type.</span>
+
+	<span class="pl-s1">s2</span> <span class="pl-c1">:=</span> <span class="pl-s">`A "raw" string literal</span>
+<span class="pl-s">can include line breaks.`</span> <span class="pl-c">// Same string type.</span>
+
+	<span class="pl-c">// Non-ASCII literal. Go source is UTF-8.</span>
+	<span class="pl-s1">g</span> <span class="pl-c1">:=</span> <span class="pl-s">'Σ'</span> <span class="pl-c">// rune type, an alias for int32, holds a unicode code point.</span>
+
+	<span class="pl-s1">f</span> <span class="pl-c1">:=</span> <span class="pl-c1">3.14195</span> <span class="pl-c">// float64, an IEEE-754 64-bit floating point number.</span>
+	<span class="pl-s1">c</span> <span class="pl-c1">:=</span> <span class="pl-c1">3</span> <span class="pl-c1">+</span> <span class="pl-c1">4i</span>  <span class="pl-c">// complex128, represented internally with two float64's.</span>
+
+	<span class="pl-c">// var syntax with initializers.</span>
+	<span class="pl-k">var</span> <span class="pl-s1">u</span> <span class="pl-smi">uint</span> <span class="pl-c1">=</span> <span class="pl-c1">7</span> <span class="pl-c">// Unsigned, but implementation dependent size as with int.</span>
+	<span class="pl-k">var</span> <span class="pl-s1">pi</span> <span class="pl-smi">float32</span> <span class="pl-c1">=</span> <span class="pl-c1">22.</span> <span class="pl-c1">/</span> <span class="pl-c1">7</span>
+
+	<span class="pl-c">// Conversion syntax with a short declaration.</span>
+	<span class="pl-s1">n</span> <span class="pl-c1">:=</span> <span class="pl-en">byte</span>(<span class="pl-s">'\n'</span>) <span class="pl-c">// byte is an alias for uint8.</span>
+
+	<span class="pl-c">// Arrays have size fixed at compile time.</span>
+	<span class="pl-k">var</span> <span class="pl-s1">a4</span> [<span class="pl-c1">4</span>]<span class="pl-smi">int</span>           <span class="pl-c">// An array of 4 ints, initialized to all 0.</span>
+	<span class="pl-s1">a5</span> <span class="pl-c1">:=</span> [<span class="pl-c1">...</span>]<span class="pl-smi">int</span>{<span class="pl-c1">3</span>, <span class="pl-c1">1</span>, <span class="pl-c1">5</span>, <span class="pl-c1">10</span>, <span class="pl-c1">100</span>} <span class="pl-c">// An array initialized with a fixed size of five</span>
+	<span class="pl-c">// elements, with values 3, 1, 5, 10, and 100.</span>
+
+	<span class="pl-c">// Arrays have value semantics.</span>
+	<span class="pl-s1">a4_cpy</span> <span class="pl-c1">:=</span> <span class="pl-s1">a4</span>            <span class="pl-c">// a4_cpy is a copy of a4, two separate instances.</span>
+	<span class="pl-s1">a4_cpy</span>[<span class="pl-c1">0</span>] <span class="pl-c1">=</span> <span class="pl-c1">25</span>          <span class="pl-c">// Only a4_cpy is changed, a4 stays the same.</span>
+	<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-s1">a4_cpy</span>[<span class="pl-c1">0</span>] <span class="pl-c1">==</span> <span class="pl-s1">a4</span>[<span class="pl-c1">0</span>]) <span class="pl-c">// false</span>
+
+	<span class="pl-c">// Slices have dynamic size. Arrays and slices each have advantages</span>
+	<span class="pl-c">// but use cases for slices are much more common.</span>
+	<span class="pl-s1">s3</span> <span class="pl-c1">:=</span> []<span class="pl-smi">int</span>{<span class="pl-c1">4</span>, <span class="pl-c1">5</span>, <span class="pl-c1">9</span>}    <span class="pl-c">// Compare to a5. No ellipsis here.</span>
+	<span class="pl-s1">s4</span> <span class="pl-c1">:=</span> <span class="pl-en">make</span>([]<span class="pl-smi">int</span>, <span class="pl-c1">4</span>)    <span class="pl-c">// Allocates slice of 4 ints, initialized to all 0.</span>
+	<span class="pl-k">var</span> <span class="pl-s1">d2</span> [][]<span class="pl-smi">float64</span>      <span class="pl-c">// Declaration only, nothing allocated here.</span>
+	<span class="pl-s1">bs</span> <span class="pl-c1">:=</span> []<span class="pl-smi">byte</span>(<span class="pl-s">"a slice"</span>) <span class="pl-c">// Type conversion syntax.</span>
+
+	<span class="pl-c">// Slices (as well as maps and channels) have reference semantics.</span>
+	<span class="pl-s1">s3_cpy</span> <span class="pl-c1">:=</span> <span class="pl-s1">s3</span>            <span class="pl-c">// Both variables point to the same instance.</span>
+	<span class="pl-s1">s3_cpy</span>[<span class="pl-c1">0</span>] <span class="pl-c1">=</span> <span class="pl-c1">0</span>           <span class="pl-c">// Which means both are updated.</span>
+	<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-s1">s3_cpy</span>[<span class="pl-c1">0</span>] <span class="pl-c1">==</span> <span class="pl-s1">s3</span>[<span class="pl-c1">0</span>]) <span class="pl-c">// true	</span>
+
+	<span class="pl-c">// Because they are dynamic, slices can be appended to on-demand.</span>
+	<span class="pl-c">// To append elements to a slice, the built-in append() function is used.</span>
+	<span class="pl-c">// First argument is a slice to which we are appending. Commonly,</span>
+	<span class="pl-c">// the array variable is updated in place, as in example below.</span>
+	<span class="pl-s1">s</span> <span class="pl-c1">:=</span> []<span class="pl-smi">int</span>{<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>}		<span class="pl-c">// Result is a slice of length 3.</span>
+	<span class="pl-s1">s</span> <span class="pl-c1">=</span> <span class="pl-en">append</span>(<span class="pl-s1">s</span>, <span class="pl-c1">4</span>, <span class="pl-c1">5</span>, <span class="pl-c1">6</span>)	<span class="pl-c">// Added 3 elements. Slice now has length of 6.</span>
+	<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-s1">s</span>) <span class="pl-c">// Updated slice is now [1 2 3 4 5 6]</span>
+
+	<span class="pl-c">// To append another slice, instead of list of atomic elements we can</span>
+	<span class="pl-c">// pass a reference to a slice or a slice literal like this, with a</span>
+	<span class="pl-c">// trailing ellipsis, meaning take a slice and unpack its elements,</span>
+	<span class="pl-c">// appending them to slice s.</span>
+	<span class="pl-s1">s</span> <span class="pl-c1">=</span> <span class="pl-en">append</span>(<span class="pl-s1">s</span>, []<span class="pl-smi">int</span>{<span class="pl-c1">7</span>, <span class="pl-c1">8</span>, <span class="pl-c1">9</span>}<span class="pl-c1">...</span>) <span class="pl-c">// Second argument is a slice literal.</span>
+	<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-s1">s</span>)	<span class="pl-c">// Updated slice is now [1 2 3 4 5 6 7 8 9]</span>
+
+	<span class="pl-s1">p</span>, <span class="pl-s1">q</span> <span class="pl-c1">:=</span> <span class="pl-en">learnMemory</span>() <span class="pl-c">// Declares p, q to be type pointer to int.</span>
+	<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-c1">*</span><span class="pl-s1">p</span>, <span class="pl-c1">*</span><span class="pl-s1">q</span>)   <span class="pl-c">// * follows a pointer. This prints two ints.</span>
+
+	<span class="pl-c">// Maps are a dynamically growable associative array type, like the</span>
+	<span class="pl-c">// hash or dictionary types of some other languages.</span>
+	<span class="pl-s1">m</span> <span class="pl-c1">:=</span> <span class="pl-k">map</span>[<span class="pl-smi">string</span>]<span class="pl-smi">int</span>{<span class="pl-s">"three"</span>: <span class="pl-c1">3</span>, <span class="pl-s">"four"</span>: <span class="pl-c1">4</span>}
+	<span class="pl-s1">m</span>[<span class="pl-s">"one"</span>] <span class="pl-c1">=</span> <span class="pl-c1">1</span>
+
+	<span class="pl-c">// Unused variables are an error in Go.</span>
+	<span class="pl-c">// The underscore lets you "use" a variable but discard its value.</span>
+	<span class="pl-s1">_</span>, <span class="pl-s1">_</span>, <span class="pl-s1">_</span>, <span class="pl-s1">_</span>, <span class="pl-s1">_</span>, <span class="pl-s1">_</span>, <span class="pl-s1">_</span>, <span class="pl-s1">_</span>, <span class="pl-s1">_</span>, <span class="pl-s1">_</span> <span class="pl-c1">=</span> <span class="pl-s1">str</span>, <span class="pl-s1">s2</span>, <span class="pl-s1">g</span>, <span class="pl-s1">f</span>, <span class="pl-s1">u</span>, <span class="pl-s1">pi</span>, <span class="pl-s1">n</span>, <span class="pl-s1">a5</span>, <span class="pl-s1">s4</span>, <span class="pl-s1">bs</span>
+	<span class="pl-c">// Usually you use it to ignore one of the return values of a function</span>
+	<span class="pl-c">// For example, in a quick and dirty script you might ignore the</span>
+	<span class="pl-c">// error value returned from os.Create, and expect that the file</span>
+	<span class="pl-c">// will always be created.</span>
+	<span class="pl-s1">file</span>, <span class="pl-s1">_</span> <span class="pl-c1">:=</span> <span class="pl-s1">os</span>.<span class="pl-en">Create</span>(<span class="pl-s">"output.txt"</span>)
+	<span class="pl-s1">fmt</span>.<span class="pl-en">Fprint</span>(<span class="pl-s1">file</span>, <span class="pl-s">"This is how you write to a file, by the way"</span>)
+	<span class="pl-s1">file</span>.<span class="pl-en">Close</span>()
+	
+	<span class="pl-c">// Output of course counts as using a variable.</span>
+	<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-s1">s</span>, <span class="pl-s1">c</span>, <span class="pl-s1">a4</span>, <span class="pl-s1">s3</span>, <span class="pl-s1">d2</span>, <span class="pl-s1">m</span>)
+
+	<span class="pl-en">learnFlowControl</span>() <span class="pl-c">// Back in the flow.</span>
+}
+
+<span class="pl-c">// It is possible, unlike in many other languages for functions in go</span>
+<span class="pl-c">// to have named return values.</span>
+<span class="pl-c">// Assigning a name to the type being returned in the function declaration line</span>
+<span class="pl-c">// allows us to easily return from multiple points in a function as well as to</span>
+<span class="pl-c">// only use the return keyword, without anything further.</span>
+<span class="pl-k">func</span> <span class="pl-en">learnNamedReturns</span>(<span class="pl-s1">x</span>, <span class="pl-s1">y</span> <span class="pl-smi">int</span>) (<span class="pl-s1">z</span> <span class="pl-smi">int</span>) {
+	<span class="pl-s1">z</span> <span class="pl-c1">=</span> <span class="pl-s1">x</span> <span class="pl-c1">*</span> <span class="pl-s1">y</span>
+	<span class="pl-k">return</span> <span class="pl-c">// z is implicit here, because we named it earlier.</span>
+}
+
+<span class="pl-c">// Go is fully garbage collected. It has pointers but no pointer arithmetic.</span>
+<span class="pl-c">// You can make a mistake with a nil pointer, but not by incrementing a pointer.</span>
+<span class="pl-c">// Unlike in C/Cpp taking and returning an address of a local variable is also safe. </span>
+<span class="pl-k">func</span> <span class="pl-en">learnMemory</span>() (<span class="pl-s1">p</span>, <span class="pl-s1">q</span> <span class="pl-c1">*</span><span class="pl-smi">int</span>) {
+	<span class="pl-c">// Named return values p and q have type pointer to int.</span>
+	<span class="pl-s1">p</span> <span class="pl-c1">=</span> <span class="pl-en">new</span>(<span class="pl-smi">int</span>) <span class="pl-c">// Built-in function new allocates memory.</span>
+	<span class="pl-c">// The allocated int slice is initialized to 0, p is no longer nil.</span>
+	<span class="pl-s1">s</span> <span class="pl-c1">:=</span> <span class="pl-en">make</span>([]<span class="pl-smi">int</span>, <span class="pl-c1">20</span>) <span class="pl-c">// Allocate 20 ints as a single block of memory.</span>
+	<span class="pl-s1">s</span>[<span class="pl-c1">3</span>] <span class="pl-c1">=</span> <span class="pl-c1">7</span>             <span class="pl-c">// Assign one of them.</span>
+	<span class="pl-s1">r</span> <span class="pl-c1">:=</span> <span class="pl-c1">-</span><span class="pl-c1">2</span>              <span class="pl-c">// Declare another local variable.</span>
+	<span class="pl-k">return</span> <span class="pl-c1">&amp;</span><span class="pl-s1">s</span>[<span class="pl-c1">3</span>], <span class="pl-c1">&amp;</span><span class="pl-s1">r</span>     <span class="pl-c">// &amp; takes the address of an object.</span>
+}
+
+<span class="pl-c">// Use the aliased math library (see imports, above) </span>
+<span class="pl-k">func</span> <span class="pl-en">expensiveComputation</span>() <span class="pl-smi">float64</span> {
+	<span class="pl-k">return</span> <span class="pl-s1">m</span>.<span class="pl-en">Exp</span>(<span class="pl-c1">10</span>)
+}
+
+<span class="pl-k">func</span> <span class="pl-en">learnFlowControl</span>() {
+	<span class="pl-c">// If statements require brace brackets, and do not require parentheses.</span>
+	<span class="pl-k">if</span> <span class="pl-c1">true</span> {
+		<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-s">"told ya"</span>)
+	}
+	<span class="pl-c">// Formatting is standardized by the command line command "go fmt".</span>
+	<span class="pl-k">if</span> <span class="pl-c1">false</span> {
+		<span class="pl-c">// Pout.</span>
+	} <span class="pl-k">else</span> {
+		<span class="pl-c">// Gloat.</span>
+	}
+	<span class="pl-c">// Use switch in preference to chained if statements.</span>
+	<span class="pl-s1">x</span> <span class="pl-c1">:=</span> <span class="pl-c1">42.0</span>
+	<span class="pl-k">switch</span> <span class="pl-s1">x</span> {
+	<span class="pl-k">case</span> <span class="pl-c1">0</span>:
+	<span class="pl-k">case</span> <span class="pl-c1">1</span>, <span class="pl-c1">2</span>: <span class="pl-c">// Can have multiple matches on one case</span>
+	<span class="pl-k">case</span> <span class="pl-c1">42</span>:
+		<span class="pl-c">// Cases don't "fall through".</span>
+		<span class="pl-c">/*</span>
+<span class="pl-c">		There is a `fallthrough` keyword however, see:</span>
+<span class="pl-c">		  https://github.com/golang/go/wiki/Switch#fall-through</span>
+<span class="pl-c">		*/</span>
+	<span class="pl-k">case</span> <span class="pl-c1">43</span>:
+		<span class="pl-c">// Unreached.</span>
+	<span class="pl-k">default</span>:
+		<span class="pl-c">// Default case is optional.</span>
+	}
+
+	<span class="pl-c">// Type switch allows switching on the type of something instead of value</span>
+	<span class="pl-k">var</span> <span class="pl-s1">data</span> <span class="pl-k">interface</span>{}
+	<span class="pl-s1">data</span> <span class="pl-c1">=</span> <span class="pl-s">""</span>
+	<span class="pl-k">switch</span> <span class="pl-s1">c</span> <span class="pl-c1">:=</span> <span class="pl-s1">data</span>.(<span class="pl-k">type</span>) {
+	<span class="pl-k">case</span> <span class="pl-smi">string</span>:
+		<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-s1">c</span>, <span class="pl-s">"is a string"</span>)
+	<span class="pl-k">case</span> <span class="pl-smi">int64</span>:
+		<span class="pl-s1">fmt</span>.<span class="pl-en">Printf</span>(<span class="pl-s">"%d is an int64<span class="pl-cce">\n</span>"</span>, <span class="pl-s1">c</span>)
+	<span class="pl-k">default</span>:
+		<span class="pl-c">// all other cases</span>
+	}
+
+	<span class="pl-c">// Like if, for doesn't use parens either.</span>
+	<span class="pl-c">// Variables declared in for and if are local to their scope.</span>
+	<span class="pl-k">for</span> <span class="pl-s1">x</span> <span class="pl-c1">:=</span> <span class="pl-c1">0</span>; <span class="pl-s1">x</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">3</span>; <span class="pl-s1">x</span><span class="pl-c1">++</span> { <span class="pl-c">// ++ is a statement.</span>
+		<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-s">"iteration"</span>, <span class="pl-s1">x</span>)
+	}
+	<span class="pl-c">// x == 42 here.</span>
+
+	<span class="pl-c">// For is the only loop statement in Go, but it has alternate forms.</span>
+	<span class="pl-k">for</span> { <span class="pl-c">// Infinite loop.</span>
+		<span class="pl-k">break</span>    <span class="pl-c">// Just kidding.</span>
+		<span class="pl-k">continue</span> <span class="pl-c">// Unreached.</span>
+	}
+
+	<span class="pl-c">// You can use range to iterate over an array, a slice, a string, a map, or a channel.</span>
+	<span class="pl-c">// range returns one (channel) or two values (array, slice, string and map).</span>
+	<span class="pl-k">for</span> <span class="pl-s1">key</span>, <span class="pl-s1">value</span> <span class="pl-c1">:=</span> <span class="pl-k">range</span> <span class="pl-k">map</span>[<span class="pl-smi">string</span>]<span class="pl-smi">int</span>{<span class="pl-s">"one"</span>: <span class="pl-c1">1</span>, <span class="pl-s">"two"</span>: <span class="pl-c1">2</span>, <span class="pl-s">"three"</span>: <span class="pl-c1">3</span>} {
+		<span class="pl-c">// for each pair in the map, print key and value</span>
+		<span class="pl-s1">fmt</span>.<span class="pl-en">Printf</span>(<span class="pl-s">"key=%s, value=%d<span class="pl-cce">\n</span>"</span>, <span class="pl-s1">key</span>, <span class="pl-s1">value</span>)
+	}
+	<span class="pl-c">// If you only need the value, use the underscore as the key</span>
+	<span class="pl-k">for</span> <span class="pl-s1">_</span>, <span class="pl-s1">name</span> <span class="pl-c1">:=</span> <span class="pl-k">range</span> []<span class="pl-smi">string</span>{<span class="pl-s">"Bob"</span>, <span class="pl-s">"Bill"</span>, <span class="pl-s">"Joe"</span>} {
+		<span class="pl-s1">fmt</span>.<span class="pl-en">Printf</span>(<span class="pl-s">"Hello, %s<span class="pl-cce">\n</span>"</span>, <span class="pl-s1">name</span>)
+	}
+
+	<span class="pl-c">// As with for, := in an if statement means to declare and assign</span>
+	<span class="pl-c">// y first, then test y &gt; x.</span>
+	<span class="pl-k">if</span> <span class="pl-s1">y</span> <span class="pl-c1">:=</span> <span class="pl-en">expensiveComputation</span>(); <span class="pl-s1">y</span> <span class="pl-c1">&gt;</span> <span class="pl-s1">x</span> {
+		<span class="pl-s1">x</span> <span class="pl-c1">=</span> <span class="pl-s1">y</span>
+	}
+	<span class="pl-c">// Function literals are closures.</span>
+	<span class="pl-s1">xBig</span> <span class="pl-c1">:=</span> <span class="pl-k">func</span>() <span class="pl-smi">bool</span> {
+		<span class="pl-k">return</span> <span class="pl-s1">x</span> <span class="pl-c1">&gt;</span> <span class="pl-c1">10000</span> <span class="pl-c">// References x declared above switch statement.</span>
+	}
+	<span class="pl-s1">x</span> <span class="pl-c1">=</span> <span class="pl-c1">99999</span>
+	<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-s">"xBig:"</span>, <span class="pl-en">xBig</span>()) <span class="pl-c">// true</span>
+	<span class="pl-s1">x</span> <span class="pl-c1">=</span> <span class="pl-c1">1.3e3</span>                    <span class="pl-c">// This makes x == 1300</span>
+	<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-s">"xBig:"</span>, <span class="pl-en">xBig</span>()) <span class="pl-c">// false now.</span>
+
+	<span class="pl-c">// What's more is function literals may be defined and called inline,</span>
+	<span class="pl-c">// acting as an argument to function, as long as:</span>
+	<span class="pl-c">// a) function literal is called immediately (),</span>
+	<span class="pl-c">// b) result type matches expected type of argument.</span>
+	<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-s">"Add + double two numbers: "</span>,
+		<span class="pl-k">func</span>(<span class="pl-s1">a</span>, <span class="pl-s1">b</span> <span class="pl-smi">int</span>) <span class="pl-smi">int</span> {
+			<span class="pl-k">return</span> (<span class="pl-s1">a</span> <span class="pl-c1">+</span> <span class="pl-s1">b</span>) <span class="pl-c1">*</span> <span class="pl-c1">2</span>
+		}(<span class="pl-c1">10</span>, <span class="pl-c1">2</span>)) <span class="pl-c">// Called with args 10 and 2</span>
+	<span class="pl-c">// =&gt; Add + double two numbers: 24</span>
+
+	<span class="pl-c">// When you need it, you'll love it.</span>
+	<span class="pl-k">goto</span> love
+love:
+
+	<span class="pl-en">learnFunctionFactory</span>() <span class="pl-c">// func returning func is fun(3)(3)</span>
+	<span class="pl-en">learnDefer</span>()      <span class="pl-c">// A quick detour to an important keyword.</span>
+	<span class="pl-en">learnInterfaces</span>() <span class="pl-c">// Good stuff coming up!</span>
+}
+
+<span class="pl-k">func</span> <span class="pl-en">learnFunctionFactory</span>() {
+	<span class="pl-c">// Next two are equivalent, with second being more practical</span>
+	<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-en">sentenceFactory</span>(<span class="pl-s">"summer"</span>)(<span class="pl-s">"A beautiful"</span>, <span class="pl-s">"day!"</span>))
+
+	<span class="pl-s1">d</span> <span class="pl-c1">:=</span> <span class="pl-en">sentenceFactory</span>(<span class="pl-s">"summer"</span>)
+	<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-en">d</span>(<span class="pl-s">"A beautiful"</span>, <span class="pl-s">"day!"</span>))
+	<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-en">d</span>(<span class="pl-s">"A lazy"</span>, <span class="pl-s">"afternoon!"</span>))
+}
+
+<span class="pl-c">// Decorators are common in other languages. Same can be done in Go</span>
+<span class="pl-c">// with function literals that accept arguments.</span>
+<span class="pl-k">func</span> <span class="pl-en">sentenceFactory</span>(<span class="pl-s1">mystring</span> <span class="pl-smi">string</span>) <span class="pl-k">func</span>(<span class="pl-s1">before</span>, <span class="pl-s1">after</span> <span class="pl-smi">string</span>) <span class="pl-smi">string</span> {
+	<span class="pl-k">return</span> <span class="pl-k">func</span>(<span class="pl-s1">before</span>, <span class="pl-s1">after</span> <span class="pl-smi">string</span>) <span class="pl-smi">string</span> {
+		<span class="pl-k">return</span> <span class="pl-s1">fmt</span>.<span class="pl-en">Sprintf</span>(<span class="pl-s">"%s %s %s"</span>, <span class="pl-s1">before</span>, <span class="pl-s1">mystring</span>, <span class="pl-s1">after</span>) <span class="pl-c">// new string</span>
+	}
+}
+
+<span class="pl-k">func</span> <span class="pl-en">learnDefer</span>() (<span class="pl-s1">ok</span> <span class="pl-smi">bool</span>) {
+	<span class="pl-c">// A defer statement pushes a function call onto a list. The list of saved</span>
+	<span class="pl-c">// calls is executed AFTER the surrounding function returns.</span>
+	<span class="pl-k">defer</span> <span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-s">"deferred statements execute in reverse (LIFO) order."</span>)
+	<span class="pl-k">defer</span> <span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-s">"<span class="pl-cce">\n</span>This line is being printed first because"</span>)
+	<span class="pl-c">// Defer is commonly used to close a file, so the function closing the</span>
+	<span class="pl-c">// file stays close to the function opening the file.</span>
+	<span class="pl-k">return</span> <span class="pl-c1">true</span>
+}
+
+<span class="pl-c">// Define Stringer as an interface type with one method, String.</span>
+<span class="pl-k">type</span> <span class="pl-smi">Stringer</span> <span class="pl-k">interface</span> {
+	<span class="pl-c1">String</span>() <span class="pl-smi">string</span>
+}
+
+<span class="pl-c">// Define pair as a struct with two fields, ints named x and y.</span>
+<span class="pl-k">type</span> <span class="pl-smi">pair</span> <span class="pl-k">struct</span> {
+	<span class="pl-c1">x</span>, <span class="pl-c1">y</span> <span class="pl-smi">int</span>
+}
+
+<span class="pl-c">// Define a method on type pair. Pair now implements Stringer because Pair has defined all the methods in the interface.</span>
+<span class="pl-k">func</span> (<span class="pl-s1">p</span> <span class="pl-smi">pair</span>) <span class="pl-en">String</span>() <span class="pl-smi">string</span> { <span class="pl-c">// p is called the "receiver"</span>
+	<span class="pl-c">// Sprintf is another public function in package fmt.</span>
+	<span class="pl-c">// Dot syntax references fields of p.</span>
+	<span class="pl-k">return</span> <span class="pl-s1">fmt</span>.<span class="pl-en">Sprintf</span>(<span class="pl-s">"(%d, %d)"</span>, <span class="pl-s1">p</span>.<span class="pl-c1">x</span>, <span class="pl-s1">p</span>.<span class="pl-c1">y</span>)
+}
+
+<span class="pl-k">func</span> <span class="pl-en">learnInterfaces</span>() {
+	<span class="pl-c">// Brace syntax is a "struct literal". It evaluates to an initialized</span>
+	<span class="pl-c">// struct. The := syntax declares and initializes p to this struct.</span>
+	<span class="pl-s1">p</span> <span class="pl-c1">:=</span> <span class="pl-smi">pair</span>{<span class="pl-c1">3</span>, <span class="pl-c1">4</span>}
+	<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-s1">p</span>.<span class="pl-en">String</span>()) <span class="pl-c">// Call String method of p, of type pair.</span>
+	<span class="pl-k">var</span> <span class="pl-s1">i</span> <span class="pl-smi">Stringer</span>          <span class="pl-c">// Declare i of interface type Stringer.</span>
+	<span class="pl-s1">i</span> <span class="pl-c1">=</span> <span class="pl-s1">p</span>                   <span class="pl-c">// Valid because pair implements Stringer</span>
+	<span class="pl-c">// Call String method of i, of type Stringer. Output same as above.</span>
+	<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-s1">i</span>.<span class="pl-en">String</span>())
+
+	<span class="pl-c">// Functions in the fmt package call the String method to ask an object</span>
+	<span class="pl-c">// for a printable representation of itself.</span>
+	<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-s1">p</span>) <span class="pl-c">// Output same as above. Println calls String method.</span>
+	<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-s1">i</span>) <span class="pl-c">// Output same as above.</span>
+
+	<span class="pl-en">learnVariadicParams</span>(<span class="pl-s">"great"</span>, <span class="pl-s">"learning"</span>, <span class="pl-s">"here!"</span>)
+}
+
+<span class="pl-c">// Functions can have variadic parameters.</span>
+<span class="pl-k">func</span> <span class="pl-en">learnVariadicParams</span>(<span class="pl-s1">myStrings</span> <span class="pl-c1">...</span><span class="pl-k">interface</span>{}) {
+	<span class="pl-c">// Iterate each value of the variadic.</span>
+	<span class="pl-c">// The underbar here is ignoring the index argument of the array.</span>
+	<span class="pl-k">for</span> <span class="pl-s1">_</span>, <span class="pl-s1">param</span> <span class="pl-c1">:=</span> <span class="pl-k">range</span> <span class="pl-s1">myStrings</span> {
+		<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-s">"param:"</span>, <span class="pl-s1">param</span>)
+	}
+
+	<span class="pl-c">// Pass variadic value as a variadic parameter.</span>
+	<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-s">"params:"</span>, <span class="pl-s1">fmt</span>.<span class="pl-en">Sprintln</span>(<span class="pl-s1">myStrings</span><span class="pl-c1">...</span>))
+
+	<span class="pl-en">learnErrorHandling</span>()
+}
+
+<span class="pl-k">func</span> <span class="pl-en">learnErrorHandling</span>() {
+	<span class="pl-c">// ", ok" idiom used to tell if something worked or not.</span>
+	<span class="pl-s1">m</span> <span class="pl-c1">:=</span> <span class="pl-k">map</span>[<span class="pl-smi">int</span>]<span class="pl-smi">string</span>{<span class="pl-c1">3</span>: <span class="pl-s">"three"</span>, <span class="pl-c1">4</span>: <span class="pl-s">"four"</span>}
+	<span class="pl-k">if</span> <span class="pl-s1">x</span>, <span class="pl-s1">ok</span> <span class="pl-c1">:=</span> <span class="pl-s1">m</span>[<span class="pl-c1">1</span>]; <span class="pl-c1">!</span><span class="pl-s1">ok</span> { <span class="pl-c">// ok will be false because 1 is not in the map.</span>
+		<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-s">"no one there"</span>)
+	} <span class="pl-k">else</span> {
+		<span class="pl-s1">fmt</span>.<span class="pl-en">Print</span>(<span class="pl-s1">x</span>) <span class="pl-c">// x would be the value, if it were in the map.</span>
+	}
+	<span class="pl-c">// An error value communicates not just "ok" but more about the problem.</span>
+	<span class="pl-k">if</span> <span class="pl-s1">_</span>, <span class="pl-s1">err</span> <span class="pl-c1">:=</span> <span class="pl-s1">strconv</span>.<span class="pl-en">Atoi</span>(<span class="pl-s">"non-int"</span>); <span class="pl-s1">err</span> <span class="pl-c1">!=</span> <span class="pl-c1">nil</span> { <span class="pl-c">// _ discards value</span>
+		<span class="pl-c">// prints 'strconv.ParseInt: parsing "non-int": invalid syntax'</span>
+		<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-s1">err</span>)
+	}
+	<span class="pl-c">// We'll revisit interfaces a little later. Meanwhile,</span>
+	<span class="pl-en">learnConcurrency</span>()
+}
+
+<span class="pl-c">// c is a channel, a concurrency-safe communication object.</span>
+<span class="pl-k">func</span> <span class="pl-en">inc</span>(<span class="pl-s1">i</span> <span class="pl-smi">int</span>, <span class="pl-s1">c</span> <span class="pl-k">chan</span> <span class="pl-smi">int</span>) {
+	<span class="pl-s1">c</span> <span class="pl-c1">&lt;-</span> <span class="pl-s1">i</span> <span class="pl-c1">+</span> <span class="pl-c1">1</span> <span class="pl-c">// &lt;- is the "send" operator when a channel appears on the left.</span>
+}
+
+<span class="pl-c">// We'll use inc to increment some numbers concurrently.</span>
+<span class="pl-k">func</span> <span class="pl-en">learnConcurrency</span>() {
+	<span class="pl-c">// Same make function used earlier to make a slice. Make allocates and</span>
+	<span class="pl-c">// initializes slices, maps, and channels.</span>
+	<span class="pl-s1">c</span> <span class="pl-c1">:=</span> <span class="pl-en">make</span>(<span class="pl-k">chan</span> <span class="pl-smi">int</span>)
+	<span class="pl-c">// Start three concurrent goroutines. Numbers will be incremented</span>
+	<span class="pl-c">// concurrently, perhaps in parallel if the machine is capable and</span>
+	<span class="pl-c">// properly configured. All three send to the same channel.</span>
+	<span class="pl-k">go</span> <span class="pl-en">inc</span>(<span class="pl-c1">0</span>, <span class="pl-s1">c</span>) <span class="pl-c">// go is a statement that starts a new goroutine.</span>
+	<span class="pl-k">go</span> <span class="pl-en">inc</span>(<span class="pl-c1">10</span>, <span class="pl-s1">c</span>)
+	<span class="pl-k">go</span> <span class="pl-en">inc</span>(<span class="pl-c1">-</span><span class="pl-c1">805</span>, <span class="pl-s1">c</span>)
+	<span class="pl-c">// Read three results from the channel and print them out.</span>
+	<span class="pl-c">// There is no telling in what order the results will arrive!</span>
+	<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-c1">&lt;-</span><span class="pl-s1">c</span>, <span class="pl-c1">&lt;-</span><span class="pl-s1">c</span>, <span class="pl-c1">&lt;-</span><span class="pl-s1">c</span>) <span class="pl-c">// channel on right, &lt;- is "receive" operator.</span>
+
+	<span class="pl-s1">cs</span> <span class="pl-c1">:=</span> <span class="pl-en">make</span>(<span class="pl-k">chan</span> <span class="pl-smi">string</span>)       <span class="pl-c">// Another channel, this one handles strings.</span>
+	<span class="pl-s1">ccs</span> <span class="pl-c1">:=</span> <span class="pl-en">make</span>(<span class="pl-k">chan</span> <span class="pl-k">chan</span> <span class="pl-smi">string</span>) <span class="pl-c">// A channel of string channels.</span>
+	<span class="pl-k">go</span> <span class="pl-k">func</span>() { <span class="pl-s1">c</span> <span class="pl-c1">&lt;-</span> <span class="pl-c1">84</span> }()       <span class="pl-c">// Start a new goroutine just to send a value.</span>
+	<span class="pl-k">go</span> <span class="pl-k">func</span>() { <span class="pl-s1">cs</span> <span class="pl-c1">&lt;-</span> <span class="pl-s">"wordy"</span> }() <span class="pl-c">// Again, for cs this time.</span>
+	<span class="pl-c">// Select has syntax like a switch statement but each case involves</span>
+	<span class="pl-c">// a channel operation. It selects a case at random out of the cases</span>
+	<span class="pl-c">// that are ready to communicate.</span>
+	<span class="pl-k">select</span> {
+	<span class="pl-k">case</span> <span class="pl-s1">i</span> <span class="pl-c1">:=</span> <span class="pl-c1">&lt;-</span><span class="pl-s1">c</span>: <span class="pl-c">// The value received can be assigned to a variable,</span>
+		<span class="pl-s1">fmt</span>.<span class="pl-en">Printf</span>(<span class="pl-s">"it's a %T"</span>, <span class="pl-s1">i</span>)
+	<span class="pl-k">case</span> <span class="pl-c1">&lt;-</span><span class="pl-s1">cs</span>: <span class="pl-c">// or the value received can be discarded.</span>
+		<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-s">"it's a string"</span>)
+	<span class="pl-k">case</span> <span class="pl-c1">&lt;-</span><span class="pl-s1">ccs</span>: <span class="pl-c">// Empty channel, not ready for communication.</span>
+		<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-s">"didn't happen."</span>)
+	}
+	<span class="pl-c">// At this point a value was taken from either c or cs. One of the two</span>
+	<span class="pl-c">// goroutines started above has completed, the other will remain blocked.</span>
+
+	<span class="pl-en">learnWebProgramming</span>() <span class="pl-c">// Go does it. You want to do it too.</span>
+}
+
+<span class="pl-c">// A single function from package http starts a web server.</span>
+<span class="pl-k">func</span> <span class="pl-en">learnWebProgramming</span>() {
+
+	<span class="pl-c">// First parameter of ListenAndServe is TCP address to listen to.</span>
+	<span class="pl-c">// Second parameter is an interface, specifically http.Handler.</span>
+	<span class="pl-k">go</span> <span class="pl-k">func</span>() {
+		<span class="pl-s1">err</span> <span class="pl-c1">:=</span> <span class="pl-s1">http</span>.<span class="pl-en">ListenAndServe</span>(<span class="pl-s">":8080"</span>, <span class="pl-smi">pair</span>{})
+		<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-s1">err</span>) <span class="pl-c">// don't ignore errors</span>
+	}()
+
+	<span class="pl-en">requestServer</span>()
+}
+
+<span class="pl-c">// Make pair an http.Handler by implementing its only method, ServeHTTP.</span>
+<span class="pl-k">func</span> (<span class="pl-s1">p</span> <span class="pl-smi">pair</span>) <span class="pl-en">ServeHTTP</span>(<span class="pl-s1">w</span> http.<span class="pl-smi">ResponseWriter</span>, <span class="pl-s1">r</span> <span class="pl-c1">*</span>http.<span class="pl-smi">Request</span>) {
+	<span class="pl-c">// Serve data with a method of http.ResponseWriter.</span>
+	<span class="pl-s1">w</span>.<span class="pl-en">Write</span>([]<span class="pl-smi">byte</span>(<span class="pl-s">"You learned Go in Y minutes!"</span>))
+}
+
+<span class="pl-k">func</span> <span class="pl-en">requestServer</span>() {
+	<span class="pl-s1">resp</span>, <span class="pl-s1">err</span> <span class="pl-c1">:=</span> <span class="pl-s1">http</span>.<span class="pl-en">Get</span>(<span class="pl-s">"http://localhost:8080"</span>)
+	<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-s1">err</span>)
+	<span class="pl-k">defer</span> <span class="pl-s1">resp</span>.<span class="pl-c1">Body</span>.<span class="pl-en">Close</span>()
+	<span class="pl-s1">body</span>, <span class="pl-s1">err</span> <span class="pl-c1">:=</span> <span class="pl-s1">ioutil</span>.<span class="pl-en">ReadAll</span>(<span class="pl-s1">resp</span>.<span class="pl-c1">Body</span>)
+	<span class="pl-s1">fmt</span>.<span class="pl-en">Printf</span>(<span class="pl-s">"<span class="pl-cce">\n</span>Webserver said: `%s`"</span>, <span class="pl-en">string</span>(<span class="pl-s1">body</span>))
+}</pre></div>
+<h2>Further Reading</h2>
+<p>The root of all things Go is the <a href="http://golang.org/" rel="nofollow">official Go web site</a>.<br>
+There you can follow the tutorial, play interactively, and read lots.<br>
+Aside from a tour, <a href="https://golang.org/doc/" rel="nofollow">the docs</a> contain information on<br>
+how to write clean and effective Go code, package and command docs, and release history.</p>
+<p>The <a href="https://golang.org/ref/spec" rel="nofollow">Go language specification</a> itself is highly recommended. It's easy to read<br>
+and amazingly short (as language definitions go these days.)</p>
+<p>You can play around with the code on <a href="https://play.golang.org/p/tnWMjr16Mm" rel="nofollow">Go playground</a>. Try to change it and run it from your browser! Note that you can use <a href="https://play.golang.org" rel="nofollow">https://play.golang.org</a> as a <a href="https://en.wikipedia.org/wiki/Read-eval-print_loop" rel="nofollow">REPL</a> to test things and code in your browser, without even installing Go.</p>
+<p>On the reading list for students of Go is the <a href="http://golang.org/src/pkg/" rel="nofollow">source code to the standard<br>
+library</a>. Comprehensively documented, it<br>
+demonstrates the best of readable and understandable Go, Go style, and Go<br>
+idioms. Or you can click on a function name in <a href="http://golang.org/pkg/" rel="nofollow">the<br>
+documentation</a> and the source code comes up!</p>
+<p>Another great resource to learn Go is <a href="https://gobyexample.com/" rel="nofollow">Go by example</a>.</p>
+<p>There are many excellent conference talks and video tutorials on Go available on YouTube, and here are three playlists of the very best, tailored for beginners, intermediate, and advanced Gophers respectively:</p>
+<ul>
+<li><a href="https://www.youtube.com/playlist?list=PLEcwzBXTPUE9V1o8mZdC9tNnRZaTgI-1P" rel="nofollow">Golang University 101</a> introduces fundamental Go concepts and shows you how to use the Go tools to create and manage Go code</li>
+<li><a href="https://www.youtube.com/playlist?list=PLEcwzBXTPUE_5m_JaMXmGEFgduH8EsuTs" rel="nofollow">Golang University 201</a> steps it up a notch, explaining important techniques like testing, web services, and APIs</li>
+<li><a href="https://www.youtube.com/playlist?list=PLEcwzBXTPUE8KvXRFmmfPEUmKoy9LfmAf" rel="nofollow">Golang University 301</a> dives into more advanced topics like the Go scheduler, implementation of maps and channels, and optimisation techniques</li>
+</ul>
+<p>Go Mobile adds support for mobile platforms (Android and iOS). You can write all-Go native mobile apps or write a library that contains bindings from a Go package, which can be invoked via Java (Android) and Objective-C (iOS). Check out the <a href="https://github.com/golang/go/wiki/Mobile">Go Mobile page</a> for more information.</p>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Sonia Keys", "https://github.com/soniakeys"]
+- ["Christopher Bess", "https://github.com/cbess"]
+- ["Jesse Johnson", "https://github.com/holocronweaver"]
+- ["Quint Guvernator", "https://github.com/qguv"]
+- ["Jose Donizetti", "https://github.com/josedonizetti"]
+- ["Alexej Friesen", "https://github.com/heyalexej"]
+- ["Clayton Walker", "https://github.com/cwalk"]
+- ["Leonid Shevtsov", "https://github.com/leonid-shevtsov"]
+- ["Michael Graf", "https://github.com/maerf0x0"]
+- ["John Arundel", "https://github.com/bitfield"]
+</code></pre>

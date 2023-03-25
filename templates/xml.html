@@ -1,0 +1,142 @@
+<h1>XML</h1>
+<p>XML is a markup language designed to store and transport data. It is supposed to be both human readable and machine readable.</p>
+<p>Unlike HTML, XML does not specify how to display or to format data, it just carries it.</p>
+<p>Distinctions are made between the <strong>content</strong> and the <strong>markup</strong>. In short, content could be anything, markup is defined.</p>
+<h2>Some definitions and introductions</h2>
+<p>XML Documents are basically made up of <em>elements</em> which can have <em>attributes</em> describing them and may contain some textual content or more elements as its children. All XML documents must have a root element, which is the ancestor of all the other elements in the document.</p>
+<p>XML Parsers are designed to be very strict, and will stop parsing malformed documents. Therefore it must be ensured that all XML documents follow the <a href="http://www.w3schools.com/xml/xml_syntax.asp" rel="nofollow">XML Syntax Rules</a>.</p>
+<div class="highlight highlight-text-xml"><pre class="notranslate"><span class="pl-c"><span class="pl-c">&lt;!--</span> This is a comment. It must not contain two consecutive hyphens (-). <span class="pl-c">--&gt;</span></span>
+<span class="pl-c"><span class="pl-c">&lt;!--</span> Comments can span</span>
+<span class="pl-c">  multiple lines <span class="pl-c">--&gt;</span></span>
+
+<span class="pl-c"><span class="pl-c">&lt;!--</span> Elements <span class="pl-c">--&gt;</span></span>
+<span class="pl-c"><span class="pl-c">&lt;!--</span> An element is a basic XML component. There are two types, empty: <span class="pl-c">--&gt;</span></span>
+&lt;<span class="pl-ent">element1</span> <span class="pl-e">attribute</span>=<span class="pl-s"><span class="pl-pds">"</span>value<span class="pl-pds">"</span></span> /&gt; <span class="pl-c"><span class="pl-c">&lt;!--</span> Empty elements do not hold any content <span class="pl-c">--&gt;</span></span>
+<span class="pl-c"><span class="pl-c">&lt;!--</span> and non-empty: <span class="pl-c">--&gt;</span></span>
+&lt;<span class="pl-ent">element2</span> <span class="pl-e">attribute</span>=<span class="pl-s"><span class="pl-pds">"</span>value<span class="pl-pds">"</span></span>&gt;Content&lt;/<span class="pl-ent">element2</span>&gt;
+<span class="pl-c"><span class="pl-c">&lt;!--</span> Element names may only contain alphabets and numbers. <span class="pl-c">--&gt;</span></span>
+
+&lt;<span class="pl-ent">empty</span> /&gt; <span class="pl-c"><span class="pl-c">&lt;!--</span> An element either consists an empty element tag… <span class="pl-c">--&gt;</span></span>
+<span class="pl-c"><span class="pl-c">&lt;!--</span> …which does not hold any content and is pure markup. <span class="pl-c">--&gt;</span></span>
+
+&lt;<span class="pl-ent">notempty</span>&gt; <span class="pl-c"><span class="pl-c">&lt;!--</span> Or, it consists of a start tag… <span class="pl-c">--&gt;</span></span>
+  <span class="pl-c"><span class="pl-c">&lt;!--</span> …some content… <span class="pl-c">--&gt;</span></span>
+&lt;/<span class="pl-ent">notempty</span>&gt; <span class="pl-c"><span class="pl-c">&lt;!--</span> and an end tag. <span class="pl-c">--&gt;</span></span>
+
+<span class="pl-c"><span class="pl-c">&lt;!--</span> Element names are case sensitive. <span class="pl-c">--&gt;</span></span>
+&lt;<span class="pl-ent">element</span> /&gt;
+<span class="pl-c"><span class="pl-c">&lt;!--</span> is not the same as <span class="pl-c">--&gt;</span></span>
+&lt;<span class="pl-ent">eLEMENT</span> /&gt;
+
+<span class="pl-c"><span class="pl-c">&lt;!--</span> Attributes <span class="pl-c">--&gt;</span></span>
+<span class="pl-c"><span class="pl-c">&lt;!--</span> An attribute is a key-value pair and exists within an element. <span class="pl-c">--&gt;</span></span>
+&lt;<span class="pl-ent">element</span> <span class="pl-e">attribute</span>=<span class="pl-s"><span class="pl-pds">"</span>value<span class="pl-pds">"</span></span> <span class="pl-e">another</span>=<span class="pl-s"><span class="pl-pds">"</span>anotherValue<span class="pl-pds">"</span></span> <span class="pl-e">many</span>=<span class="pl-s"><span class="pl-pds">"</span>space-separated list<span class="pl-pds">"</span></span> /&gt;
+<span class="pl-c"><span class="pl-c">&lt;!--</span> An attribute may appear only once in an element. It holds just one value.</span>
+<span class="pl-c">  Common workarounds to this involve the use of space-separated lists. <span class="pl-c">--&gt;</span></span>
+
+<span class="pl-c"><span class="pl-c">&lt;!--</span> Nesting elements <span class="pl-c">--&gt;</span></span>
+<span class="pl-c"><span class="pl-c">&lt;!--</span> An element's content may include other elements: <span class="pl-c">--&gt;</span></span>
+&lt;<span class="pl-ent">parent</span>&gt;
+  &lt;<span class="pl-ent">child</span>&gt;Text&lt;/<span class="pl-ent">child</span>&gt;
+  &lt;<span class="pl-ent">emptysibling</span> /&gt;
+&lt;/<span class="pl-ent">parent</span>&gt;
+<span class="pl-c"><span class="pl-c">&lt;!--</span> Standard tree nomenclature is followed. Each element being called a node.</span>
+<span class="pl-c">  An ancestor a level up is the parent, descendants a level down are children.</span>
+<span class="pl-c">  Elements within the same parent element are siblings. <span class="pl-c">--&gt;</span></span>
+
+<span class="pl-c"><span class="pl-c">&lt;!--</span> XML preserves whitespace. <span class="pl-c">--&gt;</span></span>
+&lt;<span class="pl-ent">child</span>&gt;
+  Text
+&lt;/<span class="pl-ent">child</span>&gt;
+<span class="pl-c"><span class="pl-c">&lt;!--</span> is not the same as <span class="pl-c">--&gt;</span></span>
+&lt;<span class="pl-ent">child</span>&gt;Text&lt;/<span class="pl-ent">child</span>&gt;</pre></div>
+<h2>An XML document</h2>
+<p>This is what makes XML versatile. It is human readable too. The following document tells us that it defines a bookstore which sells three books, one of which is Learning XML by Erik T. Ray. All this without having used an XML Parser yet.</p>
+<div class="highlight highlight-text-xml"><pre class="notranslate">&lt;?<span class="pl-ent">xml</span><span class="pl-e"> version</span>=<span class="pl-s"><span class="pl-pds">"</span>1.0<span class="pl-pds">"</span></span><span class="pl-e"> encoding</span>=<span class="pl-s"><span class="pl-pds">"</span>UTF-8<span class="pl-pds">"</span></span>?&gt;
+<span class="pl-c"><span class="pl-c">&lt;!--</span> This is called an XML prolog. Optional, but recommended. <span class="pl-c">--&gt;</span></span>
+&lt;<span class="pl-ent">bookstore</span>&gt;
+  &lt;<span class="pl-ent">book</span> <span class="pl-e">category</span>=<span class="pl-s"><span class="pl-pds">"</span>COOKING<span class="pl-pds">"</span></span>&gt;
+    &lt;<span class="pl-ent">title</span> <span class="pl-e">lang</span>=<span class="pl-s"><span class="pl-pds">"</span>en<span class="pl-pds">"</span></span>&gt;Everyday Italian&lt;/<span class="pl-ent">title</span>&gt;
+    &lt;<span class="pl-ent">author</span>&gt;Giada De Laurentiis&lt;/<span class="pl-ent">author</span>&gt;
+    &lt;<span class="pl-ent">year</span>&gt;2005&lt;/<span class="pl-ent">year</span>&gt;
+    &lt;<span class="pl-ent">price</span>&gt;30.00&lt;/<span class="pl-ent">price</span>&gt;
+  &lt;/<span class="pl-ent">book</span>&gt;
+  &lt;<span class="pl-ent">book</span> <span class="pl-e">category</span>=<span class="pl-s"><span class="pl-pds">"</span>CHILDREN<span class="pl-pds">"</span></span>&gt;
+    &lt;<span class="pl-ent">title</span> <span class="pl-e">lang</span>=<span class="pl-s"><span class="pl-pds">"</span>en<span class="pl-pds">"</span></span>&gt;Harry Potter&lt;/<span class="pl-ent">title</span>&gt;
+    &lt;<span class="pl-ent">author</span>&gt;J K. Rowling&lt;/<span class="pl-ent">author</span>&gt;
+    &lt;<span class="pl-ent">year</span>&gt;2005&lt;/<span class="pl-ent">year</span>&gt;
+    &lt;<span class="pl-ent">price</span>&gt;29.99&lt;/<span class="pl-ent">price</span>&gt;
+  &lt;/<span class="pl-ent">book</span>&gt;
+  &lt;<span class="pl-ent">book</span> <span class="pl-e">category</span>=<span class="pl-s"><span class="pl-pds">"</span>WEB<span class="pl-pds">"</span></span>&gt;
+    &lt;<span class="pl-ent">title</span> <span class="pl-e">lang</span>=<span class="pl-s"><span class="pl-pds">"</span>en<span class="pl-pds">"</span></span>&gt;Learning XML&lt;/<span class="pl-ent">title</span>&gt;
+    &lt;<span class="pl-ent">author</span>&gt;Erik T. Ray&lt;/<span class="pl-ent">author</span>&gt;
+    &lt;<span class="pl-ent">year</span>&gt;2003&lt;/<span class="pl-ent">year</span>&gt;
+    &lt;<span class="pl-ent">price</span>&gt;39.95&lt;/<span class="pl-ent">price</span>&gt;
+  &lt;/<span class="pl-ent">book</span>&gt;
+&lt;/<span class="pl-ent">bookstore</span>&gt;</pre></div>
+<h2>Well-formedness and Validation</h2>
+<p>A XML document is <em>well-formed</em> if it is syntactically correct. However, it is possible to add more constraints to the document, using Document Type Definitions (DTDs). A document whose elements are attributes are declared in a DTD and which follows the grammar specified in that DTD is called <em>valid</em> with respect to that DTD, in addition to being well-formed.</p>
+<p>Declaring a DTD externally:</p>
+<div class="highlight highlight-text-xml"><pre class="notranslate">&lt;?<span class="pl-ent">xml</span><span class="pl-e"> version</span>=<span class="pl-s"><span class="pl-pds">"</span>1.0<span class="pl-pds">"</span></span><span class="pl-e"> encoding</span>=<span class="pl-s"><span class="pl-pds">"</span>UTF-8<span class="pl-pds">"</span></span>?&gt;
+&lt;!<span class="pl-ent">DOCTYPE</span> <span class="pl-e">bookstore</span> SYSTEM "Bookstore.dtd"&gt;
+<span class="pl-c"><span class="pl-c">&lt;!--</span> Declares that bookstore is our root element and 'Bookstore.dtd' is the path</span>
+<span class="pl-c">  to our DTD file. <span class="pl-c">--&gt;</span></span>
+&lt;<span class="pl-ent">bookstore</span>&gt;
+  &lt;<span class="pl-ent">book</span> <span class="pl-e">category</span>=<span class="pl-s"><span class="pl-pds">"</span>COOKING<span class="pl-pds">"</span></span>&gt;
+    &lt;<span class="pl-ent">title</span> <span class="pl-e">lang</span>=<span class="pl-s"><span class="pl-pds">"</span>en<span class="pl-pds">"</span></span>&gt;Everyday Italian&lt;/<span class="pl-ent">title</span>&gt;
+    &lt;<span class="pl-ent">author</span>&gt;Giada De Laurentiis&lt;/<span class="pl-ent">author</span>&gt;
+    &lt;<span class="pl-ent">year</span>&gt;2005&lt;/<span class="pl-ent">year</span>&gt;
+    &lt;<span class="pl-ent">price</span>&gt;30.00&lt;/<span class="pl-ent">price</span>&gt;
+  &lt;/<span class="pl-ent">book</span>&gt;
+&lt;/<span class="pl-ent">bookstore</span>&gt;</pre></div>
+<p>The DTD file (Bookstore.dtd):</p>
+<pre class="notranslate"><code class="notranslate">&lt;!ELEMENT bookstore (book+)&gt;
+&lt;!-- The bookstore element may contain one or more child book elements. --&gt;
+&lt;!ELEMENT book (title, price)&gt;
+&lt;!-- Each book must have a title and a price as its children. --&gt;
+&lt;!ATTLIST book category CDATA "Literature"&gt;
+&lt;!-- A book should have a category attribute. If it doesn't, its default value
+  will be 'Literature'. --&gt;
+&lt;!ELEMENT title (#PCDATA)&gt;
+&lt;!-- The element title must only contain parsed character data. That is, it may
+  only contain text which is read by the parser and must not contain children.
+  Compare with CDATA, or character data. --&gt;
+&lt;!ELEMENT price (#PCDATA)&gt;
+</code></pre>
+<p>The DTD could be declared inside the XML file itself:</p>
+<div class="highlight highlight-text-xml"><pre class="notranslate">&lt;?<span class="pl-ent">xml</span><span class="pl-e"> version</span>=<span class="pl-s"><span class="pl-pds">"</span>1.0<span class="pl-pds">"</span></span><span class="pl-e"> encoding</span>=<span class="pl-s"><span class="pl-pds">"</span>UTF-8<span class="pl-pds">"</span></span>?&gt;
+
+&lt;!<span class="pl-ent">DOCTYPE</span> <span class="pl-e">bookstore</span> [
+&lt;!ELEMENT bookstore (book+)&gt;
+&lt;!ELEMENT book (title, price)&gt;
+&lt;!ATTLIST book category CDATA "Literature"&gt;
+&lt;!ELEMENT title (#PCDATA)&gt;
+&lt;!ELEMENT price (#PCDATA)&gt;
+]&gt;
+
+&lt;<span class="pl-ent">bookstore</span>&gt;
+  &lt;<span class="pl-ent">book</span> <span class="pl-e">category</span>=<span class="pl-s"><span class="pl-pds">"</span>COOKING<span class="pl-pds">"</span></span>&gt;
+    &lt;<span class="pl-ent">title</span>&gt;Everyday Italian&lt;/<span class="pl-ent">title</span>&gt;
+    &lt;<span class="pl-ent">price</span>&gt;30.00&lt;/<span class="pl-ent">price</span>&gt;
+  &lt;/<span class="pl-ent">book</span>&gt;
+&lt;/<span class="pl-ent">bookstore</span>&gt;</pre></div>
+<h2>DTD Compatibility and XML Schema Definitions</h2>
+<p>Support for DTDs is ubiquitous because they are so old. Unfortunately, modern XML features like namespaces are not supported by DTDs. XML Schema Definitions (XSDs) are meant to replace DTDs for defining XML document grammar.</p>
+<h2>Resources</h2>
+<ul>
+<li><a href="http://www.xmlvalidation.com" rel="nofollow">Validate your XML</a></li>
+</ul>
+<h2>Further Reading</h2>
+<ul>
+<li><a href="http://www.w3schools.com/schema/" rel="nofollow">XML Schema Definitions Tutorial</a></li>
+<li><a href="http://www.w3schools.com/xml/xml_dtd_intro.asp" rel="nofollow">DTD Tutorial</a></li>
+<li><a href="http://www.w3schools.com/xml/default.asp" rel="nofollow">XML Tutorial</a></li>
+<li><a href="http://www.w3schools.com/xml/xml_xpath.asp" rel="nofollow">Using XPath queries to parse XML</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<ul>
+<li>["João Farias", "https://github.com/JoaoGFarias"]</li>
+<li>["Rachel Stiyer", "https://github.com/rstiyer"]</li>
+<li>["Deepanshu Utkarsh", "https://github.com/duci9y"]</li>
+</ul>

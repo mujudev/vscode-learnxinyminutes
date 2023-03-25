@@ -1,0 +1,88 @@
+<h1>RST</h1>
+<p>RST, Restructured Text, is a file format created by the Python community to write documentation. It is part of <a href="https://docutils.sourceforge.io/rst.html" rel="nofollow">Docutils</a>.</p>
+<p>RST is a markdown language like HTML but is much more lightweight and easier to read.</p>
+<h2>Installation</h2>
+<p>To use Restructured Text, you will have to install <a href="http://www.python.org" rel="nofollow">Python</a> and the <code class="notranslate">docutils</code> package.</p>
+<p><code class="notranslate">docutils</code> can be installed using the commandline:</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">$ easy_install docutils</pre></div>
+<p>If your system has <code class="notranslate">pip</code>, you can use it too:</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">$ pip install docutils</pre></div>
+<h2>File syntax</h2>
+<p>A simple example of the file syntax:</p>
+<pre class="notranslate"><code class="notranslate">.. Lines starting with two dots are special commands. But if no command can be found, the line is considered as a comment.
+
+=========================================================
+Main titles are written using equals signs over and under
+=========================================================
+
+Note that each character, including spaces, needs an equals sign above and below.
+
+Titles also use equals signs but are only underneath
+====================================================
+
+Subtitles with dashes
+---------------------
+
+You can put text in *italic* or in **bold**, you can "mark" text as code with double backquote ``print()``.
+
+Special characters can be escaped using a backslash, e.g. \\ or \*.
+
+Lists are similar to Markdown, but a little more involved.
+
+Remember to line up list symbols (like - or \*) with the left edge of the previous text block, and remember to use blank lines to separate new lists from parent lists:    
+
+- First item
+- Second item
+
+  - Sub item
+    
+- Third item
+
+or
+
+* First item
+* Second item
+    
+  * Sub item
+
+* Third item
+
+Tables are really easy to write:
+
+=========== ========
+Country     Capital
+=========== ========
+France      Paris
+Japan       Tokyo
+=========== ========
+
+More complex tables can be done easily (merged columns and/or rows) but I suggest you to read the complete doc for this. :)
+
+There are multiple ways to make links:
+
+- By adding an underscore after a word : Github_ and by adding the target URL after the text (this way has the advantage of not inserting unnecessary URLs in the visible text).
+- By typing a full comprehensible URL : https://github.com/ (will be automatically converted to a link).
+- By making a more Markdown-like link: `Github &lt;https://github.com/&gt;`_ .
+
+.. _Github: https://github.com/
+
+</code></pre>
+<h2>How to Use It</h2>
+<p>RST comes with docutils where you have <code class="notranslate">rst2html</code>, for example:</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">$ rst2html myfile.rst output.html</pre></div>
+<p><em>Note : On some systems the command could be rst2html.py</em></p>
+<p>But there are more complex applications that use the RST format:</p>
+<ul>
+<li><a href="http://blog.getpelican.com/" rel="nofollow">Pelican</a>, a static site generator</li>
+<li><a href="http://sphinx-doc.org/" rel="nofollow">Sphinx</a>, a documentation generator</li>
+<li>and many others</li>
+</ul>
+<h2>Readings</h2>
+<ul>
+<li><a href="http://docutils.sourceforge.net/docs/user/rst/quickref.html" rel="nofollow">Official quick reference</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["DamienVGN", "https://github.com/martin-damien"]
+- ["Andre Polykanine", "https://github.com/Oire"]
+</code></pre>

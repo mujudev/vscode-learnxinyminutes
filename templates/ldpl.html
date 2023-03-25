@@ -1,0 +1,165 @@
+<h1>LDPL</h1>
+<p><strong>LDPL</strong> is a powerful, C++ transpiled, open-source programming language designed<br>
+from the ground up to be excessively expressive, readable, fast and easy to learn.<br>
+It mimics plain English, in the likeness of older programming languages like COBOL,<br>
+with the desire that it can be understood by anybody. It's very portable and runs on a<br>
+plethora of different architectures and operating systems and it even supports UTF-8<br>
+out of the box.</p>
+<p><a href="https://github.com/lartu/ldpl">Read more here.</a></p>
+<div class="highlight highlight-source-coffee"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> This is a single line comment in LDPL.</span>
+<span class="pl-c"><span class="pl-c">#</span> LDPL doesn't have multi-line comments.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> LDPL is a case-insensitive language: dIsPlaY and DISPLAY are the same</span>
+<span class="pl-c"><span class="pl-c">#</span> statement, and foo and FOO name the same variable.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> An LDPL source file is divided in two sections, the DATA section and</span>
+<span class="pl-c"><span class="pl-c">#</span> the PROCEDURE section.</span>
+
+<span class="pl-v">DATA</span><span class="pl-k">:</span>
+<span class="pl-c"><span class="pl-c">#</span> Within the DATA section, variables are declared.</span>
+
+myNumber <span class="pl-k">is</span> number          <span class="pl-c"><span class="pl-c">#</span> Defines a real number.</span>
+myString <span class="pl-k">is</span> text            <span class="pl-c"><span class="pl-c">#</span> Defines a string.</span>
+myList <span class="pl-k">is</span> <span class="pl-en">number</span> list       <span class="pl-c"><span class="pl-c">#</span> Defines a list of numbers.</span>
+myMap  <span class="pl-k">is</span> <span class="pl-en">number</span> map        <span class="pl-c"><span class="pl-c">#</span> Defines a map of numbers.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> LDPL understands four data types: two scalar types (NUMBER, TEXT)</span>
+<span class="pl-c"><span class="pl-c">#</span> and two container types (LISTs and MAPs).</span>
+<span class="pl-c"><span class="pl-c">#</span> LISTs can be TEXT LISTs or NUMBER LISTs, while MAPs can be</span>
+<span class="pl-c"><span class="pl-c">#</span> TEXT MAPs and NUMBER MAPs. You can also chain many containers</span>
+<span class="pl-c"><span class="pl-c">#</span> to create larger data types:</span>
+textListList <span class="pl-k">is</span> <span class="pl-en">text</span> <span class="pl-en">list</span> list
+myMulticontainer <span class="pl-k">is</span> <span class="pl-en">number</span> <span class="pl-en">list</span> <span class="pl-en">list</span> map 
+<span class="pl-c"><span class="pl-c">#</span> Defines a map of lists of lists of numbers.</span>
+
+<span class="pl-v">PROCEDURE</span><span class="pl-k">:</span>
+<span class="pl-c"><span class="pl-c">#</span> Within the PROCEDURE section, your code is written.</span>
+
+<span class="pl-en">store</span> <span class="pl-k">-</span><span class="pl-c1">19.2</span> <span class="pl-k">in</span> myNumber         <span class="pl-c"><span class="pl-c">#</span> Use the STORE statement to assign values</span>
+<span class="pl-en">store</span> <span class="pl-s"><span class="pl-pds">"</span>Hi there<span class="pl-pds">"</span></span> <span class="pl-k">in</span> myString    <span class="pl-c"><span class="pl-c">#</span> to variables.</span>
+<span class="pl-en">push</span> <span class="pl-ii">890</span> <span class="pl-en">to</span> myList <span class="pl-c"><span class="pl-c">#</span> Use PUSH - TO to append values to lists.</span>
+<span class="pl-en">push</span> <span class="pl-ii">100</span> <span class="pl-en">to</span> myList
+<span class="pl-en">push</span> <span class="pl-ii">500</span> <span class="pl-en">to</span> myList
+<span class="pl-en">store</span> <span class="pl-c1">45</span> <span class="pl-k">in</span> <span class="pl-v">myMap</span><span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">"</span>someIndex<span class="pl-pds">"</span></span> <span class="pl-c"><span class="pl-c">#</span> Use the : operator to index containers.</span>
+
+<span class="pl-en">push</span> <span class="pl-en">list</span> <span class="pl-en">to</span> textListList <span class="pl-c"><span class="pl-c">#</span> Push an empty list into a list of lists.</span>
+<span class="pl-en">push</span> <span class="pl-s"><span class="pl-pds">"</span>LDPL is nice!<span class="pl-pds">"</span></span> <span class="pl-en">to</span> <span class="pl-v">textListList</span><span class="pl-k">:</span><span class="pl-c1">0</span> <span class="pl-c"><span class="pl-c">#</span>Push text to the pushed list.</span>
+
+<span class="pl-en">display</span> <span class="pl-s"><span class="pl-pds">"</span>Hello World!<span class="pl-pds">"</span></span> <span class="pl-c"><span class="pl-c">#</span> Use the DISPLAY statement to print values.</span>
+<span class="pl-c"><span class="pl-c">#</span> The display statement can receive multiple values separated by spaces.</span>
+<span class="pl-en">display</span> <span class="pl-en">crlf</span> <span class="pl-s"><span class="pl-pds">"</span>How are you today?<span class="pl-pds">"</span></span> <span class="pl-en">myNumber</span> <span class="pl-en">myString</span> crlf
+<span class="pl-c"><span class="pl-c">#</span> CRLF is the standard line break value in LDPL.</span>
+<span class="pl-en">display</span> <span class="pl-v">textListList</span><span class="pl-k">:</span><span class="pl-c1">0</span><span class="pl-k">:</span><span class="pl-ii">0</span> <span class="pl-s"><span class="pl-pds">"</span> Isn't it?<span class="pl-pds">"</span></span> crlf
+
+<span class="pl-c"><span class="pl-c">#</span> IF statements in LDPL are extremely verbose:</span>
+<span class="pl-k">if</span> myNumber <span class="pl-k">is</span> <span class="pl-en">equal</span> <span class="pl-en">to</span> <span class="pl-k">-</span><span class="pl-c1">19.2</span> <span class="pl-k">and</span> <span class="pl-v">myList</span><span class="pl-k">:</span><span class="pl-c1">0</span> <span class="pl-k">is</span> <span class="pl-en">less</span> <span class="pl-en">than</span> <span class="pl-c1">900</span> <span class="pl-k">then</span>
+    <span class="pl-en">display</span> <span class="pl-s"><span class="pl-pds">"</span>Yes!<span class="pl-pds">"</span></span> crlf
+<span class="pl-k">else</span> <span class="pl-k">if</span> <span class="pl-v">myMap</span><span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">"</span>someIndex<span class="pl-pds">"</span></span> <span class="pl-k">is</span> <span class="pl-k">not</span> <span class="pl-en">equal</span> <span class="pl-en">to</span> <span class="pl-c1">45</span> <span class="pl-k">then</span>
+    <span class="pl-en">display</span> <span class="pl-s"><span class="pl-pds">"</span>This is an else if!<span class="pl-pds">"</span></span> crlf
+<span class="pl-k">else</span>
+    <span class="pl-en">display</span> <span class="pl-s"><span class="pl-pds">"</span>Else!<span class="pl-pds">"</span></span> crlf
+end <span class="pl-k">if</span>
+<span class="pl-c"><span class="pl-c">#</span> Valid LDPL comparison operators are</span>
+<span class="pl-c"><span class="pl-c">#</span> - IS EQUAL TO</span>
+<span class="pl-c"><span class="pl-c">#</span> - IS NOT EQUAL TO</span>
+<span class="pl-c"><span class="pl-c">#</span> - IS LESS THAN</span>
+<span class="pl-c"><span class="pl-c">#</span> - IS GREATER THAN</span>
+<span class="pl-c"><span class="pl-c">#</span> - IS LESS THAN OR EQUAL TO</span>
+<span class="pl-c"><span class="pl-c">#</span> - IS GREATER THAN OR EQUAL TO</span>
+<span class="pl-k">if</span> <span class="pl-s"><span class="pl-pds">"</span>Hi there!<span class="pl-pds">"</span></span> <span class="pl-k">is</span> <span class="pl-k">not</span> <span class="pl-en">equal</span> <span class="pl-en">to</span> <span class="pl-s"><span class="pl-pds">"</span>Bye bye!<span class="pl-pds">"</span></span> <span class="pl-k">then</span>
+    <span class="pl-en">display</span> <span class="pl-s"><span class="pl-pds">"</span>Yep, those weren't equal.<span class="pl-pds">"</span></span> crlf
+end <span class="pl-k">if</span>
+<span class="pl-c"><span class="pl-c">#</span> LDPL normally doesn't understand inline expressions, so you</span>
+<span class="pl-c"><span class="pl-c">#</span> cannot do stuff like:</span>
+<span class="pl-c"><span class="pl-c">#</span> if myNumber - 9 * 2 is equal to 10 then</span>
+<span class="pl-c"><span class="pl-c">#</span> LDPL will set your computer on fire and burst your screen if you do so.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> WHILE loops follow the same rules</span>
+<span class="pl-en">store</span> <span class="pl-c1">0</span> <span class="pl-k">in</span> myNumber
+<span class="pl-k">while</span> myNumber <span class="pl-k">is</span> <span class="pl-en">less</span> <span class="pl-en">than</span> <span class="pl-ii">10</span> <span class="pl-k">do</span>
+    <span class="pl-en">display</span> <span class="pl-s"><span class="pl-pds">"</span>Loop number <span class="pl-pds">"</span></span> <span class="pl-en">myNumber</span> <span class="pl-s"><span class="pl-pds">"</span>...<span class="pl-pds">"</span></span> crlf
+    <span class="pl-k">in</span> <span class="pl-en">myNumber</span> <span class="pl-en">solve</span> myNumber <span class="pl-k">+</span> <span class="pl-c1">1</span> <span class="pl-c"><span class="pl-c">#</span> You can do math like this.</span>
+repeat
+<span class="pl-c"><span class="pl-c">#</span> You can use 'break' and 'continue' inside loops just like any other language.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> LDPL also has FOR loops and FOR EACH loops</span>
+<span class="pl-k">for</span> <span class="pl-en">myNumber</span> <span class="pl-k">from</span> <span class="pl-ii">0</span> <span class="pl-en">to</span> <span class="pl-ii">100</span> <span class="pl-en">step</span> <span class="pl-ii">2</span> <span class="pl-k">do</span>
+    <span class="pl-en">display</span> <span class="pl-en">myNumber</span> crlf
+repeat
+
+<span class="pl-k">for</span> <span class="pl-en">each</span> myNumber <span class="pl-k">in</span> <span class="pl-en">myList</span> <span class="pl-k">do</span>
+    <span class="pl-en">display</span> myNumber
+repeat
+
+<span class="pl-en">display</span> <span class="pl-s"><span class="pl-pds">"</span>Enter your name: <span class="pl-pds">"</span></span>
+<span class="pl-en">accept</span> myString <span class="pl-c"><span class="pl-c">#</span> Use ACCEPT to let the user input values.</span>
+<span class="pl-en">display</span> <span class="pl-s"><span class="pl-pds">"</span>Hi there, <span class="pl-pds">"</span></span> <span class="pl-en">myString</span> crlf
+<span class="pl-en">display</span> <span class="pl-s"><span class="pl-pds">"</span>How old are you?: <span class="pl-pds">"</span></span>
+<span class="pl-en">accept</span> myNumber
+<span class="pl-k">if</span> myNumber <span class="pl-k">is</span> <span class="pl-en">greater</span> <span class="pl-en">than</span> <span class="pl-c1">200</span> <span class="pl-k">then</span>
+    <span class="pl-en">display</span> <span class="pl-s"><span class="pl-pds">"</span>Woah, you are so old!<span class="pl-pds">"</span></span> crlf
+end <span class="pl-k">if</span>
+
+<span class="pl-en">wait</span> <span class="pl-ii">1000</span> milliseconds <span class="pl-c"><span class="pl-c">#</span> Pause the program for a whole second.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Let's do some math</span>
+<span class="pl-en">store</span> <span class="pl-c1">1.2</span> <span class="pl-k">in</span> myNumber
+<span class="pl-k">in</span> <span class="pl-en">myNumber</span> <span class="pl-en">solve</span> myNumber <span class="pl-k">*</span> (<span class="pl-c1">10</span> <span class="pl-k">/</span> <span class="pl-c1">7.2</span>) <span class="pl-c"><span class="pl-c">#</span> Operators are separated by spaces.</span>
+<span class="pl-en">floor</span> myNumber
+<span class="pl-en">display</span> <span class="pl-en">myNumber</span> crlf
+<span class="pl-en">get</span> random <span class="pl-k">in</span> myNumber <span class="pl-c"><span class="pl-c">#</span> get a random number between 0 and 1 </span>
+                       <span class="pl-c"><span class="pl-c">#</span> and store it in myNumber</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Functions in LDPL are called sub-procedures. Sub-procedures, like source</span>
+<span class="pl-c"><span class="pl-c">#</span> files, are divided in sections. The sections found in sub-procedures are</span>
+<span class="pl-c"><span class="pl-c">#</span> the PARAMETERS section, the LOCAL DATA section and the PROCEDURE section.</span>
+<span class="pl-c"><span class="pl-c">#</span> All sections except the PROCEDURE section can be skipped if they aren't</span>
+<span class="pl-c"><span class="pl-c">#</span> used. If no PARAMETERS nor LOCAL DATA sections are used, the PROCEDURE</span>
+<span class="pl-c"><span class="pl-c">#</span> keyword may be omitted.</span>
+<span class="pl-en">sub</span> myFunction
+    <span class="pl-v">parameters</span><span class="pl-k">:</span>
+        a <span class="pl-k">is</span> number <span class="pl-c"><span class="pl-c">#</span> LDPL is pass by reference</span>
+        b <span class="pl-k">is</span> number
+        result <span class="pl-k">is</span> number <span class="pl-c"><span class="pl-c">#</span> Thus you can return values through a parameter.</span>
+    <span class="pl-en">local</span> <span class="pl-v">data</span><span class="pl-k">:</span>
+        c <span class="pl-k">is</span> number
+    <span class="pl-v">procedure</span><span class="pl-k">:</span>
+        <span class="pl-en">get</span> random <span class="pl-k">in</span> c
+        <span class="pl-k">in</span> <span class="pl-en">result</span> <span class="pl-en">solve</span> a <span class="pl-k">+</span> b <span class="pl-k">*</span> c
+<span class="pl-en">end</span> sub
+
+<span class="pl-en">sub</span> sayHello
+    <span class="pl-en">display</span> <span class="pl-s"><span class="pl-pds">"</span>Hi there!<span class="pl-pds">"</span></span> crlf
+    <span class="pl-k">return</span>
+    <span class="pl-en">display</span> <span class="pl-s"><span class="pl-pds">"</span>This won't be displayed :(<span class="pl-pds">"</span></span>
+<span class="pl-en">end</span> sub
+
+<span class="pl-en">call</span> <span class="pl-en">myFunction</span> <span class="pl-k">with</span> <span class="pl-ii">1</span> <span class="pl-ii">2</span> myNumber
+<span class="pl-en">display</span> <span class="pl-en">myNumber</span> crlf
+<span class="pl-en">call</span> sayHello
+<span class="pl-en">call</span> sayBye <span class="pl-c"><span class="pl-c">#</span> sub-procedures may be called before they are declared</span>
+
+<span class="pl-en">sub</span> sayBye
+    <span class="pl-en">display</span> <span class="pl-s"><span class="pl-pds">"</span>Bye!<span class="pl-pds">"</span></span>
+<span class="pl-en">end</span> sub
+
+<span class="pl-c"><span class="pl-c">#</span> One of the greatest features of LDPL is the ability to create your</span>
+<span class="pl-c"><span class="pl-c">#</span> own statements.</span>
+
+<span class="pl-en">create</span> <span class="pl-en">statement</span> <span class="pl-s"><span class="pl-pds">"</span>say hi<span class="pl-pds">"</span></span> <span class="pl-en">executing</span> sayHello
+<span class="pl-en">say</span> hi
+
+<span class="pl-en">create</span> <span class="pl-en">statement</span> <span class="pl-s"><span class="pl-pds">"</span>random add $ and $ in $<span class="pl-pds">"</span></span> <span class="pl-en">executing</span> myFunction
+<span class="pl-en">random</span> <span class="pl-en">add</span> <span class="pl-c1">1</span> <span class="pl-k">and</span> <span class="pl-c1">2</span> <span class="pl-k">in</span> myNumber
+<span class="pl-en">display</span> <span class="pl-en">myNumber</span> crlf
+
+exit</pre></div>
+<h2>Further Reading</h2>
+<ul>
+<li><a href="https://docs.ldpl-lang.org" rel="nofollow">LDPL Docs</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Martín del Río", "https://github.com/lartu"]
+- ["John Paul Wohlscheid", "https://github.com/JohnBlood"]
+</code></pre>

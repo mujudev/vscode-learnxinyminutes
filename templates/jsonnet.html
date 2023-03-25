@@ -1,0 +1,134 @@
+<h1>Jsonnet</h1>
+<p>Jsonnet is a powerful templating language for JSON. Any valid JSON<br>
+document is a valid Jsonnet object. For an interactive demo/tutorial,<br>
+click <a href="https://jsonnet.org/learning/tutorial.html" rel="nofollow">here</a></p>
+<div class="highlight highlight-source-python"><pre class="notranslate"><span class="pl-c1">//</span> <span class="pl-s1">single</span> <span class="pl-s1">line</span> <span class="pl-s1">comment</span>
+
+<span class="pl-c1">/</span><span class="pl-c1">*</span>
+    <span class="pl-s1">multiline</span> <span class="pl-s1">comment</span>
+<span class="pl-c1">*</span><span class="pl-s1"></span><span class="pl-c1">/</span>
+
+<span class="pl-c"># as well as python style comment</span>
+
+<span class="pl-c"># define a variable.</span>
+<span class="pl-c"># Variables have no effect in the generated JSON without being used.</span>
+<span class="pl-s1">local</span> <span class="pl-s1">num1</span> <span class="pl-c1">=</span> <span class="pl-c1">1</span>;
+<span class="pl-s1">local</span> <span class="pl-s1">num2</span> <span class="pl-c1">=</span> <span class="pl-c1">1</span> <span class="pl-c1">+</span> <span class="pl-c1">1</span>;
+<span class="pl-s1">local</span> <span class="pl-s1">num3</span> <span class="pl-c1">=</span> <span class="pl-c1">5</span> <span class="pl-c1">-</span> <span class="pl-c1">2</span>;
+<span class="pl-s1">local</span> <span class="pl-s1">num4</span> <span class="pl-c1">=</span> <span class="pl-c1">9</span> <span class="pl-c1">%</span> <span class="pl-c1">5</span>;
+<span class="pl-s1">local</span> <span class="pl-s1">num5</span> <span class="pl-c1">=</span> <span class="pl-c1">10</span> <span class="pl-c1">/</span> <span class="pl-c1">2.0</span>;
+<span class="pl-c"># jsonnet is a lazy language, if a variable is not used, it is not evaluated.</span>
+<span class="pl-s1">local</span> <span class="pl-s1">num_runtime_error</span> <span class="pl-c1">=</span> <span class="pl-c1">1</span> <span class="pl-c1">/</span> <span class="pl-c1">0</span>;
+
+<span class="pl-c"># fields are valid identifiers without quotes</span>
+<span class="pl-s1">local</span> <span class="pl-s1">obj1</span> <span class="pl-c1">=</span> { <span class="pl-s1">a</span>: <span class="pl-s">'letter a'</span>, <span class="pl-v">B</span>: <span class="pl-s">'letter B'</span> };
+
+<span class="pl-s1">local</span> <span class="pl-s1">arr1</span> <span class="pl-c1">=</span> [<span class="pl-s">'a'</span>, <span class="pl-s">'b'</span>, <span class="pl-s">'c'</span>];
+
+<span class="pl-c"># string literals use " or '.</span>
+<span class="pl-s1">local</span> <span class="pl-s1">str1</span> <span class="pl-c1">=</span> <span class="pl-s">'a'</span> <span class="pl-c1">+</span> <span class="pl-s">'B'</span>;
+<span class="pl-c"># multiline text literal in between |||</span>
+<span class="pl-c"># Each line must start with a white space.</span>
+<span class="pl-s1">local</span> <span class="pl-s1">str_multiline</span> <span class="pl-c1">=</span> <span class="pl-c1">|</span><span class="pl-c1">|</span><span class="pl-c1">|</span>
+  <span class="pl-s1">this</span> <span class="pl-c1">is</span> <span class="pl-s1">a</span>
+  <span class="pl-s1">multiline</span> <span class="pl-s1">string</span>
+<span class="pl-c1">|</span><span class="pl-c1">|</span><span class="pl-c1">|</span>;
+<span class="pl-c"># Python-compatible string formatting is available via %</span>
+<span class="pl-c"># When combined with ||| this can be used for templating text files.</span>
+<span class="pl-s1">local</span> <span class="pl-s1">str_templating</span> <span class="pl-c1">=</span> <span class="pl-c1">|</span><span class="pl-c1">|</span><span class="pl-c1">|</span>
+  <span class="pl-c1">%</span>(<span class="pl-s1">f1</span>)<span class="pl-c1">0.3</span><span class="pl-s1">f</span>
+<span class="pl-c1">|</span><span class="pl-c1">|</span><span class="pl-c1">|</span> <span class="pl-c1">%</span> { <span class="pl-s1">f1</span>: <span class="pl-c1">1.2345678</span> };
+<span class="pl-k">assert</span> <span class="pl-s1">str_templating</span> <span class="pl-c1">==</span> <span class="pl-s">'1.235<span class="pl-cce">\n</span>'</span>;
+
+<span class="pl-c"># if b then e else e. The else branch is optional and defaults to null</span>
+<span class="pl-s1">local</span> <span class="pl-s1">var1</span> <span class="pl-c1">=</span> <span class="pl-k">if</span> <span class="pl-c1">3</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">2</span> <span class="pl-s1">then</span> <span class="pl-s">"YES"</span>;
+<span class="pl-k">assert</span> <span class="pl-s1">var1</span> <span class="pl-c1">==</span> <span class="pl-s1">null</span>;
+
+<span class="pl-s1">local</span> <span class="pl-s1">obj2</span> <span class="pl-c1">=</span> {
+  <span class="pl-c"># variable defined inside the object ends with ','</span>
+  <span class="pl-s1">local</span> <span class="pl-s1">var_in_obj</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span>,
+
+  <span class="pl-s1">local</span> <span class="pl-s1">vowels</span> <span class="pl-c1">=</span> [<span class="pl-s">'a'</span>, <span class="pl-s">'e'</span>, <span class="pl-s">'i'</span>, <span class="pl-s">'o'</span>, <span class="pl-s">'u'</span>],
+  <span class="pl-s1">local</span> <span class="pl-s1">numbers</span> <span class="pl-c1">=</span> [<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span>, <span class="pl-c1">5</span>, <span class="pl-c1">6</span>, <span class="pl-c1">7</span>, <span class="pl-c1">8</span>, <span class="pl-c1">9</span>, <span class="pl-c1">10</span>],
+
+  <span class="pl-c"># [num] to look up an array element</span>
+  <span class="pl-s1">first_vowel</span>: <span class="pl-s1">vowels</span>[<span class="pl-c1">0</span>],
+  <span class="pl-c"># can also slice the array like in Python</span>
+  <span class="pl-s1">even_numbers</span>: <span class="pl-s1">numbers</span>[<span class="pl-c1">1</span>::<span class="pl-c1">2</span>],
+
+  <span class="pl-c"># python-style list and object comprehensions are also supported</span>
+  <span class="pl-s1">double_numbers</span>: [<span class="pl-s1">x</span> <span class="pl-c1">*</span> <span class="pl-c1">2</span> <span class="pl-k">for</span> <span class="pl-s1">x</span> <span class="pl-c1">in</span> <span class="pl-s1">numbers</span>],
+  <span class="pl-s1">even_numbers_map</span>: {
+      <span class="pl-c"># [ ] syntax in field name is to compute the field name dynamically</span>
+      [<span class="pl-s1">x</span> <span class="pl-c1">+</span> <span class="pl-s">'_is_even'</span>]: <span class="pl-s1">true</span> <span class="pl-k">for</span> <span class="pl-s1">x</span> <span class="pl-c1">in</span> <span class="pl-s1">numbers</span> <span class="pl-k">if</span> <span class="pl-s1">x</span> <span class="pl-c1">%</span> <span class="pl-c1">2</span> <span class="pl-c1">==</span> <span class="pl-c1">0</span>
+  },
+
+  <span class="pl-s1">nested</span>: {
+    <span class="pl-s1">nested_field1</span>: <span class="pl-s">'some-value'</span>,
+    <span class="pl-c"># self refers to the current object</span>
+    <span class="pl-c"># ["field-name"] or .field-name can be used to look up a field</span>
+    <span class="pl-s1">nested_field2</span>: <span class="pl-s1">self</span>.<span class="pl-s1">nested_field1</span>,
+    <span class="pl-s1">nested_field3</span>: <span class="pl-s1">self</span>.<span class="pl-s1">nested_field1</span>,
+    <span class="pl-c"># $ refers to outer-most object</span>
+    <span class="pl-s1">nested_field4</span>: $.<span class="pl-s1">first_vowel</span>,
+
+    <span class="pl-s1">assert</span> <span class="pl-s1">self</span>.<span class="pl-s1">nested_field1</span> <span class="pl-c1">==</span> <span class="pl-s1">self</span>.<span class="pl-s1">nested_field2</span>,
+    <span class="pl-k">assert</span> <span class="pl-s1">self</span>.<span class="pl-s1">nested_field1</span> <span class="pl-c1">==</span> <span class="pl-s1">self</span>.<span class="pl-s1">nested_field3</span>,
+  },
+
+  <span class="pl-s1">special_field</span>: <span class="pl-s">'EVERYTHING FEELS BAD'</span>,
+};
+
+<span class="pl-s1">local</span> <span class="pl-s1">obj3</span> <span class="pl-c1">=</span> {
+  <span class="pl-s1">local</span> <span class="pl-s1">var_in_obj</span> <span class="pl-c1">=</span> <span class="pl-c1">1.234</span>,
+  <span class="pl-s1">local</span> <span class="pl-s1">var_in_obj2</span> <span class="pl-c1">=</span> { <span class="pl-s1">a</span>: { <span class="pl-s1">b</span>: <span class="pl-s">'c'</span> } },
+
+  <span class="pl-s1">concat_array</span>: [<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>] <span class="pl-c1">+</span> [<span class="pl-c1">4</span>],
+  <span class="pl-c"># strings can be concat with +,</span>
+  <span class="pl-c"># which implicitly converts one operand to string if needed.</span>
+  <span class="pl-s1">concat_string</span>: <span class="pl-s">'123'</span> <span class="pl-c1">+</span> <span class="pl-c1">4</span>,
+
+  <span class="pl-c"># == tests deep equality</span>
+  <span class="pl-s1">equals</span>: { <span class="pl-s1">a</span>: { <span class="pl-s1">b</span>: <span class="pl-s">'c'</span>, <span class="pl-s1">d</span>: {} } } <span class="pl-c1">==</span> <span class="pl-s1">var_in_obj2</span>,
+
+  <span class="pl-s1">special_field</span>: <span class="pl-s">'this feels good'</span>,
+};
+
+<span class="pl-c"># objects can be merged with + where the right-hand side wins field conflicts</span>
+<span class="pl-s1">local</span> <span class="pl-s1">obj4</span> <span class="pl-c1">=</span> <span class="pl-s1">obj2</span> <span class="pl-c1">+</span> <span class="pl-s1">obj3</span>;
+<span class="pl-k">assert</span> <span class="pl-s1">obj4</span>.<span class="pl-s1">special_field</span> <span class="pl-c1">==</span> <span class="pl-s">'this feels good'</span>;
+
+<span class="pl-c"># define a function</span>
+<span class="pl-c"># functions have positional parameters, named parameters, and default arguments</span>
+<span class="pl-s1">local</span> <span class="pl-en">my_function</span>(<span class="pl-s1">x</span>, <span class="pl-s1">y</span>, <span class="pl-s1">z</span><span class="pl-c1">=</span><span class="pl-c1">1</span>) <span class="pl-c1">=</span> <span class="pl-s1">x</span> <span class="pl-c1">+</span> <span class="pl-s1">y</span> <span class="pl-c1">-</span> <span class="pl-s1">z</span>;
+<span class="pl-s1">local</span> <span class="pl-s1">num6</span> <span class="pl-c1">=</span> <span class="pl-en">my_function</span>(<span class="pl-c1">7</span>, <span class="pl-c1">8</span>, <span class="pl-c1">9</span>);
+<span class="pl-s1">local</span> <span class="pl-s1">num7</span> <span class="pl-c1">=</span> <span class="pl-en">my_function</span>(<span class="pl-c1">8</span>, <span class="pl-s1">z</span><span class="pl-c1">=</span><span class="pl-c1">10</span>, <span class="pl-s1">y</span><span class="pl-c1">=</span><span class="pl-c1">9</span>);
+<span class="pl-s1">local</span> <span class="pl-s1">num8</span> <span class="pl-c1">=</span> <span class="pl-en">my_function</span>(<span class="pl-c1">4</span>, <span class="pl-c1">5</span>);
+<span class="pl-c"># inline anonymous function</span>
+<span class="pl-s1">local</span> <span class="pl-s1">num9</span> <span class="pl-c1">=</span> (<span class="pl-en">function</span>(<span class="pl-s1">x</span>) <span class="pl-s1">x</span> <span class="pl-c1">*</span> <span class="pl-s1">x</span>)(<span class="pl-c1">3</span>);
+
+<span class="pl-s1">local</span> <span class="pl-s1">obj5</span> <span class="pl-c1">=</span> {
+  <span class="pl-c"># define a method</span>
+  <span class="pl-c"># fields defined with :: are hidden, which does not apper in generated JSON</span>
+  <span class="pl-c"># function cannot be serialized so need to be hidden</span>
+  <span class="pl-c"># if the object is used in the generated JSON.</span>
+  <span class="pl-en">is_odd</span>(<span class="pl-s1">x</span>):: <span class="pl-s1">x</span> <span class="pl-c1">%</span> <span class="pl-c1">2</span> <span class="pl-c1">==</span> <span class="pl-c1">1</span>,
+};
+<span class="pl-k">assert</span> <span class="pl-s1">obj5</span> <span class="pl-c1">==</span> {};
+
+<span class="pl-c"># a jsonnet document has to evaluate to something</span>
+<span class="pl-c"># be it an object, list, number or just string literal</span>
+<span class="pl-s">"FIN"</span></pre></div>
+<h2>Further Reading</h2>
+<p>There are a few but important concepts that are not touched in this example, including:</p>
+<ul>
+<li>Passing variables from command line: <a href="https://jsonnet.org/learning/tutorial.html#parameterize-entire-config" rel="nofollow">Parameterize Entire Config</a></li>
+<li>Import other jsonnet libraries/files: <a href="https://jsonnet.org/learning/tutorial.html#imports" rel="nofollow">Imports</a></li>
+<li>In depth example of OOP aspect of Jsonnet: <a href="https://jsonnet.org/learning/tutorial.html#Object-Orientation" rel="nofollow">Object-Orientation</a></li>
+<li>Useful standard library: <a href="https://jsonnet.org/ref/stdlib.html" rel="nofollow">Stdlib</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<ul>
+<li>["Huan Wang", "https://github.com/fredwangwang"]</li>
+</ul>

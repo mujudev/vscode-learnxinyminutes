@@ -1,0 +1,246 @@
+<h1>Markdown</h1>
+<p>Markdown was created by John Gruber in 2004. It's meant to be an easy to read<br>
+and write syntax which converts easily to HTML (and now many other formats as<br>
+well).</p>
+<p>Markdown also varies in implementation from one parser to a next. This<br>
+guide will attempt to clarify when features are universal or when they are<br>
+specific to a certain parser.</p>
+<ul>
+<li><a href="#html-elements">HTML Elements</a></li>
+<li><a href="#headings">Headings</a></li>
+<li><a href="#simple-text-styles">Simple text styles</a></li>
+<li><a href="#paragraphs">Paragraphs</a></li>
+<li><a href="#lists">Lists</a></li>
+<li><a href="#code-blocks">Code blocks</a></li>
+<li><a href="#horizontal-rule">Horizontal rule</a></li>
+<li><a href="#links">Links</a>
+<ul>
+<li><a href="#table-of-contents">Table of contents</a></li>
+</ul>
+</li>
+<li><a href="#images">Images</a></li>
+<li><a href="#miscellany">Miscellany</a>
+<ul>
+<li><a href="#auto-links">Auto-links</a></li>
+<li><a href="#auto-links-for-emails">Auto-links for emails</a></li>
+<li><a href="#escaping-characters">Escaping characters</a></li>
+<li><a href="#keyboard-keys">Keyboard keys</a></li>
+<li><a href="#tables">Tables</a></li>
+</ul>
+</li>
+<li><a href="#markdownlint">Markdownlint</a></li>
+<li><a href="#further-reading">Further reading</a></li>
+</ul>
+<h2>HTML Elements</h2>
+<p>Markdown is a superset of HTML, so any HTML file is valid Markdown.</p>
+<div class="highlight highlight-source-lisp"><pre class="notranslate">&lt;!--This means we can use HTML elements in Markdown, such as the comment
+element, <span class="pl-k">and</span> they won'<span class="pl-c1">t</span> be affected by a markdown parser. However, <span class="pl-k">if</span> you
+create an HTML element in your markdown file, you cannot use markdown syntax
+within that element's contents.--&gt;</pre></div>
+<h2>Headings</h2>
+<p>You can create HTML elements <code class="notranslate">&lt;h1&gt;</code> through <code class="notranslate">&lt;h6&gt;</code> easily by prepending the<br>
+text you want to be in that element by a number of hashes (#).</p>
+<div class="highlight highlight-source-lisp"><pre class="notranslate"># This is an &lt;h1&gt;
+<span class="pl-c1">##</span> This is an &lt;h2&gt;
+<span class="pl-c1">###</span> This is an &lt;h3&gt;
+<span class="pl-c1">####</span> This is an &lt;h4&gt;
+<span class="pl-c1">#####</span> This is an &lt;h5&gt;
+<span class="pl-c1">######</span> This is an &lt;h6&gt;</pre></div>
+<p>Markdown also provides us with two alternative ways of indicating h1 and h2.</p>
+<div class="highlight highlight-source-lisp"><pre class="notranslate">This is an h1
+=============
+
+This is an h2
+-------------</pre></div>
+<h2>Simple text styles</h2>
+<p>Text can be easily styled as italic or bold using markdown.</p>
+<div class="highlight highlight-source-lisp"><pre class="notranslate">*This text is in italics.*
+_And so is this text._
+
+<span class="pl-smi">**</span>This text is in bold.<span class="pl-smi">**</span>
+__And so is this text.__
+
+<span class="pl-smi">***</span>This text is in both.<span class="pl-smi">***</span>
+<span class="pl-smi">**</span>_As is this!_<span class="pl-smi">**</span>
+*__And this!__*</pre></div>
+<p>In GitHub Flavored Markdown, which is used to render markdown files on<br>
+GitHub, we also have strikethrough:</p>
+<div class="highlight highlight-source-lisp"><pre class="notranslate">~~This text is rendered with strikethrough.~~</pre></div>
+<h2>Paragraphs</h2>
+<p>Paragraphs are a one or multiple adjacent lines of text separated by one or<br>
+multiple blank lines.</p>
+<div class="highlight highlight-source-lisp"><pre class="notranslate">This is a paragraph. I'm typing in a paragraph isn'<span class="pl-c1">t</span> this fun?
+
+Now I'm in paragraph <span class="pl-c1">2</span>.
+I'm still in paragraph <span class="pl-c1">2</span> too!
+
+
+I'm in paragraph three!</pre></div>
+<p>Should you ever want to insert an HTML <code class="notranslate">&lt;br /&gt;</code> tag, you can end a paragraph<br>
+with two or more spaces and then begin a new paragraph.</p>
+<div class="highlight highlight-source-lisp"><pre class="notranslate">I end with two spaces (highlight me to see them).
+
+There's a &lt;br /&gt; above me!</pre></div>
+<p>Block quotes are easy and done with the &gt; character.</p>
+<div class="highlight highlight-source-lisp"><pre class="notranslate">&gt; This is a block <span class="pl-c1">quote</span>. You can either
+&gt; manually wrap your lines <span class="pl-k">and</span> put a `&gt;` before every line <span class="pl-k">or</span> you can <span class="pl-k">let</span> your lines get really long <span class="pl-k">and</span> wrap on their own.
+&gt; It doesn'<span class="pl-c1">t</span> make a difference so long as they start with a `&gt;`.
+
+&gt; You can also use more than one level
+&gt;&gt; of indentation?
+&gt; How neat is that?
+</pre></div>
+<h2>Lists</h2>
+<p>Unordered lists can be made using asterisks, pluses, or hyphens.</p>
+<div class="highlight highlight-source-lisp"><pre class="notranslate">* Item
+* Item
+* Another item
+
+<span class="pl-k">or</span>
+
++ Item
++ Item
++ One more item
+
+<span class="pl-k">or</span>
+
+- Item
+- Item
+- One last item</pre></div>
+<p>Ordered lists are done with a number followed by a period.</p>
+<div class="highlight highlight-source-lisp"><pre class="notranslate"><span class="pl-c1">1</span>. Item one
+<span class="pl-c1">2</span>. Item two
+<span class="pl-c1">3</span>. Item three</pre></div>
+<p>You don't even have to label the items correctly and Markdown will still<br>
+render the numbers in order, but this may not be a good idea.</p>
+<div class="highlight highlight-source-lisp"><pre class="notranslate"><span class="pl-c1">1</span>. Item one
+<span class="pl-c1">1</span>. Item two
+<span class="pl-c1">1</span>. Item three</pre></div>
+<p>(This renders the same as the example above.)</p>
+<p>You can also use sublists.</p>
+<div class="highlight highlight-source-lisp"><pre class="notranslate"><span class="pl-c1">1</span>. Item one
+<span class="pl-c1">2</span>. Item two
+<span class="pl-c1">3</span>. Item three
+    * Sub-item
+    * Sub-item
+<span class="pl-c1">4</span>. Item four</pre></div>
+<p>There are even task lists. This creates HTML checkboxes.</p>
+<div class="highlight highlight-source-lisp"><pre class="notranslate">Boxes below without the 'x' are unchecked HTML checkboxes.
+- [ ] First task to complete.
+- [ ] Second task that needs done
+This checkbox below will be a checked HTML checkbox.
+- [x] This task has been completed</pre></div>
+<h2>Code blocks</h2>
+<p>You can indicate a code block (which uses the <code class="notranslate">&lt;code&gt;</code> element) by indenting<br>
+a line with four spaces or a tab.</p>
+<div class="highlight highlight-source-lisp"><pre class="notranslate">    This is code
+    So is this</pre></div>
+<p>You can also re-tab (or add an additional four spaces) for indentation<br>
+inside your code.</p>
+<div class="highlight highlight-source-lisp"><pre class="notranslate">    my_array.each <span class="pl-k">do</span> |item|
+        puts item
+    end</pre></div>
+<p>Inline code can be created using the backtick character <code class="notranslate">`</code>.</p>
+<div class="highlight highlight-source-lisp"><pre class="notranslate">John didn'<span class="pl-c1">t</span> even know what the `go_to()` function did!</pre></div>
+<p>In GitHub Flavored Markdown, you can use a special syntax for code.</p>
+<pre class="notranslate"><code class="notranslate">```ruby
+def foobar
+    puts "Hello world!"
+end
+```</code></pre>
+<p>The above text doesn't require indenting, plus GitHub will use syntax<br>
+highlighting of the language you specify after the opening <code class="notranslate">```</code>.</p>
+<h2>Horizontal rule</h2>
+<p>Horizontal rules (<code class="notranslate">&lt;hr/&gt;</code>) are easily added with three or more asterisks or<br>
+hyphens, with or without spaces.</p>
+<div class="highlight highlight-source-lisp"><pre class="notranslate"><span class="pl-smi">***</span>
+---
+- - -
+<span class="pl-smi">****************</span></pre></div>
+<h2>Links</h2>
+<p>One of the best things about markdown is how easy it is to make links. Put<br>
+the text to display in hard brackets [] followed by the url in parentheses ()</p>
+<div class="highlight highlight-source-lisp"><pre class="notranslate">[Click me!](http://test.com/)</pre></div>
+<p>You can also add a link title using quotes inside the parentheses.</p>
+<div class="highlight highlight-source-lisp"><pre class="notranslate">[Click me!](http://test.com/ <span class="pl-s"><span class="pl-pds">"</span>Link to Test.com<span class="pl-pds">"</span></span>)</pre></div>
+<p>Relative paths work too.</p>
+<div class="highlight highlight-source-lisp"><pre class="notranslate">[Go to music](/music/).</pre></div>
+<p>Markdown also supports reference style links.</p>
+<pre class="notranslate"><code class="notranslate">[<span>Click this link</span>][<span>link1</span>] for more info about it!
+[<span>Also check out this link</span>][<span>foobar</span>] if you want to.
+
+[<span>link1</span>]: <span>http://test.com/</span> <span>"Cool!"</span>
+[<span>foobar</span>]: <span>http://foobar.biz/</span> <span>"Alright!"</span></code></pre>
+<p>The title can also be in single quotes or in parentheses, or omitted<br>
+entirely. The references can be anywhere in your document and the reference IDs<br>
+can be anything so long as they are unique.</p>
+<p>There is also "implicit naming" which lets you use the link text as the id.</p>
+<pre class="notranslate"><code class="notranslate">[<span>This</span>][] is a link.
+
+[<span>This</span>]: <span>http://thisisalink.com/</span></code></pre>
+<p>But it's not that commonly used.</p>
+<h3>Table of contents</h3>
+<p>Some Markdown flavors even make use of the combination of lists, links and<br>
+headings in order to create tables of contents. In this case, heading titles in<br>
+lowercase are prepended with hash (<code class="notranslate">#</code>) and are used as link ids. Should the<br>
+heading have multiple words, they will be connected with a hyphen (<code class="notranslate">-</code>), that<br>
+also replaces some special characters. (Some other special characters are<br>
+omitted though.)</p>
+<div class="highlight highlight-source-lisp"><pre class="notranslate">- [Heading](<span class="pl-c1">#heading</span>)
+- [Another heading](<span class="pl-c1">#another-heading</span>)
+- [Chapter](<span class="pl-c1">#chapter</span>)
+  - [Subchapter &lt;h3 /&gt;](<span class="pl-c1">#subchapter-h3-</span>)</pre></div>
+<p>Nonetheless, this is a feature that might not be working in all Markdown<br>
+implementations the same way.</p>
+<h2>Images</h2>
+<p>Images are done the same way as links but with an exclamation point in front!</p>
+<div class="highlight highlight-source-lisp"><pre class="notranslate">![This is the alt-attribute for my image](http://imgur.com/myimage.jpg <span class="pl-s"><span class="pl-pds">"</span>An optional title<span class="pl-pds">"</span></span>)</pre></div>
+<p>And reference style works as expected.</p>
+<pre class="notranslate"><code class="notranslate">![<span>This is the alt-attribute.</span>][<span>myimage</span>]
+
+[<span>myimage</span>]: <span>relative/urls/cool/image.jpg</span> <span>"if you need a title, it's here"</span></code></pre>
+<h2>Miscellany</h2>
+<h3>Auto-links</h3>
+<div class="highlight highlight-source-lisp"><pre class="notranslate">&lt;http://testwebsite.com/&gt; is equivalent to
+[http://testwebsite.com/](http://testwebsite.com/)</pre></div>
+<h3>Auto-links for emails</h3>
+<div class="highlight highlight-source-lisp"><pre class="notranslate">&lt;foo@bar.com&gt;</pre></div>
+<h3>Escaping characters</h3>
+<div class="highlight highlight-source-lisp"><pre class="notranslate">I want to type *this text surrounded by asterisks* but I don'<span class="pl-c1">t</span> want it to be
+in italics, so I <span class="pl-k">do</span> this: \*this text surrounded by asterisks\*.</pre></div>
+<h3>Keyboard keys</h3>
+<p>In GitHub Flavored Markdown, you can use a <code class="notranslate">&lt;kbd&gt;</code> tag to represent keyboard<br>
+keys.</p>
+<div class="highlight highlight-source-lisp"><pre class="notranslate">Your computer crashed? Try sending a
+&lt;kbd&gt;Ctrl&lt;/kbd&gt;+&lt;kbd&gt;Alt&lt;/kbd&gt;+&lt;kbd&gt;Del&lt;/kbd&gt;</pre></div>
+<h3>Tables</h3>
+<p>Tables are only available in GitHub Flavored Markdown and are slightly<br>
+cumbersome, but if you really want it:</p>
+<div class="highlight highlight-source-lisp"><pre class="notranslate">| Col1         | Col2     | Col3          |
+| :----------- | :------: | ------------: |
+| Left-aligned | Centered | Right-aligned |
+| blah         | blah     | blah          |</pre></div>
+<p>or, for the same results</p>
+<div class="highlight highlight-source-lisp"><pre class="notranslate">Col <span class="pl-c1">1</span> | Col2 | Col3
+:-- | :-: | --:
+Ugh this is so ugly | make it | stop</pre></div>
+<h2>Markdownlint</h2>
+<p>In order to simplify work with Markdown and to unify its coding style,<br>
+<code class="notranslate">Markdownlint</code> has been created. Available as a<br>
+<a href="https://github.com/markdownlint/markdownlint">separate tool</a><br>
+as well as a plugin for some IDEs, it can be used to ensure validity and<br>
+readability of Markdown.</p>
+<hr>
+<h2>Further reading</h2>
+<p>For more info, check out John Gruber's official post of syntax <a href="http://daringfireball.net/projects/markdown/syntax" rel="nofollow">here</a> and Adam Pritchard's great cheatsheet <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">here</a>.</p>
+<p>If you want to learn more on some major Markdown flavors' features, see:</p>
+<ul>
+<li><a href="https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax">GitHub flavored Markdown</a></li>
+<li><a href="https://docs.gitlab.com/ee/user/markdown.html" rel="nofollow">GitLab flavored Markdown</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Dan Turkel", "http://danturkel.com/"]
+- ["Jacob Ward", "http://github.com/JacobCWard/"]
+- ["Tomáš Hartman", "https://github.com/tomas-hartman"]
+</code></pre>

@@ -1,0 +1,758 @@
+<h1>Cairo</h1>
+<p>Cairo is a Turing-complete language that allows you write provable programs<br>
+(where one party can prove to another that a certain computation was executed<br>
+correctly) on StarkNet.</p>
+<h2>StarkNet</h2>
+<p>StarkNet is a decentralized ZK-rollup that operates as an Ethereum layer 2<br>
+chain.</p>
+<p>In this document, we are going to be going in-depth into understanding Cairo's<br>
+syntax and how you could create and deploy a Cairo smart contract on StarkNet.</p>
+<p><strong>NB: As at the time of this writing, StarkNet is still at v0.10.3, with Cairo<br>
+1.0 coming soon. The ecosystem is young and evolving very fast, so you might<br>
+want to check the <a href="https://www.cairo-lang.org/docs" rel="nofollow">official docs</a> to confirm<br>
+this document is still up-to-date. Pull requests are welcome!</strong></p>
+<h2>Setting Up A Development Environment</h2>
+<p>Before we get started writing codes, we will need to setup a Cairo development<br>
+environment, for writing, compiling and deploying our contracts to StarkNet.<br>
+For the purpose of this tutorial we are going to be using the<br>
+<a href="https://github.com/software-mansion/protostar">Protostar Framework</a>.<br>
+Installation steps can be found in the docs<br>
+<a href="https://docs.swmansion.com/protostar/docs/tutorials/installation" rel="nofollow">here</a>.<br>
+Note that Protostar supports just Mac and Linux OS, Windows users might need to<br>
+use WSL, or go for other alternatives such as the Official<br>
+<a href="https://www.cairo-lang.org/docs/quickstart.html" rel="nofollow">StarkNet CLI</a> or<br>
+<a href="https://github.com/OpenZeppelin/nile">Nile from Openzeppelin</a></p>
+<p>Once you're done with the installations, run the command <code class="notranslate">protostar -v</code> to<br>
+confirm your installation was successful. If successful, you should see your<br>
+Protostar version displayed on the screen.</p>
+<h2>Initializing a new project</h2>
+<p>Protostar similar to Truffle for solidity development can be installed once and<br>
+used for multiple projects. To initialize a new Protostar project, run the<br>
+following command:</p>
+<pre class="notranslate"><code class="notranslate">protostar init
+</code></pre>
+<p>It would then request the project's name and the library's directory name,<br>
+you'd need to fill in this, and a new project will be initialized successfully.</p>
+<h2>Compiling, Declaring, Deploying and Interacting with StarkNet Contracts</h2>
+<p>Within the <code class="notranslate">src</code> folder you'll find a boilerplate contract that comes with<br>
+initializing a new Protostar project, <code class="notranslate">main.cairo</code>. We are going to be<br>
+compiling, declaring and deploying this contract.</p>
+<h3>Compiling Contracts</h3>
+<p>To compile a Cairo contract using Protostar, ensure a path to the contract is<br>
+specified in the <code class="notranslate">[contracts]</code> section of the <code class="notranslate">protostar.toml</code> file. Once<br>
+you've done that, open your terminal and run the command:</p>
+<pre class="notranslate"><code class="notranslate">protostar build
+</code></pre>
+<p>And you should get an output similar to what you see below, with a <code class="notranslate">main.json</code><br>
+and <code class="notranslate">main_abi.json</code> files created in the <code class="notranslate">build</code> folder.<br>
+<a target="_blank" rel="noopener noreferrer" href="./images/cairo/build.png"><img src="./images/cairo/build.png" alt="building your contract" style="max-width: 100%;"></a></p>
+<h3>Declaring Contracts</h3>
+<p>With the recent StarkNet update to 0.10.3, the DEPLOY transaction was<br>
+deprecated and no longer works. To deploy a transaction, you must first declare<br>
+a Contract to obtain the class hash, then deploy the declared contract using the<br>
+<a href="https://community.starknet.io/t/universal-deployer-contract-proposal/1864" rel="nofollow">Universal Deployer Contract</a>.</p>
+<p>Before declaring or deploying your contract using Protostar, you should set the<br>
+private key associated with the specified account address in a file, or in the<br>
+terminal. To set your private key in the terminal, run the command:</p>
+<pre class="notranslate"><code class="notranslate">export PROTOSTAR_ACCOUNT_PRIVATE_KEY=[YOUR PRIVATE KEY HERE]
+</code></pre>
+<p>Then to declare our contract using Protostar run the following command (for<br>
+visual clarity, the backslash sign symbolizes the continuing line):</p>
+<pre class="notranslate"><code class="notranslate">protostar declare ./build/main.json \
+  --network testnet \
+  --account 0x0691622bBFD29e835bA4004e7425A4e9630840EbD11c5269DE51C16774585b16 \
+  --max-fee auto
+</code></pre>
+<p>where <code class="notranslate">network</code> specifies the network we are deploying to, <code class="notranslate">account</code> specifies<br>
+account whose private key we are using, <code class="notranslate">max-fee</code> specifies the maximum fee to<br>
+be paid for the transaction. You should get the class hash outputted as seen<br>
+below:<br>
+<a target="_blank" rel="noopener noreferrer" href="./images/cairo/declare.png"><img src="./images/cairo/declare.png" alt="declaring your contract" style="max-width: 100%;"></a></p>
+<h3>Deploying Contracts</h3>
+<p>After obtaining our class hash from declaring, we can now deploy using the<br>
+command below:</p>
+<pre class="notranslate"><code class="notranslate">protostar \
+  deploy 0x02a5de1b145e18dfeb31c7cd7ff403714ededf5f3fdf75f8b0ac96f2017541bc \
+  --network testnet \
+  --account 0x0691622bBFD29e835bA4004e7425A4e9630840EbD11c5269DE51C16774585b16 \
+  --max-fee auto
+</code></pre>
+<p>where <code class="notranslate">0x02a5de1b145e18dfeb31c7cd7ff403714ededf5f3fdf75f8b0ac96f2017541bc</code> is<br>
+the class hash of our contract.<br>
+<a target="_blank" rel="noopener noreferrer" href="./images/cairo/deploy.png"><img src="./images/cairo/deploy.png" alt="deploying your contract" style="max-width: 100%;"></a></p>
+<h3>Interacting with Contracts</h3>
+<p>To interact with your deployed contract, we will be using <code class="notranslate">Argent X</code><br>
+(alternative: <code class="notranslate">Braavos</code>), and <code class="notranslate">Starkscan</code> (alternative: <code class="notranslate">Voyager</code>). To install<br>
+and setup <code class="notranslate">Argent X</code>, see this<br>
+<a href="https://www.argent.xyz/learn/how-to-create-an-argent-x-wallet/" rel="nofollow">guide</a>.</p>
+<p>Copy your contract address, displayed on screen from the previous step, and<br>
+head over to <a href="https://testnet.starkscan.co/" rel="nofollow">Starkscan</a> to search for the<br>
+contract. Once found, you can make write calls to the contract in the following<br>
+sequence:</p>
+<ul>
+<li>click on the "connect wallet" button,<br>
+<a target="_blank" rel="noopener noreferrer" href="./images/cairo/connect.png"><img src="./images/cairo/connect.png" alt="connect wallet" style="max-width: 100%;"></a></li>
+<li>select <code class="notranslate">Argent X</code> and approve the connection<br>
+<a target="_blank" rel="noopener noreferrer" href="./images/cairo/connect2.png"><img src="./images/cairo/connect2.png" alt="connect to argentX" style="max-width: 100%;"></a></li>
+<li>you can now make read and write calls easily.</li>
+</ul>
+<h2>Let's learn Cairo</h2>
+<p>First let's look at a default contract that comes with Protostar which allows<br>
+you to set balance on deployment, increase, and get the balance.</p>
+<pre class="notranslate"><code class="notranslate">// Language directive - instructs compiler its a StarkNet contract
+%lang starknet
+
+// Library imports from the Cairo-lang library
+from starkware.cairo.common.math import assert_nn
+from starkware.cairo.common.cairo_builtins import HashBuiltin
+
+// @dev Storage variable that stores the balance of a user.
+// @storage_var is a decorator that instructs the compiler the function
+//   below it is a storage variable.
+@storage_var
+func balance() -&gt; (res: felt) {}
+
+// @dev Constructor writes the balance variable to 0 on deployment
+// Constructors sets storage variables on deployment. Can accept arguments too.
+@constructor
+func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
+range_check_ptr}() {
+  balance.write(0); 
+  return();
+}
+
+// @dev increase_balance updates the balance variable
+// @param amount the amount you want to add to balance
+// @external is a decorator that specifies the func below it is an external
+//   function.
+@external
+func increase_balance{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
+range_check_ptr}(amount: felt){
+  with_attr error_message("Amount must be positive. Got: {amount}.") {
+    assert_nn(amount);
+  }
+
+  let (res) = balance.read();
+  balance.write(res + amount);
+  return ();
+}
+
+// @dev returns the balance variable
+// @view is a decorator that specifies the func below it is a view function.
+@view
+func get_balance{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
+range_check_ptr}() -&gt; (res: felt) {
+  let (res) = balance.read();
+  return (res,);
+}
+</code></pre>
+<p>Before proceeding to the main lessons, try to build, deploy and interact with<br>
+this contract.<br>
+NB: You should be at <code class="notranslate">main.cairo</code> if you are using Protostar.</p>
+<h3>1. The Felt data type</h3>
+<p>Unlike solidity, where you have access to various data types, Cairo comes with<br>
+just a single data type <code class="notranslate">..felts</code>. Felts stands for Field elements, and are a<br>
+252 bit integer in the range <code class="notranslate">0&lt;=x&lt;=P</code> where <code class="notranslate">P</code> is a prime number. You can<br>
+create a <code class="notranslate">Uint256</code> in Cairo by utlizing a struct of two 128 bits felts.</p>
+<pre class="notranslate"><code class="notranslate">struct Uint256 {
+  low: felt, // The low 128 bits of the value.
+  high: felt, // The high 128 bits of the value.
+}
+</code></pre>
+<p>To avoid running into issues with divisions, it's safer to work with the<br>
+<code class="notranslate">unsigned_div_rem</code> method from Cairo-lang's library.</p>
+<h3>2. Lang Directive and Imports</h3>
+<p>To get started with writing a StarkNet contract, you must specify the directive:</p>
+<pre class="notranslate"><code class="notranslate">%lang starknet
+</code></pre>
+<p>This directive informs the compiler you are writing a contract and not a<br>
+program. The difference between both is contracts have access to StarkNet's<br>
+storage, programs don't and as such are stateless.</p>
+<p>There are important functions you might need to import from the official<br>
+Cairo-lang library or Openzeppelin's, e.g.</p>
+<pre class="notranslate"><code class="notranslate">from starkware.cairo.common.cairo_builtins import HashBuiltin
+from cairo_contracts.src.openzeppelin.token.erc20.library import ERC20
+from starkware.cairo.common.uint256 import Uint256
+from starkware.cairo.common.bool import TRUE
+</code></pre>
+<h3>3. Data Structures</h3>
+<ul>
+<li>
+<p>Storage variables: Cairo's storage is a map with <code class="notranslate">2^251</code> slots, where each<br>
+slot is a felt which is initialized to <code class="notranslate">0</code>. You create one using the<br>
+<code class="notranslate">@storage_var</code> decorator.</p>
+<pre class="notranslate"><code class="notranslate">@storage_var
+func names() -&gt; (name: felt) {}
+</code></pre>
+</li>
+<li>
+<p>Storage mappings: Unlike Solidity where mappings have a separate keyword, in<br>
+Cairo you create mappings using storage variables.</p>
+<pre class="notranslate"><code class="notranslate">@storage_var
+func names(address: felt) -&gt; (name: felt) {}
+</code></pre>
+</li>
+<li>
+<p>Structs: are a means to create custom data types in Cairo. A <code class="notranslate">struct</code> has a<br>
+size, which is the sum of the sizes of its members. The size can be<br>
+retrieved using <code class="notranslate">MyStruct.SIZE</code>. You create a struct in Cairo using the<br>
+<code class="notranslate">struct</code> keyword.</p>
+<pre class="notranslate"><code class="notranslate">struct Person {
+  name: felt,
+  age: felt,
+  address: felt,
+}
+</code></pre>
+</li>
+<li>
+<p>Constants: Constants are fixed and as such can't be altered after being set.<br>
+They evaluate to an integer (field element) at compile time. To create a<br>
+constant in Cairo, you use the <code class="notranslate">const</code> keyword. It's proper practice to<br>
+capitalize constant names.</p>
+<pre class="notranslate"><code class="notranslate">const USER = 0x01C6cfC1DB2ae90dACEA243F0a8C2F4e32560F7cDD398e4dA2Cc56B733774E9b
+</code></pre>
+</li>
+<li>
+<p>Arrays: Arrays can be defined as a <code class="notranslate">pointer(felt*)</code> to the first element of<br>
+the array. As an array is populated, its elements take up contigous memory<br>
+cells. The <code class="notranslate">alloc</code> keyword can be used to dynamically allocate a new memory<br>
+segment, which can be used to store an array:</p>
+<pre class="notranslate"><code class="notranslate">let (myArray: felt*) = alloc ();
+assert myArray[0] = 1;
+assert myArray[1] = 2;
+assert myArray[3] = 3;
+</code></pre>
+<p>You can also use the <code class="notranslate">new</code> operator to create fixed-size arrays using<br>
+tuples. The new operator is useful as it enables you allocate memory and<br>
+initialize the object in one instruction</p>
+<pre class="notranslate"><code class="notranslate">func foo() {
+  tempvar arr: felt* = new (1, 1, 2, 3, 5);
+  assert arr[4] = 5;
+  return ();
+}
+</code></pre>
+</li>
+<li>
+<p>Tuples: A tuple is a finite, ordered, unchangeable list of elements. It is<br>
+represented as a comma-separated list of elements enclosed by parentheses.<br>
+Their elements may be of any combination of valid types.</p>
+<pre class="notranslate"><code class="notranslate">local tuple0: (felt, felt, felt) = (7, 9, 13);
+</code></pre>
+</li>
+<li>
+<p>Events: Events allows a contract emit information during the course of its<br>
+execution, that can be used outside of StarkNet. An event can be created,<br>
+subsequently emitted:</p>
+<pre class="notranslate"><code class="notranslate">@event
+func name_stored(address, name) {}
+
+name_stored.emit(address, name);
+</code></pre>
+</li>
+</ul>
+<h3>4. Constructors, External and View functions</h3>
+<ul>
+<li>
+<p>Constructors: Constructors are a way to intialize state variables on<br>
+contract deployment. You create a constructor using the <code class="notranslate">@constructor</code><br>
+decorator.</p>
+<pre class="notranslate"><code class="notranslate">@constructor
+func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
+range_check_ptr}(_name: felt) {
+  let (caller) = get_caller_address();
+  names.write(caller, _name);
+  return ();
+}
+</code></pre>
+</li>
+<li>
+<p>External functions: External functions are functions that modifies the state<br>
+of the network. You create an external function using the <code class="notranslate">@external</code><br>
+decorator:</p>
+<pre class="notranslate"><code class="notranslate">@external
+func store_name{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
+range_check_ptr}(_name: felt){
+  let (caller) = get_caller_address();
+  names.write(caller, _name);
+  stored_name.emit(caller, _name);
+  return ();
+}
+</code></pre>
+</li>
+<li>
+<p>View functions: View functions do not modify the state of the blockchain.<br>
+You can create a view function using the <code class="notranslate">@view</code> decorator.</p>
+<pre class="notranslate"><code class="notranslate">@view
+func get_name{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
+range_check_ptr}(_address: felt) -&gt; (name: felt){
+  let (name) = names.read(_address);
+  return (name,);
+}
+</code></pre>
+<p>NB: Unlike Solidity, Cairo supports just External and View function types.<br>
+You can alternatively also create an internal function by not adding any<br>
+decorator to the function.</p>
+</li>
+</ul>
+<h3>5. Decorators</h3>
+<p>All functions in Cairo are specified by the <code class="notranslate">func</code> keyword, which can be<br>
+confusing. Decorators are used by the compiler to distinguish between these<br>
+functions.</p>
+<p>Here are the most common decorators you'll encounter in Cairo:</p>
+<ul>
+<li><code class="notranslate">@storage_var</code> — used for specifying state variables.</li>
+<li><code class="notranslate">@constructor</code> — used for specifying constructors.</li>
+<li><code class="notranslate">@external</code> — used for specifying functions that write to a state variable.</li>
+<li><code class="notranslate">@event</code> — used for specifying events</li>
+<li><code class="notranslate">@view</code> — used to specify functions reading from a state variable</li>
+<li><code class="notranslate">@contract_interface</code> — used for specifying function interfaces.</li>
+<li><code class="notranslate">@l1_handler</code> — used for specifying functions that processes message sent from<br>
+an L1 contract in a messaging bridge.</li>
+</ul>
+<h3>6. BUILTINS, HINTS &amp; IMPLICIT Arguments</h3>
+<ul>
+<li>
+<p><code class="notranslate">BUILTINS</code> are predefined optimized low-level execution units, which are<br>
+added to Cairo’s CPU board. They help perform predefined computations like<br>
+pedersen hashing, bitwise operations etc, which are expensive to perform in<br>
+Vanilla Cairo. Each builtin in Cairo is assigned a separate memory location,<br>
+accessible through regular Cairo memory calls using implicit parameters. You<br>
+specify them using the <code class="notranslate">%builtins</code> directive</p>
+<p>Here is a list of available builtins in Cairo:</p>
+<ul>
+<li><code class="notranslate">output</code> — the output builtin is used for writing program outputs</li>
+<li><code class="notranslate">pedersen</code> — the pedersen builtin is used for pedersen hashing<br>
+computations</li>
+<li><code class="notranslate">range_check</code> — This builtin is mostly used for integer comparisons,<br>
+and facilitates check to confirm that a field element is within a range<br>
+<code class="notranslate">[0, 2^128)</code></li>
+<li><code class="notranslate">ecdsa</code> — the ecdsa builtin is used for verifying ECDSA signatures</li>
+<li><code class="notranslate">bitwise</code> — the bitwise builtin is used for carrying out bitwise<br>
+operations on felts</li>
+</ul>
+</li>
+<li>
+<p><code class="notranslate">HINTS</code> are pieces of Python codes, which contains instructions that only<br>
+the prover sees and executes. From the point of view of the verifier these<br>
+hints do not exist. To specify a hint in Cairo, you need to encapsulate it<br>
+within <code class="notranslate">%{</code> and <code class="notranslate">%}</code>. It is good practice to avoid using hints as much as<br>
+you can in your contracts, as hints are not added to the bytecode, and thus<br>
+do not count in the total number of execution steps.</p>
+<pre class="notranslate"><code class="notranslate">%{
+  # Python hint goes here
+%}
+</code></pre>
+</li>
+<li>
+<p><code class="notranslate">IMPLICIT ARGUMENTS</code> are not restricted to the function body, but can be<br>
+inherited by other functions calls that require them. Implicit arguments are<br>
+passed in between curly bracelets, like you can see below:</p>
+<pre class="notranslate"><code class="notranslate">func store_name{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
+range_check_ptr}(_name: felt){
+  let (caller) = get_caller_address();
+  names.write(caller, _name);
+  stored_name.emit(caller, _name);
+  return ();
+}
+</code></pre>
+</li>
+</ul>
+<h3>7. Error Messages and Access Controls</h3>
+<p>You can create custom errors in Cairo which is outputted to the user upon failed<br>
+execution. This can be very useful for implementing checks and proper access<br>
+control mechanisms. An example is preventing a user to call a function except<br>
+user is <code class="notranslate">admin</code>.</p>
+<pre class="notranslate"><code class="notranslate">// imports
+from starkware.starknet.common.syscalls import get_caller_address
+
+// create an admin constant
+const ADMIN = 0x01C6cfC1DB2ae90dACEA243F0a8C2F4e32560F7cDD398e4dA2Cc56B733774E9b
+
+// implement access control
+with_attr error_message("You do not have access to make this action!"){
+  let (caller) = get_caller_address();
+  assert ADMIN = caller;
+}
+
+// using an assert statement throws if condition is not true, thus
+// returning the specified error.
+</code></pre>
+<h3>8. Contract Interfaces</h3>
+<p>Contract interfaces provide a means for one contract to invoke or call the<br>
+external function of another contract. To create a contract interface, you use<br>
+the <code class="notranslate">@contract_interface</code> keyword:</p>
+<pre class="notranslate"><code class="notranslate">@contract_interface
+  namespace IENS {
+    func store_name(_name: felt) {
+    }
+
+    func get_name(_address: felt) -&gt; (name: felt) {
+    }
+  }
+</code></pre>
+<p>Once a contract interface is specified, any contract can make calls to that<br>
+contract passing in the contract address as the first parameter like this:</p>
+<pre class="notranslate"><code class="notranslate">IENS.store_name(contract_address, _name);
+</code></pre>
+<p>Note that Interfaces exclude the function body/logic and the implicit<br>
+arguments.</p>
+<h3>9. Recursions</h3>
+<p>Due to the unavailability of loops, Recursion is the go-to for similar<br>
+operations. In simple terms, a recursive function is one which calls itself<br>
+repeatedly.</p>
+<p>A good example to demonstrate this is writing a function for getting the nth<br>
+fibonacci number:</p>
+<pre class="notranslate"><code class="notranslate">@external
+func fibonacci{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
+range_check_ptr}(n : felt) -&gt; (result : felt){
+  alloc_locals;
+  if (n == 0){
+    return (0);
+  }
+  if (n == 1){
+    return (1);
+  }
+  let (local x) = fibonacci(n - 1);
+  let (local y) = fibonacci(n - 2);
+  return (result=(x + y));
+}
+</code></pre>
+<p>The nth fibonacci term is the sum of the <code class="notranslate">nth - 1</code> and the <code class="notranslate">nth - 2</code> numbers,<br>
+that's why we get these two as <code class="notranslate">(x,y)</code> using recursion.</p>
+<p>NB: when implementing recursive functions, always remember to implement a base<br>
+case (<code class="notranslate">n==0</code>, <code class="notranslate">n==1</code> in our case), to prevent stack overflows.</p>
+<h3>10. Registers</h3>
+<p>Registers holds values that may change over time. There are 3 major types of<br>
+registers:</p>
+<ul>
+<li><code class="notranslate">ap</code> (allocation pointer) points to a yet unused memory. Temporary variables<br>
+created using <code class="notranslate">let</code>, <code class="notranslate">tempvar</code> are held here, and thus susceptible to being<br>
+revoked.</li>
+<li><code class="notranslate">fp</code> (frame pointer) points to the frame of the current function. The address<br>
+of all the function arguments and local variables are relative to this<br>
+register and as such can never be revoked.</li>
+<li><code class="notranslate">pc</code> (program counter) points to the current instruction.</li>
+</ul>
+<h3>11. Revoked References</h3>
+<p>Revoked references occur when there is a call instruction to another function,<br>
+between the definition of a reference variable that depends on <code class="notranslate">ap</code> (temp<br>
+variables) and its usage. This occurs as the compiler may not be able to compute<br>
+the change of <code class="notranslate">ap</code> (as one may jump to the label from another place in the<br>
+program, or call a function that might change ap in an unknown way).</p>
+<p>Here is an example to demonstrate what I mean:</p>
+<pre class="notranslate"><code class="notranslate">@external
+func get_balance{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
+range_check_ptr}() -&gt; (res: felt) {
+  return (res=100);
+}
+
+@external
+func double_balance{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
+range_check_ptr}() -&gt; (res: felt) {
+  let multiplier = 2;
+  let (balance) = get_balance();
+  let new_balance = balance * multiplier;
+  return (res=new_balance);
+}
+</code></pre>
+<p>If you run that code, you'll run into the revoked reference error as we are<br>
+trying to access the <code class="notranslate">multiplier</code> variable after calling the <code class="notranslate">get_balance</code><br>
+function.</p>
+<p>In simple cases you can resolve revoked references by adding the keyword<br>
+<code class="notranslate">alloc_locals</code> within function scopes. In more complex cases you might need to<br>
+create a local variable to resolve it.</p>
+<pre class="notranslate"><code class="notranslate">// resolving the `double_balance` function:
+@external
+func double_balance{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
+range_check_ptr}() -&gt; (res: felt) {
+  alloc_locals;
+  let multiplier = 2;
+  let (balance) = get_balance();
+  let new_balance = balance * multiplier;
+  return (res=new_balance);
+}
+</code></pre>
+<h3>12. Understanding Cairo's Punctuations</h3>
+<ul>
+<li><code class="notranslate">;</code> (semicolon). Used at the end of each instruction</li>
+<li><code class="notranslate">()</code> (parentheses). Used in a function declaration, if statements, and in a<br>
+tuple declaration</li>
+<li><code class="notranslate">{}</code> (curly braces). Used in a declaration of implicit arguments and to define<br>
+code blocks.</li>
+<li><code class="notranslate">[]</code> (square brackets). Standalone brackets represent the value at a<br>
+particular address location (such as the allocation pointer, <code class="notranslate">[ap]</code>). Brackets<br>
+following a pointer or a tuple act as a subscript operator, where <code class="notranslate">x[2]</code><br>
+represents the element with index <code class="notranslate">2</code> in <code class="notranslate">x</code>.</li>
+<li><code class="notranslate">*</code> (single asterisk). Refers to the pointer of an expression.</li>
+<li><code class="notranslate">%</code> (percent sign). Appears at the start of a directive, such as <code class="notranslate">%builtins</code><br>
+or <code class="notranslate">%lang</code>.</li>
+<li><code class="notranslate">%{</code> and <code class="notranslate">%}</code> represent Python hints.</li>
+<li><code class="notranslate">_</code> (underscore). A placeholder to handle values that are not used, such as an<br>
+unused function return value.</li>
+</ul>
+<h2>Full Contract Example</h2>
+<p>Below is a simple automated market maker contract example that implements most<br>
+of what we just learnt! Re-write, deploy, have fun!</p>
+<pre class="notranslate"><code class="notranslate">%lang starknet
+
+from starkware.cairo.common.cairo_builtins import HashBuiltin
+from starkware.cairo.common.hash import hash2
+from starkware.cairo.common.alloc import alloc
+from starkware.cairo.common.math import (assert_le, assert_nn_le,
+  unsigned_div_rem)
+from starkware.starknet.common.syscalls import (get_caller_address,
+  storage_read, storage_write)
+
+
+// CONSTANTS
+//
+// @dev the maximum amount of each token that belongs to the AMM
+const BALANCE_UPPER_BOUND = 2 ** 64;
+
+const TOKEN_TYPE_A = 1;
+const TOKEN_TYPE_B = 2;
+
+// @dev Ensure the user's balances are much smaller than the pool's balance
+const POOL_UPPER_BOUND = 2 ** 30;
+const ACCOUNT_BALANCE_BOUND = 1073741; // (2 ** 30 / 1000)
+
+
+// STORAGE VARIABLES
+//
+// @dev A map from account and token type to corresponding balance
+@storage_var
+func account_balance(account_id: felt, token_type: felt) -&gt; (balance: felt) {}
+
+// @dev a map from token type to corresponding pool balance
+@storage_var
+func pool_balance(token_type: felt) -&gt; (balance: felt) {}
+
+
+// GETTERS
+//
+// @dev returns account balance for a given token
+// @param account_id Account to be queried
+// @param token_type Token to be queried
+@view
+func get_account_token_balance{syscall_ptr: felt*, pedersen_ptr:
+HashBuiltin*, range_check_ptr}(
+  account_id: felt, token_type: felt
+  ) -&gt; (balance: felt) {
+  return account_balance.read(account_id, token_type);
+}
+
+// @dev return the pool's balance
+// @param token_type Token type to get pool balance
+@view
+func get_pool_token_balance{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
+range_check_ptr}(
+  token_type: felt
+  ) -&gt; (balance: felt) {
+  return pool_balance.read(token_type);
+}
+
+
+// EXTERNALS
+//
+// @dev set pool balance for a given token
+// @param token_type Token whose balance is to be set
+// @param balance Amount to be set as balance
+@external
+func set_pool_token_balance{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
+range_check_ptr}(
+  token_type: felt, balance: felt
+  ) {
+  with_attr error_message("exceeds maximum allowed tokens!"){
+    assert_nn_le(balance, BALANCE_UPPER_BOUND - 1);
+  }
+
+  pool_balance.write(token_type, balance);
+  return ();
+}
+
+// @dev add demo token to the given account
+// @param token_a_amount amount of token a to be added
+// @param token_b_amount amount of token b to be added
+@external
+func add_demo_token{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
+range_check_ptr}(
+    token_a_amount: felt, token_b_amount: felt
+  ) {
+  alloc_locals;
+  let (account_id) = get_caller_address();
+
+  modify_account_balance(account_id=account_id, token_type=TOKEN_TYPE_A,
+    amount=token_a_amount);
+  modify_account_balance(account_id=account_id, token_type=TOKEN_TYPE_B,
+    amount=token_b_amount);
+
+  return ();
+}
+
+// @dev intialize AMM
+// @param token_a amount of token a to be set in pool
+// @param token_b amount of token b to be set in pool
+@external
+func init_pool{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
+range_check_ptr}(
+  token_a: felt, token_b: felt
+  ) {
+  with_attr error_message("exceeds maximum allowed tokens!"){
+    assert_nn_le(token_a, POOL_UPPER_BOUND - 1);
+    assert_nn_le(token_b, POOL_UPPER_BOUND - 1);
+  }
+
+  set_pool_token_balance(token_type=TOKEN_TYPE_A, balance=token_a);
+  set_pool_token_balance(token_type=TOKEN_TYPE_B, balance=token_b);
+
+  return ();
+}
+
+
+// @dev swaps token between the given account and the pool
+// @param token_from token to be swapped
+// @param amount_from amount of token to be swapped
+// @return amount_to the token swapped to
+@external
+func swap{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+  token_from: felt, amount_from: felt
+  ) -&gt; (amount_to: felt) {
+  alloc_locals;
+  let (account_id) = get_caller_address();
+
+  // verify token_from is TOKEN_TYPE_A or TOKEN_TYPE_B
+  with_attr error_message("token not allowed in pool!"){
+    assert (token_from - TOKEN_TYPE_A) * (token_from - TOKEN_TYPE_B) = 0;
+    }
+
+  // check requested amount_from is valid
+  with_attr error_message("exceeds maximum allowed tokens!"){
+    assert_nn_le(amount_from, BALANCE_UPPER_BOUND - 1);
+    }
+
+  // check user has enough funds
+  let (account_from_balance) =
+    get_account_token_balance(account_id=account_id, token_type=token_from);
+  with_attr error_message("insufficient balance!"){
+    assert_le(amount_from, account_from_balance);
+    }
+
+  let (token_to) = get_opposite_token(token_type=token_from);
+  let (amount_to) = do_swap(account_id=account_id, token_from=token_from,
+    token_to=token_to, amount_from=amount_from);
+
+  return (amount_to=amount_to);
+}
+
+
+// INTERNALS
+//
+// @dev internal function that updates account balance for a given token
+// @param account_id Account whose balance is to be modified
+// @param token_type Token type to be modified
+// @param amount Amount Amount to be added
+func modify_account_balance{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
+range_check_ptr}(
+  account_id: felt, token_type: felt, amount: felt
+  ) {
+  let (current_balance) = account_balance.read(account_id, token_type);
+  tempvar new_balance = current_balance + amount;
+
+  with_attr error_message("exceeds maximum allowed tokens!"){
+    assert_nn_le(new_balance, BALANCE_UPPER_BOUND - 1);
+    }
+
+  account_balance.write(account_id=account_id, token_type=token_type,
+    value=new_balance);
+  return ();
+}
+
+// @dev internal function that swaps tokens between the given account and
+// the pool
+// @param account_id Account whose tokens are to be swapped
+// @param token_from Token type to be swapped from
+// @param token_to Token type to be swapped to
+// @param amount_from Amount to be swapped
+func do_swap{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*,
+range_check_ptr}(
+  account_id: felt, token_from: felt, token_to: felt, amount_from: felt
+  ) -&gt; (amount_to: felt) {
+  alloc_locals;
+
+  // get pool balance
+  let (local amm_from_balance) = get_pool_token_balance(token_type =
+    token_from);
+  let (local amm_to_balance) = get_pool_token_balance(token_type=token_to);
+
+  // calculate swap amount
+  let (local amount_to, _) = unsigned_div_rem((amm_to_balance *
+    amount_from), (amm_from_balance + amount_from));
+
+  // update token_from balances
+  modify_account_balance(account_id=account_id, token_type=token_from,
+    amount=-amount_from);
+  set_pool_token_balance(token_type=token_from, balance=(amm_from_balance
+    + amount_from));
+
+  // update token_to balances
+  modify_account_balance(account_id=account_id, token_type=token_to,
+    amount=amount_to);
+  set_pool_token_balance(token_type=token_to, balance=(amm_to_balance -
+    amount_to));
+
+  return (amount_to=amount_to);
+}
+
+
+// @dev internal function to get the opposite token type
+// @param token_type Token whose opposite pair needs to be gotten
+func get_opposite_token(token_type: felt) -&gt; (t: felt) {
+  if(token_type == TOKEN_TYPE_A) {
+    return (t=TOKEN_TYPE_B);
+  } else {
+    return (t=TOKEN_TYPE_A);
+  }
+}
+</code></pre>
+<h2>Additional Resources</h2>
+<ul>
+<li><a href="https://www.cairo-lang.org/docs/" rel="nofollow">Official documentation</a></li>
+<li><a href="https://medium.com/starknet-edu" rel="nofollow">Starknet EDU</a></li>
+<li><a href="https://medium.com/@darlingtonnnam/journey-through-cairo-i-setting-up-protostar-and-argentx-for-local-development-ba40ae6c5524" rel="nofollow">Journey through Cairo</a></li>
+<li><a href="https://medium.com/@pban/demystifying-cairo-white-paper-part-i-b71976ad0108" rel="nofollow">Demystifying Cairo whitepaper</a></li>
+<li><a href="https://www.argent.xyz/learn/tag/starknet/" rel="nofollow">Learn about StarkNet with Argent</a></li>
+</ul>
+<h2>Development Frameworks</h2>
+<ul>
+<li><a href="https://docs.swmansion.com/protostar/docs/tutorials/installation" rel="nofollow">Protostar</a></li>
+<li><a href="https://github.com/OpenZeppelin/nile">Nile</a></li>
+<li><a href="https://www.cairo-lang.org/docs/quickstart.html" rel="nofollow">StarkNet CLI</a></li>
+</ul>
+<h2>Helpful Libraries</h2>
+<ul>
+<li><a href="https://github.com/starkware-libs/cairo-lang">Cairo-lang</a></li>
+<li><a href="https://github.com/OpenZeppelin/cairo-contracts">Openzeppelin</a></li>
+</ul>
+<h2>Educational Repos</h2>
+<ul>
+<li><a href="https://github.com/starknet-edu/starknet-cairo-101">StarkNet Cairo 101</a></li>
+<li><a href="https://github.com/starknet-edu/starknet-erc721">StarkNet ERC721</a></li>
+<li><a href="https://github.com/starknet-edu/starknet-erc20">StarkNet ERC20</a></li>
+<li><a href="https://github.com/starknet-edu/starknet-messaging-bridge">L1 -&gt; L2 Messaging</a></li>
+<li><a href="https://github.com/starknet-edu/starknet-debug">StarkNet Debug</a></li>
+<li><a href="https://github.com/starknet-edu/starknet-accounts">StarkNet Accounts</a></li>
+<li><a href="https://github.com/Darlington02/min-starknet">Min-Starknet</a></li>
+</ul>
+<h2>Security</h2>
+<ul>
+<li><a href="https://blog.trailofbits.com/2022/04/20/amarna-static-analysis-for-cairo-programs/" rel="nofollow">Amarna static analysis for Cairo programs</a></li>
+<li><a href="https://ctrlc03.github.io/" rel="nofollow">Cairo and StarkNet security by Ctrl03</a></li>
+<li><a href="https://medium.com/ginger-security/how-to-hack-almost-any-starknet-cairo-smart-contract-67b4681ac0f6" rel="nofollow">How to hack almost any Cairo smart contract</a></li>
+<li><a href="https://dic0de.substack.com/p/analyzing-cairo-code-using-amarna?sd=pf" rel="nofollow">Analyzing Cairo code using Armana</a></li>
+</ul>
+<h2>Future TO-DOs</h2>
+<p>Update tutorial to fit Cairo 1.0</p>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Darlington Nnam", "https://github.com/Darlington02"]
+</code></pre>

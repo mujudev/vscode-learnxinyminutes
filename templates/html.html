@@ -1,0 +1,166 @@
+<h1>HTML</h1>
+<p>HTML stands for Hypertext Markup Language.</p>
+<p>It is a language which allows us to write pages for the World Wide Web.<br>
+It is a markup language, it enables us to write webpages using code to indicate<br>
+how text and data should be displayed.  In fact, HTML files are simple text<br>
+files.</p>
+<p>What is this markup? It is a method of organising the page's data by<br>
+surrounding it with opening tags and closing tags.  This markup serves to give<br>
+significance to the text that it encloses.  Like other computer languages, HTML<br>
+has many versions. Here we will talk about HTML5.</p>
+<p><strong>NOTE :</strong>  You can test the different tags and elements as you progress through<br>
+the tutorial on a site like <a href="http://codepen.io/pen/" rel="nofollow">codepen</a> in order to see<br>
+their effects, understand how they work and familiarise yourself with the<br>
+language.  This article is concerned principally with HTML syntax and some<br>
+useful tips.</p>
+<div class="highlight highlight-text-html-basic"><pre class="notranslate"><span class="pl-c">&lt;!-- Comments are enclosed like this line! --&gt;</span>
+
+<span class="pl-c">&lt;!--</span>
+<span class="pl-c">	Comments</span>
+<span class="pl-c">	can</span>
+<span class="pl-c">	span</span>
+<span class="pl-c">	multiple</span>
+<span class="pl-c">	lines!</span>
+<span class="pl-c">--&gt;</span>
+
+<span class="pl-c">&lt;!-- #################### The Tags #################### --&gt;</span>
+
+<span class="pl-c">&lt;!-- Here is an example HTML file that we are going to analyse. --&gt;</span>
+
+
+<span class="pl-c1">&lt;!doctype html<span class="pl-kos">&gt;</span></span>
+	<span class="pl-kos">&lt;</span><span class="pl-ent">html</span><span class="pl-kos">&gt;</span>
+		<span class="pl-kos">&lt;</span><span class="pl-ent">head</span><span class="pl-kos">&gt;</span>
+			<span class="pl-kos">&lt;</span><span class="pl-ent">title</span><span class="pl-kos">&gt;</span>My Site<span class="pl-kos">&lt;/</span><span class="pl-ent">title</span><span class="pl-kos">&gt;</span>
+		<span class="pl-kos">&lt;/</span><span class="pl-ent">head</span><span class="pl-kos">&gt;</span>
+		<span class="pl-kos">&lt;</span><span class="pl-ent">body</span><span class="pl-kos">&gt;</span>
+			<span class="pl-kos">&lt;</span><span class="pl-ent">h1</span><span class="pl-kos">&gt;</span>Hello, world!<span class="pl-kos">&lt;/</span><span class="pl-ent">h1</span><span class="pl-kos">&gt;</span>
+			<span class="pl-kos">&lt;</span><span class="pl-ent">a</span> <span class="pl-c1">href</span>="<span class="pl-s">http://codepen.io/anon/pen/xwjLbZ</span>"<span class="pl-kos">&gt;</span>
+				Come look at what this shows
+			<span class="pl-kos">&lt;/</span><span class="pl-ent">a</span><span class="pl-kos">&gt;</span>
+			<span class="pl-kos">&lt;</span><span class="pl-ent">p</span><span class="pl-kos">&gt;</span>This is a paragraph.<span class="pl-kos">&lt;/</span><span class="pl-ent">p</span><span class="pl-kos">&gt;</span>
+			<span class="pl-kos">&lt;</span><span class="pl-ent">p</span><span class="pl-kos">&gt;</span>This is another paragraph.<span class="pl-kos">&lt;/</span><span class="pl-ent">p</span><span class="pl-kos">&gt;</span>
+			<span class="pl-kos">&lt;</span><span class="pl-ent">ul</span><span class="pl-kos">&gt;</span>
+				<span class="pl-kos">&lt;</span><span class="pl-ent">li</span><span class="pl-kos">&gt;</span>This is an item in a non-enumerated list (bullet list)<span class="pl-kos">&lt;/</span><span class="pl-ent">li</span><span class="pl-kos">&gt;</span>
+				<span class="pl-kos">&lt;</span><span class="pl-ent">li</span><span class="pl-kos">&gt;</span>This is another item<span class="pl-kos">&lt;/</span><span class="pl-ent">li</span><span class="pl-kos">&gt;</span>
+				<span class="pl-kos">&lt;</span><span class="pl-ent">li</span><span class="pl-kos">&gt;</span>And this is the last item on the list<span class="pl-kos">&lt;/</span><span class="pl-ent">li</span><span class="pl-kos">&gt;</span>
+			<span class="pl-kos">&lt;/</span><span class="pl-ent">ul</span><span class="pl-kos">&gt;</span>
+		<span class="pl-kos">&lt;/</span><span class="pl-ent">body</span><span class="pl-kos">&gt;</span>
+	<span class="pl-kos">&lt;/</span><span class="pl-ent">html</span><span class="pl-kos">&gt;</span>
+
+<span class="pl-c">&lt;!--</span>
+<span class="pl-c">	An HTML file always starts by indicating to the browser that the page is HTML.</span>
+<span class="pl-c">--&gt;</span>
+<span class="pl-c1">&lt;!doctype html<span class="pl-kos">&gt;</span></span>
+
+<span class="pl-c">&lt;!-- After this, it starts by opening an &lt;html&gt; tag. --&gt;</span>
+<span class="pl-kos">&lt;</span><span class="pl-ent">html</span><span class="pl-kos">&gt;</span>
+
+<span class="pl-c">&lt;!-- that will be closed at the end of the file with &lt;/html&gt;. --&gt;</span>
+<span class="pl-kos">&lt;/</span><span class="pl-ent">html</span><span class="pl-kos">&gt;</span>
+
+<span class="pl-c">&lt;!-- Nothing should appear after this final tag. --&gt;</span>
+
+<span class="pl-c">&lt;!-- Inside (between the opening and closing tags &lt;html&gt;&lt;/html&gt;), we find: --&gt;</span>
+
+<span class="pl-c">&lt;!-- A header defined by &lt;head&gt; (it must be closed with &lt;/head&gt;). --&gt;</span>
+<span class="pl-c">&lt;!--</span>
+<span class="pl-c">	The header contains some description and additional information which are not</span>
+<span class="pl-c">	displayed; this is metadata.</span>
+<span class="pl-c">--&gt;</span>
+
+<span class="pl-kos">&lt;</span><span class="pl-ent">head</span><span class="pl-kos">&gt;</span>
+	<span class="pl-c">&lt;!--</span>
+<span class="pl-c">		The tag &lt;title&gt; indicates to the browser the title to show in browser</span>
+<span class="pl-c">		window's title bar and tab name.</span>
+<span class="pl-c">	--&gt;</span>
+	<span class="pl-kos">&lt;</span><span class="pl-ent">title</span><span class="pl-kos">&gt;</span>My Site<span class="pl-kos">&lt;/</span><span class="pl-ent">title</span><span class="pl-kos">&gt;</span>
+<span class="pl-kos">&lt;/</span><span class="pl-ent">head</span><span class="pl-kos">&gt;</span>
+
+<span class="pl-c">&lt;!-- After the &lt;head&gt; section, we find the tag - &lt;body&gt; --&gt;</span>
+<span class="pl-c">&lt;!-- Until this point, nothing described will show up in the browser window. --&gt;</span>
+<span class="pl-c">&lt;!-- We must fill the body with the content to be displayed. --&gt;</span>
+
+<span class="pl-kos">&lt;</span><span class="pl-ent">body</span><span class="pl-kos">&gt;</span>
+	<span class="pl-c">&lt;!-- The h1 tag creates a title. --&gt;</span>
+	<span class="pl-kos">&lt;</span><span class="pl-ent">h1</span><span class="pl-kos">&gt;</span>Hello, world!<span class="pl-kos">&lt;/</span><span class="pl-ent">h1</span><span class="pl-kos">&gt;</span>
+	<span class="pl-c">&lt;!--</span>
+<span class="pl-c">		There are also subtitles to &lt;h1&gt; from the most important (h2) to the most</span>
+<span class="pl-c">		precise (h6).</span>
+<span class="pl-c">	--&gt;</span>
+
+	<span class="pl-c">&lt;!-- a hyperlink to the url given by the attribute href="" --&gt;</span>
+	<span class="pl-kos">&lt;</span><span class="pl-ent">a</span> <span class="pl-c1">href</span>="<span class="pl-s">http://codepen.io/anon/pen/xwjLbZ</span>"<span class="pl-kos">&gt;</span>
+		Come look at what this shows
+	<span class="pl-kos">&lt;/</span><span class="pl-ent">a</span><span class="pl-kos">&gt;</span>
+
+	<span class="pl-c">&lt;!-- The tag &lt;p&gt; lets us include text in the html page. --&gt;</span>
+	<span class="pl-kos">&lt;</span><span class="pl-ent">p</span><span class="pl-kos">&gt;</span>This is a paragraph.<span class="pl-kos">&lt;/</span><span class="pl-ent">p</span><span class="pl-kos">&gt;</span>
+	<span class="pl-kos">&lt;</span><span class="pl-ent">p</span><span class="pl-kos">&gt;</span>This is another paragraph.<span class="pl-kos">&lt;/</span><span class="pl-ent">p</span><span class="pl-kos">&gt;</span>
+
+	<span class="pl-c">&lt;!-- The tag &lt;ul&gt; creates a bullet list. --&gt;</span>
+	<span class="pl-c">&lt;!--</span>
+<span class="pl-c">		To have a numbered list instead we would use &lt;ol&gt; giving 1. for the first</span>
+<span class="pl-c">		element, 2. for the second, etc.</span>
+<span class="pl-c">	--&gt;</span>
+	<span class="pl-kos">&lt;</span><span class="pl-ent">ul</span><span class="pl-kos">&gt;</span>
+		<span class="pl-kos">&lt;</span><span class="pl-ent">li</span><span class="pl-kos">&gt;</span>This is an item in a non-enumerated list (bullet list)<span class="pl-kos">&lt;/</span><span class="pl-ent">li</span><span class="pl-kos">&gt;</span>
+		<span class="pl-kos">&lt;</span><span class="pl-ent">li</span><span class="pl-kos">&gt;</span>This is another item<span class="pl-kos">&lt;/</span><span class="pl-ent">li</span><span class="pl-kos">&gt;</span>
+		<span class="pl-kos">&lt;</span><span class="pl-ent">li</span><span class="pl-kos">&gt;</span>And this is the last item on the list<span class="pl-kos">&lt;/</span><span class="pl-ent">li</span><span class="pl-kos">&gt;</span>
+	<span class="pl-kos">&lt;/</span><span class="pl-ent">ul</span><span class="pl-kos">&gt;</span>
+<span class="pl-kos">&lt;/</span><span class="pl-ent">body</span><span class="pl-kos">&gt;</span>
+
+<span class="pl-c">&lt;!-- And that's it, creating an HTML file can be simple. --&gt;</span>
+
+<span class="pl-c">&lt;!-- But it is possible to add many additional types of HTML tags. --&gt;</span>
+
+<span class="pl-c">&lt;!-- The &lt;img /&gt; tag is used to insert an image. --&gt;</span>
+<span class="pl-c">&lt;!--</span>
+<span class="pl-c">	The source of the image is indicated using the attribute src=""</span>
+<span class="pl-c">	The source can be an URL or even path to a file on your computer.</span>
+<span class="pl-c">--&gt;</span>
+<span class="pl-kos">&lt;</span><span class="pl-ent">img</span> <span class="pl-c1">src</span>="<span class="pl-s">http://i.imgur.com/XWG0O.gif</span>"/&gt;
+
+<span class="pl-c">&lt;!-- It is also possible to create a table. --&gt;</span>
+
+<span class="pl-c">&lt;!-- We open a &lt;table&gt; element. --&gt;</span>
+<span class="pl-kos">&lt;</span><span class="pl-ent">table</span><span class="pl-kos">&gt;</span>
+
+	<span class="pl-c">&lt;!-- &lt;tr&gt; allows us to create a row. --&gt;</span>
+	<span class="pl-kos">&lt;</span><span class="pl-ent">tr</span><span class="pl-kos">&gt;</span>
+
+		<span class="pl-c">&lt;!-- &lt;th&gt; allows us to give a title to a table column. --&gt;</span>
+		<span class="pl-kos">&lt;</span><span class="pl-ent">th</span><span class="pl-kos">&gt;</span>First Header<span class="pl-kos">&lt;/</span><span class="pl-ent">th</span><span class="pl-kos">&gt;</span>
+		<span class="pl-kos">&lt;</span><span class="pl-ent">th</span><span class="pl-kos">&gt;</span>Second Header<span class="pl-kos">&lt;/</span><span class="pl-ent">th</span><span class="pl-kos">&gt;</span>
+	<span class="pl-kos">&lt;/</span><span class="pl-ent">tr</span><span class="pl-kos">&gt;</span>
+
+	<span class="pl-kos">&lt;</span><span class="pl-ent">tr</span><span class="pl-kos">&gt;</span>
+
+		<span class="pl-c">&lt;!-- &lt;td&gt; allows us to create a table cell. --&gt;</span>
+		<span class="pl-kos">&lt;</span><span class="pl-ent">td</span><span class="pl-kos">&gt;</span>first row, first column<span class="pl-kos">&lt;/</span><span class="pl-ent">td</span><span class="pl-kos">&gt;</span>
+		<span class="pl-kos">&lt;</span><span class="pl-ent">td</span><span class="pl-kos">&gt;</span>first row, second column<span class="pl-kos">&lt;/</span><span class="pl-ent">td</span><span class="pl-kos">&gt;</span>
+	<span class="pl-kos">&lt;/</span><span class="pl-ent">tr</span><span class="pl-kos">&gt;</span>
+
+	<span class="pl-kos">&lt;</span><span class="pl-ent">tr</span><span class="pl-kos">&gt;</span>
+		<span class="pl-kos">&lt;</span><span class="pl-ent">td</span><span class="pl-kos">&gt;</span>second row, first column<span class="pl-kos">&lt;/</span><span class="pl-ent">td</span><span class="pl-kos">&gt;</span>
+		<span class="pl-kos">&lt;</span><span class="pl-ent">td</span><span class="pl-kos">&gt;</span>second row, second column<span class="pl-kos">&lt;/</span><span class="pl-ent">td</span><span class="pl-kos">&gt;</span>
+	<span class="pl-kos">&lt;/</span><span class="pl-ent">tr</span><span class="pl-kos">&gt;</span>
+<span class="pl-kos">&lt;/</span><span class="pl-ent">table</span><span class="pl-kos">&gt;</span></pre></div>
+<h2>Usage</h2>
+<p>HTML is written in files ending with <code class="notranslate">.html</code> or <code class="notranslate">.htm</code>. The mime type is<br>
+<code class="notranslate">text/html</code>.<br>
+<strong>HTML is NOT a programming language</strong></p>
+<h2>To Learn More</h2>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/HTML" rel="nofollow">Wikipedia</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML" rel="nofollow">HTML Tutorial</a></li>
+<li><a href="http://www.w3schools.com/html/html_intro.asp" rel="nofollow">W3Schools</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Christophe THOMAS", "https://github.com/WinChris"]
+</code></pre>
+<h3>Translators</h3>
+<pre class="notranslate"><code class="notranslate">- ["Robert Steed", "https://github.com/robochat"]
+- ["Dimitri Kokkonis", "https://github.com/kokkonisd"]
+</code></pre>

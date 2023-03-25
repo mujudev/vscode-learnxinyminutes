@@ -1,0 +1,216 @@
+<h1>HDL</h1>
+<p>HDL (hardware description language) is a specialized language used to describe the structure/behavior of real world circuits.</p>
+<p>It is used by circuit designers to simulate circuits and logic prior to wiring and fabricating a hardware circuit.</p>
+<p>HDL allows circuit designers to simulate circuits at a high level without being connected to specific components.</p>
+<h2>Basic building blocks &amp; introduction to the language---</h2>
+<p>This programming language is built by simulating hardware chips and wiring. Normal programming functions are replaced with specialized chips that are added to the current wiring design. Every base chip must be written as it's own file and imported to be used in the current chip, though they may be reused as often as desired.</p>
+<div class="highlight highlight-source-verilog"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> Single line comments start with two forward slashes.</span>
+
+<span class="pl-c">/*</span>
+<span class="pl-c"> * Multiline comments can be written using '/*' and 'star/'.</span>
+<span class="pl-c"> * These are often used as comments.</span>
+<span class="pl-c"> *</span>
+<span class="pl-c"> * Note that they cannot be nested and will end at the first 'star/'.</span>
+<span class="pl-c"> */</span>
+
+<span class="pl-c"><span class="pl-c">//</span>//////////////////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> 1. Chips &amp; Components</span>
+<span class="pl-c"><span class="pl-c">//</span>//////////////////////////////////////////////////</span>
+<span class="pl-c">/* </span>
+<span class="pl-c"> * Unlike other languages HDL creates an individual chip (function) per file</span>
+<span class="pl-c"> * These are defined with a name, input arguments, output arguments</span>
+<span class="pl-c"> * and finally the parts/logic of that specific chip.</span>
+<span class="pl-c"> */</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Note CHIP is capitalized, the chip name does not need to be.</span>
+CHIP Ex {
+    IN  a,  <span class="pl-c"><span class="pl-c">//</span> Single bit (0 or 1) variable.</span>
+        c[<span class="pl-c1">16</span>];  <span class="pl-c"><span class="pl-c">//</span> 16 bit variable bus of single bit values.</span>
+
+    OUT out[<span class="pl-c1">16</span>],  <span class="pl-c"><span class="pl-c">//</span> 16 bit variable bus output.</span>
+        carry;  <span class="pl-c"><span class="pl-c">//</span> Single bit output variable</span>
+
+    PARTS:
+    <span class="pl-c"><span class="pl-c">//</span> The functional components of the chip.</span>
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Lines are ended with semicolons but can be continued using commas. The</span>
+<span class="pl-c"><span class="pl-c">//</span> whitespace is ignored.</span>
+
+
+
+<span class="pl-c"><span class="pl-c">//</span>//////////////////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> 2. Inputs, Outputs, &amp; Variables</span>
+<span class="pl-c"><span class="pl-c">//</span>//////////////////////////////////////////////////</span>
+<span class="pl-c">/*</span>
+<span class="pl-c"> * Variables and IO are treated as pins/wires and can carry a single bit</span>
+<span class="pl-c"> * of data (0 or 1).</span>
+<span class="pl-c"> */</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Hardware works on low level 0's and 1's, in order to use a constant</span>
+<span class="pl-c"><span class="pl-c">//</span> high or low we use the terms true and false.</span>
+a<span class="pl-k">=</span>false; <span class="pl-c"><span class="pl-c">//</span> This is a 0 value.</span>
+b<span class="pl-k">=</span>true; <span class="pl-c"><span class="pl-c">//</span> This is a 1 value.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Inputs and outputs can be defined as single bits</span>
+IN a, b; <span class="pl-c"><span class="pl-c">//</span> Creates two single bit inputs</span>
+
+<span class="pl-c"><span class="pl-c">//</span> They can also be defined as busses act as arrays where each</span>
+<span class="pl-c"><span class="pl-c">//</span> index can contain a single bit value.</span>
+OUT c[<span class="pl-c1">16</span>]; <span class="pl-c"><span class="pl-c">//</span> Creates a 16 bit output array.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Bussed values can be accessed using brackets</span>
+a[<span class="pl-c1">0</span>] <span class="pl-c"><span class="pl-c">//</span> The first indexed value in the bus a.</span>
+a[<span class="pl-c1">0</span>..<span class="pl-c1">3</span>] <span class="pl-c"><span class="pl-c">//</span> The first 4 values in the a bus.</span>
+<span class="pl-c"><span class="pl-c">//</span> Values can also be passed in entirety. For example if the function </span>
+<span class="pl-c"><span class="pl-c">//</span> foo() takes an 8 bit input bus and outputs a 2 bit bus:</span>
+foo(in<span class="pl-k">=</span>a[<span class="pl-c1">0</span>..<span class="pl-c1">7</span>], out<span class="pl-k">=</span>c); <span class="pl-c"><span class="pl-c">//</span> C is now a 2 bit internal bus</span>
+
+
+<span class="pl-c"><span class="pl-c">//</span> Note that internally defined busses cannot be subbussed!</span>
+<span class="pl-c"><span class="pl-c">//</span> To access these elements, output or input them separately:</span>
+foo(in[<span class="pl-c1">0</span>]<span class="pl-k">=</span>false, in[<span class="pl-c1">1</span>..<span class="pl-c1">7</span>]<span class="pl-k">=</span>a[<span class="pl-c1">0</span>..<span class="pl-c1">6</span>], out[<span class="pl-c1">0</span>]<span class="pl-k">=</span>out1, out[<span class="pl-c1">1</span>]<span class="pl-k">=</span>out2);
+<span class="pl-c"><span class="pl-c">//</span> out1 and out2 can then be passed into other circuits within the design.</span>
+
+
+
+<span class="pl-c"><span class="pl-c">//</span>//////////////////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> Combining Subsystems</span>
+<span class="pl-c"><span class="pl-c">//</span>//////////////////////////////////////////////////</span>
+<span class="pl-c">/*</span>
+<span class="pl-c"> * HDL relies heavily on using smaller "building block" chips to then be</span>
+<span class="pl-c"> * added into larger and more complex designs. Creating the smaller components</span>
+<span class="pl-c"> * and then adding them to the larger circuit allows for fewer lines of code</span>
+<span class="pl-c"> * as well as reduction in total rewriting of code.</span>
+<span class="pl-c"> */</span>
+
+<span class="pl-c"><span class="pl-c">//</span> We are writing the function AND that checks if inputs I and K are both one.</span>
+<span class="pl-c"><span class="pl-c">//</span> To implement this chip we will use the built in NAND gate as well as design</span>
+<span class="pl-c"><span class="pl-c">//</span> a custom NOT gate to invert a single input.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> First we construct the Negation (not) chip. We will use the logically</span>
+<span class="pl-c"><span class="pl-c">//</span> complete gate NAND that is built in for this task.</span>
+CHIP Not {
+    IN i; <span class="pl-c"><span class="pl-c">//</span> Not gates only take one single bit input.</span>
+    OUT o; <span class="pl-c"><span class="pl-c">//</span> The negated value of a.</span>
+
+    PARTS:
+    <span class="pl-c"><span class="pl-c">//</span> Add the input to the built in chip, which then sends output to the NOT</span>
+    <span class="pl-c"><span class="pl-c">//</span> output. This effectively negates the given value.</span>
+    Nand(a<span class="pl-k">=</span>i, b<span class="pl-k">=</span>i, out<span class="pl-k">=</span>o);
+}
+
+<span class="pl-c"><span class="pl-c">//</span> By using the built in NAND gate we were able to construct a NOT gate</span>
+<span class="pl-c"><span class="pl-c">//</span> that works like a real world hardware logic chip. Now we must construct</span>
+<span class="pl-c"><span class="pl-c">//</span> the AND gate using these two gate primitives.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> We define a two input, single output AND gate:</span>
+CHIP And {
+    IN i, k; <span class="pl-c"><span class="pl-c">//</span> Two single bit inputs.</span>
+    OUT o; <span class="pl-c"><span class="pl-c">//</span> One single bit output.</span>
+
+    PARTS:
+    <span class="pl-c"><span class="pl-c">//</span> Insert I and K into the nand gate and store the output in an internal</span>
+    <span class="pl-c"><span class="pl-c">//</span> wire called notOut.</span>
+    Nand(a<span class="pl-k">=</span>i,b<span class="pl-k">=</span>k,out<span class="pl-k">=</span>notOut);
+
+    <span class="pl-c"><span class="pl-c">//</span> Use the not gate we constructed to invert notOut and send to the AND</span>
+    <span class="pl-c"><span class="pl-c">//</span> output.</span>
+    Not(in<span class="pl-k">=</span>notOut,out<span class="pl-k">=</span>o);
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Easy! Now we can use Nand, And, and Not gates in higher level circuits.</span>
+<span class="pl-c"><span class="pl-c">//</span> Many of these low level components are built in to HDL but any chip can</span>
+<span class="pl-c"><span class="pl-c">//</span> be written as a submodule and used in larger designs.</span></pre></div>
+<h2>Test Files</h2>
+<p>When working with the nand2tetris hardware simulator chips written using HDL will<br>
+then be processed against test and comparison files to test functionality of the<br>
+simulated chip versus the expected output. To do this a test file will be loaded<br>
+into the hardware simulator and run against the simulated hardware.</p>
+<div class="highlight highlight-source-verilog"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> First the chip the test file is written for is loaded</span>
+load <span class="pl-k">&lt;</span>chip name<span class="pl-k">&gt;</span>.hdl
+
+<span class="pl-c"><span class="pl-c">//</span> We set the output file for the simulated chip output as well as the comparison</span>
+<span class="pl-c"><span class="pl-c">//</span> file that it will be tested against. We also specify what the output is</span>
+<span class="pl-c"><span class="pl-c">//</span> expected to look like. In this case there will be two output columns, each</span>
+<span class="pl-c"><span class="pl-c">//</span> will be buffered by a single space on either side and 4 binary values in</span>
+<span class="pl-c"><span class="pl-c">//</span> the center of each column.</span>
+<span class="pl-k">output</span><span class="pl-k">-</span>file <span class="pl-k">&lt;</span>chip name<span class="pl-k">&gt;</span>.out,
+compare<span class="pl-k">-</span>to <span class="pl-k">&lt;</span>chip name<span class="pl-k">&gt;</span>.cmp,
+<span class="pl-k">output</span><span class="pl-k">-</span>list in<span class="pl-k">%</span>B1.<span class="pl-c1">4</span>.<span class="pl-c1">1</span> out<span class="pl-k">%</span>B1.<span class="pl-c1">4</span>.<span class="pl-c1">1</span>;
+
+<span class="pl-c"><span class="pl-c">//</span> Then we set initial values for inputs to the chip. For example</span>
+set enable1 <span class="pl-c1">1</span>, <span class="pl-c"><span class="pl-c">//</span> set input enable1 to 1</span>
+set enable2 <span class="pl-c1">0</span>, <span class="pl-c"><span class="pl-c">//</span> set input enable2 to 0</span>
+
+<span class="pl-c"><span class="pl-c">//</span> The clock is also controlled in the test file using tick and tock. Tick is a</span>
+<span class="pl-c"><span class="pl-c">//</span> positive pulse and tock takes the clock back to 0. Clock cycles can be run</span>
+<span class="pl-c"><span class="pl-c">//</span> multiple times in a row with no other changes to inputs or outputs.</span>
+tick,
+tock,
+
+<span class="pl-c"><span class="pl-c">//</span> Finally we output the first expected value (from the test file) which is then</span>
+<span class="pl-c"><span class="pl-c">//</span> compared with the first line of real output from our HDL circuit. This output</span>
+<span class="pl-c"><span class="pl-c">//</span> can be viewed in the &lt;chip name&gt;.out file.</span>
+<span class="pl-k">output</span>;
+
+<span class="pl-c"><span class="pl-c">//</span> An example of &lt;chip name&gt;, a chip that takes in a 4 bit value as input and</span>
+<span class="pl-c"><span class="pl-c">//</span> adds 1 to that value could have the following as test code:</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Set the input value to 0000, clock pulse, compare output from cmp file to actual out.</span>
+set in <span class="pl-k">%</span>B0000,
+tick,
+tock,
+<span class="pl-k">output</span>;
+
+<span class="pl-c"><span class="pl-c">//</span> Set the input value to 0110, clock pulse, compare output from cmp file to actual out.</span>
+set in <span class="pl-k">%</span>B0110,
+tick,
+tock,
+<span class="pl-k">output</span>;
+
+<span class="pl-c"><span class="pl-c">//</span> The expected output for case 1 should be 0001 and case 2 expects 0111, lets</span>
+<span class="pl-c"><span class="pl-c">//</span> learn a little more about comparison files before finalizing our lesson.</span></pre></div>
+<h2>Comparison Files</h2>
+<p>Now lets take a look at comparison files, the files that hold what the test file<br>
+compares with the actual output of an HDL chip in the hardware simulator!</p>
+<div class="highlight highlight-source-verilog"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> Like the &lt;chip name&gt; example above, the structure of the comparison file</span>
+<span class="pl-c"><span class="pl-c">//</span> would look something like this</span>
+<span class="pl-k">|</span>  in  <span class="pl-k">|</span> out  <span class="pl-k">|</span>
+<span class="pl-k">|</span> <span class="pl-c1">0000</span> <span class="pl-k">|</span> <span class="pl-c1">0001</span> <span class="pl-k">|</span>
+<span class="pl-k">|</span> <span class="pl-c1">0110</span> <span class="pl-k">|</span> <span class="pl-c1">0111</span> <span class="pl-k">|</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Notice how the input values specified in the test case are equivalent to the</span>
+<span class="pl-c"><span class="pl-c">//</span> `in` column of the comparison file, and that the space buffer is 1 on either side.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> If the output from the HDL code we not this, such as the output below, then the</span>
+<span class="pl-c"><span class="pl-c">//</span> test will fail and the user will know that the simulated chip is not correctly designed.</span>
+<span class="pl-k">|</span>  in  <span class="pl-k">|</span> out  <span class="pl-k">|</span>
+<span class="pl-k">|</span> <span class="pl-c1">0000</span> <span class="pl-k">|</span> <span class="pl-c1">0001</span> <span class="pl-k">|</span>
+<span class="pl-k">|</span> <span class="pl-c1">0110</span> <span class="pl-k">|</span> <span class="pl-c1">0110</span> <span class="pl-k">|</span> <span class="pl-c"><span class="pl-c">//</span> Error! The chip did not add 1 here, something went wrong.</span>
+
+</pre></div>
+<p>This is incredibly useful as it allows designers to simulate chip logic prior to<br>
+fabricating real life hardware and identify problems in their designs. Be warned that<br>
+errors in the test or comparison files can lead to both false positives and also<br>
+the more damaging false negatives so ensure that the logic is sound behind the test<br>
+creation.</p>
+<p>Good luck and happy coding!</p>
+<h2>Resources</h2>
+<ul>
+<li><a href="https://www.nand2tetris.org" rel="nofollow">From Nand To Tetris</a></li>
+</ul>
+<h2>Further Reading</h2>
+<ul>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/Hardware_description_language" rel="nofollow">Hardware Description Language</a></p>
+</li>
+<li>
+<p><a href="https://www.electronicdesign.com/products/hdl-programming-fundamentals" rel="nofollow">HDL Programming Fundamentals</a></p>
+</li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<ul>
+<li>["Jack Smith", "https://github.com/JSmithTech2019"]</li>
+</ul>

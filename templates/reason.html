@@ -1,0 +1,540 @@
+<h1>Reason</h1>
+<p>Reason is a syntax over OCaml that is easier to get started for programmers who are familiar with C-style syntax like JavaScript. BuckleScript is part of the toolchain which compiles Reason to JavaScript so you can write statically typed code for anywhere that JavaScript runs.</p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-c">/* Comments start with slash-star, and end with star-slash */</span>
+
+<span class="pl-c">/*----------------------------------------------</span>
+<span class="pl-c"> * Variable and function declaration</span>
+<span class="pl-c"> *----------------------------------------------</span>
+<span class="pl-c"> * Variables and functions use the let keyword and end with a semi-colon</span>
+<span class="pl-c"> * `let` bindings are immutable</span>
+<span class="pl-c"> */</span>
+
+<span class="pl-k">let</span> <span class="pl-s1">x</span> <span class="pl-c1">=</span> <span class="pl-c1">5</span><span class="pl-kos">;</span>
+<span class="pl-c">/* - Notice we didn't add a type, Reason will infer x is an int */</span>
+
+<span class="pl-c">/* A function like this, take two arguments and add them together */</span>
+<span class="pl-k">let</span> <span class="pl-en">add</span> <span class="pl-c1">=</span> <span class="pl-kos">(</span><span class="pl-s1">a</span><span class="pl-kos">,</span> <span class="pl-s1">b</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-s1">a</span> <span class="pl-c1">+</span> <span class="pl-s1">b</span><span class="pl-kos">;</span>
+<span class="pl-c">/* - This doesn't need a type annotation either! */</span>
+
+<span class="pl-c">/*----------------------------------------------</span>
+<span class="pl-c"> * Type annotation</span>
+<span class="pl-c"> *----------------------------------------------</span>
+<span class="pl-c"> * Types don't need to be explicitly annotated in most cases but when you need</span>
+<span class="pl-c"> * to, you can add the type after the name</span>
+<span class="pl-c"> */</span>
+
+<span class="pl-c">/* A type can be explicitly written like so */</span>
+<span class="pl-k">let</span> <span class="pl-s1">x</span>: <span class="pl-s1">int</span> <span class="pl-c1">=</span> <span class="pl-c1">5</span><span class="pl-kos">;</span>
+
+<span class="pl-c">/* The add function from before could be explicitly annotated too */</span>
+<span class="pl-k">let</span> <span class="pl-en">add2</span> <span class="pl-c1">=</span> <span class="pl-kos">(</span><span class="pl-s1">a</span>: <span class="pl-s1">int</span><span class="pl-kos">,</span> <span class="pl-s1">b</span>: <span class="pl-s1">int</span><span class="pl-kos">)</span>: <span class="pl-s1">int</span> <span class="pl-c1">=&gt;</span> <span class="pl-s1">a</span> <span class="pl-c1">+</span> <span class="pl-s1">b</span><span class="pl-kos">;</span>
+
+<span class="pl-c">/* A type can be aliased using the type keyword */</span>
+<span class="pl-s1">type</span> <span class="pl-s1">companyId</span> <span class="pl-c1">=</span> <span class="pl-s1">int</span><span class="pl-kos">;</span>
+<span class="pl-k">let</span> <span class="pl-s1">myId</span>: <span class="pl-s1">companyId</span> <span class="pl-c1">=</span> <span class="pl-c1">101</span><span class="pl-kos">;</span>
+
+<span class="pl-c">/* Mutation is not encouraged in Reason but it's there if you need it</span>
+<span class="pl-c">   If you need to mutate a let binding, the value must be wrapped in a `ref()`*/</span>
+<span class="pl-k">let</span> <span class="pl-s1">myMutableNumber</span> <span class="pl-c1">=</span> <span class="pl-en">ref</span><span class="pl-kos">(</span><span class="pl-c1">120</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-c">/* To access the value (and not the ref container), use `^` */</span>
+<span class="pl-k">let</span> <span class="pl-s1">copyOfMyMutableNumber</span> <span class="pl-c1">=</span> <span class="pl-s1">myMutableNumber</span><span class="pl-c1">^</span><span class="pl-kos">;</span>
+
+<span class="pl-c">/* To assign a new value, use the `:=` operator */</span>
+<span class="pl-s1">myMutableNumber</span> :<span class="pl-c1">=</span> <span class="pl-c1">240</span><span class="pl-kos">;</span>
+
+<span class="pl-c">/*----------------------------------------------</span>
+<span class="pl-c"> * Basic types and operators</span>
+<span class="pl-c"> *----------------------------------------------</span>
+<span class="pl-c"> */</span>
+
+<span class="pl-c">/* &gt; String */</span>
+
+<span class="pl-c">/* Use double quotes for strings */</span>
+<span class="pl-k">let</span> <span class="pl-s1">greeting</span> <span class="pl-c1">=</span> <span class="pl-s">"Hello world!"</span><span class="pl-kos">;</span>
+
+<span class="pl-c">/* A string can span multiple lines */</span>
+<span class="pl-k">let</span> <span class="pl-s1">aLongerGreeting</span> <span class="pl-c1">=</span> <span class="pl-s">"Look at me,</span>
+<span class="pl-s">I'm a multi-line string</span>
+<span class="pl-s">"</span><span class="pl-kos">;</span>
+
+<span class="pl-c">/* A quoted string can be used for string interpolation and special chars</span>
+<span class="pl-c">   Use the `js` annotation for unicode */</span>
+<span class="pl-k">let</span> <span class="pl-s1">world</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span>js<span class="pl-kos"></span><span class="pl-c1">|</span><span class="pl-s1">🌍</span><span class="pl-c1">|</span><span class="pl-s1">js</span><span class="pl-kos">}</span><span class="pl-kos">;</span>
+
+<span class="pl-c">/* The `j` annotation is used for string interpolation */</span>
+<span class="pl-k">let</span> <span class="pl-s1">helloWorld</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span>j<span class="pl-kos"></span><span class="pl-c1">|</span><span class="pl-s1">hello</span><span class="pl-kos">,</span> <span class="pl-s1">$world</span><span class="pl-c1">|</span><span class="pl-s1">j</span><span class="pl-kos">}</span><span class="pl-kos">;</span>
+
+<span class="pl-c">/* Concatenate strings with ++ */</span>
+<span class="pl-k">let</span> <span class="pl-s1">name</span> <span class="pl-c1">=</span> <span class="pl-s">"John "</span> <span class="pl-c1">++</span><span class="pl-kos"></span> <span class="pl-s">"Wayne"</span><span class="pl-kos">;</span>
+<span class="pl-k">let</span> <span class="pl-s1">emailSubject</span> <span class="pl-c1">=</span> <span class="pl-s">"Hi "</span> <span class="pl-c1">++</span> <span class="pl-s1">name</span> <span class="pl-c1">++</span><span class="pl-kos"></span> <span class="pl-s">", you're a valued customer"</span><span class="pl-kos">;</span>
+
+<span class="pl-c">/* &gt; Char */</span>
+
+<span class="pl-c">/* Use a single character for the char type */</span>
+<span class="pl-k">let</span> <span class="pl-s1">lastLetter</span> <span class="pl-c1">=</span> <span class="pl-s">'z'</span><span class="pl-kos">;</span>
+<span class="pl-c">/* - Char doesn't support Unicode or UTF-8 */</span>
+
+<span class="pl-c">/* &gt; Boolean */</span>
+
+<span class="pl-c">/* A boolean can be either true or false */</span>
+<span class="pl-k">let</span> <span class="pl-s1">isLearning</span> <span class="pl-c1">=</span> <span class="pl-c1">true</span><span class="pl-kos">;</span>
+
+<span class="pl-c1">true</span> <span class="pl-c1">&amp;&amp;</span> <span class="pl-c1">false</span><span class="pl-kos">;</span>  <span class="pl-c">/* - : bool = false;  Logical and */</span>
+<span class="pl-c1">true</span> <span class="pl-c1">||</span> <span class="pl-c1">true</span><span class="pl-kos">;</span>   <span class="pl-c">/* - : bool = true;   Logical or  */</span>
+<span class="pl-c1">!</span><span class="pl-c1">true</span><span class="pl-kos">;</span>          <span class="pl-c">/* - : bool = false;  Logical not */</span>
+
+<span class="pl-c">/* Greater than `&gt;`, or greater than or equal to `&gt;=` */</span>
+<span class="pl-s">'a'</span> <span class="pl-c1">&gt;</span> <span class="pl-s">'b'</span><span class="pl-kos">;</span> <span class="pl-c">/* - bool : false */</span>
+
+<span class="pl-c">/* Less than `&lt;`, or less than or equal to `&lt;=` */</span>
+<span class="pl-c1">1</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">5</span><span class="pl-kos">;</span> <span class="pl-c">/* - : bool = true */</span>
+
+<span class="pl-c">/* Structural equal */</span>
+<span class="pl-s">"hello"</span> <span class="pl-c1">==</span> <span class="pl-s">"hello"</span><span class="pl-kos">;</span> <span class="pl-c">/* - : bool = true */</span>
+
+<span class="pl-c">/* Referential equal */</span>
+<span class="pl-s">"hello"</span> <span class="pl-c1">===</span> <span class="pl-s">"hello"</span><span class="pl-kos">;</span> <span class="pl-c">/* - : bool = false */</span>
+<span class="pl-c">/* - This is false because they are two different "hello" string literals */</span>
+
+<span class="pl-c">/* Structural unequal */</span>
+<span class="pl-s1">lastLetter</span> <span class="pl-c1">!=</span> <span class="pl-s">'a'</span><span class="pl-kos">;</span> <span class="pl-c">/* -: bool = true */</span>
+
+<span class="pl-c">/* Referential unequal */</span>
+<span class="pl-s1">lastLetter</span> <span class="pl-c1">!==</span> <span class="pl-s1">lastLetter</span><span class="pl-kos">;</span> <span class="pl-c">/* - : bool = false */</span>
+
+<span class="pl-c">/* &gt; Integer */</span>
+<span class="pl-c">/* Perform math operations on integers */</span>
+
+<span class="pl-c1">1</span> <span class="pl-c1">+</span> <span class="pl-c1">1</span><span class="pl-kos">;</span>          <span class="pl-c">/* - : int = 2  */</span>
+<span class="pl-c1">25</span> <span class="pl-c1">-</span> <span class="pl-c1">11</span><span class="pl-kos">;</span>        <span class="pl-c">/* - : int = 11 */</span>
+<span class="pl-c1">5</span> <span class="pl-c1">*</span> <span class="pl-c1">2</span> <span class="pl-c1">*</span> <span class="pl-c1">3</span><span class="pl-kos">;</span>      <span class="pl-c">/* - : int = 30 */</span>
+<span class="pl-c1">8</span> <span class="pl-c1">/</span> <span class="pl-c1">2</span><span class="pl-kos">;</span>          <span class="pl-c">/* - : int = 4  */</span>
+
+<span class="pl-c">/* &gt; Float */</span>
+<span class="pl-c">/* Operators on floats have a dot after them */</span>
+
+<span class="pl-c1">1.1</span> <span class="pl-c1">+</span><span class="pl-kos">.</span> <span class="pl-c1">1.5</span><span class="pl-kos">;</span>     <span class="pl-c">/* - : float = 2.6  */</span>
+<span class="pl-c1">18.0</span> <span class="pl-c1">-</span><span class="pl-kos">.</span> <span class="pl-c1">24.5</span><span class="pl-kos">;</span>   <span class="pl-c">/* - : float = -6.5 */</span>
+<span class="pl-c1">2.5</span> <span class="pl-c1">*</span><span class="pl-kos">.</span> <span class="pl-c1">2.0</span><span class="pl-kos">;</span>     <span class="pl-c">/* - : float = 5.   */</span>
+<span class="pl-c1">16.0</span> <span class="pl-c1">/</span><span class="pl-kos">.</span> <span class="pl-c1">4.0</span><span class="pl-kos">;</span>    <span class="pl-c">/* - : float = 4.   */</span>
+
+<span class="pl-c">/* &gt; Tuple</span>
+<span class="pl-c"> * Tuples have the following attributes</span>
+<span class="pl-c">  - immutable</span>
+<span class="pl-c">  - ordered</span>
+<span class="pl-c">  - fix-sized at creation time</span>
+<span class="pl-c">  - heterogeneous (can contain different types of values)</span>
+<span class="pl-c"> A tuple is 2 or more values */</span>
+
+<span class="pl-k">let</span> <span class="pl-s1">teamMember</span> <span class="pl-c1">=</span> <span class="pl-kos">(</span><span class="pl-s">"John"</span><span class="pl-kos">,</span> <span class="pl-c1">25</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-c">/* Type annotation matches the values */</span>
+<span class="pl-k">let</span> <span class="pl-s1">position2d</span>: <span class="pl-kos">(</span><span class="pl-s1">float</span><span class="pl-kos">,</span> <span class="pl-s1">float</span><span class="pl-kos">)</span> <span class="pl-c1">=</span> <span class="pl-kos">(</span><span class="pl-c1">9.0</span><span class="pl-kos">,</span> <span class="pl-c1">12.0</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-c">/* Pattern matching is a great tool to retrieve just the values you care about</span>
+<span class="pl-c">   If we only want the y value, let's use `_` to ignore the value */</span>
+<span class="pl-k">let</span> <span class="pl-kos">(</span><span class="pl-s1">_</span><span class="pl-kos">,</span> <span class="pl-s1">y</span><span class="pl-kos">)</span> <span class="pl-c1">=</span> <span class="pl-s1">position2d</span><span class="pl-kos">;</span>
+<span class="pl-s1">y</span> <span class="pl-c1">+</span><span class="pl-kos">.</span> <span class="pl-c1">1.0</span><span class="pl-kos">;</span> <span class="pl-c">/* - : float = 13. */</span>
+
+<span class="pl-c">/* &gt; Record */</span>
+
+<span class="pl-c">/* A record has to have an explicit type */</span>
+<span class="pl-s1">type</span><span class="pl-kos"></span> <span class="pl-s1">trainJourney</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span>
+  <span class="pl-c1">destination</span>: <span class="pl-s1">string</span><span class="pl-kos">,</span>
+  <span class="pl-c1">capacity</span>: <span class="pl-s1">int</span><span class="pl-kos">,</span>
+  <span class="pl-c1">averageSpeed</span>: <span class="pl-s1">float</span><span class="pl-kos">,</span>
+<span class="pl-kos">}</span><span class="pl-kos">;</span>
+
+<span class="pl-c">/* Once the type is declared, Reason can infer it whenever it comes up */</span>
+<span class="pl-k">let</span> <span class="pl-s1">firstTrip</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span><span class="pl-c1">destination</span>: <span class="pl-s">"London"</span><span class="pl-kos">,</span> <span class="pl-c1">capacity</span>: <span class="pl-c1">45</span><span class="pl-kos">,</span> <span class="pl-c1">averageSpeed</span>: <span class="pl-c1">120.0</span><span class="pl-kos">}</span><span class="pl-kos">;</span>
+
+<span class="pl-c">/* Access a property using dot notation */</span>
+<span class="pl-k">let</span> <span class="pl-s1">maxPassengers</span> <span class="pl-c1">=</span> <span class="pl-s1">firstTrip</span><span class="pl-kos">.</span><span class="pl-c1">capacity</span><span class="pl-kos">;</span>
+
+<span class="pl-c">/* If you define the record type in a different file, you have to reference the</span>
+<span class="pl-c">   filename, if trainJourney was in a file called Trips.re */</span>
+<span class="pl-k">let</span> <span class="pl-s1">secondTrip</span>: <span class="pl-v">Trips</span><span class="pl-kos">.</span><span class="pl-s1">trainJourney</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span>
+  <span class="pl-c1">destination</span>: <span class="pl-s">"Paris"</span><span class="pl-kos">,</span>
+  <span class="pl-c1">capacity</span>: <span class="pl-c1">50</span><span class="pl-kos">,</span>
+  <span class="pl-c1">averageSpeed</span>: <span class="pl-c1">150.0</span><span class="pl-kos">,</span>
+<span class="pl-kos">}</span><span class="pl-kos">;</span>
+
+<span class="pl-c">/* Records are immutable by default */</span>
+<span class="pl-c">/* But the contents of a record can be copied using the spread operator */</span>
+<span class="pl-k">let</span> <span class="pl-s1">newTrip</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span>...<span class="pl-s1">secondTrip</span><span class="pl-kos">,</span> <span class="pl-c1">averageSpeed</span>: <span class="pl-c1">120.0</span><span class="pl-kos">}</span><span class="pl-kos">;</span>
+
+<span class="pl-c">/* A record property can be mutated explicitly with the `mutable` keyword */</span>
+<span class="pl-s1">type</span><span class="pl-kos"></span> <span class="pl-s1">breakfastCereal</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span>
+  <span class="pl-c1">name</span>: <span class="pl-s1">string</span><span class="pl-kos">,</span>
+  <span class="pl-c1">mutable</span> <span class="pl-s1">amount</span>: <span class="pl-s1">int</span><span class="pl-kos">,</span>
+<span class="pl-kos">}</span><span class="pl-kos">;</span>
+
+<span class="pl-k">let</span> <span class="pl-s1">tastyMuesli</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span><span class="pl-c1">name</span>: <span class="pl-s">"Tasty Muesli TM"</span><span class="pl-kos">,</span> <span class="pl-c1">amount</span>: <span class="pl-c1">500</span><span class="pl-kos">}</span><span class="pl-kos">;</span>
+
+<span class="pl-s1">tastyMuesli</span><span class="pl-kos">.</span><span class="pl-c1">amount</span> <span class="pl-c1">=</span> <span class="pl-c1">200</span><span class="pl-kos">;</span>
+<span class="pl-c">/* - tastyMuesli now has an amount of 200 */</span>
+
+<span class="pl-c">/* Punning is used to avoid redundant typing */</span>
+<span class="pl-k">let</span> <span class="pl-s1">name</span> <span class="pl-c1">=</span> <span class="pl-s">"Just As Good Muesli"</span><span class="pl-kos">;</span>
+<span class="pl-k">let</span> <span class="pl-s1">justAsGoodMuesli</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span>name<span class="pl-kos">,</span> <span class="pl-c1">amount</span>: <span class="pl-c1">500</span><span class="pl-kos">}</span><span class="pl-kos">;</span>
+<span class="pl-c">/* - justAsGoodMuesli.name is now "Just As Good Muesli", it's equivalent</span>
+<span class="pl-c">   to { name: name, amount: 500 } */</span>
+
+<span class="pl-c">/* &gt; Variant</span>
+<span class="pl-c">   Mutually exclusive states can be expressed with variants */</span>
+
+<span class="pl-s1">type</span> <span class="pl-s1">authType</span> <span class="pl-c1">=</span>
+  <span class="pl-c1">|</span> <span class="pl-v">GitHub</span>
+  <span class="pl-c1">|</span> <span class="pl-v">Facebook</span>
+  <span class="pl-c1">|</span> <span class="pl-v">Google</span>
+  <span class="pl-c1">|</span> <span class="pl-v">Password</span><span class="pl-kos">;</span>
+<span class="pl-c">/* - The constructors must be capitalized like so */</span>
+<span class="pl-c">/* - Like records, variants should be named if declared in a different file */</span>
+
+<span class="pl-k">let</span> <span class="pl-s1">userPreferredAuth</span> <span class="pl-c1">=</span> <span class="pl-v">GitHub</span><span class="pl-kos">;</span>
+
+<span class="pl-c">/* Variants work great with a switch statement */</span>
+<span class="pl-k">let</span> <span class="pl-s1">loginMessage</span> <span class="pl-c1">=</span>
+  <span class="pl-en">switch</span> <span class="pl-kos">(</span><span class="pl-s1">userPreferredAuth</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+  <span class="pl-c1">|</span> <span class="pl-v">GitHub</span> <span class="pl-c1">=&gt;</span> <span class="pl-s">"Login with GitHub credentials."</span>
+  <span class="pl-c1">|</span> <span class="pl-v">Facebook</span> <span class="pl-c1">=&gt;</span> <span class="pl-s">"Login with your Facebook account."</span>
+  <span class="pl-c1">|</span> <span class="pl-v">Google</span> <span class="pl-c1">=&gt;</span> <span class="pl-s">"Login with your Google account"</span>
+  <span class="pl-c1">|</span> <span class="pl-v">Password</span> <span class="pl-c1">=&gt;</span> <span class="pl-s">"Login with email and password."</span>
+  <span class="pl-kos">}</span><span class="pl-kos">;</span>
+
+<span class="pl-c">/* &gt; Option</span>
+<span class="pl-c">   An option can be None or Some('a) where 'a is the type */</span>
+
+<span class="pl-k">let</span> <span class="pl-s1">userId</span> <span class="pl-c1">=</span> <span class="pl-v">Some</span><span class="pl-kos">(</span><span class="pl-c1">23</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-c">/* A switch handles the two cases */</span>
+<span class="pl-k">let</span> <span class="pl-s1">alertMessage</span> <span class="pl-c1">=</span>
+  <span class="pl-en">switch</span> <span class="pl-kos">(</span><span class="pl-s1">userId</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+  <span class="pl-c1">|</span> <span class="pl-v">Some</span><span class="pl-kos">(</span><span class="pl-s1">id</span><span class="pl-kos">)</span> <span class="pl-c1">=</span><span class="pl-c1">&gt;</span> <span class="pl-s">"Welcome, your ID is"</span> <span class="pl-c1">++</span> <span class="pl-s1">string_of_int</span><span class="pl-kos">(</span><span class="pl-s1">id</span><span class="pl-kos">)</span>
+  <span class="pl-c1">|</span> <span class="pl-v">None</span> <span class="pl-c1">=&gt;</span> <span class="pl-s">"You don't have an account!"</span>
+  <span class="pl-kos">}</span><span class="pl-kos">;</span>
+<span class="pl-c">/* - Missing a case, `None` or `Some`, would cause an error */</span>
+
+<span class="pl-c">/* &gt; List</span>
+<span class="pl-c">  * Lists have the following attributes</span>
+<span class="pl-c">   - immutable</span>
+<span class="pl-c">   - ordered</span>
+<span class="pl-c">   - fast at prepending items</span>
+<span class="pl-c">   - fast at splitting</span>
+<span class="pl-c"></span>
+<span class="pl-c">  * Lists in Reason are linked lists</span>
+<span class="pl-c"> */</span>
+
+<span class="pl-c">/* A list is declared with square brackets */</span>
+<span class="pl-k">let</span> <span class="pl-s1">userIds</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span><span class="pl-c1">1</span><span class="pl-kos">,</span> <span class="pl-c1">4</span><span class="pl-kos">,</span> <span class="pl-c1">8</span><span class="pl-kos">]</span><span class="pl-kos">;</span>
+
+<span class="pl-c">/* The type can be explicitly set with list('a) where 'a is the type */</span>
+<span class="pl-s1">type</span> <span class="pl-s1">idList</span> <span class="pl-c1">=</span> <span class="pl-en">list</span><span class="pl-kos">(</span><span class="pl-s1">int</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-s1">type</span><span class="pl-kos"></span> <span class="pl-s1">attendanceList</span> <span class="pl-c1">=</span> <span class="pl-en">list</span><span class="pl-kos">(</span><span class="pl-s1">string</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-c">/* Lists are immutable */</span>
+<span class="pl-c">/* But the contents of a list can be copied using the spread operator */</span>
+<span class="pl-k">let</span> <span class="pl-s1">newUserIds</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span><span class="pl-c1">101</span><span class="pl-kos">,</span> <span class="pl-c1">102</span><span class="pl-kos">,</span> ...<span class="pl-s1">userIds</span><span class="pl-kos">]</span><span class="pl-kos">;</span>
+
+<span class="pl-c">/* &gt; Array</span>
+<span class="pl-c"> * Arrays have the following attributes</span>
+<span class="pl-c">  - mutable</span>
+<span class="pl-c">  - fast at random access &amp; updates */</span>
+
+<span class="pl-c">/* An array is declared with `[|` and ends with `|]` */</span>
+<span class="pl-k">let</span> <span class="pl-s1">languages</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span><span class="pl-c1">|</span><span class="pl-s">"Reason"</span><span class="pl-kos">,</span> <span class="pl-s">"JavaScript"</span><span class="pl-kos">,</span> <span class="pl-s">"OCaml"</span><span class="pl-c1">|</span><span class="pl-kos">]</span><span class="pl-kos">;</span>
+
+<span class="pl-c">/*----------------------------------------------</span>
+<span class="pl-c"> * Function</span>
+<span class="pl-c"> *----------------------------------------------</span>
+<span class="pl-c"> */</span>
+
+<span class="pl-c">/* Reason functions use the arrow syntax, the expression is returned */</span>
+<span class="pl-k">let</span> <span class="pl-en">signUpToNewsletter</span> <span class="pl-c1">=</span> <span class="pl-s1">email</span> <span class="pl-c1">=&gt;</span> <span class="pl-s">"Thanks for signing up "</span> <span class="pl-c1">++</span> <span class="pl-s1">email</span><span class="pl-kos">;</span>
+
+<span class="pl-c">/* Call a function like this */</span>
+<span class="pl-en">signUpToNewsletter</span><span class="pl-kos">(</span><span class="pl-s">"hello@reason.org"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-c">/* For longer functions, use a block */</span>
+<span class="pl-k">let</span> <span class="pl-en">getEmailPrefs</span> <span class="pl-c1">=</span> <span class="pl-s1">email</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span>
+  <span class="pl-k">let</span> <span class="pl-s1">message</span> <span class="pl-c1">=</span> <span class="pl-s">"Update settings for "</span> <span class="pl-c1">++</span> <span class="pl-s1">email</span><span class="pl-kos">;</span>
+  <span class="pl-k">let</span> <span class="pl-s1">prefs</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span><span class="pl-s">"Weekly News"</span><span class="pl-kos">,</span> <span class="pl-s">"Daily Notifications"</span><span class="pl-kos">]</span><span class="pl-kos">;</span>
+
+  <span class="pl-kos">(</span><span class="pl-s1">message</span><span class="pl-kos">,</span> <span class="pl-s1">prefs</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span><span class="pl-kos">;</span>
+<span class="pl-c">/* - the final tuple is implicitly returned */</span>
+
+<span class="pl-c">/* &gt; Labeled Arguments */</span>
+
+<span class="pl-c">/* Arguments can be labeled with the ~ symbol */</span>
+<span class="pl-k">let</span> <span class="pl-s1">moveTo</span> <span class="pl-c1">=</span> <span class="pl-kos">(</span><span class="pl-c1">~</span><span class="pl-s1">x</span><span class="pl-kos">,</span> <span class="pl-c1">~</span><span class="pl-s1">y</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span><span class="pl-c">/* Move to x,y */</span><span class="pl-kos">}</span><span class="pl-kos">;</span>
+
+<span class="pl-s1">moveTo</span><span class="pl-kos">(</span><span class="pl-c1">~</span><span class="pl-s1">x</span><span class="pl-c1">=</span><span class="pl-c1">7.0</span><span class="pl-kos">,</span> <span class="pl-c1">~</span><span class="pl-s1">y</span><span class="pl-c1">=</span><span class="pl-c1">3.5</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-c">/* Labeled arguments can also have a name used within the function */</span>
+<span class="pl-k">let</span> <span class="pl-s1">getMessage</span> <span class="pl-c1">=</span> <span class="pl-kos">(</span><span class="pl-c1">~</span><span class="pl-s1">message</span> <span class="pl-s1">as</span> <span class="pl-s1">msg</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> "<span class="pl-c1">==</span><span class="pl-s">" ++ msg ++ "</span><span class="pl-c1">==</span><span class="pl-s">";</span>
+<span class="pl-s"></span>
+<span class="pl-s">getMessage(~message="</span><span class="pl-v">You</span> <span class="pl-s1">have</span> <span class="pl-s1">a</span> <span class="pl-s1">message</span><span class="pl-c1">!</span><span class="pl-s">");</span>
+<span class="pl-s">/* - The caller specifies ~message but internally the function can make use */</span>
+<span class="pl-s"></span>
+<span class="pl-s">/* The following function also has explicit types declared */</span>
+<span class="pl-s">let showDialog = (~message: string): unit =&gt; {</span>
+<span class="pl-s">  () /* Show the dialog */;</span>
+<span class="pl-s">};</span>
+<span class="pl-s">/* - The return type is `unit`, this is a special type that is equivalent to</span>
+<span class="pl-s">   specifying that this function doesn't return a value</span>
+<span class="pl-s">   the `unit` type can also be represented as `()` */</span>
+<span class="pl-s"></span>
+<span class="pl-s">/* &gt; Currying</span>
+<span class="pl-s">   Functions can be curried and are partially called, allowing for easy reuse */</span>
+<span class="pl-s"></span>
+<span class="pl-s">let div = (denom, numr) =&gt; numr / denom;</span>
+<span class="pl-s">let divBySix = div(6);</span>
+<span class="pl-s">let divByTwo = div(2);</span>
+<span class="pl-s"></span>
+<span class="pl-s">div(3, 24);     /* - : int = 8  */</span>
+<span class="pl-s">divBySix(128);  /* - : int = 21 */</span>
+<span class="pl-s">divByTwo(10);   /* - : int = 5  */</span>
+<span class="pl-s"></span>
+<span class="pl-s">/* &gt; Optional Labeled Arguments */</span>
+<span class="pl-s"></span>
+<span class="pl-s">/* Use `=?` syntax for optional labeled arguments */</span>
+<span class="pl-s">let greetPerson = (~name, ~greeting=?, ()) =&gt; {</span>
+<span class="pl-s">  switch (greeting) {</span>
+<span class="pl-s">  | Some(greet) =&gt; greet ++ "</span><span class="pl-kos"></span> <span class="pl-s">" ++ name</span>
+<span class="pl-s">  | None =&gt; "</span><span class="pl-v">Hi</span> <span class="pl-s">" ++ name</span>
+<span class="pl-s">  };</span>
+<span class="pl-s">};</span>
+<span class="pl-s">/* - The third argument, `unit` or `()` is required because if we omitted it,</span>
+<span class="pl-s">   the function would be curried so greetPerson(~name="</span><span class="pl-v">Kate</span><span class="pl-s">") would create</span>
+<span class="pl-s">   a partial function, to fix this we add `unit` when we declare and call it */</span>
+<span class="pl-s"></span>
+<span class="pl-s">/* Call greetPerson without the optional labeled argument */</span>
+<span class="pl-s">greetPerson(~name="</span><span class="pl-v">Kate</span><span class="pl-s">", ());</span>
+<span class="pl-s"></span>
+<span class="pl-s">/* Call greetPerson with all arguments */</span>
+<span class="pl-s">greetPerson(~name="</span><span class="pl-v">Marco</span><span class="pl-s">", ~greeting="</span><span class="pl-v">How</span> <span class="pl-s1">are</span> <span class="pl-s1">you</span> <span class="pl-s1">today</span><span class="pl-kos">,</span><span class="pl-s">");</span>
+<span class="pl-s"></span>
+<span class="pl-s">/* &gt; Pipe */</span>
+<span class="pl-s">/* Functions can be called with the pipeline operator */</span>
+<span class="pl-s"></span>
+<span class="pl-s">/* Use `-&gt;` to pass in the first argument (pipe-first) */</span>
+<span class="pl-s">3-&gt;div(24);     /* - : int = 8 */</span>
+<span class="pl-s">/* - This is equivalent to div(3, 24); */</span>
+<span class="pl-s"></span>
+<span class="pl-s">36-&gt;divBySix;   /* - : int = 6 */</span>
+<span class="pl-s">/* - This is equivalent to divBySix(36); */</span>
+<span class="pl-s"></span>
+<span class="pl-s">/* Use `|&gt;` to pass in the last argument (pipe-last) */</span>
+<span class="pl-s">24 |&gt; div(3);   /* - : int = 8 */</span>
+<span class="pl-s">/* - This is equivalent to div(3, 24); */</span>
+<span class="pl-s"></span>
+<span class="pl-s">36 |&gt; divBySix; /* - : int = 6 */</span>
+<span class="pl-s">/* - This is equivalent to divBySix(36); */</span>
+<span class="pl-s"></span>
+<span class="pl-s">/* Pipes make it easier to chain code together */</span>
+<span class="pl-s">let addOne = a =&gt; a + 1;</span>
+<span class="pl-s">let divByTwo = a =&gt; a / 2;</span>
+<span class="pl-s">let multByThree = a =&gt; a * 3;</span>
+<span class="pl-s"></span>
+<span class="pl-s">let pipedValue = 3-&gt;addOne-&gt;divByTwo-&gt;multByThree; /* - : int = 6 */</span>
+<span class="pl-s"></span>
+<span class="pl-s">/*----------------------------------------------</span>
+<span class="pl-s"> * Control Flow &amp; Pattern Matching</span>
+<span class="pl-s"> *----------------------------------------------</span>
+<span class="pl-s"> */</span>
+<span class="pl-s"></span>
+<span class="pl-s">/* &gt; If-else */</span>
+<span class="pl-s">/* In Reason, `If` is an expression when evaluate will return the result */</span>
+<span class="pl-s"></span>
+<span class="pl-s">/* greeting will be "</span><span class="pl-v">Good</span> <span class="pl-s1">morning</span><span class="pl-c1">!</span><span class="pl-s">" */</span>
+<span class="pl-s">let greeting = if (true) {"</span><span class="pl-v">Good</span> <span class="pl-s1">morning</span><span class="pl-c1">!</span><span class="pl-s">"} else {"</span><span class="pl-v">Hello</span><span class="pl-c1">!</span><span class="pl-s">"};</span>
+<span class="pl-s"></span>
+<span class="pl-s">/* Without an else branch the expression will return `unit` or `()` */</span>
+<span class="pl-s">if (false) {</span>
+<span class="pl-s">  showDialog(~message="</span><span class="pl-v">Are</span> <span class="pl-s1">you</span> <span class="pl-s1">sure</span> <span class="pl-s1">you</span> <span class="pl-s1">want</span> <span class="pl-s1">to</span> <span class="pl-s1">leave</span>?<span class="pl-s">");</span>
+<span class="pl-s">};</span>
+<span class="pl-s">/* - Because the result will be of type `unit`, both return types should be of</span>
+<span class="pl-s">   the same type if you want to assign the result. */</span>
+<span class="pl-s"></span>
+<span class="pl-s">/* &gt; Destructuring */</span>
+<span class="pl-s">/* Extract properties from data structures easily */</span>
+<span class="pl-s"></span>
+<span class="pl-s">let aTuple = ("</span><span class="pl-v">Teacher</span><span class="pl-s">", 101);</span>
+<span class="pl-s"></span>
+<span class="pl-s">/* We can extract the values of a tuple */</span>
+<span class="pl-s">let (name, classNum) = aTuple;</span>
+<span class="pl-s"></span>
+<span class="pl-s">/* The properties of a record can be extracted too */</span>
+<span class="pl-s">type person = {</span>
+<span class="pl-s">  firstName: string,</span>
+<span class="pl-s">  age: int,</span>
+<span class="pl-s">};</span>
+<span class="pl-s">let bjorn = {firstName: "</span><span class="pl-v">Bjorn</span><span class="pl-s">", age: 28};</span>
+<span class="pl-s"></span>
+<span class="pl-s">/* The variable names have to match with the record property names */</span>
+<span class="pl-s">let {firstName, age} = bjorn;</span>
+<span class="pl-s"></span>
+<span class="pl-s">/* But we can rename them like so */</span>
+<span class="pl-s">let {firstName: bName, age: bAge} = bjorn;</span>
+<span class="pl-s"></span>
+<span class="pl-s">let {firstName: cName, age: _} = bjorn;</span>
+<span class="pl-s"></span>
+<span class="pl-s">/* &gt; Switch</span>
+<span class="pl-s">   Pattern matching with switches is an important tool in Reason</span>
+<span class="pl-s">   It can be used in combination with destructuring for an expressive and</span>
+<span class="pl-s">   concise tool */</span>
+<span class="pl-s"></span>
+<span class="pl-s">/* Lets take a simple list */</span>
+<span class="pl-s">let firstNames = ["</span><span class="pl-v">James</span>"<span class="pl-kos">,</span> "<span class="pl-v">Jean</span><span class="pl-s">", "</span><span class="pl-v">Geoff</span><span class="pl-s">"];</span>
+<span class="pl-s"></span>
+<span class="pl-s">/* We can pattern match on the names for each case we want to handle */</span>
+<span class="pl-s">switch (firstNames) {</span>
+<span class="pl-s">| [] =&gt; "</span><span class="pl-v">No</span> <span class="pl-s1">names</span><span class="pl-s">"</span>
+<span class="pl-s">| [first] =&gt; "</span><span class="pl-v">Only</span> <span class="pl-s">" ++ first</span>
+<span class="pl-s">| [first, second] =&gt; "</span><span class="pl-v">A</span> <span class="pl-s1">couple</span> <span class="pl-s1">of</span> <span class="pl-s1">names</span> <span class="pl-s">" ++ first ++ "</span><span class="pl-kos">,</span><span class="pl-s">" ++ second</span>
+<span class="pl-s">| [first, second, third] =&gt;</span>
+<span class="pl-s">  "</span><span class="pl-v">Three</span> <span class="pl-s1">names</span><span class="pl-kos">,</span> <span class="pl-s">" ++ first ++ "</span><span class="pl-kos">,</span> <span class="pl-s">" ++ second ++ "</span><span class="pl-kos">,</span> <span class="pl-s">" ++ third</span>
+<span class="pl-s">| _ =&gt; "</span><span class="pl-v">Lots</span> <span class="pl-k">of</span> <span class="pl-s1">names</span><span class="pl-s">"</span>
+<span class="pl-s">};</span>
+<span class="pl-s">/* - The `_` is a catch all at the end, it signifies that we don't care what</span>
+<span class="pl-s">   the value is so it will match every other case */</span>
+<span class="pl-s"></span>
+<span class="pl-s">/* &gt; When clause */</span>
+<span class="pl-s"></span>
+<span class="pl-s">let isJohn = a =&gt; a == "</span><span class="pl-v">John</span><span class="pl-s">";</span>
+<span class="pl-s">let maybeName = Some("</span><span class="pl-v">John</span><span class="pl-s">");</span>
+<span class="pl-s"></span>
+<span class="pl-s">/* When can add more complex logic to a simple switch */</span>
+<span class="pl-s">let aGreeting =</span>
+<span class="pl-s">  switch (maybeName) {</span>
+<span class="pl-s">  | Some(name) when isJohn(name) =&gt; "</span><span class="pl-v">Hi</span> <span class="pl-v">John</span><span class="pl-c1">!</span> <span class="pl-v">How</span><span class="pl-s">'s it going?"</span>
+<span class="pl-s">  | Some(name) =&gt; "Hi " ++ name ++ ", welcome."</span>
+<span class="pl-s">  | None =&gt; "No one to greet."</span>
+<span class="pl-s">  };</span>
+<span class="pl-s"></span>
+<span class="pl-s">/* &gt; Exception */</span>
+<span class="pl-s"></span>
+<span class="pl-s">/* Define a custom exception */</span>
+<span class="pl-s">exception Under_Age;</span>
+<span class="pl-s"></span>
+<span class="pl-s">/* Raise an exception within a function */</span>
+<span class="pl-s">let driveToTown = (driver: person) =&gt;</span>
+<span class="pl-s">  if (driver.age &gt;= 15) {</span>
+<span class="pl-s">    "We'</span><span class="pl-s1">re</span> <span class="pl-k">in</span> <span class="pl-s1">town</span><span class="pl-s">";</span>
+<span class="pl-s">  } else {</span>
+<span class="pl-s">    raise(Under_Age);</span>
+<span class="pl-s">  };</span>
+<span class="pl-s"></span>
+<span class="pl-s">let evan = {firstName: "</span><span class="pl-v">Evan</span><span class="pl-s">", age: 14};</span>
+<span class="pl-s"></span>
+<span class="pl-s">/* Pattern match on the exception Under_Age */</span>
+<span class="pl-s">switch (driveToTown(evan)) {</span>
+<span class="pl-s">| status =&gt; print_endline(status)</span>
+<span class="pl-s">| exception Under_Age =&gt;</span>
+<span class="pl-s">  print_endline(evan.firstName ++ "</span> <span class="pl-s1">is</span> <span class="pl-s1">too</span> <span class="pl-s1">young</span> <span class="pl-s1">to</span> <span class="pl-s1">drive</span><span class="pl-c1">!</span><span class="pl-s">")</span>
+<span class="pl-s">};</span>
+<span class="pl-s"></span>
+<span class="pl-s">/* Alternatively, a try block can be used */</span>
+<span class="pl-s">/* - With Reason exceptions can be avoided with optionals and are seldom used */</span>
+<span class="pl-s">let messageToEvan =</span>
+<span class="pl-s">  try (driveToTown(evan)) {</span>
+<span class="pl-s">  | Under_Age =&gt; evan.firstName ++ "</span> <span class="pl-s1">is</span> <span class="pl-s1">too</span> <span class="pl-s1">young</span> <span class="pl-s1">to</span> <span class="pl-s1">drive</span><span class="pl-c1">!</span><span class="pl-s">"</span>
+<span class="pl-s">  };</span>
+<span class="pl-s"></span>
+<span class="pl-s">/*----------------------------------------------</span>
+<span class="pl-s"> * Object</span>
+<span class="pl-s"> *----------------------------------------------</span>
+<span class="pl-s"> * Objects are similar to Record types but aren't as rigid</span>
+<span class="pl-s"> * An object resembles a class</span>
+<span class="pl-s"> */</span>
+<span class="pl-s"></span>
+<span class="pl-s">/* An object may be typed like a record but contains a dot */</span>
+<span class="pl-s">type surfaceComputer = {</span>
+<span class="pl-s">  .</span>
+<span class="pl-s">  color: string,</span>
+<span class="pl-s">  capacity: int,</span>
+<span class="pl-s">};</span>
+<span class="pl-s">/* - A single dot signifies a closed object, an object that uses this type</span>
+<span class="pl-s">   must have the exact shape */</span>
+<span class="pl-s"></span>
+<span class="pl-s">let surfaceBook: surfaceComputer = {pub color = "</span><span class="pl-s1">blue</span><span class="pl-s">"; pub capacity = 512};</span>
+<span class="pl-s"></span>
+<span class="pl-s">/* But an object doesn't require a type */</span>
+<span class="pl-s">let house = {</span>
+<span class="pl-s">  /* A private property */</span>
+<span class="pl-s">  val temp = ref(18.0);</span>
+<span class="pl-s">  /* Public properties */</span>
+<span class="pl-s">  pub temperature = temp;</span>
+<span class="pl-s">  /* A private method only accessible from within house */</span>
+<span class="pl-s">  pri setThermostat = v =&gt; temp := v;</span>
+<span class="pl-s">  /* A public method that calls the private setThermostat method */</span>
+<span class="pl-s">  pub arriveHome = () =&gt; this#setThermostat(22.0)</span>
+<span class="pl-s">};</span>
+<span class="pl-s"></span>
+<span class="pl-s">house#temperature; /* - : float = 18. */</span>
+<span class="pl-s">house#arriveHome();</span>
+<span class="pl-s">house#temperature; /* - : float = 22. */</span>
+<span class="pl-s"></span>
+<span class="pl-s">/*----------------------------------------------</span>
+<span class="pl-s"> * Module</span>
+<span class="pl-s"> *----------------------------------------------</span>
+<span class="pl-s"> * Modules are used to organize your code and provide namespacing.</span>
+<span class="pl-s"> * Each file is a module by default</span>
+<span class="pl-s"> */</span>
+<span class="pl-s"></span>
+<span class="pl-s">/* Create a module */</span>
+<span class="pl-s">module Staff = {</span>
+<span class="pl-s">  type role =</span>
+<span class="pl-s">    | Delivery</span>
+<span class="pl-s">    | Sales</span>
+<span class="pl-s">    | Other;</span>
+<span class="pl-s">  type member = {</span>
+<span class="pl-s">    name: string,</span>
+<span class="pl-s">    role,</span>
+<span class="pl-s">  };</span>
+<span class="pl-s"></span>
+<span class="pl-s">  let getRoleDirectionMessage = staff =&gt;</span>
+<span class="pl-s">    switch (staff.role) {</span>
+<span class="pl-s">    | Delivery =&gt; "</span><span class="pl-v">Deliver</span> <span class="pl-s1">it</span> <span class="pl-s1">like</span> <span class="pl-s1">you</span> <span class="pl-s1">mean</span> <span class="pl-s1">it</span><span class="pl-c1">!</span>"
+    <span class="pl-c1">|</span> <span class="pl-v">Sales</span> <span class="pl-c1">=&gt;</span> <span class="pl-s">"Sell it like only you can!"</span>
+    <span class="pl-c1">|</span> <span class="pl-v">Other</span> <span class="pl-c1">=&gt;</span> <span class="pl-s">"You're an important part of the team!"</span>
+    <span class="pl-kos">}</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span><span class="pl-kos">;</span>
+
+<span class="pl-c">/* A module can be accessed with dot notation */</span>
+<span class="pl-k">let</span> <span class="pl-s1">newEmployee</span>: <span class="pl-v">Staff</span><span class="pl-kos">.</span><span class="pl-c1">member</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span><span class="pl-c1">name</span>: <span class="pl-s">"Laura"</span><span class="pl-kos">,</span> <span class="pl-c1">role</span>: <span class="pl-v">Staff</span><span class="pl-kos">.</span><span class="pl-c1">Delivery</span><span class="pl-kos">}</span><span class="pl-kos">;</span>
+
+<span class="pl-c">/* Using the module name can be tiresome so the module's contents can be opened</span>
+<span class="pl-c">   into the current scope with `open` */</span>
+<span class="pl-s1">open</span> <span class="pl-v">Staff</span><span class="pl-kos">;</span>
+
+<span class="pl-k">let</span> <span class="pl-s1">otherNewEmployee</span>: <span class="pl-s1">member</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span><span class="pl-c1">name</span>: <span class="pl-s">"Fred"</span><span class="pl-kos">,</span> <span class="pl-c1">role</span>: <span class="pl-v">Other</span><span class="pl-kos">}</span><span class="pl-kos">;</span>
+
+<span class="pl-c">/* A module can be extended using the `include` keyword, include copies</span>
+<span class="pl-c">   the contents of the module into the scope of the new module */</span>
+<span class="pl-smi">module</span><span class="pl-kos"></span> <span class="pl-v">SpecializedStaff</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span>
+  <span class="pl-s1">include</span> <span class="pl-v">Staff</span><span class="pl-kos">;</span>
+
+  <span class="pl-c">/* `member` is included so there's no need to reference it explicitly */</span>
+  <span class="pl-k">let</span> <span class="pl-s1">ceo</span>: <span class="pl-s1">member</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span><span class="pl-c1">name</span>: <span class="pl-s">"Reggie"</span><span class="pl-kos">,</span> <span class="pl-c1">role</span>: <span class="pl-v">Other</span><span class="pl-kos">}</span><span class="pl-kos">;</span>
+
+  <span class="pl-k">let</span> <span class="pl-s1">getMeetingTime</span> <span class="pl-c1">=</span> <span class="pl-s1">staff</span> <span class="pl-c1">=&gt;</span>
+    <span class="pl-en">switch</span> <span class="pl-kos">(</span><span class="pl-s1">staff</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-c1">|</span> <span class="pl-v">Other</span> <span class="pl-c1">=&gt;</span> <span class="pl-c1">11_15</span> <span class="pl-c">/* - : int = 1115; Underscores are for formatting only  */</span>
+    <span class="pl-c1">|</span> <span class="pl-s1">_</span> <span class="pl-c1">=&gt;</span> <span class="pl-c1">9_30</span>
+    <span class="pl-kos">}</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span><span class="pl-kos">;</span></pre></div>
+<h2>Further Reading</h2>
+<ul>
+<li><a href="https://reasonml.github.io/docs/en/what-and-why" rel="nofollow">Official Reason Docs</a></li>
+<li><a href="https://bucklescript.github.io/docs/en/what-why" rel="nofollow">Official BuckleScript Docs</a></li>
+<li><a href="https://reasonml.github.io/en/try" rel="nofollow">Try Reason</a></li>
+<li><a href="https://egghead.io/courses/get-started-with-reason" rel="nofollow">Get Started with Reason by Nik Graf</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<ul>
+<li>["Seth Corker", "https://sethcorker.com"]</li>
+</ul>

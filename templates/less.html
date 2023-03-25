@@ -1,0 +1,380 @@
+<h1>Less</h1>
+<p>Less is a CSS pre-processor, that adds features such as variables, nesting, mixins and more.<br>
+Less (and other preprocessors, such as <a href="http://sass-lang.com/" rel="nofollow">Sass</a>) help developers to write maintainable and DRY (Don't Repeat Yourself) code.</p>
+<div class="highlight highlight-source-css"><pre class="notranslate"><span class="pl-c1">/</span><span class="pl-c1">/</span>Single line comments are removed when Less is compiled <span class="pl-k">to</span> CSS.
+
+<span class="pl-c">/*Multi line comments are preserved. */</span>
+
+
+
+<span class="pl-c">/* Variables</span>
+<span class="pl-c">==============================*/</span>
+
+
+<span class="pl-c">/* You can store a CSS value (such as a color) in a variable.</span>
+<span class="pl-c">   Use the '@' symbol to create a variable. */</span>
+
+<span class="pl-k">@primary-color</span><span class="pl-kos">:</span> <span class="pl-kos">#</span>a3a4ff;
+<span class="pl-k">@secondary-color</span><span class="pl-kos">:</span> <span class="pl-kos">#</span>51527f;
+<span class="pl-k">@body-font</span><span class="pl-kos">:</span> <span class="pl-s">'Roboto'</span><span class="pl-kos">,</span> <span class="pl-ent">sans-serif</span>;
+
+<span class="pl-c">/* You can use the variables throughout your stylesheet.</span>
+<span class="pl-c">   Now if you want to change a color, you only have to make the change once.*/</span>
+
+<span class="pl-ent">body</span> {
+	<span class="pl-c1">background-color</span><span class="pl-kos">:</span> <span class="pl-k">@primary-color</span>;
+	<span class="pl-c1">color</span><span class="pl-kos">:</span> <span class="pl-k">@secondary-color</span>;
+	<span class="pl-c1">font-family</span><span class="pl-kos">:</span> <span class="pl-k">@body-font</span>;
+}
+
+<span class="pl-c">/* This would compile to: */</span>
+
+<span class="pl-ent">body</span> {
+	<span class="pl-c1">background-color</span><span class="pl-kos">:</span> <span class="pl-pds"><span class="pl-kos">#</span>a3a4ff</span>;
+	<span class="pl-c1">color</span><span class="pl-kos">:</span> <span class="pl-pds"><span class="pl-kos">#</span>51527F</span>;
+	<span class="pl-c1">font-family</span><span class="pl-kos">:</span> <span class="pl-s">'Roboto'</span><span class="pl-kos">,</span> sans-serif;
+}
+
+
+<span class="pl-c">/* This is much more maintainable than having to change the color</span>
+<span class="pl-c">   each time it appears throughout your stylesheet. */</span>
+
+
+
+<span class="pl-c">/* Mixins</span>
+<span class="pl-c">==============================*/</span>
+
+
+<span class="pl-c">/* If you find you are writing the same code for more than one</span>
+<span class="pl-c">   element, you might want to reuse that easily.*/</span>
+
+.<span class="pl-c1">center</span> {
+	<span class="pl-c1">display</span><span class="pl-kos">:</span> block;
+	<span class="pl-c1">margin-left</span><span class="pl-kos">:</span> auto;
+	<span class="pl-c1">margin-right</span><span class="pl-kos">:</span> auto;
+	<span class="pl-c1">left</span><span class="pl-kos">:</span> <span class="pl-c1">0</span>;
+	<span class="pl-c1">right</span><span class="pl-kos">:</span> <span class="pl-c1">0</span>;
+}
+
+<span class="pl-c">/* You can use the mixin by simply adding the selector as a style */</span>
+
+<span class="pl-ent">div</span> {
+	.<span class="pl-c1">center</span>;
+	<span class="pl-ent">background-color</span><span class="pl-kos">:</span> <span class="pl-k">@primary-color</span>;
+}
+
+<span class="pl-c">/* Which would compile to: */</span>
+
+.<span class="pl-c1">center</span> {
+  <span class="pl-c1">display</span><span class="pl-kos">:</span> block;
+  <span class="pl-c1">margin-left</span><span class="pl-kos">:</span> auto;
+  <span class="pl-c1">margin-right</span><span class="pl-kos">:</span> auto;
+  <span class="pl-c1">left</span><span class="pl-kos">:</span> <span class="pl-c1">0</span>;
+  <span class="pl-c1">right</span><span class="pl-kos">:</span> <span class="pl-c1">0</span>;
+}
+<span class="pl-ent">div</span> {
+	<span class="pl-c1">display</span><span class="pl-kos">:</span> block;
+	<span class="pl-c1">margin-left</span><span class="pl-kos">:</span> auto;
+	<span class="pl-c1">margin-right</span><span class="pl-kos">:</span> auto;
+	<span class="pl-c1">left</span><span class="pl-kos">:</span> <span class="pl-c1">0</span>;
+	<span class="pl-c1">right</span><span class="pl-kos">:</span> <span class="pl-c1">0</span>;
+	<span class="pl-c1">background-color</span><span class="pl-kos">:</span> <span class="pl-pds"><span class="pl-kos">#</span>a3a4ff</span>;
+}
+
+<span class="pl-c">/* You can omit the mixin code from being compiled by adding parenthesis</span>
+<span class="pl-c">   after the selector */</span>
+
+.<span class="pl-c1">center</span>() {
+  <span class="pl-c1">display</span><span class="pl-kos">:</span> block;
+  <span class="pl-c1">margin-left</span><span class="pl-kos">:</span> auto;
+  <span class="pl-c1">margin-right</span><span class="pl-kos">:</span> auto;
+  <span class="pl-c1">left</span><span class="pl-kos">:</span> <span class="pl-c1">0</span>;
+  <span class="pl-c1">right</span><span class="pl-kos">:</span> <span class="pl-c1">0</span>;
+}
+
+<span class="pl-ent">div</span> {
+  .<span class="pl-c1">center</span>;
+  <span class="pl-ent">background-color</span><span class="pl-kos">:</span> <span class="pl-k">@primary-color</span>;
+}
+
+<span class="pl-c">/* Which would compile to: */</span>
+<span class="pl-ent">div</span> {
+  <span class="pl-c1">display</span><span class="pl-kos">:</span> block;
+  <span class="pl-c1">margin-left</span><span class="pl-kos">:</span> auto;
+  <span class="pl-c1">margin-right</span><span class="pl-kos">:</span> auto;
+  <span class="pl-c1">left</span><span class="pl-kos">:</span> <span class="pl-c1">0</span>;
+  <span class="pl-c1">right</span><span class="pl-kos">:</span> <span class="pl-c1">0</span>;
+  <span class="pl-c1">background-color</span><span class="pl-kos">:</span> <span class="pl-pds"><span class="pl-kos">#</span>a3a4ff</span>;
+}
+
+
+
+<span class="pl-c">/* Nesting</span>
+<span class="pl-c">==============================*/</span>
+
+
+<span class="pl-c">/* Less allows you to nest selectors within selectors */</span>
+
+<span class="pl-ent">ul</span> {
+	<span class="pl-c1">list-style-type</span><span class="pl-kos">:</span> none;
+	<span class="pl-c1">margin-top</span><span class="pl-kos">:</span> <span class="pl-c1">2<span class="pl-smi">em</span></span>;
+
+	<span class="pl-ent">li</span> {
+		<span class="pl-c1">background-color</span><span class="pl-kos">:</span> <span class="pl-pds"><span class="pl-kos">#</span>f00</span>;
+	}
+}
+
+<span class="pl-c">/* '&amp;' will be replaced by the parent selector. */</span>
+<span class="pl-c">/* You can also nest pseudo-classes. */</span>
+<span class="pl-c">/* Keep in mind that over-nesting will make your code less maintainable.</span>
+<span class="pl-c">   Best practices recommend going no more than 3 levels deep when nesting.</span>
+<span class="pl-c">   For example: */</span>
+
+<span class="pl-ent">ul</span> {
+	<span class="pl-c1">list-style-type</span><span class="pl-kos">:</span> none;
+	<span class="pl-c1">margin-top</span><span class="pl-kos">:</span> <span class="pl-c1">2<span class="pl-smi">em</span></span>;
+
+	<span class="pl-ent">li</span> {
+		<span class="pl-c1">background-color</span><span class="pl-kos">:</span> red;
+
+		<span class="pl-ent">&amp;</span><span class="pl-kos">:</span><span class="pl-c1">hover</span> {
+		  <span class="pl-c1">background-color</span><span class="pl-kos">:</span> blue;
+		}
+
+		<span class="pl-ent">a</span> {
+		  <span class="pl-c1">color</span><span class="pl-kos">:</span> white;
+		}
+	}
+}
+
+<span class="pl-c">/* Compiles to: */</span>
+
+<span class="pl-ent">ul</span> {
+  <span class="pl-c1">list-style-type</span><span class="pl-kos">:</span> none;
+  <span class="pl-c1">margin-top</span><span class="pl-kos">:</span> <span class="pl-c1">2<span class="pl-smi">em</span></span>;
+}
+
+<span class="pl-ent">ul</span> <span class="pl-ent">li</span> {
+  <span class="pl-c1">background-color</span><span class="pl-kos">:</span> red;
+}
+
+<span class="pl-ent">ul</span> <span class="pl-ent">li</span><span class="pl-kos">:</span><span class="pl-c1">hover</span> {
+  <span class="pl-c1">background-color</span><span class="pl-kos">:</span> blue;
+}
+
+<span class="pl-ent">ul</span> <span class="pl-ent">li</span> <span class="pl-ent">a</span> {
+  <span class="pl-c1">color</span><span class="pl-kos">:</span> white;
+}
+
+
+
+<span class="pl-c">/* Functions</span>
+<span class="pl-c">==============================*/</span>
+
+
+<span class="pl-c">/* Less provides functions that can be used to accomplish a variety of</span>
+<span class="pl-c">   tasks. Consider the following: */</span>
+
+<span class="pl-c">/* Functions can be invoked by using their name and passing in the</span>
+<span class="pl-c">   required arguments. */</span>
+
+<span class="pl-ent">body</span> {
+  <span class="pl-c1">width</span><span class="pl-kos">:</span> <span class="pl-en">round</span>(<span class="pl-c1">10.25<span class="pl-smi">px</span></span>);
+}
+
+.<span class="pl-c1">header</span> {
+	<span class="pl-c1">background-color</span><span class="pl-kos">:</span> <span class="pl-en">lighten</span>(<span class="pl-pds"><span class="pl-kos">#</span>000</span><span class="pl-kos">,</span> <span class="pl-c1">0.5</span>);
+}
+
+.<span class="pl-c1">footer</span> {
+  <span class="pl-c1">background-color</span><span class="pl-kos">:</span> <span class="pl-en">fadeout</span>(<span class="pl-pds"><span class="pl-kos">#</span>000</span><span class="pl-kos">,</span> <span class="pl-c1">0.25</span>)
+}
+
+<span class="pl-c">/* Compiles to: */</span>
+
+<span class="pl-ent">body</span> {
+  <span class="pl-c1">width</span><span class="pl-kos">:</span> <span class="pl-c1">10<span class="pl-smi">px</span></span>;
+}
+
+.<span class="pl-c1">header</span> {
+  <span class="pl-c1">background-color</span><span class="pl-kos">:</span> <span class="pl-pds"><span class="pl-kos">#</span>010101</span>;
+}
+
+.<span class="pl-c1">footer</span> {
+  <span class="pl-c1">background-color</span><span class="pl-kos">:</span> <span class="pl-en">rgba</span>(<span class="pl-c1">0</span><span class="pl-kos">,</span> <span class="pl-c1">0</span><span class="pl-kos">,</span> <span class="pl-c1">0</span><span class="pl-kos">,</span> <span class="pl-c1">0.75</span>);
+}
+
+<span class="pl-c">/* You may also define your own functions. Functions are very similar to</span>
+<span class="pl-c">   mixins. When trying to choose between a function or a mixin, remember</span>
+<span class="pl-c">   that mixins are best for generating CSS while functions are better for</span>
+<span class="pl-c">   logic that might be used throughout your Less code. The examples in</span>
+<span class="pl-c">   the 'Math Operators' section are ideal candidates for becoming a reusable</span>
+<span class="pl-c">   function. */</span>
+
+<span class="pl-c">/* This function calculates the average of two numbers: */</span>
+
+.<span class="pl-c1">average</span>(<span class="pl-k">@x</span><span class="pl-kos">,</span> <span class="pl-k">@y</span>) {
+  <span class="pl-k">@average-result</span><span class="pl-kos">:</span> ((<span class="pl-k">@x</span> <span class="pl-c1">+</span> <span class="pl-k">@y</span>) <span class="pl-c1">/</span> 2);
+}
+
+<span class="pl-ent">div</span> {
+  .<span class="pl-c1">average</span>(16px<span class="pl-kos">,</span> 50px); <span class="pl-c1">/</span><span class="pl-c1">/</span> <span class="pl-s">"call"</span> <span class="pl-ent">the</span> <span class="pl-ent">mixin</span>
+  <span class="pl-ent">padding</span><span class="pl-kos">:</span> <span class="pl-k">@average-result</span>;    <span class="pl-c1">/</span><span class="pl-c1">/</span> <span class="pl-ent">use</span> <span class="pl-ent">its</span> <span class="pl-s">"return"</span> <span class="pl-ent">value</span>
+}
+
+<span class="pl-c">/* Compiles to: */</span>
+
+<span class="pl-ent">div</span> {
+  <span class="pl-c1">padding</span><span class="pl-kos">:</span> <span class="pl-c1">33<span class="pl-smi">px</span></span>;
+}
+
+
+
+<span class="pl-c">/*Extend (Inheritance)</span>
+<span class="pl-c">==============================*/</span>
+
+
+<span class="pl-c">/*Extend is a way to share the properties of one selector with another. */</span>
+
+.<span class="pl-c1">display</span> {
+  <span class="pl-c1">height</span><span class="pl-kos">:</span> <span class="pl-c1">50<span class="pl-smi">px</span></span>;
+}
+
+.<span class="pl-c1">display-success</span> {
+  <span class="pl-ent">&amp;</span><span class="pl-kos">:</span><span class="pl-c1">extend</span>(.<span class="pl-c1">display</span>);
+	<span class="pl-ent">border-color</span><span class="pl-kos">:</span> <span class="pl-kos">#</span>22df56;
+}
+
+<span class="pl-c">/* Compiles to: */</span>
+.<span class="pl-c1">display</span><span class="pl-kos">,</span>
+.<span class="pl-c1">display-success</span> {
+  <span class="pl-c1">height</span><span class="pl-kos">:</span> <span class="pl-c1">50<span class="pl-smi">px</span></span>;
+}
+.<span class="pl-c1">display-success</span> {
+  <span class="pl-c1">border-color</span><span class="pl-kos">:</span> <span class="pl-pds"><span class="pl-kos">#</span>22df56</span>;
+}
+
+<span class="pl-c">/* Extending a CSS statement is preferable to creating a mixin</span>
+<span class="pl-c">   because of the way it groups together the classes that all share</span>
+<span class="pl-c">   the same base styling. If this was done with a mixin, the properties</span>
+<span class="pl-c">   would be duplicated for each statement that</span>
+<span class="pl-c">   called the mixin. While it won't affect your workflow, it will</span>
+<span class="pl-c">   add unnecessary bloat to the files created by the Less compiler. */</span>
+
+
+
+<span class="pl-c">/*Partials and Imports</span>
+<span class="pl-c">==============================*/</span>
+
+
+<span class="pl-c">/* Less allows you to create partial files. This can help keep your Less</span>
+<span class="pl-c">   code modularized. Partial files conventionally begin with an '_',</span>
+<span class="pl-c">   e.g. _reset.less. and are imported into a main less file that gets</span>
+<span class="pl-c">   compiled into CSS */</span>
+
+<span class="pl-c">/* Consider the following CSS which we'll put in a file called _reset.less */</span>
+
+<span class="pl-ent">html</span><span class="pl-kos">,</span>
+<span class="pl-ent">body</span><span class="pl-kos">,</span>
+<span class="pl-ent">ul</span><span class="pl-kos">,</span>
+<span class="pl-ent">ol</span> {
+  <span class="pl-c1">margin</span><span class="pl-kos">:</span> <span class="pl-c1">0</span>;
+  <span class="pl-c1">padding</span><span class="pl-kos">:</span> <span class="pl-c1">0</span>;
+}
+
+<span class="pl-c">/* Less offers @import which can be used to import partials into a file.</span>
+<span class="pl-c">   This differs from the traditional CSS @import statement which makes</span>
+<span class="pl-c">   another HTTP request to fetch the imported file. Less takes the</span>
+<span class="pl-c">   imported file and combines it with the compiled code. */</span>
+
+<span class="pl-k">@import</span> <span class="pl-s">'reset'</span>;
+
+<span class="pl-ent">body</span> {
+  <span class="pl-c1">font-size</span><span class="pl-kos">:</span> <span class="pl-c1">16<span class="pl-smi">px</span></span>;
+  <span class="pl-c1">font-family</span><span class="pl-kos">:</span> Helvetica<span class="pl-kos">,</span> Arial<span class="pl-kos">,</span> Sans-serif;
+}
+
+<span class="pl-c">/* Compiles to: */</span>
+
+<span class="pl-ent">html</span><span class="pl-kos">,</span> <span class="pl-ent">body</span><span class="pl-kos">,</span> <span class="pl-ent">ul</span><span class="pl-kos">,</span> <span class="pl-ent">ol</span> {
+  <span class="pl-c1">margin</span><span class="pl-kos">:</span> <span class="pl-c1">0</span>;
+  <span class="pl-c1">padding</span><span class="pl-kos">:</span> <span class="pl-c1">0</span>;
+}
+
+<span class="pl-ent">body</span> {
+  <span class="pl-c1">font-size</span><span class="pl-kos">:</span> <span class="pl-c1">16<span class="pl-smi">px</span></span>;
+  <span class="pl-c1">font-family</span><span class="pl-kos">:</span> Helvetica<span class="pl-kos">,</span> Arial<span class="pl-kos">,</span> Sans-serif;
+}
+
+
+
+<span class="pl-c">/* Math Operations</span>
+<span class="pl-c">==============================*/</span>
+
+
+<span class="pl-c">/* Less provides the following operators: +, -, *, /, and %. These can</span>
+<span class="pl-c">   be useful for calculating values directly in your Less files instead</span>
+<span class="pl-c">   of using values that you've already calculated by hand. Below is an example</span>
+<span class="pl-c">   of a setting up a simple two column design. */</span>
+
+<span class="pl-k">@content-area</span><span class="pl-kos">:</span> 960px;
+<span class="pl-k">@main-content</span><span class="pl-kos">:</span> 600px;
+<span class="pl-k">@sidebar-content</span><span class="pl-kos">:</span> 300px;
+
+<span class="pl-k">@main-size</span><span class="pl-kos">:</span> <span class="pl-k">@main-content</span> <span class="pl-c1">/</span> <span class="pl-k">@content-area</span> <span class="pl-c1">*</span> 100%;
+<span class="pl-k">@sidebar-size</span><span class="pl-kos">:</span> <span class="pl-k">@sidebar-content</span> <span class="pl-c1">/</span> <span class="pl-k">@content-area</span> <span class="pl-c1">*</span> 100%;
+<span class="pl-k">@gutter</span><span class="pl-kos">:</span> 100% <span class="pl-c1">-</span> (<span class="pl-k">@main-size</span> <span class="pl-c1">+</span> <span class="pl-k">@sidebar-size</span>);
+
+<span class="pl-ent">body</span> {
+  <span class="pl-c1">width</span><span class="pl-kos">:</span> <span class="pl-c1">100<span class="pl-smi">%</span></span>;
+}
+
+.<span class="pl-c1">main-content</span> {
+  <span class="pl-c1">width</span><span class="pl-kos">:</span> <span class="pl-k">@main-size</span>;
+}
+
+.<span class="pl-c1">sidebar</span> {
+  <span class="pl-c1">width</span><span class="pl-kos">:</span> <span class="pl-k">@sidebar-size</span>;
+}
+
+.<span class="pl-c1">gutter</span> {
+  <span class="pl-c1">width</span><span class="pl-kos">:</span> <span class="pl-k">@gutter</span>;
+}
+
+<span class="pl-c">/* Compiles to: */</span>
+
+<span class="pl-ent">body</span> {
+  <span class="pl-c1">width</span><span class="pl-kos">:</span> <span class="pl-c1">100<span class="pl-smi">%</span></span>;
+}
+
+.<span class="pl-c1">main-content</span> {
+  <span class="pl-c1">width</span><span class="pl-kos">:</span> <span class="pl-c1">62.5<span class="pl-smi">%</span></span>;
+}
+
+.<span class="pl-c1">sidebar</span> {
+  <span class="pl-c1">width</span><span class="pl-kos">:</span> <span class="pl-c1">31.25<span class="pl-smi">%</span></span>;
+}
+
+.<span class="pl-c1">gutter</span> {
+  <span class="pl-c1">width</span><span class="pl-kos">:</span> <span class="pl-c1">6.25<span class="pl-smi">%</span></span>;
+}
+</pre></div>
+<h2>Practice Less</h2>
+<p>If you want to play with Less in your browser, check out:</p>
+<ul>
+<li><a href="http://codepen.io/" rel="nofollow">Codepen</a></li>
+<li><a href="http://lesscss.org/less-preview/" rel="nofollow">LESS2CSS</a></li>
+</ul>
+<h2>Compatibility</h2>
+<p>Less can be used in any project as long as you have a program to compile it into CSS. You'll want to verify that the CSS you're using is compatible with your target browsers.</p>
+<p><a href="http://www.quirksmode.org/css/" rel="nofollow">QuirksMode CSS</a> and <a href="http://caniuse.com" rel="nofollow">CanIUse</a> are great resources for checking compatibility.</p>
+<h2>Further reading</h2>
+<ul>
+<li><a href="http://lesscss.org/features/" rel="nofollow">Official Documentation</a></li>
+<li><a href="http://www.hongkiat.com/blog/less-basic/" rel="nofollow">Less CSS - Beginner's Guide</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<ul>
+<li>["Saravanan Ganesh", "http://srrvnn.me"]</li>
+</ul>

@@ -1,0 +1,361 @@
+<h1>OCaml</h1>
+<p>OCaml is a strictly evaluated functional language with some imperative<br>
+features.</p>
+<p>Along with StandardML and its dialects it belongs to ML language family.<br>
+F# is also heavily influenced by OCaml.</p>
+<p>Just like StandardML, OCaml features both an interpreter, that can be<br>
+used interactively, and a compiler.<br>
+The interpreter binary is normally called "ocaml" and the compiler is "ocamlopt".<br>
+There is also a bytecode compiler, "ocamlc", but there are few reasons to use it.</p>
+<p>It is strongly and statically typed, but instead of using manually written<br>
+type annotations, it infers types of expressions using Hindley-Milner algorithm.<br>
+It makes type annotations unnecessary in most cases, but can be a major<br>
+source of confusion for beginners.</p>
+<p>When you are in the top level loop, OCaml will print the inferred type<br>
+after you enter an expression.</p>
+<pre class="notranslate"><code class="notranslate"># let inc x = x	+ 1 ;;
+val inc : int -&gt; int = &lt;fun&gt;
+# let a = 99 ;;
+val a : int = 99
+</code></pre>
+<p>For a source file you can use "ocamlc -i /path/to/file.ml" command<br>
+to print all names and type signatures.</p>
+<pre class="notranslate"><code class="notranslate">$ cat sigtest.ml
+let inc x = x + 1
+let add x y = x + y
+
+let a = 1
+
+$ ocamlc -i ./sigtest.ml
+val inc : int -&gt; int
+val add : int -&gt; int -&gt; int
+val a : int
+</code></pre>
+<p>Note that type signatures of functions of multiple arguments are<br>
+written in curried form. A function that takes multiple arguments can be<br>
+represented as a composition of functions that take only one argument.<br>
+The "f(x,y) = x + y" function from the example above applied to<br>
+arguments 2 and 3 is equivalent to the "f0(y) = 2 + y" function applied to 3.<br>
+Hence the "int -&gt; int -&gt; int" signature.</p>
+<div class="highlight highlight-source-ocaml"><pre class="notranslate"><span class="pl-c"><span class="pl-c">(*</span>** Comments **<span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> Comments are enclosed in <span class="pl-c"><span class="pl-c">(*</span> and <span class="pl-c">*)</span></span>. It's fine to nest comments. <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> There are no single-line comments. <span class="pl-c">*)</span></span>
+
+
+<span class="pl-c"><span class="pl-c">(*</span>** Variables and functions **<span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> Expressions can be separated by a double semicolon symbol, ";;".</span>
+<span class="pl-c">   In many cases it's redundant, but in this tutorial we use it after</span>
+<span class="pl-c">   every expression for easy pasting into the interpreter shell.</span>
+<span class="pl-c">   Unnecessary use of expression separators in source code files</span>
+<span class="pl-c">   is often considered to be a bad style. <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> Variable and function declarations use "let" keyword. <span class="pl-c">*)</span></span>
+<span class="pl-k">let</span> x <span class="pl-k">=</span> <span class="pl-c1">10</span> ;;
+
+<span class="pl-c"><span class="pl-c">(*</span> OCaml allows single quote characters in identifiers.</span>
+<span class="pl-c">   Single quote doesn't have a special meaning in this case, it's often used</span>
+<span class="pl-c">   in cases when in other languages one would use names like "foo_tmp". <span class="pl-c">*)</span></span>
+<span class="pl-k">let</span> foo <span class="pl-k">=</span> <span class="pl-c1">1</span> ;;
+<span class="pl-k">let</span> foo' <span class="pl-k">=</span> foo <span class="pl-k">*</span> <span class="pl-c1">2</span> ;;
+
+<span class="pl-c"><span class="pl-c">(*</span> Since OCaml compiler infers types automatically, you normally don't need to</span>
+<span class="pl-c">   specify argument types explicitly. However, you can do it if</span>
+<span class="pl-c">   you want or need to. <span class="pl-c">*)</span></span>
+<span class="pl-k">let</span> <span class="pl-en">inc_int</span> (<span class="pl-v">x</span><span class="pl-k">: int</span>) : <span class="pl-k">int </span><span class="pl-k">=</span> x <span class="pl-k">+</span> <span class="pl-c1">1</span> ;;
+
+<span class="pl-c"><span class="pl-c">(*</span> One of the cases when explicit type annotations may be needed is</span>
+<span class="pl-c">   resolving ambiguity between two record types that have fields with</span>
+<span class="pl-c">   the same name. The alternative is to encapsulate those types in</span>
+<span class="pl-c">   modules, but both topics are a bit out of scope of this</span>
+<span class="pl-c">   tutorial. <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> You need to mark recursive function definitions as such with "rec" keyword. <span class="pl-c">*)</span></span>
+<span class="pl-k">let</span> <span class="pl-k">rec </span><span class="pl-en">factorial</span> <span class="pl-v">n</span> <span class="pl-k">=</span>
+    <span class="pl-k">if</span> n <span class="pl-k">=</span> <span class="pl-c1">0</span> <span class="pl-k">then</span> <span class="pl-c1">1</span>
+    <span class="pl-k">else</span> n <span class="pl-k">*</span> factorial (n<span class="pl-c1">-1</span>)
+;;
+
+<span class="pl-c"><span class="pl-c">(*</span> Function application usually doesn't need parentheses around arguments <span class="pl-c">*)</span></span>
+<span class="pl-k">let</span> fact_5 <span class="pl-k">=</span> factorial <span class="pl-c1">5</span> ;;
+
+<span class="pl-c"><span class="pl-c">(*</span> ...unless the argument is an expression. <span class="pl-c">*)</span></span>
+<span class="pl-k">let</span> fact_4 <span class="pl-k">=</span> factorial (<span class="pl-c1">5-1</span>) ;;
+<span class="pl-k">let</span> sqr2 <span class="pl-k">=</span> sqr (<span class="pl-k">-</span><span class="pl-c1">2</span>) ;;
+
+<span class="pl-c"><span class="pl-c">(*</span> Every function must have at least one argument.</span>
+<span class="pl-c">   Since some functions naturally don't take any arguments, there's</span>
+<span class="pl-c">   "unit" type for it that has the only one value written as "()" <span class="pl-c">*)</span></span>
+<span class="pl-k">let</span> <span class="pl-en">print_hello</span> <span class="pl-v">()</span> <span class="pl-k">=</span> print_endline <span class="pl-s"><span class="pl-pds">"</span>hello world<span class="pl-pds">"</span></span> ;;
+
+<span class="pl-c"><span class="pl-c">(*</span> Note that you must specify "()" as argument when calling it. <span class="pl-c">*)</span></span>
+print_hello <span class="pl-c1">()</span> ;;
+
+<span class="pl-c"><span class="pl-c">(*</span> Calling a function with insufficient number of arguments</span>
+<span class="pl-c">   does not cause an error, it produces a new function. <span class="pl-c">*)</span></span>
+<span class="pl-k">let</span> <span class="pl-en">make_inc</span> <span class="pl-v">x</span> <span class="pl-v">y</span> <span class="pl-k">=</span> x <span class="pl-k">+</span> y ;; <span class="pl-c"><span class="pl-c">(*</span> make_inc is int -&gt; int -&gt; int <span class="pl-c">*)</span></span>
+<span class="pl-k">let</span> inc_2 <span class="pl-k">=</span> make_inc <span class="pl-c1">2</span> ;;   <span class="pl-c"><span class="pl-c">(*</span> inc_2 is int -&gt; int <span class="pl-c">*)</span></span>
+inc_2 <span class="pl-c1">3</span> ;; <span class="pl-c"><span class="pl-c">(*</span> Evaluates to 5 <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> You can use multiple expressions in function body.</span>
+<span class="pl-c">   The last expression becomes the return value. All other</span>
+<span class="pl-c">   expressions must be of the "unit" type.</span>
+<span class="pl-c">   This is useful when writing in imperative style, the simplest</span>
+<span class="pl-c">   form of it is inserting a debug print. <span class="pl-c">*)</span></span>
+<span class="pl-k">let</span> <span class="pl-en">print_and_return</span> <span class="pl-v">x</span> <span class="pl-k">=</span>
+    print_endline (string_of_int x);
+    x
+;;
+
+<span class="pl-c"><span class="pl-c">(*</span> Since OCaml is a functional language, it lacks "procedures".</span>
+<span class="pl-c">   Every function must return something. So functions that</span>
+<span class="pl-c">   do not really return anything and are called solely for their</span>
+<span class="pl-c">   side effects, like print_endline, return value of "unit" type. <span class="pl-c">*)</span></span>
+
+
+<span class="pl-c"><span class="pl-c">(*</span> Definitions can be chained with "let ... in" construct.</span>
+<span class="pl-c">   This is roughly the same to assigning values to multiple</span>
+<span class="pl-c">   variables before using them in expressions in imperative</span>
+<span class="pl-c">   languages. <span class="pl-c">*)</span></span>
+<span class="pl-k">let</span> x <span class="pl-k">=</span> <span class="pl-c1">10</span> <span class="pl-k">in</span>
+<span class="pl-k">let</span> y <span class="pl-k">=</span> <span class="pl-c1">20</span> <span class="pl-k">in</span>
+x <span class="pl-k">+</span> y ;;
+
+<span class="pl-c"><span class="pl-c">(*</span> Alternatively you can use "let ... and ... in" construct.</span>
+<span class="pl-c">   This is especially useful for mutually recursive functions,</span>
+<span class="pl-c">   with ordinary "let .. in" the compiler will complain about</span>
+<span class="pl-c">   unbound values. <span class="pl-c">*)</span></span>
+<span class="pl-k">let</span> <span class="pl-en">rec</span>
+  <span class="pl-v">is_even</span> <span class="pl-k">=</span> <span class="pl-k">function</span><span class="pl-k"></span>
+  <span class="pl-k">|</span> <span class="pl-c1">0</span> -&gt; <span class="pl-c1">true</span>
+  <span class="pl-k">|</span> <span class="pl-v">n</span> -&gt; is_odd (n<span class="pl-c1">-1</span>)
+<span class="pl-k">and</span>
+  is_odd <span class="pl-k">=</span> <span class="pl-k">function</span><span class="pl-k"></span>
+  <span class="pl-k">|</span> <span class="pl-c1">0</span> -&gt; <span class="pl-c1">false</span>
+  <span class="pl-k">|</span> <span class="pl-v">n</span> -&gt; is_even (n<span class="pl-c1">-1</span>)
+;;
+
+<span class="pl-c"><span class="pl-c">(*</span> Anonymous functions use the following syntax: <span class="pl-c">*)</span></span>
+<span class="pl-k">let</span> my_lambda <span class="pl-k">=</span> <span class="pl-k">fun</span> <span class="pl-v">x</span> -&gt; x <span class="pl-k">*</span> x ;;
+
+<span class="pl-c"><span class="pl-c">(*</span>** Operators **<span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> There is little distinction between operators and functions.</span>
+<span class="pl-c">   Every operator can be called as a function. <span class="pl-c">*)</span></span>
+
+(<span class="pl-k">+</span>) <span class="pl-c1">3</span> <span class="pl-c1">4</span>  <span class="pl-c"><span class="pl-c">(*</span> Same as 3 + 4 <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> There's a number of built-in operators. One unusual feature is</span>
+<span class="pl-c">   that OCaml doesn't just refrain from any implicit conversions</span>
+<span class="pl-c">   between integers and floats, it also uses different operators</span>
+<span class="pl-c">   for floats. <span class="pl-c">*)</span></span>
+<span class="pl-c1">12</span> <span class="pl-k">+</span> <span class="pl-c1">3</span> ;; <span class="pl-c"><span class="pl-c">(*</span> Integer addition. <span class="pl-c">*)</span></span>
+<span class="pl-c1">12.0</span> <span class="pl-k">+.</span> <span class="pl-c1">3.0</span> ;; <span class="pl-c"><span class="pl-c">(*</span> Floating point addition. <span class="pl-c">*)</span></span>
+
+<span class="pl-c1">12</span> <span class="pl-k">/</span> <span class="pl-c1">3</span> ;; <span class="pl-c"><span class="pl-c">(*</span> Integer division. <span class="pl-c">*)</span></span>
+<span class="pl-c1">12.0</span> <span class="pl-k">/.</span> <span class="pl-c1">3.0</span> ;; <span class="pl-c"><span class="pl-c">(*</span> Floating point division. <span class="pl-c">*)</span></span>
+<span class="pl-c1">5</span> <span class="pl-k">mod</span> <span class="pl-c1">2</span> ;; <span class="pl-c"><span class="pl-c">(*</span> Remainder. <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> Unary minus is a notable exception, it's polymorphic.</span>
+<span class="pl-c">   However, it also has "pure" integer and float forms. <span class="pl-c">*)</span></span>
+<span class="pl-k">-</span> <span class="pl-c1">3</span> ;; <span class="pl-c"><span class="pl-c">(*</span> Polymorphic, integer <span class="pl-c">*)</span></span>
+<span class="pl-k">-</span> <span class="pl-c1">4.5</span> ;; <span class="pl-c"><span class="pl-c">(*</span> Polymorphic, float <span class="pl-c">*)</span></span>
+<span class="pl-k">~-</span> <span class="pl-c1">3</span> <span class="pl-c"><span class="pl-c">(*</span> Integer only <span class="pl-c">*)</span></span>
+<span class="pl-k">~-</span> <span class="pl-c1">3.4</span> <span class="pl-c"><span class="pl-c">(*</span> Type error <span class="pl-c">*)</span></span>
+<span class="pl-k">~-.</span> <span class="pl-c1">3.4</span> <span class="pl-c"><span class="pl-c">(*</span> Float only <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> You can define your own operators or redefine existing ones.</span>
+<span class="pl-c">   Unlike SML or Haskell, only selected symbols can be used</span>
+<span class="pl-c">   for operator names and first symbol defines associativity</span>
+<span class="pl-c">   and precedence rules. <span class="pl-c">*)</span></span>
+<span class="pl-k">let</span> <span class="pl-en">(+)</span> <span class="pl-v">a</span> <span class="pl-v">b</span> <span class="pl-k">=</span> a <span class="pl-k">-</span> b ;; <span class="pl-c"><span class="pl-c">(*</span> Surprise maintenance programmers. <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> More useful: a reciprocal operator for floats.</span>
+<span class="pl-c">   Unary operators must start with "~". <span class="pl-c">*)</span></span>
+<span class="pl-k">let</span> <span class="pl-en">(~/)</span> <span class="pl-v">x</span> <span class="pl-k">=</span> <span class="pl-c1">1.0</span> <span class="pl-k">/.</span> x ;;
+<span class="pl-k">~/</span><span class="pl-c1">4.0</span> <span class="pl-c"><span class="pl-c">(*</span> = 0.25 <span class="pl-c">*)</span></span>
+
+
+<span class="pl-c"><span class="pl-c">(*</span>** Built-in data structures **<span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> Lists are enclosed in square brackets, items are separated by</span>
+<span class="pl-c">   semicolons. <span class="pl-c">*)</span></span>
+<span class="pl-k">let</span> my_list <span class="pl-k">=</span> [<span class="pl-c1">1</span>; <span class="pl-c1">2</span>; <span class="pl-c1">3</span>] ;; <span class="pl-c"><span class="pl-c">(*</span> Has type "int list". <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> Tuples are (optionally) enclosed in parentheses, items are separated</span>
+<span class="pl-c">   by commas. <span class="pl-c">*)</span></span>
+<span class="pl-k">let</span> first_tuple <span class="pl-k">=</span> <span class="pl-c1">3</span>, <span class="pl-c1">4</span> ;; <span class="pl-c"><span class="pl-c">(*</span> Has type "int * int". <span class="pl-c">*)</span></span>
+<span class="pl-k">let</span> second_tuple <span class="pl-k">=</span> (<span class="pl-c1">4</span>, <span class="pl-c1">5</span>) ;;
+
+<span class="pl-c"><span class="pl-c">(*</span> Corollary: if you try to separate list items by commas, you get a list</span>
+<span class="pl-c">   with a tuple inside, probably not what you want. <span class="pl-c">*)</span></span>
+<span class="pl-k">let</span> bad_list <span class="pl-k">=</span> [<span class="pl-c1">1</span>, <span class="pl-c1">2</span>] ;; <span class="pl-c"><span class="pl-c">(*</span> Becomes [(1, 2)] <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> You can access individual list items with the List.nth function. <span class="pl-c">*)</span></span>
+<span class="pl-c1">List.</span>nth my_list <span class="pl-c1">1</span> ;;
+
+<span class="pl-c"><span class="pl-c">(*</span> There are higher-order functions for lists such as map and filter. <span class="pl-c">*)</span></span>
+<span class="pl-c1">List.</span>map (<span class="pl-k">fun</span> <span class="pl-v">x</span> -&gt; x <span class="pl-k">*</span> <span class="pl-c1">2</span>) [<span class="pl-c1">1</span>; <span class="pl-c1">2</span>; <span class="pl-c1">3</span>] ;;
+<span class="pl-c1">List.</span>filter (<span class="pl-k">fun</span> <span class="pl-v">x</span> -&gt; x <span class="pl-k">mod</span> <span class="pl-c1">2</span> <span class="pl-k">=</span> <span class="pl-c1">0</span>) [<span class="pl-c1">1</span>; <span class="pl-c1">2</span>; <span class="pl-c1">3</span>; <span class="pl-c1">4</span>] ;;
+
+<span class="pl-c"><span class="pl-c">(*</span> You can add an item to the beginning of a list with the "::" constructor</span>
+<span class="pl-c">   often referred to as "cons". <span class="pl-c">*)</span></span>
+<span class="pl-c1">1</span> :: [<span class="pl-c1">2</span>; <span class="pl-c1">3</span>] ;; <span class="pl-c"><span class="pl-c">(*</span> Gives [1; 2; 3] <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> Arrays are enclosed in [| |] <span class="pl-c">*)</span></span>
+<span class="pl-k">let</span> my_array <span class="pl-k">=</span> [| <span class="pl-c1">1</span>; <span class="pl-c1">2</span>; <span class="pl-c1">3</span> |] ;;
+
+<span class="pl-c"><span class="pl-c">(*</span> You can access array items like this: <span class="pl-c">*)</span></span>
+my_array.(<span class="pl-c1">0</span>) ;;
+
+
+<span class="pl-c"><span class="pl-c">(*</span>** Strings and characters **<span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> Use double quotes for string literals. <span class="pl-c">*)</span></span>
+<span class="pl-k">let</span> my_str <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Hello world<span class="pl-pds">"</span></span> ;;
+
+<span class="pl-c"><span class="pl-c">(*</span> Use single quotes for character literals. <span class="pl-c">*)</span></span>
+<span class="pl-k">let</span> my_char <span class="pl-k">=</span> <span class="pl-c1">'a'</span> ;;
+
+<span class="pl-c"><span class="pl-c">(*</span> Single and double quotes are not interchangeable. <span class="pl-c">*)</span></span>
+<span class="pl-k">let</span> bad_str <span class="pl-k">=</span> 'syntax error' ;; <span class="pl-c"><span class="pl-c">(*</span> Syntax error. <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> This will give you a single character string, not a character. <span class="pl-c">*)</span></span>
+<span class="pl-k">let</span> single_char_str <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>w<span class="pl-pds">"</span></span> ;;
+
+<span class="pl-c"><span class="pl-c">(*</span> Strings can be concatenated with the "^" operator. <span class="pl-c">*)</span></span>
+<span class="pl-k">let</span> some_str <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>hello<span class="pl-pds">"</span></span> <span class="pl-k">^</span> <span class="pl-s"><span class="pl-pds">"</span>world<span class="pl-pds">"</span></span> ;;
+
+<span class="pl-c"><span class="pl-c">(*</span> Strings are not arrays of characters.</span>
+<span class="pl-c">   You can't mix characters and strings in expressions.</span>
+<span class="pl-c">   You can convert a character to a string with "String.make 1 my_char".</span>
+<span class="pl-c">   There are more convenient functions for this purpose in additional</span>
+<span class="pl-c">   libraries such as Core.Std that may not be installed and/or loaded</span>
+<span class="pl-c">   by default. <span class="pl-c">*)</span></span>
+<span class="pl-k">let</span> ocaml <span class="pl-k">=</span> (<span class="pl-c1">String.</span>make <span class="pl-c1">1</span> <span class="pl-c1">'O'</span>) <span class="pl-k">^</span> <span class="pl-s"><span class="pl-pds">"</span>Caml<span class="pl-pds">"</span></span> ;;
+
+<span class="pl-c"><span class="pl-c">(*</span> There is a printf function. <span class="pl-c">*)</span></span>
+<span class="pl-c1">Printf.</span>printf <span class="pl-s"><span class="pl-pds">"</span>%d %s<span class="pl-pds">"</span></span> <span class="pl-c1">99</span> <span class="pl-s"><span class="pl-pds">"</span>bottles of beer<span class="pl-pds">"</span></span> ;;
+
+<span class="pl-c"><span class="pl-c">(*</span> Unformatted read and write functions are there too. <span class="pl-c">*)</span></span>
+print_string <span class="pl-s"><span class="pl-pds">"</span>hello world<span class="pl-c1">\n</span><span class="pl-pds">"</span></span> ;;
+print_endline <span class="pl-s"><span class="pl-pds">"</span>hello world<span class="pl-pds">"</span></span> ;;
+<span class="pl-k">let</span> line <span class="pl-k">=</span> read_line <span class="pl-c1">()</span> ;;
+
+
+<span class="pl-c"><span class="pl-c">(*</span>** User-defined data types **<span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> You can define types with the "type some_type =" construct. Like in this</span>
+<span class="pl-c">   useless type alias: <span class="pl-c">*)</span></span>
+<span class="pl-k">type</span> <span class="pl-k">my_int </span>= <span class="pl-k">int</span> ;;
+
+<span class="pl-c"><span class="pl-c">(*</span> More interesting types include so called type constructors.</span>
+<span class="pl-c">   Constructors must start with a capital letter. <span class="pl-c">*)</span></span>
+<span class="pl-k">type</span> <span class="pl-k">ml </span>= <span class="pl-en">OCaml</span> | <span class="pl-en">StandardML</span> ;;
+<span class="pl-k">let</span> lang <span class="pl-k">=</span> <span class="pl-en">OCaml</span> ;;  <span class="pl-c"><span class="pl-c">(*</span> Has type "ml". <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> Type constructors don't need to be empty. <span class="pl-c">*)</span></span>
+<span class="pl-k">type</span> <span class="pl-k">my_number </span>= <span class="pl-en">PlusInfinity</span> | <span class="pl-en">MinusInfinity</span> | <span class="pl-en">Real</span> <span class="pl-k">of</span> <span class="pl-k">float</span> ;;
+<span class="pl-k">let</span> r0 <span class="pl-k">=</span> <span class="pl-en">Real</span> (<span class="pl-k">-</span><span class="pl-c1">3.4</span>) ;; <span class="pl-c"><span class="pl-c">(*</span> Has type "my_number". <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> Can be used to implement polymorphic arithmetics. <span class="pl-c">*)</span></span>
+<span class="pl-k">type</span> <span class="pl-k">number </span>= <span class="pl-en">Int</span> <span class="pl-k">of</span> <span class="pl-k">int</span> | <span class="pl-en">Float</span> <span class="pl-k">of</span> <span class="pl-k">float</span> ;;
+
+<span class="pl-c"><span class="pl-c">(*</span> Point on a plane, essentially a type-constrained tuple <span class="pl-c">*)</span></span>
+<span class="pl-k">type</span> <span class="pl-k">point2d </span>= <span class="pl-en">Point</span> <span class="pl-k">of</span> <span class="pl-k">float</span> <span class="pl-k">*</span> <span class="pl-k">float</span> ;;
+<span class="pl-k">let</span> my_point <span class="pl-k">=</span> <span class="pl-en">Point</span> (<span class="pl-c1">2.0</span>, <span class="pl-c1">3.0</span>) ;;
+
+<span class="pl-c"><span class="pl-c">(*</span> Types can be parameterized, like in this type for "list of lists</span>
+<span class="pl-c">   of anything". 'a can be substituted with any type. <span class="pl-c">*)</span></span>
+<span class="pl-k">type</span> <span class="pl-k">'a list_of_lists </span>= <span class="pl-k">'a</span> <span class="pl-k">list</span> <span class="pl-k">list</span> ;;
+<span class="pl-k">type</span> <span class="pl-k">int_list_list </span>= <span class="pl-k">int</span> <span class="pl-k">list_of_lists</span> ;;
+
+<span class="pl-c"><span class="pl-c">(*</span> Types can also be recursive. Like in this type analogous to</span>
+<span class="pl-c">   built-in list of integers. <span class="pl-c">*)</span></span>
+<span class="pl-k">type</span> <span class="pl-k">my_int_list </span>= <span class="pl-en">EmptyList</span> | <span class="pl-en">IntList</span> <span class="pl-k">of</span> <span class="pl-k">int</span> <span class="pl-k">*</span> <span class="pl-k">my_int_list</span> ;;
+<span class="pl-k">let</span> l <span class="pl-k">=</span> <span class="pl-en">IntList</span> (<span class="pl-c1">1</span>, <span class="pl-en">EmptyList</span>) ;;
+
+
+<span class="pl-c"><span class="pl-c">(*</span>** Pattern matching **<span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> Pattern matching is somewhat similar to switch statement in imperative</span>
+<span class="pl-c">   languages, but offers a lot more expressive power.</span>
+<span class="pl-c"></span>
+<span class="pl-c">   Even though it may look complicated, it really boils down to matching</span>
+<span class="pl-c">   an argument against an exact value, a predicate, or a type constructor.</span>
+<span class="pl-c">   The type system is what makes it so powerful. <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span>* Matching exact values.  *<span class="pl-c">*)</span></span>
+
+<span class="pl-k">let</span> <span class="pl-en">is_zero</span> <span class="pl-v">x</span> <span class="pl-k">=</span>
+    <span class="pl-k">match</span> x <span class="pl-k">with</span><span class="pl-k"></span>
+    <span class="pl-k">|</span> <span class="pl-c1">0</span> -&gt; <span class="pl-c1">true</span>
+    <span class="pl-k">|</span> <span class="pl-c1">_</span> -&gt; <span class="pl-c1">false</span>  <span class="pl-c"><span class="pl-c">(*</span> The "_" pattern means "anything else". <span class="pl-c">*)</span></span>
+;;
+
+<span class="pl-c"><span class="pl-c">(*</span> Alternatively, you can use the "function" keyword. <span class="pl-c">*)</span></span>
+<span class="pl-k">let</span> <span class="pl-en">is_one</span> <span class="pl-k">=</span> <span class="pl-k">function</span><span class="pl-k"></span>
+| <span class="pl-c1">1</span> -&gt; <span class="pl-c1">true</span>
+<span class="pl-k">|</span> <span class="pl-c1">_</span> -&gt; <span class="pl-c1">false</span>
+;;
+
+<span class="pl-c"><span class="pl-c">(*</span> Matching predicates, aka "guarded pattern matching". <span class="pl-c">*)</span></span>
+<span class="pl-k">let</span> <span class="pl-en">abs</span> <span class="pl-v">x</span> <span class="pl-k">=</span>
+    <span class="pl-k">match</span> x <span class="pl-k">with</span><span class="pl-k"></span>
+    <span class="pl-k">|</span> <span class="pl-v">x</span> <span class="pl-k">when</span> x <span class="pl-k">&lt;</span> <span class="pl-c1">0</span> -&gt; <span class="pl-k">-</span>x
+    <span class="pl-k">|</span> <span class="pl-c1">_</span> -&gt; x
+;;
+
+abs <span class="pl-c1">5</span> ;; <span class="pl-c"><span class="pl-c">(*</span> 5 <span class="pl-c">*)</span></span>
+abs (<span class="pl-k">-</span><span class="pl-c1">5</span>) <span class="pl-c"><span class="pl-c">(*</span> 5 again <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span>* Matching type constructors *<span class="pl-c">*)</span></span>
+
+<span class="pl-k">type</span> <span class="pl-k">animal </span>= <span class="pl-en">Dog</span> <span class="pl-k">of</span> <span class="pl-k">string</span> | <span class="pl-en">Cat</span> <span class="pl-k">of</span> <span class="pl-k">string</span> ;;
+
+<span class="pl-k">let</span> <span class="pl-en">say</span> <span class="pl-v">x</span> <span class="pl-k">=</span>
+    <span class="pl-k">match</span> x <span class="pl-k">with</span><span class="pl-k"></span>
+    <span class="pl-k">|</span> <span class="pl-en">Dog</span> <span class="pl-v">x</span> -&gt; x <span class="pl-k">^</span> <span class="pl-s"><span class="pl-pds">"</span> says woof<span class="pl-pds">"</span></span>
+    <span class="pl-k">|</span> <span class="pl-en">Cat</span> <span class="pl-v">x</span> -&gt; x <span class="pl-k">^</span> <span class="pl-s"><span class="pl-pds">"</span> says meow<span class="pl-pds">"</span></span>
+;;
+
+say (<span class="pl-en">Cat</span> <span class="pl-s"><span class="pl-pds">"</span>Fluffy<span class="pl-pds">"</span></span>) ;; <span class="pl-c"><span class="pl-c">(*</span> "Fluffy says meow". <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span>* Traversing data structures with pattern matching *<span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> Recursive types can be traversed with pattern matching easily.</span>
+<span class="pl-c">   Let's see how we can traverse a data structure of the built-in list type.</span>
+<span class="pl-c">   Even though the built-in cons ("::") looks like an infix operator,</span>
+<span class="pl-c">   it's actually a type constructor and can be matched like any other. <span class="pl-c">*)</span></span>
+<span class="pl-k">let</span> <span class="pl-k">rec </span><span class="pl-en">sum_list</span> <span class="pl-v">l</span> <span class="pl-k">=</span>
+    <span class="pl-k">match</span> l <span class="pl-k">with</span><span class="pl-k"></span>
+    <span class="pl-k">|</span> <span class="pl-c1">[]</span> -&gt; <span class="pl-c1">0</span>
+    <span class="pl-k">|</span> <span class="pl-v">head</span> :: <span class="pl-v">tail</span> -&gt; head <span class="pl-k">+</span> (sum_list tail)
+;;
+
+sum_list [<span class="pl-c1">1</span>; <span class="pl-c1">2</span>; <span class="pl-c1">3</span>] ;; <span class="pl-c"><span class="pl-c">(*</span> Evaluates to 6 <span class="pl-c">*)</span></span>
+
+<span class="pl-c"><span class="pl-c">(*</span> Built-in syntax for cons obscures the structure a bit, so we'll make</span>
+<span class="pl-c">   our own list for demonstration. <span class="pl-c">*)</span></span>
+
+<span class="pl-k">type</span> <span class="pl-k">int_list </span>= <span class="pl-en">Nil</span> | <span class="pl-en">Cons</span> <span class="pl-k">of</span> <span class="pl-k">int</span> <span class="pl-k">*</span> <span class="pl-k">int_list</span> ;;
+<span class="pl-k">let</span> <span class="pl-k">rec </span><span class="pl-en">sum_int_list</span> <span class="pl-v">l</span> <span class="pl-k">=</span>
+  <span class="pl-k">match</span> l <span class="pl-k">with</span><span class="pl-k"></span>
+      <span class="pl-k">|</span> <span class="pl-en">Nil</span> -&gt; <span class="pl-c1">0</span>
+      <span class="pl-k">|</span> <span class="pl-en">Cons</span> (<span class="pl-v">head</span>, <span class="pl-v">tail</span>) -&gt; head <span class="pl-k">+</span> (sum_int_list tail)
+;;
+
+<span class="pl-k">let</span> t <span class="pl-k">=</span> <span class="pl-en">Cons</span> (<span class="pl-c1">1</span>, <span class="pl-en">Cons</span> (<span class="pl-c1">2</span>, <span class="pl-en">Cons</span> (<span class="pl-c1">3</span>, <span class="pl-en">Nil</span>))) ;;
+sum_int_list t ;;
+</pre></div>
+<h2>Further reading</h2>
+<ul>
+<li>Visit the official website to get the compiler and read the docs: <a href="http://ocaml.org/" rel="nofollow">http://ocaml.org/</a></li>
+<li>Try interactive tutorials and a web-based interpreter by OCaml Pro: <a href="http://try.ocamlpro.com/" rel="nofollow">http://try.ocamlpro.com/</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Daniil Baturin", "http://baturin.org/"]
+</code></pre>

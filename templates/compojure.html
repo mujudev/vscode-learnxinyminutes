@@ -1,0 +1,179 @@
+<h1>Compojure</h1>
+<h2>Getting Started</h2>
+<p>Compojure is a DSL for <em>quickly</em> creating <em>performant</em> web applications<br>
+in Clojure with minimal effort:</p>
+<div class="highlight highlight-source-clojure"><pre class="notranslate">(<span class="pl-k">ns</span> <span class="pl-e">myapp.core</span>
+  (<span class="pl-c1">:require</span> [compojure.core <span class="pl-c1">:refer</span> <span class="pl-c1">:all</span>]
+            [org.httpkit.server <span class="pl-c1">:refer</span> [run-server]])) <span class="pl-c"><span class="pl-c">;</span> httpkit is a server</span>
+
+(<span class="pl-k">defroutes</span> <span class="pl-e">myapp</span>
+  (<span class="pl-en">GET</span> <span class="pl-s"><span class="pl-pds">"</span>/<span class="pl-pds">"</span></span> [] <span class="pl-s"><span class="pl-pds">"</span>Hello World<span class="pl-pds">"</span></span>))
+
+(<span class="pl-k">defn</span> <span class="pl-e">-main</span> []
+  (<span class="pl-en">run-server</span> myapp {<span class="pl-c1">:port</span> <span class="pl-c1">5000</span>}))</pre></div>
+<p><strong>Step 1:</strong> Create a project with <a href="http://leiningen.org/" rel="nofollow">Leiningen</a>:</p>
+<pre class="notranslate"><code class="notranslate">lein new myapp
+</code></pre>
+<p><strong>Step 2:</strong> Put the above code in <code class="notranslate">src/myapp/core.clj</code></p>
+<p><strong>Step 3:</strong> Add some dependencies to <code class="notranslate">project.clj</code>:</p>
+<pre class="notranslate"><code class="notranslate">[compojure "1.1.8"]
+[http-kit "2.1.16"]
+</code></pre>
+<p><strong>Step 4:</strong> Run:</p>
+<pre class="notranslate"><code class="notranslate">lein run -m myapp.core
+</code></pre>
+<p>View at: <a href="http://localhost:5000/" rel="nofollow">http://localhost:5000/</a></p>
+<p>Compojure apps will run on any ring-compatible server, but we recommend<br>
+<a href="http://http-kit.org/" rel="nofollow">http-kit</a> for its performance and<br>
+<a href="http://http-kit.org/600k-concurrent-connection-http-kit.html" rel="nofollow">massive concurrency</a>.</p>
+<h3>Routes</h3>
+<p>In compojure, each route is an HTTP method paired with a URL-matching pattern,<br>
+an argument list, and a body.</p>
+<div class="highlight highlight-source-clojure"><pre class="notranslate">(<span class="pl-k">defroutes</span> <span class="pl-e">myapp</span>
+  (<span class="pl-en">GET</span> <span class="pl-s"><span class="pl-pds">"</span>/<span class="pl-pds">"</span></span> [] <span class="pl-s"><span class="pl-pds">"</span>Show something<span class="pl-pds">"</span></span>)
+  (<span class="pl-en">POST</span> <span class="pl-s"><span class="pl-pds">"</span>/<span class="pl-pds">"</span></span> [] <span class="pl-s"><span class="pl-pds">"</span>Create something<span class="pl-pds">"</span></span>)
+  (<span class="pl-en">PUT</span> <span class="pl-s"><span class="pl-pds">"</span>/<span class="pl-pds">"</span></span> [] <span class="pl-s"><span class="pl-pds">"</span>Replace something<span class="pl-pds">"</span></span>)
+  (<span class="pl-en">PATCH</span> <span class="pl-s"><span class="pl-pds">"</span>/<span class="pl-pds">"</span></span> [] <span class="pl-s"><span class="pl-pds">"</span>Modify Something<span class="pl-pds">"</span></span>)
+  (<span class="pl-en">DELETE</span> <span class="pl-s"><span class="pl-pds">"</span>/<span class="pl-pds">"</span></span> [] <span class="pl-s"><span class="pl-pds">"</span>Annihilate something<span class="pl-pds">"</span></span>)
+  (<span class="pl-en">OPTIONS</span> <span class="pl-s"><span class="pl-pds">"</span>/<span class="pl-pds">"</span></span> [] <span class="pl-s"><span class="pl-pds">"</span>Appease something<span class="pl-pds">"</span></span>)
+  (<span class="pl-en">HEAD</span> <span class="pl-s"><span class="pl-pds">"</span>/<span class="pl-pds">"</span></span> [] <span class="pl-s"><span class="pl-pds">"</span>Preview something<span class="pl-pds">"</span></span>))</pre></div>
+<p>Compojure route definitions are just functions which<br>
+<a href="https://github.com/mmcgrana/ring/blob/master/SPEC">accept request maps and return response maps</a>:</p>
+<div class="highlight highlight-source-clojure"><pre class="notranslate">(<span class="pl-en">myapp</span> {<span class="pl-c1">:uri</span> <span class="pl-s"><span class="pl-pds">"</span>/<span class="pl-pds">"</span></span> <span class="pl-c1">:request-method</span> <span class="pl-c1">:post</span>})
+<span class="pl-c"><span class="pl-c">;</span> =&gt; {:status 200</span>
+<span class="pl-c"><span class="pl-c">;</span>     :headers {"Content-Type" "text/html; charset=utf-8}</span>
+<span class="pl-c"><span class="pl-c">;</span>     :body "Create Something"}</span></pre></div>
+<p>The body may be a function, which must accept the request as a parameter:</p>
+<div class="highlight highlight-source-clojure"><pre class="notranslate">(<span class="pl-k">defroutes</span> <span class="pl-e">myapp</span>
+  (<span class="pl-en">GET</span> <span class="pl-s"><span class="pl-pds">"</span>/<span class="pl-pds">"</span></span> [] (<span class="pl-k">fn</span> [req] <span class="pl-s"><span class="pl-pds">"</span>Do something with req<span class="pl-pds">"</span></span>)))</pre></div>
+<p>Or, you can just use the request directly:</p>
+<div class="highlight highlight-source-clojure"><pre class="notranslate">(<span class="pl-k">defroutes</span> <span class="pl-e">myapp</span>
+  (<span class="pl-en">GET</span> <span class="pl-s"><span class="pl-pds">"</span>/<span class="pl-pds">"</span></span> req <span class="pl-s"><span class="pl-pds">"</span>Do something with req<span class="pl-pds">"</span></span>))</pre></div>
+<p>Route patterns may include named parameters:</p>
+<div class="highlight highlight-source-clojure"><pre class="notranslate">(<span class="pl-k">defroutes</span> <span class="pl-e">myapp</span>
+  (<span class="pl-en">GET</span> <span class="pl-s"><span class="pl-pds">"</span>/hello/:name<span class="pl-pds">"</span></span> [name] (<span class="pl-en">str</span> <span class="pl-s"><span class="pl-pds">"</span>Hello <span class="pl-pds">"</span></span> name)))</pre></div>
+<p>You can adjust what each parameter matches by supplying a regex:</p>
+<div class="highlight highlight-source-clojure"><pre class="notranslate">(<span class="pl-k">defroutes</span> <span class="pl-e">myapp</span>
+  (<span class="pl-en">GET</span> [<span class="pl-s"><span class="pl-pds">"</span>/file/:name.:ext<span class="pl-pds">"</span></span> <span class="pl-c1">:name</span> <span class="pl-sr">#".*"</span>, <span class="pl-c1">:ext</span> <span class="pl-sr">#".*"</span>] [name ext]
+    (<span class="pl-en">str</span> <span class="pl-s"><span class="pl-pds">"</span>File: <span class="pl-pds">"</span></span> name ext)))</pre></div>
+<h3>Middleware</h3>
+<p>Clojure uses <a href="https://github.com/ring-clojure/ring">Ring</a> for routing.<br>
+Handlers are just functions that accept a request map and return a<br>
+response map (Compojure will turn strings into 200 responses for you).</p>
+<p>You can easily write middleware that wraps all or part of your<br>
+application to modify requests or responses:</p>
+<div class="highlight highlight-source-clojure"><pre class="notranslate">(<span class="pl-k">defroutes</span> <span class="pl-e">myapp</span>
+  (<span class="pl-en">GET</span> <span class="pl-s"><span class="pl-pds">"</span>/<span class="pl-pds">"</span></span> req (<span class="pl-en">str</span> <span class="pl-s"><span class="pl-pds">"</span>Hello World v<span class="pl-pds">"</span></span> (<span class="pl-c1">:app-version</span> req))))
+
+(<span class="pl-k">defn</span> <span class="pl-e">wrap-version</span> [handler]
+  (<span class="pl-k">fn</span> [request]
+    (<span class="pl-en">handler</span> (<span class="pl-en">assoc</span> request <span class="pl-c1">:app-version</span> <span class="pl-s"><span class="pl-pds">"</span>1.0.1<span class="pl-pds">"</span></span>))))
+
+(<span class="pl-k">defn</span> <span class="pl-e">-main</span> []
+  (<span class="pl-en">run-server</span> (<span class="pl-en">wrap-version</span> myapp) {<span class="pl-c1">:port</span> <span class="pl-c1">5000</span>}))</pre></div>
+<p><a href="https://github.com/ring-clojure/ring-defaults">Ring-Defaults</a> provides some handy<br>
+middlewares for sites and apis, so add it to your dependencies:</p>
+<pre class="notranslate"><code class="notranslate">[ring/ring-defaults "0.1.1"]
+</code></pre>
+<p>Then, you can import it in your ns:</p>
+<pre class="notranslate"><code class="notranslate">(ns myapp.core
+  (:require [compojure.core :refer :all]
+            [ring.middleware.defaults :refer :all]
+            [org.httpkit.server :refer [run-server]]))
+</code></pre>
+<p>And use <code class="notranslate">wrap-defaults</code> to add the <code class="notranslate">site-defaults</code> middleware to your<br>
+app:</p>
+<pre class="notranslate"><code class="notranslate">(defn -main []
+  (run-server (wrap-defaults myapp site-defaults) {:port 5000}))
+</code></pre>
+<p>Now, your handlers may utilize query parameters:</p>
+<div class="highlight highlight-source-clojure"><pre class="notranslate">(<span class="pl-k">defroutes</span> <span class="pl-e">myapp</span>
+  (<span class="pl-en">GET</span> <span class="pl-s"><span class="pl-pds">"</span>/posts<span class="pl-pds">"</span></span> req
+    (<span class="pl-k">let</span> [title (<span class="pl-en">get</span> (<span class="pl-c1">:params</span> req) <span class="pl-c1">:title</span>)
+          author (<span class="pl-en">get</span> (<span class="pl-c1">:params</span> req) <span class="pl-c1">:author</span>)]
+      (<span class="pl-en">str</span> <span class="pl-s"><span class="pl-pds">"</span>Title: <span class="pl-pds">"</span></span> title <span class="pl-s"><span class="pl-pds">"</span>, Author: <span class="pl-pds">"</span></span> author))))</pre></div>
+<p>Or, for POST and PUT requests, form parameters as well</p>
+<div class="highlight highlight-source-clojure"><pre class="notranslate">(<span class="pl-k">defroutes</span> <span class="pl-e">myapp</span>
+  (<span class="pl-en">POST</span> <span class="pl-s"><span class="pl-pds">"</span>/posts<span class="pl-pds">"</span></span> req
+    (<span class="pl-k">let</span> [title (<span class="pl-en">get</span> (<span class="pl-c1">:params</span> req) <span class="pl-c1">:title</span>)
+          author (<span class="pl-en">get</span> (<span class="pl-c1">:params</span> req) <span class="pl-c1">:author</span>)]
+      (<span class="pl-en">str</span> <span class="pl-s"><span class="pl-pds">"</span>Title: <span class="pl-pds">"</span></span> title <span class="pl-s"><span class="pl-pds">"</span>, Author: <span class="pl-pds">"</span></span> author))))</pre></div>
+<h3>Return values</h3>
+<p>The return value of a route block determines the response body<br>
+passed on to the HTTP client, or at least the next middleware in the<br>
+ring stack. Most commonly, this is a string, as in the above examples.<br>
+But, you may also return a <a href="https://github.com/mmcgrana/ring/blob/master/SPEC">response map</a>:</p>
+<div class="highlight highlight-source-clojure"><pre class="notranslate">(<span class="pl-k">defroutes</span> <span class="pl-e">myapp</span>
+  (<span class="pl-en">GET</span> <span class="pl-s"><span class="pl-pds">"</span>/<span class="pl-pds">"</span></span> []
+    {<span class="pl-c1">:status</span> <span class="pl-c1">200</span> <span class="pl-c1">:body</span> <span class="pl-s"><span class="pl-pds">"</span>Hello World<span class="pl-pds">"</span></span>})
+  (<span class="pl-en">GET</span> <span class="pl-s"><span class="pl-pds">"</span>/is-403<span class="pl-pds">"</span></span> []
+    {<span class="pl-c1">:status</span> <span class="pl-c1">403</span> <span class="pl-c1">:body</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>})
+  (<span class="pl-en">GET</span> <span class="pl-s"><span class="pl-pds">"</span>/is-json<span class="pl-pds">"</span></span> []
+    {<span class="pl-c1">:status</span> <span class="pl-c1">200</span> <span class="pl-c1">:headers</span> {<span class="pl-s"><span class="pl-pds">"</span>Content-Type<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>application/json<span class="pl-pds">"</span></span>} <span class="pl-c1">:body</span> <span class="pl-s"><span class="pl-pds">"</span>{}<span class="pl-pds">"</span></span>}))</pre></div>
+<h3>Static Files</h3>
+<p>To serve up static files, use <code class="notranslate">compojure.route.resources</code>.<br>
+Resources will be served from your project's <code class="notranslate">resources/</code> folder.</p>
+<div class="highlight highlight-source-clojure"><pre class="notranslate">(<span class="pl-k">require</span> '[compojure.route <span class="pl-c1">:as</span> route])
+
+(<span class="pl-k">defroutes</span> <span class="pl-e">myapp</span>
+  (<span class="pl-en">GET</span> <span class="pl-s"><span class="pl-pds">"</span>/<span class="pl-pds">"</span></span>)
+  (<span class="pl-en">route/resources</span> <span class="pl-s"><span class="pl-pds">"</span>/<span class="pl-pds">"</span></span>)) <span class="pl-c"><span class="pl-c">;</span> Serve static resources at the root path</span>
+
+(<span class="pl-en">myapp</span> {<span class="pl-c1">:uri</span> <span class="pl-s"><span class="pl-pds">"</span>/js/script.js<span class="pl-pds">"</span></span> <span class="pl-c1">:request-method</span> <span class="pl-c1">:get</span>})
+<span class="pl-c"><span class="pl-c">;</span> =&gt; Contents of resources/public/js/script.js</span></pre></div>
+<h3>Views / Templates</h3>
+<p>To use templating with Compojure, you'll need a template library. Here are a few:</p>
+<h4><a href="https://github.com/davidsantiago/stencil">Stencil</a></h4>
+<p><a href="https://github.com/davidsantiago/stencil">Stencil</a> is a <a href="http://mustache.github.com/">Mustache</a> template library:</p>
+<div class="highlight highlight-source-clojure"><pre class="notranslate">(<span class="pl-k">require</span> '[stencil.core <span class="pl-c1">:refer</span> [render-string]])
+
+(<span class="pl-k">defroutes</span> <span class="pl-e">myapp</span>
+  (<span class="pl-en">GET</span> <span class="pl-s"><span class="pl-pds">"</span>/hello/:name<span class="pl-pds">"</span></span> [name]
+    (<span class="pl-en">render-string</span> <span class="pl-s"><span class="pl-pds">"</span>Hello {{name}}<span class="pl-pds">"</span></span> {<span class="pl-c1">:name</span> name})))</pre></div>
+<p>You can easily read in templates from your resources directory. Here's a helper function</p>
+<div class="highlight highlight-source-clojure"><pre class="notranslate">(<span class="pl-k">require</span> 'clojure.java.io)
+
+(<span class="pl-k">defn</span> <span class="pl-e">read-template</span> [filename]
+  (<span class="pl-en">slurp</span> (<span class="pl-en">clojure.java.io/resource</span> filename)))
+
+(<span class="pl-k">defroutes</span> <span class="pl-e">myapp</span>
+  (<span class="pl-en">GET</span> <span class="pl-s"><span class="pl-pds">"</span>/hello/:name<span class="pl-pds">"</span></span> [name]
+    (<span class="pl-en">render-string</span> (<span class="pl-en">read-template</span> <span class="pl-s"><span class="pl-pds">"</span>templates/hello.html<span class="pl-pds">"</span></span>) {<span class="pl-c1">:name</span> name})))</pre></div>
+<h4><a href="https://github.com/yogthos/Selmer">Selmer</a></h4>
+<p><a href="https://github.com/yogthos/Selmer">Selmer</a> is a Django and Jinja2-inspired templating language:</p>
+<div class="highlight highlight-source-clojure"><pre class="notranslate">(<span class="pl-k">require</span> '[selmer.parser <span class="pl-c1">:refer</span> [render-file]])
+
+(<span class="pl-k">defroutes</span> <span class="pl-e">myapp</span>
+  (<span class="pl-en">GET</span> <span class="pl-s"><span class="pl-pds">"</span>/hello/:name<span class="pl-pds">"</span></span> [name]
+    (<span class="pl-en">render-file</span> <span class="pl-s"><span class="pl-pds">"</span>templates/hello.html<span class="pl-pds">"</span></span> {<span class="pl-c1">:name</span> name})))</pre></div>
+<h4><a href="https://github.com/weavejester/hiccup">Hiccup</a></h4>
+<p><a href="https://github.com/weavejester/hiccup">Hiccup</a> is a library for representing HTML as Clojure code</p>
+<div class="highlight highlight-source-clojure"><pre class="notranslate">(<span class="pl-k">require</span> '[hiccup.core <span class="pl-c1">:as</span> hiccup])
+
+(<span class="pl-k">defroutes</span> <span class="pl-e">myapp</span>
+  (<span class="pl-en">GET</span> <span class="pl-s"><span class="pl-pds">"</span>/hello/:name<span class="pl-pds">"</span></span> [name]
+    (<span class="pl-en">hiccup/html</span>
+      [<span class="pl-c1">:html</span>
+        [<span class="pl-c1">:body</span>
+          [<span class="pl-c1">:h1</span> {<span class="pl-c1">:class</span> <span class="pl-s"><span class="pl-pds">"</span>title<span class="pl-pds">"</span></span>}
+            (<span class="pl-en">str</span> <span class="pl-s"><span class="pl-pds">"</span>Hello <span class="pl-pds">"</span></span> name)]]])))</pre></div>
+<h4><a href="https://github.com/yogthos/markdown-clj">Markdown</a></h4>
+<p><a href="https://github.com/yogthos/markdown-clj">Markdown-clj</a> is a Markdown implementation.</p>
+<div class="highlight highlight-source-clojure"><pre class="notranslate">(<span class="pl-k">require</span> '[markdown.core <span class="pl-c1">:refer</span> [md-to-html-string]])
+
+(<span class="pl-k">defroutes</span> <span class="pl-e">myapp</span>
+  (<span class="pl-en">GET</span> <span class="pl-s"><span class="pl-pds">"</span>/hello/:name<span class="pl-pds">"</span></span> [name]
+    (<span class="pl-en">md-to-html-string</span> <span class="pl-s"><span class="pl-pds">"</span>## Hello, world<span class="pl-pds">"</span></span>)))</pre></div>
+<p>Further reading:</p>
+<ul>
+<li>
+<p><a href="https://github.com/weavejester/compojure/wiki">Official Compojure Documentation</a></p>
+</li>
+<li>
+<p><a href="http://www.braveclojure.com/" rel="nofollow">Clojure for the Brave and True</a></p>
+</li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Adam Bard", "http://adambard.com/"]
+</code></pre>

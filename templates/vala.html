@@ -1,0 +1,497 @@
+<h1>Vala</h1>
+<p>In GNOME's own words, "Vala is a programming language that aims to bring modern programming language features to GNOME developers without imposing any additional runtime requirements and without using a different ABI compared to applications and libraries written in C."</p>
+<p>Vala has aspects of Java and C#, so it'll be natural to those who know either.</p>
+<p><a href="https://wiki.gnome.org/Projects/Vala" rel="nofollow">Read more here.</a></p>
+<div class="highlight highlight-source-vala"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> Single line comment</span>
+
+<span class="pl-c"><span class="pl-c">/*</span> Multiline</span>
+<span class="pl-c">Comment <span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">/**</span></span>
+<span class="pl-c">* Documentation comment</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">/*</span> Data Types <span class="pl-c">*/</span></span>
+
+<span class="pl-k">char</span> character <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>a<span class="pl-pds">'</span></span>
+unichar unicode_character <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>u<span class="pl-pds">'</span></span> <span class="pl-c"><span class="pl-c">//</span> 32-bit unicode character</span>
+
+<span class="pl-k">int</span> i <span class="pl-k">=</span> <span class="pl-c1">2</span>; <span class="pl-c"><span class="pl-c">//</span> ints can also have guaranteed sizes (e.g. int64, uint64)</span>
+<span class="pl-k">uint</span> j <span class="pl-k">=</span> <span class="pl-k">-</span><span class="pl-c1">6</span>; <span class="pl-c"><span class="pl-c">//</span> Won't compile; unsigned ints can only be positive</span>
+
+<span class="pl-k">long</span> k;
+
+<span class="pl-k">short</span> l;
+<span class="pl-k">ushort</span> m;
+
+<span class="pl-k">string</span> text <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Hello,<span class="pl-pds">"</span></span>; <span class="pl-c"><span class="pl-c">//</span> Note that the == operator will check string content</span>
+
+<span class="pl-k">string</span> verbatim <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span><span class="pl-pds">"</span>This is a verbatim (a.k.a. raw) string. Special characters</span>
+<span class="pl-s">(e.g. <span class="pl-cce">\n</span> and <span class="pl-pds">"</span><span class="pl-pds">"</span>) are not interpreted. They may also be multiple lines long.<span class="pl-pds">"</span><span class="pl-pds">"</span><span class="pl-pds">"</span></span>;
+
+<span class="pl-c"><span class="pl-c">//</span> String Templates allow for easy string formatting</span>
+<span class="pl-k">string</span> string_template <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">@"</span><span class="pl-cce">$text</span> world<span class="pl-pds">"</span></span>; <span class="pl-c"><span class="pl-c">//</span> "$text" evaluates to "Hello,"</span>
+
+<span class="pl-k">int</span> test <span class="pl-k">=</span> <span class="pl-c1">5</span>;
+<span class="pl-k">int</span> test2 <span class="pl-k">=</span> <span class="pl-c1">10</span>;
+<span class="pl-k">string</span> template2 <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">@"</span><span class="pl-cce">$(test * test2)</span> is a number.<span class="pl-pds">"</span></span>; <span class="pl-c"><span class="pl-c">//</span> Expression evaluation</span>
+
+<span class="pl-k">string</span> template_slice <span class="pl-k">=</span> string_template[<span class="pl-c1">7</span><span class="pl-k">:</span><span class="pl-c1">12</span>]; <span class="pl-c"><span class="pl-c">//</span> =&gt; "world"</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Most data types have methods for parsing.</span>
+
+<span class="pl-k">bool</span> parse_bool <span class="pl-k">=</span> <span class="pl-k">bool</span><span class="pl-k">.</span>parse(<span class="pl-s"><span class="pl-pds">"</span>false<span class="pl-pds">"</span></span>); <span class="pl-c"><span class="pl-c">//</span> =&gt; false</span>
+<span class="pl-k">int</span> parse_int <span class="pl-k">=</span> <span class="pl-k">int</span><span class="pl-k">.</span>parse(<span class="pl-s"><span class="pl-pds">"</span>-52<span class="pl-pds">"</span></span>); <span class="pl-c"><span class="pl-c">//</span> =&gt; -52</span>
+<span class="pl-k">string</span> parse_string <span class="pl-k">=</span> parse_int<span class="pl-k">.</span>to_string(); <span class="pl-c"><span class="pl-c">//</span> =&gt; "-52"</span>
+
+<span class="pl-c"><span class="pl-c">/*</span> Basic I/O <span class="pl-c">*/</span></span>
+
+stdout<span class="pl-k">.</span>printf(parse_string); <span class="pl-c"><span class="pl-c">//</span> Prints to console</span>
+<span class="pl-k">string</span> input <span class="pl-k">=</span> stdin<span class="pl-k">.</span>read_line(); <span class="pl-c"><span class="pl-c">//</span> Gets input from console</span>
+
+stderr<span class="pl-k">.</span>printf(<span class="pl-s"><span class="pl-pds">"</span>Error message<span class="pl-pds">"</span></span>); <span class="pl-c"><span class="pl-c">//</span> Error printing</span>
+
+<span class="pl-c"><span class="pl-c">/*</span> Arrays <span class="pl-c">*/</span></span>
+
+<span class="pl-k">int</span>[] int_array <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-k">int</span>[<span class="pl-c1">10</span>]; <span class="pl-c"><span class="pl-c">//</span> Array of ints with 10 slots</span>
+<span class="pl-k">int</span> better_int_array[<span class="pl-c1">10</span>]; <span class="pl-c"><span class="pl-c">//</span> Above expression, shortened</span>
+int_array<span class="pl-k">.</span>length; <span class="pl-c"><span class="pl-c">//</span> =&gt; 10;</span>
+
+<span class="pl-k">int</span>[] int_array2 <span class="pl-k">=</span> {<span class="pl-c1">5</span>, <span class="pl-c1">10</span>, <span class="pl-c1">15</span>, <span class="pl-c1">20</span>}; <span class="pl-c"><span class="pl-c">//</span> Can be created on-the-fly</span>
+
+<span class="pl-k">int</span>[] array_slice <span class="pl-k">=</span> int_array2[<span class="pl-c1">1</span><span class="pl-k">:</span><span class="pl-c1">3</span>]; <span class="pl-c"><span class="pl-c">//</span> Slice (copy of data)</span>
+<span class="pl-k">unowned</span> <span class="pl-k">int</span>[] array_slice_ref <span class="pl-k">=</span> int_array2[<span class="pl-c1">1</span><span class="pl-k">:</span><span class="pl-c1">3</span>]; <span class="pl-c"><span class="pl-c">//</span> Reference to data</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Multi-dimensional Arrays (defined with a number of commas in the brackets)</span>
+
+<span class="pl-k">int</span>[,] multi_array <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-k">int</span>[<span class="pl-c1">6</span>,<span class="pl-c1">4</span>]; <span class="pl-c"><span class="pl-c">//</span> 6 is the number of arrays, 4 is their size</span>
+<span class="pl-k">int</span>[,] multi_array2 <span class="pl-k">=</span> {{<span class="pl-c1">7</span>, <span class="pl-c1">4</span>, <span class="pl-c1">6</span>, <span class="pl-c1">4</span>},
+                       {<span class="pl-c1">3</span>, <span class="pl-c1">2</span>, <span class="pl-c1">4</span>, <span class="pl-c1">6</span>},
+                       {<span class="pl-c1">5</span>, <span class="pl-c1">9</span>, <span class="pl-c1">5</span>, <span class="pl-c1">1</span>}}; <span class="pl-c"><span class="pl-c">//</span> new int[3,4]</span>
+multi_array2[<span class="pl-c1">2</span>,<span class="pl-c1">3</span>] <span class="pl-k">=</span> <span class="pl-c1">12</span>; <span class="pl-c"><span class="pl-c">//</span> 2 is the array, 3 is the index in the array</span>
+<span class="pl-k">int</span> first_d <span class="pl-k">=</span> multi_array2<span class="pl-k">.</span>length[<span class="pl-c1">0</span>] <span class="pl-c"><span class="pl-c">//</span> =&gt; 3</span>
+<span class="pl-k">int</span> second_d <span class="pl-k">=</span> multi_array2<span class="pl-k">.</span>length[<span class="pl-c1">1</span>] <span class="pl-c"><span class="pl-c">//</span> =&gt; 4</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Stacked arrays (e.g. int[][]) where array lengths vary are not supported.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Multi-dimensional arrays cannot be sliced, nor can they be converted to one-</span>
+<span class="pl-c"><span class="pl-c">//</span> dimensional.</span>
+
+<span class="pl-k">int</span>[] add_to_array <span class="pl-k">=</span> {};
+add_to_array <span class="pl-k">+</span><span class="pl-k">=</span> <span class="pl-c1">12</span>; <span class="pl-c"><span class="pl-c">//</span> Arrays can be dynamically added to</span>
+
+add_to_array<span class="pl-k">.</span>resize(<span class="pl-c1">20</span>); <span class="pl-c"><span class="pl-c">//</span> Array now has 20 slots</span>
+
+<span class="pl-k">uint8</span>[] chars <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>test message<span class="pl-pds">"</span></span><span class="pl-k">.</span>data;
+chars<span class="pl-k">.</span>move(<span class="pl-c1">5</span>, <span class="pl-c1">0</span>, <span class="pl-c1">7</span>);
+stdout<span class="pl-k">.</span>printf((<span class="pl-k">string</span>) chars); <span class="pl-c"><span class="pl-c">//</span> Casts the array to a string and prints it</span>
+
+<span class="pl-c"><span class="pl-c">/*</span> Control Flow <span class="pl-c">*/</span></span>
+
+<span class="pl-k">int</span> a <span class="pl-k">=</span> <span class="pl-c1">1</span>;
+<span class="pl-k">int</span> b <span class="pl-k">=</span> <span class="pl-c1">2</span>;
+<span class="pl-k">int</span>[] foreach_demo <span class="pl-k">=</span> {<span class="pl-c1">2</span>, <span class="pl-c1">4</span>, <span class="pl-c1">6</span>, <span class="pl-c1">8</span>};
+
+<span class="pl-k">while</span> (b <span class="pl-k">&gt;</span> a) { <span class="pl-c"><span class="pl-c">//</span> While loop; checks if expression is true before executing</span>
+  b<span class="pl-k">--</span>;
+}
+
+<span class="pl-k">do</span> {
+  b<span class="pl-k">--</span>;
+}
+<span class="pl-k">while</span> (b <span class="pl-k">&gt;</span> a); <span class="pl-c"><span class="pl-c">//</span> Do While loop; executes the code in "do" before while (b &gt; a)</span>
+
+<span class="pl-k">for</span> (a <span class="pl-k">=</span> <span class="pl-c1">0</span>; a <span class="pl-k">&lt;</span> <span class="pl-c1">10</span>; a<span class="pl-k">++</span>) { stdout<span class="pl-k">.</span>printf(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">%d\n</span><span class="pl-pds">"</span></span>, a); } <span class="pl-c"><span class="pl-c">//</span> for loop</span>
+
+<span class="pl-k">foreach</span> (<span class="pl-k">int</span> foreach_demo_var <span class="pl-k">in</span> foreach_demo) {
+  stdout<span class="pl-k">.</span>printf(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">%d\n</span><span class="pl-pds">"</span></span>, foreach_demo_var);
+} <span class="pl-c"><span class="pl-c">//</span> foreach works on any iterable collection</span>
+
+<span class="pl-k">if</span> (a <span class="pl-k">==</span> <span class="pl-c1">0</span>) {
+  stdout<span class="pl-k">.</span>printf(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">%d\n</span><span class="pl-pds">"</span></span>, a);
+} <span class="pl-k">else</span> <span class="pl-k">if</span> (a <span class="pl-k">&gt;</span> <span class="pl-c1">1</span>) {
+  stdout<span class="pl-k">.</span>printf(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">%d\n</span><span class="pl-pds">"</span></span>, a);
+} <span class="pl-k">else</span> {
+  stdout<span class="pl-k">.</span>printf(<span class="pl-s"><span class="pl-pds">"</span>A is less than 0<span class="pl-pds">"</span></span>);
+} <span class="pl-c"><span class="pl-c">//</span> if-then-else</span>
+
+<span class="pl-k">switch</span> (a) {
+  <span class="pl-k">case</span> <span class="pl-c1">1</span><span class="pl-k">:</span>
+    stdout<span class="pl-k">.</span>printf(<span class="pl-s"><span class="pl-pds">"</span>A is 1<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>);
+    <span class="pl-k">break</span>;
+  <span class="pl-k">case</span> <span class="pl-c1">5</span><span class="pl-k">:</span>
+  <span class="pl-k">case</span> <span class="pl-c1">10</span><span class="pl-k">:</span>
+    stdout<span class="pl-k">.</span>printf(<span class="pl-s"><span class="pl-pds">"</span>A is 5 or 10<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>);
+    <span class="pl-k">break</span>;
+  <span class="pl-k">default:</span>
+    stdout<span class="pl-k">.</span>printf(<span class="pl-s"><span class="pl-pds">"</span>???<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>)
+    <span class="pl-k">break</span>;
+} <span class="pl-c"><span class="pl-c">//</span> switch statement</span>
+
+<span class="pl-c"><span class="pl-c">/*</span> Type Casting and Inference <span class="pl-c">*/</span></span>
+
+<span class="pl-k">int</span> cast_to_float <span class="pl-k">=</span> <span class="pl-c1">10</span>;
+<span class="pl-k">float</span> casted_float <span class="pl-k">=</span> (<span class="pl-k">float</span>) cast_to_float; <span class="pl-c"><span class="pl-c">//</span> static casting; no runtime checks</span>
+
+<span class="pl-c"><span class="pl-c">//</span> For runtime checks, use dynamic casting.</span>
+<span class="pl-c"><span class="pl-c">//</span> Dynamically casted objects must be the following:</span>
+<span class="pl-c"><span class="pl-c">//</span> - Object's class is the same class as the desired type</span>
+<span class="pl-c"><span class="pl-c">//</span> - Object's class is a subclass of the desired type</span>
+<span class="pl-c"><span class="pl-c">//</span> - Desired class is an interface implemented by the object's class</span>
+
+<span class="pl-k">float</span> dyna_casted_float <span class="pl-k">=</span> cast_to_float <span class="pl-k">as</span> <span class="pl-k">float</span> <span class="pl-c"><span class="pl-c">//</span> Won't compile</span>
+
+<span class="pl-k">var</span> inferred_string <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>hello<span class="pl-pds">"</span></span>; <span class="pl-c"><span class="pl-c">//</span> Type inference</span>
+
+<span class="pl-c"><span class="pl-c">/*</span> Methods (a.k.a. functions) <span class="pl-c">*/</span></span>
+
+<span class="pl-k">int</span> method_demo(<span class="pl-k">string</span> arg1, <span class="pl-k">Object</span> arg2) { <span class="pl-c"><span class="pl-c">//</span> Returns int and takes args</span>
+    <span class="pl-k">return</span> <span class="pl-c1">1</span>;
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Vala methods cannot be overloaded.</span>
+
+<span class="pl-k">void</span> some_method(<span class="pl-k">string</span> text) { }
+<span class="pl-k">void</span> some_method(<span class="pl-k">int</span> number) { }  <span class="pl-c"><span class="pl-c">//</span> Won't compile</span>
+
+<span class="pl-c"><span class="pl-c">//</span> To achieve similar functionality, use default argument values.</span>
+
+<span class="pl-k">void</span> some_better_method(<span class="pl-k">string</span> text, <span class="pl-k">int</span> number <span class="pl-k">=</span> <span class="pl-c1">0</span>) { }
+
+some_better_method(<span class="pl-s"><span class="pl-pds">"</span>text<span class="pl-pds">"</span></span>);
+some_better_method(<span class="pl-s"><span class="pl-pds">"</span>text<span class="pl-pds">"</span></span>, <span class="pl-c1">12</span>);
+
+<span class="pl-c"><span class="pl-c">//</span> varargs (variable-length argument lists) are also supported.</span>
+
+<span class="pl-k">void</span> method_with_varargs(<span class="pl-k">int</span> arg1, .<span class="pl-k">..</span>) {
+    <span class="pl-k">var</span> varargs_list <span class="pl-k">=</span> va_list(); <span class="pl-c"><span class="pl-c">//</span> gets the varargs list</span>
+
+    <span class="pl-k">string</span> arg_string <span class="pl-k">=</span> varargs_list<span class="pl-k">.</span>arg(); <span class="pl-c"><span class="pl-c">//</span> gets arguments, one after another</span>
+    <span class="pl-k">int</span> int_vararg <span class="pl-k">=</span> varargs_list<span class="pl-k">.</span>arg();
+
+    stdout<span class="pl-k">.</span>printf(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">%s</span>, <span class="pl-cce">%d\n</span><span class="pl-pds">"</span></span>, arg_string, int_vararg)
+}
+
+<span class="pl-k">string</span><span class="pl-k">?</span> ok_to_be_null(<span class="pl-k">int</span><span class="pl-k">?</span> test_int) { } <span class="pl-c"><span class="pl-c">//</span> "?" denotes possible null value</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Delegates</span>
+
+delegate <span class="pl-k">void</span> <span class="pl-k">DelegateDemo</span>(<span class="pl-k">char</span> char_a);
+
+<span class="pl-k">void</span> delegate_match(<span class="pl-k">char</span> char_a) { <span class="pl-c"><span class="pl-c">//</span> Matches DelegateDemo's signature</span>
+  stdout<span class="pl-k">.</span>printf(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">%d\n</span><span class="pl-pds">"</span></span>);
+}
+
+<span class="pl-k">void</span> call_delegate(<span class="pl-k">DelegateDemo</span> d, <span class="pl-k">char</span> char_b) { <span class="pl-c"><span class="pl-c">//</span> Takes a delegate arg</span>
+  d(char_b) <span class="pl-c"><span class="pl-c">//</span> calls delegate</span>
+}
+
+<span class="pl-k">void</span> final_delegate_demo() {
+  call_delegate(delegate_match); <span class="pl-c"><span class="pl-c">//</span> Passes matching method as argument</span>
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Lambdas (a.k.a. Anonymous Methods) are defined with "=&gt;"</span>
+
+(a) <span class="pl-k">=</span><span class="pl-k">&gt;</span> { stdout<span class="pl-k">.</span>printf(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">%d\n</span><span class="pl-pds">"</span></span>, a); } <span class="pl-c"><span class="pl-c">//</span> Prints "a"</span>
+
+<span class="pl-c"><span class="pl-c">/*</span> Namespaces <span class="pl-c">*/</span></span>
+
+<span class="pl-k">namespace</span> <span class="pl-en">NamespaceDemo</span> {
+  <span class="pl-c"><span class="pl-c">//</span> Allows you to organize variable names</span>
+  <span class="pl-k">int</span> namespace_int <span class="pl-k">=</span> <span class="pl-c1">12</span>;
+}
+namespace_int <span class="pl-k">+</span><span class="pl-k">=</span> <span class="pl-c1">5</span>; <span class="pl-c"><span class="pl-c">//</span> Won't compile</span>
+
+<span class="pl-k">using</span> <span class="pl-k">NamespaceDemo</span>;
+namespace_int <span class="pl-k">+</span><span class="pl-k">=</span> <span class="pl-c1">5</span>; <span class="pl-c"><span class="pl-c">//</span> Valid</span>
+
+<span class="pl-c"><span class="pl-c">/*</span> Structs and Enums <span class="pl-c">*/</span></span>
+
+<span class="pl-k">struct</span> <span class="pl-en">Closet</span> {
+  <span class="pl-k">public</span> <span class="pl-k">uint</span> shirts; <span class="pl-c"><span class="pl-c">//</span> Default access modifier is private</span>
+  <span class="pl-k">public</span> <span class="pl-k">uint</span> jackets;
+}
+
+<span class="pl-k">Closet</span> struct_init_1 <span class="pl-k">=</span> <span class="pl-k">Closet</span>(); <span class="pl-c"><span class="pl-c">//</span> or Closet struct_init_1 = {};</span>
+<span class="pl-k">Closet</span> struct_init_2 <span class="pl-k">=</span> {<span class="pl-c1">15</span>, <span class="pl-c1">3</span>};
+<span class="pl-k">var</span> struct_init_3 <span class="pl-k">=</span> <span class="pl-k">Closet</span>() { <span class="pl-c"><span class="pl-c">//</span> Type inference also works</span>
+  shirts <span class="pl-k">=</span> <span class="pl-c1">15</span>;
+  jackets <span class="pl-k">=</span> <span class="pl-c1">3</span>;
+}
+
+<span class="pl-k">enum</span> <span class="pl-en">HouseSize</span> { <span class="pl-c"><span class="pl-c">//</span> An example of an enum</span>
+  <span class="pl-c1">SMALL</span>,
+  <span class="pl-c1">MODERATE</span>,
+  <span class="pl-c1">BIG</span>
+}
+
+<span class="pl-c"><span class="pl-c">/*</span> Classes and Object-Oriented Programming <span class="pl-c">*/</span></span>
+
+<span class="pl-k">class</span> <span class="pl-en">Message</span> <span class="pl-k">:</span> <span class="pl-e">GLib</span>.<span class="pl-e">Object</span> { <span class="pl-c"><span class="pl-c">//</span> Class Message extends GLib's Object</span>
+  <span class="pl-k">private</span> <span class="pl-k">string</span> sender; <span class="pl-c"><span class="pl-c">//</span> a private field</span>
+  <span class="pl-k">public</span> <span class="pl-k">string</span> text {get; set;} // a public <span class="pl-en">property</span> (<span class="pl-v">more</span> <span class="pl-v">on</span> <span class="pl-v">that</span> <span class="pl-v">later</span>)
+  <span class="pl-k">protected</span> <span class="pl-k">bool</span> is_digital = true; // <span class="pl-k">protected</span> (this class and subclasses)
+  <span class="pl-k">internal</span> <span class="pl-k">bool</span> sent = false; // <span class="pl-k">internal</span> (classes in same package)
+
+  <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">send</span>(<span class="pl-k">string</span> <span class="pl-v">sender</span>) { <span class="pl-c"><span class="pl-c">//</span> public method</span>
+    <span class="pl-c1">this</span><span class="pl-k">.</span>sender <span class="pl-k">=</span> sender;
+    sent <span class="pl-k">=</span> <span class="pl-c1">true</span>;
+  }
+
+  <span class="pl-k">public</span> <span class="pl-en">Message</span>() { <span class="pl-c"><span class="pl-c">//</span> Constructor</span>
+    <span class="pl-c"><span class="pl-c">//</span> ...</span>
+  }
+
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Since method overloading isn't possible, you can't overload constructors.</span>
+<span class="pl-c"><span class="pl-c">//</span> However, you can use named constructors to achieve the same functionality.</span>
+
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">Calculator</span> <span class="pl-k">:</span> <span class="pl-e">GLib</span>.<span class="pl-e">Object</span> {
+
+    <span class="pl-k">public</span> <span class="pl-en">Calculator</span>() {
+    }
+
+    <span class="pl-k">public</span> <span class="pl-en">Calculator.with_name</span>(<span class="pl-k">string</span> <span class="pl-v">name</span>) {
+    }
+
+    <span class="pl-k">public</span> <span class="pl-en">Calculator.model</span>(<span class="pl-k">string</span> <span class="pl-v">model_id</span>, <span class="pl-k">string</span> <span class="pl-v">name</span> = "") {
+      <span class="pl-c1">this</span><span class="pl-k">.</span>with_name(<span class="pl-s"><span class="pl-pds">@"</span><span class="pl-cce">$model_id</span> <span class="pl-cce">$name</span><span class="pl-pds">"</span></span>); <span class="pl-c"><span class="pl-c">//</span> Chained constructors with "this"</span>
+    }
+    ~<span class="pl-en">Calculator</span>() { } <span class="pl-c"><span class="pl-c">//</span> Only needed if you're using manual memory management</span>
+}
+
+<span class="pl-k">var</span> calc1 <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-k">Calculator</span>.with_name(<span class="pl-s"><span class="pl-pds">"</span>Temp<span class="pl-pds">"</span></span>);
+<span class="pl-k">var</span> calc2 <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-k">Calculator</span>.model(<span class="pl-s"><span class="pl-pds">"</span>TI-84<span class="pl-pds">"</span></span>);
+
+<span class="pl-c"><span class="pl-c">//</span> Signals (a.k.a. events or event listeners) are a way to execute multiple</span>
+<span class="pl-c"><span class="pl-c">//</span> methods with the same signature at the same time.</span>
+
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">SignalDemo</span> <span class="pl-k">:</span> <span class="pl-e">GLib</span>.<span class="pl-e">Object</span> {
+  <span class="pl-k">public</span> <span class="pl-k">signal</span> <span class="pl-k">void</span> <span class="pl-en">sig_demo</span>(<span class="pl-k">int</span> <span class="pl-v">sig_demo_int</span>); <span class="pl-c"><span class="pl-c">//</span> Must be public</span>
+
+  <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">int</span> <span class="pl-en">main</span>(<span class="pl-k">string</span>[] <span class="pl-v">args</span>) {
+    <span class="pl-c"><span class="pl-c">//</span> main method; program does not compile without it</span>
+
+    <span class="pl-k">var</span> sig_demo_class <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-k">SignalDemo</span>(); <span class="pl-c"><span class="pl-c">//</span> New instance of class</span>
+
+    sig_demo_class<span class="pl-k">.</span>sig_demo<span class="pl-k">.</span>connect((ob, sig_int) <span class="pl-k">=</span><span class="pl-k">&gt;</span> { <span class="pl-c"><span class="pl-c">//</span> Lambda used as handler</span>
+        stdout<span class="pl-k">.</span>printf(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">%d\n</span><span class="pl-pds">"</span></span>, sig_int); <span class="pl-c"><span class="pl-c">//</span> "ob" is object on which it is emitted</span>
+      });
+
+    sig_demo_class<span class="pl-k">.</span>sig_demo(<span class="pl-c1">27</span>); <span class="pl-c"><span class="pl-c">//</span> Signal is emitted</span>
+
+    <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+  }
+}
+
+<span class="pl-c"><span class="pl-c">//</span> You may use the connect() method and attach as many handlers as you'd like.</span>
+<span class="pl-c"><span class="pl-c">//</span> They'll all run at around the same time when the signal is emitted.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Properties (getters and setters)</span>
+
+<span class="pl-k">class</span> <span class="pl-en">Animal</span> <span class="pl-k">:</span> <span class="pl-e">GLib</span>.<span class="pl-e">Object</span> {
+  <span class="pl-k">private</span> <span class="pl-k">int</span> _legs; <span class="pl-c"><span class="pl-c">//</span> prefixed with underscore to prevent name clashes</span>
+
+  <span class="pl-k">public</span> <span class="pl-k">int</span> legs {
+    <span class="pl-k">get</span> { <span class="pl-k">return</span> _legs; }
+    <span class="pl-k">set</span> { _legs <span class="pl-k">=</span> <span class="pl-k">value</span>; }
+  }
+
+  <span class="pl-k">public</span> <span class="pl-k">int</span> eyes { <span class="pl-k">get</span>; <span class="pl-k">set</span>; <span class="pl-k">default</span> <span class="pl-k">=</span> <span class="pl-c1">5</span>; } <span class="pl-c"><span class="pl-c">//</span> Shorter way</span>
+  <span class="pl-k">public</span> <span class="pl-k">int</span> kingdom { <span class="pl-k">get</span>; <span class="pl-k">private</span> <span class="pl-k">set</span>; <span class="pl-k">default</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Animalia<span class="pl-pds">"</span></span>} <span class="pl-c"><span class="pl-c">//</span> Read-only</span>
+
+  <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">main</span>(<span class="pl-k">string</span> <span class="pl-v">args</span>[]) {
+    rabbit <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-k">Animal</span>();
+
+    <span class="pl-c"><span class="pl-c">//</span> All GLib.Objects have a signal "notify" emitted when a property changes.</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> If you specify a specific property, replace all underscores with dashes</span>
+    <span class="pl-c"><span class="pl-c">//</span> to conform to the GObject naming convention.</span>
+
+    rabbit<span class="pl-k">.</span>notify[<span class="pl-s"><span class="pl-pds">"</span>eyes<span class="pl-pds">"</span></span>]<span class="pl-k">.</span>connect((s, p) <span class="pl-k">=</span><span class="pl-k">&gt;</span> { <span class="pl-c"><span class="pl-c">//</span> Remove the ["eyes"] for all</span>
+      stdout<span class="pl-k">.</span>printf(<span class="pl-s"><span class="pl-pds">"</span>Property '<span class="pl-cce">%s</span>' has changed!<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, p<span class="pl-k">.</span>name);
+    });
+
+    rabbit<span class="pl-k">.</span>legs <span class="pl-k">=</span> <span class="pl-c1">2</span>;
+    rabbit<span class="pl-k">.</span>legs <span class="pl-k">+</span><span class="pl-k">=</span> <span class="pl-c1">2</span>;
+    rabbit<span class="pl-k">.</span>eyes <span class="pl-k">=</span> <span class="pl-c1">2</span>;
+
+  }
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Inheritance: Vala classes may inherit 1 class. Inheritance is not implicit.</span>
+
+<span class="pl-k">class</span> <span class="pl-en">SuperDemo</span> <span class="pl-k">:</span> <span class="pl-e">GLib</span>.<span class="pl-e">Object</span> {
+  <span class="pl-k">public</span> <span class="pl-k">int</span> data1;
+  <span class="pl-k">protected</span> <span class="pl-k">int</span> data2;
+  <span class="pl-k">internal</span> <span class="pl-k">int</span> data3;
+  <span class="pl-k">private</span> <span class="pl-k">int</span> data4;
+
+  <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">void</span> test_method {  } <span class="pl-c"><span class="pl-c">//</span> Statics can be called w/out an object</span>
+}
+<span class="pl-k">class</span> <span class="pl-en">SubDemo</span> <span class="pl-k">:</span> <span class="pl-e">SuperDemo</span> {
+  <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">main</span>(<span class="pl-k">string</span> <span class="pl-v">args</span>[]) {
+    stdout<span class="pl-k">.</span>printf((<span class="pl-k">string</span>) data1); <span class="pl-c"><span class="pl-c">//</span> Will compile</span>
+    stdout<span class="pl-k">.</span>printf((<span class="pl-k">string</span>) data2); <span class="pl-c"><span class="pl-c">//</span> Protected can be accessed by subclasses</span>
+    stdout<span class="pl-k">.</span>printf((<span class="pl-k">string</span>) data3); <span class="pl-c"><span class="pl-c">//</span> Internal is accessible to package</span>
+    stdout<span class="pl-k">.</span>printf((<span class="pl-k">string</span>) data4); <span class="pl-c"><span class="pl-c">//</span> Won't compile</span>
+  }
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Abstract Classes and Methods</span>
+
+<span class="pl-k">public</span> <span class="pl-k">abstract</span> <span class="pl-k">class</span> <span class="pl-en">OperatingSystem</span> <span class="pl-k">:</span> <span class="pl-e">GLib</span>.<span class="pl-e">Object</span> {
+  <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">turn_on</span>() {
+    stdout<span class="pl-k">.</span>printf(<span class="pl-s"><span class="pl-pds">"</span>Booted successfully.<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>);
+  }
+  <span class="pl-k">public</span> <span class="pl-k">abstract</span> <span class="pl-k">void</span> <span class="pl-en">use_computer</span>();
+}
+
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">Linux</span> <span class="pl-k">:</span> <span class="pl-e">OperatingSystem</span> {
+  <span class="pl-k">public</span> <span class="pl-k">override</span> <span class="pl-k">void</span> <span class="pl-en">use_computer</span>() { <span class="pl-c"><span class="pl-c">//</span> Abstract methods must be overridden</span>
+    stdout<span class="pl-k">.</span>printf(<span class="pl-s"><span class="pl-pds">"</span>Beep boop<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>);
+  }
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Add default behavior to an abstract method by making it "virtual".</span>
+
+<span class="pl-k">public</span> <span class="pl-k">abstract</span> <span class="pl-k">class</span> <span class="pl-en">HardDrive</span> <span class="pl-k">:</span> <span class="pl-e">GLib</span>.<span class="pl-e">Object</span> {
+  <span class="pl-k">public</span> <span class="pl-k">virtual</span> <span class="pl-k">void</span> <span class="pl-en">die</span>() {
+    stdout<span class="pl-k">.</span>printf(<span class="pl-s"><span class="pl-pds">"</span>CLICK-CLICK-CLICK<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>);
+  }
+}
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">MyHD</span> <span class="pl-k">:</span> <span class="pl-e">HardDrive</span> {
+  <span class="pl-k">public</span> <span class="pl-k">override</span> <span class="pl-k">void</span> <span class="pl-en">die</span>() {
+    <span class="pl-k">return</span>;
+  }
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Interfaces: classes can implement any number of these.</span>
+
+<span class="pl-k">interface</span> <span class="pl-en">Laptop</span> { <span class="pl-c"><span class="pl-c">//</span> May only contain abstracts or virtuals</span>
+  <span class="pl-k">public</span> <span class="pl-k">abstract</span> <span class="pl-k">void</span> <span class="pl-en">turn_on</span>();
+  <span class="pl-k">public</span> <span class="pl-k">abstract</span> <span class="pl-k">void</span> <span class="pl-en">turn_off</span>();
+
+  <span class="pl-k">public</span> <span class="pl-k">abstract</span> <span class="pl-k">int</span> cores; <span class="pl-c"><span class="pl-c">//</span> Won't compile; fields cannot be abstract</span>
+  <span class="pl-k">public</span> <span class="pl-k">abstract</span> <span class="pl-k">int</span> cores {<span class="pl-k">get</span>; <span class="pl-k">set</span>;} <span class="pl-c"><span class="pl-c">//</span> Will compile</span>
+
+  <span class="pl-k">public</span> <span class="pl-k">virtual</span> <span class="pl-k">void</span> <span class="pl-en">keyboard</span>() { <span class="pl-c"><span class="pl-c">//</span> Virtuals are allowed (unlike Java/C#)</span>
+    stdout<span class="pl-k">.</span>printf(<span class="pl-s"><span class="pl-pds">"</span>Clickity-clack<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>);
+  }
+}
+
+<span class="pl-c"><span class="pl-c">//</span> The ability to use virtuals in Vala means that multiple inheritance is</span>
+<span class="pl-c"><span class="pl-c">//</span> possible (albeit somewhat confined)</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Interfaces cannot implement interfaces, but they may specify that certain</span>
+<span class="pl-c"><span class="pl-c">//</span> interfaces or classes must be also implemented (pre-requisites).</span>
+
+<span class="pl-k">public</span> <span class="pl-k">interface</span> <span class="pl-en">CellPhone</span> <span class="pl-k">:</span> <span class="pl-e">Collection</span><span class="pl-k">,</span> <span class="pl-e">GLib</span>.<span class="pl-e">Object</span> {}
+
+<span class="pl-c"><span class="pl-c">//</span> You can get the type info of a class at runtime dynamically.</span>
+
+<span class="pl-k">bool</span> type_info <span class="pl-k">=</span> <span class="pl-k">object</span> <span class="pl-k">is</span> <span class="pl-k">TypeName</span>; <span class="pl-c"><span class="pl-c">//</span> uses "is" to get a bool</span>
+
+<span class="pl-k">Type</span> type_info2 <span class="pl-k">=</span> <span class="pl-k">object</span><span class="pl-k">.</span>get_type();
+<span class="pl-k">var</span> type_name <span class="pl-k">=</span> type_info2<span class="pl-k">.</span>name();
+
+<span class="pl-k">Type</span> type_info3 <span class="pl-k">=</span> <span class="pl-k">typeof</span>(<span class="pl-k">Linux</span>);
+<span class="pl-k">Linux</span> type_demo <span class="pl-k">=</span> (<span class="pl-k">Linux</span>) <span class="pl-k">Object</span><span class="pl-k">.</span><span class="pl-k">new</span>(type_info3);
+
+<span class="pl-c"><span class="pl-c">//</span> Generics</span>
+
+<span class="pl-k">class</span> <span class="pl-en">Computer</span>&lt;OperatingSystem&gt; <span class="pl-k">:</span> <span class="pl-e">GLib</span>.<span class="pl-e">Object</span> {
+  <span class="pl-k">private</span> <span class="pl-k">OperatingSystem</span> os;
+
+  <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">install_os</span>(<span class="pl-k">OperatingSystem</span> <span class="pl-v">os</span>) {
+    <span class="pl-c1">this</span><span class="pl-k">.</span>os <span class="pl-k">=</span> os;
+  }
+  <span class="pl-k">public</span> <span class="pl-k">OperatingSystem</span> <span class="pl-en">retrieve_os</span>() {
+    <span class="pl-k">return</span> <span class="pl-c1">this</span><span class="pl-k">.</span>os;
+  }
+}
+
+<span class="pl-k">var</span> new_computer <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-k">Computer&lt;<span class="pl-k">Linux</span>&gt;</span>();
+
+<span class="pl-c"><span class="pl-c">/*</span> Other Features <span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span> Assertions: crash if a statement is not true (at runtime)</span>
+
+<span class="pl-k">bool</span> is_true <span class="pl-k">=</span> <span class="pl-c1">true</span>;
+assert(is_true);
+
+<span class="pl-c"><span class="pl-c">//</span> Contract Programming</span>
+
+<span class="pl-k">int</span> contract_demo(<span class="pl-k">int</span> arg1, <span class="pl-k">int</span> arg2) {
+  requires(arg1 <span class="pl-k">&gt;</span> <span class="pl-c1">0</span> <span class="pl-k">&amp;&amp;</span> arg1 <span class="pl-k">&lt;</span> <span class="pl-c1">10</span>) <span class="pl-c"><span class="pl-c">//</span> Notice the lack of semicolon</span>
+  requires(arg2 <span class="pl-k">&gt;=</span> <span class="pl-c1">12</span>)
+  ensures(result <span class="pl-k">&gt;=</span> <span class="pl-c1">0</span>)
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Error Handling</span>
+
+<span class="pl-k">void</span> error_demo(<span class="pl-k">int</span> int_ex) throws <span class="pl-k">GError</span> {
+  <span class="pl-k">if</span> (int_ex <span class="pl-k">!=</span> <span class="pl-c1">1</span>) {
+    <span class="pl-k">throw</span> <span class="pl-k">new</span> <span class="pl-k">GError</span>(<span class="pl-s"><span class="pl-pds">"</span>TEST MESSAGE<span class="pl-pds">"</span></span>);
+  }
+}
+<span class="pl-k">void</span> error_demo2() {
+  <span class="pl-k">try</span> {
+    error_demo(<span class="pl-c1">0</span>);
+  } <span class="pl-k">catch</span> (<span class="pl-k">GError</span> ge) {
+    stdout<span class="pl-k">.</span>printf(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">%s\n</span><span class="pl-pds">"</span></span>, ge<span class="pl-k">.</span>message);
+  }
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Main Loop</span>
+
+<span class="pl-k">void</span> main() {
+
+  <span class="pl-k">var</span> main_loop <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-k">MainLoop</span>();
+  <span class="pl-k">var</span> time <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-k">TimeoutSource</span>(<span class="pl-c1">2000</span>);
+
+  time<span class="pl-k">.</span>set_callback(() <span class="pl-k">=</span><span class="pl-k">&gt;</span> { <span class="pl-c"><span class="pl-c">//</span> Executes the following lambda after 2000ms</span>
+      stdout<span class="pl-k">.</span>printf(<span class="pl-s"><span class="pl-pds">"</span>2000ms have passed<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>);
+      main_loop<span class="pl-k">.</span>quit();
+      <span class="pl-k">return</span> <span class="pl-c1">false</span>;
+  });
+
+  time<span class="pl-k">.</span>attach(main_loop<span class="pl-k">.</span>get_context());
+
+  loop<span class="pl-k">.</span>run();
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Pointers (manual memory management)</span>
+
+<span class="pl-k">Object</span><span class="pl-k">*</span> pointer_obj <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-k">Object</span>(); <span class="pl-c"><span class="pl-c">//</span> Creates Object instance and gives pointer</span>
+
+pointer_obj<span class="pl-k">-</span><span class="pl-k">&gt;</span>some_method(); <span class="pl-c"><span class="pl-c">//</span> Executes some_method</span>
+pointer_obj<span class="pl-k">-</span><span class="pl-k">&gt;</span>some_data; <span class="pl-c"><span class="pl-c">//</span> Returns some_data</span>
+
+delete pointer_obj;
+
+<span class="pl-k">int</span> more <span class="pl-k">=</span> <span class="pl-c1">57</span>;
+<span class="pl-k">int</span><span class="pl-k">*</span> more_pointer <span class="pl-k">=</span> &amp;more; <span class="pl-c"><span class="pl-c">//</span> &amp; = address-of</span>
+<span class="pl-k">int</span> indirection_demo <span class="pl-k">=</span> more_pointer<span class="pl-k">*</span>; <span class="pl-c"><span class="pl-c">//</span> indirection</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Profiles: affect which Vala features are available and which libraries the</span>
+<span class="pl-c"><span class="pl-c">//</span> C-code will use.</span>
+<span class="pl-c"><span class="pl-c">//</span> - gobject (default)</span>
+<span class="pl-c"><span class="pl-c">//</span> posix</span>
+<span class="pl-c"><span class="pl-c">//</span> dova</span>
+<span class="pl-c"><span class="pl-c">//</span> Use "--profile=whatever" when compiling.</span>
+</pre></div>
+<ul>
+<li>More <a href="https://valadoc.org/" rel="nofollow">Vala documentation</a>.</li>
+<li><a href="https://wiki.gnome.org/Projects/Vala/Tutorial#GObject-Style_Construction" rel="nofollow">Alternate construction syntax</a> similar to GObject</li>
+<li>More on <a href="http://en.wikipedia.org/wiki/Contract_programming" rel="nofollow">contract programming</a></li>
+<li><a href="https://wiki.gnome.org/Projects/Vala/Tutorial#Collections" rel="nofollow">Collections library</a></li>
+<li><a href="https://wiki.gnome.org/Projects/Vala/Tutorial#Multi-Threading" rel="nofollow">Multithreading</a></li>
+<li>Read about <a href="http://archive.is/7C7bw" rel="nofollow">building GUIs with GTK+ and Vala</a>.</li>
+<li><a href="https://wiki.gnome.org/Projects/Vala/Tutorial#D-Bus_Integration" rel="nofollow">D-Bus integration</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Milo Gilad", "https://github.com/Myl0g"]
+</code></pre>

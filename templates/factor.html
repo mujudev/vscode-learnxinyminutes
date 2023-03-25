@@ -1,0 +1,176 @@
+<h1>Factor</h1>
+<p>Factor is a modern stack-based language, based on Forth, created by Slava Pestov.</p>
+<p>Code in this file can be typed into Factor, but not directly imported because the vocabulary and import header would make the beginning thoroughly confusing.</p>
+<div class="highlight highlight-source-factor"><pre class="notranslate"><span class="pl-c">! This is a comment</span>
+
+<span class="pl-c">! Like Forth, all programming is done by manipulating the stack.</span>
+<span class="pl-c">! Stating a literal value pushes it onto the stack.</span>
+<span class="pl-c1">5 2 3 56 76 23 65 </span>   <span class="pl-c">! No output, but stack is printed out in interactive mode</span>
+
+<span class="pl-c">! Those numbers get added to the stack, from left to right.</span>
+<span class="pl-c">! .s prints out the stack non-destructively.</span>
+.s     <span class="pl-c">! 5 2 3 56 76 23 65</span>
+
+<span class="pl-c">! Arithmetic works by manipulating data on the stack.</span>
+<span class="pl-c1">5 4 </span><span class="pl-k">+ </span>   <span class="pl-c">! No output</span>
+
+<span class="pl-c">! `.` pops the top result from the stack and prints it.</span>
+.    <span class="pl-c">! 9</span>
+
+<span class="pl-c">! More examples of arithmetic:</span>
+<span class="pl-c1">6 7 </span><span class="pl-k">* </span>.        <span class="pl-c">! 42</span>
+<span class="pl-c1">1360 23 </span><span class="pl-k">- </span>.    <span class="pl-c">! 1337</span>
+<span class="pl-c1">12 12 </span><span class="pl-k">/ </span>.      <span class="pl-c">! 1</span>
+<span class="pl-c1">13 2 </span><span class="pl-k">mod </span>.     <span class="pl-c">! 1</span>
+
+<span class="pl-c1">99 </span><span class="pl-k">neg </span>.       <span class="pl-c">! -99</span>
+<span class="pl-c1">-99 </span><span class="pl-k">abs </span>.      <span class="pl-c">! 99</span>
+<span class="pl-c1">52 23 </span>max .    <span class="pl-c">! 52</span>
+<span class="pl-c1">52 23 </span>min .    <span class="pl-c">! 23</span>
+
+<span class="pl-c">! A number of words are provided to manipulate the stack, collectively known as shuffle words.</span>
+
+<span class="pl-c1">3 </span><span class="pl-k">dup </span><span class="pl-k">- </span>         <span class="pl-c">! duplicate the top item (1st now equals 2nd): 3 - 3</span>
+<span class="pl-c1">2 5 </span><span class="pl-k">swap </span><span class="pl-k">/ </span>      <span class="pl-c">! swap the top with the second element:        5 / 2</span>
+<span class="pl-c1">4 0 </span><span class="pl-k">drop </span><span class="pl-c1">2 </span><span class="pl-k">/ </span>    <span class="pl-c">! remove the top item (don't print to screen):  4 / 2</span>
+<span class="pl-c1">1 2 3 </span><span class="pl-k">nip </span>.s     <span class="pl-c">! remove the second item (similar to drop):    1 3</span>
+<span class="pl-c1">1 2 </span><span class="pl-k">clear </span>.s     <span class="pl-c">! wipe out the entire stack</span>
+<span class="pl-c1">1 2 3 4 </span><span class="pl-k">over </span>.s  <span class="pl-c">! duplicate the second item to the top: 1 2 3 4 3</span>
+<span class="pl-c1">1 2 3 4 2 </span><span class="pl-k">pick </span>.s <span class="pl-c">! duplicate the third item to the top: 1 2 3 4 2 3</span>
+
+<span class="pl-c">! Creating Words</span>
+<span class="pl-c">! The `:` word sets Factor into compile mode until it sees the `;` word.</span>
+<span class="pl-k">:</span> <span class="pl-en">square</span> <span class="pl-c">( n -- n )</span> <span class="pl-k">dup </span><span class="pl-k">* </span>;    <span class="pl-c">! No output</span>
+<span class="pl-c1">5 </span>square .                     <span class="pl-c">! 25</span>
+
+<span class="pl-c">! We can view what a word does too.</span>
+<span class="pl-c">! \ suppresses evaluation of a word and pushes its identifier on the stack instead.</span>
+\ square see    <span class="pl-c">! : square ( n -- n ) dup * ;</span>
+
+<span class="pl-c">! After the name of the word to create, the declaration between brackets gives the stack effect.</span>
+<span class="pl-c">! We can use whatever names we like inside the declaration:</span>
+<span class="pl-k">:</span> <span class="pl-en">weirdsquare</span> <span class="pl-c">( camel -- llama )</span> <span class="pl-k">dup </span><span class="pl-k">* </span>;
+
+<span class="pl-c">! Provided their count matches the word's stack effect:</span>
+<span class="pl-k">:</span> <span class="pl-en">doubledup</span> <span class="pl-c">( a -- b )</span> <span class="pl-k">dup dup </span>; <span class="pl-c">! Error: Stack effect declaration is wrong</span>
+<span class="pl-k">:</span> <span class="pl-en">doubledup</span> <span class="pl-c">( a -- a a a )</span> <span class="pl-k">dup dup </span>; <span class="pl-c">! Ok</span>
+<span class="pl-k">:</span> <span class="pl-en">weirddoubledup</span> <span class="pl-c">( i -- am a fish )</span> <span class="pl-k">dup dup </span>; <span class="pl-c">! Also Ok</span>
+
+<span class="pl-c">! Where Factor differs from Forth is in the use of quotations.</span>
+<span class="pl-c">! A quotation is a block of code that is pushed on the stack as a value.</span>
+<span class="pl-c">! [ starts quotation mode; ] ends it.</span>
+[ <span class="pl-c1">2 </span><span class="pl-k">+ </span>]       <span class="pl-c">! Quotation that adds 2 is left on the stack</span>
+<span class="pl-c1">4 </span><span class="pl-k">swap call </span>. <span class="pl-c">! 6</span>
+
+<span class="pl-c">! And thus, higher order words. TONS of higher order words.</span>
+<span class="pl-c1">2 3 </span>[ <span class="pl-c1">2 </span><span class="pl-k">+ </span>] <span class="pl-k">dip </span>.s      <span class="pl-c">! Pop top stack value, run quotation, push it back: 4 3</span>
+<span class="pl-c1">3 4 </span>[ <span class="pl-k">+ </span>] <span class="pl-k">keep </span>.s       <span class="pl-c">! Copy top stack value, run quotation, push the copy: 7 4</span>
+<span class="pl-c1">1 </span>[ <span class="pl-c1">2 </span><span class="pl-k">+ </span>] [ <span class="pl-c1">3 </span><span class="pl-k">+ </span>] <span class="pl-k">bi </span>.s <span class="pl-c">! Run each quotation on the top value, push both results: 3 4</span>
+<span class="pl-c1">4 3 1 </span>[ <span class="pl-k">+ </span>] [ <span class="pl-k">+ </span>] <span class="pl-k">bi </span>.s <span class="pl-c">! Quotations in a bi can pull values from deeper on the stack: 4 5 ( 1+3 1+4 )</span>
+<span class="pl-c1">1 2 </span>[ <span class="pl-c1">2 </span><span class="pl-k">+ </span>] <span class="pl-k">bi@ </span>.s      <span class="pl-c">! Run the quotation on first and second values</span>
+<span class="pl-c1">2 </span>[ <span class="pl-k">+ </span>] <span class="pl-k">curry </span>          <span class="pl-c">! Inject the given value at the start of the quotation: [ 2 + ] is left on the stack</span>
+
+<span class="pl-c">! Conditionals</span>
+<span class="pl-c">! Any value is true except the built-in value f.</span>
+<span class="pl-c">! A built-in value t does exist, but its use isn't essential.</span>
+<span class="pl-c">! Conditionals are higher order words as with the combinators above.</span>
+
+<span class="pl-c1">5 </span>[ <span class="pl-s">"Five is true"</span> . ] <span class="pl-k">when </span>                    <span class="pl-c">! Five is true</span>
+<span class="pl-c1">0 </span>[ <span class="pl-s">"Zero is true"</span> . ] <span class="pl-k">when </span>                    <span class="pl-c">! Zero is true</span>
+<span class="pl-c1">f </span>[ <span class="pl-s">"F is true"</span> . ] <span class="pl-k">when </span>                       <span class="pl-c">! No output</span>
+<span class="pl-c1">f </span>[ <span class="pl-s">"F is false"</span> . ] <span class="pl-k">unless </span>                    <span class="pl-c">! F is false</span>
+<span class="pl-c1">2 </span>[ <span class="pl-s">"Two is true"</span> . ] [ <span class="pl-s">"Two is false"</span> . ] <span class="pl-k">if </span>  <span class="pl-c">! Two is true</span>
+
+<span class="pl-c">! By default the conditionals consume the value under test, but starred variants</span>
+<span class="pl-c">! leave it alone if it's true:</span>
+
+<span class="pl-c1">5 </span>[ . ] <span class="pl-k">when* </span>     <span class="pl-c">! 5</span>
+<span class="pl-c1">f </span>[ . ] <span class="pl-k">when* </span>     <span class="pl-c">! No output, empty stack, f is consumed because it's false</span>
+
+
+<span class="pl-c">! Loops</span>
+<span class="pl-c">! You've guessed it.. these are higher order words too.</span>
+
+<span class="pl-c1">5 </span>[ . ] <span class="pl-k">each-integer </span>              <span class="pl-c">! 0 1 2 3 4</span>
+<span class="pl-c1">4 3 2 1 0 5 </span>[ <span class="pl-k">+ </span>. ] <span class="pl-k">each-integer </span>  <span class="pl-c">! 0 2 4 6 8</span>
+<span class="pl-c1">5 </span>[ <span class="pl-s">"Hello"</span> . ] <span class="pl-k">times </span>             <span class="pl-c">! Hello Hello Hello Hello Hello</span>
+
+<span class="pl-c">! Here's a list:</span>
+{ <span class="pl-c1">2 4 6 8 </span>}                        <span class="pl-c">! Goes on the stack as one item</span>
+
+<span class="pl-c">! Loop through the list:</span>
+{ <span class="pl-c1">2 4 6 8 </span>} [ <span class="pl-c1">1 </span><span class="pl-k">+ </span>. ] <span class="pl-k">each </span>         <span class="pl-c">! Prints 3 5 7 9</span>
+{ <span class="pl-c1">2 4 6 8 </span>} [ <span class="pl-c1">1 </span><span class="pl-k">+ </span>] <span class="pl-k">map </span>            <span class="pl-c">! Leaves { 3 5 7 9 } on stack</span>
+
+<span class="pl-c">! Loop reducing or building lists:</span>
+{ <span class="pl-c1">1 2 3 4 5 </span>} [ <span class="pl-c1">2 </span><span class="pl-k">mod </span><span class="pl-c1">0 </span><span class="pl-k">= </span>] <span class="pl-k">filter </span> <span class="pl-c">! Keeps only list members for which quotation yields true: { 2 4 }  </span>
+{ <span class="pl-c1">2 4 6 8 </span>} <span class="pl-c1">0 </span>[ <span class="pl-k">+ </span>] <span class="pl-k">reduce </span>.        <span class="pl-c">! Like "fold" in functional languages: prints 20 (0+2+4+6+8)</span>
+{ <span class="pl-c1">2 4 6 8 </span>} <span class="pl-c1">0 </span>[ <span class="pl-k">+ </span>] <span class="pl-k">accumulate </span>. .  <span class="pl-c">! Like reduce but keeps the intermediate values in a list: prints { 0 2 6 12 } then 20</span>
+<span class="pl-c1">1 5 </span>[ <span class="pl-c1">2 </span><span class="pl-k">* </span><span class="pl-k">dup </span>] <span class="pl-k">replicate </span>.         <span class="pl-c">! Loops the quotation 5 times and collects the results in a list: { 2 4 8 16 32 }</span>
+<span class="pl-c1">1 </span>[ <span class="pl-k">dup </span><span class="pl-c1">100 </span><span class="pl-k">&lt; </span>] [ <span class="pl-c1">2 </span><span class="pl-k">* </span><span class="pl-k">dup </span>] <span class="pl-k">produce </span><span class="pl-c">! Loops the second quotation until the first returns false and collects the results: { 2 4 8 16 32 64 128 }</span>
+
+<span class="pl-c">! If all else fails, a general purpose while loop:</span>
+<span class="pl-c1">1 </span>[ <span class="pl-k">dup </span><span class="pl-c1">10 </span><span class="pl-k">&lt; </span>] [ <span class="pl-s">"Hello"</span> . <span class="pl-c1">1 </span><span class="pl-k">+ </span>] <span class="pl-k">while </span> <span class="pl-c">! Prints "Hello" 10 times</span>
+                                        <span class="pl-c">! Yes, it's hard to read</span>
+                                        <span class="pl-c">! That's what all those variant loops are for</span>
+
+<span class="pl-c">! Variables</span>
+<span class="pl-c">! Usually Factor programs are expected to keep all data on the stack.</span>
+<span class="pl-c">! Using named variables makes refactoring harder (and it's called Factor for a reason)</span>
+<span class="pl-c">! Global variables, if you must:</span>
+
+<span class="pl-k">SYMBOL: name </span>           <span class="pl-c">! Creates name as an identifying word</span>
+<span class="pl-s">"Bob"</span> name <span class="pl-k">set-global </span>  <span class="pl-c">! No output</span>
+name <span class="pl-k">get-global </span>.       <span class="pl-c">! "Bob"                     </span>
+
+<span class="pl-c">! Named local variables are considered an extension but are available</span>
+<span class="pl-c">! In a quotation..</span>
+[| m n                  <span class="pl-c">! Quotation captures top two stack values into m and n</span>
+ | m n <span class="pl-k">+ </span>]              <span class="pl-c">! Read them</span>
+
+<span class="pl-c">! Or in a word..</span>
+<span class="pl-k">::</span> <span class="pl-en">lword</span> <span class="pl-c">( -- )</span>           <span class="pl-c">! Note double colon to invoke lexical variable extension</span>
+   <span class="pl-c1">2 </span>:&gt; c                 <span class="pl-c">! Declares immutable variable c to hold 2</span>
+   c . ;                  <span class="pl-c">! Print it out</span>
+
+<span class="pl-c">! In a word declared this way,  the input side of the stack declaration</span>
+<span class="pl-c">! becomes meaningful and gives the variable names stack values are captured into</span>
+<span class="pl-k">::</span> <span class="pl-en">double</span> <span class="pl-c">( a -- result )</span> a <span class="pl-c1">2 </span><span class="pl-k">* </span>;
+
+<span class="pl-c">! Variables are declared mutable by ending their name with a shriek</span>
+<span class="pl-k">::</span> <span class="pl-en">mword2</span> <span class="pl-c">( a! -- x y )</span>   <span class="pl-c">! Capture top of stack in mutable variable a</span>
+   a                      <span class="pl-c">! Push a</span>
+   a <span class="pl-c1">2 </span><span class="pl-k">* </span>a!               <span class="pl-c">! Multiply a by 2 and store result back in a</span>
+   a ;                    <span class="pl-c">! Push new value of a</span>
+<span class="pl-c1">5 </span>mword2                  <span class="pl-c">! Stack: 5 10</span>
+
+<span class="pl-c">! Lists and Sequences</span>
+<span class="pl-c">! We saw above how to push a list onto the stack</span>
+
+<span class="pl-c1">0 </span>{ <span class="pl-c1">1 2 3 4 </span>} <span class="pl-k">nth </span>        <span class="pl-c">! Access a particular member of a list: 1</span>
+<span class="pl-c1">10 </span>{ <span class="pl-c1">1 2 3 4 </span>} <span class="pl-k">nth </span>       <span class="pl-c">! Error: sequence index out of bounds</span>
+<span class="pl-c1">1 </span>{ <span class="pl-c1">1 2 3 4 </span>} <span class="pl-k">?nth </span>       <span class="pl-c">! Same as nth if index is in bounds: 2</span>
+<span class="pl-c1">10 </span>{ <span class="pl-c1">1 2 3 4 </span>} <span class="pl-k">?nth </span>      <span class="pl-c">! No error if out of bounds: f</span>
+
+{ <span class="pl-s">"at"</span> <span class="pl-s">"the"</span> <span class="pl-s">"beginning"</span> } <span class="pl-s">"Append"</span> <span class="pl-k">prefix </span>   <span class="pl-c">! { "Append" "at" "the" "beginning" }</span>
+{ <span class="pl-s">"Append"</span> <span class="pl-s">"at"</span> <span class="pl-s">"the"</span> } <span class="pl-s">"end"</span> <span class="pl-k">suffix </span>         <span class="pl-c">! { "Append" "at" "the" "end" }</span>
+<span class="pl-s">"in"</span> <span class="pl-c1">1 </span>{ <span class="pl-s">"Insert"</span> <span class="pl-s">"the"</span> <span class="pl-s">"middle"</span> } <span class="pl-k">insert-nth </span><span class="pl-c">! { "Insert" "in" "the" "middle" }</span>
+<span class="pl-s">"Concat"</span> <span class="pl-s">"enate"</span> <span class="pl-k">append </span>                      <span class="pl-c">! "Concatenate" - strings are sequences too</span>
+<span class="pl-s">"Concatenate"</span> <span class="pl-s">"Reverse "</span> <span class="pl-k">prepend </span>             <span class="pl-c">! "Reverse Concatenate"</span>
+{ <span class="pl-s">"Concatenate "</span> <span class="pl-s">"seq "</span> <span class="pl-s">"of "</span> <span class="pl-s">"seqs"</span> } <span class="pl-k">concat </span><span class="pl-c">! "Concatenate seq of seqs"</span>
+{ <span class="pl-s">"Connect"</span> <span class="pl-s">"subseqs"</span> <span class="pl-s">"with"</span> <span class="pl-s">"separators"</span> } <span class="pl-s">" "</span> <span class="pl-k">join </span> <span class="pl-c">! "Connect subseqs with separators"</span>
+
+<span class="pl-c">! And if you want to get meta, quotations are sequences and can be dismantled..</span>
+<span class="pl-c1">0 </span>[ <span class="pl-c1">2 </span><span class="pl-k">+ </span>] <span class="pl-k">nth </span>                             <span class="pl-c">! 2</span>
+<span class="pl-c1">1 </span>[ <span class="pl-c1">2 </span><span class="pl-k">+ </span>] <span class="pl-k">nth </span>                             <span class="pl-c">! +</span>
+[ <span class="pl-c1">2 </span><span class="pl-k">+ </span>] \ <span class="pl-k">- </span><span class="pl-k">suffix </span>                        <span class="pl-c">! Quotation [ 2 + - ]</span>
+
+</pre></div>
+<p>##Ready For More?</p>
+<ul>
+<li><a href="http://docs.factorcode.org/content/article-help.home.html" rel="nofollow">Factor Documentation</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["hyphz", "http://github.com/hyphz/"]
+</code></pre>

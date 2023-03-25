@@ -1,0 +1,1355 @@
+<h1>C#</h1>
+<p>C# is an elegant and type-safe object-oriented language that enables developers to build a variety of secure and robust applications that run on the cross-platform .NET framework.</p>
+<p><a href="https://docs.microsoft.com/en-us/dotnet/csharp/tour-of-csharp/" rel="nofollow">Read more here.</a></p>
+<div class="highlight highlight-source-cs"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> Single-line comments start with //</span>
+
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">Multi-line comments look like this</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">///</span> &lt;<span class="pl-ent"><span class="pl-ent">summary</span></span>&gt;</span>
+<span class="pl-c"><span class="pl-c">///</span> This is an XML documentation comment which can be used to generate external</span>
+<span class="pl-c"><span class="pl-c">///</span> documentation or provide context help within an IDE</span>
+<span class="pl-c"><span class="pl-c">///</span> &lt;/<span class="pl-ent"><span class="pl-ent">summary</span></span>&gt;</span>
+<span class="pl-c"><span class="pl-c">///</span> &lt;<span class="pl-ent"><span class="pl-ent">param</span></span> <span class="pl-e"><span class="pl-e">name</span></span>=<span class="pl-s"><span class="pl-pds">"</span>firstParam<span class="pl-pds">"</span></span>&gt;This is some parameter documentation for firstParam&lt;/<span class="pl-ent"><span class="pl-ent">param</span></span>&gt;</span>
+<span class="pl-c"><span class="pl-c">///</span> &lt;<span class="pl-ent"><span class="pl-ent">returns</span></span>&gt;Information on the returned value of a function&lt;/<span class="pl-ent"><span class="pl-ent">returns</span></span>&gt;</span>
+<span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">MethodOrClassOrOtherWithParsableHelp</span>(<span class="pl-k">string</span> <span class="pl-en">firstParam</span>) { }
+
+<span class="pl-c"><span class="pl-c">//</span> Specify the namespaces this source code will be using</span>
+<span class="pl-c"><span class="pl-c">//</span> The namespaces below are all part of the standard .NET Framework Class Library</span>
+<span class="pl-k">using</span> <span class="pl-en">System</span>;
+<span class="pl-k">using</span> <span class="pl-en">System</span>.<span class="pl-en">Collections</span>.<span class="pl-en">Generic</span>;
+<span class="pl-k">using</span> <span class="pl-en">System</span>.<span class="pl-en">Dynamic</span>;
+<span class="pl-k">using</span> <span class="pl-en">System</span>.<span class="pl-en">Linq</span>;
+<span class="pl-k">using</span> <span class="pl-en">System</span>.<span class="pl-en">Net</span>;
+<span class="pl-k">using</span> <span class="pl-en">System</span>.<span class="pl-en">Threading</span>.<span class="pl-en">Tasks</span>;
+<span class="pl-k">using</span> <span class="pl-en">System</span>.<span class="pl-en">IO</span>;
+
+<span class="pl-c"><span class="pl-c">//</span> But this one is not:</span>
+<span class="pl-k">using</span> <span class="pl-en">System</span>.<span class="pl-en">Data</span>.<span class="pl-en">Entity</span>;
+<span class="pl-c"><span class="pl-c">//</span> In order to be able to use it, you need to add a dll reference</span>
+<span class="pl-c"><span class="pl-c">//</span> This can be done with the NuGet package manager: `Install-Package EntityFramework`</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Namespaces define scope to organize code into "packages" or "modules"</span>
+<span class="pl-c"><span class="pl-c">//</span> Using this code from another source file: using Learning.CSharp;</span>
+
+<span class="pl-c"><span class="pl-c">//</span> You can also do this in C# 10, it is called file-scoped namespaces.</span>
+<span class="pl-c"><span class="pl-c">//</span> namespace Learning.CSharp;</span>
+
+<span class="pl-k">namespace</span> <span class="pl-en">Learning</span>.<span class="pl-en">CSharp</span>
+{
+    <span class="pl-c"><span class="pl-c">//</span> Each .cs file should at least contain a class with the same name as the file.</span>
+    <span class="pl-c"><span class="pl-c">//</span> You're allowed to do otherwise, but shouldn't for sanity.</span>
+    <span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">LearnCSharp</span>
+    {
+        <span class="pl-c"><span class="pl-c">//</span> BASIC SYNTAX - skip to INTERESTING FEATURES if you have used Java or C++ before</span>
+        <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">Syntax</span>()
+        {
+            <span class="pl-c"><span class="pl-c">//</span> Use Console.WriteLine to print lines</span>
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-s"><span class="pl-pds">"</span>Hello World<span class="pl-pds">"</span></span>);
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(
+                <span class="pl-s"><span class="pl-pds">"</span>Integer: <span class="pl-pds">"</span></span> <span class="pl-k">+</span> <span class="pl-c1">10</span> <span class="pl-k">+</span>
+                <span class="pl-s"><span class="pl-pds">"</span> Double: <span class="pl-pds">"</span></span> <span class="pl-k">+</span> <span class="pl-c1">3</span><span class="pl-c1">.</span><span class="pl-c1">14</span> <span class="pl-k">+</span>
+                <span class="pl-s"><span class="pl-pds">"</span> Boolean: <span class="pl-pds">"</span></span> <span class="pl-k">+</span> <span class="pl-c1">true</span>);
+
+            <span class="pl-c"><span class="pl-c">//</span> To print without a new line, use Console.Write</span>
+            <span class="pl-smi">Console</span>.<span class="pl-en">Write</span>(<span class="pl-s"><span class="pl-pds">"</span>Hello <span class="pl-pds">"</span></span>);
+            <span class="pl-smi">Console</span>.<span class="pl-en">Write</span>(<span class="pl-s"><span class="pl-pds">"</span>World<span class="pl-pds">"</span></span>);
+
+            <span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////////////////</span>
+            <span class="pl-c"><span class="pl-c">//</span> Types &amp; Variables</span>
+            <span class="pl-c"><span class="pl-c">//</span></span>
+            <span class="pl-c"><span class="pl-c">//</span> Declare a variable using &lt;type&gt; &lt;name&gt;</span>
+            <span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////////////////</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> Sbyte - Signed 8-bit integer</span>
+            <span class="pl-c"><span class="pl-c">//</span> (-128 &lt;= sbyte &lt;= 127)</span>
+            <span class="pl-k">sbyte</span> <span class="pl-en">fooSbyte</span> <span class="pl-k">=</span> <span class="pl-c1">100</span>;
+
+            <span class="pl-c"><span class="pl-c">//</span> Byte - Unsigned 8-bit integer</span>
+            <span class="pl-c"><span class="pl-c">//</span> (0 &lt;= byte &lt;= 255)</span>
+            <span class="pl-k">byte</span> <span class="pl-en">fooByte</span> <span class="pl-k">=</span> <span class="pl-c1">100</span>;
+
+            <span class="pl-c"><span class="pl-c">//</span> Short - 16-bit integer</span>
+            <span class="pl-c"><span class="pl-c">//</span> Signed - (-32,768 &lt;= short &lt;= 32,767)</span>
+            <span class="pl-c"><span class="pl-c">//</span> Unsigned - (0 &lt;= ushort &lt;= 65,535)</span>
+            <span class="pl-k">short</span> <span class="pl-en">fooShort</span> <span class="pl-k">=</span> <span class="pl-c1">10000</span>;
+            <span class="pl-k">ushort</span> <span class="pl-en">fooUshort</span> <span class="pl-k">=</span> <span class="pl-c1">10000</span>;
+
+            <span class="pl-c"><span class="pl-c">//</span> Integer - 32-bit integer</span>
+            <span class="pl-k">int</span> <span class="pl-en">fooInt</span> <span class="pl-k">=</span> <span class="pl-c1">1</span>; <span class="pl-c"><span class="pl-c">//</span> (-2,147,483,648 &lt;= int &lt;= 2,147,483,647)</span>
+            <span class="pl-k">uint</span> <span class="pl-en">fooUint</span> <span class="pl-k">=</span> <span class="pl-c1">1</span>; <span class="pl-c"><span class="pl-c">//</span> (0 &lt;= uint &lt;= 4,294,967,295)</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> Long - 64-bit integer</span>
+            <span class="pl-k">long</span> <span class="pl-en">fooLong</span> <span class="pl-k">=</span> <span class="pl-c1">100000</span><span class="pl-c1">L</span>; <span class="pl-c"><span class="pl-c">//</span> (-9,223,372,036,854,775,808 &lt;= long &lt;= 9,223,372,036,854,775,807)</span>
+            <span class="pl-k">ulong</span> <span class="pl-en">fooUlong</span> <span class="pl-k">=</span> <span class="pl-c1">100000</span><span class="pl-c1">L</span>; <span class="pl-c"><span class="pl-c">//</span> (0 &lt;= ulong &lt;= 18,446,744,073,709,551,615)</span>
+            <span class="pl-c"><span class="pl-c">//</span> Numbers default to being int or uint depending on size.</span>
+            <span class="pl-c"><span class="pl-c">//</span> L is used to denote that this variable value is of type long or ulong</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> Double - Double-precision 64-bit IEEE 754 Floating Point</span>
+            <span class="pl-k">double</span> <span class="pl-en">fooDouble</span> <span class="pl-k">=</span> <span class="pl-c1">123</span><span class="pl-c1">.</span><span class="pl-c1">4</span>; <span class="pl-c"><span class="pl-c">//</span> Precision: 15-16 digits</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> Float - Single-precision 32-bit IEEE 754 Floating Point</span>
+            <span class="pl-k">float</span> <span class="pl-en">fooFloat</span> <span class="pl-k">=</span> <span class="pl-c1">234</span><span class="pl-c1">.</span><span class="pl-c1">5</span><span class="pl-c1">f</span>; <span class="pl-c"><span class="pl-c">//</span> Precision: 7 digits</span>
+            <span class="pl-c"><span class="pl-c">//</span> f is used to denote that this variable value is of type float</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> Decimal - a 128-bits data type, with more precision than other floating-point types,</span>
+            <span class="pl-c"><span class="pl-c">//</span> suited for financial and monetary calculations</span>
+            <span class="pl-k">decimal</span> <span class="pl-en">fooDecimal</span> <span class="pl-k">=</span> <span class="pl-c1">150</span><span class="pl-c1">.</span><span class="pl-c1">3</span><span class="pl-c1">m</span>;
+
+            <span class="pl-c"><span class="pl-c">//</span> Boolean - true &amp; false</span>
+            <span class="pl-k">bool</span> <span class="pl-en">fooBoolean</span> <span class="pl-k">=</span> <span class="pl-c1">true</span>; <span class="pl-c"><span class="pl-c">//</span> or false</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> Char - A single 16-bit Unicode character</span>
+            <span class="pl-k">char</span> <span class="pl-en">fooChar</span> <span class="pl-k">=</span> <span class="pl-s">'A'</span>;
+
+            <span class="pl-c"><span class="pl-c">//</span> Strings -- unlike the previous base types which are all value types,</span>
+            <span class="pl-c"><span class="pl-c">//</span> a string is a reference type. That is, you can set it to null</span>
+            <span class="pl-k">string</span> <span class="pl-en">fooString</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">\"</span>escape<span class="pl-cce">\"</span> quotes and add <span class="pl-cce">\n</span> (new lines) and <span class="pl-cce">\t</span> (tabs)<span class="pl-pds">"</span></span>;
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-smi">fooString</span>);
+
+            <span class="pl-c"><span class="pl-c">//</span> You can access each character of the string with an indexer:</span>
+            <span class="pl-k">char</span> <span class="pl-en">charFromString</span> <span class="pl-k">=</span> <span class="pl-smi">fooString</span>[<span class="pl-c1">1</span>]; <span class="pl-c"><span class="pl-c">//</span> =&gt; 'e'</span>
+            <span class="pl-c"><span class="pl-c">//</span> Strings are immutable: you can't do fooString[1] = 'X';</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> Compare strings with current culture, ignoring case</span>
+            <span class="pl-smi">string</span>.<span class="pl-en">Compare</span>(<span class="pl-smi">fooString</span>, <span class="pl-s"><span class="pl-pds">"</span>x<span class="pl-pds">"</span></span>, <span class="pl-smi">StringComparison</span>.<span class="pl-smi">CurrentCultureIgnoreCase</span>);
+
+            <span class="pl-c"><span class="pl-c">//</span> Formatting, based on sprintf</span>
+            <span class="pl-k">string</span> <span class="pl-en">fooFs</span> <span class="pl-k">=</span> <span class="pl-smi">string</span>.<span class="pl-en">Format</span>(<span class="pl-s"><span class="pl-pds">"</span>Check Check, {0} {1}, {0} {1:0.0}<span class="pl-pds">"</span></span>, <span class="pl-c1">1</span>, <span class="pl-c1">2</span>);
+
+            <span class="pl-c"><span class="pl-c">//</span> Dates &amp; Formatting</span>
+            <span class="pl-en">DateTime</span> <span class="pl-en">fooDate</span> <span class="pl-k">=</span> <span class="pl-smi">DateTime</span>.<span class="pl-smi">Now</span>;
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-smi">fooDate</span>.<span class="pl-en">ToString</span>(<span class="pl-s"><span class="pl-pds">"</span>hh:mm, dd MMM yyyy<span class="pl-pds">"</span></span>));
+
+            <span class="pl-c"><span class="pl-c">//</span> Verbatim String</span>
+            <span class="pl-c"><span class="pl-c">//</span> You can use the @ symbol before a string literal to escape all characters in the string</span>
+            <span class="pl-k">string</span> <span class="pl-en">path</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>C:<span class="pl-cce">\\</span>Users<span class="pl-cce">\\</span>User<span class="pl-cce">\\</span>Desktop<span class="pl-pds">"</span></span>;
+            <span class="pl-k">string</span> <span class="pl-en">verbatimPath</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">@"</span>C:\Users\User\Desktop<span class="pl-pds">"</span></span>;
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-smi">path</span> <span class="pl-k">==</span> <span class="pl-smi">verbatimPath</span>);  <span class="pl-c"><span class="pl-c">//</span> =&gt; true</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> You can split a string over two lines with the @ symbol. To escape " use ""</span>
+            <span class="pl-k">string</span> <span class="pl-en">bazString</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">@"</span>Here's some stuff</span>
+<span class="pl-s">on a new line! <span class="pl-cce">""</span>Wow!<span class="pl-cce">""</span>, the masses cried<span class="pl-pds">"</span></span>;
+
+            <span class="pl-c"><span class="pl-c">//</span> Use const or read-only to make a variable immutable</span>
+            <span class="pl-c"><span class="pl-c">//</span> const values are calculated at compile time</span>
+            <span class="pl-k">const</span> <span class="pl-k">int</span> <span class="pl-en">HoursWorkPerWeek</span> <span class="pl-k">=</span> <span class="pl-c1">9001</span>;
+
+            <span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////////////////</span>
+            <span class="pl-c"><span class="pl-c">//</span> Data Structures</span>
+            <span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////////////////</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> Arrays - zero indexed</span>
+            <span class="pl-c"><span class="pl-c">//</span> The array size must be decided upon declaration</span>
+            <span class="pl-c"><span class="pl-c">//</span> The format for declaring an array is</span>
+            <span class="pl-c"><span class="pl-c">//</span> &lt;datatype&gt;[] &lt;var name&gt; = new &lt;datatype&gt;[&lt;array size&gt;];</span>
+            <span class="pl-k">int</span>[] <span class="pl-en">intArray</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-k">int</span>[<span class="pl-c1">10</span>];
+
+            <span class="pl-c"><span class="pl-c">//</span> Another way to declare &amp; initialize an array</span>
+            <span class="pl-k">int</span>[] <span class="pl-en">y</span> <span class="pl-k">=</span> { <span class="pl-c1">9000</span>, <span class="pl-c1">1000</span>, <span class="pl-c1">1337</span> };
+
+            <span class="pl-c"><span class="pl-c">//</span> Indexing an array - Accessing an element</span>
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-s"><span class="pl-pds">"</span>intArray @ 0: <span class="pl-pds">"</span></span> <span class="pl-k">+</span> <span class="pl-smi">intArray</span>[<span class="pl-c1">0</span>]);
+            <span class="pl-c"><span class="pl-c">//</span> Arrays are mutable.</span>
+            <span class="pl-smi">intArray</span>[<span class="pl-c1">1</span>] <span class="pl-k">=</span> <span class="pl-c1">1</span>;
+
+            <span class="pl-c"><span class="pl-c">//</span> Lists</span>
+            <span class="pl-c"><span class="pl-c">//</span> Lists are used more frequently than arrays as they are more flexible</span>
+            <span class="pl-c"><span class="pl-c">//</span> The format for declaring a list is</span>
+            <span class="pl-c"><span class="pl-c">//</span> List&lt;datatype&gt; &lt;var name&gt; = new List&lt;datatype&gt;();</span>
+            <span class="pl-en">List</span>&lt;<span class="pl-k">int</span>&gt; <span class="pl-en">intList</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">List</span>&lt;<span class="pl-k">int</span>&gt;();
+            <span class="pl-en">List</span>&lt;<span class="pl-k">string</span>&gt; <span class="pl-en">stringList</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">List</span>&lt;<span class="pl-k">string</span>&gt;();
+            <span class="pl-en">List</span>&lt;<span class="pl-k">int</span>&gt; <span class="pl-en">z</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">List</span>&lt;<span class="pl-k">int</span>&gt; { <span class="pl-c1">9000</span>, <span class="pl-c1">1000</span>, <span class="pl-c1">1337</span> }; <span class="pl-c"><span class="pl-c">//</span> initialize</span>
+            <span class="pl-c"><span class="pl-c">//</span> The &lt;&gt; are for generics - Check out the cool stuff section</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> Lists don't default to a value;</span>
+            <span class="pl-c"><span class="pl-c">//</span> A value must be added before accessing the index</span>
+            <span class="pl-smi">intList</span>.<span class="pl-en">Add</span>(<span class="pl-c1">1</span>);
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-s"><span class="pl-pds">"</span>intList at 0: <span class="pl-pds">"</span></span> <span class="pl-k">+</span> <span class="pl-smi">intList</span>[<span class="pl-c1">0</span>]);
+
+            <span class="pl-c"><span class="pl-c">//</span> Other data structures to check out:</span>
+            <span class="pl-c"><span class="pl-c">//</span> Stack/Queue</span>
+            <span class="pl-c"><span class="pl-c">//</span> Dictionary (an implementation of a hash map)</span>
+            <span class="pl-c"><span class="pl-c">//</span> HashSet</span>
+            <span class="pl-c"><span class="pl-c">//</span> Read-only Collections</span>
+            <span class="pl-c"><span class="pl-c">//</span> Tuple (.NET 4+)</span>
+
+            <span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+            <span class="pl-c"><span class="pl-c">//</span> Operators</span>
+            <span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">\n</span>-&gt;Operators<span class="pl-pds">"</span></span>);
+
+            <span class="pl-k">int</span> <span class="pl-en">i1</span> <span class="pl-k">=</span> <span class="pl-c1">1</span>, <span class="pl-en">i2</span> <span class="pl-k">=</span> <span class="pl-c1">2</span>; <span class="pl-c"><span class="pl-c">//</span> Shorthand for multiple declarations</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> Arithmetic is straightforward</span>
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-smi">i1</span> <span class="pl-k">+</span> <span class="pl-smi">i2</span> <span class="pl-k">-</span> <span class="pl-smi">i1</span> <span class="pl-k">*</span> <span class="pl-c1">3</span> <span class="pl-k">/</span> <span class="pl-c1">7</span>); <span class="pl-c"><span class="pl-c">//</span> =&gt; 3</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> Modulo</span>
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-s"><span class="pl-pds">"</span>11%3 = <span class="pl-pds">"</span></span> <span class="pl-k">+</span> (<span class="pl-c1">11</span> <span class="pl-k">%</span> <span class="pl-c1">3</span>)); <span class="pl-c"><span class="pl-c">//</span> =&gt; 2</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> Comparison operators</span>
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-s"><span class="pl-pds">"</span>3 == 2? <span class="pl-pds">"</span></span> <span class="pl-k">+</span> (<span class="pl-c1">3</span> <span class="pl-k">==</span> <span class="pl-c1">2</span>)); <span class="pl-c"><span class="pl-c">//</span> =&gt; false</span>
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-s"><span class="pl-pds">"</span>3 != 2? <span class="pl-pds">"</span></span> <span class="pl-k">+</span> (<span class="pl-c1">3</span> <span class="pl-k">!=</span> <span class="pl-c1">2</span>)); <span class="pl-c"><span class="pl-c">//</span> =&gt; true</span>
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-s"><span class="pl-pds">"</span>3 &gt; 2? <span class="pl-pds">"</span></span> <span class="pl-k">+</span> (<span class="pl-c1">3</span> <span class="pl-k">&gt;</span> <span class="pl-c1">2</span>)); <span class="pl-c"><span class="pl-c">//</span> =&gt; true</span>
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-s"><span class="pl-pds">"</span>3 &lt; 2? <span class="pl-pds">"</span></span> <span class="pl-k">+</span> (<span class="pl-c1">3</span> <span class="pl-k">&lt;</span> <span class="pl-c1">2</span>)); <span class="pl-c"><span class="pl-c">//</span> =&gt; false</span>
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-s"><span class="pl-pds">"</span>2 &lt;= 2? <span class="pl-pds">"</span></span> <span class="pl-k">+</span> (<span class="pl-c1">2</span> <span class="pl-k">&lt;=</span> <span class="pl-c1">2</span>)); <span class="pl-c"><span class="pl-c">//</span> =&gt; true</span>
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-s"><span class="pl-pds">"</span>2 &gt;= 2? <span class="pl-pds">"</span></span> <span class="pl-k">+</span> (<span class="pl-c1">2</span> <span class="pl-k">&gt;=</span> <span class="pl-c1">2</span>)); <span class="pl-c"><span class="pl-c">//</span> =&gt; true</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> Bitwise operators!</span>
+            <span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">            ~       Unary bitwise complement</span>
+<span class="pl-c">            &lt;&lt;      Signed left shift</span>
+<span class="pl-c">            &gt;&gt;      Signed right shift</span>
+<span class="pl-c">            &amp;       Bitwise AND</span>
+<span class="pl-c">            ^       Bitwise exclusive OR</span>
+<span class="pl-c">            |       Bitwise inclusive OR</span>
+<span class="pl-c">            <span class="pl-c">*/</span></span>
+
+            <span class="pl-c"><span class="pl-c">//</span> Incrementing</span>
+            <span class="pl-k">int</span> <span class="pl-en">i</span> <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">\n</span>-&gt;Inc/Dec-rement<span class="pl-pds">"</span></span>);
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-smi">i</span><span class="pl-k">++</span>); <span class="pl-c"><span class="pl-c">//</span>Prints "0", i = 1. Post-Increment</span>
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-k">++</span><span class="pl-smi">i</span>); <span class="pl-c"><span class="pl-c">//</span>Prints "2", i = 2. Pre-Increment</span>
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-smi">i</span><span class="pl-k">--</span>); <span class="pl-c"><span class="pl-c">//</span>Prints "2", i = 1. Post-Decrement</span>
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-k">--</span><span class="pl-smi">i</span>); <span class="pl-c"><span class="pl-c">//</span>Prints "0", i = 0. Pre-Decrement</span>
+
+            <span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+            <span class="pl-c"><span class="pl-c">//</span> Control Structures</span>
+            <span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">\n</span>-&gt;Control Structures<span class="pl-pds">"</span></span>);
+
+            <span class="pl-c"><span class="pl-c">//</span> If statements are C-like</span>
+            <span class="pl-k">int</span> <span class="pl-en">j</span> <span class="pl-k">=</span> <span class="pl-c1">10</span>;
+            <span class="pl-k">if</span> (<span class="pl-smi">j</span> <span class="pl-k">==</span> <span class="pl-c1">10</span>)
+            {
+                <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-s"><span class="pl-pds">"</span>I get printed<span class="pl-pds">"</span></span>);
+            }
+            <span class="pl-k">else</span> <span class="pl-k">if</span> (<span class="pl-smi">j</span> <span class="pl-k">&gt;</span> <span class="pl-c1">10</span>)
+            {
+                <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-s"><span class="pl-pds">"</span>I don't<span class="pl-pds">"</span></span>);
+            }
+            <span class="pl-k">else</span>
+            {
+                <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-s"><span class="pl-pds">"</span>I also don't<span class="pl-pds">"</span></span>);
+            }
+
+            <span class="pl-c"><span class="pl-c">//</span> Ternary operators</span>
+            <span class="pl-c"><span class="pl-c">//</span> A simple if/else can be written as follows</span>
+            <span class="pl-c"><span class="pl-c">//</span> &lt;condition&gt; ? &lt;true&gt; : &lt;false&gt;</span>
+            <span class="pl-k">int</span> <span class="pl-en">toCompare</span> <span class="pl-k">=</span> <span class="pl-c1">17</span>;
+            <span class="pl-k">string</span> <span class="pl-en">isTrue</span> <span class="pl-k">=</span> <span class="pl-smi">toCompare</span> <span class="pl-k">==</span> <span class="pl-c1">17</span> <span class="pl-k">?</span> <span class="pl-s"><span class="pl-pds">"</span>True<span class="pl-pds">"</span></span> <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>False<span class="pl-pds">"</span></span>;
+
+            <span class="pl-c"><span class="pl-c">//</span> While loop</span>
+            <span class="pl-k">int</span> <span class="pl-en">fooWhile</span> <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+            <span class="pl-k">while</span> (<span class="pl-smi">fooWhile</span> <span class="pl-k">&lt;</span> <span class="pl-c1">100</span>)
+            {
+                <span class="pl-c"><span class="pl-c">//</span> Iterated 100 times, fooWhile 0-&gt;99</span>
+                <span class="pl-smi">fooWhile</span><span class="pl-k">++</span>;
+            }
+
+            <span class="pl-c"><span class="pl-c">//</span> Do While Loop</span>
+            <span class="pl-k">int</span> <span class="pl-en">fooDoWhile</span> <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+            <span class="pl-k">do</span>
+            {
+                <span class="pl-c"><span class="pl-c">//</span> Start iteration 100 times, fooDoWhile 0-&gt;99</span>
+                <span class="pl-k">if</span> (<span class="pl-c1">false</span>)
+                    <span class="pl-k">continue</span>; <span class="pl-c"><span class="pl-c">//</span> skip the current iteration</span>
+
+                <span class="pl-smi">fooDoWhile</span><span class="pl-k">++</span>;
+
+                <span class="pl-k">if</span> (<span class="pl-smi">fooDoWhile</span> <span class="pl-k">==</span> <span class="pl-c1">50</span>)
+                    <span class="pl-k">break</span>; <span class="pl-c"><span class="pl-c">//</span> breaks from the loop completely</span>
+
+            } <span class="pl-k">while</span> (<span class="pl-smi">fooDoWhile</span> <span class="pl-k">&lt;</span> <span class="pl-c1">100</span>);
+
+            <span class="pl-c"><span class="pl-c">//</span> for loop structure =&gt; for(&lt;start_statement&gt;; &lt;conditional&gt;; &lt;step&gt;)</span>
+            <span class="pl-k">for</span> (<span class="pl-k">int</span> <span class="pl-en">fooFor</span> <span class="pl-k">=</span> <span class="pl-c1">0</span>; <span class="pl-smi">fooFor</span> <span class="pl-k">&lt;</span> <span class="pl-c1">10</span>; <span class="pl-smi">fooFor</span><span class="pl-k">++</span>)
+            {
+                <span class="pl-c"><span class="pl-c">//</span> Iterated 10 times, fooFor 0-&gt;9</span>
+            }
+
+            <span class="pl-c"><span class="pl-c">//</span> For Each Loop</span>
+            <span class="pl-c"><span class="pl-c">//</span> foreach loop structure =&gt; foreach(&lt;iteratorType&gt; &lt;iteratorName&gt; in &lt;enumerable&gt;)</span>
+            <span class="pl-c"><span class="pl-c">//</span> The foreach loop loops over any object implementing IEnumerable or IEnumerable&lt;T&gt;</span>
+            <span class="pl-c"><span class="pl-c">//</span> All the collection types (Array, List, Dictionary...) in the .NET framework</span>
+            <span class="pl-c"><span class="pl-c">//</span> implement one or both of these interfaces.</span>
+            <span class="pl-c"><span class="pl-c">//</span> (The ToCharArray() could be removed, because a string also implements IEnumerable)</span>
+            <span class="pl-k">foreach</span> (<span class="pl-k">char</span> <span class="pl-en">character</span> <span class="pl-k">in</span> <span class="pl-s"><span class="pl-pds">"</span>Hello World<span class="pl-pds">"</span></span>.<span class="pl-en">ToCharArray</span>())
+            {
+                <span class="pl-c"><span class="pl-c">//</span> Iterated over all the characters in the string</span>
+            }
+
+            <span class="pl-c"><span class="pl-c">//</span> Switch Case</span>
+            <span class="pl-c"><span class="pl-c">//</span> A switch works with byte, short, char, and int data types.</span>
+            <span class="pl-c"><span class="pl-c">//</span> It also works with enumerated types (discussed in Enum Types),</span>
+            <span class="pl-c"><span class="pl-c">//</span> the String class, and a few special classes that wrap</span>
+            <span class="pl-c"><span class="pl-c">//</span> primitive types: Character, Byte, Short, and Integer.</span>
+            <span class="pl-k">int</span> <span class="pl-en">month</span> <span class="pl-k">=</span> <span class="pl-c1">3</span>;
+            <span class="pl-k">string</span> <span class="pl-en">monthString</span>;
+            <span class="pl-k">switch</span> (<span class="pl-smi">month</span>)
+            {
+                <span class="pl-k">case</span> <span class="pl-c1">1</span>:
+                    <span class="pl-smi">monthString</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>January<span class="pl-pds">"</span></span>;
+                    <span class="pl-k">break</span>;
+                <span class="pl-k">case</span> <span class="pl-c1">2</span>:
+                    <span class="pl-smi">monthString</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>February<span class="pl-pds">"</span></span>;
+                    <span class="pl-k">break</span>;
+                <span class="pl-k">case</span> <span class="pl-c1">3</span>:
+                    <span class="pl-smi">monthString</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>March<span class="pl-pds">"</span></span>;
+                    <span class="pl-k">break</span>;
+                <span class="pl-c"><span class="pl-c">//</span> You can assign more than one case to an action</span>
+                <span class="pl-c"><span class="pl-c">//</span> But you can't add an action without a break before another case</span>
+                <span class="pl-c"><span class="pl-c">//</span> (if you want to do this, you would have to explicitly add a goto case x)</span>
+                <span class="pl-k">case</span> <span class="pl-c1">6</span>:
+                <span class="pl-k">case</span> <span class="pl-c1">7</span>:
+                <span class="pl-k">case</span> <span class="pl-c1">8</span>:
+                    <span class="pl-smi">monthString</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Summer time!!<span class="pl-pds">"</span></span>;
+                    <span class="pl-k">break</span>;
+                <span class="pl-k">default</span>:
+                    <span class="pl-smi">monthString</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Some other month<span class="pl-pds">"</span></span>;
+                    <span class="pl-k">break</span>;
+            }
+
+            <span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+            <span class="pl-c"><span class="pl-c">//</span> Converting Data Types And Typecasting</span>
+            <span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> Converting data</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> Convert String To Integer</span>
+            <span class="pl-c"><span class="pl-c">//</span> this will throw a FormatException on failure</span>
+            <span class="pl-smi">int</span>.<span class="pl-en">Parse</span>(<span class="pl-s"><span class="pl-pds">"</span>123<span class="pl-pds">"</span></span>); <span class="pl-c"><span class="pl-c">//</span> returns an integer version of "123"</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> TryParse will default to the type's default value on failure</span>
+            <span class="pl-c"><span class="pl-c">//</span> in this case 0</span>
+            <span class="pl-k">int</span> <span class="pl-en">tryInt</span>;
+            <span class="pl-k">if</span> (<span class="pl-smi">int</span>.<span class="pl-en">TryParse</span>(<span class="pl-s"><span class="pl-pds">"</span>123<span class="pl-pds">"</span></span>, <span class="pl-k">out</span> <span class="pl-smi">tryInt</span>)) <span class="pl-c"><span class="pl-c">//</span> Function is boolean</span>
+                <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-smi">tryInt</span>);       <span class="pl-c"><span class="pl-c">//</span> 123</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> Convert Integer To String</span>
+            <span class="pl-c"><span class="pl-c">//</span> The Convert class has a number of methods to facilitate conversions</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> String to int</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> Better</span>
+            <span class="pl-k">bool</span> <span class="pl-en">result</span> <span class="pl-k">=</span> <span class="pl-smi">int</span>.<span class="pl-en">TryParse</span>(<span class="pl-smi">string</span>, <span class="pl-k">out</span> <span class="pl-k">var</span> <span class="pl-en">integer</span>)
+            <span class="pl-smi">int</span>.<span class="pl-en">Parse</span>(<span class="pl-smi">string</span>);
+
+            <span class="pl-c"><span class="pl-c">//</span> Not recommended</span>
+            <span class="pl-smi">Convert</span>.<span class="pl-en">ToString</span>(<span class="pl-c1">123</span>);
+
+            <span class="pl-c"><span class="pl-c">//</span> Int to string</span>
+            <span class="pl-smi">tryInt</span>.<span class="pl-en">ToString</span>();
+
+            <span class="pl-c"><span class="pl-c">//</span> Casting</span>
+            <span class="pl-c"><span class="pl-c">//</span> Cast decimal 15 to an int</span>
+            <span class="pl-c"><span class="pl-c">//</span> and then implicitly cast to long</span>
+            <span class="pl-k">long</span> <span class="pl-en">x</span> <span class="pl-k">=</span> (<span class="pl-k">int</span>) <span class="pl-c1">15</span><span class="pl-c1">M</span>;
+        }
+
+        <span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+        <span class="pl-c"><span class="pl-c">//</span> CLASSES - see definitions at end of file</span>
+        <span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+        <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">Classes</span>()
+        {
+            <span class="pl-c"><span class="pl-c">//</span> See Declaration of objects at end of file</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> Use new to instantiate a class</span>
+            <span class="pl-en">Bicycle</span> <span class="pl-en">trek</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Bicycle</span>();
+
+            <span class="pl-c"><span class="pl-c">//</span> Call object methods</span>
+            <span class="pl-smi">trek</span>.<span class="pl-en">SpeedUp</span>(<span class="pl-c1">3</span>); <span class="pl-c"><span class="pl-c">//</span> You should always use setter and getter methods</span>
+            <span class="pl-smi">trek</span>.<span class="pl-smi">Cadence</span> <span class="pl-k">=</span> <span class="pl-c1">100</span>;
+
+            <span class="pl-c"><span class="pl-c">//</span> ToString is a convention to display the value of this Object.</span>
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-s"><span class="pl-pds">"</span>trek info: <span class="pl-pds">"</span></span> <span class="pl-k">+</span> <span class="pl-smi">trek</span>.<span class="pl-en">Info</span>());
+
+            <span class="pl-c"><span class="pl-c">//</span> Instantiate a new Penny Farthing</span>
+            <span class="pl-en">PennyFarthing</span> <span class="pl-en">funbike</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">PennyFarthing</span>(<span class="pl-c1">1</span>, <span class="pl-c1">10</span>);
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-s"><span class="pl-pds">"</span>funbike info: <span class="pl-pds">"</span></span> <span class="pl-k">+</span> <span class="pl-smi">funbike</span>.<span class="pl-en">Info</span>());
+
+            <span class="pl-smi">Console</span>.<span class="pl-en">Read</span>();
+        } <span class="pl-c"><span class="pl-c">//</span> End main method</span>
+
+        <span class="pl-c"><span class="pl-c">//</span> Available in C# 9 and later, this is basically syntactic sugar for a class. Records are immutable*.</span>
+        <span class="pl-k">public</span> <span class="pl-k">record</span> <span class="pl-en">ARecord</span>(string Csharp);
+
+        <span class="pl-c"><span class="pl-c">//</span> CONSOLE ENTRY - A console application must have a main method as an entry point</span>
+        public static void Main(string[] args)
+        {
+            <span class="pl-en">OtherInterestingFeatures</span>();
+        }
+
+        <span class="pl-c"><span class="pl-c">//</span></span>
+        <span class="pl-c"><span class="pl-c">//</span> INTERESTING FEATURES</span>
+        <span class="pl-c"><span class="pl-c">//</span></span>
+
+        <span class="pl-c"><span class="pl-c">//</span> DEFAULT METHOD SIGNATURES</span>
+
+        <span class="pl-k">public</span> <span class="pl-c"><span class="pl-c">//</span> Visibility</span>
+        <span class="pl-k">static</span> <span class="pl-c"><span class="pl-c">//</span> Allows for direct call on class without object</span>
+        int <span class="pl-c"><span class="pl-c">//</span> Return Type,</span>
+        <span class="pl-en">MethodSignatures</span>(
+            <span class="pl-k">int</span> <span class="pl-en">maxCount</span>, <span class="pl-c"><span class="pl-c">//</span> First variable, expects an int</span>
+            <span class="pl-k">int</span> <span class="pl-en">count</span> <span class="pl-k">=</span> <span class="pl-c1">0</span>, <span class="pl-c"><span class="pl-c">//</span> will default the value to 0 if not passed in</span>
+            <span class="pl-k">int</span> <span class="pl-en">another</span> <span class="pl-k">=</span> <span class="pl-c1">3</span>,
+            <span class="pl-k">params</span> <span class="pl-k">string</span>[] <span class="pl-en">otherParams</span> <span class="pl-c"><span class="pl-c">//</span> captures all other parameters passed to method</span>
+        )
+        {
+            <span class="pl-k">return</span> <span class="pl-k">-</span><span class="pl-c1">1</span>;
+        }
+
+        <span class="pl-c"><span class="pl-c">//</span> Methods can have the same name, as long as the signature is unique</span>
+        <span class="pl-c"><span class="pl-c">//</span> A method that differs only in return type is not unique</span>
+        <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">MethodSignatures</span>(
+            <span class="pl-k">ref</span> <span class="pl-k">int</span> <span class="pl-en">maxCount</span>, <span class="pl-c"><span class="pl-c">//</span> Pass by reference</span>
+            <span class="pl-k">out</span> <span class="pl-k">int</span> <span class="pl-en">count</span>)
+        {
+            <span class="pl-c"><span class="pl-c">//</span> the argument passed in as 'count' will hold the value of 15 outside of this function</span>
+            <span class="pl-smi">count</span> <span class="pl-k">=</span> <span class="pl-c1">15</span>; <span class="pl-c"><span class="pl-c">//</span> out param must be assigned before control leaves the method</span>
+        }
+
+        <span class="pl-c"><span class="pl-c">//</span> GENERICS</span>
+        <span class="pl-c"><span class="pl-c">//</span> The classes for TKey and TValue is specified by the user calling this function.</span>
+        <span class="pl-c"><span class="pl-c">//</span> This method emulates Python's dict.setdefault()</span>
+        <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-en">TValue</span> <span class="pl-en">SetDefault</span>&lt;<span class="pl-en">TKey</span>, <span class="pl-en">TValue</span>&gt;(
+            <span class="pl-en">IDictionary</span>&lt;<span class="pl-en">TKey</span>, <span class="pl-en">TValue</span>&gt; <span class="pl-en">dictionary</span>,
+            <span class="pl-en">TKey</span> <span class="pl-en">key</span>,
+            <span class="pl-en">TValue</span> <span class="pl-en">defaultItem</span>)
+        {
+            <span class="pl-en">TValue</span> <span class="pl-en">result</span>;
+            <span class="pl-k">if</span> (<span class="pl-k">!</span><span class="pl-smi">dictionary</span>.<span class="pl-en">TryGetValue</span>(<span class="pl-smi">key</span>, <span class="pl-k">out</span> <span class="pl-smi">result</span>))
+                <span class="pl-k">return</span> <span class="pl-smi">dictionary</span>[<span class="pl-smi">key</span>] <span class="pl-k">=</span> <span class="pl-smi">defaultItem</span>;
+            <span class="pl-k">return</span> <span class="pl-smi">result</span>;
+        }
+
+        <span class="pl-c"><span class="pl-c">//</span> You can narrow down the objects that are passed in</span>
+        <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">IterateAndPrint</span>&lt;<span class="pl-en">T</span>&gt;(<span class="pl-en">T</span> <span class="pl-en">toPrint</span>) <span class="pl-k">where</span> <span class="pl-en">T</span>: <span class="pl-en">IEnumerable</span>&lt;<span class="pl-k">int</span>&gt;
+        {
+            <span class="pl-c"><span class="pl-c">//</span> We can iterate, since T is a IEnumerable</span>
+            <span class="pl-k">foreach</span> (<span class="pl-k">var</span> <span class="pl-en">item</span> <span class="pl-k">in</span> <span class="pl-smi">toPrint</span>)
+                <span class="pl-c"><span class="pl-c">//</span> Item is an int</span>
+                <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-smi">item</span>.<span class="pl-en">ToString</span>());
+        }
+
+        <span class="pl-c"><span class="pl-c">//</span> YIELD</span>
+        <span class="pl-c"><span class="pl-c">//</span> Usage of the "yield" keyword indicates that the method it appears in is an Iterator</span>
+        <span class="pl-c"><span class="pl-c">//</span> (this means you can use it in a foreach loop)</span>
+        <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-en">IEnumerable</span>&lt;<span class="pl-k">int</span>&gt; <span class="pl-en">YieldCounter</span>(<span class="pl-k">int</span> <span class="pl-en">limit</span> <span class="pl-k">=</span> <span class="pl-c1">10</span>)
+        {
+            <span class="pl-k">for</span> (<span class="pl-k">var</span> <span class="pl-en">i</span> <span class="pl-k">=</span> <span class="pl-c1">0</span>; <span class="pl-smi">i</span> <span class="pl-k">&lt;</span> <span class="pl-smi">limit</span>; <span class="pl-smi">i</span><span class="pl-k">++</span>)
+                <span class="pl-k">yield</span> <span class="pl-k">return</span> <span class="pl-smi">i</span>;
+        }
+
+        <span class="pl-c"><span class="pl-c">//</span> which you would call like this :</span>
+        <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">PrintYieldCounterToConsole</span>()
+        {
+            <span class="pl-k">foreach</span> (<span class="pl-k">var</span> <span class="pl-en">counter</span> <span class="pl-k">in</span> <span class="pl-en">YieldCounter</span>())
+                <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-smi">counter</span>);
+        }
+
+        <span class="pl-c"><span class="pl-c">//</span> you can use more than one "yield return" in a method</span>
+        <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-en">IEnumerable</span>&lt;<span class="pl-k">int</span>&gt; <span class="pl-en">ManyYieldCounter</span>()
+        {
+            <span class="pl-k">yield</span> <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+            <span class="pl-k">yield</span> <span class="pl-k">return</span> <span class="pl-c1">1</span>;
+            <span class="pl-k">yield</span> <span class="pl-k">return</span> <span class="pl-c1">2</span>;
+            <span class="pl-k">yield</span> <span class="pl-k">return</span> <span class="pl-c1">3</span>;
+        }
+
+        <span class="pl-c"><span class="pl-c">//</span> you can also use "yield break" to stop the Iterator</span>
+        <span class="pl-c"><span class="pl-c">//</span> this method would only return half of the values from 0 to limit.</span>
+        <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-en">IEnumerable</span>&lt;<span class="pl-k">int</span>&gt; <span class="pl-en">YieldCounterWithBreak</span>(<span class="pl-k">int</span> <span class="pl-en">limit</span> <span class="pl-k">=</span> <span class="pl-c1">10</span>)
+        {
+            <span class="pl-k">for</span> (<span class="pl-k">var</span> <span class="pl-en">i</span> <span class="pl-k">=</span> <span class="pl-c1">0</span>; <span class="pl-smi">i</span> <span class="pl-k">&lt;</span> <span class="pl-smi">limit</span>; <span class="pl-smi">i</span><span class="pl-k">++</span>)
+            {
+                <span class="pl-k">if</span> (<span class="pl-smi">i</span> <span class="pl-k">&gt;</span> <span class="pl-smi">limit</span><span class="pl-k">/</span><span class="pl-c1">2</span>) <span class="pl-k">yield</span> <span class="pl-k">break</span>;
+                <span class="pl-k">yield</span> <span class="pl-k">return</span> <span class="pl-smi">i</span>;
+            }
+        }
+
+        <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">OtherInterestingFeatures</span>()
+        {
+            <span class="pl-c"><span class="pl-c">//</span> OPTIONAL PARAMETERS</span>
+            <span class="pl-en">MethodSignatures</span>(<span class="pl-c1">3</span>, <span class="pl-c1">1</span>, <span class="pl-c1">3</span>, <span class="pl-s"><span class="pl-pds">"</span>Some<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Extra<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Strings<span class="pl-pds">"</span></span>);
+            <span class="pl-en">MethodSignatures</span>(<span class="pl-c1">3</span>, <span class="pl-en">another</span>: <span class="pl-c1">3</span>); <span class="pl-c"><span class="pl-c">//</span> explicitly set a parameter, skipping optional ones</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> BY REF AND OUT PARAMETERS</span>
+            <span class="pl-k">int</span> <span class="pl-en">maxCount</span> <span class="pl-k">=</span> <span class="pl-c1">0</span>, <span class="pl-en">count</span>; <span class="pl-c"><span class="pl-c">//</span> ref params must have value</span>
+            <span class="pl-en">MethodSignatures</span>(<span class="pl-k">ref</span> <span class="pl-smi">maxCount</span>, <span class="pl-k">out</span> <span class="pl-smi">count</span>);
+
+            <span class="pl-c"><span class="pl-c">//</span> EXTENSION METHODS</span>
+            <span class="pl-k">int</span> <span class="pl-en">i</span> <span class="pl-k">=</span> <span class="pl-c1">3</span>;
+            <span class="pl-smi">i</span>.<span class="pl-en">Print</span>(); <span class="pl-c"><span class="pl-c">//</span> Defined below</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> NULLABLE TYPES - great for database interaction / return values</span>
+            <span class="pl-c"><span class="pl-c">//</span> any value type (i.e. not a class) can be made nullable by suffixing a ?</span>
+            <span class="pl-c"><span class="pl-c">//</span> &lt;type&gt;? &lt;var name&gt; = &lt;value&gt;</span>
+            <span class="pl-k">int</span>? <span class="pl-en">nullable</span> <span class="pl-k">=</span> <span class="pl-c1">null</span>; <span class="pl-c"><span class="pl-c">//</span> short hand for Nullable&lt;int&gt;</span>
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-s"><span class="pl-pds">"</span>Nullable variable: <span class="pl-pds">"</span></span> <span class="pl-k">+</span> <span class="pl-smi">nullable</span>);
+            <span class="pl-k">bool</span> <span class="pl-en">hasValue</span> <span class="pl-k">=</span> <span class="pl-smi">nullable</span>.<span class="pl-smi">HasValue</span>; <span class="pl-c"><span class="pl-c">//</span> true if not null</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> ?? is syntactic sugar for specifying default value (coalesce)</span>
+            <span class="pl-c"><span class="pl-c">//</span> in case variable is null</span>
+            <span class="pl-k">int</span> <span class="pl-en">notNullable</span> <span class="pl-k">=</span> <span class="pl-smi">nullable</span> <span class="pl-k">??</span> <span class="pl-c1">0</span>; <span class="pl-c"><span class="pl-c">//</span> 0</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> ?. is an operator for null-propagation - a shorthand way of checking for null</span>
+            <span class="pl-smi">nullable</span><span class="pl-k">?</span>.<span class="pl-en">Print</span>(); <span class="pl-c"><span class="pl-c">//</span> Use the Print() extension method if nullable isn't null</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> IMPLICITLY TYPED VARIABLES - you can let the compiler work out what the type is:</span>
+            <span class="pl-k">var</span> <span class="pl-en">magic</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>magic is a string, at compile time, so you still get type safety<span class="pl-pds">"</span></span>;
+            <span class="pl-c"><span class="pl-c">//</span> magic = 9; will not work as magic is a string, not an int</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> GENERICS</span>
+            <span class="pl-c"><span class="pl-c">//</span></span>
+            <span class="pl-k">var</span> <span class="pl-en">phonebook</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Dictionary</span>&lt;<span class="pl-k">string</span>, <span class="pl-k">string</span>&gt;() {
+                {<span class="pl-s"><span class="pl-pds">"</span>Sarah<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>212 555 5555<span class="pl-pds">"</span></span>} <span class="pl-c"><span class="pl-c">//</span> Add some entries to the phone book</span>
+            };
+
+            <span class="pl-c"><span class="pl-c">//</span> Calling SETDEFAULT defined as a generic above</span>
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-en">SetDefault</span>&lt;<span class="pl-k">string</span>,<span class="pl-k">string</span>&gt;(<span class="pl-smi">phonebook</span>, <span class="pl-s"><span class="pl-pds">"</span>Shaun<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>No Phone<span class="pl-pds">"</span></span>)); <span class="pl-c"><span class="pl-c">//</span> No Phone</span>
+            <span class="pl-c"><span class="pl-c">//</span> nb, you don't need to specify the TKey and TValue since they can be</span>
+            <span class="pl-c"><span class="pl-c">//</span> derived implicitly</span>
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-en">SetDefault</span>(<span class="pl-smi">phonebook</span>, <span class="pl-s"><span class="pl-pds">"</span>Sarah<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>No Phone<span class="pl-pds">"</span></span>)); <span class="pl-c"><span class="pl-c">//</span> 212 555 5555</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> LAMBDA EXPRESSIONS - allow you to write code in line</span>
+            <span class="pl-en">Func</span>&lt;<span class="pl-k">int</span>, <span class="pl-k">int</span>&gt; <span class="pl-en">square</span> <span class="pl-k">=</span> (<span class="pl-en">x</span>) <span class="pl-k">=&gt;</span> <span class="pl-smi">x</span> <span class="pl-k">*</span> <span class="pl-smi">x</span>; <span class="pl-c"><span class="pl-c">//</span> Last T item is the return value</span>
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-en">square</span>(<span class="pl-c1">3</span>)); <span class="pl-c"><span class="pl-c">//</span> 9</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> ERROR HANDLING - coping with an uncertain world</span>
+            <span class="pl-k">try</span>
+            {
+                <span class="pl-k">var</span> <span class="pl-en">funBike</span> <span class="pl-k">=</span> <span class="pl-smi">PennyFarthing</span>.<span class="pl-en">CreateWithGears</span>(<span class="pl-c1">6</span>);
+
+                <span class="pl-c"><span class="pl-c">//</span> will no longer execute because CreateWithGears throws an exception</span>
+                <span class="pl-k">string</span> <span class="pl-en">some</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>;
+                <span class="pl-k">if</span> (<span class="pl-c1">true</span>) <span class="pl-smi">some</span> <span class="pl-k">=</span> <span class="pl-c1">null</span>;
+                <span class="pl-smi">some</span>.<span class="pl-en">ToLower</span>(); <span class="pl-c"><span class="pl-c">//</span> throws a NullReferenceException</span>
+            }
+            <span class="pl-k">catch</span> (<span class="pl-en">NotSupportedException</span>)
+            {
+                <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-s"><span class="pl-pds">"</span>Not so much fun now!<span class="pl-pds">"</span></span>);
+            }
+            <span class="pl-k">catch</span> (<span class="pl-en">Exception</span> <span class="pl-en">ex</span>) <span class="pl-c"><span class="pl-c">//</span> catch all other exceptions</span>
+            {
+                <span class="pl-k">throw</span> <span class="pl-k">new</span> <span class="pl-en">ApplicationException</span>(<span class="pl-s"><span class="pl-pds">"</span>It hit the fan<span class="pl-pds">"</span></span>, <span class="pl-smi">ex</span>);
+                <span class="pl-c"><span class="pl-c">//</span> throw; // A rethrow that preserves the callstack</span>
+            }
+            <span class="pl-c"><span class="pl-c">//</span> catch { } // catch-all without capturing the Exception</span>
+            <span class="pl-k">finally</span>
+            {
+                <span class="pl-c"><span class="pl-c">//</span> executes after try or catch</span>
+            }
+
+            <span class="pl-c"><span class="pl-c">//</span> DISPOSABLE RESOURCES MANAGEMENT - let you handle unmanaged resources easily.</span>
+            <span class="pl-c"><span class="pl-c">//</span> Most of objects that access unmanaged resources (file handle, device contexts, etc.)</span>
+            <span class="pl-c"><span class="pl-c">//</span> implement the IDisposable interface. The using statement takes care of</span>
+            <span class="pl-c"><span class="pl-c">//</span> cleaning those IDisposable objects for you.</span>
+            <span class="pl-k">using</span> (<span class="pl-en">StreamWriter</span> <span class="pl-en">writer</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">StreamWriter</span>(<span class="pl-s"><span class="pl-pds">"</span>log.txt<span class="pl-pds">"</span></span>))
+            {
+                <span class="pl-smi">writer</span>.<span class="pl-en">WriteLine</span>(<span class="pl-s"><span class="pl-pds">"</span>Nothing suspicious here<span class="pl-pds">"</span></span>);
+                <span class="pl-c"><span class="pl-c">//</span> At the end of scope, resources will be released.</span>
+                <span class="pl-c"><span class="pl-c">//</span> Even if an exception is thrown.</span>
+            }
+
+            <span class="pl-c"><span class="pl-c">//</span> PARALLEL FRAMEWORK</span>
+            <span class="pl-c"><span class="pl-c">//</span> https://devblogs.microsoft.com/csharpfaq/parallel-programming-in-net-framework-4-getting-started/</span>
+
+            <span class="pl-k">var</span> <span class="pl-en">words</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">List</span>&lt;<span class="pl-k">string</span>&gt; {<span class="pl-s"><span class="pl-pds">"</span>dog<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>cat<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>horse<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>pony<span class="pl-pds">"</span></span>};
+
+            <span class="pl-smi">Parallel</span>.<span class="pl-en">ForEach</span>(<span class="pl-smi">words</span>,
+                <span class="pl-k">new</span> <span class="pl-en">ParallelOptions</span>() { <span class="pl-smi">MaxDegreeOfParallelism</span> <span class="pl-k">=</span> <span class="pl-c1">4</span> },
+                <span class="pl-en">word</span> <span class="pl-k">=&gt;</span>
+                {
+                    <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-smi">word</span>);
+                }
+            );
+
+            <span class="pl-c"><span class="pl-c">//</span> Running this will produce different outputs</span>
+            <span class="pl-c"><span class="pl-c">//</span> since each thread finishes at different times.</span>
+            <span class="pl-c"><span class="pl-c">//</span> Some example outputs are:</span>
+            <span class="pl-c"><span class="pl-c">//</span> cat dog horse pony</span>
+            <span class="pl-c"><span class="pl-c">//</span> dog horse pony cat</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> DYNAMIC OBJECTS (great for working with other languages)</span>
+            <span class="pl-k">dynamic</span> <span class="pl-en">student</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">ExpandoObject</span>();
+            <span class="pl-smi">student</span>.<span class="pl-smi">FirstName</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>First Name<span class="pl-pds">"</span></span>; <span class="pl-c"><span class="pl-c">//</span> No need to define class first!</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> You can even add methods (returns a string, and takes in a string)</span>
+            <span class="pl-smi">student</span>.<span class="pl-smi">Introduce</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Func</span>&lt;<span class="pl-k">string</span>, <span class="pl-k">string</span>&gt;(
+                (<span class="pl-en">introduceTo</span>) <span class="pl-k">=&gt;</span> <span class="pl-smi">string</span>.<span class="pl-en">Format</span>(<span class="pl-s"><span class="pl-pds">"</span>Hey {0}, this is {1}<span class="pl-pds">"</span></span>, <span class="pl-smi">student</span>.<span class="pl-smi">FirstName</span>, <span class="pl-smi">introduceTo</span>));
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-smi">student</span>.<span class="pl-en">Introduce</span>(<span class="pl-s"><span class="pl-pds">"</span>Beth<span class="pl-pds">"</span></span>));
+
+            <span class="pl-c"><span class="pl-c">//</span> IQUERYABLE&lt;T&gt; - almost all collections implement this, which gives you a lot of</span>
+            <span class="pl-c"><span class="pl-c">//</span> very useful Map / Filter / Reduce style methods</span>
+            <span class="pl-k">var</span> <span class="pl-en">bikes</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">List</span>&lt;<span class="pl-en">Bicycle</span>&gt;();
+            <span class="pl-smi">bikes</span>.<span class="pl-en">Sort</span>(); <span class="pl-c"><span class="pl-c">//</span> Sorts the array</span>
+            <span class="pl-smi">bikes</span>.<span class="pl-en">Sort</span>((<span class="pl-en">b1</span>, <span class="pl-en">b2</span>) <span class="pl-k">=&gt;</span> <span class="pl-smi">b1</span>.<span class="pl-smi">Wheels</span>.<span class="pl-en">CompareTo</span>(<span class="pl-smi">b2</span>.<span class="pl-smi">Wheels</span>)); <span class="pl-c"><span class="pl-c">//</span> Sorts based on wheels</span>
+            <span class="pl-k">var</span> <span class="pl-en">result</span> <span class="pl-k">=</span> <span class="pl-smi">bikes</span>
+                .<span class="pl-en">Where</span>(<span class="pl-en">b</span> <span class="pl-k">=&gt;</span> <span class="pl-smi">b</span>.<span class="pl-smi">Wheels</span> <span class="pl-k">&gt;</span> <span class="pl-c1">3</span>) <span class="pl-c"><span class="pl-c">//</span> Filters - chainable (returns IQueryable of previous type)</span>
+                .<span class="pl-en">Where</span>(<span class="pl-en">b</span> <span class="pl-k">=&gt;</span> <span class="pl-smi">b</span>.<span class="pl-smi">IsBroken</span> <span class="pl-k">&amp;&amp;</span> <span class="pl-smi">b</span>.<span class="pl-smi">HasTassles</span>)
+                .<span class="pl-en">Select</span>(<span class="pl-en">b</span> <span class="pl-k">=&gt;</span> <span class="pl-smi">b</span>.<span class="pl-en">ToString</span>()); <span class="pl-c"><span class="pl-c">//</span> Map - we only this selects, so result is a IQueryable&lt;string&gt;</span>
+
+            <span class="pl-k">var</span> <span class="pl-en">sum</span> <span class="pl-k">=</span> <span class="pl-smi">bikes</span>.<span class="pl-en">Sum</span>(<span class="pl-en">b</span> <span class="pl-k">=&gt;</span> <span class="pl-smi">b</span>.<span class="pl-smi">Wheels</span>); <span class="pl-c"><span class="pl-c">//</span> Reduce - sums all the wheels in the collection</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> Create a list of IMPLICIT objects based on some parameters of the bike</span>
+            <span class="pl-k">var</span> <span class="pl-en">bikeSummaries</span> <span class="pl-k">=</span> <span class="pl-smi">bikes</span>.<span class="pl-en">Select</span>(<span class="pl-en">b</span><span class="pl-k">=&gt;</span><span class="pl-k">new</span> { <span class="pl-smi">Name</span> <span class="pl-k">=</span> <span class="pl-smi">b</span>.<span class="pl-smi">Name</span>, <span class="pl-smi">IsAwesome</span> <span class="pl-k">=</span> <span class="pl-k">!</span><span class="pl-smi">b</span>.<span class="pl-smi">IsBroken</span> <span class="pl-k">&amp;&amp;</span> <span class="pl-smi">b</span>.<span class="pl-smi">HasTassles</span> });
+            <span class="pl-c"><span class="pl-c">//</span> Hard to show here, but you get type ahead completion since the compiler can implicitly work</span>
+            <span class="pl-c"><span class="pl-c">//</span> out the types above!</span>
+            <span class="pl-k">foreach</span> (<span class="pl-k">var</span> <span class="pl-en">bikeSummary</span> <span class="pl-k">in</span> <span class="pl-smi">bikeSummaries</span>.<span class="pl-en">Where</span>(<span class="pl-en">b</span> <span class="pl-k">=&gt;</span> <span class="pl-smi">b</span>.<span class="pl-smi">IsAwesome</span>))
+                <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-smi">bikeSummary</span>.<span class="pl-smi">Name</span>);
+
+            <span class="pl-c"><span class="pl-c">//</span> ASPARALLEL</span>
+            <span class="pl-c"><span class="pl-c">//</span> And this is where things get wicked - combine linq and parallel operations</span>
+            <span class="pl-k">var</span> <span class="pl-en">threeWheelers</span> <span class="pl-k">=</span> <span class="pl-smi">bikes</span>.<span class="pl-en">AsParallel</span>().<span class="pl-en">Where</span>(<span class="pl-en">b</span> <span class="pl-k">=&gt;</span> <span class="pl-smi">b</span>.<span class="pl-smi">Wheels</span> <span class="pl-k">==</span> <span class="pl-c1">3</span>).<span class="pl-en">Select</span>(<span class="pl-en">b</span> <span class="pl-k">=&gt;</span> <span class="pl-smi">b</span>.<span class="pl-smi">Name</span>);
+            <span class="pl-c"><span class="pl-c">//</span> this will happen in parallel! Threads will automagically be spun up and the</span>
+            <span class="pl-c"><span class="pl-c">//</span> results divvied amongst them! Amazing for large datasets when you have lots of</span>
+            <span class="pl-c"><span class="pl-c">//</span> cores</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> LINQ - maps a store to IQueryable&lt;T&gt; objects, with delayed execution</span>
+            <span class="pl-c"><span class="pl-c">//</span> e.g. LinqToSql - maps to a database, LinqToXml maps to an xml document</span>
+            <span class="pl-k">var</span> <span class="pl-en">db</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">BikeRepository</span>();
+
+            <span class="pl-c"><span class="pl-c">//</span> execution is delayed, which is great when querying a database</span>
+            <span class="pl-k">var</span> <span class="pl-en">filter</span> <span class="pl-k">=</span> <span class="pl-smi">db</span>.<span class="pl-smi">Bikes</span>.<span class="pl-en">Where</span>(<span class="pl-en">b</span> <span class="pl-k">=&gt;</span> <span class="pl-smi">b</span>.<span class="pl-smi">HasTassles</span>); <span class="pl-c"><span class="pl-c">//</span> no query run</span>
+            <span class="pl-k">if</span> (<span class="pl-c1">42</span> <span class="pl-k">&gt;</span> <span class="pl-c1">6</span>) <span class="pl-c"><span class="pl-c">//</span> You can keep adding filters, even conditionally - great for "advanced search" functionality</span>
+                <span class="pl-smi">filter</span> <span class="pl-k">=</span> <span class="pl-smi">filter</span>.<span class="pl-en">Where</span>(<span class="pl-en">b</span> <span class="pl-k">=&gt;</span> <span class="pl-smi">b</span>.<span class="pl-smi">IsBroken</span>); <span class="pl-c"><span class="pl-c">//</span> no query run</span>
+
+            <span class="pl-k">var</span> <span class="pl-en">query</span> <span class="pl-k">=</span> <span class="pl-smi">filter</span>
+                .<span class="pl-en">OrderBy</span>(<span class="pl-en">b</span> <span class="pl-k">=&gt;</span> <span class="pl-smi">b</span>.<span class="pl-smi">Wheels</span>)
+                .<span class="pl-en">ThenBy</span>(<span class="pl-en">b</span> <span class="pl-k">=&gt;</span> <span class="pl-smi">b</span>.<span class="pl-smi">Name</span>)
+                .<span class="pl-en">Select</span>(<span class="pl-en">b</span> <span class="pl-k">=&gt;</span> <span class="pl-smi">b</span>.<span class="pl-smi">Name</span>); <span class="pl-c"><span class="pl-c">//</span> still no query run</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> Now the query runs, but opens a reader, so only populates as you iterate through</span>
+            <span class="pl-k">foreach</span> (<span class="pl-k">string</span> <span class="pl-en">bike</span> <span class="pl-k">in</span> <span class="pl-smi">query</span>)
+                <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-smi">result</span>);
+
+
+
+        }
+
+    } <span class="pl-c"><span class="pl-c">//</span> End LearnCSharp class</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> You can include other classes in a .cs file</span>
+
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">class</span> <span class="pl-en">Extensions</span>
+    {
+        <span class="pl-c"><span class="pl-c">//</span> EXTENSION METHODS</span>
+        <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">Print</span>(<span class="pl-k">this</span> <span class="pl-k">object</span> <span class="pl-en">obj</span>)
+        {
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-smi">obj</span>.<span class="pl-en">ToString</span>());
+        }
+    }
+
+
+    <span class="pl-c"><span class="pl-c">//</span> DELEGATES AND EVENTS</span>
+    <span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">DelegateTest</span>
+    {
+        <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">int</span> <span class="pl-en">count</span> <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+        <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">int</span> <span class="pl-en">Increment</span>()
+        {
+            <span class="pl-c"><span class="pl-c">//</span> increment count then return it</span>
+            <span class="pl-k">return</span> <span class="pl-k">++</span><span class="pl-smi">count</span>;
+        }
+
+        <span class="pl-c"><span class="pl-c">//</span> A delegate is a reference to a method.</span>
+        <span class="pl-c"><span class="pl-c">//</span> To reference the Increment method,</span>
+        <span class="pl-c"><span class="pl-c">//</span> first declare a delegate with the same signature,</span>
+        <span class="pl-c"><span class="pl-c">//</span> i.e. takes no arguments and returns an int</span>
+        <span class="pl-k">public</span> <span class="pl-k">delegate</span> <span class="pl-k">int</span> <span class="pl-en">IncrementDelegate</span>();
+
+        <span class="pl-c"><span class="pl-c">//</span> An event can also be used to trigger delegates</span>
+        <span class="pl-c"><span class="pl-c">//</span> Create an event with the delegate type</span>
+        <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">event</span> <span class="pl-en">IncrementDelegate</span> <span class="pl-en">MyEvent</span>;
+
+        <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">Main</span>(<span class="pl-k">string</span>[] <span class="pl-en">args</span>)
+        {
+            <span class="pl-c"><span class="pl-c">//</span> Refer to the Increment method by instantiating the delegate</span>
+            <span class="pl-c"><span class="pl-c">//</span> and passing the method itself in as an argument</span>
+            <span class="pl-en">IncrementDelegate</span> <span class="pl-en">inc</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">IncrementDelegate</span>(<span class="pl-smi">Increment</span>);
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-en">inc</span>());  <span class="pl-c"><span class="pl-c">//</span> =&gt; 1</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> Delegates can be composed with the + operator</span>
+            <span class="pl-en">IncrementDelegate</span> <span class="pl-en">composedInc</span> <span class="pl-k">=</span> <span class="pl-smi">inc</span>;
+            <span class="pl-smi">composedInc</span> <span class="pl-k">+=</span> <span class="pl-smi">inc</span>;
+            <span class="pl-smi">composedInc</span> <span class="pl-k">+=</span> <span class="pl-smi">inc</span>;
+
+            <span class="pl-c"><span class="pl-c">//</span> composedInc will run Increment 3 times</span>
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-en">composedInc</span>());  <span class="pl-c"><span class="pl-c">//</span> =&gt; 4</span>
+
+
+            <span class="pl-c"><span class="pl-c">//</span> Subscribe to the event with the delegate</span>
+            <span class="pl-smi">MyEvent</span> <span class="pl-k">+=</span> <span class="pl-k">new</span> <span class="pl-en">IncrementDelegate</span>(<span class="pl-smi">Increment</span>);
+            <span class="pl-smi">MyEvent</span> <span class="pl-k">+=</span> <span class="pl-k">new</span> <span class="pl-en">IncrementDelegate</span>(<span class="pl-smi">Increment</span>);
+
+            <span class="pl-c"><span class="pl-c">//</span> Trigger the event</span>
+            <span class="pl-c"><span class="pl-c">//</span> ie. run all delegates subscribed to this event</span>
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-en">MyEvent</span>());  <span class="pl-c"><span class="pl-c">//</span> =&gt; 6</span>
+        }
+    }
+
+
+    <span class="pl-c"><span class="pl-c">//</span> Class Declaration Syntax:</span>
+    <span class="pl-c"><span class="pl-c">//</span> &lt;public/private/protected/internal&gt; class &lt;class name&gt;{</span>
+    <span class="pl-c"><span class="pl-c">//</span>    //data fields, constructors, functions all inside.</span>
+    <span class="pl-c"><span class="pl-c">//</span>    //functions are called as methods in Java.</span>
+    <span class="pl-c"><span class="pl-c">//</span> }</span>
+
+    <span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">Bicycle</span>
+    {
+        <span class="pl-c"><span class="pl-c">//</span> Bicycle's Fields/Variables</span>
+        <span class="pl-k">public</span> int Cadence <span class="pl-c"><span class="pl-c">//</span> Public: Can be accessed from anywhere</span>
+        {
+            get <span class="pl-c"><span class="pl-c">//</span> get - define a method to retrieve the property</span>
+            {
+                <span class="pl-en">return</span> <span class="pl-en">_cadence</span>;
+            }
+            set <span class="pl-c"><span class="pl-c">//</span> set - define a method to set a property</span>
+            {
+                _cadence = value; <span class="pl-c"><span class="pl-c">//</span> Value is the value passed in to the setter</span>
+            }
+        }
+        <span class="pl-k">private</span> <span class="pl-k">int</span> <span class="pl-en">_cadence</span>;
+
+        <span class="pl-k">protected</span> <span class="pl-k">virtual</span> <span class="pl-smi">int</span> <span class="pl-smi">Gear</span> <span class="pl-c"><span class="pl-c">//</span> Protected: Accessible from the class and subclasses</span>
+        {
+            <span class="pl-smi">get</span>; <span class="pl-c"><span class="pl-c">//</span> creates an auto property so you don't need a member field</span>
+            <span class="pl-smi">set</span>;
+        }
+
+        <span class="pl-k">internal</span> <span class="pl-smi">int</span> <span class="pl-smi">Wheels</span> <span class="pl-c"><span class="pl-c">//</span> Internal: Accessible from within the assembly</span>
+        {
+            <span class="pl-smi">get</span>;
+            <span class="pl-en">private</span> <span class="pl-en">set</span>; <span class="pl-c"><span class="pl-c">//</span> You can set modifiers on the get/set methods</span>
+        }
+
+        <span class="pl-k">int</span> <span class="pl-en">_speed</span>; <span class="pl-c"><span class="pl-c">//</span> Everything is private by default: Only accessible from within this class.</span>
+                    <span class="pl-c"><span class="pl-c">//</span> can also use keyword private</span>
+        <span class="pl-k">public</span> <span class="pl-smi">string</span> <span class="pl-smi">Name</span> { <span class="pl-smi">get</span>; <span class="pl-smi">set</span>; }
+
+        <span class="pl-c"><span class="pl-c">//</span> Properties also have a special syntax for when you want a readonly property</span>
+        <span class="pl-c"><span class="pl-c">//</span> that simply returns the result of an expression</span>
+        <span class="pl-k">public</span> <span class="pl-smi">string</span> <span class="pl-en">LongName</span> <span class="pl-k">=&gt;</span> <span class="pl-smi">Name</span> <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> <span class="pl-pds">"</span></span> <span class="pl-k">+</span> <span class="pl-smi">_speed</span> <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> speed<span class="pl-pds">"</span></span>;
+
+        <span class="pl-c"><span class="pl-c">//</span> Enum is a value type that consists of a set of named constants</span>
+        <span class="pl-c"><span class="pl-c">//</span> It is really just mapping a name to a value (an int, unless specified otherwise).</span>
+        <span class="pl-c"><span class="pl-c">//</span> The approved types for an enum are byte, sbyte, short, ushort, int, uint, long, or ulong.</span>
+        <span class="pl-c"><span class="pl-c">//</span> An enum can't contain the same value twice.</span>
+        <span class="pl-k">public</span> <span class="pl-k">enum</span> <span class="pl-en">BikeBrand</span>
+        {
+            <span class="pl-en">AIST</span>,
+            <span class="pl-en">BMC</span>,
+            <span class="pl-en">Electra</span> <span class="pl-k">=</span> <span class="pl-c1">42</span>, <span class="pl-c"><span class="pl-c">//</span>you can explicitly set a value to a name</span>
+            <span class="pl-en">Gitane</span> <span class="pl-c"><span class="pl-c">//</span> 43</span>
+        }
+        <span class="pl-c"><span class="pl-c">//</span> We defined this type inside a Bicycle class, so it is a nested type</span>
+        <span class="pl-c"><span class="pl-c">//</span> Code outside of this class should reference this type as Bicycle.BikeBrand</span>
+
+        <span class="pl-k">public</span> <span class="pl-en">BikeBrand</span> <span class="pl-en">Brand</span>; <span class="pl-c"><span class="pl-c">//</span> After declaring an enum type, we can declare the field of this type</span>
+
+        <span class="pl-c"><span class="pl-c">//</span> Decorate an enum with the FlagsAttribute to indicate that multiple values can be switched on</span>
+        <span class="pl-c"><span class="pl-c">//</span> Any class derived from Attribute can be used to decorate types, methods, parameters etc</span>
+        <span class="pl-c"><span class="pl-c">//</span> Bitwise operators &amp; and | can be used to perform and/or operations</span>
+
+        [<span class="pl-en">Flags</span>]
+        <span class="pl-k">public</span> <span class="pl-k">enum</span> <span class="pl-en">BikeAccessories</span>
+        {
+            <span class="pl-en">None</span> <span class="pl-k">=</span> <span class="pl-c1">0</span>,
+            <span class="pl-en">Bell</span> <span class="pl-k">=</span> <span class="pl-c1">1</span>,
+            <span class="pl-en">MudGuards</span> <span class="pl-k">=</span> <span class="pl-c1">2</span>, <span class="pl-c"><span class="pl-c">//</span> need to set the values manually!</span>
+            <span class="pl-en">Racks</span> <span class="pl-k">=</span> <span class="pl-c1">4</span>,
+            <span class="pl-en">Lights</span> <span class="pl-k">=</span> <span class="pl-c1">8</span>,
+            <span class="pl-en">FullPackage</span> <span class="pl-k">=</span> <span class="pl-smi">Bell</span> <span class="pl-k">|</span> <span class="pl-smi">MudGuards</span> <span class="pl-k">|</span> <span class="pl-smi">Racks</span> <span class="pl-k">|</span> <span class="pl-smi">Lights</span>
+        }
+
+        <span class="pl-c"><span class="pl-c">//</span> Usage: aBike.Accessories.HasFlag(Bicycle.BikeAccessories.Bell)</span>
+        <span class="pl-c"><span class="pl-c">//</span> Before .NET 4: (aBike.Accessories &amp; Bicycle.BikeAccessories.Bell) == Bicycle.BikeAccessories.Bell</span>
+        <span class="pl-k">public</span> <span class="pl-smi">BikeAccessories</span> <span class="pl-smi">Accessories</span> { <span class="pl-smi">get</span>; <span class="pl-smi">set</span>; }
+
+        <span class="pl-c"><span class="pl-c">//</span> Static members belong to the type itself rather than specific object.</span>
+        <span class="pl-c"><span class="pl-c">//</span> You can access them without a reference to any object:</span>
+        <span class="pl-c"><span class="pl-c">//</span> Console.WriteLine("Bicycles created: " + Bicycle.bicyclesCreated);</span>
+        <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-smi">int</span> <span class="pl-smi">BicyclesCreated</span> { <span class="pl-smi">get</span>; <span class="pl-smi">set</span>; }
+
+        <span class="pl-c"><span class="pl-c">//</span> readonly values are set at run time</span>
+        <span class="pl-c"><span class="pl-c">//</span> they can only be assigned upon declaration or in a constructor</span>
+        <span class="pl-k">readonly</span> <span class="pl-k">bool</span> <span class="pl-en">_hasCardsInSpokes</span> <span class="pl-k">=</span> <span class="pl-c1">false</span>; <span class="pl-c"><span class="pl-c">//</span> read-only private</span>
+
+        <span class="pl-c"><span class="pl-c">//</span> Constructors are a way of creating classes</span>
+        <span class="pl-c"><span class="pl-c">//</span> This is a default constructor</span>
+        <span class="pl-k">public</span> <span class="pl-en">Bicycle</span>()
+        {
+            <span class="pl-k">this</span>.<span class="pl-smi">Gear</span> <span class="pl-k">=</span> <span class="pl-c1">1</span>; <span class="pl-c"><span class="pl-c">//</span> you can access members of the object with the keyword this</span>
+            <span class="pl-smi">Cadence</span> <span class="pl-k">=</span> <span class="pl-c1">50</span>;  <span class="pl-c"><span class="pl-c">//</span> but you don't always need it</span>
+            <span class="pl-smi">_speed</span> <span class="pl-k">=</span> <span class="pl-c1">5</span>;
+            <span class="pl-smi">Name</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Bontrager<span class="pl-pds">"</span></span>;
+            <span class="pl-smi">Brand</span> <span class="pl-k">=</span> <span class="pl-smi">BikeBrand</span>.<span class="pl-smi">AIST</span>;
+            <span class="pl-smi">BicyclesCreated</span><span class="pl-k">++</span>;
+        }
+
+        <span class="pl-c"><span class="pl-c">//</span> This is a specified constructor (it contains arguments)</span>
+        <span class="pl-k">public</span> <span class="pl-en">Bicycle</span>(<span class="pl-k">int</span> <span class="pl-en">startCadence</span>, <span class="pl-k">int</span> <span class="pl-en">startSpeed</span>, <span class="pl-k">int</span> <span class="pl-en">startGear</span>,
+                       <span class="pl-k">string</span> <span class="pl-en">name</span>, <span class="pl-k">bool</span> <span class="pl-en">hasCardsInSpokes</span>, <span class="pl-en">BikeBrand</span> <span class="pl-en">brand</span>)
+            : <span class="pl-k">base</span>() <span class="pl-c"><span class="pl-c">//</span> calls base first</span>
+        {
+            <span class="pl-smi">Gear</span> <span class="pl-k">=</span> <span class="pl-smi">startGear</span>;
+            <span class="pl-smi">Cadence</span> <span class="pl-k">=</span> <span class="pl-smi">startCadence</span>;
+            <span class="pl-smi">_speed</span> <span class="pl-k">=</span> <span class="pl-smi">startSpeed</span>;
+            <span class="pl-smi">Name</span> <span class="pl-k">=</span> <span class="pl-smi">name</span>;
+            <span class="pl-smi">_hasCardsInSpokes</span> <span class="pl-k">=</span> <span class="pl-smi">hasCardsInSpokes</span>;
+            <span class="pl-smi">Brand</span> <span class="pl-k">=</span> <span class="pl-smi">brand</span>;
+        }
+
+        <span class="pl-c"><span class="pl-c">//</span> Constructors can be chained</span>
+        <span class="pl-k">public</span> <span class="pl-en">Bicycle</span>(<span class="pl-k">int</span> <span class="pl-en">startCadence</span>, <span class="pl-k">int</span> <span class="pl-en">startSpeed</span>, <span class="pl-en">BikeBrand</span> <span class="pl-en">brand</span>) :
+            <span class="pl-k">this</span>(<span class="pl-smi">startCadence</span>, <span class="pl-smi">startSpeed</span>, <span class="pl-c1">0</span>, <span class="pl-s"><span class="pl-pds">"</span>big wheels<span class="pl-pds">"</span></span>, <span class="pl-c1">true</span>, <span class="pl-smi">brand</span>)
+        {
+        }
+
+        <span class="pl-c"><span class="pl-c">//</span> Function Syntax:</span>
+        <span class="pl-c"><span class="pl-c">//</span> &lt;public/private/protected&gt; &lt;return type&gt; &lt;function name&gt;(&lt;args&gt;)</span>
+
+        <span class="pl-c"><span class="pl-c">//</span> classes can implement getters and setters for their fields</span>
+        <span class="pl-c"><span class="pl-c">//</span> or they can implement properties (this is the preferred way in C#)</span>
+
+        <span class="pl-c"><span class="pl-c">//</span> Method parameters can have default values.</span>
+        <span class="pl-c"><span class="pl-c">//</span> In this case, methods can be called with these parameters omitted</span>
+        <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">SpeedUp</span>(<span class="pl-k">int</span> <span class="pl-en">increment</span> <span class="pl-k">=</span> <span class="pl-c1">1</span>)
+        {
+            <span class="pl-smi">_speed</span> <span class="pl-k">+=</span> <span class="pl-smi">increment</span>;
+        }
+
+        <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">SlowDown</span>(<span class="pl-k">int</span> <span class="pl-en">decrement</span> <span class="pl-k">=</span> <span class="pl-c1">1</span>)
+        {
+            <span class="pl-smi">_speed</span> <span class="pl-k">-=</span> <span class="pl-smi">decrement</span>;
+        }
+
+        <span class="pl-c"><span class="pl-c">//</span> properties get/set values</span>
+        <span class="pl-c"><span class="pl-c">//</span> when only data needs to be accessed, consider using properties.</span>
+        <span class="pl-c"><span class="pl-c">//</span> properties may have either get or set, or both</span>
+        <span class="pl-k">private</span> <span class="pl-k">bool</span> <span class="pl-en">_hasTassles</span>; <span class="pl-c"><span class="pl-c">//</span> private variable</span>
+        <span class="pl-k">public</span> <span class="pl-smi">bool</span> <span class="pl-smi">HasTassles</span> <span class="pl-c"><span class="pl-c">//</span> public accessor</span>
+        {
+            <span class="pl-smi">get</span> { <span class="pl-k">return</span> <span class="pl-smi">_hasTassles</span>; }
+            <span class="pl-smi">set</span> { <span class="pl-smi">_hasTassles</span> <span class="pl-k">=</span> <span class="pl-smi">value</span>; }
+        }
+
+        <span class="pl-c"><span class="pl-c">//</span> You can also define an automatic property in one line</span>
+        <span class="pl-c"><span class="pl-c">//</span> this syntax will create a backing field automatically.</span>
+        <span class="pl-c"><span class="pl-c">//</span> You can set an access modifier on either the getter or the setter (or both)</span>
+        <span class="pl-c"><span class="pl-c">//</span> to restrict its access:</span>
+        <span class="pl-k">public</span> <span class="pl-smi">bool</span> <span class="pl-smi">IsBroken</span> { <span class="pl-smi">get</span>; <span class="pl-en">private</span> <span class="pl-en">set</span>; }
+
+        <span class="pl-c"><span class="pl-c">//</span> Properties can be auto-implemented</span>
+        <span class="pl-k">public</span> <span class="pl-smi">int</span> <span class="pl-smi">FrameSize</span>
+        {
+            <span class="pl-smi">get</span>;
+            <span class="pl-c"><span class="pl-c">//</span> you are able to specify access modifiers for either get or set</span>
+            <span class="pl-c"><span class="pl-c">//</span> this means only Bicycle class can call set on Framesize</span>
+            <span class="pl-en">private</span> <span class="pl-en">set</span>;
+        }
+
+        <span class="pl-c"><span class="pl-c">//</span> It's also possible to define custom Indexers on objects.</span>
+        <span class="pl-c"><span class="pl-c">//</span> All though this is not entirely useful in this example, you</span>
+        <span class="pl-c"><span class="pl-c">//</span> could do bicycle[0] which returns "chris" to get the first passenger or</span>
+        <span class="pl-c"><span class="pl-c">//</span> bicycle[1] = "lisa" to set the passenger. (of this apparent quattrocycle)</span>
+        <span class="pl-k">private</span> <span class="pl-k">string</span>[] <span class="pl-en">passengers</span> <span class="pl-k">=</span> { <span class="pl-s"><span class="pl-pds">"</span>chris<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>phil<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>darren<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>regina<span class="pl-pds">"</span></span> };
+
+        <span class="pl-k">public</span> <span class="pl-smi">string</span> <span class="pl-k">this</span>[<span class="pl-en">int</span> <span class="pl-en">i</span>]
+        {
+            <span class="pl-smi">get</span> {
+                <span class="pl-k">return</span> <span class="pl-smi">passengers</span>[<span class="pl-smi">i</span>];
+            }
+
+            <span class="pl-smi">set</span> {
+                <span class="pl-smi">passengers</span>[<span class="pl-smi">i</span>] <span class="pl-k">=</span> <span class="pl-smi">value</span>;
+            }
+        }
+
+        <span class="pl-c"><span class="pl-c">//</span> Method to display the attribute values of this Object.</span>
+        <span class="pl-k">public</span> <span class="pl-k">virtual</span> <span class="pl-k">string</span> <span class="pl-en">Info</span>()
+        {
+            <span class="pl-k">return</span> <span class="pl-s"><span class="pl-pds">"</span>Gear: <span class="pl-pds">"</span></span> <span class="pl-k">+</span> <span class="pl-smi">Gear</span> <span class="pl-k">+</span>
+                    <span class="pl-s"><span class="pl-pds">"</span> Cadence: <span class="pl-pds">"</span></span> <span class="pl-k">+</span> <span class="pl-smi">Cadence</span> <span class="pl-k">+</span>
+                    <span class="pl-s"><span class="pl-pds">"</span> Speed: <span class="pl-pds">"</span></span> <span class="pl-k">+</span> <span class="pl-smi">_speed</span> <span class="pl-k">+</span>
+                    <span class="pl-s"><span class="pl-pds">"</span> Name: <span class="pl-pds">"</span></span> <span class="pl-k">+</span> <span class="pl-smi">Name</span> <span class="pl-k">+</span>
+                    <span class="pl-s"><span class="pl-pds">"</span> Cards in Spokes: <span class="pl-pds">"</span></span> <span class="pl-k">+</span> (<span class="pl-smi">_hasCardsInSpokes</span> <span class="pl-k">?</span> <span class="pl-s"><span class="pl-pds">"</span>yes<span class="pl-pds">"</span></span> <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>no<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
+                    <span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">\n</span>------------------------------<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>
+                    ;
+        }
+
+        <span class="pl-c"><span class="pl-c">//</span> Methods can also be static. It can be useful for helper methods</span>
+        <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">bool</span> <span class="pl-en">DidWeCreateEnoughBicycles</span>()
+        {
+            <span class="pl-c"><span class="pl-c">//</span> Within a static method, we only can reference static class members</span>
+            <span class="pl-k">return</span> <span class="pl-smi">BicyclesCreated</span> <span class="pl-k">&gt;</span> <span class="pl-c1">9000</span>;
+        } <span class="pl-c"><span class="pl-c">//</span> If your class only needs static members, consider marking the class itself as static.</span>
+
+
+    } <span class="pl-c"><span class="pl-c">//</span> end class Bicycle</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> PennyFarthing is a subclass of Bicycle</span>
+    <span class="pl-k">class</span> <span class="pl-en">PennyFarthing</span> : <span class="pl-en">Bicycle</span>
+    {
+        <span class="pl-c"><span class="pl-c">//</span> (Penny Farthings are those bicycles with the big front wheel.</span>
+        <span class="pl-c"><span class="pl-c">//</span> They have no gears.)</span>
+
+        <span class="pl-c"><span class="pl-c">//</span> calling parent constructor</span>
+        <span class="pl-k">public</span> <span class="pl-en">PennyFarthing</span>(<span class="pl-k">int</span> <span class="pl-en">startCadence</span>, <span class="pl-k">int</span> <span class="pl-en">startSpeed</span>) :
+            <span class="pl-k">base</span>(<span class="pl-smi">startCadence</span>, <span class="pl-smi">startSpeed</span>, <span class="pl-c1">0</span>, <span class="pl-s"><span class="pl-pds">"</span>PennyFarthing<span class="pl-pds">"</span></span>, <span class="pl-c1">true</span>, <span class="pl-smi">BikeBrand</span>.<span class="pl-smi">Electra</span>)
+        {
+        }
+
+        <span class="pl-k">protected</span> <span class="pl-k">override</span> <span class="pl-k">int</span> <span class="pl-en">Gear</span>
+        {
+            <span class="pl-k">get</span>
+            {
+                <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+            }
+            <span class="pl-k">set</span>
+            {
+                <span class="pl-k">throw</span> <span class="pl-k">new</span> <span class="pl-en">InvalidOperationException</span>(<span class="pl-s"><span class="pl-pds">"</span>You can't change gears on a PennyFarthing<span class="pl-pds">"</span></span>);
+            }
+        }
+
+        <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-en">PennyFarthing</span> <span class="pl-en">CreateWithGears</span>(<span class="pl-k">int</span> <span class="pl-en">gears</span>)
+        {
+            <span class="pl-k">var</span> <span class="pl-en">penny</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">PennyFarthing</span>(<span class="pl-c1">1</span>, <span class="pl-c1">1</span>);
+            <span class="pl-smi">penny</span>.<span class="pl-smi">Gear</span> <span class="pl-k">=</span> <span class="pl-smi">gears</span>; <span class="pl-c"><span class="pl-c">//</span> Oops, can't do this!</span>
+            <span class="pl-k">return</span> <span class="pl-smi">penny</span>;
+        }
+
+        <span class="pl-k">public</span> <span class="pl-k">override</span> <span class="pl-k">string</span> <span class="pl-en">Info</span>()
+        {
+            <span class="pl-k">string</span> <span class="pl-en">result</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>PennyFarthing bicycle <span class="pl-pds">"</span></span>;
+            <span class="pl-smi">result</span> <span class="pl-k">+=</span> <span class="pl-k">base</span>.<span class="pl-en">ToString</span>(); <span class="pl-c"><span class="pl-c">//</span> Calling the base version of the method</span>
+            <span class="pl-k">return</span> <span class="pl-smi">result</span>;
+        }
+    }
+
+    <span class="pl-c"><span class="pl-c">//</span> Interfaces only contain signatures of the members, without the implementation.</span>
+    <span class="pl-k">interface</span> <span class="pl-en">IJumpable</span>
+    {
+        <span class="pl-k">void</span> <span class="pl-en">Jump</span>(<span class="pl-k">int</span> <span class="pl-en">meters</span>); <span class="pl-c"><span class="pl-c">//</span> all interface members are implicitly public</span>
+    }
+
+    <span class="pl-k">interface</span> <span class="pl-en">IBreakable</span>
+    {
+        <span class="pl-k">bool</span> <span class="pl-en">Broken</span> { <span class="pl-k">get</span>; } <span class="pl-c"><span class="pl-c">//</span> interfaces can contain properties as well as methods &amp; events</span>
+    }
+
+    <span class="pl-c"><span class="pl-c">//</span> Classes can inherit only one other class, but can implement any amount of interfaces,</span>
+    <span class="pl-c"><span class="pl-c">//</span> however the base class name must be the first in the list and all interfaces follow</span>
+    <span class="pl-k">class</span> <span class="pl-en">MountainBike</span> : <span class="pl-en">Bicycle</span>, <span class="pl-en">IJumpable</span>, <span class="pl-en">IBreakable</span>
+    {
+        <span class="pl-k">int</span> <span class="pl-en">damage</span> <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+
+        <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">Jump</span>(<span class="pl-k">int</span> <span class="pl-en">meters</span>)
+        {
+            <span class="pl-smi">damage</span> <span class="pl-k">+=</span> <span class="pl-smi">meters</span>;
+        }
+
+        <span class="pl-k">public</span> <span class="pl-k">bool</span> <span class="pl-en">Broken</span>
+        {
+            <span class="pl-k">get</span>
+            {
+                <span class="pl-k">return</span> <span class="pl-smi">damage</span> <span class="pl-k">&gt;</span> <span class="pl-c1">100</span>;
+            }
+        }
+    }
+
+    <span class="pl-c"><span class="pl-c">///</span> &lt;<span class="pl-ent"><span class="pl-ent">summary</span></span>&gt;</span>
+    <span class="pl-c"><span class="pl-c">///</span> Used to connect to DB for LinqToSql example.</span>
+    <span class="pl-c"><span class="pl-c">///</span> EntityFramework Code First is awesome (similar to Ruby's ActiveRecord, but bidirectional)</span>
+    <span class="pl-c"><span class="pl-c">///</span> https://docs.microsoft.com/ef/ef6/modeling/code-first/workflows/new-database</span>
+    <span class="pl-c"><span class="pl-c">///</span> &lt;/<span class="pl-ent"><span class="pl-ent">summary</span></span>&gt;</span>
+    <span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">BikeRepository</span> : <span class="pl-en">DbContext</span>
+    {
+        <span class="pl-k">public</span> <span class="pl-en">BikeRepository</span>()
+            : <span class="pl-k">base</span>()
+        {
+        }
+
+        <span class="pl-k">public</span> <span class="pl-en">DbSet</span>&lt;<span class="pl-en">Bicycle</span>&gt; <span class="pl-en">Bikes</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+    }
+
+    <span class="pl-c"><span class="pl-c">//</span> Classes can be split across multiple .cs files</span>
+    <span class="pl-c"><span class="pl-c">//</span> A1.cs</span>
+    <span class="pl-k">public</span> <span class="pl-k">partial</span> <span class="pl-k">class</span> <span class="pl-en">A</span>
+    {
+        <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">A1</span>()
+        {
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-s"><span class="pl-pds">"</span>Method A1 in class A<span class="pl-pds">"</span></span>);
+        }
+    }
+
+    <span class="pl-c"><span class="pl-c">//</span> A2.cs</span>
+    <span class="pl-k">public</span> <span class="pl-k">partial</span> <span class="pl-k">class</span> <span class="pl-en">A</span>
+    {
+        <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">A2</span>()
+        {
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-s"><span class="pl-pds">"</span>Method A2 in class A<span class="pl-pds">"</span></span>);
+        }
+    }
+
+    <span class="pl-c"><span class="pl-c">//</span> Program using the partial class "A"</span>
+    <span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">Program</span>
+    {
+        <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">Main</span>()
+        {
+            <span class="pl-smi">A</span>.<span class="pl-en">A1</span>();
+            <span class="pl-smi">A</span>.<span class="pl-en">A2</span>();
+        }
+    }
+
+    <span class="pl-c"><span class="pl-c">//</span> String interpolation by prefixing the string with $</span>
+    <span class="pl-c"><span class="pl-c">//</span> and wrapping the expression you want to interpolate with { braces }</span>
+    <span class="pl-c"><span class="pl-c">//</span> You can also combine both interpolated and verbatim strings with $@</span>
+    <span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">Rectangle</span>
+    {
+        <span class="pl-k">public</span> <span class="pl-k">int</span> <span class="pl-en">Length</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+        <span class="pl-k">public</span> <span class="pl-k">int</span> <span class="pl-en">Width</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+    }
+
+    <span class="pl-k">class</span> <span class="pl-en">Program</span>
+    {
+        <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">Main</span>(<span class="pl-k">string</span>[] <span class="pl-en">args</span>)
+        {
+            <span class="pl-en">Rectangle</span> <span class="pl-en">rect</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Rectangle</span> { <span class="pl-smi">Length</span> <span class="pl-k">=</span> <span class="pl-c1">5</span>, <span class="pl-smi">Width</span> <span class="pl-k">=</span> <span class="pl-c1">3</span> };
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-s"><span class="pl-pds">$"</span>The length is {<span class="pl-smi">rect</span>.<span class="pl-smi">Length</span>} and the width is {<span class="pl-smi">rect</span>.<span class="pl-smi">Width</span>}<span class="pl-pds">"</span></span>);
+
+            <span class="pl-k">string</span> <span class="pl-en">username</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>User<span class="pl-pds">"</span></span>;
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-s"><span class="pl-pds">$@"</span>C:\Users\{<span class="pl-smi">username</span>}\Desktop<span class="pl-pds">"</span></span>);
+        }
+    }
+
+    <span class="pl-c"><span class="pl-c">//</span> New C# 6 features</span>
+    <span class="pl-k">class</span> <span class="pl-en">GlassBall</span> : <span class="pl-en">IJumpable</span>, <span class="pl-en">IBreakable</span>
+    {
+        <span class="pl-c"><span class="pl-c">//</span> Autoproperty initializers</span>
+        <span class="pl-k">public</span> <span class="pl-k">int</span> <span class="pl-en">Damage</span> { <span class="pl-k">get</span>; <span class="pl-k">private</span> <span class="pl-k">set</span>; } <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+
+        <span class="pl-c"><span class="pl-c">//</span> Autoproperty initializers on getter-only properties</span>
+        <span class="pl-k">public</span> <span class="pl-k">string</span> <span class="pl-en">Name</span> { <span class="pl-k">get</span>; } <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Glass ball<span class="pl-pds">"</span></span>;
+
+        <span class="pl-c"><span class="pl-c">//</span> Getter-only autoproperty that is initialized in constructor</span>
+        <span class="pl-k">public</span> <span class="pl-k">string</span> <span class="pl-en">GenieName</span> { <span class="pl-k">get</span>; }
+
+        <span class="pl-k">public</span> <span class="pl-en">GlassBall</span>(<span class="pl-k">string</span> <span class="pl-en">genieName</span> <span class="pl-k">=</span> <span class="pl-c1">null</span>)
+        {
+            <span class="pl-smi">GenieName</span> <span class="pl-k">=</span> <span class="pl-smi">genieName</span>;
+        }
+
+        <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">Jump</span>(<span class="pl-k">int</span> <span class="pl-en">meters</span>)
+        {
+            <span class="pl-k">if</span> (<span class="pl-smi">meters</span> <span class="pl-k">&lt;</span> <span class="pl-c1">0</span>)
+                <span class="pl-c"><span class="pl-c">//</span> New nameof() expression; compiler will check that the identifier exists</span>
+                <span class="pl-c"><span class="pl-c">//</span> nameof(x) == "x"</span>
+                <span class="pl-c"><span class="pl-c">//</span> Prevents e.g. parameter names changing but not updated in error messages</span>
+                <span class="pl-k">throw</span> <span class="pl-k">new</span> <span class="pl-en">ArgumentException</span>(<span class="pl-s"><span class="pl-pds">"</span>Cannot jump negative amount!<span class="pl-pds">"</span></span>, <span class="pl-k">nameof</span>(<span class="pl-smi">meters</span>));
+
+            <span class="pl-smi">Damage</span> <span class="pl-k">+=</span> <span class="pl-smi">meters</span>;
+        }
+
+        <span class="pl-c"><span class="pl-c">//</span> Expression-bodied properties ...</span>
+        <span class="pl-k">public</span> <span class="pl-k">bool</span> <span class="pl-en">Broken</span>
+            <span class="pl-k">=&gt;</span> <span class="pl-smi">Damage</span> <span class="pl-k">&gt;</span> <span class="pl-c1">100</span>;
+
+        <span class="pl-c"><span class="pl-c">//</span> ... and methods</span>
+        <span class="pl-k">public</span> <span class="pl-k">override</span> <span class="pl-k">string</span> <span class="pl-en">ToString</span>()
+            <span class="pl-c"><span class="pl-c">//</span> Interpolated string</span>
+            <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">$"</span>{<span class="pl-smi">Name</span>}. Damage taken: {<span class="pl-smi">Damage</span>}<span class="pl-pds">"</span></span>;
+
+        <span class="pl-k">public</span> <span class="pl-k">string</span> <span class="pl-en">SummonGenie</span>()
+            <span class="pl-c"><span class="pl-c">//</span> Null-conditional operators</span>
+            <span class="pl-c"><span class="pl-c">//</span> x?.y will return null immediately if x is null; y is not evaluated</span>
+            <span class="pl-k">=&gt;</span> <span class="pl-smi">GenieName</span><span class="pl-k">?</span>.<span class="pl-en">ToUpper</span>();
+    }
+
+    <span class="pl-k">static</span> <span class="pl-k">class</span> <span class="pl-en">MagicService</span>
+    {
+        <span class="pl-k">private</span> <span class="pl-k">static</span> <span class="pl-k">bool</span> <span class="pl-en">LogException</span>(<span class="pl-en">Exception</span> <span class="pl-en">ex</span>)
+        {
+            <span class="pl-c"><span class="pl-c">//</span> log exception somewhere</span>
+            <span class="pl-k">return</span> <span class="pl-c1">false</span>;
+        }
+
+        <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">bool</span> <span class="pl-en">CastSpell</span>(<span class="pl-k">string</span> <span class="pl-en">spell</span>)
+        {
+            <span class="pl-k">try</span>
+            {
+                <span class="pl-c"><span class="pl-c">//</span> Pretend we call API here</span>
+                <span class="pl-k">throw</span> <span class="pl-k">new</span> <span class="pl-en">MagicServiceException</span>(<span class="pl-s"><span class="pl-pds">"</span>Spell failed<span class="pl-pds">"</span></span>, <span class="pl-c1">42</span>);
+
+                <span class="pl-c"><span class="pl-c">//</span> Spell succeeded</span>
+                <span class="pl-k">return</span> <span class="pl-c1">true</span>;
+            }
+            <span class="pl-c"><span class="pl-c">//</span> Only catch if Code is 42 i.e. spell failed</span>
+            <span class="pl-k">catch</span>(<span class="pl-en">MagicServiceException</span> <span class="pl-en">ex</span>) <span class="pl-k">when</span> (<span class="pl-smi">ex</span>.<span class="pl-smi">Code</span> <span class="pl-k">==</span> <span class="pl-c1">42</span>)
+            {
+                <span class="pl-c"><span class="pl-c">//</span> Spell failed</span>
+                <span class="pl-k">return</span> <span class="pl-c1">false</span>;
+            }
+            <span class="pl-c"><span class="pl-c">//</span> Other exceptions, or MagicServiceException where Code is not 42</span>
+            <span class="pl-k">catch</span>(<span class="pl-en">Exception</span> <span class="pl-en">ex</span>) <span class="pl-k">when</span> (<span class="pl-en">LogException</span>(<span class="pl-smi">ex</span>))
+            {
+                <span class="pl-c"><span class="pl-c">//</span> Execution never reaches this block</span>
+                <span class="pl-c"><span class="pl-c">//</span> The stack is not unwound</span>
+            }
+            <span class="pl-k">return</span> <span class="pl-c1">false</span>;
+            <span class="pl-c"><span class="pl-c">//</span> Note that catching a MagicServiceException and rethrowing if Code</span>
+            <span class="pl-c"><span class="pl-c">//</span> is not 42 or 117 is different, as then the final catch-all block</span>
+            <span class="pl-c"><span class="pl-c">//</span> will not catch the rethrown exception</span>
+        }
+    }
+
+    <span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">MagicServiceException</span> : <span class="pl-en">Exception</span>
+    {
+        <span class="pl-k">public</span> <span class="pl-k">int</span> <span class="pl-en">Code</span> { <span class="pl-k">get</span>; }
+
+        <span class="pl-k">public</span> <span class="pl-en">MagicServiceException</span>(<span class="pl-k">string</span> <span class="pl-en">message</span>, <span class="pl-k">int</span> <span class="pl-en">code</span>) : <span class="pl-k">base</span>(<span class="pl-smi">message</span>)
+        {
+            <span class="pl-smi">Code</span> <span class="pl-k">=</span> <span class="pl-smi">code</span>;
+        }
+    }
+
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">class</span> <span class="pl-en">PragmaWarning</span> {
+        <span class="pl-c"><span class="pl-c">//</span> Obsolete attribute</span>
+        [<span class="pl-en">Obsolete</span>(<span class="pl-s"><span class="pl-pds">"</span>Use NewMethod instead<span class="pl-pds">"</span></span>, <span class="pl-c1">false</span>)]
+        <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">ObsoleteMethod</span>()
+        {
+            <span class="pl-c"><span class="pl-c">//</span> obsolete code</span>
+        }
+
+        <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">NewMethod</span>()
+        {
+            <span class="pl-c"><span class="pl-c">//</span> new code</span>
+        }
+
+        <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">Main</span>()
+        {
+            <span class="pl-en">ObsoleteMethod</span>(); <span class="pl-c"><span class="pl-c">//</span> CS0618: 'ObsoleteMethod is obsolete: Use NewMethod instead'</span>
+#<span class="pl-k">pragma</span> <span class="pl-k">warning</span> <span class="pl-k">disable</span> CS0618
+            <span class="pl-en">ObsoleteMethod</span>(); <span class="pl-c"><span class="pl-c">//</span> no warning</span>
+#<span class="pl-k">pragma</span> <span class="pl-k">warning</span> <span class="pl-k">restore</span> CS0618
+            <span class="pl-en">ObsoleteMethod</span>(); <span class="pl-c"><span class="pl-c">//</span> CS0618: 'ObsoleteMethod is obsolete: Use NewMethod instead'</span>
+        }
+    }
+} <span class="pl-c"><span class="pl-c">//</span> End Namespace</span>
+
+<span class="pl-k">using</span> <span class="pl-en">System</span>;
+<span class="pl-c"><span class="pl-c">//</span> C# 6, static using</span>
+<span class="pl-k">using</span> <span class="pl-k">static</span> <span class="pl-en">System</span>.<span class="pl-en">Math</span>;
+
+<span class="pl-k">namespace</span> <span class="pl-en">Learning</span>.<span class="pl-en">More</span>.<span class="pl-en">CSharp</span>
+{
+    <span class="pl-k">class</span> <span class="pl-en">StaticUsing</span>
+    {
+        <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">Main</span>()
+        {
+            <span class="pl-c"><span class="pl-c">//</span> Without a static using statement..</span>
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-s"><span class="pl-pds">"</span>The square root of 4 is {}.<span class="pl-pds">"</span></span>, <span class="pl-smi">Math</span>.<span class="pl-en">Sqrt</span>(<span class="pl-c1">4</span>));
+            <span class="pl-c"><span class="pl-c">//</span> With one</span>
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-s"><span class="pl-pds">"</span>The square root of 4 is {}.<span class="pl-pds">"</span></span>, <span class="pl-en">Sqrt</span>(<span class="pl-c1">4</span>));
+        }
+    }
+}
+
+<span class="pl-c"><span class="pl-c">//</span> New C# 7 Feature</span>
+<span class="pl-c"><span class="pl-c">//</span> Install Microsoft.Net.Compilers Latest from Nuget</span>
+<span class="pl-c"><span class="pl-c">//</span> Install System.ValueTuple Latest from Nuget</span>
+<span class="pl-k">using</span> <span class="pl-en">System</span>;
+<span class="pl-k">namespace</span> <span class="pl-en">Csharp7</span>
+{
+    <span class="pl-c"><span class="pl-c">//</span> TUPLES, DECONSTRUCTION AND DISCARDS</span>
+    <span class="pl-k">class</span> <span class="pl-en">TuplesTest</span>
+    {
+        <span class="pl-k">public</span> (<span class="pl-k">string</span>, <span class="pl-k">string</span>) <span class="pl-en">GetName</span>()
+        {
+            <span class="pl-c"><span class="pl-c">//</span> Fields in tuples are by default named Item1, Item2...</span>
+            <span class="pl-k">var</span> <span class="pl-en">names1</span> <span class="pl-k">=</span> (<span class="pl-s"><span class="pl-pds">"</span>Peter<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Parker<span class="pl-pds">"</span></span>);
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-smi">names1</span>.<span class="pl-smi">Item2</span>);  <span class="pl-c"><span class="pl-c">//</span> =&gt; Parker</span>
+
+            <span class="pl-c"><span class="pl-c">//</span> Fields can instead be explicitly named</span>
+            <span class="pl-c"><span class="pl-c">//</span> Type 1 Declaration</span>
+            (<span class="pl-k">string</span> <span class="pl-en">FirstName</span>, <span class="pl-k">string</span> <span class="pl-en">LastName</span>) <span class="pl-en">names2</span> <span class="pl-k">=</span> (<span class="pl-s"><span class="pl-pds">"</span>Peter<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Parker<span class="pl-pds">"</span></span>);
+
+            <span class="pl-c"><span class="pl-c">//</span> Type 2 Declaration</span>
+            <span class="pl-k">var</span> <span class="pl-en">names3</span> <span class="pl-k">=</span> (<span class="pl-en">First</span>:<span class="pl-s"><span class="pl-pds">"</span>Peter<span class="pl-pds">"</span></span>, <span class="pl-en">Last</span>:<span class="pl-s"><span class="pl-pds">"</span>Parker<span class="pl-pds">"</span></span>);
+
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-smi">names2</span>.<span class="pl-smi">FirstName</span>);  <span class="pl-c"><span class="pl-c">//</span> =&gt; Peter</span>
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-smi">names3</span>.<span class="pl-smi">Last</span>);  <span class="pl-c"><span class="pl-c">//</span> =&gt; Parker</span>
+
+            <span class="pl-k">return</span> <span class="pl-smi">names3</span>;
+        }
+
+        <span class="pl-k">public</span> <span class="pl-k">string</span> <span class="pl-en">GetLastName</span>() {
+            <span class="pl-k">var</span> <span class="pl-en">fullName</span> <span class="pl-k">=</span> <span class="pl-en">GetName</span>();
+
+            <span class="pl-c"><span class="pl-c">//</span> Tuples can be deconstructed</span>
+            (<span class="pl-k">string</span> <span class="pl-en">firstName</span>, <span class="pl-k">string</span> <span class="pl-en">lastName</span>) <span class="pl-k">=</span> <span class="pl-smi">fullName</span>;
+
+            <span class="pl-c"><span class="pl-c">//</span> Fields in a deconstructed tuple can be discarded by using _</span>
+            <span class="pl-k">var</span> (<span class="pl-en">_</span>, <span class="pl-en">last</span>) <span class="pl-k">=</span> <span class="pl-smi">fullName</span>;
+            <span class="pl-k">return</span> <span class="pl-smi">last</span>;
+        }
+
+        <span class="pl-c"><span class="pl-c">//</span> Any type can be deconstructed in the same way by</span>
+        <span class="pl-c"><span class="pl-c">//</span> specifying a Deconstruct method</span>
+        <span class="pl-k">public</span> <span class="pl-k">int</span> <span class="pl-en">randomNumber</span> <span class="pl-k">=</span> <span class="pl-c1">4</span>;
+        <span class="pl-k">public</span> <span class="pl-k">int</span> <span class="pl-en">anotherRandomNumber</span> <span class="pl-k">=</span> <span class="pl-c1">10</span>;
+
+        <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">Deconstruct</span>(<span class="pl-k">out</span> <span class="pl-k">int</span> <span class="pl-en">randomNumber</span>, <span class="pl-k">out</span> <span class="pl-k">int</span> <span class="pl-en">anotherRandomNumber</span>)
+        {
+            <span class="pl-smi">randomNumber</span> <span class="pl-k">=</span> <span class="pl-k">this</span>.<span class="pl-smi">randomNumber</span>;
+            <span class="pl-smi">anotherRandomNumber</span> <span class="pl-k">=</span> <span class="pl-k">this</span>.<span class="pl-smi">anotherRandomNumber</span>;
+        }
+
+        <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">Main</span>(<span class="pl-k">string</span>[] <span class="pl-en">args</span>)
+        {
+            <span class="pl-k">var</span> <span class="pl-en">tt</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">TuplesTest</span>();
+            (<span class="pl-k">int</span> <span class="pl-en">num1</span>, <span class="pl-k">int</span> <span class="pl-en">num2</span>) <span class="pl-k">=</span> <span class="pl-smi">tt</span>;
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-s"><span class="pl-pds">$"</span>num1: {<span class="pl-smi">num1</span>}, num2: {<span class="pl-smi">num2</span>}<span class="pl-pds">"</span></span>);  <span class="pl-c"><span class="pl-c">//</span> =&gt; num1: 4, num2: 10</span>
+
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-smi">tt</span>.<span class="pl-en">GetLastName</span>());
+        }
+    }
+
+    <span class="pl-c"><span class="pl-c">//</span> PATTERN MATCHING</span>
+    <span class="pl-k">class</span> <span class="pl-en">PatternMatchingTest</span>
+    {
+        <span class="pl-k">public</span> <span class="pl-k">static</span> (<span class="pl-k">string</span>, <span class="pl-k">int</span>)? <span class="pl-en">CreateLogMessage</span>(<span class="pl-k">object</span> <span class="pl-en">data</span>)
+        {
+            <span class="pl-k">switch</span>(<span class="pl-smi">data</span>)
+            {
+                <span class="pl-c"><span class="pl-c">//</span> Additional filtering using when</span>
+                <span class="pl-k">case</span> <span class="pl-smi">System</span>.<span class="pl-smi">Net</span>.<span class="pl-smi">Http</span>.<span class="pl-smi">HttpRequestException</span> <span class="pl-smi">h</span> <span class="pl-smi">when</span> <span class="pl-smi">h</span>.<span class="pl-smi">Message</span>.<span class="pl-en">Contains</span>(<span class="pl-s"><span class="pl-pds">"</span>404<span class="pl-pds">"</span></span>):
+                    <span class="pl-k">return</span> (<span class="pl-smi">h</span>.<span class="pl-smi">Message</span>, <span class="pl-c1">404</span>);
+                <span class="pl-k">case</span> <span class="pl-smi">System</span>.<span class="pl-smi">Net</span>.<span class="pl-smi">Http</span>.<span class="pl-smi">HttpRequestException</span> <span class="pl-smi">h</span> <span class="pl-smi">when</span> <span class="pl-smi">h</span>.<span class="pl-smi">Message</span>.<span class="pl-en">Contains</span>(<span class="pl-s"><span class="pl-pds">"</span>400<span class="pl-pds">"</span></span>):
+                    <span class="pl-k">return</span> (<span class="pl-smi">h</span>.<span class="pl-smi">Message</span>, <span class="pl-c1">400</span>);
+                <span class="pl-k">case</span> <span class="pl-smi">Exception</span> <span class="pl-smi">e</span>:
+                    <span class="pl-k">return</span> (<span class="pl-smi">e</span>.<span class="pl-smi">Message</span>, <span class="pl-c1">500</span>);
+                <span class="pl-k">case</span> <span class="pl-smi">string</span> <span class="pl-smi">s</span>:
+                    <span class="pl-k">return</span> (<span class="pl-smi">s</span>, <span class="pl-smi">s</span>.<span class="pl-en">Contains</span>(<span class="pl-s"><span class="pl-pds">"</span>Error<span class="pl-pds">"</span></span>) <span class="pl-k">?</span> <span class="pl-c1">500</span> <span class="pl-k">:</span> <span class="pl-c1">200</span>);
+                <span class="pl-k">case</span> <span class="pl-c1">null</span>:
+                    <span class="pl-k">return</span> <span class="pl-c1">null</span>;
+                <span class="pl-k">default</span>:
+                    <span class="pl-k">return</span> (<span class="pl-smi">data</span>.<span class="pl-en">ToString</span>(), <span class="pl-c1">500</span>);
+            }
+        }
+    }
+
+    <span class="pl-c"><span class="pl-c">//</span> REFERENCE LOCALS</span>
+    <span class="pl-c"><span class="pl-c">//</span> Allow you to return a reference to an object instead of just its value</span>
+    <span class="pl-k">class</span> <span class="pl-en">RefLocalsTest</span>
+    {
+        <span class="pl-c"><span class="pl-c">//</span> note ref in return</span>
+        <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">ref</span> <span class="pl-k">string</span> <span class="pl-en">FindItem</span>(<span class="pl-k">string</span>[] <span class="pl-en">arr</span>, <span class="pl-k">string</span> <span class="pl-en">el</span>)
+        {
+            <span class="pl-k">for</span>(<span class="pl-k">int</span> <span class="pl-en">i</span><span class="pl-k">=</span><span class="pl-c1">0</span>; <span class="pl-smi">i</span><span class="pl-k">&lt;</span><span class="pl-smi">arr</span>.<span class="pl-smi">Length</span>; <span class="pl-smi">i</span><span class="pl-k">++</span>)
+            {
+                <span class="pl-k">if</span>(<span class="pl-smi">arr</span>[<span class="pl-smi">i</span>] <span class="pl-k">==</span> <span class="pl-smi">el</span>) {
+                    <span class="pl-c"><span class="pl-c">//</span> return the reference</span>
+                    <span class="pl-k">return</span> <span class="pl-k">ref</span> <span class="pl-smi">arr</span>[<span class="pl-smi">i</span>];
+                }
+            }
+            <span class="pl-k">throw</span> <span class="pl-k">new</span> <span class="pl-en">Exception</span>(<span class="pl-s"><span class="pl-pds">"</span>Item not found<span class="pl-pds">"</span></span>);
+        }
+
+        <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">SomeMethod</span>()
+        {
+            <span class="pl-k">string</span>[] <span class="pl-en">arr</span> <span class="pl-k">=</span> {<span class="pl-s"><span class="pl-pds">"</span>this<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>is<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>an<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>array<span class="pl-pds">"</span></span>};
+
+            <span class="pl-c"><span class="pl-c">//</span> note refs everywhere</span>
+            <span class="pl-k">ref</span> <span class="pl-k">string</span> <span class="pl-en">item</span> <span class="pl-k">=</span> <span class="pl-k">ref</span> <span class="pl-en">FindItem</span>(<span class="pl-smi">arr</span>, <span class="pl-s"><span class="pl-pds">"</span>array<span class="pl-pds">"</span></span>);
+            <span class="pl-smi">item</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>apple<span class="pl-pds">"</span></span>;
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-smi">arr</span>[<span class="pl-c1">3</span>]);  <span class="pl-c"><span class="pl-c">//</span> =&gt; apple</span>
+        }
+    }
+
+    <span class="pl-c"><span class="pl-c">//</span> LOCAL FUNCTIONS</span>
+    <span class="pl-k">class</span> <span class="pl-en">LocalFunctionTest</span>
+    {
+        <span class="pl-k">private</span> <span class="pl-k">static</span> <span class="pl-k">int</span> <span class="pl-en">_id</span> <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+        <span class="pl-k">public</span> <span class="pl-k">int</span> <span class="pl-en">id</span>;
+        <span class="pl-k">public</span> <span class="pl-en">LocalFunctionTest</span>()
+        {
+            <span class="pl-smi">id</span> <span class="pl-k">=</span> <span class="pl-en">generateId</span>();
+
+            <span class="pl-c"><span class="pl-c">//</span> This local function can only be accessed in this scope</span>
+            <span class="pl-k">int</span> <span class="pl-en">generateId</span>()
+            {
+                <span class="pl-k">return</span> <span class="pl-smi">_id</span><span class="pl-k">++</span>;
+            }
+        }
+
+        <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">AnotherMethod</span>()
+        {
+            <span class="pl-k">var</span> <span class="pl-en">lf1</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">LocalFunctionTest</span>();
+            <span class="pl-k">var</span> <span class="pl-en">lf2</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">LocalFunctionTest</span>();
+            <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-s"><span class="pl-pds">$"</span>{<span class="pl-smi">lf1</span>.<span class="pl-smi">id</span>}, {<span class="pl-smi">lf2</span>.<span class="pl-smi">id</span>}<span class="pl-pds">"</span></span>);  <span class="pl-c"><span class="pl-c">//</span> =&gt; 0, 1</span>
+
+            <span class="pl-k">int</span> <span class="pl-en">id</span> <span class="pl-k">=</span> <span class="pl-en">generateId</span>();
+            <span class="pl-c"><span class="pl-c">//</span> error CS0103: The name 'generateId' does not exist in the current context</span>
+        }
+    }
+}
+</pre></div>
+<h2>Topics Not Covered</h2>
+<p><g-emoji class="g-emoji" alias="sparkles" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/2728.png">✨</g-emoji> New, <g-emoji class="g-emoji" alias="+1" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f44d.png">👍</g-emoji> Old, <g-emoji class="g-emoji" alias="balloon" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f388.png">🎈</g-emoji> LTS, <g-emoji class="g-emoji" alias="fire" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f525.png">🔥</g-emoji> Cross-platform, <g-emoji class="g-emoji" alias="gift" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f381.png">🎁</g-emoji> Windows-only</p>
+<ul>
+<li>
+<p>Attributes</p>
+</li>
+<li>
+<p>Asynchronous Programming</p>
+</li>
+<li>
+<p>Web Development</p>
+<ul>
+<li>ASP.NET Core <g-emoji class="g-emoji" alias="sparkles" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/2728.png">✨</g-emoji></li>
+</ul>
+</li>
+<li>
+<p>Desktop Development</p>
+<ul>
+<li>Windows Presentation Foundation <g-emoji class="g-emoji" alias="+1" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f44d.png">👍</g-emoji> <g-emoji class="g-emoji" alias="balloon" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f388.png">🎈</g-emoji> <g-emoji class="g-emoji" alias="gift" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f381.png">🎁</g-emoji></li>
+<li>Universal Windows Platform <g-emoji class="g-emoji" alias="sparkles" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/2728.png">✨</g-emoji> <g-emoji class="g-emoji" alias="gift" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f381.png">🎁</g-emoji></li>
+<li>Uno Platform <g-emoji class="g-emoji" alias="fire" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f525.png">🔥</g-emoji> <g-emoji class="g-emoji" alias="sparkles" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/2728.png">✨</g-emoji></li>
+<li>WinForms <g-emoji class="g-emoji" alias="+1" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f44d.png">👍</g-emoji> <g-emoji class="g-emoji" alias="balloon" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f388.png">🎈</g-emoji> <g-emoji class="g-emoji" alias="gift" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f381.png">🎁</g-emoji></li>
+<li>Avalonia <g-emoji class="g-emoji" alias="fire" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f525.png">🔥</g-emoji> <g-emoji class="g-emoji" alias="sparkles" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/2728.png">✨</g-emoji></li>
+<li>WinUI <g-emoji class="g-emoji" alias="sparkles" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/2728.png">✨</g-emoji> <g-emoji class="g-emoji" alias="gift" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f381.png">🎁</g-emoji></li>
+</ul>
+</li>
+<li>
+<p>Cross-platform Development</p>
+<ul>
+<li>Xamarin.Forms <g-emoji class="g-emoji" alias="+1" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f44d.png">👍</g-emoji></li>
+<li>MAUI <g-emoji class="g-emoji" alias="sparkles" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/2728.png">✨</g-emoji></li>
+</ul>
+</li>
+</ul>
+<h2>Further Reading</h2>
+<ul>
+<li><a href="https://docs.microsoft.com/dotnet/csharp/language-reference/" rel="nofollow">C# language reference</a></li>
+<li><a href="https://dotnet.microsoft.com/learn" rel="nofollow">Learn .NET</a></li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/inside-a-program/coding-conventions" rel="nofollow">C# Coding Conventions</a></li>
+<li><a href="http://www.dotnetperls.com" rel="nofollow">DotNetPerls</a></li>
+<li><a href="http://manning.com/skeet2" rel="nofollow">C# in Depth</a></li>
+<li><a href="http://shop.oreilly.com/product/0636920024064.do" rel="nofollow">Programming C# 5.0</a></li>
+<li><a href="http://shop.oreilly.com/product/9780596519254.do" rel="nofollow">LINQ Pocket Reference</a></li>
+<li><a href="http://www.amazon.com/Windows-Forms-Programming-Chris-Sells/dp/0321116208" rel="nofollow">Windows Forms Programming in C#</a></li>
+<li><a href="https://www.youtube.com/watch?v=GhQdlIFylQ8" rel="nofollow">freeCodeCamp - C# Tutorial for Beginners</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Irfan Charania", "https://github.com/irfancharania"]
+- ["Max Yankov", "https://github.com/golergka"]
+- ["Melvyn Laïly", "http://x2a.yt"]
+- ["Shaun McCarthy", "http://www.shaunmccarthy.com"]
+- ["Wouter Van Schandevijl", "http://github.com/laoujin"]
+- ["Jo Pearce", "http://github.com/jdpearce"]
+- ["Chris Zimmerman", "https://github.com/chriszimmerman"]
+- ["Shawn McGuire", "https://github.com/bigbash"]
+</code></pre>

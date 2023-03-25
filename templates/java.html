@@ -1,0 +1,1066 @@
+<h1>Java</h1>
+<p>Java is a general-purpose, concurrent, class-based, object-oriented computer<br>
+programming language.<br>
+<a href="https://docs.oracle.com/javase/tutorial/java/" rel="nofollow">Read more here.</a></p>
+<div class="highlight highlight-source-java"><pre class="notranslate"><span class="pl-c">// Single-line comments start with //</span>
+
+<span class="pl-c">/*</span>
+<span class="pl-c">Multi-line comments look like this.</span>
+<span class="pl-c">*/</span>
+
+<span class="pl-c">/**</span>
+<span class="pl-c"> * JavaDoc comments look like this. Used to describe the Class or various</span>
+<span class="pl-c"> * attributes of a Class.</span>
+<span class="pl-c"> * Main attributes:</span>
+<span class="pl-c"> *</span>
+<span class="pl-c"> * @author         Name (and contact information such as email) of author(s).</span>
+<span class="pl-c"> * @version     Current version of the program.</span>
+<span class="pl-c"> * @since        When this part of the program was first added.</span>
+<span class="pl-c"> * @param         For describing the different parameters for a method.</span>
+<span class="pl-c"> * @return        For describing what the method returns.</span>
+<span class="pl-c"> * @deprecated  For showing the code is outdated or shouldn't be used.</span>
+<span class="pl-c"> * @see         Links to another part of documentation.</span>
+<span class="pl-c">*/</span>
+
+<span class="pl-c">// Import ArrayList class inside of the java.util package</span>
+<span class="pl-k">import</span> <span class="pl-s1">java</span>.<span class="pl-s1">util</span>.<span class="pl-s1">ArrayList</span>;
+<span class="pl-c">// Import all classes inside of java.security package</span>
+<span class="pl-k">import</span> <span class="pl-s1">java</span>.<span class="pl-s1">security</span>.*;
+
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-smi">LearnJava</span> {
+
+    <span class="pl-c">// In order to run a java program, it must have a main method as an entry</span>
+    <span class="pl-c">// point.</span>
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-smi">void</span> <span class="pl-en">main</span>(<span class="pl-smi">String</span>[] <span class="pl-s1">args</span>) {
+
+    <span class="pl-c">///////////////////////////////////////</span>
+    <span class="pl-c">// Input/Output</span>
+    <span class="pl-c">///////////////////////////////////////</span>
+
+        <span class="pl-c">/*</span>
+<span class="pl-c">        * Output</span>
+<span class="pl-c">        */</span>
+
+        <span class="pl-c">// Use System.out.println() to print lines.</span>
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"Hello World!"</span>);
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(
+            <span class="pl-s">"Integer: "</span> + <span class="pl-c1">10</span> +
+            <span class="pl-s">" Double: "</span> + <span class="pl-c1">3.14</span> +
+            <span class="pl-s">" Boolean: "</span> + <span class="pl-c1">true</span>);
+
+        <span class="pl-c">// To print without a newline, use System.out.print().</span>
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">print</span>(<span class="pl-s">"Hello "</span>);
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">print</span>(<span class="pl-s">"World"</span>);
+
+        <span class="pl-c">// Use System.out.printf() for easy formatted printing.</span>
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">printf</span>(<span class="pl-s">"pi = %.5f"</span>, <span class="pl-smi">Math</span>.<span class="pl-c1">PI</span>); <span class="pl-c">// =&gt; pi = 3.14159</span>
+
+        <span class="pl-c">/*</span>
+<span class="pl-c">         * Input</span>
+<span class="pl-c">         */</span>
+
+        <span class="pl-c">// use Scanner to read input</span>
+        <span class="pl-c">// must import java.util.Scanner;</span>
+        <span class="pl-smi">Scanner</span> <span class="pl-s1">scanner</span> = <span class="pl-k">new</span> <span class="pl-smi">Scanner</span>(<span class="pl-smi">System</span>.<span class="pl-s1">in</span>);
+
+        <span class="pl-c">// read string input</span>
+        <span class="pl-smi">String</span> <span class="pl-s1">name</span> = <span class="pl-s1">scanner</span>.<span class="pl-en">next</span>();
+
+        <span class="pl-c">// read byte input</span>
+        <span class="pl-smi">byte</span> <span class="pl-s1">numByte</span> = <span class="pl-s1">scanner</span>.<span class="pl-en">nextByte</span>();
+
+        <span class="pl-c">// read int input</span>
+        <span class="pl-smi">int</span> <span class="pl-s1">numInt</span> = <span class="pl-s1">scanner</span>.<span class="pl-en">nextInt</span>();
+
+        <span class="pl-c">// read long input</span>
+        <span class="pl-smi">float</span> <span class="pl-s1">numFloat</span> = <span class="pl-s1">scanner</span>.<span class="pl-en">nextFloat</span>();
+
+        <span class="pl-c">// read double input</span>
+        <span class="pl-smi">double</span> <span class="pl-s1">numDouble</span> = <span class="pl-s1">scanner</span>.<span class="pl-en">nextDouble</span>();
+
+        <span class="pl-c">// read boolean input</span>
+        <span class="pl-smi">boolean</span> <span class="pl-s1">bool</span> = <span class="pl-s1">scanner</span>.<span class="pl-en">nextBoolean</span>();
+
+        <span class="pl-c">///////////////////////////////////////</span>
+        <span class="pl-c">// Variables</span>
+        <span class="pl-c">///////////////////////////////////////</span>
+
+        <span class="pl-c">/*</span>
+<span class="pl-c">        *  Variable Declaration</span>
+<span class="pl-c">        */</span>
+        <span class="pl-c">// Declare a variable using &lt;type&gt; &lt;name&gt;</span>
+        <span class="pl-smi">int</span> <span class="pl-s1">fooInt</span>;
+        <span class="pl-c">// Declare multiple variables of the same</span>
+        <span class="pl-c">// type &lt;type&gt; &lt;name1&gt;, &lt;name2&gt;, &lt;name3&gt;</span>
+        <span class="pl-smi">int</span> <span class="pl-s1">fooInt1</span>, <span class="pl-s1">fooInt2</span>, <span class="pl-s1">fooInt3</span>;
+
+        <span class="pl-c">/*</span>
+<span class="pl-c">        *  Variable Initialization</span>
+<span class="pl-c">        */</span>
+
+        <span class="pl-c">// Initialize a variable using &lt;type&gt; &lt;name&gt; = &lt;val&gt;</span>
+        <span class="pl-smi">int</span> <span class="pl-s1">barInt</span> = <span class="pl-c1">1</span>;
+        <span class="pl-c">// Initialize multiple variables of same type with same</span>
+        <span class="pl-c">// value &lt;type&gt; &lt;name1&gt;, &lt;name2&gt;, &lt;name3&gt;</span>
+        <span class="pl-c">// &lt;name1&gt; = &lt;name2&gt; = &lt;name3&gt; = &lt;val&gt;</span>
+        <span class="pl-smi">int</span> <span class="pl-s1">barInt1</span>, <span class="pl-s1">barInt2</span>, <span class="pl-s1">barInt3</span>;
+        <span class="pl-s1">barInt1</span> = <span class="pl-s1">barInt2</span> = <span class="pl-s1">barInt3</span> = <span class="pl-c1">1</span>;
+
+        <span class="pl-c">/*</span>
+<span class="pl-c">        *  Variable types</span>
+<span class="pl-c">        */</span>
+        <span class="pl-c">// Byte - 8-bit signed two's complement integer</span>
+        <span class="pl-c">// (-128 &lt;= byte &lt;= 127)</span>
+        <span class="pl-smi">byte</span> <span class="pl-s1">fooByte</span> = <span class="pl-c1">100</span>;
+
+        <span class="pl-c">// If you would like to interpret a byte as an unsigned integer</span>
+        <span class="pl-c">// then this simple operation can help</span>
+        <span class="pl-smi">int</span> <span class="pl-s1">unsignedIntLessThan256</span> = <span class="pl-c1">0xff</span> &amp; <span class="pl-s1">fooByte</span>;
+        <span class="pl-c">// this contrasts a cast which can be negative.</span>
+        <span class="pl-smi">int</span> <span class="pl-s1">signedInt</span> = (<span class="pl-smi">int</span>) <span class="pl-s1">fooByte</span>;
+
+        <span class="pl-c">// Short - 16-bit signed two's complement integer</span>
+        <span class="pl-c">// (-32,768 &lt;= short &lt;= 32,767)</span>
+        <span class="pl-smi">short</span> <span class="pl-s1">fooShort</span> = <span class="pl-c1">10000</span>;
+
+        <span class="pl-c">// Integer - 32-bit signed two's complement integer</span>
+        <span class="pl-c">// (-2,147,483,648 &lt;= int &lt;= 2,147,483,647)</span>
+        <span class="pl-smi">int</span> <span class="pl-s1">bazInt</span> = <span class="pl-c1">1</span>;
+
+        <span class="pl-c">// Long - 64-bit signed two's complement integer</span>
+        <span class="pl-c">// (-9,223,372,036,854,775,808 &lt;= long &lt;= 9,223,372,036,854,775,807)</span>
+        <span class="pl-smi">long</span> <span class="pl-s1">fooLong</span> = <span class="pl-c1">100000L</span>;
+        <span class="pl-c">// L is used to denote that this variable value is of type Long;</span>
+        <span class="pl-c">// anything without is treated as integer by default.</span>
+
+        <span class="pl-c">// Note: byte, short, int and long are signed. They can have positive and negative values.</span>
+        <span class="pl-c">// There are no unsigned variants.</span>
+        <span class="pl-c">// char, however, is 16-bit unsigned.</span>
+
+        <span class="pl-c">// Float - Single-precision 32-bit IEEE 754 Floating Point</span>
+        <span class="pl-c">// 2^-149 &lt;= float &lt;= (2-2^-23) * 2^127</span>
+        <span class="pl-smi">float</span> <span class="pl-s1">fooFloat</span> = <span class="pl-c1">234.5f</span>;
+        <span class="pl-c">// f or F is used to denote that this variable value is of type float;</span>
+        <span class="pl-c">// otherwise it is treated as double.</span>
+
+        <span class="pl-c">// Double - Double-precision 64-bit IEEE 754 Floating Point</span>
+        <span class="pl-c">// 2^-1074 &lt;= x &lt;= (2-2^-52) * 2^1023</span>
+        <span class="pl-smi">double</span> <span class="pl-s1">fooDouble</span> = <span class="pl-c1">123.4</span>;
+
+        <span class="pl-c">// Boolean - true &amp; false</span>
+        <span class="pl-smi">boolean</span> <span class="pl-s1">fooBoolean</span> = <span class="pl-c1">true</span>;
+        <span class="pl-smi">boolean</span> <span class="pl-s1">barBoolean</span> = <span class="pl-c1">false</span>;
+
+        <span class="pl-c">// Char - A single 16-bit Unicode character</span>
+        <span class="pl-smi">char</span> <span class="pl-s1">fooChar</span> = <span class="pl-s">'A'</span>;
+
+        <span class="pl-c">// final variables can't be reassigned,</span>
+        <span class="pl-k">final</span> <span class="pl-smi">int</span> <span class="pl-c1">HOURS_I_WORK_PER_WEEK</span> = <span class="pl-c1">9001</span>;
+        <span class="pl-c">// but they can be initialized later.</span>
+        <span class="pl-k">final</span> <span class="pl-smi">double</span> <span class="pl-s1">E</span>;
+        <span class="pl-s1">E</span> = <span class="pl-c1">2.71828</span>;
+
+        <span class="pl-c">// BigInteger - Immutable arbitrary-precision integers</span>
+        <span class="pl-c">//</span>
+        <span class="pl-c">// BigInteger is a data type that allows programmers to manipulate</span>
+        <span class="pl-c">// integers longer than 64-bits. Integers are stored as an array of</span>
+        <span class="pl-c">// of bytes and are manipulated using functions built into BigInteger</span>
+        <span class="pl-c">//</span>
+        <span class="pl-c">// BigInteger can be initialized using an array of bytes or a string.</span>
+        <span class="pl-smi">BigInteger</span> <span class="pl-s1">fooBigInteger</span> = <span class="pl-k">new</span> <span class="pl-smi">BigInteger</span>(<span class="pl-s1">fooByteArray</span>);
+
+        <span class="pl-c">// BigDecimal - Immutable, arbitrary-precision signed decimal number</span>
+        <span class="pl-c">//</span>
+        <span class="pl-c">// A BigDecimal takes two parts: an arbitrary precision integer</span>
+        <span class="pl-c">// unscaled value and a 32-bit integer scale</span>
+        <span class="pl-c">//</span>
+        <span class="pl-c">// BigDecimal allows the programmer complete control over decimal</span>
+        <span class="pl-c">// rounding. It is recommended to use BigDecimal with currency values</span>
+        <span class="pl-c">// and where exact decimal precision is required.</span>
+        <span class="pl-c">//</span>
+        <span class="pl-c">// BigDecimal can be initialized with an int, long, double or String</span>
+        <span class="pl-c">// or by initializing the unscaled value (BigInteger) and scale (int).</span>
+        <span class="pl-smi">BigDecimal</span> <span class="pl-s1">fooBigDecimal</span> = <span class="pl-k">new</span> <span class="pl-smi">BigDecimal</span>(<span class="pl-s1">fooBigInteger</span>, <span class="pl-s1">fooInt</span>);
+
+        <span class="pl-c">// Be wary of the constructor that takes a float or double as</span>
+        <span class="pl-c">// the inaccuracy of the float/double will be copied in BigDecimal.</span>
+        <span class="pl-c">// Prefer the String constructor when you need an exact value.</span>
+        <span class="pl-smi">BigDecimal</span> <span class="pl-s1">tenCents</span> = <span class="pl-k">new</span> <span class="pl-smi">BigDecimal</span>(<span class="pl-s">"0.1"</span>);
+
+        <span class="pl-c">// Strings</span>
+        <span class="pl-smi">String</span> <span class="pl-s1">fooString</span> = <span class="pl-s">"My String Is Here!"</span>;
+
+        <span class="pl-c">// \n is an escaped character that starts a new line</span>
+        <span class="pl-smi">String</span> <span class="pl-s1">barString</span> = <span class="pl-s">"Printing on a new line?\nNo Problem!"</span>;
+        <span class="pl-c">// \t is an escaped character that adds a tab character</span>
+        <span class="pl-smi">String</span> <span class="pl-s1">bazString</span> = <span class="pl-s">"Do you want to add a tab?\tNo Problem!"</span>;
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s1">fooString</span>);
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s1">barString</span>);
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s1">bazString</span>);
+
+        <span class="pl-c">// String Building</span>
+        <span class="pl-c">// #1 - with plus operator</span>
+        <span class="pl-c">// That's the basic way to do it (optimized under the hood)</span>
+        <span class="pl-smi">String</span> <span class="pl-s1">plusConcatenated</span> = <span class="pl-s">"Strings can "</span> + <span class="pl-s">"be concatenated "</span> + <span class="pl-s">"via + operator."</span>;
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s1">plusConcatenated</span>);
+        <span class="pl-c">// Output: Strings can be concatenated via + operator.</span>
+
+        <span class="pl-c">// #2 - with StringBuilder</span>
+        <span class="pl-c">// This way doesn't create any intermediate strings. It just stores the string pieces, and ties them together</span>
+        <span class="pl-c">// when toString() is called.</span>
+        <span class="pl-c">// Hint: This class is not thread safe. A thread-safe alternative (with some impact on performance) is StringBuffer.</span>
+        <span class="pl-smi">StringBuilder</span> <span class="pl-s1">builderConcatenated</span> = <span class="pl-k">new</span> <span class="pl-smi">StringBuilder</span>();
+        <span class="pl-s1">builderConcatenated</span>.<span class="pl-en">append</span>(<span class="pl-s">"You "</span>);
+        <span class="pl-s1">builderConcatenated</span>.<span class="pl-en">append</span>(<span class="pl-s">"can use "</span>);
+        <span class="pl-s1">builderConcatenated</span>.<span class="pl-en">append</span>(<span class="pl-s">"the StringBuilder class."</span>);
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s1">builderConcatenated</span>.<span class="pl-en">toString</span>()); <span class="pl-c">// only now is the string built</span>
+        <span class="pl-c">// Output: You can use the StringBuilder class.</span>
+
+        <span class="pl-c">// StringBuilder is efficient when the fully constructed String is not required until the end of some processing.</span>
+        <span class="pl-smi">StringBuilder</span> <span class="pl-s1">stringBuilder</span> = <span class="pl-k">new</span> <span class="pl-smi">StringBuilder</span>();
+        <span class="pl-smi">String</span> <span class="pl-s1">inefficientString</span> = <span class="pl-s">""</span>;
+        <span class="pl-k">for</span> (<span class="pl-smi">int</span> <span class="pl-s1">i</span> = <span class="pl-c1">0</span> ; <span class="pl-s1">i</span> &lt; <span class="pl-c1">10</span>; <span class="pl-s1">i</span>++) {
+            <span class="pl-s1">stringBuilder</span>.<span class="pl-en">append</span>(<span class="pl-s1">i</span>).<span class="pl-en">append</span>(<span class="pl-s">" "</span>);
+            <span class="pl-s1">inefficientString</span> += <span class="pl-s1">i</span> + <span class="pl-s">" "</span>;
+        }
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s1">inefficientString</span>);
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s1">stringBuilder</span>.<span class="pl-en">toString</span>());
+        <span class="pl-c">// inefficientString requires a lot more work to produce, as it generates a String on every loop iteration.</span>
+        <span class="pl-c">// Simple concatenation with + is compiled to a StringBuilder and toString()</span>
+        <span class="pl-c">// Avoid string concatenation in loops.</span>
+
+        <span class="pl-c">// #3 - with String formatter</span>
+        <span class="pl-c">// Another alternative way to create strings. Fast and readable.</span>
+        <span class="pl-s1">String</span>.<span class="pl-en">format</span>(<span class="pl-s">"%s may prefer %s."</span>, <span class="pl-s">"Or you"</span>, <span class="pl-s">"String.format()"</span>);
+        <span class="pl-c">// Output: Or you may prefer String.format().</span>
+
+        <span class="pl-c">// Arrays</span>
+        <span class="pl-c">// The array size must be decided upon instantiation</span>
+        <span class="pl-c">// The following formats work for declaring an array</span>
+        <span class="pl-c">// &lt;datatype&gt;[] &lt;var name&gt; = new &lt;datatype&gt;[&lt;array size&gt;];</span>
+        <span class="pl-c">// &lt;datatype&gt; &lt;var name&gt;[] = new &lt;datatype&gt;[&lt;array size&gt;];</span>
+        <span class="pl-smi">int</span>[] <span class="pl-s1">intArray</span> = <span class="pl-k">new</span> <span class="pl-smi">int</span>[<span class="pl-c1">10</span>];
+        <span class="pl-smi">String</span>[] <span class="pl-s1">stringArray</span> = <span class="pl-k">new</span> <span class="pl-smi">String</span>[<span class="pl-c1">1</span>];
+        <span class="pl-smi">boolean</span> <span class="pl-s1">boolArray</span>[] = <span class="pl-k">new</span> <span class="pl-smi">boolean</span>[<span class="pl-c1">100</span>];
+
+        <span class="pl-c">// Another way to declare &amp; initialize an array</span>
+        <span class="pl-smi">int</span>[] <span class="pl-s1">y</span> = {<span class="pl-c1">9000</span>, <span class="pl-c1">1000</span>, <span class="pl-c1">1337</span>};
+        <span class="pl-smi">String</span> <span class="pl-s1">names</span>[] = {<span class="pl-s">"Bob"</span>, <span class="pl-s">"John"</span>, <span class="pl-s">"Fred"</span>, <span class="pl-s">"Juan Pedro"</span>};
+        <span class="pl-smi">boolean</span> <span class="pl-s1">bools</span>[] = {<span class="pl-c1">true</span>, <span class="pl-c1">false</span>, <span class="pl-c1">false</span>};
+
+        <span class="pl-c">// Indexing an array - Accessing an element</span>
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"intArray @ 0: "</span> + <span class="pl-s1">intArray</span>[<span class="pl-c1">0</span>]);
+
+        <span class="pl-c">// Arrays are zero-indexed and mutable.</span>
+        <span class="pl-s1">intArray</span>[<span class="pl-c1">1</span>] = <span class="pl-c1">1</span>;
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"intArray @ 1: "</span> + <span class="pl-s1">intArray</span>[<span class="pl-c1">1</span>]); <span class="pl-c">// =&gt; 1</span>
+
+        <span class="pl-c">// Other data types worth checking out</span>
+        <span class="pl-c">// ArrayLists - Like arrays except more functionality is offered, and</span>
+        <span class="pl-c">//              the size is mutable.</span>
+        <span class="pl-c">// LinkedLists - Implementation of doubly-linked list. All of the</span>
+        <span class="pl-c">//               operations perform as could be expected for a</span>
+        <span class="pl-c">//               doubly-linked list.</span>
+        <span class="pl-c">// Maps - A mapping of key Objects to value Objects. Map is</span>
+        <span class="pl-c">//        an interface and therefore cannot be instantiated.</span>
+        <span class="pl-c">//        The type of keys and values contained in a Map must</span>
+        <span class="pl-c">//        be specified upon instantiation of the implementing</span>
+        <span class="pl-c">//        class. Each key may map to only one corresponding value,</span>
+        <span class="pl-c">//        and each key may appear only once (no duplicates).</span>
+        <span class="pl-c">// HashMaps - This class uses a hashtable to implement the Map</span>
+        <span class="pl-c">//            interface. This allows the execution time of basic</span>
+        <span class="pl-c">//            operations, such as get and insert element, to remain</span>
+        <span class="pl-c">//            constant-amortized even for large sets.</span>
+        <span class="pl-c">// TreeMap - A Map that is sorted by its keys. Each modification</span>
+        <span class="pl-c">//           maintains the sorting defined by either a Comparator</span>
+        <span class="pl-c">//           supplied at instantiation, or comparisons of each Object</span>
+        <span class="pl-c">//           if they implement the Comparable interface.</span>
+        <span class="pl-c">//           Failure of keys to implement Comparable combined with failure to</span>
+        <span class="pl-c">//           supply a Comparator will throw ClassCastExceptions.</span>
+        <span class="pl-c">//           Insertion and removal operations take O(log(n)) time</span>
+        <span class="pl-c">//           so avoid using this data structure unless you are taking</span>
+        <span class="pl-c">//           advantage of the sorting.</span>
+
+        <span class="pl-c">///////////////////////////////////////</span>
+        <span class="pl-c">// Operators</span>
+        <span class="pl-c">///////////////////////////////////////</span>
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"\n-&gt;Operators"</span>);
+
+        <span class="pl-smi">int</span> <span class="pl-s1">i1</span> = <span class="pl-c1">1</span>, <span class="pl-s1">i2</span> = <span class="pl-c1">2</span>; <span class="pl-c">// Shorthand for multiple declarations</span>
+
+        <span class="pl-c">// Arithmetic is straightforward</span>
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"1+2 = "</span> + (<span class="pl-s1">i1</span> + <span class="pl-s1">i2</span>)); <span class="pl-c">// =&gt; 3</span>
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"2-1 = "</span> + (<span class="pl-s1">i2</span> - <span class="pl-s1">i1</span>)); <span class="pl-c">// =&gt; 1</span>
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"2*1 = "</span> + (<span class="pl-s1">i2</span> * <span class="pl-s1">i1</span>)); <span class="pl-c">// =&gt; 2</span>
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"1/2 = "</span> + (<span class="pl-s1">i1</span> / <span class="pl-s1">i2</span>)); <span class="pl-c">// =&gt; 0 (int/int returns int)</span>
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"1/2.0 = "</span> + (<span class="pl-s1">i1</span> / (<span class="pl-smi">double</span>)<span class="pl-s1">i2</span>)); <span class="pl-c">// =&gt; 0.5</span>
+
+        <span class="pl-c">// Modulo</span>
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"11%3 = "</span>+(<span class="pl-c1">11</span> % <span class="pl-c1">3</span>)); <span class="pl-c">// =&gt; 2</span>
+
+        <span class="pl-c">// Comparison operators</span>
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"3 == 2? "</span> + (<span class="pl-c1">3</span> == <span class="pl-c1">2</span>)); <span class="pl-c">// =&gt; false</span>
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"3 != 2? "</span> + (<span class="pl-c1">3</span> != <span class="pl-c1">2</span>)); <span class="pl-c">// =&gt; true</span>
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"3 &gt; 2? "</span> + (<span class="pl-c1">3</span> &gt; <span class="pl-c1">2</span>)); <span class="pl-c">// =&gt; true</span>
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"3 &lt; 2? "</span> + (<span class="pl-c1">3</span> &lt; <span class="pl-c1">2</span>)); <span class="pl-c">// =&gt; false</span>
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"2 &lt;= 2? "</span> + (<span class="pl-c1">2</span> &lt;= <span class="pl-c1">2</span>)); <span class="pl-c">// =&gt; true</span>
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"2 &gt;= 2? "</span> + (<span class="pl-c1">2</span> &gt;= <span class="pl-c1">2</span>)); <span class="pl-c">// =&gt; true</span>
+
+        <span class="pl-c">// Boolean operators</span>
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"3 &gt; 2 &amp;&amp; 2 &gt; 3? "</span> + ((<span class="pl-c1">3</span> &gt; <span class="pl-c1">2</span>) &amp;&amp; (<span class="pl-c1">2</span> &gt; <span class="pl-c1">3</span>))); <span class="pl-c">// =&gt; false</span>
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"3 &gt; 2 || 2 &gt; 3? "</span> + ((<span class="pl-c1">3</span> &gt; <span class="pl-c1">2</span>) || (<span class="pl-c1">2</span> &gt; <span class="pl-c1">3</span>))); <span class="pl-c">// =&gt; true</span>
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"!(3 == 2)? "</span> + (!(<span class="pl-c1">3</span> == <span class="pl-c1">2</span>))); <span class="pl-c">// =&gt; true</span>
+
+        <span class="pl-c">// Bitwise operators!</span>
+        <span class="pl-c">/*</span>
+<span class="pl-c">        ~      Unary bitwise complement</span>
+<span class="pl-c">        &lt;&lt;     Signed left shift</span>
+<span class="pl-c">        &gt;&gt;     Signed/Arithmetic right shift</span>
+<span class="pl-c">        &gt;&gt;&gt;    Unsigned/Logical right shift</span>
+<span class="pl-c">        &amp;      Bitwise AND</span>
+<span class="pl-c">        ^      Bitwise exclusive OR</span>
+<span class="pl-c">        |      Bitwise inclusive OR</span>
+<span class="pl-c">        */</span>
+
+        <span class="pl-c">// Increment operators</span>
+        <span class="pl-smi">int</span> <span class="pl-s1">i</span> = <span class="pl-c1">0</span>;
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"\n-&gt;Inc/Dec-rementation"</span>);
+        <span class="pl-c">// The ++ and -- operators increment and decrement by 1 respectively.</span>
+        <span class="pl-c">// If they are placed before the variable, they increment then return;</span>
+        <span class="pl-c">// after the variable they return then increment.</span>
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s1">i</span>++); <span class="pl-c">// i = 1, prints 0 (post-increment)</span>
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(++<span class="pl-s1">i</span>); <span class="pl-c">// i = 2, prints 2 (pre-increment)</span>
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s1">i</span>--); <span class="pl-c">// i = 1, prints 2 (post-decrement)</span>
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(--<span class="pl-s1">i</span>); <span class="pl-c">// i = 0, prints 0 (pre-decrement)</span>
+
+        <span class="pl-c">///////////////////////////////////////</span>
+        <span class="pl-c">// Control Structures</span>
+        <span class="pl-c">///////////////////////////////////////</span>
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"\n-&gt;Control Structures"</span>);
+
+        <span class="pl-c">// If statements are c-like</span>
+        <span class="pl-smi">int</span> <span class="pl-s1">j</span> = <span class="pl-c1">10</span>;
+        <span class="pl-k">if</span> (<span class="pl-s1">j</span> == <span class="pl-c1">10</span>) {
+            <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"I get printed"</span>);
+        } <span class="pl-k">else</span> <span class="pl-k">if</span> (<span class="pl-s1">j</span> &gt; <span class="pl-c1">10</span>) {
+            <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"I don't"</span>);
+        } <span class="pl-k">else</span> {
+            <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"I also don't"</span>);
+        }
+
+        <span class="pl-c">// While loop</span>
+        <span class="pl-smi">int</span> <span class="pl-s1">fooWhile</span> = <span class="pl-c1">0</span>;
+        <span class="pl-k">while</span>(<span class="pl-s1">fooWhile</span> &lt; <span class="pl-c1">100</span>) {
+            <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s1">fooWhile</span>);
+            <span class="pl-c">// Increment the counter</span>
+            <span class="pl-c">// Iterated 100 times, fooWhile 0,1,2...99</span>
+            <span class="pl-s1">fooWhile</span>++;
+        }
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"fooWhile Value: "</span> + <span class="pl-s1">fooWhile</span>);
+
+        <span class="pl-c">// Do While Loop</span>
+        <span class="pl-smi">int</span> <span class="pl-s1">fooDoWhile</span> = <span class="pl-c1">0</span>;
+        <span class="pl-k">do</span> {
+            <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s1">fooDoWhile</span>);
+            <span class="pl-c">// Increment the counter</span>
+            <span class="pl-c">// Iterated 100 times, fooDoWhile 0-&gt;99</span>
+            <span class="pl-s1">fooDoWhile</span>++;
+        } <span class="pl-k">while</span>(<span class="pl-s1">fooDoWhile</span> &lt; <span class="pl-c1">100</span>);
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"fooDoWhile Value: "</span> + <span class="pl-s1">fooDoWhile</span>);
+
+        <span class="pl-c">// For Loop</span>
+        <span class="pl-c">// for loop structure =&gt; for(&lt;start_statement&gt;; &lt;conditional&gt;; &lt;step&gt;)</span>
+        <span class="pl-k">for</span> (<span class="pl-smi">int</span> <span class="pl-s1">fooFor</span> = <span class="pl-c1">0</span>; <span class="pl-s1">fooFor</span> &lt; <span class="pl-c1">10</span>; <span class="pl-s1">fooFor</span>++) {
+            <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s1">fooFor</span>);
+            <span class="pl-c">// Iterated 10 times, fooFor 0-&gt;9</span>
+        }
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"fooFor Value: "</span> + <span class="pl-s1">fooFor</span>);
+
+        <span class="pl-c">// Nested For Loop Exit with Label</span>
+        <span class="pl-s1">outer</span>:
+        <span class="pl-k">for</span> (<span class="pl-smi">int</span> <span class="pl-s1">i</span> = <span class="pl-c1">0</span>; <span class="pl-s1">i</span> &lt; <span class="pl-c1">10</span>; <span class="pl-s1">i</span>++) {
+          <span class="pl-k">for</span> (<span class="pl-smi">int</span> <span class="pl-s1">j</span> = <span class="pl-c1">0</span>; <span class="pl-s1">j</span> &lt; <span class="pl-c1">10</span>; <span class="pl-s1">j</span>++) {
+            <span class="pl-k">if</span> (<span class="pl-s1">i</span> == <span class="pl-c1">5</span> &amp;&amp; <span class="pl-s1">j</span> ==<span class="pl-c1">5</span>) {
+              <span class="pl-k">break</span> <span class="pl-s1">outer</span>;
+              <span class="pl-c">// breaks out of outer loop instead of only the inner one</span>
+            }
+          }
+        }
+
+        <span class="pl-c">// For Each Loop</span>
+        <span class="pl-c">// The for loop is also able to iterate over arrays as well as objects</span>
+        <span class="pl-c">// that implement the Iterable interface.</span>
+        <span class="pl-smi">int</span>[] <span class="pl-s1">fooList</span> = {<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span>, <span class="pl-c1">5</span>, <span class="pl-c1">6</span>, <span class="pl-c1">7</span>, <span class="pl-c1">8</span>, <span class="pl-c1">9</span>};
+        <span class="pl-c">// for each loop structure =&gt; for (&lt;object&gt; : &lt;iterable&gt;)</span>
+        <span class="pl-c">// reads as: for each element in the iterable</span>
+        <span class="pl-c">// note: the object type must match the element type of the iterable.</span>
+        <span class="pl-k">for</span> (<span class="pl-smi">int</span> <span class="pl-s1">bar</span> : <span class="pl-s1">fooList</span>) {
+            <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s1">bar</span>);
+            <span class="pl-c">//Iterates 9 times and prints 1-9 on new lines</span>
+        }
+
+        <span class="pl-c">// Switch Case</span>
+        <span class="pl-c">// A switch works with the byte, short, char, and int data types.</span>
+        <span class="pl-c">// It also works with enumerated types (discussed in Enum Types), the</span>
+        <span class="pl-c">// String class, and a few special classes that wrap primitive types:</span>
+        <span class="pl-c">// Character, Byte, Short, and Integer.</span>
+        <span class="pl-c">// Starting in Java 7 and above, we can also use the String type.</span>
+        <span class="pl-c">// Note: Do remember that, not adding "break" at end any particular case ends up in</span>
+        <span class="pl-c">// executing the very next case(given it satisfies the condition provided) as well.</span>
+        <span class="pl-smi">int</span> <span class="pl-s1">month</span> = <span class="pl-c1">3</span>;
+        <span class="pl-smi">String</span> <span class="pl-s1">monthString</span>;
+        <span class="pl-k">switch</span> (<span class="pl-s1">month</span>) {
+            <span class="pl-k">case</span> <span class="pl-c1">1</span>: <span class="pl-s1">monthString</span> = <span class="pl-s">"January"</span>;
+                    <span class="pl-k">break</span>;
+            <span class="pl-k">case</span> <span class="pl-c1">2</span>: <span class="pl-s1">monthString</span> = <span class="pl-s">"February"</span>;
+                    <span class="pl-k">break</span>;
+            <span class="pl-k">case</span> <span class="pl-c1">3</span>: <span class="pl-s1">monthString</span> = <span class="pl-s">"March"</span>;
+                    <span class="pl-k">break</span>;
+            <span class="pl-k">default</span>: <span class="pl-s1">monthString</span> = <span class="pl-s">"Some other month"</span>;
+                     <span class="pl-k">break</span>;
+        }
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"Switch Case Result: "</span> + <span class="pl-s1">monthString</span>);
+
+
+        <span class="pl-c">// Try-with-resources (Java 7+)</span>
+        <span class="pl-c">// Try-catch-finally statements work as expected in Java but in Java 7+</span>
+        <span class="pl-c">// the try-with-resources statement is also available. Try-with-resources</span>
+        <span class="pl-c">// simplifies try-catch-finally statements by closing resources</span>
+        <span class="pl-c">// automatically.</span>
+
+        <span class="pl-c">// In order to use a try-with-resources, include an instance of a class</span>
+        <span class="pl-c">// in the try statement. The class must implement java.lang.AutoCloseable.</span>
+        <span class="pl-k">try</span> (<span class="pl-smi">BufferedReader</span> <span class="pl-s1">br</span> = <span class="pl-k">new</span> <span class="pl-smi">BufferedReader</span>(<span class="pl-k">new</span> <span class="pl-smi">FileReader</span>(<span class="pl-s">"foo.txt"</span>))) {
+            <span class="pl-c">// You can attempt to do something that could throw an exception.</span>
+            <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s1">br</span>.<span class="pl-en">readLine</span>());
+            <span class="pl-c">// In Java 7, the resource will always be closed, even if it throws</span>
+            <span class="pl-c">// an Exception.</span>
+        } <span class="pl-k">catch</span> (<span class="pl-smi">Exception</span> <span class="pl-s1">ex</span>) {
+            <span class="pl-c">//The resource will be closed before the catch statement executes.</span>
+            <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"readLine() failed."</span>);
+        }
+        <span class="pl-c">// No need for a finally statement in this case, the BufferedReader is</span>
+        <span class="pl-c">// already closed. This can be used to avoid certain edge cases where</span>
+        <span class="pl-c">// a finally statement might not be called.</span>
+        <span class="pl-c">// To learn more:</span>
+        <span class="pl-c">// https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html</span>
+
+
+        <span class="pl-c">// Conditional Shorthand</span>
+        <span class="pl-c">// You can use the '?' operator for quick assignments or logic forks.</span>
+        <span class="pl-c">// Reads as "If (statement) is true, use &lt;first value&gt;, otherwise, use</span>
+        <span class="pl-c">// &lt;second value&gt;"</span>
+        <span class="pl-smi">int</span> <span class="pl-s1">foo</span> = <span class="pl-c1">5</span>;
+        <span class="pl-smi">String</span> <span class="pl-s1">bar</span> = (<span class="pl-s1">foo</span> &lt; <span class="pl-c1">10</span>) ? <span class="pl-s">"A"</span> : <span class="pl-s">"B"</span>;
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"bar : "</span> + <span class="pl-s1">bar</span>); <span class="pl-c">// Prints "bar : A", because the</span>
+        <span class="pl-c">// statement is true.</span>
+        <span class="pl-c">// Or simply</span>
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"bar : "</span> + (<span class="pl-s1">foo</span> &lt; <span class="pl-c1">10</span> ? <span class="pl-s">"A"</span> : <span class="pl-s">"B"</span>));
+
+
+        <span class="pl-c">////////////////////////////////////////</span>
+        <span class="pl-c">// Converting Data Types</span>
+        <span class="pl-c">////////////////////////////////////////</span>
+
+        <span class="pl-c">// Converting data</span>
+
+        <span class="pl-c">// Convert String To Integer</span>
+        <span class="pl-s1">Integer</span>.<span class="pl-en">parseInt</span>(<span class="pl-s">"123"</span>);<span class="pl-c">//returns an integer version of "123"</span>
+
+        <span class="pl-c">// Convert Integer To String</span>
+        <span class="pl-s1">Integer</span>.<span class="pl-en">toString</span>(<span class="pl-c1">123</span>);<span class="pl-c">//returns a string version of 123</span>
+
+        <span class="pl-c">// For other conversions check out the following classes:</span>
+        <span class="pl-c">// Double</span>
+        <span class="pl-c">// Long</span>
+        <span class="pl-c">// String</span>
+
+        <span class="pl-c">///////////////////////////////////////</span>
+        <span class="pl-c">// Classes And Functions</span>
+        <span class="pl-c">///////////////////////////////////////</span>
+
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"\n-&gt;Classes &amp; Functions"</span>);
+
+        <span class="pl-c">// (definition of the Bicycle class follows)</span>
+
+        <span class="pl-c">// Use new to instantiate a class</span>
+        <span class="pl-smi">Bicycle</span> <span class="pl-s1">trek</span> = <span class="pl-k">new</span> <span class="pl-smi">Bicycle</span>();
+
+        <span class="pl-c">// Call object methods</span>
+        <span class="pl-s1">trek</span>.<span class="pl-en">speedUp</span>(<span class="pl-c1">3</span>); <span class="pl-c">// You should always use setter and getter methods</span>
+        <span class="pl-s1">trek</span>.<span class="pl-en">setCadence</span>(<span class="pl-c1">100</span>);
+
+        <span class="pl-c">// toString returns this Object's string representation.</span>
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"trek info: "</span> + <span class="pl-s1">trek</span>.<span class="pl-en">toString</span>());
+    } <span class="pl-c">// End main method</span>
+
+    <span class="pl-k">private</span> <span class="pl-k">static</span> <span class="pl-k">class</span> <span class="pl-smi">TestInitialization</span> {
+        <span class="pl-c">// Double Brace Initialization</span>
+        <span class="pl-c">// Before Java 11, the Java Language had no syntax for how to create</span>
+        <span class="pl-c">// static Collections in an easy way. Usually you end up like this:</span>
+        <span class="pl-k">private</span> <span class="pl-k">static</span> <span class="pl-k">final</span> <span class="pl-smi">Set</span>&lt;<span class="pl-smi">String</span>&gt; <span class="pl-c1">COUNTRIES</span> = <span class="pl-k">new</span> <span class="pl-smi">HashSet</span>&lt;<span class="pl-smi">String</span>&gt;();
+        <span class="pl-k">static</span> {
+           <span class="pl-c1">COUNTRIES</span>.<span class="pl-en">add</span>(<span class="pl-s">"DENMARK"</span>);
+           <span class="pl-c1">COUNTRIES</span>.<span class="pl-en">add</span>(<span class="pl-s">"SWEDEN"</span>);
+           <span class="pl-c1">COUNTRIES</span>.<span class="pl-en">add</span>(<span class="pl-s">"FINLAND"</span>);
+        }
+
+        <span class="pl-c">// There's a nifty way to achieve the same thing, </span>
+        <span class="pl-c">// by using something that is called Double Brace Initialization.</span>
+        <span class="pl-k">private</span> <span class="pl-k">static</span> <span class="pl-k">final</span> <span class="pl-smi">Set</span>&lt;<span class="pl-smi">String</span>&gt; <span class="pl-c1">COUNTRIES_DOUBLE_BRACE</span> = 
+        <span class="pl-k">new</span> <span class="pl-smi">HashSet</span>&lt;<span class="pl-smi">String</span>&gt;() {{
+            <span class="pl-en">add</span>(<span class="pl-s">"DENMARK"</span>);
+            <span class="pl-en">add</span>(<span class="pl-s">"SWEDEN"</span>);
+            <span class="pl-en">add</span>(<span class="pl-s">"FINLAND"</span>);
+        }}
+
+        <span class="pl-c">// The first brace is creating a new AnonymousInnerClass and the</span>
+        <span class="pl-c">// second one declares an instance initializer block. This block</span>
+        <span class="pl-c">// is called when the anonymous inner class is created.</span>
+        <span class="pl-c">// This does not only work for Collections, it works for all</span>
+        <span class="pl-c">// non-final classes.</span>
+        
+
+        <span class="pl-c">// Another option was to initialize the Collection from an array,</span>
+        <span class="pl-c">// using Arrays.asList() method:</span>
+        <span class="pl-k">private</span> <span class="pl-k">static</span> <span class="pl-k">final</span> <span class="pl-smi">List</span>&lt;<span class="pl-smi">String</span>&gt; <span class="pl-c1">COUNTRIES_AS_LIST</span> = 
+                        <span class="pl-s1">Arrays</span>.<span class="pl-en">asList</span>(<span class="pl-s">"SWEDEN"</span>, <span class="pl-s">"DENMARK"</span>, <span class="pl-s">"NORWAY"</span>);
+        <span class="pl-c">// This has one catch: the list we get is internally backed by the array,</span>
+        <span class="pl-c">// and since arrays can't change their size, the list backed by the array</span>
+        <span class="pl-c">// is not resizeable, which means we can't add new elements to it: </span>
+        <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-smi">void</span> <span class="pl-en">main</span>(<span class="pl-smi">String</span>[] <span class="pl-s1">args</span>) {
+            <span class="pl-c1">COUNTRIES</span>.<span class="pl-en">add</span>(<span class="pl-s">"FINLAND"</span>); <span class="pl-c">// throws UnsupportedOperationException!</span>
+            <span class="pl-c">// However, we can replace elements by index, just like in array: </span>
+            <span class="pl-c1">COUNTRIES</span>.<span class="pl-en">set</span>(<span class="pl-c1">1</span>, <span class="pl-s">"FINLAND"</span>);
+            <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-c1">COUNTRIES</span>); <span class="pl-c">// prints [SWEDEN, FINLAND, NORWAY]</span>
+        }
+        <span class="pl-c">// The resizing problem can be circumvented </span>
+        <span class="pl-c">// by creating another Collection from the List:</span>
+         <span class="pl-k">private</span> <span class="pl-k">static</span> <span class="pl-k">final</span> <span class="pl-smi">Set</span>&lt;<span class="pl-smi">String</span>&gt; <span class="pl-c1">COUNTRIES_SET</span> = 
+                <span class="pl-k">new</span> <span class="pl-smi">HashSet</span>&lt;&gt;(<span class="pl-s1">Arrays</span>.<span class="pl-en">asList</span>(<span class="pl-s">"SWEDEN"</span>, <span class="pl-s">"DENMARK"</span>, <span class="pl-s">"NORWAY"</span>));
+        <span class="pl-c">// It's perfectly fine to add anything to the Set of COUNTRIES now. </span>
+    } <span class="pl-c">// End TestInitialization class</span>
+
+    <span class="pl-k">private</span> <span class="pl-k">static</span> <span class="pl-k">class</span> <span class="pl-smi">TestJava11Initialization</span> {
+        <span class="pl-c">// Since Java 11, there is a convenient option to initialize Collections:</span>
+        <span class="pl-c">// Set.of() and List.of() methods. </span>
+        <span class="pl-k">private</span> <span class="pl-k">static</span> <span class="pl-k">final</span> <span class="pl-smi">Set</span>&lt;<span class="pl-smi">String</span>&gt; <span class="pl-c1">COUNTRIES</span> = 
+                <span class="pl-s1">Set</span>.<span class="pl-en">of</span>(<span class="pl-s">"SWEDEN"</span>, <span class="pl-s">"DENMARK"</span>, <span class="pl-s">"NORWAY"</span>);
+        <span class="pl-c">// There is a massive catch, though: Lists and Sets initialized like this </span>
+        <span class="pl-c">// 1) are immutable </span>
+        <span class="pl-c">// 2) can't contain null elements (even check for null elements fails)!</span>
+        <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-smi">void</span> <span class="pl-en">main</span>(<span class="pl-smi">String</span>[] <span class="pl-s1">args</span>) {
+            <span class="pl-c1">COUNTRIES</span>.<span class="pl-en">add</span>(<span class="pl-s">"FINLAND"</span>); <span class="pl-c">// throws UnsupportedOperationException</span>
+            <span class="pl-c1">COUNTRIES</span>.<span class="pl-en">remove</span>(<span class="pl-s">"NORWAY"</span>); <span class="pl-c">// throws UnsupportedOperationException </span>
+            <span class="pl-c1">COUNTRIES</span>.<span class="pl-en">contains</span>(<span class="pl-c1">null</span>); <span class="pl-c">// throws NullPointerException</span>
+        }
+        <span class="pl-k">private</span> <span class="pl-k">static</span> <span class="pl-k">final</span> <span class="pl-smi">Set</span>&lt;<span class="pl-smi">String</span>&gt; <span class="pl-c1">COUNTRIES_WITH_NULL</span> = 
+                    <span class="pl-s1">Set</span>.<span class="pl-en">of</span>(<span class="pl-s">"SWEDEN"</span>, <span class="pl-c1">null</span>, <span class="pl-s">"NORWAY"</span>); <span class="pl-c">// throws NullPointerException</span>
+
+    } <span class="pl-c">// End TestJava11Initialization class</span>
+} <span class="pl-c">// End LearnJava class</span>
+
+<span class="pl-c">// You can include other, non-public outer-level classes in a .java file,</span>
+<span class="pl-c">// but it is not good practice. Instead split classes into separate files.</span>
+
+<span class="pl-c">// Class Declaration Syntax:</span>
+<span class="pl-c">// &lt;public/private/protected&gt; class &lt;class name&gt; {</span>
+<span class="pl-c">//    // data fields, constructors, functions all inside.</span>
+<span class="pl-c">//    // functions are called as methods in Java.</span>
+<span class="pl-c">// }</span>
+
+<span class="pl-k">class</span> <span class="pl-smi">Bicycle</span> {
+
+    <span class="pl-c">// Bicycle's Fields/Variables</span>
+    <span class="pl-k">public</span> <span class="pl-smi">int</span> <span class="pl-s1">cadence</span>; <span class="pl-c">// Public: Can be accessed from anywhere</span>
+    <span class="pl-k">private</span> <span class="pl-smi">int</span> <span class="pl-s1">speed</span>;  <span class="pl-c">// Private: Only accessible from within the class</span>
+    <span class="pl-k">protected</span> <span class="pl-smi">int</span> <span class="pl-s1">gear</span>; <span class="pl-c">// Protected: Accessible from the class and subclasses</span>
+    <span class="pl-smi">String</span> <span class="pl-s1">name</span>; <span class="pl-c">// default: Only accessible from within this package</span>
+    <span class="pl-k">static</span> <span class="pl-smi">String</span> <span class="pl-s1">className</span>; <span class="pl-c">// Static class variable</span>
+
+    <span class="pl-c">// Static block</span>
+    <span class="pl-c">// Java has no implementation of static constructors, but</span>
+    <span class="pl-c">// has a static block that can be used to initialize class variables</span>
+    <span class="pl-c">// (static variables).</span>
+    <span class="pl-c">// This block will be called when the class is loaded.</span>
+    <span class="pl-k">static</span> {
+        <span class="pl-s1">className</span> = <span class="pl-s">"Bicycle"</span>;
+    }
+
+    <span class="pl-c">// Constructors are a way of creating classes</span>
+    <span class="pl-c">// This is a constructor</span>
+    <span class="pl-k">public</span> <span class="pl-smi">Bicycle</span>() {
+        <span class="pl-c">// You can also call another constructor:</span>
+        <span class="pl-c">// this(1, 50, 5, "Bontrager");</span>
+        <span class="pl-s1">gear</span> = <span class="pl-c1">1</span>;
+        <span class="pl-s1">cadence</span> = <span class="pl-c1">50</span>;
+        <span class="pl-s1">speed</span> = <span class="pl-c1">5</span>;
+        <span class="pl-s1">name</span> = <span class="pl-s">"Bontrager"</span>;
+    }
+    <span class="pl-c">// This is a constructor that takes arguments</span>
+    <span class="pl-k">public</span> <span class="pl-smi">Bicycle</span>(<span class="pl-smi">int</span> <span class="pl-s1">startCadence</span>, <span class="pl-smi">int</span> <span class="pl-s1">startSpeed</span>, <span class="pl-smi">int</span> <span class="pl-s1">startGear</span>,
+        <span class="pl-smi">String</span> <span class="pl-s1">name</span>) {
+        <span class="pl-smi">this</span>.<span class="pl-s1">gear</span> = <span class="pl-s1">startGear</span>;
+        <span class="pl-smi">this</span>.<span class="pl-s1">cadence</span> = <span class="pl-s1">startCadence</span>;
+        <span class="pl-smi">this</span>.<span class="pl-s1">speed</span> = <span class="pl-s1">startSpeed</span>;
+        <span class="pl-smi">this</span>.<span class="pl-s1">name</span> = <span class="pl-s1">name</span>;
+    }
+
+    <span class="pl-c">// Method Syntax:</span>
+    <span class="pl-c">// &lt;public/private/protected&gt; &lt;return type&gt; &lt;function name&gt;(&lt;args&gt;)</span>
+
+    <span class="pl-c">// Java classes often implement getters and setters for their fields</span>
+
+    <span class="pl-c">// Method declaration syntax:</span>
+    <span class="pl-c">// &lt;access modifier&gt; &lt;return type&gt; &lt;method name&gt;(&lt;args&gt;)</span>
+    <span class="pl-k">public</span> <span class="pl-smi">int</span> <span class="pl-en">getCadence</span>() {
+        <span class="pl-k">return</span> <span class="pl-s1">cadence</span>;
+    }
+
+    <span class="pl-c">// void methods require no return statement</span>
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">setCadence</span>(<span class="pl-smi">int</span> <span class="pl-s1">newValue</span>) {
+        <span class="pl-s1">cadence</span> = <span class="pl-s1">newValue</span>;
+    }
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">setGear</span>(<span class="pl-smi">int</span> <span class="pl-s1">newValue</span>) {
+        <span class="pl-s1">gear</span> = <span class="pl-s1">newValue</span>;
+    }
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">speedUp</span>(<span class="pl-smi">int</span> <span class="pl-s1">increment</span>) {
+        <span class="pl-s1">speed</span> += <span class="pl-s1">increment</span>;
+    }
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">slowDown</span>(<span class="pl-smi">int</span> <span class="pl-s1">decrement</span>) {
+        <span class="pl-s1">speed</span> -= <span class="pl-s1">decrement</span>;
+    }
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">setName</span>(<span class="pl-smi">String</span> <span class="pl-s1">newName</span>) {
+        <span class="pl-s1">name</span> = <span class="pl-s1">newName</span>;
+    }
+    <span class="pl-k">public</span> <span class="pl-smi">String</span> <span class="pl-en">getName</span>() {
+        <span class="pl-k">return</span> <span class="pl-s1">name</span>;
+    }
+
+    <span class="pl-c">//Method to display the attribute values of this Object.</span>
+    <span class="pl-c1">@</span><span class="pl-c1">Override</span> <span class="pl-c">// Inherited from the Object class.</span>
+    <span class="pl-k">public</span> <span class="pl-smi">String</span> <span class="pl-en">toString</span>() {
+        <span class="pl-k">return</span> <span class="pl-s">"gear: "</span> + <span class="pl-s1">gear</span> + <span class="pl-s">" cadence: "</span> + <span class="pl-s1">cadence</span> + <span class="pl-s">" speed: "</span> + <span class="pl-s1">speed</span> +
+            <span class="pl-s">" name: "</span> + <span class="pl-s1">name</span>;
+    }
+} <span class="pl-c">// end class Bicycle</span>
+
+<span class="pl-c">// PennyFarthing is a subclass of Bicycle</span>
+<span class="pl-k">class</span> <span class="pl-smi">PennyFarthing</span> <span class="pl-k">extends</span> <span class="pl-smi">Bicycle</span> {
+    <span class="pl-c">// (Penny Farthings are those bicycles with the big front wheel.</span>
+    <span class="pl-c">// They have no gears.)</span>
+
+    <span class="pl-k">public</span> <span class="pl-smi">PennyFarthing</span>(<span class="pl-smi">int</span> <span class="pl-s1">startCadence</span>, <span class="pl-smi">int</span> <span class="pl-s1">startSpeed</span>) {
+        <span class="pl-c">// Call the parent constructor with super</span>
+        <span class="pl-en">super</span>(<span class="pl-s1">startCadence</span>, <span class="pl-s1">startSpeed</span>, <span class="pl-c1">0</span>, <span class="pl-s">"PennyFarthing"</span>);
+    }
+
+    <span class="pl-c">// You should mark a method you're overriding with an @annotation.</span>
+    <span class="pl-c">// To learn more about what annotations are and their purpose check this</span>
+    <span class="pl-c">// out: http://docs.oracle.com/javase/tutorial/java/annotations/</span>
+    <span class="pl-c1">@</span><span class="pl-c1">Override</span>
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">setGear</span>(<span class="pl-smi">int</span> <span class="pl-s1">gear</span>) {
+        <span class="pl-smi">this</span>.<span class="pl-s1">gear</span> = <span class="pl-c1">0</span>;
+    }
+}
+
+<span class="pl-c">// Object casting</span>
+<span class="pl-c">// Since the PennyFarthing class is extending the Bicycle class, we can say</span>
+<span class="pl-c">// a PennyFarthing is a Bicycle and write :</span>
+<span class="pl-c">// Bicycle bicycle = new PennyFarthing();</span>
+<span class="pl-c">// This is called object casting where an object is taken for another one. There</span>
+<span class="pl-c">// are lots of details and deals with some more intermediate concepts here:</span>
+<span class="pl-c">// https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html</span>
+
+<span class="pl-c">// Interfaces</span>
+<span class="pl-c">// Interface declaration syntax</span>
+<span class="pl-c">// &lt;access-level&gt; interface &lt;interface-name&gt; extends &lt;super-interfaces&gt; {</span>
+<span class="pl-c">//     // Constants</span>
+<span class="pl-c">//     // Method declarations</span>
+<span class="pl-c">// }</span>
+
+<span class="pl-c">// Example - Food:</span>
+<span class="pl-k">public</span> <span class="pl-k">interface</span> <span class="pl-smi">Edible</span> {
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">eat</span>(); <span class="pl-c">// Any class that implements this interface, must</span>
+                       <span class="pl-c">// implement this method.</span>
+}
+
+<span class="pl-k">public</span> <span class="pl-k">interface</span> <span class="pl-smi">Digestible</span> {
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">digest</span>();
+    <span class="pl-c">// Since Java 8, interfaces can have default method.</span>
+    <span class="pl-k">public</span> <span class="pl-k">default</span> <span class="pl-smi">void</span> <span class="pl-en">defaultMethod</span>() {
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"Hi from default method ..."</span>);
+    }
+}
+
+<span class="pl-c">// We can now create a class that implements both of these interfaces.</span>
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-smi">Fruit</span> <span class="pl-k">implements</span> <span class="pl-smi">Edible</span>, <span class="pl-smi">Digestible</span> {
+    <span class="pl-c1">@</span><span class="pl-c1">Override</span>
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">eat</span>() {
+        <span class="pl-c">// ...</span>
+    }
+
+    <span class="pl-c1">@</span><span class="pl-c1">Override</span>
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">digest</span>() {
+        <span class="pl-c">// ...</span>
+    }
+}
+
+<span class="pl-c">// In Java, you can extend only one class, but you can implement many</span>
+<span class="pl-c">// interfaces. For example:</span>
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-smi">ExampleClass</span> <span class="pl-k">extends</span> <span class="pl-smi">ExampleClassParent</span> <span class="pl-k">implements</span> <span class="pl-smi">InterfaceOne</span>,
+    <span class="pl-smi">InterfaceTwo</span> {
+    <span class="pl-c1">@</span><span class="pl-c1">Override</span>
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">InterfaceOneMethod</span>() {
+    }
+
+    <span class="pl-c1">@</span><span class="pl-c1">Override</span>
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">InterfaceTwoMethod</span>() {
+    }
+
+}
+
+<span class="pl-c">// Abstract Classes</span>
+
+<span class="pl-c">// Abstract Class declaration syntax</span>
+<span class="pl-c">// &lt;access-level&gt; abstract class &lt;abstract-class-name&gt; extends</span>
+<span class="pl-c">// &lt;super-abstract-classes&gt; {</span>
+<span class="pl-c">//     // Constants and variables</span>
+<span class="pl-c">//     // Method declarations</span>
+<span class="pl-c">// }</span>
+
+<span class="pl-c">// Abstract Classes cannot be instantiated.</span>
+<span class="pl-c">// Abstract classes may define abstract methods.</span>
+<span class="pl-c">// Abstract methods have no body and are marked abstract</span>
+<span class="pl-c">// Non-abstract child classes must @Override all abstract methods</span>
+<span class="pl-c">// from their super-classes.</span>
+<span class="pl-c">// Abstract classes can be useful when combining repetitive logic</span>
+<span class="pl-c">// with customised behavior, but as Abstract classes require</span>
+<span class="pl-c">// inheritance, they violate "Composition over inheritance"</span>
+<span class="pl-c">// so consider other approaches using composition.</span>
+<span class="pl-c">// https://en.wikipedia.org/wiki/Composition_over_inheritance</span>
+
+<span class="pl-k">public</span> <span class="pl-k">abstract</span> <span class="pl-k">class</span> <span class="pl-smi">Animal</span>
+{
+    <span class="pl-k">private</span> <span class="pl-smi">int</span> <span class="pl-s1">age</span>;
+
+    <span class="pl-k">public</span> <span class="pl-k">abstract</span> <span class="pl-smi">void</span> <span class="pl-en">makeSound</span>();
+
+    <span class="pl-c">// Method can have a body</span>
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">eat</span>()
+    {
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"I am an animal and I am Eating."</span>);
+        <span class="pl-c">// Note: We can access private variable here.</span>
+        <span class="pl-s1">age</span> = <span class="pl-c1">30</span>;
+    }
+
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">printAge</span>()
+    {
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s1">age</span>);
+    }
+
+    <span class="pl-c">// Abstract classes can have main method.</span>
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-smi">void</span> <span class="pl-en">main</span>(<span class="pl-smi">String</span>[] <span class="pl-s1">args</span>)
+    {
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"I am abstract"</span>);
+    }
+}
+
+<span class="pl-k">class</span> <span class="pl-smi">Dog</span> <span class="pl-k">extends</span> <span class="pl-smi">Animal</span>
+{
+    <span class="pl-c">// Note still have to override the abstract methods in the</span>
+    <span class="pl-c">// abstract class.</span>
+    <span class="pl-c1">@</span><span class="pl-c1">Override</span>
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">makeSound</span>()
+    {
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"Bark"</span>);
+        <span class="pl-c">// age = 30;    ==&gt; ERROR!    age is private to Animal</span>
+    }
+
+    <span class="pl-c">// NOTE: You will get an error if you used the</span>
+    <span class="pl-c">// @Override annotation here, since java doesn't allow</span>
+    <span class="pl-c">// overriding of static methods.</span>
+    <span class="pl-c">// What is happening here is called METHOD HIDING.</span>
+    <span class="pl-c">// Check out this SO post: http://stackoverflow.com/questions/16313649/</span>
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-smi">void</span> <span class="pl-en">main</span>(<span class="pl-smi">String</span>[] <span class="pl-s1">args</span>)
+    {
+        <span class="pl-smi">Dog</span> <span class="pl-s1">pluto</span> = <span class="pl-k">new</span> <span class="pl-smi">Dog</span>();
+        <span class="pl-s1">pluto</span>.<span class="pl-en">makeSound</span>();
+        <span class="pl-s1">pluto</span>.<span class="pl-en">eat</span>();
+        <span class="pl-s1">pluto</span>.<span class="pl-en">printAge</span>();
+    }
+}
+
+<span class="pl-c">// Final Classes</span>
+
+<span class="pl-c">// Final Class declaration syntax</span>
+<span class="pl-c">// &lt;access-level&gt; final &lt;final-class-name&gt; {</span>
+<span class="pl-c">//     // Constants and variables</span>
+<span class="pl-c">//     // Method declarations</span>
+<span class="pl-c">// }</span>
+
+<span class="pl-c">// Final classes are classes that cannot be inherited from and are therefore a</span>
+<span class="pl-c">// final child. In a way, final classes are the opposite of abstract classes</span>
+<span class="pl-c">// because abstract classes must be extended, but final classes cannot be</span>
+<span class="pl-c">// extended.</span>
+<span class="pl-k">public</span> <span class="pl-k">final</span> <span class="pl-k">class</span> <span class="pl-smi">SaberToothedCat</span> <span class="pl-k">extends</span> <span class="pl-smi">Animal</span>
+{
+    <span class="pl-c">// Note still have to override the abstract methods in the</span>
+    <span class="pl-c">// abstract class.</span>
+    <span class="pl-c1">@</span><span class="pl-c1">Override</span>
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">makeSound</span>()
+    {
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"Roar"</span>);
+    }
+}
+
+<span class="pl-c">// Final Methods</span>
+<span class="pl-k">public</span> <span class="pl-k">abstract</span> <span class="pl-k">class</span> <span class="pl-smi">Mammal</span>()
+{
+    <span class="pl-c">// Final Method Syntax:</span>
+    <span class="pl-c">// &lt;access modifier&gt; final &lt;return type&gt; &lt;function name&gt;(&lt;args&gt;)</span>
+
+    <span class="pl-c">// Final methods, like, final classes cannot be overridden by a child</span>
+    <span class="pl-c">// class, and are therefore the final implementation of the method.</span>
+    <span class="pl-k">public</span> <span class="pl-k">final</span> <span class="pl-smi">boolean</span> <span class="pl-en">isWarmBlooded</span>()
+    {
+        <span class="pl-k">return</span> <span class="pl-c1">true</span>;
+    }
+}
+
+<span class="pl-c">// Enum Type</span>
+<span class="pl-c">//</span>
+<span class="pl-c">// An enum type is a special data type that enables for a variable to be a set</span>
+<span class="pl-c">// of predefined constants. The variable must be equal to one of the values</span>
+<span class="pl-c">// that have been predefined for it. Because they are constants, the names of</span>
+<span class="pl-c">// an enum type's fields are in uppercase letters. In the Java programming</span>
+<span class="pl-c">// language, you define an enum type by using the enum keyword. For example,</span>
+<span class="pl-c">// you would specify a days-of-the-week enum type as:</span>
+<span class="pl-k">public</span> <span class="pl-k">enum</span> <span class="pl-smi">Day</span> {
+    <span class="pl-c1">SUNDAY</span>, <span class="pl-c1">MONDAY</span>, <span class="pl-c1">TUESDAY</span>, <span class="pl-c1">WEDNESDAY</span>,
+    <span class="pl-c1">THURSDAY</span>, <span class="pl-c1">FRIDAY</span>, <span class="pl-c1">SATURDAY</span>
+}
+
+<span class="pl-c">// We can use our enum Day like that:</span>
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-smi">EnumTest</span> {
+    <span class="pl-c">// Variable Enum</span>
+    <span class="pl-smi">Day</span> <span class="pl-s1">day</span>;
+
+    <span class="pl-k">public</span> <span class="pl-smi">EnumTest</span>(<span class="pl-smi">Day</span> <span class="pl-s1">day</span>) {
+        <span class="pl-smi">this</span>.<span class="pl-s1">day</span> = <span class="pl-s1">day</span>;
+    }
+
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">tellItLikeItIs</span>() {
+        <span class="pl-k">switch</span> (<span class="pl-s1">day</span>) {
+            <span class="pl-k">case</span> <span class="pl-c1">MONDAY</span>:
+                <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"Mondays are bad."</span>);
+                <span class="pl-k">break</span>;
+            <span class="pl-k">case</span> <span class="pl-c1">FRIDAY</span>:
+                <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"Fridays are better."</span>);
+                <span class="pl-k">break</span>;
+            <span class="pl-k">case</span> <span class="pl-c1">SATURDAY</span>:
+            <span class="pl-k">case</span> <span class="pl-c1">SUNDAY</span>:
+                <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"Weekends are best."</span>);
+                <span class="pl-k">break</span>;
+            <span class="pl-k">default</span>:
+                <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"Midweek days are so-so."</span>);
+                <span class="pl-k">break</span>;
+        }
+    }
+
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-smi">void</span> <span class="pl-en">main</span>(<span class="pl-smi">String</span>[] <span class="pl-s1">args</span>) {
+        <span class="pl-smi">EnumTest</span> <span class="pl-s1">firstDay</span> = <span class="pl-k">new</span> <span class="pl-smi">EnumTest</span>(<span class="pl-smi">Day</span>.<span class="pl-c1">MONDAY</span>);
+        <span class="pl-s1">firstDay</span>.<span class="pl-en">tellItLikeItIs</span>(); <span class="pl-c">// =&gt; Mondays are bad.</span>
+        <span class="pl-smi">EnumTest</span> <span class="pl-s1">thirdDay</span> = <span class="pl-k">new</span> <span class="pl-smi">EnumTest</span>(<span class="pl-smi">Day</span>.<span class="pl-c1">WEDNESDAY</span>);
+        <span class="pl-s1">thirdDay</span>.<span class="pl-en">tellItLikeItIs</span>(); <span class="pl-c">// =&gt; Midweek days are so-so.</span>
+    }
+}
+
+<span class="pl-c">// Enum types are much more powerful than we show above.</span>
+<span class="pl-c">// The enum body can include methods and other fields.</span>
+<span class="pl-c">// You can see more at https://docs.oracle.com/javase/tutorial/java/javaOO/enum.html</span>
+
+<span class="pl-c">// Getting Started with Lambda Expressions</span>
+<span class="pl-c">//</span>
+<span class="pl-c">// New to Java version 8 are lambda expressions. Lambdas are more commonly found</span>
+<span class="pl-c">// in functional programming languages, which means they are methods which can</span>
+<span class="pl-c">// be created without belonging to a class, passed around as if it were itself</span>
+<span class="pl-c">// an object, and executed on demand.</span>
+<span class="pl-c">//</span>
+<span class="pl-c">// Final note, lambdas must implement a functional interface. A functional</span>
+<span class="pl-c">// interface is one which has only a single abstract method declared. It can</span>
+<span class="pl-c">// have any number of default methods. Lambda expressions can be used as an</span>
+<span class="pl-c">// instance of that functional interface. Any interface meeting the requirements</span>
+<span class="pl-c">// is treated as a functional interface. You can read more about interfaces</span>
+<span class="pl-c">// above.</span>
+<span class="pl-c">//</span>
+<span class="pl-k">import</span> <span class="pl-s1">java</span>.<span class="pl-s1">util</span>.<span class="pl-s1">Map</span>;
+<span class="pl-k">import</span> <span class="pl-s1">java</span>.<span class="pl-s1">util</span>.<span class="pl-s1">HashMap</span>;
+<span class="pl-k">import</span> <span class="pl-s1">java</span>.<span class="pl-s1">util</span>.<span class="pl-s1">function</span>.*;
+<span class="pl-k">import</span> <span class="pl-s1">java</span>.<span class="pl-s1">security</span>.<span class="pl-s1">SecureRandom</span>;
+
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-smi">Lambdas</span> {
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-smi">void</span> <span class="pl-en">main</span>(<span class="pl-smi">String</span>[] <span class="pl-s1">args</span>) {
+        <span class="pl-c">// Lambda declaration syntax:</span>
+	<span class="pl-c">// &lt;zero or more parameters&gt; -&gt; &lt;expression body or statement block&gt;</span>
+
+        <span class="pl-c">// We will use this hashmap in our examples below.</span>
+        <span class="pl-smi">Map</span>&lt;<span class="pl-smi">String</span>, <span class="pl-smi">String</span>&gt; <span class="pl-s1">planets</span> = <span class="pl-k">new</span> <span class="pl-smi">HashMap</span>&lt;&gt;();
+            <span class="pl-s1">planets</span>.<span class="pl-en">put</span>(<span class="pl-s">"Mercury"</span>, <span class="pl-s">"87.969"</span>);
+            <span class="pl-s1">planets</span>.<span class="pl-en">put</span>(<span class="pl-s">"Venus"</span>, <span class="pl-s">"224.7"</span>);
+            <span class="pl-s1">planets</span>.<span class="pl-en">put</span>(<span class="pl-s">"Earth"</span>, <span class="pl-s">"365.2564"</span>);
+            <span class="pl-s1">planets</span>.<span class="pl-en">put</span>(<span class="pl-s">"Mars"</span>, <span class="pl-s">"687"</span>);
+            <span class="pl-s1">planets</span>.<span class="pl-en">put</span>(<span class="pl-s">"Jupiter"</span>, <span class="pl-s">"4,332.59"</span>);
+            <span class="pl-s1">planets</span>.<span class="pl-en">put</span>(<span class="pl-s">"Saturn"</span>, <span class="pl-s">"10,759"</span>);
+            <span class="pl-s1">planets</span>.<span class="pl-en">put</span>(<span class="pl-s">"Uranus"</span>, <span class="pl-s">"30,688.5"</span>);
+            <span class="pl-s1">planets</span>.<span class="pl-en">put</span>(<span class="pl-s">"Neptune"</span>, <span class="pl-s">"60,182"</span>);
+
+        <span class="pl-c">// Lambda with zero parameters using the Supplier functional interface</span>
+        <span class="pl-c">// from java.util.function.Supplier. The actual lambda expression is</span>
+        <span class="pl-c">// what comes after numPlanets =.</span>
+        <span class="pl-smi">Supplier</span>&lt;<span class="pl-smi">String</span>&gt; <span class="pl-s1">numPlanets</span> = () -&gt; <span class="pl-s1">Integer</span>.<span class="pl-en">toString</span>(<span class="pl-s1">planets</span>.<span class="pl-en">size</span>());
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">format</span>(<span class="pl-s">"Number of Planets: %s\n\n"</span>, <span class="pl-s1">numPlanets</span>.<span class="pl-en">get</span>());
+
+        <span class="pl-c">// Lambda with one parameter and using the Consumer functional interface</span>
+        <span class="pl-c">// from java.util.function.Consumer. This is because planets is a Map,</span>
+        <span class="pl-c">// which implements both Collection and Iterable. The forEach used here,</span>
+        <span class="pl-c">// found in Iterable, applies the lambda expression to each member of</span>
+        <span class="pl-c">// the Collection. The default implementation of forEach behaves as if:</span>
+        <span class="pl-c">/*</span>
+<span class="pl-c">            for (T t : this)</span>
+<span class="pl-c">                action.accept(t);</span>
+<span class="pl-c">        */</span>
+
+        <span class="pl-c">// The actual lambda expression is the parameter passed to forEach.</span>
+        <span class="pl-s1">planets</span>.<span class="pl-en">keySet</span>().<span class="pl-en">forEach</span>((<span class="pl-s1">p</span>) -&gt; <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">format</span>(<span class="pl-s">"%s\n"</span>, <span class="pl-s1">p</span>));
+
+        <span class="pl-c">// If you are only passing a single argument, then the above can also be</span>
+        <span class="pl-c">// written as (note absent parentheses around p):</span>
+        <span class="pl-s1">planets</span>.<span class="pl-en">keySet</span>().<span class="pl-en">forEach</span>(<span class="pl-s1">p</span> -&gt; <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">format</span>(<span class="pl-s">"%s\n"</span>, <span class="pl-s1">p</span>));
+
+        <span class="pl-c">// Tracing the above, we see that planets is a HashMap, keySet() returns</span>
+        <span class="pl-c">// a Set of its keys, forEach applies each element as the lambda</span>
+        <span class="pl-c">// expression of: (parameter p) -&gt; System.out.format("%s\n", p). Each</span>
+        <span class="pl-c">// time, the element is said to be "consumed" and the statement(s)</span>
+        <span class="pl-c">// referred to in the lambda body is applied. Remember the lambda body</span>
+        <span class="pl-c">// is what comes after the -&gt;.</span>
+
+        <span class="pl-c">// The above without use of lambdas would look more traditionally like:</span>
+        <span class="pl-k">for</span> (<span class="pl-smi">String</span> <span class="pl-s1">planet</span> : <span class="pl-s1">planets</span>.<span class="pl-en">keySet</span>()) {
+            <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">format</span>(<span class="pl-s">"%s\n"</span>, <span class="pl-s1">planet</span>);
+        }
+
+        <span class="pl-c">// This example differs from the above in that a different forEach</span>
+        <span class="pl-c">// implementation is used: the forEach found in the HashMap class</span>
+        <span class="pl-c">// implementing the Map interface. This forEach accepts a BiConsumer,</span>
+        <span class="pl-c">// which generically speaking is a fancy way of saying it handles</span>
+        <span class="pl-c">// the Set of each Key -&gt; Value pairs. This default implementation</span>
+        <span class="pl-c">// behaves as if:</span>
+        <span class="pl-c">/*</span>
+<span class="pl-c">            for (Map.Entry&lt;K, V&gt; entry : map.entrySet())</span>
+<span class="pl-c">                action.accept(entry.getKey(), entry.getValue());</span>
+<span class="pl-c">        */</span>
+
+        <span class="pl-c">// The actual lambda expression is the parameter passed to forEach.</span>
+        <span class="pl-smi">String</span> <span class="pl-s1">orbits</span> = <span class="pl-s">"%s orbits the Sun in %s Earth days.\n"</span>;
+        <span class="pl-s1">planets</span>.<span class="pl-en">forEach</span>((<span class="pl-s1">K</span>, <span class="pl-s1">V</span>) -&gt; <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">format</span>(<span class="pl-s1">orbits</span>, <span class="pl-s1">K</span>, <span class="pl-s1">V</span>));
+
+        <span class="pl-c">// The above without use of lambdas would look more traditionally like:</span>
+        <span class="pl-k">for</span> (<span class="pl-smi">String</span> <span class="pl-s1">planet</span> : <span class="pl-s1">planets</span>.<span class="pl-en">keySet</span>()) {
+            <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">format</span>(<span class="pl-s1">orbits</span>, <span class="pl-s1">planet</span>, <span class="pl-s1">planets</span>.<span class="pl-en">get</span>(<span class="pl-s1">planet</span>));
+        }
+
+        <span class="pl-c">// Or, if following more closely the specification provided by the</span>
+        <span class="pl-c">// default implementation:</span>
+        <span class="pl-k">for</span> (<span class="pl-smi">Map</span>.<span class="pl-smi">Entry</span>&lt;<span class="pl-smi">String</span>, <span class="pl-smi">String</span>&gt; <span class="pl-s1">planet</span> : <span class="pl-s1">planets</span>.<span class="pl-en">entrySet</span>()) {
+            <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">format</span>(<span class="pl-s1">orbits</span>, <span class="pl-s1">planet</span>.<span class="pl-en">getKey</span>(), <span class="pl-s1">planet</span>.<span class="pl-en">getValue</span>());
+        }
+
+        <span class="pl-c">// These examples cover only the very basic use of lambdas. It might not</span>
+        <span class="pl-c">// seem like much or even very useful, but remember that a lambda can be</span>
+        <span class="pl-c">// created as an object that can later be passed as parameters to other</span>
+        <span class="pl-c">// methods.</span>
+    }
+}</pre></div>
+<h2>Further Reading</h2>
+<p>The links provided here below are just to get an understanding of the topic, feel free to Google and find specific examples.</p>
+<p><strong>Official Oracle Guides</strong>:</p>
+<ul>
+<li>
+<p><a href="https://docs.oracle.com/javase/tutorial/index.html" rel="nofollow">Java Tutorial Trail from Sun / Oracle</a></p>
+</li>
+<li>
+<p><a href="https://docs.oracle.com/javase/tutorial/java/javaOO/accesscontrol.html" rel="nofollow">Java Access level modifiers</a></p>
+</li>
+<li>
+<p><a href="https://docs.oracle.com/javase/tutorial/java/concepts/index.html" rel="nofollow">Object-Oriented Programming Concepts</a>:</p>
+<ul>
+<li><a href="https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html" rel="nofollow">Inheritance</a></li>
+<li><a href="https://docs.oracle.com/javase/tutorial/java/IandI/polymorphism.html" rel="nofollow">Polymorphism</a></li>
+<li><a href="https://docs.oracle.com/javase/tutorial/java/IandI/abstract.html" rel="nofollow">Abstraction</a></li>
+</ul>
+</li>
+<li>
+<p><a href="https://docs.oracle.com/javase/tutorial/essential/exceptions/index.html" rel="nofollow">Exceptions</a></p>
+</li>
+<li>
+<p><a href="https://docs.oracle.com/javase/tutorial/java/IandI/createinterface.html" rel="nofollow">Interfaces</a></p>
+</li>
+<li>
+<p><a href="https://docs.oracle.com/javase/tutorial/java/generics/index.html" rel="nofollow">Generics</a></p>
+</li>
+<li>
+<p><a href="https://www.oracle.com/technetwork/java/codeconvtoc-136057.html" rel="nofollow">Java Code Conventions</a></p>
+</li>
+<li>
+<p>New features in Java 8:</p>
+<ul>
+<li><a href="https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html" rel="nofollow">Lambda expressions (functional programming)</a></li>
+<li><a href="http://www.oracle.com/technetwork/articles/java/jf14-date-time-2125367.html" rel="nofollow">Date and time API (java.time package)</a></li>
+</ul>
+</li>
+</ul>
+<p><strong>Online Practice and Tutorials</strong></p>
+<ul>
+<li>
+<p><a href="http://www.learneroo.com" rel="nofollow">Learneroo.com - Learn Java</a></p>
+</li>
+<li>
+<p><a href="http://codingbat.com/java" rel="nofollow">Codingbat.com</a></p>
+</li>
+<li>
+<p><a href="https://www.codewars.com/?language=java" rel="nofollow">Codewars - Java Katas</a></p>
+</li>
+<li>
+<p><a href="http://moocfi.github.io/courses/2013/programming-part-1/" rel="nofollow">University of Helsinki - Object-Oriented programming with Java</a></p>
+</li>
+</ul>
+<p><strong>Books</strong>:</p>
+<ul>
+<li>
+<p><a href="http://www.headfirstlabs.com/books/hfjava/" rel="nofollow">Head First Java</a></p>
+</li>
+<li>
+<p><a href="http://www.mindview.net/Books/TIJ/" rel="nofollow">Thinking in Java</a></p>
+</li>
+<li>
+<p><a href="https://www.amazon.com/Objects-First-Java-Practical-Introduction/dp/0132492660" rel="nofollow">Objects First with Java</a></p>
+</li>
+<li>
+<p><a href="https://www.amazon.com/gp/product/0071606300" rel="nofollow">Java The Complete Reference</a></p>
+</li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Jake Prather", "https://github.com/JakeHP"]
+- ["Jakukyo Friel", "https://weakish.github.io"]
+- ["Madison Dickson", "https://github.com/mix3d"]
+- ["Simon Morgan", "https://sjm.io/"]
+- ["Zachary Ferguson", "https://github.com/zfergus2"]
+- ["Cameron Schermerhorn", "https://github.com/cschermerhorn"]
+- ["Rachel Stiyer", "https://github.com/rstiyer"]
+- ["Michael Dähnert", "https://github.com/JaXt0r"]
+- ["Rob Rose", "https://github.com/RobRoseKnows"]
+- ["Sean Nam", "https://github.com/seannam"]
+- ["Shawn M. Hanes", "https://github.com/smhanes15"]
+</code></pre>

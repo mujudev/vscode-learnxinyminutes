@@ -1,0 +1,192 @@
+<h1>Q#</h1>
+<p>Q# is a high-level domain-specific language which enables developers to write quantum algorithms. Q# programs can be executed on a quantum simulator running on a classical computer and (in future) on quantum computers.</p>
+<div class="highlight highlight-source-cs"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> Single-line comments start with //</span>
+
+
+<span class="pl-c"><span class="pl-c">//</span>///////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> 1. Quantum data types and operators</span>
+
+<span class="pl-c"><span class="pl-c">//</span> The most important part of quantum programs is qubits. </span>
+<span class="pl-c"><span class="pl-c">//</span> In Q# type Qubit represents the qubits which can be used.</span>
+<span class="pl-c"><span class="pl-c">//</span> This will allocate an array of two new qubits as the variable qs.</span>
+<span class="pl-k">using</span> (<span class="pl-en">qs</span> <span class="pl-k">=</span> <span class="pl-en">Qubit</span>[2]) {
+
+    <span class="pl-c"><span class="pl-c">//</span> The qubits have internal state that you cannot access to read or modify directly.</span>
+    <span class="pl-c"><span class="pl-c">//</span> You can inspect the current state of your quantum program </span>
+    <span class="pl-c"><span class="pl-c">//</span> if you're running it on a classical simulator.</span>
+    <span class="pl-c"><span class="pl-c">//</span> Note that this will not work on actual quantum hardware!</span>
+    <span class="pl-en">DumpMachine</span>();
+
+    <span class="pl-c"><span class="pl-c">//</span> If you want to change the state of a qubit</span>
+    <span class="pl-c"><span class="pl-c">//</span> you have to do this by applying quantum gates to the qubit.</span>
+    <span class="pl-en">H</span>(<span class="pl-smi">qs</span>[<span class="pl-c1">0</span>]);    <span class="pl-c"><span class="pl-c">//</span> This changes the state of the first qubit </span>
+                <span class="pl-c"><span class="pl-c">//</span> from |0⟩ (the initial state of allocated qubits) </span>
+                <span class="pl-c"><span class="pl-c">//</span> to (|0⟩ + |1⟩) / sqrt(2).</span>
+    <span class="pl-c"><span class="pl-c">//</span> qs[1] = |1⟩; - this does NOT work, you have to manipulate a qubit by using gates.</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> You can apply multi-qubit gates to several qubits.</span>
+    <span class="pl-en">CNOT</span>(<span class="pl-smi">qs</span>[<span class="pl-c1">0</span>], <span class="pl-smi">qs</span>[<span class="pl-c1">1</span>]);
+
+    <span class="pl-c"><span class="pl-c">//</span> You can also apply a controlled version of a gate: </span>
+    <span class="pl-c"><span class="pl-c">//</span> a gate that is applied if all control qubits are in |1⟩ state.</span>
+    <span class="pl-c"><span class="pl-c">//</span> The first argument is an array of control qubits, </span>
+    <span class="pl-c"><span class="pl-c">//</span> the second argument is the target qubit.</span>
+    <span class="pl-en">Controlled</span> <span class="pl-en">Y</span>([<span class="pl-en">qs</span>[0]], qs[1]); 
+
+    <span class="pl-c"><span class="pl-c">//</span> If you want to apply an anti-controlled gate </span>
+    <span class="pl-c"><span class="pl-c">//</span> (a gate that is applied if all control qubits are in |0⟩ state), </span>
+    <span class="pl-c"><span class="pl-c">//</span> you can use a library function.</span>
+    <span class="pl-en">ApplyControlledOnInt</span>(<span class="pl-c1">0</span>, <span class="pl-smi">X</span>, [<span class="pl-smi">qs</span>[<span class="pl-c1">0</span>]], <span class="pl-smi">qs</span>[<span class="pl-c1">1</span>]);
+
+    <span class="pl-c"><span class="pl-c">//</span> To read the information from the quantum system, you use measurements.</span>
+    <span class="pl-c"><span class="pl-c">//</span> Measurements return a value of Result data type: Zero or One.</span>
+    <span class="pl-c"><span class="pl-c">//</span> You can print measurement results as a classical value.</span>
+    <span class="pl-en">Message</span>(<span class="pl-s"><span class="pl-pds">$"</span>Measured {<span class="pl-en">M</span>(<span class="pl-smi">qs</span>[<span class="pl-c1">0</span>])}, {<span class="pl-en">M</span>(<span class="pl-smi">qs</span>[<span class="pl-c1">1</span>])}<span class="pl-pds">"</span></span>);
+}
+
+
+<span class="pl-c"><span class="pl-c">//</span>///////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> 2. Classical data types and operators</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Numbers in Q# can be stored in Int, BigInt or Double.</span>
+<span class="pl-en">let</span> <span class="pl-en">i</span> <span class="pl-k">=</span> <span class="pl-c1">1</span>;            <span class="pl-c"><span class="pl-c">//</span> This defines an Int variable i equal to 1</span>
+<span class="pl-en">let</span> <span class="pl-en">bi</span> <span class="pl-k">=</span> <span class="pl-c1">1</span><span class="pl-c1">L</span>;          <span class="pl-c"><span class="pl-c">//</span> This defines a BigInt variable bi equal to 1</span>
+<span class="pl-en">let</span> <span class="pl-en">d</span> <span class="pl-k">=</span> <span class="pl-c1">1</span><span class="pl-c1">.</span><span class="pl-c1">0</span>;          <span class="pl-c"><span class="pl-c">//</span> This defines a Double variable d equal to 1</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Arithmetic is done as expected, as long as the types are the same</span>
+<span class="pl-en">let</span> <span class="pl-en">n</span> <span class="pl-k">=</span> <span class="pl-c1">2</span> <span class="pl-k">*</span> <span class="pl-c1">10</span>;                <span class="pl-c"><span class="pl-c">//</span> = 20</span>
+<span class="pl-c"><span class="pl-c">//</span> Q# does not have implicit type cast, </span>
+<span class="pl-c"><span class="pl-c">//</span> so to perform arithmetic on values of different types, </span>
+<span class="pl-c"><span class="pl-c">//</span> you need to cast type explicitly</span>
+<span class="pl-en">let</span> <span class="pl-en">nd</span> <span class="pl-k">=</span> <span class="pl-en">IntAsDouble</span>(<span class="pl-c1">2</span>) <span class="pl-k">*</span> <span class="pl-c1">1</span><span class="pl-c1">.</span><span class="pl-c1">0</span>; <span class="pl-c"><span class="pl-c">//</span> = 20.0</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Boolean type is called Bool</span>
+<span class="pl-en">let</span> <span class="pl-en">trueBool</span> <span class="pl-k">=</span> <span class="pl-c1">true</span>;
+<span class="pl-en">let</span> <span class="pl-en">falseBool</span> <span class="pl-k">=</span> <span class="pl-c1">false</span>;
+
+<span class="pl-c"><span class="pl-c">//</span> Logic operators work as expected</span>
+<span class="pl-en">let</span> <span class="pl-en">andBool</span> <span class="pl-k">=</span> <span class="pl-c1">true</span> <span class="pl-smi">and</span> <span class="pl-c1">false</span>;
+<span class="pl-en">let</span> <span class="pl-en">orBool</span> <span class="pl-k">=</span> <span class="pl-c1">true</span> <span class="pl-smi">or</span> <span class="pl-c1">false</span>;
+<span class="pl-en">let</span> <span class="pl-en">notBool</span> <span class="pl-k">=</span> <span class="pl-smi">not</span> <span class="pl-c1">false</span>;
+
+<span class="pl-c"><span class="pl-c">//</span> Strings</span>
+<span class="pl-en">let</span> <span class="pl-en">str</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Hello World!<span class="pl-pds">"</span></span>;
+
+<span class="pl-c"><span class="pl-c">//</span> Equality is ==</span>
+<span class="pl-en">let</span> <span class="pl-en">x</span> <span class="pl-k">=</span> <span class="pl-c1">10</span> <span class="pl-k">==</span> <span class="pl-c1">15</span>; <span class="pl-c"><span class="pl-c">//</span> is false</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Range is a sequence of integers and can be defined like: start..step..stop</span>
+<span class="pl-en">let</span> <span class="pl-en">xi</span> <span class="pl-k">=</span> <span class="pl-ii">1..2..7</span>; <span class="pl-c"><span class="pl-c">//</span> Gives the sequence 1,3,5,7</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Assigning new value to a variable:</span>
+<span class="pl-c"><span class="pl-c">//</span> by default all Q# variables are immutable;</span>
+<span class="pl-c"><span class="pl-c">//</span> if the variable was defined using let, you cannot reassign its value.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> When you want to make a variable mutable, you have to declare it as such, </span>
+<span class="pl-c"><span class="pl-c">//</span> and use the set word to update value</span>
+<span class="pl-en">mutable</span> <span class="pl-en">xii</span> <span class="pl-k">=</span> <span class="pl-c1">true</span>;
+<span class="pl-en">set</span> <span class="pl-en">xii</span> <span class="pl-k">=</span> <span class="pl-c1">false</span>;
+
+<span class="pl-c"><span class="pl-c">//</span> You can create an array for any data type like this</span>
+<span class="pl-en">let</span> <span class="pl-en">xiii</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Double</span>[<span class="pl-c1">10</span>];
+
+<span class="pl-c"><span class="pl-c">//</span> Getting an element from an array </span>
+<span class="pl-en">let</span> <span class="pl-en">xiv</span> <span class="pl-k">=</span> <span class="pl-smi">xiii</span>[<span class="pl-c1">8</span>];
+
+<span class="pl-c"><span class="pl-c">//</span> Assigning a new value to an array element</span>
+<span class="pl-en">mutable</span> <span class="pl-en">xv</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Double</span>[<span class="pl-c1">10</span>];
+<span class="pl-smi">set</span> <span class="pl-smi">xv</span> <span class="pl-smi">w</span><span class="pl-k">/=</span> <span class="pl-c1">5</span> <span class="pl-k">&lt;</span><span class="pl-k">-</span> <span class="pl-c1">1</span>;
+
+
+<span class="pl-c"><span class="pl-c">//</span>///////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> 3. Control flow</span>
+
+<span class="pl-c"><span class="pl-c">//</span> If structures work a little different than most languages</span>
+<span class="pl-k">if</span> (<span class="pl-smi">a</span> <span class="pl-k">==</span> <span class="pl-c1">1</span>) {
+    <span class="pl-c"><span class="pl-c">//</span> ...</span>
+} <span class="pl-en">elif</span> (<span class="pl-smi">a</span> <span class="pl-k">==</span> <span class="pl-c1">2</span>) {
+    <span class="pl-c"><span class="pl-c">//</span> ... </span>
+} <span class="pl-k">else</span> {
+    <span class="pl-c"><span class="pl-c">//</span> ...</span>
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Foreach loops can be used to iterate over an array</span>
+<span class="pl-k">for</span> (<span class="pl-smi">qubit</span> <span class="pl-en">in</span> <span class="pl-en">qubits</span>) {
+    <span class="pl-en">X</span>(<span class="pl-smi">qubit</span>);
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Regular for loops can be used to iterate over a range of numbers</span>
+<span class="pl-k">for</span> (<span class="pl-smi">index</span> <span class="pl-smi">in</span> <span class="pl-c1">0</span> .. <span class="pl-en">Length</span>(<span class="pl-smi">qubits</span>) <span class="pl-k">-</span> <span class="pl-c1">1</span>) {
+    <span class="pl-en">X</span>(<span class="pl-smi">qubits</span>[<span class="pl-smi">index</span>]);
+}
+
+<span class="pl-c"><span class="pl-c">//</span> While loops are restricted for use in classical context only</span>
+<span class="pl-en">mutable</span> <span class="pl-en">index</span> <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+<span class="pl-k">while</span> (<span class="pl-smi">index</span> <span class="pl-k">&lt;</span> <span class="pl-c1">10</span>) {
+    <span class="pl-smi">set</span> <span class="pl-smi">index</span> <span class="pl-k">+=</span> <span class="pl-c1">1</span>;
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Quantum equivalent of a while loop is a repeat-until-success loop.</span>
+<span class="pl-c"><span class="pl-c">//</span> Because of the probabilistic nature of quantum computing sometimes</span>
+<span class="pl-c"><span class="pl-c">//</span> you want to repeat a certain sequence of operations </span>
+<span class="pl-c"><span class="pl-c">//</span> until a specific condition is achieved; you can use this loop to express this.</span>
+<span class="pl-smi">repeat</span> {
+    <span class="pl-c"><span class="pl-c">//</span> Your operation here</span>
+}
+<span class="pl-en">until</span> (<span class="pl-en">success</span> <span class="pl-en">criteria</span>) <span class="pl-c"><span class="pl-c">//</span> This could be a measurement to check if the state is reached</span>
+<span class="pl-smi">fixup</span> {
+    <span class="pl-c"><span class="pl-c">//</span> Resetting to the initial conditions, if required</span>
+}
+
+
+<span class="pl-c"><span class="pl-c">//</span>///////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> 4. Putting it all together</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Q# code is written in operations and functions</span>
+<span class="pl-en">operation</span> <span class="pl-en">ApplyXGate</span>(source : Qubit) : Unit {
+    <span class="pl-en">X</span>(<span class="pl-smi">source</span>);
+}
+
+<span class="pl-c"><span class="pl-c">//</span> If the operation implements a unitary transformation, you can define </span>
+<span class="pl-c"><span class="pl-c">//</span> adjoint and controlled variants of it. </span>
+<span class="pl-c"><span class="pl-c">//</span> The easiest way to do that is to add "is Adj + Ctl" after Unit. </span>
+<span class="pl-c"><span class="pl-c">//</span> This will tell the compiler to generate the variants automatically.</span>
+<span class="pl-en">operation</span> <span class="pl-en">ApplyXGateCA</span> (source : Qubit) : Unit is Adj + Ctl {
+    <span class="pl-en">X</span>(<span class="pl-smi">source</span>);
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Now you can call Adjoint ApplyXGateCA and Controlled ApplyXGateCA.</span>
+
+
+<span class="pl-c"><span class="pl-c">//</span> To run Q# code, you can put @EntryPoint() before the operation you want to run first</span>
+<span class="pl-en">@EntryPoint</span>()
+<span class="pl-en">operation</span> <span class="pl-en">XGateDemo</span>() : Unit {
+    <span class="pl-k">using</span> (<span class="pl-smi">q</span> <span class="pl-k">=</span> <span class="pl-en">Qubit</span>()) {
+        <span class="pl-en">ApplyXGate</span>(<span class="pl-smi">q</span>);
+    }
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Here is a simple example: a quantum random number generator. </span>
+<span class="pl-c"><span class="pl-c">//</span> We will generate a classical array of random bits using quantum code.</span>
+<span class="pl-en">@EntryPoint</span>()
+<span class="pl-en">operation</span> <span class="pl-en">QRNGDemo</span>() : Unit {
+    <span class="pl-en">mutable</span> <span class="pl-en">bits</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Int</span>[<span class="pl-c1">5</span>];                <span class="pl-c"><span class="pl-c">//</span> Array we'll use to store bits</span>
+    <span class="pl-k">using</span> (<span class="pl-smi">q</span> <span class="pl-k">=</span> <span class="pl-en">Qubit</span>()) {                     <span class="pl-c"><span class="pl-c">//</span> Allocate a qubit</span>
+        <span class="pl-k">for</span> (<span class="pl-smi">i</span> <span class="pl-smi">in</span> <span class="pl-c1">0</span> .. <span class="pl-c1">4</span>) {                   <span class="pl-c"><span class="pl-c">//</span> Generate each bit independently</span>
+            <span class="pl-en">H</span>(<span class="pl-smi">q</span>);                             <span class="pl-c"><span class="pl-c">//</span> Hadamard gate sets equal superposition</span>
+            <span class="pl-en">let</span> <span class="pl-en">result</span> <span class="pl-k">=</span> <span class="pl-en">M</span>(<span class="pl-smi">q</span>);                <span class="pl-c"><span class="pl-c">//</span> Measure qubit gets 0|1 with 50/50 prob</span>
+            <span class="pl-en">let</span> <span class="pl-en">bit</span> <span class="pl-k">=</span> <span class="pl-smi">result</span> <span class="pl-k">==</span> <span class="pl-smi">Zero</span> <span class="pl-k">?</span> <span class="pl-c1">0</span> <span class="pl-k">|</span> <span class="pl-c1">1</span>; <span class="pl-c"><span class="pl-c">//</span> Convert measurement result to integer</span>
+            <span class="pl-smi">set</span> <span class="pl-smi">bits</span> <span class="pl-smi">w</span><span class="pl-k">/=</span> <span class="pl-smi">i</span> <span class="pl-k">&lt;</span><span class="pl-k">-</span> <span class="pl-smi">bit</span>;            <span class="pl-c"><span class="pl-c">//</span> Write generated bit to an array</span>
+        }
+    }
+    <span class="pl-en">Message</span>(<span class="pl-s"><span class="pl-pds">$"</span>{<span class="pl-smi">bits</span>}<span class="pl-pds">"</span></span>);                       <span class="pl-c"><span class="pl-c">//</span> Print the result</span>
+}</pre></div>
+<h2>Further Reading</h2>
+<p>The <a href="https://github.com/microsoft/QuantumKatas">Quantum Katas</a> offer great self-paced tutorials and programming exercises to learn quantum computing and Q#.</p>
+<p><a href="https://docs.microsoft.com/quantum/" rel="nofollow">Q# Documentation</a> is official Q# documentation, including language reference and user guides.</p>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Vincent van Wingerden", "https://github.com/vivanwin"]
+- ["Mariia Mykhailova", "https://github.com/tcNickolas"]
+- ["Andrew Ryan Davis", "https://github.com/AndrewDavis1191"]
+</code></pre>

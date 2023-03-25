@@ -1,0 +1,874 @@
+<h1>Vyper</h1>
+<blockquote>
+<p>The content of this document is largely inspired by <a href="https:#github.com/adambard/learnxinyminutes-docs/blob/master/solidity.html.markdown" rel="nofollow">"Learn Solidity in Y Minutes"</a></p>
+</blockquote>
+<p>Vyper lets you program on <a href="https:#www.ethereum.org/" rel="nofollow">Ethereum</a>, a<br>
+blockchain-based virtual machine that allows the creation and<br>
+execution of smart contracts, without requiring centralized or trusted parties. It was<br>
+designed to improve upon Solidity, another smart contract language for Ethereum, by<br>
+limiting unsafe practices and enhancing readability; Vyper seeks to optimize the<br>
+security and auditability of smart contracts.</p>
+<p>Vyper is an experimental, statically typed, contract programming language meant to<br>
+resemble Python. Like objects in OOP, each contract contains state variables, functions,<br>
+and common data types. Contract-specific features include event notifiers for listeners,<br>
+and custom global variables, global constants.</p>
+<p>Some Ethereum contract examples include crowdfunding, voting, and blind auctions.</p>
+<hr>
+<h2>Table of Contents</h2>
+<ul>
+<li>Intro</li>
+<li>Example</li>
+</ul>
+<ol>
+<li>Data types and associated methods</li>
+<li>Data structures</li>
+<li>Simple operators</li>
+<li>Global variables of note</li>
+<li>Functions and more<br>
+a. functions<br>
+b. events</li>
+<li>Branching and loops</li>
+<li>Objects/contracts<br>
+a. calling external contracts<br>
+b. ERC20 built-in<br>
+c. following an interface</li>
+<li>Other keywords<br>
+a. selfdestruct</li>
+<li>Contract design notes<br>
+a. obfuscation<br>
+b. storage optimization<br>
+c. data access in blockchain<br>
+d. cron job<br>
+e. observer pattern</li>
+<li>Security</li>
+<li>Style notes</li>
+<li>Natspec comments</li>
+</ol>
+<ul>
+<li>Other documents</li>
+</ul>
+<hr>
+<h2>Intro</h2>
+<p>From <a href="https://media.readthedocs.org/pdf/vyper/latest/vyper.pdf" rel="nofollow">the docs</a><br>
+the foundational tenants of Vyper are:</p>
+<ol>
+<li><em>Security</em></li>
+<li><em>Language and compiler simplicity</em></li>
+<li><em>Auditability</em></li>
+</ol>
+<p>This allows for the following features:</p>
+<ol>
+<li><em>Bounds and overflow checking</em>
+<ul>
+<li>On the arithmetic and array level</li>
+<li>There are no dynamic arrays in Vyper</li>
+</ul>
+</li>
+<li><em>Support for signed integers and decimal fixed point numbers</em></li>
+<li><em>Decidability</em> - You can always compute precise upper bound on gas cost</li>
+<li><em>Strong typing</em> - for built-in and custom types</li>
+<li><em>Small and understandable compiler code</em></li>
+<li><em>Limited support for pure functions</em>
+<ul>
+<li>Anything marked <code class="notranslate">@constant</code> is not allowed to change the state</li>
+</ul>
+</li>
+</ol>
+<p>Following the principles and goals, Vyper does not provide the following features:</p>
+<ol>
+<li><em>Modifiers</em> (defining parts of functions elsewhere)</li>
+<li><em>Class inheritance</em></li>
+<li><em>Inline assembly</em></li>
+<li><em>Function overloading</em></li>
+<li><em>Operator overloading</em></li>
+<li><em>Recursive calling</em></li>
+<li><em>Infinite-length loops</em></li>
+<li><em>Binary fixed point</em> (decimal fixed point is used for its exactness)</li>
+</ol>
+<p>WITH THE RAPID CHANGES IN ETHEREUM, THIS DOCUMENT IS UNLIKELY TO STAY UP TO<br>
+DATE, SO YOU SHOULD FOLLOW THE LATEST VYPER DOCS AND ETHEREUM BLOG FOR THE LATEST.<br>
+ALL CODE HERE IS PROVIDED AS IS, WITH SUBSTANTIAL RISK OF ERRORS OR DEPRECATED CODE<br>
+PATTERNS.</p>
+<p>This document primarily discusses syntax, and so excludes many<br>
+popular design patterns.</p>
+<p>As Vyper and Ethereum are under active development, experimental or beta<br>
+features are typically marked, and subject to change. Pull requests welcome.</p>
+<p>This document describes Vyper version <code class="notranslate">0.1.0-beta.8</code>.</p>
+<p><em>All of the following code exists for educational purposes only!</em><br>
+<em>None of the following code should be used in production as-is!</em></p>
+<h2>Example</h2>
+<div class="highlight highlight-source-python"><pre class="notranslate"><span class="pl-c"># First, a simple todo list contract</span>
+<span class="pl-c"># Implements CRUD operations for tasks</span>
+
+<span class="pl-c"># todo.vy (note .vy extension)</span>
+<span class="pl-c">### **** START EXAMPLE **** ###</span>
+
+<span class="pl-c"># Start with Natspec comment</span>
+<span class="pl-c"># used for documentation</span>
+
+<span class="pl-c"># @title SimpleBank v1</span>
+<span class="pl-c"># @author kennyp</span>
+<span class="pl-c"># @notice This is a simple bank.</span>
+
+<span class="pl-c"># Vyper contracts must obey a particular order:</span>
+<span class="pl-c">#   struct -&gt; interface -&gt; events -&gt; globals and constants -&gt; functions</span>
+<span class="pl-c"># Additionally, like Python, Vyper functions must be defined in the file</span>
+<span class="pl-c">#    before they're called.</span>
+
+<span class="pl-c"># Structs</span>
+
+<span class="pl-s1">struct</span> <span class="pl-v">Task</span>:
+    <span class="pl-s1">done</span>: <span class="pl-s1">bool</span>
+    <span class="pl-s1">deleted</span>: <span class="pl-s1">bool</span>
+    <span class="pl-s1">task</span>: <span class="pl-s1">string</span>[<span class="pl-c1">100</span>]
+    <span class="pl-s1">metadata</span>: <span class="pl-s1">bytes32</span>
+
+<span class="pl-c"># Interfaces</span>
+
+<span class="pl-s1">contract</span> <span class="pl-v">AnotherContract</span>():
+    <span class="pl-k">def</span> <span class="pl-en">fetch</span>() <span class="pl-c1">-&gt;</span> <span class="pl-s1">bytes32</span>: <span class="pl-s1">constant</span>
+    <span class="pl-k">def</span> <span class="pl-en">inform</span>(<span class="pl-s1">_taskId</span>: <span class="pl-s1">uint256</span>, <span class="pl-s1">_status</span>: <span class="pl-s1">uint256</span>) <span class="pl-c1">-&gt;</span> <span class="pl-s1">bool</span>: <span class="pl-s1">modifying</span>
+
+<span class="pl-c"># Events</span>
+
+<span class="pl-c"># Events - publicize actions to external listeners</span>
+<span class="pl-c"># `indexed` means that it's easier to search/filter on this field</span>
+<span class="pl-v">TaskStatus</span>: <span class="pl-en">event</span>({<span class="pl-s1">_taskId</span>: <span class="pl-en">indexed</span>(<span class="pl-s1">uint256</span>), <span class="pl-s1">_status</span>: <span class="pl-s1">uint256</span>})
+
+<span class="pl-c"># Global Variables</span>
+
+<span class="pl-c"># State variables are values which are permanently stored in contract storage</span>
+<span class="pl-c"># State vars consist of any value persisting beyond any function's scope</span>
+<span class="pl-c">#   and are permanently stored in contract storage</span>
+
+<span class="pl-c"># You can define your own, custom, unmutable constants</span>
+<span class="pl-v">CREATED</span>: <span class="pl-en">constant</span>(<span class="pl-s1">uint256</span>) <span class="pl-c1">=</span> <span class="pl-c1">0</span>
+<span class="pl-v">COMPLETED</span>: <span class="pl-en">constant</span>(<span class="pl-s1">uint256</span>) <span class="pl-c1">=</span> <span class="pl-c1">1</span>
+<span class="pl-v">DELETED</span>: <span class="pl-en">constant</span>(<span class="pl-s1">uint256</span>) <span class="pl-c1">=</span> <span class="pl-c1">2</span>
+
+<span class="pl-c"># The `public` built-in allows for this address to be read externally</span>
+<span class="pl-c">#   without defining a `get()` constant function</span>
+<span class="pl-s1">owner</span>: <span class="pl-en">public</span>(<span class="pl-s1">address</span>)
+<span class="pl-s1">other</span>: <span class="pl-en">public</span>(<span class="pl-s1">address</span>)
+
+<span class="pl-c"># uint256 means "unsigned positive integer between 0 and 2^256 - 1"</span>
+<span class="pl-c"># Overflow protection is built-in to Vyper</span>
+<span class="pl-s1">taskCount</span>: <span class="pl-s1">uint256</span>
+<span class="pl-s1">tasks</span>: <span class="pl-en">map</span>(<span class="pl-s1">uint256</span>, <span class="pl-v">Task</span>) <span class="pl-c"># dictionary: key=uint256, value: Task struct</span>
+
+<span class="pl-c"># Private Functions</span>
+
+<span class="pl-c"># Start each function with Pythonic decorators</span>
+<span class="pl-c"># These decorators resemble Natspec but are actually enforced by Vyper's compiler</span>
+<span class="pl-c"># These decorators are:</span>
+<span class="pl-c"># @public XOR @private (either one or the other)</span>
+<span class="pl-c">#   @public (if any contract/user can call it)</span>
+<span class="pl-c">#   @private (if only internal functions can call it)</span>
+<span class="pl-c"># @payable (if the function is payable i.e. accepting ETH)</span>
+<span class="pl-c"># @constant (if the function is not modifying anything on-chain)</span>
+<span class="pl-en">@<span class="pl-s1">private</span></span>
+<span class="pl-k">def</span> <span class="pl-en">_changeTaskStatus</span>( \
+        <span class="pl-s1">_sender</span>: <span class="pl-s1">address</span>, \
+        <span class="pl-s1">_taskId</span>: <span class="pl-s1">uint256</span>, \
+        <span class="pl-s1">_status</span>: <span class="pl-s1">uint256</span>, \
+    ):
+    <span class="pl-c"># backslashes (\) allow for multi-line code</span>
+    <span class="pl-c"># Natspec comments are particularly helpful for documentation and readability</span>
+    <span class="pl-c"># Natspec can be included using familiar Pythonic docstring syntax</span>
+    <span class="pl-s">"""</span>
+<span class="pl-s">    @notice</span>
+<span class="pl-s">    @dev `_sender` MUST be `self.owner`</span>
+<span class="pl-s">    @param _sender Who is triggering this function</span>
+<span class="pl-s">    @param _task The description of the task (only useful when task added)</span>
+<span class="pl-s">    """</span>
+    <span class="pl-c"># NOTE: Private functions do not have access to `msg.sender`</span>
+    <span class="pl-c"># SIDE NOTE: `msg.sender` refers to whoever immediately called the function of</span>
+    <span class="pl-c">#   immediate scope. In other words, if I call a function that calls another</span>
+    <span class="pl-c">#   in-contract, public function, then `msg.sender` turns from my address to</span>
+    <span class="pl-c">#   the address of the current contract.</span>
+    <span class="pl-k">assert</span> <span class="pl-s1">_sender</span> <span class="pl-c1">==</span> <span class="pl-s1">self</span>.<span class="pl-s1">owner</span> <span class="pl-c"># failed assertions cause calls/transactions to fail</span>
+    <span class="pl-c"># Note that unlike Solidity, `self.` is required to query the contract's state</span>
+    <span class="pl-c"># Control flow is Pythonic, as is much of Vyper:</span>
+    <span class="pl-s1">_task</span>: <span class="pl-s1">string</span>[<span class="pl-c1">100</span>] <span class="pl-c"># initialized to default value</span>
+    <span class="pl-s1">_data</span>: <span class="pl-s1">bytes32</span> <span class="pl-c1">=</span> <span class="pl-en">sha3</span>(<span class="pl-en">convert</span>(<span class="pl-s1">_sender</span>, <span class="pl-s1">bytes32</span>)) <span class="pl-c"># owner is obfuscated (but still visible in logs)</span>
+    <span class="pl-k">if</span> <span class="pl-s1">_status</span> <span class="pl-c1">==</span> <span class="pl-v">CREATED</span>: <span class="pl-c"># control flow mimics python</span>
+        <span class="pl-c"># How a new struct is instantiated:</span>
+        <span class="pl-s1">self</span>.<span class="pl-s1">tasks</span>[<span class="pl-s1">_taskId</span>] <span class="pl-c1">=</span> <span class="pl-v">Task</span>({ \
+            <span class="pl-s1">done</span>: <span class="pl-c1">False</span>, <span class="pl-s1">deleted</span>: <span class="pl-c1">False</span>, <span class="pl-s1">task</span>: <span class="pl-s1">_task</span>, <span class="pl-s1">metadata</span>: <span class="pl-s1">_data</span> \
+        })
+    <span class="pl-k">elif</span> <span class="pl-s1">_status</span> <span class="pl-c1">==</span> <span class="pl-v">COMPLETED</span>:
+        <span class="pl-c"># Modifying an existing struct:</span>
+        <span class="pl-s1">self</span>.<span class="pl-s1">tasks</span>[<span class="pl-s1">_taskId</span>].<span class="pl-s1">done</span> <span class="pl-c1">=</span> <span class="pl-c1">True</span>
+    <span class="pl-k">elif</span> <span class="pl-s1">_status</span> <span class="pl-c1">==</span> <span class="pl-v">DELETED</span>:
+        <span class="pl-s1">self</span>.<span class="pl-s1">tasks</span>[<span class="pl-s1">_taskId</span>].<span class="pl-s1">deleted</span> <span class="pl-c1">=</span> <span class="pl-c1">True</span>
+    <span class="pl-v">AnotherContract</span>(<span class="pl-s1">self</span>.<span class="pl-s1">other</span>).<span class="pl-en">inform</span>(<span class="pl-s1">_taskId</span>, <span class="pl-s1">_status</span>) <span class="pl-c"># modifying external call</span>
+    <span class="pl-s1">log</span>.<span class="pl-v">TaskStatus</span>(<span class="pl-s1">_taskId</span>, <span class="pl-s1">_status</span>) <span class="pl-c"># emit an event</span>
+
+<span class="pl-c"># Public Functions</span>
+
+<span class="pl-c"># Pythonic constructor - can receive none or many arguments</span>
+<span class="pl-en">@<span class="pl-s1">public</span></span>
+<span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">_owner</span>: <span class="pl-s1">address</span>, <span class="pl-s1">_other_contract</span>: <span class="pl-s1">address</span>):
+    <span class="pl-s">"""</span>
+<span class="pl-s">    @dev Called once and only upon contract depoyment</span>
+<span class="pl-s">    """</span>
+    <span class="pl-s1">self</span>.<span class="pl-s1">owner</span> <span class="pl-c1">=</span> <span class="pl-s1">_owner</span>
+    <span class="pl-s1">self</span>.<span class="pl-s1">other</span> <span class="pl-c1">=</span> <span class="pl-s1">_other_contract</span>
+
+<span class="pl-c"># NOTE: Pythonic whitespace rules are mandated in Vyper</span>
+
+<span class="pl-en">@<span class="pl-s1">public</span></span>
+<span class="pl-k">def</span> <span class="pl-en">addTask</span>(<span class="pl-s1">_task</span>: <span class="pl-s1">string</span>[<span class="pl-c1">100</span>]) <span class="pl-c1">-&gt;</span> <span class="pl-s1">uint256</span>:
+    <span class="pl-s">"""</span>
+<span class="pl-s">    @notice Adds a task to contract</span>
+<span class="pl-s">    @param _task Description of task</span>
+<span class="pl-s">    @return Id of newly minted task</span>
+<span class="pl-s">    """</span>
+    <span class="pl-c"># msg.sender gives the address of who/what contract is calling this function</span>
+    <span class="pl-s1">self</span>.<span class="pl-en">_changeTaskStatus</span>(<span class="pl-s1">msg</span>.<span class="pl-s1">sender</span>, <span class="pl-s1">self</span>.<span class="pl-s1">taskCount</span>, <span class="pl-v">CREATED</span>)
+    <span class="pl-s1">self</span>.<span class="pl-s1">tasks</span>[<span class="pl-s1">self</span>.<span class="pl-s1">taskCount</span>].<span class="pl-s1">task</span> <span class="pl-c1">=</span> <span class="pl-s1">_task</span>
+    <span class="pl-s1">self</span>.<span class="pl-s1">taskCount</span> <span class="pl-c1">+=</span> <span class="pl-c1">1</span>
+    <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-s1">taskCount</span> <span class="pl-c1">-</span> <span class="pl-c1">1</span>
+
+<span class="pl-en">@<span class="pl-s1">public</span></span>
+<span class="pl-k">def</span> <span class="pl-en">addSpecialTask</span>(<span class="pl-s1">_task</span>: <span class="pl-s1">string</span>[<span class="pl-c1">100</span>]) <span class="pl-c1">-&gt;</span> <span class="pl-s1">uint256</span>:
+    <span class="pl-s">"""</span>
+<span class="pl-s">    @notice Adds a task with metadata pulled from elsewhere</span>
+<span class="pl-s">    @param _task Description of task</span>
+<span class="pl-s">    @return Id of newly minted task</span>
+<span class="pl-s">    """</span>
+    <span class="pl-s1">self</span>.<span class="pl-en">_changeTaskStatus</span>(<span class="pl-s1">msg</span>.<span class="pl-s1">sender</span>, <span class="pl-s1">self</span>.<span class="pl-s1">taskCount</span>, <span class="pl-v">CREATED</span>)
+    <span class="pl-s1">self</span>.<span class="pl-s1">tasks</span>[<span class="pl-s1">self</span>.<span class="pl-s1">taskCount</span>].<span class="pl-s1">task</span> <span class="pl-c1">=</span> <span class="pl-s1">_task</span>
+    <span class="pl-s1">self</span>.<span class="pl-s1">tasks</span>[<span class="pl-s1">self</span>.<span class="pl-s1">taskCount</span>].<span class="pl-s1">metadata</span> <span class="pl-c1">=</span> <span class="pl-v">AnotherContract</span>(<span class="pl-s1">self</span>.<span class="pl-s1">other</span>).<span class="pl-en">fetch</span>()
+    <span class="pl-s1">self</span>.<span class="pl-s1">taskCount</span> <span class="pl-c1">+=</span> <span class="pl-c1">1</span>
+    <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-s1">taskCount</span> <span class="pl-c1">-</span> <span class="pl-c1">1</span>
+
+<span class="pl-en">@<span class="pl-s1">public</span></span>
+<span class="pl-k">def</span> <span class="pl-en">completeTask</span>(<span class="pl-s1">_taskId</span>: <span class="pl-s1">uint256</span>):
+    <span class="pl-s">"""</span>
+<span class="pl-s">    @notice Marks a task as "completed"</span>
+<span class="pl-s">    @param _taskId Id of task to complete</span>
+<span class="pl-s">    """</span>
+    <span class="pl-s1">self</span>.<span class="pl-en">_changeTaskStatus</span>(<span class="pl-s1">msg</span>.<span class="pl-s1">sender</span>, <span class="pl-s1">_taskId</span>, <span class="pl-v">COMPLETED</span>)
+
+<span class="pl-en">@<span class="pl-s1">public</span></span>
+<span class="pl-k">def</span> <span class="pl-en">deleteTask</span>(<span class="pl-s1">_taskId</span>: <span class="pl-s1">uint256</span>):
+    <span class="pl-s">"""</span>
+<span class="pl-s">    @notice Adds a task to contract</span>
+<span class="pl-s">    @param _taskId Id of task to delete</span>
+<span class="pl-s">    """</span>
+    <span class="pl-s1">self</span>.<span class="pl-en">_changeTaskStatus</span>(<span class="pl-s1">msg</span>.<span class="pl-s1">sender</span>, <span class="pl-s1">_taskId</span>, <span class="pl-v">DELETED</span>)
+
+<span class="pl-en">@<span class="pl-s1">public</span></span>
+<span class="pl-en">@<span class="pl-s1">constant</span> <span class="pl-c"># allows function to run locally/off blockchain</span></span>
+<span class="pl-k">def</span> <span class="pl-en">getTask</span>(<span class="pl-s1">_taskId</span>: <span class="pl-s1">uint256</span>) <span class="pl-c1">-&gt;</span> <span class="pl-s1">string</span>[<span class="pl-c1">100</span>]:
+    <span class="pl-s">"""</span>
+<span class="pl-s">    @notice Getter for a task's description</span>
+<span class="pl-s">    @param _taskId Id of task with desired description</span>
+<span class="pl-s">    @return Description of task</span>
+<span class="pl-s">    """</span>
+    <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-s1">tasks</span>[<span class="pl-s1">_taskId</span>].<span class="pl-s1">task</span>
+
+<span class="pl-c">### **** END EXAMPLE **** ###</span>
+
+
+<span class="pl-c"># Now, the basics of Vyper</span>
+
+
+<span class="pl-c"># ---</span>
+
+
+<span class="pl-c"># 1. DATA TYPES AND ASSOCIATED METHODS</span>
+<span class="pl-c"># uint256 used for currency amount and for dates (in unix time)</span>
+<span class="pl-s1">x</span>: <span class="pl-s1">uint256</span>
+
+<span class="pl-c"># int of 128 bits, cannot be changed after contract deployment</span>
+<span class="pl-c"># with 'constant', compiler replaces each occurrence with actual value</span>
+<span class="pl-s1">a</span>: <span class="pl-en">constant</span>(<span class="pl-s1">int128</span>) <span class="pl-c1">=</span> <span class="pl-c1">5</span>
+
+<span class="pl-c"># All state variables (those outside a function)</span>
+<span class="pl-c">#   are by default 'internal' and accessible inside contract</span>
+<span class="pl-c"># Need to explicitly set to 'public' to allow external contracts to access</span>
+<span class="pl-c">#   A getter is automatically created, but NOT a setter</span>
+<span class="pl-c"># Can only be called in the contract's scope (not within functions)</span>
+<span class="pl-c"># Add 'public' field to indicate publicly/externally accessible</span>
+<span class="pl-s1">a</span>: <span class="pl-en">public</span>(<span class="pl-s1">int128</span>)
+
+<span class="pl-c"># No random functions built in, use other contracts for randomness</span>
+
+<span class="pl-c"># Type casting is limited but exists</span>
+<span class="pl-s1">b</span>: <span class="pl-s1">int128</span> <span class="pl-c1">=</span> <span class="pl-c1">5</span>
+<span class="pl-s1">x</span>: <span class="pl-s1">uint256</span> <span class="pl-c1">=</span> <span class="pl-en">convert</span>(<span class="pl-s1">b</span>, <span class="pl-s1">uint256</span>)
+
+<span class="pl-c"># Types of accounts:</span>
+<span class="pl-c"># Contract Account: f(creator_addr, num_transactions)=address set on contract creation</span>
+<span class="pl-c"># External Account: (person/external entity): f(public_key)=address</span>
+
+<span class="pl-c"># Addresses - An address type can hold an Ethereum address which</span>
+<span class="pl-c">#   equates to 20 bytes or 160 bits. It returns in hexadecimal notation</span>
+<span class="pl-c">#   with a leading 0x. No arithmetic allowed</span>
+<span class="pl-s1">owner</span>: <span class="pl-en">public</span>(<span class="pl-s1">address</span>)
+
+<span class="pl-c"># Members can be invoked on all addresses:</span>
+<span class="pl-s1">owner</span>.<span class="pl-s1">balance</span> <span class="pl-c"># returns balance of address as `wei_value`</span>
+<span class="pl-s1">owner</span>.<span class="pl-s1">codesize</span> <span class="pl-c"># returns code size of address as `int128`</span>
+<span class="pl-s1">owner</span>.<span class="pl-s1">is_contract</span> <span class="pl-c"># `True` if Contract Account</span>
+
+<span class="pl-c"># All addresses can be sent ether via `send()` built-in</span>
+<span class="pl-en">@<span class="pl-s1">public</span></span>
+<span class="pl-en">@<span class="pl-s1">payable</span></span>
+<span class="pl-k">def</span> <span class="pl-en">sendWei</span>(<span class="pl-s1">any_addr</span>: <span class="pl-s1">address</span>):
+    <span class="pl-en">send</span>(<span class="pl-s1">any_addr</span>, <span class="pl-s1">msg</span>.<span class="pl-s1">value</span>)
+
+<span class="pl-c"># Bytes available</span>
+<span class="pl-s1">a</span>: <span class="pl-s1">bytes</span>[<span class="pl-c1">2</span>]
+<span class="pl-s1">b</span>: <span class="pl-s1">bytes</span>[<span class="pl-c1">32</span>]
+<span class="pl-s1">c</span>: <span class="pl-s1">bytes32</span>
+<span class="pl-c"># `b` and `c` are 2 different types</span>
+
+<span class="pl-c"># Bytes are preferable to strings since Vyper currently offers better</span>
+<span class="pl-c">#   support for bytes i.e. more built-ins to deal with `bytes32`, `bytes32`</span>
+<span class="pl-c">#   can be returned from functions and strings[] can't be, UTF8 (string encoding)</span>
+<span class="pl-c">#   uses more storage, etc.</span>
+
+<span class="pl-c"># There are no dynamically sized bytes, similar to how there are no</span>
+<span class="pl-c">#   dynamic arrays</span>
+
+<span class="pl-c"># Fixed-size byte arrays (Strings)</span>
+<span class="pl-s1">a</span>: <span class="pl-s1">string</span>[<span class="pl-c1">100</span>]
+<span class="pl-s1">b</span>: <span class="pl-s1">string</span>[<span class="pl-c1">8</span>]
+<span class="pl-s1">c</span>: <span class="pl-s1">string</span>[<span class="pl-c1">108</span>] <span class="pl-c1">=</span> <span class="pl-en">concat</span>(<span class="pl-s1">a</span>, <span class="pl-s1">b</span>) <span class="pl-c"># check the latest docs for more built-ins</span>
+
+<span class="pl-c"># Time</span>
+<span class="pl-s1">t1</span>: <span class="pl-s1">timedelta</span>
+<span class="pl-s1">t2</span>: <span class="pl-s1">timestamp</span>
+<span class="pl-c"># Both types are built-in "custom type" variants of `uint256`</span>
+<span class="pl-c"># `timedelta` values can be added but not `timestamp` values</span>
+
+<span class="pl-c"># Money</span>
+<span class="pl-s1">m</span>: <span class="pl-s1">wei_value</span>
+<span class="pl-c"># Also has the base type `uint256` like `timestamp` and `timedelta`</span>
+<span class="pl-c"># 1 unit of WEI (a small amount of ETH i.e. ether)</span>
+
+<span class="pl-c"># Custom types</span>
+<span class="pl-c"># specify units used in the contract:</span>
+<span class="pl-s1">units</span>: {
+    <span class="pl-s1">cm</span>: <span class="pl-s">"centimeter"</span>,
+    <span class="pl-s1">km</span>: <span class="pl-s">"kilometer"</span>
+}
+<span class="pl-c"># usage:</span>
+<span class="pl-s1">a</span>: <span class="pl-en">int128</span>(<span class="pl-s1">cm</span>)
+<span class="pl-s1">b</span>: <span class="pl-en">uint256</span>(<span class="pl-s1">km</span>)
+
+<span class="pl-c"># BY DEFAULT: all values are set to 0 on instantiation</span>
+
+<span class="pl-c"># `clear()` can be called on most types</span>
+<span class="pl-c">#   Does NOT destroy value, but sets value to 0, the initial value</span>
+
+
+<span class="pl-c"># ---</span>
+
+
+<span class="pl-c"># 2. DATA STRUCTURES</span>
+<span class="pl-c"># Arrays</span>
+<span class="pl-s1">bytes32</span>[<span class="pl-c1">5</span>] <span class="pl-s1">nicknames</span>; <span class="pl-c"># static array</span>
+<span class="pl-s1">bytes32</span>[] <span class="pl-s1">names</span>; <span class="pl-c"># dynamic array</span>
+<span class="pl-s1">uint</span> <span class="pl-s1">newLength</span> <span class="pl-c1">=</span> <span class="pl-s1">names</span>.<span class="pl-en">push</span>(<span class="pl-s">"John"</span>); <span class="pl-c"># adding returns new length of the array</span>
+<span class="pl-c"># Length</span>
+<span class="pl-s1">names</span>.<span class="pl-s1">length</span>; <span class="pl-c"># get length</span>
+<span class="pl-s1">names</span>.<span class="pl-s1">length</span> <span class="pl-c1">=</span> <span class="pl-c1">1</span>; <span class="pl-c"># lengths can be set (for dynamic arrays in storage only)</span>
+
+<span class="pl-c"># Multidimensional Arrays</span>
+<span class="pl-c"># At initialization, array dimensions must be hard-coded or constants</span>
+<span class="pl-c"># Initialize a 10-column by 3-row, multidimensional fixed array</span>
+<span class="pl-s1">ls</span>: (<span class="pl-s1">uint256</span>[<span class="pl-c1">10</span>])[<span class="pl-c1">3</span>] <span class="pl-c"># parentheses are optional</span>
+<span class="pl-en">@<span class="pl-s1">public</span></span>
+<span class="pl-k">def</span> <span class="pl-en">setToThree</span>():
+    <span class="pl-c"># Multidimensional Array Access and Write</span>
+    <span class="pl-c"># access indices are reversed</span>
+    <span class="pl-c"># set element in row 2 (3rd row) column 5 (6th column) to 3</span>
+    <span class="pl-s1">self</span>.<span class="pl-s1">ls</span>[<span class="pl-c1">2</span>][<span class="pl-c1">5</span>] <span class="pl-c1">=</span> <span class="pl-c1">3</span>
+
+<span class="pl-c"># Dictionaries (any simple type to any other type including structs)</span>
+<span class="pl-s1">theMap</span>: <span class="pl-en">map</span>(<span class="pl-s1">uint256</span>, <span class="pl-s1">bytes32</span>)
+<span class="pl-s1">theMap</span>[<span class="pl-c1">5</span>] <span class="pl-c1">=</span> <span class="pl-en">sha3</span>(<span class="pl-s">"charles"</span>)
+<span class="pl-c"># theMap[255] result is 0, all non-set key values return zeroes</span>
+<span class="pl-c"># To make read public, make a getter that accesses the mapping</span>
+<span class="pl-en">@<span class="pl-s1">public</span></span>
+<span class="pl-k">def</span> <span class="pl-en">getMap</span>(<span class="pl-s1">_idx</span>: <span class="pl-s1">uint256</span>) <span class="pl-c1">-&gt;</span> <span class="pl-s1">bytes32</span>:
+    <span class="pl-s">"""</span>
+<span class="pl-s">    @notice Get the value of `theMap` at `_idx`</span>
+<span class="pl-s">    """</span>
+    <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-s1">theMap</span>[<span class="pl-s1">_idx</span>]
+
+<span class="pl-s1">self</span>.<span class="pl-en">getMap</span>(<span class="pl-c1">5</span>) <span class="pl-c"># returns sha3("charles") in bytes32</span>
+
+<span class="pl-c"># Nested mappings</span>
+<span class="pl-s1">aMap</span>: <span class="pl-en">map</span>(<span class="pl-s1">address</span>, <span class="pl-en">map</span>(<span class="pl-s1">address</span>, <span class="pl-s1">uint256</span>))
+<span class="pl-c"># NOTE: Mappings are only allowed as state variables</span>
+<span class="pl-c"># NOTE: Mappings are not iterable; can only be accessed</span>
+
+<span class="pl-c"># To delete (reset the mapping's value to default at a key)</span>
+<span class="pl-en">clear</span>(<span class="pl-s1">balances</span>[<span class="pl-s">"John"</span>])
+<span class="pl-en">clear</span>(<span class="pl-s1">balances</span>); <span class="pl-c"># sets all elements to 0</span>
+
+<span class="pl-c"># Unlike other languages, CANNOT iterate through all elements in</span>
+<span class="pl-c">#   mapping, without knowing source keys - can build data structure</span>
+<span class="pl-c">#   on top to do this</span>
+
+<span class="pl-c"># Structs</span>
+<span class="pl-s1">struct</span> <span class="pl-v">Struct</span>:
+    <span class="pl-s1">owner</span>: <span class="pl-s1">address</span>
+    <span class="pl-s1">_balance</span>: <span class="pl-s1">uint256</span> <span class="pl-c"># balance is a reserved keyword, is a member for addresses</span>
+
+<span class="pl-s1">exampleStruct</span>: <span class="pl-v">Struct</span>
+
+<span class="pl-en">@<span class="pl-s1">public</span></span>
+<span class="pl-k">def</span> <span class="pl-en">foo</span>() <span class="pl-c1">-&gt;</span> <span class="pl-s1">uint256</span>:
+    <span class="pl-s1">self</span>.<span class="pl-s1">exampleStruct</span> <span class="pl-c1">=</span> <span class="pl-v">Struct</span>({<span class="pl-s1">owner</span>: <span class="pl-s1">msg</span>.<span class="pl-s1">sender</span>, <span class="pl-s1">_balance</span>: <span class="pl-c1">5</span>})
+    <span class="pl-s1">self</span>.<span class="pl-s1">exampleStruct</span>.<span class="pl-s1">_balance</span> <span class="pl-c1">=</span> <span class="pl-c1">10</span>
+    <span class="pl-s1">self</span>.<span class="pl-s1">exampleStruct</span>.<span class="pl-s1">_balance</span> <span class="pl-c1">=</span> <span class="pl-c1">5</span> <span class="pl-c"># set to new value</span>
+    <span class="pl-en">clear</span>(<span class="pl-s1">self</span>.<span class="pl-s1">exampleStruct</span>.<span class="pl-s1">_balance</span>)
+    <span class="pl-en">clear</span>(<span class="pl-s1">self</span>.<span class="pl-s1">exampleStruct</span>)
+    <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-s1">exampleStruct</span>.<span class="pl-s1">_balance</span>
+
+
+<span class="pl-c"># Data locations: Memory vs. storage vs. calldata - all complex types (arrays,</span>
+<span class="pl-c"># structs) have a data location</span>
+<span class="pl-c"># 'memory' does not persist, 'storage' does</span>
+<span class="pl-c"># Default is 'storage' for local and state variables; 'memory' for func params</span>
+<span class="pl-c"># stack holds small local variables</span>
+
+<span class="pl-c"># for most types, can explicitly set which data location to use</span>
+
+
+<span class="pl-c"># ---</span>
+
+
+<span class="pl-c"># 3. SIMPLE OPERATORS</span>
+<span class="pl-c"># Comparisons, bit operators and arithmetic operators are provided</span>
+<span class="pl-c"># exponentiation: **</span>
+<span class="pl-c"># modulo: %</span>
+<span class="pl-c"># maximum: max(x, y)</span>
+<span class="pl-c"># AND: bitwise_and(x, y)</span>
+<span class="pl-c"># bitwise shift: shift(x, _shift)</span>
+<span class="pl-c">#   where x,y are uint256</span>
+<span class="pl-c">#         _shift is int128</span>
+
+<span class="pl-c"># 4. GLOBAL VARIABLES OF NOTE</span>
+<span class="pl-c"># ** self **</span>
+<span class="pl-s1">self</span> <span class="pl-c"># address of contract</span>
+<span class="pl-c"># often used at end of contract life to transfer remaining balance to party:</span>
+<span class="pl-s1">self</span>.<span class="pl-s1">balance</span> <span class="pl-c"># balance of current contract</span>
+<span class="pl-s1">self</span>.<span class="pl-en">someFunction</span>() <span class="pl-c"># calls func externally via call, not via internal jump</span>
+
+<span class="pl-c"># ** msg - Current message received by the contract **</span>
+<span class="pl-c"># Ethereum programmers take NOTE: this `msg` object is smaller than elsewhere</span>
+<span class="pl-s1">msg</span>.<span class="pl-s1">sender</span> <span class="pl-c"># address of sender</span>
+<span class="pl-s1">msg</span>.<span class="pl-s1">value</span> <span class="pl-c"># amount of ether provided to this contract in wei, the function should be marked `@payable`</span>
+<span class="pl-s1">msg</span>.<span class="pl-s1">gas</span> <span class="pl-c"># remaining gas</span>
+
+<span class="pl-c"># ** tx - This transaction **</span>
+<span class="pl-c"># Ethereum programmers take NOTE: this `tx` object is smaller than elsewhere</span>
+<span class="pl-s1">tx</span>.<span class="pl-s1">origin</span> <span class="pl-c"># address of sender of the transaction</span>
+
+<span class="pl-c"># ** block - Information about current block **</span>
+<span class="pl-s1">block</span>.<span class="pl-s1">timestamp</span> <span class="pl-c"># time at current block (uses Unix time)</span>
+<span class="pl-c"># Note that `block.timestamp` can be manipulated by miners, so be careful</span>
+<span class="pl-s1">block</span>.<span class="pl-s1">number</span> <span class="pl-c"># current block number</span>
+<span class="pl-s1">block</span>.<span class="pl-s1">difficulty</span> <span class="pl-c"># current block difficulty</span>
+
+<span class="pl-c"># ** storage - Persistent storage hash **</span>
+<span class="pl-s1">storage</span>[<span class="pl-s">'abc'</span>] <span class="pl-c1">=</span> <span class="pl-s">'def'</span>; <span class="pl-c"># maps 256 bit words to 256 bit words</span>
+
+
+<span class="pl-c"># ---</span>
+
+
+<span class="pl-c"># 5. FUNCTIONS AND MORE</span>
+
+<span class="pl-c"># A. FUNCTIONS</span>
+<span class="pl-c"># Simple function</span>
+<span class="pl-en">function</span> <span class="pl-s1">increment</span>(<span class="pl-s1">uint</span> <span class="pl-s1">x</span>) <span class="pl-s1">returns</span> (<span class="pl-s1">uint</span>) {
+    <span class="pl-s1">x</span> <span class="pl-c1">+=</span> <span class="pl-c1">1</span>;
+    <span class="pl-k">return</span> <span class="pl-s1">x</span>;
+}
+
+<span class="pl-c"># Functions can return many arguments</span>
+<span class="pl-en">@<span class="pl-s1">public</span></span>
+<span class="pl-en">@<span class="pl-s1">constant</span></span>
+<span class="pl-k">def</span> <span class="pl-en">increment</span>(<span class="pl-s1">x</span>: <span class="pl-s1">uint256</span>, <span class="pl-s1">y</span>: <span class="pl-s1">uint256</span>) <span class="pl-c1">-&gt;</span> (<span class="pl-s1">uint256</span>, <span class="pl-s1">uint256</span>):
+    <span class="pl-s1">x</span> <span class="pl-c1">+=</span> <span class="pl-c1">1</span>
+    <span class="pl-s1">y</span> <span class="pl-c1">+=</span> <span class="pl-c1">1</span>
+    <span class="pl-k">return</span>  (<span class="pl-s1">x</span>, <span class="pl-s1">y</span>)
+
+<span class="pl-c"># Call previous function</span>
+<span class="pl-en">@<span class="pl-s1">public</span></span>
+<span class="pl-en">@<span class="pl-s1">constant</span></span>
+<span class="pl-k">def</span> <span class="pl-en">willCall</span>() <span class="pl-c1">-&gt;</span> (<span class="pl-s1">uint256</span>, <span class="pl-s1">uint256</span>):
+    <span class="pl-k">return</span>  <span class="pl-s1">self</span>.<span class="pl-en">increment</span>(<span class="pl-c1">1</span>,<span class="pl-c1">1</span>)
+
+<span class="pl-c"># One should never have to call a function / hold any logic outside</span>
+<span class="pl-c">#   outside the scope of a function in Vyper</span>
+
+<span class="pl-c"># '@constant'</span>
+<span class="pl-c"># indicates that function does not/cannot change persistent vars</span>
+<span class="pl-c"># Constant function execute locally, not on blockchain</span>
+<span class="pl-s1">y</span>: <span class="pl-s1">uint256</span>
+<span class="pl-en">@<span class="pl-s1">public</span></span>
+<span class="pl-en">@<span class="pl-s1">constant</span></span>
+<span class="pl-k">def</span> <span class="pl-en">increment</span>(<span class="pl-s1">x</span>: <span class="pl-s1">uint256</span>) <span class="pl-c1">-&gt;</span> <span class="pl-s1">uint256</span>:
+    <span class="pl-s1">x</span> <span class="pl-c1">+=</span> <span class="pl-c1">1</span>
+    <span class="pl-s1">y</span> <span class="pl-c1">+=</span> <span class="pl-c1">1</span> <span class="pl-c"># this line would fail</span>
+    <span class="pl-c"># y is a state variable =&gt; can't be changed in a constant function</span>
+
+
+<span class="pl-c"># 'Function Decorators'</span>
+<span class="pl-c"># Used like python decorators but are REQUIRED by Vyper</span>
+<span class="pl-c"># @public - visible externally and internally (default for function)</span>
+<span class="pl-c"># @private - only visible in the current contract</span>
+<span class="pl-c"># @constant - doesn't change state</span>
+<span class="pl-c"># @payable - receive ether/ETH</span>
+<span class="pl-c"># @nonrentant(&lt;unique_key&gt;) - Function can only be called once, both externally</span>
+<span class="pl-c">#                             and internally. Used to prevent reentrancy attacks</span>
+
+<span class="pl-c"># Functions hare not hoisted</span>
+<span class="pl-c"># Functions cannot be assigned to a variable</span>
+<span class="pl-c"># Functions cannot be recursive</span>
+
+<span class="pl-c"># All functions that receive ether must be marked 'payable'</span>
+<span class="pl-en">@<span class="pl-s1">public</span></span>
+<span class="pl-en">@<span class="pl-s1">payable</span></span>
+<span class="pl-k">def</span> <span class="pl-en">depositEther</span>():
+    <span class="pl-s1">self</span>.<span class="pl-s1">balances</span>[<span class="pl-s1">msg</span>.<span class="pl-s1">sender</span>] <span class="pl-c1">+=</span> <span class="pl-s1">msg</span>.<span class="pl-s1">value</span>
+
+
+<span class="pl-c"># B. EVENTS</span>
+<span class="pl-c"># Events are notify external parties; easy to search and</span>
+<span class="pl-c">#   access events from outside blockchain (with lightweight clients)</span>
+<span class="pl-c">#   typically declare after contract parameters</span>
+
+<span class="pl-c"># Declare</span>
+<span class="pl-v">LogSent</span>: <span class="pl-en">event</span>({<span class="pl-s1">_from</span>: <span class="pl-en">indexed</span>(<span class="pl-s1">address</span>), <span class="pl-s1">address</span>: <span class="pl-en">indexed</span>(<span class="pl-s1">_to</span>), <span class="pl-s1">_amount</span>: <span class="pl-s1">uint256</span>})
+<span class="pl-c"># Call</span>
+<span class="pl-s1">log</span>.<span class="pl-v">LogSent</span>(<span class="pl-s1">from</span>, <span class="pl-s1">to</span>, <span class="pl-s1">amount</span>)
+
+<span class="pl-c1">/</span><span class="pl-c1">**</span>
+<span class="pl-v">For</span> <span class="pl-s1">an</span> <span class="pl-en">external</span> <span class="pl-s1">party</span> (<span class="pl-s1">a</span> <span class="pl-s1">contract</span> <span class="pl-c1">or</span> <span class="pl-s1">external</span> <span class="pl-s1">entity</span>), <span class="pl-s1">to</span> <span class="pl-s1">watch</span> <span class="pl-s1">using</span>
+<span class="pl-s1">the</span> <span class="pl-v">Web3</span> <span class="pl-v">Javascript</span> <span class="pl-s1">library</span>:
+
+<span class="pl-c"># The following is Javascript code, not Vyper code</span>
+<span class="pl-v">Coin</span>.<span class="pl-v">LogSent</span>().<span class="pl-s1">watch</span>({}, <span class="pl-s">''</span>, <span class="pl-en">function</span>(<span class="pl-s1">error</span>, <span class="pl-s1">result</span>) {
+    <span class="pl-k">if</span> (!e<span class="pl-s1">rror</span>) {
+        <span class="pl-s1">console</span>.<span class="pl-en">log</span>(<span class="pl-s">"Coin transfer: "</span> <span class="pl-c1">+</span> <span class="pl-s1">result</span>.<span class="pl-s1">args</span>.<span class="pl-s1">amount</span> <span class="pl-c1">+</span>
+            <span class="pl-s">" coins were sent from "</span> <span class="pl-c1">+</span> <span class="pl-s1">result</span>.<span class="pl-s1">args</span>.<span class="pl-s1">from</span> <span class="pl-c1">+</span>
+            <span class="pl-s">" to "</span> <span class="pl-c1">+</span> <span class="pl-s1">result</span>.<span class="pl-s1">args</span>.<span class="pl-s1">to</span> <span class="pl-c1">+</span> <span class="pl-s">"."</span>);
+        <span class="pl-s1">console</span>.<span class="pl-en">log</span>(<span class="pl-s">"Balances now:<span class="pl-cce">\n</span>"</span> <span class="pl-c1">+</span>
+            <span class="pl-s">"Sender: "</span> <span class="pl-c1">+</span> <span class="pl-v">Coin</span>.<span class="pl-s1">balances</span>.<span class="pl-en">call</span>(<span class="pl-s1">result</span>.<span class="pl-s1">args</span>.<span class="pl-s1">from</span>) <span class="pl-c1">+</span>
+            <span class="pl-s">"Receiver: "</span> <span class="pl-c1">+</span> <span class="pl-v">Coin</span>.<span class="pl-s1">balances</span>.<span class="pl-en">call</span>(<span class="pl-s1">result</span>.<span class="pl-s1">args</span>.<span class="pl-s1">to</span>));
+    }
+}
+<span class="pl-c1">**</span><span class="pl-c1">/</span>
+
+<span class="pl-c"># Common paradigm for one contract to depend on another (e.g., a</span>
+<span class="pl-c">#   contract that depends on current exchange rate provided by another)</span>
+
+
+<span class="pl-c"># ---</span>
+
+
+<span class="pl-c"># 6. BRANCHING AND LOOPS</span>
+
+<span class="pl-c"># All basic logic blocks from Python work - including if/elif/else, for,</span>
+<span class="pl-c">#   while, break, continue, return - but no switch</span>
+
+<span class="pl-c"># Syntax same as Python, but no type conversion from non-boolean</span>
+<span class="pl-c"># to boolean (comparison operators must be used to get the boolean val)</span>
+
+<span class="pl-c"># REMEMBER: Vyper does not allow resursive calls or infinite loops</span>
+
+
+<span class="pl-c"># ---</span>
+
+
+<span class="pl-c"># 7. OBJECTS/CONTRACTS</span>
+<span class="pl-c"># REMEMBER: Vyper does not allow for inheritance or imports</span>
+
+<span class="pl-c"># A. CALLING EXTERNAL CONTRACTS</span>
+<span class="pl-c"># You must define an interface to an external contract in the current contract</span>
+
+<span class="pl-en">contract</span> <span class="pl-v">InfoFeed</span>():
+    <span class="pl-k">def</span> <span class="pl-s1">getInfo</span>() <span class="pl-c1">-</span><span class="pl-c1">&gt;</span> <span class="pl-s1">uint256</span>: <span class="pl-s1">constant</span>
+
+<span class="pl-s1">info</span>: <span class="pl-s1">uint256</span>
+
+<span class="pl-en">@<span class="pl-s1">public</span></span>
+<span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">_source</span>: <span class="pl-s1">address</span>):
+    <span class="pl-s1">self</span>.<span class="pl-s1">info</span> <span class="pl-c1">=</span> <span class="pl-v">InfoFeed</span>(<span class="pl-s1">_source</span>).<span class="pl-en">getInfo</span>()
+
+
+<span class="pl-c"># B. ERC20 BUILT-IN</span>
+<span class="pl-c"># Using the `ERC20` keyword implies that the contract at the address</span>
+<span class="pl-c">#   follows the ERC20 token standard, allowing you to safely call</span>
+<span class="pl-c">#   functions like `transfer()`, etc.</span>
+
+<span class="pl-s1">tokenAddress</span>: <span class="pl-en">address</span>(<span class="pl-v">ERC20</span>)
+
+<span class="pl-en">@<span class="pl-s1">public</span></span>
+<span class="pl-k">def</span> <span class="pl-en">transferIt</span>(<span class="pl-s1">_to</span>: <span class="pl-s1">address</span>, <span class="pl-s1">_amt</span>: <span class="pl-en">uint256</span>(<span class="pl-s1">wei</span>)):
+    <span class="pl-s1">self</span>.<span class="pl-s1">tokenAddress</span>.<span class="pl-en">transfer</span>(<span class="pl-s1">_to</span>, <span class="pl-s1">_amt</span>)
+
+
+<span class="pl-c"># C. FOLLOWING AN INTERFACE</span>
+<span class="pl-c"># Vyper is experimenting with using the following syntax at the top of</span>
+<span class="pl-c">#   a `.vy` file to specify what interfaces are followed by the contract</span>
+<span class="pl-c"># This allows interfaces to be better organized, registered, and recognized</span>
+
+<span class="pl-k">import</span> <span class="pl-s1">interfaces</span>.<span class="pl-s1">some_interface</span> <span class="pl-k">as</span> <span class="pl-v">SomeInterface</span>
+<span class="pl-s1">implements</span>: <span class="pl-v">SomeInterface</span>
+<span class="pl-c"># &lt;rest of contract&gt;</span>
+
+
+<span class="pl-c"># ---</span>
+
+
+<span class="pl-c"># 8. OTHER KEYWORDS</span>
+
+<span class="pl-c"># A. selfdestruct()</span>
+<span class="pl-c"># selfdestruct current contract, sending funds to address (often creator)</span>
+<span class="pl-en">selfdestruct</span>(<span class="pl-v">SOME_ADDRESS</span>);
+
+<span class="pl-c"># removes storage/code from current/future blocks</span>
+<span class="pl-c"># helps thin clients, but previous data persists in blockchain</span>
+
+<span class="pl-c"># Common pattern, lets owner end the contract and receive remaining funds</span>
+<span class="pl-en">@<span class="pl-s1">public</span></span>
+<span class="pl-k">def</span> <span class="pl-s1">endItAll</span>() {
+    <span class="pl-k">assert</span> <span class="pl-s1">msg</span>.<span class="pl-s1">sender</span> <span class="pl-c1">==</span> <span class="pl-s1">self</span>.<span class="pl-s1">creator</span> <span class="pl-c"># Only let the contract creator do this</span>
+    <span class="pl-en">selfdestruct</span>(<span class="pl-s1">self</span>.<span class="pl-s1">creator</span>) <span class="pl-c"># Makes contract inactive, returns funds</span>
+
+<span class="pl-c"># May want to deactivate contract manually, rather than selfdestruct</span>
+<span class="pl-c">#   (ether sent to selfdestructed contract is lost)</span>
+
+
+<span class="pl-c"># B. sha3()</span>
+<span class="pl-c"># Encrypts strings and other data</span>
+<span class="pl-c"># Very important on the blockchain</span>
+<span class="pl-c"># Takes 1 argument, `concat()` can be called beforehand</span>
+<span class="pl-c"># All strings passed are concatenated before hash action</span>
+<span class="pl-en">sha3</span>(<span class="pl-en">concat</span>(<span class="pl-s">"ab"</span>, <span class="pl-s">"cd"</span>)) <span class="pl-c"># returns bytes32</span>
+
+
+<span class="pl-c"># ---</span>
+
+
+<span class="pl-c"># 9. CONTRACT DESIGN NOTES</span>
+
+<span class="pl-c"># A. Obfuscation</span>
+<span class="pl-c"># All variables are publicly viewable on blockchain, so anything</span>
+<span class="pl-c">#   that is private needs to be obfuscated (e.g., hashed w/secret)</span>
+<span class="pl-c"># Oftentimes, a "commit-reveal" scheme is employed</span>
+
+<span class="pl-c"># Step 1. Commit</span>
+<span class="pl-c"># Place a commitment by sending output of `sha3()`</span>
+<span class="pl-en">sha3</span>(<span class="pl-s">"a secret"</span>); <span class="pl-c"># bytes32 commit</span>
+<span class="pl-en">sha3</span>(<span class="pl-en">concat</span>(<span class="pl-s">"secret"</span>, <span class="pl-s">"other secret"</span>, <span class="pl-s">"salt"</span>)); <span class="pl-c"># commit multiple things</span>
+<span class="pl-c"># The `sha3()` calculation should occur off-chain, only the bytes32</span>
+<span class="pl-c">#   output should be inputted into some `commit()` function</span>
+<span class="pl-s1">commits</span>: <span class="pl-en">map</span>(<span class="pl-s1">address</span>, <span class="pl-s1">bytes32</span>)
+<span class="pl-en">@<span class="pl-s1">public</span></span>
+<span class="pl-k">def</span> <span class="pl-en">commit</span>(<span class="pl-s1">commitment</span>: <span class="pl-s1">bytes32</span>):
+    <span class="pl-s1">self</span>.<span class="pl-s1">commits</span>[<span class="pl-s1">msg</span>.<span class="pl-s1">sender</span>] <span class="pl-c1">=</span> <span class="pl-s1">commitment</span>
+
+<span class="pl-c"># Step 2. Reveal</span>
+<span class="pl-c"># Send your previously committed data so the contract can check</span>
+<span class="pl-c">#   if your commitment was honest</span>
+<span class="pl-en">@<span class="pl-s1">public</span></span>
+<span class="pl-k">def</span> <span class="pl-en">reveal</span>(<span class="pl-s1">_secret</span>: <span class="pl-s1">string</span>[<span class="pl-c1">100</span>], <span class="pl-s1">_salt</span>: <span class="pl-s1">string</span>[<span class="pl-c1">100</span>]) <span class="pl-c1">-&gt;</span> <span class="pl-s1">bool</span>:
+    <span class="pl-k">return</span> <span class="pl-en">sha3</span>(<span class="pl-en">concat</span>(<span class="pl-s1">_secret</span>, <span class="pl-s1">_salt</span>)) <span class="pl-c1">==</span> <span class="pl-s1">self</span>.<span class="pl-s1">commits</span>[<span class="pl-s1">msg</span>.<span class="pl-s1">sender</span>]
+
+
+<span class="pl-c"># B. Storage optimization</span>
+<span class="pl-c"># Writing to blockchain can be expensive, as data stored forever; encourages</span>
+<span class="pl-c">#   smart ways to use memory (eventually, compilation will be better, but for now</span>
+<span class="pl-c">#   benefits to planning data structures - and storing min amount in blockchain)</span>
+
+<span class="pl-c"># Cost can often be high for items like multidimensional arrays</span>
+<span class="pl-c">#   (cost is for storing data - not declaring unfilled variables)</span>
+
+
+<span class="pl-c"># C. Data access in blockchain</span>
+<span class="pl-c"># Cannot restrict human or computer from reading contents of</span>
+<span class="pl-c">#   transaction or transaction's state</span>
+
+<span class="pl-c"># While 'private' prevents other *contracts* from reading data</span>
+<span class="pl-c">#   directly - any other party can still read data in blockchain</span>
+
+<span class="pl-c"># All data to start of time is stored in blockchain, so</span>
+<span class="pl-c">#   anyone can observe all previous data and changes</span>
+
+
+<span class="pl-c"># D. Cron Job</span>
+<span class="pl-c"># Contracts must be manually called to handle time-based scheduling;</span>
+<span class="pl-c">#   can create external code to regularly ping or provide incentives</span>
+<span class="pl-c">#   (ether) for others to ping</span>
+
+
+<span class="pl-c"># E. Observer Pattern</span>
+<span class="pl-c"># An Observer Pattern lets you register as a subscriber and</span>
+<span class="pl-c">#   register a function which is called by the oracle (note, the oracle</span>
+<span class="pl-c">#   pays for this action to be run)</span>
+<span class="pl-c"># Some similarities to subscription in Pub/sub</span>
+
+<span class="pl-c"># This is an abstract contract, both client and server classes import,</span>
+<span class="pl-c">#   the client should implement</span>
+
+<span class="pl-c">### **** START EXAMPLE **** ###</span>
+
+<span class="pl-s1">contract</span> <span class="pl-v">SomeOracleCallback</span>():
+    <span class="pl-k">def</span> <span class="pl-en">oracleCallback</span>(<span class="pl-s1">_value</span>: <span class="pl-s1">uint256</span>, <span class="pl-s1">_time</span>: <span class="pl-s1">timestamp</span>, <span class="pl-s1">_info</span>: <span class="pl-s1">bytes32</span>): <span class="pl-s1">modifying</span>
+
+<span class="pl-v">MAX_SUBS</span>: <span class="pl-en">constant</span>(<span class="pl-s1">uint256</span>) <span class="pl-c1">=</span> <span class="pl-c1">100</span>
+<span class="pl-s1">numSubs</span>: <span class="pl-en">public</span>(<span class="pl-s1">uint256</span>) <span class="pl-c"># number of subscribers</span>
+<span class="pl-s1">subs</span>: <span class="pl-en">map</span>(<span class="pl-s1">uint256</span>, <span class="pl-s1">address</span>) <span class="pl-c"># enumerates subscribers</span>
+
+<span class="pl-en">@<span class="pl-s1">public</span></span>
+<span class="pl-k">def</span> <span class="pl-en">addSub</span>(<span class="pl-s1">_sub</span>: <span class="pl-s1">address</span>) <span class="pl-c1">-&gt;</span> <span class="pl-s1">uint256</span>:
+    <span class="pl-s">"""</span>
+<span class="pl-s">    @notice Add subscriber</span>
+<span class="pl-s">    @param _sub Address to add</span>
+<span class="pl-s">    @return Id of newly added subscriber</span>
+<span class="pl-s">    """</span>
+    <span class="pl-s1">self</span>.<span class="pl-s1">subs</span>[<span class="pl-s1">self</span>.<span class="pl-s1">numSubs</span>] <span class="pl-c1">=</span> <span class="pl-s1">_sub</span>
+    <span class="pl-s1">self</span>.<span class="pl-s1">numSubs</span> <span class="pl-c1">+=</span> <span class="pl-c1">1</span>
+    <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-s1">numSubs</span> <span class="pl-c1">-</span> <span class="pl-c1">1</span>
+
+<span class="pl-en">@<span class="pl-s1">private</span></span>
+<span class="pl-k">def</span> <span class="pl-en">notify</span>(<span class="pl-s1">_value</span>: <span class="pl-s1">uint256</span>, <span class="pl-s1">_time</span>: <span class="pl-s1">timestamp</span>, <span class="pl-s1">_info</span>: <span class="pl-s1">bytes32</span>) <span class="pl-c1">-&gt;</span> <span class="pl-s1">bool</span>:
+    <span class="pl-s">"""</span>
+<span class="pl-s">    @notice Notify all subscribers</span>
+<span class="pl-s">    @dev Check `numSubs` first; Watch out for gas costs!</span>
+<span class="pl-s">    @param _value whatever</span>
+<span class="pl-s">    @param _time what have you</span>
+<span class="pl-s">    @param _info what else</span>
+<span class="pl-s">    @return True upon successful completion</span>
+<span class="pl-s">    """</span>
+    <span class="pl-s1">j</span>: <span class="pl-s1">uint256</span>
+    <span class="pl-k">for</span> <span class="pl-s1">i</span> <span class="pl-c1">in</span> <span class="pl-en">range</span>(<span class="pl-v">MAX_SUBS</span>):
+        <span class="pl-s1">j</span> <span class="pl-c1">=</span> <span class="pl-en">convert</span>(<span class="pl-s1">i</span>, <span class="pl-s1">uint256</span>) <span class="pl-c"># `i` is int128 by default</span>
+        <span class="pl-k">if</span> <span class="pl-s1">j</span> <span class="pl-c1">==</span> <span class="pl-s1">self</span>.<span class="pl-s1">numSubs</span>:
+            <span class="pl-k">return</span> <span class="pl-c1">True</span>
+        <span class="pl-v">SomeOracleCallback</span>(<span class="pl-s1">self</span>.<span class="pl-s1">subs</span>[<span class="pl-s1">j</span>]).<span class="pl-en">oracleCallback</span>(<span class="pl-s1">_value</span>, <span class="pl-s1">_time</span>, <span class="pl-s1">_info</span>)
+
+<span class="pl-en">@<span class="pl-s1">public</span></span>
+<span class="pl-k">def</span> <span class="pl-en">doSomething</span>():
+    <span class="pl-s">"""</span>
+<span class="pl-s">    @notice Do something and notify subscribers</span>
+<span class="pl-s">    """</span>
+    <span class="pl-c"># ...something...</span>
+    <span class="pl-s1">whatever</span>: <span class="pl-s1">uint256</span> <span class="pl-c1">=</span> <span class="pl-c1">6</span>
+    <span class="pl-s1">what_have_you</span>: <span class="pl-s1">timestamp</span>
+    <span class="pl-s1">what_else</span>: <span class="pl-s1">bytes32</span> <span class="pl-c1">=</span> <span class="pl-en">sha3</span>(<span class="pl-s">"6"</span>)
+    <span class="pl-s1">self</span>.<span class="pl-en">notify</span>(<span class="pl-s1">whatever</span>, <span class="pl-s1">what_have_you</span>, <span class="pl-s1">what_else</span>)
+
+<span class="pl-c"># Now, your client contract can addSubscriber by importing SomeOracleCallback</span>
+<span class="pl-c"># and registering with Some Oracle</span>
+
+<span class="pl-c">### **** END EXAMPLE **** ###</span>
+
+
+<span class="pl-c"># ---</span>
+
+
+<span class="pl-c"># 10. SECURITY</span>
+<span class="pl-c"># Bugs can be disastrous in Ethereum contracts - and even popular patterns in</span>
+<span class="pl-c">#   Vyper may be found to be antipatterns</span>
+
+<span class="pl-c"># See security links at the end of this doc</span>
+
+
+<span class="pl-c"># ---</span>
+
+
+<span class="pl-c"># 11. STYLE NOTES</span>
+<span class="pl-c"># Based on Python's PEP8 style guide</span>
+<span class="pl-c"># Full Style guide: http:#solidity.readthedocs.io/en/develop/style-guide.html</span>
+
+<span class="pl-c"># Quick summary:</span>
+<span class="pl-c"># 4 spaces for indentation</span>
+<span class="pl-c"># Two lines separate contract declarations (and other top level declarations)</span>
+<span class="pl-c"># Avoid extraneous spaces in parentheses</span>
+<span class="pl-c"># Can omit curly braces for one line statement (if, for, etc)</span>
+<span class="pl-c"># else should be placed on own line</span>
+
+<span class="pl-c"># Specific to Vyper:</span>
+<span class="pl-c"># arguments: snake_case</span>
+<span class="pl-c"># events, interfaces, structs: PascalCase</span>
+<span class="pl-c"># public functions: camelCase</span>
+<span class="pl-c"># private functions: _prefaceWithUnderscore</span>
+
+
+<span class="pl-c"># ---</span>
+
+
+<span class="pl-c"># 12. NATSPEC COMMENTS</span>
+<span class="pl-c"># used for documentation, commenting, and external UIs</span>
+
+<span class="pl-c"># Contract natspec - always above contract definition</span>
+<span class="pl-c"># @title Contract title</span>
+<span class="pl-c"># @author Author name</span>
+
+<span class="pl-c"># Function natspec</span>
+<span class="pl-c"># Should include in docstring of functions in typical Pythonic fashion</span>
+<span class="pl-c"># @notice Information about what function does; shown when function to execute</span>
+<span class="pl-c"># @dev Function documentation for developer</span>
+
+<span class="pl-c"># Function parameter/return value natspec</span>
+<span class="pl-c"># @param someParam Some description of what the param does</span>
+<span class="pl-c"># @return Description of the return value</span></pre></div>
+<h2>Additional resources</h2>
+<ul>
+<li><a href="https://vyper.readthedocs.io/en/latest/installing-vyper.html" rel="nofollow">Installation</a></li>
+<li><a href="https://media.readthedocs.org/pdf/vyper/latest/vyper.pdf" rel="nofollow">Vyper Docs</a></li>
+<li><a href="https://github.com/ethereum/vyper">Vyper GitHub (under active dev)</a></li>
+<li><a href="https://github.com/ethereum/vyper/wiki/Vyper-tools-and-resources">Tools and Resources</a></li>
+<li><a href="https://vyper.online/" rel="nofollow">Online Compiler</a></li>
+</ul>
+<h2>Sample contracts</h2>
+<ul>
+<li><a href="https://github.com/Uniswap/contracts-vyper">Uniswap</a></li>
+<li><a href="https://github.com/kpeluso/gdg">Generalized Governance</a></li>
+<li><a href="https://github.com/kpeluso/vyper-dynamic-array">Dynamic Arrays</a></li>
+</ul>
+<h2>Security</h2>
+<p>Vyper is secure by design, but it may be helpful to understand what Vyper is<br>
+protecting you from.</p>
+<ul>
+<li><a href="https:#blog.ethereum.org/2016/06/19/thinking-smart-contract-security/" rel="nofollow">Thinking About Smart Contract Security</a></li>
+<li><a href="https:#blog.ethereum.org/2016/06/10/smart-contract-security/" rel="nofollow">Smart Contract Security</a></li>
+<li><a href="http:#hackingdistributed.com/" rel="nofollow">Hacking Distributed Blog</a></li>
+</ul>
+<h2>Style</h2>
+<ul>
+<li><a href="https://github.com/ethereum/vyper/issues/905" data-hovercard-type="issue" data-hovercard-url="/vyperlang/vyper/issues/905/hovercard">Vyper Style Guide WIP</a>
+<ul>
+<li>Heavily derived from <a href="http:#solidity.readthedocs.io/en/latest/style-guide.html" rel="nofollow">Solidity's style guide</a> ...</li>
+<li>... which, in turn, is heavily derived from Python's <a href="https:#www.python.org/dev/peps/pep-0008/" rel="nofollow">PEP 8</a> style guide.</li>
+</ul>
+</li>
+</ul>
+<h2>Editors</h2>
+<ul>
+<li><a href="https://github.com/p-/vscode-vyper">Vyper for VS Code (alpha)</a></li>
+</ul>
+<h2>Future To Dos</h2>
+<ul>
+<li>Update to current Vyper release</li>
+<li>List of common design patterns</li>
+</ul>
+<p><em>Feel free to send a pull request with any edits - or email</em> <code class="notranslate">pelusoken -/at-/ gmail</code></p>
+<hr>
+<h2>Contributors</h2>
+<ul>
+<li>["Kenny Peluso", "kennyp.herokuapp.com"]</li>
+</ul>

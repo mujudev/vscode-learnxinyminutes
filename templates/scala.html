@@ -1,0 +1,748 @@
+<h1>Scala</h1>
+<p>Scala - the scalable language</p>
+<div class="highlight highlight-source-scala"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span>///////////////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> 0. Basics</span>
+<span class="pl-c"><span class="pl-c">//</span>///////////////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">  Setup Scala:</span>
+<span class="pl-c"></span>
+<span class="pl-c">  1) Download Scala - http://www.scala-lang.org/downloads</span>
+<span class="pl-c">  2) Unzip/untar to your favorite location and put the bin subdir in your `PATH` environment variable</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">  Try the REPL</span>
+<span class="pl-c"></span>
+<span class="pl-c">  Scala has a tool called the REPL (Read-Eval-Print Loop) that is analogous to</span>
+<span class="pl-c">  commandline interpreters in many other languages. You may type any Scala</span>
+<span class="pl-c">  expression, and the result will be evaluated and printed.  </span>
+<span class="pl-c"></span>
+<span class="pl-c">  The REPL is a very handy tool to test and verify code.  Use it as you read</span>
+<span class="pl-c">  this tutorial to quickly explore concepts on your own.</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span> Start a Scala REPL by running `scala`. You should see the prompt:</span>
+$ scala
+scala<span class="pl-k">&gt;</span>
+
+<span class="pl-c"><span class="pl-c">//</span> By default each expression you type is saved as a new numbered value</span>
+scala<span class="pl-k">&gt;</span> <span class="pl-c1">2</span> <span class="pl-k">+</span> <span class="pl-c1">2</span>
+res0<span class="pl-k">:</span> <span class="pl-en">Int</span> <span class="pl-k">=</span> <span class="pl-c1">4</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Default values can be reused.  Note the value type displayed in the result..</span>
+scala<span class="pl-k">&gt;</span> res0 <span class="pl-k">+</span> <span class="pl-c1">2</span>
+res1<span class="pl-k">:</span> <span class="pl-en">Int</span> <span class="pl-k">=</span> <span class="pl-c1">6</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Scala is a strongly typed language. You can use the REPL to check the type</span>
+<span class="pl-c"><span class="pl-c">//</span> without evaluating an expression.</span>
+scala<span class="pl-k">&gt;</span> <span class="pl-k">:</span><span class="pl-k">type</span> (<span class="pl-c1">true</span>, <span class="pl-c1">2.0</span>)
+(<span class="pl-en">Boolean</span>, <span class="pl-en">Double</span>)
+
+<span class="pl-c"><span class="pl-c">//</span> REPL sessions can be saved</span>
+scala<span class="pl-k">&gt;</span> <span class="pl-k">:</span>save <span class="pl-k">/</span>sites<span class="pl-k">/</span>repl<span class="pl-k">-</span>test.scala
+
+<span class="pl-c"><span class="pl-c">//</span> Files can be loaded into the REPL</span>
+scala<span class="pl-k">&gt;</span> <span class="pl-k">:</span>load <span class="pl-k">/</span>sites<span class="pl-k">/</span>repl<span class="pl-k">-</span>test.scala
+<span class="pl-en">Loading</span> <span class="pl-k">/</span>sites<span class="pl-k">/</span>repl<span class="pl-k">-</span>test.scala...
+res2<span class="pl-k">:</span> <span class="pl-en">Int</span> <span class="pl-k">=</span> <span class="pl-c1">4</span>
+res3<span class="pl-k">:</span> <span class="pl-en">Int</span> <span class="pl-k">=</span> <span class="pl-c1">6</span>
+
+<span class="pl-c"><span class="pl-c">//</span> You can search your recent history</span>
+scala<span class="pl-k">&gt;</span> <span class="pl-k">:</span>h<span class="pl-k">?</span>
+<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-k">+</span> <span class="pl-c1">2</span>
+<span class="pl-c1">2</span> res0 <span class="pl-k">+</span> <span class="pl-c1">2</span>
+<span class="pl-c1">3</span> <span class="pl-k">:</span>save <span class="pl-k">/</span>sites<span class="pl-k">/</span>repl<span class="pl-k">-</span>test.scala
+<span class="pl-c1">4</span> <span class="pl-k">:</span>load <span class="pl-k">/</span>sites<span class="pl-k">/</span>repl<span class="pl-k">-</span>test.scala
+<span class="pl-c1">5</span> <span class="pl-k">:</span>h<span class="pl-k">?</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Now that you know how to play, let's learn a little scala...</span>
+
+<span class="pl-c"><span class="pl-c">//</span>///////////////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> 1. Basics</span>
+<span class="pl-c"><span class="pl-c">//</span>///////////////////////////////////////////////</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Single-line comments start with two forward slashes</span>
+
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">  Multi-line comments, as you can already see from above, look like this.</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span> Printing, and forcing a new line on the next print</span>
+println(<span class="pl-s"><span class="pl-pds">"</span>Hello world!<span class="pl-pds">"</span></span>)
+println(<span class="pl-c1">10</span>)
+<span class="pl-c"><span class="pl-c">//</span> Hello world!</span>
+<span class="pl-c"><span class="pl-c">//</span> 10</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Printing, without forcing a new line on next print</span>
+print(<span class="pl-s"><span class="pl-pds">"</span>Hello world<span class="pl-pds">"</span></span>)
+print(<span class="pl-c1">10</span>)
+<span class="pl-c"><span class="pl-c">//</span> Hello world10</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Declaring values is done using either var or val.</span>
+<span class="pl-c"><span class="pl-c">//</span> val declarations are immutable, whereas vars are mutable. Immutability is</span>
+<span class="pl-c"><span class="pl-c">//</span> a good thing.</span>
+<span class="pl-k">val</span> <span class="pl-v">x</span> <span class="pl-k">=</span> <span class="pl-c1">10</span> <span class="pl-c"><span class="pl-c">//</span> x is now 10</span>
+x <span class="pl-k">=</span> <span class="pl-c1">20</span>     <span class="pl-c"><span class="pl-c">//</span> error: reassignment to val</span>
+<span class="pl-k">var</span> <span class="pl-v">y</span> <span class="pl-k">=</span> <span class="pl-c1">10</span>
+y <span class="pl-k">=</span> <span class="pl-c1">20</span>     <span class="pl-c"><span class="pl-c">//</span> y is now 20</span>
+
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">  Scala is a statically typed language, yet note that in the above declarations,</span>
+<span class="pl-c">  we did not specify a type. This is due to a language feature called type</span>
+<span class="pl-c">  inference. In most cases, Scala compiler can guess what the type of a variable</span>
+<span class="pl-c">  is, so you don't have to type it every time. We can explicitly declare the</span>
+<span class="pl-c">  type of a variable like so:</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+<span class="pl-k">val</span> <span class="pl-v">z</span><span class="pl-k">:</span> <span class="pl-en">Int</span> <span class="pl-k">=</span> <span class="pl-c1">10</span>
+<span class="pl-k">val</span> <span class="pl-v">a</span><span class="pl-k">:</span> <span class="pl-en">Double</span> <span class="pl-k">=</span> <span class="pl-c1">1.0</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Notice automatic conversion from Int to Double, result is 10.0, not 10</span>
+<span class="pl-k">val</span> <span class="pl-v">b</span><span class="pl-k">:</span> <span class="pl-en">Double</span> <span class="pl-k">=</span> <span class="pl-c1">10</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Boolean values</span>
+<span class="pl-c1">true</span>
+<span class="pl-c1">false</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Boolean operations</span>
+<span class="pl-k">!</span><span class="pl-c1">true</span>         <span class="pl-c"><span class="pl-c">//</span> false</span>
+<span class="pl-k">!</span><span class="pl-c1">false</span>        <span class="pl-c"><span class="pl-c">//</span> true</span>
+<span class="pl-c1">true</span> <span class="pl-k">==</span> <span class="pl-c1">false</span> <span class="pl-c"><span class="pl-c">//</span> false</span>
+<span class="pl-c1">10</span> <span class="pl-k">&gt;</span> <span class="pl-c1">5</span>        <span class="pl-c"><span class="pl-c">//</span> true</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Math is as per usual</span>
+<span class="pl-c1">1</span> <span class="pl-k">+</span> <span class="pl-c1">1</span>   <span class="pl-c"><span class="pl-c">//</span> 2</span>
+<span class="pl-c1">2</span> <span class="pl-k">-</span> <span class="pl-c1">1</span>   <span class="pl-c"><span class="pl-c">//</span> 1</span>
+<span class="pl-c1">5</span> <span class="pl-k">*</span> <span class="pl-c1">3</span>   <span class="pl-c"><span class="pl-c">//</span> 15</span>
+<span class="pl-c1">6</span> <span class="pl-k">/</span> <span class="pl-c1">2</span>   <span class="pl-c"><span class="pl-c">//</span> 3</span>
+<span class="pl-c1">6</span> <span class="pl-k">/</span> <span class="pl-c1">4</span>   <span class="pl-c"><span class="pl-c">//</span> 1</span>
+<span class="pl-c1">6.0</span> <span class="pl-k">/</span> <span class="pl-c1">4</span> <span class="pl-c"><span class="pl-c">//</span> 1.5</span>
+<span class="pl-c1">6</span> <span class="pl-k">/</span> <span class="pl-c1">4.0</span> <span class="pl-c"><span class="pl-c">//</span> 1.5</span>
+
+
+<span class="pl-c"><span class="pl-c">//</span> Evaluating an expression in the REPL gives you the type and value of the result</span>
+
+<span class="pl-c1">1</span> <span class="pl-k">+</span> <span class="pl-c1">7</span>
+
+<span class="pl-c"><span class="pl-c">/*</span> The above line results in:</span>
+<span class="pl-c"></span>
+<span class="pl-c">  scala&gt; 1 + 7</span>
+<span class="pl-c">  res29: Int = 8</span>
+<span class="pl-c"></span>
+<span class="pl-c">  This means the result of evaluating 1 + 7 is an object of type Int with a</span>
+<span class="pl-c">  value of 8</span>
+<span class="pl-c"></span>
+<span class="pl-c">  Note that "res29" is a sequentially generated variable name to store the</span>
+<span class="pl-c">  results of the expressions you typed, your output may differ.</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+
+<span class="pl-s"><span class="pl-pds">"</span>Scala strings are surrounded by double quotes<span class="pl-pds">"</span></span>
+<span class="pl-s">'a'</span> <span class="pl-c"><span class="pl-c">//</span> A Scala Char</span>
+<span class="pl-c"><span class="pl-c">//</span> 'Single quote strings don't exist' &lt;= This causes an error</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Strings have the usual Java methods defined on them</span>
+<span class="pl-s"><span class="pl-pds">"</span>hello world<span class="pl-pds">"</span></span>.length
+<span class="pl-s"><span class="pl-pds">"</span>hello world<span class="pl-pds">"</span></span>.substring(<span class="pl-c1">2</span>, <span class="pl-c1">6</span>)
+<span class="pl-s"><span class="pl-pds">"</span>hello world<span class="pl-pds">"</span></span>.replace(<span class="pl-s"><span class="pl-pds">"</span>C<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>3<span class="pl-pds">"</span></span>)
+
+<span class="pl-c"><span class="pl-c">//</span> They also have some extra Scala methods. See also: scala.collection.immutable.StringOps</span>
+<span class="pl-s"><span class="pl-pds">"</span>hello world<span class="pl-pds">"</span></span>.take(<span class="pl-c1">5</span>)
+<span class="pl-s"><span class="pl-pds">"</span>hello world<span class="pl-pds">"</span></span>.drop(<span class="pl-c1">5</span>)
+
+<span class="pl-c"><span class="pl-c">//</span> String interpolation: notice the prefix "s"</span>
+<span class="pl-k">val</span> <span class="pl-v">n</span> <span class="pl-k">=</span> <span class="pl-c1">45</span>
+<span class="pl-k">s</span><span class="pl-s">"</span><span class="pl-s">We have </span>$n<span class="pl-s"> apples</span><span class="pl-s">"</span> <span class="pl-c"><span class="pl-c">//</span> =&gt; "We have 45 apples"</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Expressions inside interpolated strings are also possible</span>
+<span class="pl-k">val</span> <span class="pl-v">a</span> <span class="pl-k">=</span> <span class="pl-en">Array</span>(<span class="pl-c1">11</span>, <span class="pl-c1">9</span>, <span class="pl-c1">6</span>)
+<span class="pl-k">s</span><span class="pl-s">"</span><span class="pl-s">My second daughter is </span>${a(<span class="pl-c1">0</span>) <span class="pl-k">-</span> a(<span class="pl-c1">2</span>)}<span class="pl-s"> years old.</span><span class="pl-s">"</span>    <span class="pl-c"><span class="pl-c">//</span> =&gt; "My second daughter is 5 years old."</span>
+<span class="pl-k">s</span><span class="pl-s">"</span><span class="pl-s">We have double the amount of </span>${n <span class="pl-k">/</span> <span class="pl-c1">2.0</span>}<span class="pl-s"> in apples.</span><span class="pl-s">"</span> <span class="pl-c"><span class="pl-c">//</span> =&gt; "We have double the amount of 22.5 in apples."</span>
+<span class="pl-k">s</span><span class="pl-s">"</span><span class="pl-s">Power of 2: </span>${math.pow(<span class="pl-c1">2</span>, <span class="pl-c1">2</span>)}<span class="pl-s">"</span>                      <span class="pl-c"><span class="pl-c">//</span> =&gt; "Power of 2: 4"</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Formatting with interpolated strings with the prefix "f"</span>
+<span class="pl-k">f</span><span class="pl-s">"</span><span class="pl-s">Power of 5: </span>${math.pow(<span class="pl-c1">5</span>, <span class="pl-c1">2</span>)}<span class="pl-s">%1.0f</span><span class="pl-s">"</span>         <span class="pl-c"><span class="pl-c">//</span> "Power of 5: 25"</span>
+<span class="pl-k">f</span><span class="pl-s">"</span><span class="pl-s">Square root of 122: </span>${math.sqrt(<span class="pl-c1">122</span>)}<span class="pl-s">%1.4f</span><span class="pl-s">"</span> <span class="pl-c"><span class="pl-c">//</span> "Square root of 122: 11.0454"</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Raw strings, ignoring special characters.</span>
+<span class="pl-k">raw</span><span class="pl-s">"</span><span class="pl-s">New line feed: \n. Carriage return: \r.</span><span class="pl-s">"</span> <span class="pl-c"><span class="pl-c">//</span> =&gt; "New line feed: \n. Carriage return: \r."</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Some characters need to be "escaped", e.g. a double quote inside a string:</span>
+<span class="pl-s"><span class="pl-pds">"</span>They stood outside the <span class="pl-cce">\"</span>Rose and Crown<span class="pl-cce">\"</span><span class="pl-pds">"</span></span> <span class="pl-c"><span class="pl-c">//</span> =&gt; "They stood outside the "Rose and Crown""</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Triple double-quotes let strings span multiple rows and contain quotes</span>
+<span class="pl-k">val</span> <span class="pl-v">html</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"""</span>&lt;form id="daform"&gt;</span>
+<span class="pl-s">                &lt;p&gt;Press belo', Joe&lt;/p&gt;</span>
+<span class="pl-s">                &lt;input type="submit"&gt;</span>
+<span class="pl-s">              &lt;/form&gt;<span class="pl-pds">"""</span></span>
+
+
+<span class="pl-c"><span class="pl-c">//</span>///////////////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> 2. Functions</span>
+<span class="pl-c"><span class="pl-c">//</span>///////////////////////////////////////////////</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Functions are defined like so:</span>
+<span class="pl-c"><span class="pl-c">//</span></span>
+<span class="pl-c"><span class="pl-c">//</span>   def functionName(args...): ReturnType = { body... }</span>
+<span class="pl-c"><span class="pl-c">//</span></span>
+<span class="pl-c"><span class="pl-c">//</span> If you come from more traditional languages, notice the omission of the</span>
+<span class="pl-c"><span class="pl-c">//</span> return keyword. In Scala, the last expression in the function block is the</span>
+<span class="pl-c"><span class="pl-c">//</span> return value.</span>
+<span class="pl-k">def</span> <span class="pl-en">sumOfSquares</span>(<span class="pl-v">x</span>: <span class="pl-en">Int</span>, <span class="pl-v">y</span>: <span class="pl-en">Int</span>)<span class="pl-k">:</span> <span class="pl-en">Int</span> <span class="pl-k">=</span> {
+  <span class="pl-k">val</span> <span class="pl-v">x2</span> <span class="pl-k">=</span> x <span class="pl-k">*</span> x
+  <span class="pl-k">val</span> <span class="pl-v">y2</span> <span class="pl-k">=</span> y <span class="pl-k">*</span> y
+  x2 <span class="pl-k">+</span> y2
+}
+
+<span class="pl-c"><span class="pl-c">//</span> The { } can be omitted if the function body is a single expression:</span>
+<span class="pl-k">def</span> <span class="pl-en">sumOfSquaresShort</span>(<span class="pl-v">x</span>: <span class="pl-en">Int</span>, <span class="pl-v">y</span>: <span class="pl-en">Int</span>)<span class="pl-k">:</span> <span class="pl-en">Int</span> <span class="pl-k">=</span> x <span class="pl-k">*</span> x <span class="pl-k">+</span> y <span class="pl-k">*</span> y
+
+<span class="pl-c"><span class="pl-c">//</span> Syntax for calling functions is familiar:</span>
+sumOfSquares(<span class="pl-c1">3</span>, <span class="pl-c1">4</span>)  <span class="pl-c"><span class="pl-c">//</span> =&gt; 25</span>
+
+<span class="pl-c"><span class="pl-c">//</span> You can use parameters names to specify them in different order</span>
+<span class="pl-k">def</span> <span class="pl-en">subtract</span>(<span class="pl-v">x</span>: <span class="pl-en">Int</span>, <span class="pl-v">y</span>: <span class="pl-en">Int</span>)<span class="pl-k">:</span> <span class="pl-en">Int</span> <span class="pl-k">=</span> x <span class="pl-k">-</span> y
+
+subtract(<span class="pl-c1">10</span>, <span class="pl-c1">3</span>)     <span class="pl-c"><span class="pl-c">//</span> =&gt; 7</span>
+subtract(y<span class="pl-k">=</span><span class="pl-c1">10</span>, x<span class="pl-k">=</span><span class="pl-c1">3</span>) <span class="pl-c"><span class="pl-c">//</span> =&gt; -7</span>
+
+<span class="pl-c"><span class="pl-c">//</span> In most cases (with recursive functions the most notable exception), function</span>
+<span class="pl-c"><span class="pl-c">//</span> return type can be omitted, and the same type inference we saw with variables</span>
+<span class="pl-c"><span class="pl-c">//</span> will work with function return values:</span>
+<span class="pl-k">def</span> <span class="pl-en">sq</span>(<span class="pl-v">x</span>: <span class="pl-en">Int</span>) <span class="pl-k">=</span> x <span class="pl-k">*</span> x  <span class="pl-c"><span class="pl-c">//</span> Compiler can guess return type is Int</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Functions can have default parameters:</span>
+<span class="pl-k">def</span> <span class="pl-en">addWithDefault</span>(<span class="pl-v">x</span>: <span class="pl-en">Int</span>, <span class="pl-v">y</span>: <span class="pl-en">Int</span> <span class="pl-k">=</span> <span class="pl-c1">5</span>) <span class="pl-k">=</span> x <span class="pl-k">+</span> y
+addWithDefault(<span class="pl-c1">1</span>, <span class="pl-c1">2</span>) <span class="pl-c"><span class="pl-c">//</span> =&gt; 3</span>
+addWithDefault(<span class="pl-c1">1</span>)    <span class="pl-c"><span class="pl-c">//</span> =&gt; 6</span>
+
+
+<span class="pl-c"><span class="pl-c">//</span> Anonymous functions look like this:</span>
+(<span class="pl-v">x</span>: <span class="pl-en">Int</span>) <span class="pl-k">=&gt;</span> x <span class="pl-k">*</span> x
+
+<span class="pl-c"><span class="pl-c">//</span> Unlike defs, even the input type of anonymous functions can be omitted if the</span>
+<span class="pl-c"><span class="pl-c">//</span> context makes it clear. Notice the type "Int =&gt; Int" which means a function</span>
+<span class="pl-c"><span class="pl-c">//</span> that takes Int and returns Int.</span>
+<span class="pl-k">val</span> <span class="pl-v">sq</span><span class="pl-k">:</span> <span class="pl-en">Int</span> <span class="pl-k">=&gt;</span> <span class="pl-en">Int</span> <span class="pl-k">=</span> x <span class="pl-k">=&gt;</span> x <span class="pl-k">*</span> x
+
+<span class="pl-c"><span class="pl-c">//</span> Anonymous functions can be called as usual:</span>
+sq(<span class="pl-c1">10</span>)   <span class="pl-c"><span class="pl-c">//</span> =&gt; 100</span>
+
+<span class="pl-c"><span class="pl-c">//</span> If each argument in your anonymous function is</span>
+<span class="pl-c"><span class="pl-c">//</span> used only once, Scala gives you an even shorter way to define them. These</span>
+<span class="pl-c"><span class="pl-c">//</span> anonymous functions turn out to be extremely common, as will be obvious in</span>
+<span class="pl-c"><span class="pl-c">//</span> the data structure section.</span>
+<span class="pl-k">val</span> <span class="pl-v">addOne</span><span class="pl-k">:</span> <span class="pl-en">Int</span> <span class="pl-k">=&gt;</span> <span class="pl-en">Int</span> <span class="pl-k">=</span> _ <span class="pl-k">+</span> <span class="pl-c1">1</span>
+<span class="pl-k">val</span> <span class="pl-v">weirdSum</span><span class="pl-k">:</span> (<span class="pl-en">Int</span>, <span class="pl-en">Int</span>) <span class="pl-k">=&gt;</span> <span class="pl-en">Int</span> <span class="pl-k">=</span> (_ <span class="pl-k">*</span> <span class="pl-c1">2</span> <span class="pl-k">+</span> _ <span class="pl-k">*</span> <span class="pl-c1">3</span>)
+
+addOne(<span class="pl-c1">5</span>)      <span class="pl-c"><span class="pl-c">//</span> =&gt; 6</span>
+weirdSum(<span class="pl-c1">2</span>, <span class="pl-c1">4</span>) <span class="pl-c"><span class="pl-c">//</span> =&gt; 16</span>
+
+
+<span class="pl-c"><span class="pl-c">//</span> The return keyword exists in Scala, but it only returns from the inner-most</span>
+<span class="pl-c"><span class="pl-c">//</span> def that surrounds it.</span>
+<span class="pl-c"><span class="pl-c">//</span> WARNING: Using return in Scala is error-prone and should be avoided.</span>
+<span class="pl-c"><span class="pl-c">//</span> It has no effect on anonymous functions. For example here you may expect foo(7) should return 17 but it returns 7:</span>
+<span class="pl-k">def</span> <span class="pl-en">foo</span>(<span class="pl-v">x</span>: <span class="pl-en">Int</span>)<span class="pl-k">:</span> <span class="pl-en">Int</span> <span class="pl-k">=</span> {
+  <span class="pl-k">val</span> <span class="pl-v">anonFunc</span><span class="pl-k">:</span> <span class="pl-en">Int</span> <span class="pl-k">=&gt;</span> <span class="pl-en">Int</span> <span class="pl-k">=</span> { z <span class="pl-k">=&gt;</span>
+    <span class="pl-k">if</span> (z <span class="pl-k">&gt;</span> <span class="pl-c1">5</span>)
+      <span class="pl-k">return</span> z <span class="pl-c"><span class="pl-c">//</span> This line makes z the return value of foo!</span>
+    <span class="pl-k">else</span>
+      z <span class="pl-k">+</span> <span class="pl-c1">2</span>    <span class="pl-c"><span class="pl-c">//</span> This line is the return value of anonFunc</span>
+  }
+  anonFunc(x) <span class="pl-k">+</span> <span class="pl-c1">10</span>  <span class="pl-c"><span class="pl-c">//</span> This line is the return value of foo</span>
+}
+
+foo(<span class="pl-c1">7</span>) <span class="pl-c"><span class="pl-c">//</span> =&gt; 7</span>
+
+<span class="pl-c"><span class="pl-c">//</span>///////////////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> 3. Flow Control</span>
+<span class="pl-c"><span class="pl-c">//</span>///////////////////////////////////////////////</span>
+
+<span class="pl-c1">1</span> to <span class="pl-c1">5</span>
+<span class="pl-k">val</span> <span class="pl-v">r</span> <span class="pl-k">=</span> <span class="pl-c1">1</span> to <span class="pl-c1">5</span>
+r.foreach(println)
+
+r foreach println
+<span class="pl-c"><span class="pl-c">//</span> NB: Scala is quite lenient when it comes to dots and brackets - study the</span>
+<span class="pl-c"><span class="pl-c">//</span> rules separately. This helps write DSLs and APIs that read like English</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Why doesn't `println` need any parameters here?</span>
+<span class="pl-c"><span class="pl-c">//</span> Stay tuned for first-class functions in the Functional Programming section below!</span>
+(<span class="pl-c1">5</span> to <span class="pl-c1">1</span> by <span class="pl-k">-</span><span class="pl-c1">1</span>) foreach (println)
+
+<span class="pl-c"><span class="pl-c">//</span> A while loop</span>
+<span class="pl-k">var</span> <span class="pl-v">i</span> <span class="pl-k">=</span> <span class="pl-c1">0</span>
+<span class="pl-k">while</span> (i <span class="pl-k">&lt;</span> <span class="pl-c1">10</span>) { println(<span class="pl-s"><span class="pl-pds">"</span>i <span class="pl-pds">"</span></span> <span class="pl-k">+</span> i); i <span class="pl-k">+</span><span class="pl-k">=</span> <span class="pl-c1">1</span> }
+
+<span class="pl-k">while</span> (i <span class="pl-k">&lt;</span> <span class="pl-c1">10</span>) { println(<span class="pl-s"><span class="pl-pds">"</span>i <span class="pl-pds">"</span></span> <span class="pl-k">+</span> i); i <span class="pl-k">+</span><span class="pl-k">=</span> <span class="pl-c1">1</span> }   <span class="pl-c"><span class="pl-c">//</span> Yes, again. What happened? Why?</span>
+
+i    <span class="pl-c"><span class="pl-c">//</span> Show the value of i. Note that while is a loop in the classical sense -</span>
+     <span class="pl-c"><span class="pl-c">//</span> it executes sequentially while changing the loop variable. while is very</span>
+     <span class="pl-c"><span class="pl-c">//</span> fast, but using the combinators and comprehensions above is easier</span>
+     <span class="pl-c"><span class="pl-c">//</span> to understand and parallelize</span>
+
+<span class="pl-c"><span class="pl-c">//</span> A do-while loop</span>
+i <span class="pl-k">=</span> <span class="pl-c1">0</span>
+<span class="pl-k">do</span> {
+  println(<span class="pl-s"><span class="pl-pds">"</span>i is still less than 10<span class="pl-pds">"</span></span>)
+  i <span class="pl-k">+</span><span class="pl-k">=</span> <span class="pl-c1">1</span>
+} <span class="pl-k">while</span> (i <span class="pl-k">&lt;</span> <span class="pl-c1">10</span>)
+
+<span class="pl-c"><span class="pl-c">//</span> Recursion is the idiomatic way of repeating an action in Scala (as in most</span>
+<span class="pl-c"><span class="pl-c">//</span> other functional languages).</span>
+<span class="pl-c"><span class="pl-c">//</span> Recursive functions need an explicit return type, the compiler can't infer it.</span>
+<span class="pl-c"><span class="pl-c">//</span> Here it's Unit, which is analogous to a `void` return type in Java</span>
+<span class="pl-k">def</span> <span class="pl-en">showNumbersInRange</span>(<span class="pl-v">a</span>: <span class="pl-en">Int</span>, <span class="pl-v">b</span>: <span class="pl-en">Int</span>)<span class="pl-k">:</span> <span class="pl-en">Unit</span> <span class="pl-k">=</span> {
+  print(a)
+  <span class="pl-k">if</span> (a <span class="pl-k">&lt;</span> b)
+    showNumbersInRange(a <span class="pl-k">+</span> <span class="pl-c1">1</span>, b)
+}
+showNumbersInRange(<span class="pl-c1">1</span>, <span class="pl-c1">14</span>)
+
+
+<span class="pl-c"><span class="pl-c">//</span> Conditionals</span>
+
+<span class="pl-k">val</span> <span class="pl-v">x</span> <span class="pl-k">=</span> <span class="pl-c1">10</span>
+
+<span class="pl-k">if</span> (x <span class="pl-k">==</span> <span class="pl-c1">1</span>) println(<span class="pl-s"><span class="pl-pds">"</span>yeah<span class="pl-pds">"</span></span>)
+<span class="pl-k">if</span> (x <span class="pl-k">==</span> <span class="pl-c1">10</span>) println(<span class="pl-s"><span class="pl-pds">"</span>yeah<span class="pl-pds">"</span></span>)
+<span class="pl-k">if</span> (x <span class="pl-k">==</span> <span class="pl-c1">11</span>) println(<span class="pl-s"><span class="pl-pds">"</span>yeah<span class="pl-pds">"</span></span>)
+<span class="pl-k">if</span> (x <span class="pl-k">==</span> <span class="pl-c1">11</span>) println(<span class="pl-s"><span class="pl-pds">"</span>yeah<span class="pl-pds">"</span></span>) <span class="pl-k">else</span> println(<span class="pl-s"><span class="pl-pds">"</span>nay<span class="pl-pds">"</span></span>)
+
+println(<span class="pl-k">if</span> (x <span class="pl-k">==</span> <span class="pl-c1">10</span>) <span class="pl-s"><span class="pl-pds">"</span>yeah<span class="pl-pds">"</span></span> <span class="pl-k">else</span> <span class="pl-s"><span class="pl-pds">"</span>nope<span class="pl-pds">"</span></span>)
+<span class="pl-k">val</span> <span class="pl-v">text</span> <span class="pl-k">=</span> <span class="pl-k">if</span> (x <span class="pl-k">==</span> <span class="pl-c1">10</span>) <span class="pl-s"><span class="pl-pds">"</span>yeah<span class="pl-pds">"</span></span> <span class="pl-k">else</span> <span class="pl-s"><span class="pl-pds">"</span>nope<span class="pl-pds">"</span></span>
+
+
+<span class="pl-c"><span class="pl-c">//</span>///////////////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> 4. Data Structures</span>
+<span class="pl-c"><span class="pl-c">//</span>///////////////////////////////////////////////</span>
+
+<span class="pl-k">val</span> <span class="pl-v">a</span> <span class="pl-k">=</span> <span class="pl-en">Array</span>(<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">5</span>, <span class="pl-c1">8</span>, <span class="pl-c1">13</span>)
+a(<span class="pl-c1">0</span>)     <span class="pl-c"><span class="pl-c">//</span> Int = 1</span>
+a(<span class="pl-c1">3</span>)     <span class="pl-c"><span class="pl-c">//</span> Int = 5</span>
+a(<span class="pl-c1">21</span>)    <span class="pl-c"><span class="pl-c">//</span> Throws an exception</span>
+
+<span class="pl-k">val</span> <span class="pl-v">m</span> <span class="pl-k">=</span> <span class="pl-en">Map</span>(<span class="pl-s"><span class="pl-pds">"</span>fork<span class="pl-pds">"</span></span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>tenedor<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>spoon<span class="pl-pds">"</span></span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>cuchara<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>knife<span class="pl-pds">"</span></span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>cuchillo<span class="pl-pds">"</span></span>)
+m(<span class="pl-s"><span class="pl-pds">"</span>fork<span class="pl-pds">"</span></span>)         <span class="pl-c"><span class="pl-c">//</span> java.lang.String = tenedor</span>
+m(<span class="pl-s"><span class="pl-pds">"</span>spoon<span class="pl-pds">"</span></span>)        <span class="pl-c"><span class="pl-c">//</span> java.lang.String = cuchara</span>
+m(<span class="pl-s"><span class="pl-pds">"</span>bottle<span class="pl-pds">"</span></span>)       <span class="pl-c"><span class="pl-c">//</span> Throws an exception</span>
+
+<span class="pl-k">val</span> <span class="pl-v">safeM</span> <span class="pl-k">=</span> m.withDefaultValue(<span class="pl-s"><span class="pl-pds">"</span>no lo se<span class="pl-pds">"</span></span>)
+safeM(<span class="pl-s"><span class="pl-pds">"</span>bottle<span class="pl-pds">"</span></span>)   <span class="pl-c"><span class="pl-c">//</span> java.lang.String = no lo se</span>
+
+<span class="pl-k">val</span> <span class="pl-v">s</span> <span class="pl-k">=</span> <span class="pl-en">Set</span>(<span class="pl-c1">1</span>, <span class="pl-c1">3</span>, <span class="pl-c1">7</span>)
+s(<span class="pl-c1">0</span>)      <span class="pl-c"><span class="pl-c">//</span> Boolean = false</span>
+s(<span class="pl-c1">1</span>)      <span class="pl-c"><span class="pl-c">//</span> Boolean = true</span>
+
+<span class="pl-c"><span class="pl-c">/*</span> Look up the documentation of map here -</span>
+<span class="pl-c"> * https://www.scala-lang.org/api/current/scala/collection/immutable/Map.html</span>
+<span class="pl-c"> * and make sure you can read it</span>
+<span class="pl-c"> <span class="pl-c">*/</span></span>
+
+
+<span class="pl-c"><span class="pl-c">//</span> Tuples</span>
+
+(<span class="pl-c1">1</span>, <span class="pl-c1">2</span>)
+
+(<span class="pl-c1">4</span>, <span class="pl-c1">3</span>, <span class="pl-c1">2</span>)
+
+(<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-s"><span class="pl-pds">"</span>three<span class="pl-pds">"</span></span>)
+
+(a, <span class="pl-c1">2</span>, <span class="pl-s"><span class="pl-pds">"</span>three<span class="pl-pds">"</span></span>)
+
+<span class="pl-c"><span class="pl-c">//</span> Why have this?</span>
+<span class="pl-k">val</span> <span class="pl-v">divideInts</span> <span class="pl-k">=</span> (<span class="pl-v">x</span>: <span class="pl-en">Int</span>, <span class="pl-v">y</span>: <span class="pl-en">Int</span>) <span class="pl-k">=&gt;</span> (x <span class="pl-k">/</span> y, x <span class="pl-k">%</span> y)
+
+<span class="pl-c"><span class="pl-c">//</span> The function divideInts gives you the result and the remainder</span>
+divideInts(<span class="pl-c1">10</span>, <span class="pl-c1">3</span>)    <span class="pl-c"><span class="pl-c">//</span> (Int, Int) = (3,1)</span>
+
+<span class="pl-c"><span class="pl-c">//</span> To access the elements of a tuple, use _._n where n is the 1-based index of</span>
+<span class="pl-c"><span class="pl-c">//</span> the element</span>
+<span class="pl-k">val</span> <span class="pl-v">d</span> <span class="pl-k">=</span> divideInts(<span class="pl-c1">10</span>, <span class="pl-c1">3</span>)    <span class="pl-c"><span class="pl-c">//</span> (Int, Int) = (3,1)</span>
+
+d._1    <span class="pl-c"><span class="pl-c">//</span> Int = 3</span>
+d._2    <span class="pl-c"><span class="pl-c">//</span> Int = 1</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Alternatively you can do multiple-variable assignment to tuple, which is more</span>
+<span class="pl-c"><span class="pl-c">//</span> convenient and readable in many cases</span>
+<span class="pl-k">val</span> (div, mod) <span class="pl-k">=</span> divideInts(<span class="pl-c1">10</span>, <span class="pl-c1">3</span>)
+
+div     <span class="pl-c"><span class="pl-c">//</span> Int = 3</span>
+mod     <span class="pl-c"><span class="pl-c">//</span> Int = 1</span>
+
+
+<span class="pl-c"><span class="pl-c">//</span>///////////////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> 5. Object Oriented Programming</span>
+<span class="pl-c"><span class="pl-c">//</span>///////////////////////////////////////////////</span>
+
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">  Aside: Everything we've done so far in this tutorial has been simple</span>
+<span class="pl-c">  expressions (values, functions, etc). These expressions are fine to type into</span>
+<span class="pl-c">  the command-line interpreter for quick tests, but they cannot exist by</span>
+<span class="pl-c">  themselves in a Scala file. For example, you cannot have just "val x = 5" in</span>
+<span class="pl-c">  a Scala file. Instead, the only top-level constructs allowed in Scala are:</span>
+<span class="pl-c"></span>
+<span class="pl-c">  - objects</span>
+<span class="pl-c">  - classes</span>
+<span class="pl-c">  - case classes</span>
+<span class="pl-c">  - traits</span>
+<span class="pl-c"></span>
+<span class="pl-c">  And now we will explain what these are.</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span> classes are similar to classes in other languages. Constructor arguments are</span>
+<span class="pl-c"><span class="pl-c">//</span> declared after the class name, and initialization is done in the class body.</span>
+<span class="pl-k">class</span> <span class="pl-en">Dog</span>(<span class="pl-v">br</span>: <span class="pl-en">String</span>) {
+  <span class="pl-c"><span class="pl-c">//</span> Constructor code here</span>
+  <span class="pl-k">var</span> <span class="pl-v">breed</span><span class="pl-k">:</span> <span class="pl-en">String</span> <span class="pl-k">=</span> br
+
+  <span class="pl-c"><span class="pl-c">//</span> Define a method called bark, returning a String</span>
+  <span class="pl-k">def</span> <span class="pl-en">bark</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Woof, woof!<span class="pl-pds">"</span></span>
+
+  <span class="pl-c"><span class="pl-c">//</span> Values and methods are assumed public. "protected" and "private" keywords</span>
+  <span class="pl-c"><span class="pl-c">//</span> are also available.</span>
+  <span class="pl-k">private</span> <span class="pl-k">def</span> <span class="pl-en">sleep</span>(<span class="pl-v">hours</span>: <span class="pl-en">Int</span>) <span class="pl-k">=</span>
+    println(<span class="pl-k">s</span><span class="pl-s">"</span><span class="pl-s">I'm sleeping for </span>$hours<span class="pl-s"> hours</span><span class="pl-s">"</span>)
+
+  <span class="pl-c"><span class="pl-c">//</span> Abstract methods are simply methods with no body. If we uncomment the</span>
+  <span class="pl-c"><span class="pl-c">//</span> def line below, class Dog would need to be declared abstract like so:</span>
+  <span class="pl-c"><span class="pl-c">//</span>   abstract class Dog(...) { ... }</span>
+  <span class="pl-c"><span class="pl-c">//</span> def chaseAfter(what: String): String</span>
+}
+
+<span class="pl-k">val</span> <span class="pl-v">mydog</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Dog</span>(<span class="pl-s"><span class="pl-pds">"</span>greyhound<span class="pl-pds">"</span></span>)
+println(mydog.breed) <span class="pl-c"><span class="pl-c">//</span> =&gt; "greyhound"</span>
+println(mydog.bark)  <span class="pl-c"><span class="pl-c">//</span> =&gt; "Woof, woof!"</span>
+
+
+<span class="pl-c"><span class="pl-c">//</span> The "object" keyword creates a type AND a singleton instance of it. It is</span>
+<span class="pl-c"><span class="pl-c">//</span> common for Scala classes to have a "companion object", where the per-instance</span>
+<span class="pl-c"><span class="pl-c">//</span> behavior is captured in the classes themselves, but behavior related to all</span>
+<span class="pl-c"><span class="pl-c">//</span> instance of that class go in objects. The difference is similar to class</span>
+<span class="pl-c"><span class="pl-c">//</span> methods vs static methods in other languages. Note that objects and classes</span>
+<span class="pl-c"><span class="pl-c">//</span> can have the same name.</span>
+<span class="pl-k">object</span> <span class="pl-en">Dog</span> {
+  <span class="pl-k">def</span> <span class="pl-en">allKnownBreeds</span> <span class="pl-k">=</span> <span class="pl-en">List</span>(<span class="pl-s"><span class="pl-pds">"</span>pitbull<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>shepherd<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>retriever<span class="pl-pds">"</span></span>)
+  <span class="pl-k">def</span> <span class="pl-en">createDog</span>(<span class="pl-v">breed</span>: <span class="pl-en">String</span>) <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Dog</span>(breed)
+}
+
+
+<span class="pl-c"><span class="pl-c">//</span> Case classes are classes that have extra functionality built in. A common</span>
+<span class="pl-c"><span class="pl-c">//</span> question for Scala beginners is when to use classes and when to use case</span>
+<span class="pl-c"><span class="pl-c">//</span> classes. The line is quite fuzzy, but in general, classes tend to focus on</span>
+<span class="pl-c"><span class="pl-c">//</span> encapsulation, polymorphism, and behavior. The values in these classes tend</span>
+<span class="pl-c"><span class="pl-c">//</span> to be private, and only methods are exposed. The primary purpose of case</span>
+<span class="pl-c"><span class="pl-c">//</span> classes is to hold immutable data. They often have few methods, and the</span>
+<span class="pl-c"><span class="pl-c">//</span> methods rarely have side-effects.</span>
+<span class="pl-k">case</span> <span class="pl-k">class</span> <span class="pl-en">Person</span>(<span class="pl-v">name</span>: <span class="pl-en">String</span>, <span class="pl-v">phoneNumber</span>: <span class="pl-en">String</span>)
+
+<span class="pl-c"><span class="pl-c">//</span> Create a new instance. Note cases classes don't need "new"</span>
+<span class="pl-k">val</span> <span class="pl-v">george</span> <span class="pl-k">=</span> <span class="pl-en">Person</span>(<span class="pl-s"><span class="pl-pds">"</span>George<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>1234<span class="pl-pds">"</span></span>)
+<span class="pl-k">val</span> <span class="pl-v">kate</span> <span class="pl-k">=</span> <span class="pl-en">Person</span>(<span class="pl-s"><span class="pl-pds">"</span>Kate<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>4567<span class="pl-pds">"</span></span>)
+
+<span class="pl-c"><span class="pl-c">//</span> With case classes, you get a few perks for free, like getters:</span>
+george.phoneNumber  <span class="pl-c"><span class="pl-c">//</span> =&gt; "1234"</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Per field equality (no need to override .equals)</span>
+<span class="pl-en">Person</span>(<span class="pl-s"><span class="pl-pds">"</span>George<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>1234<span class="pl-pds">"</span></span>) <span class="pl-k">==</span> <span class="pl-en">Person</span>(<span class="pl-s"><span class="pl-pds">"</span>Kate<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>1236<span class="pl-pds">"</span></span>)  <span class="pl-c"><span class="pl-c">//</span> =&gt; false</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Easy way to copy</span>
+<span class="pl-c"><span class="pl-c">//</span> otherGeorge == Person("George", "9876")</span>
+<span class="pl-k">val</span> <span class="pl-v">otherGeorge</span> <span class="pl-k">=</span> george.copy(phoneNumber <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>9876<span class="pl-pds">"</span></span>)
+
+<span class="pl-c"><span class="pl-c">//</span> And many others. Case classes also get pattern matching for free, see below.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Traits</span>
+<span class="pl-c"><span class="pl-c">//</span> Similar to Java interfaces, traits define an object type and method</span>
+<span class="pl-c"><span class="pl-c">//</span> signatures. Scala allows partial implementation of those methods.</span>
+<span class="pl-c"><span class="pl-c">//</span> Constructor parameters are not allowed. Traits can inherit from other</span>
+<span class="pl-c"><span class="pl-c">//</span> traits or classes without parameters.</span>
+
+<span class="pl-k">trait</span> <span class="pl-en">Dog</span> {
+	<span class="pl-k">def</span> <span class="pl-en">breed</span><span class="pl-k">:</span> <span class="pl-en">String</span>
+	<span class="pl-k">def</span> <span class="pl-en">color</span><span class="pl-k">:</span> <span class="pl-en">String</span>
+	<span class="pl-k">def</span> <span class="pl-en">bark</span><span class="pl-k">:</span> <span class="pl-en">Boolean</span> <span class="pl-k">=</span> <span class="pl-c1">true</span>
+	<span class="pl-k">def</span> <span class="pl-en">bite</span><span class="pl-k">:</span> <span class="pl-en">Boolean</span>
+}
+<span class="pl-k">class</span> <span class="pl-en">SaintBernard</span> <span class="pl-k">extends</span> <span class="pl-en">Dog</span> {
+	<span class="pl-k">val</span> <span class="pl-v">breed</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Saint Bernard<span class="pl-pds">"</span></span>
+	<span class="pl-k">val</span> <span class="pl-v">color</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>brown<span class="pl-pds">"</span></span>
+	<span class="pl-k">def</span> <span class="pl-en">bite</span> <span class="pl-k">=</span> <span class="pl-c1">false</span>
+}  
+
+scala<span class="pl-k">&gt;</span> <span class="pl-k">val</span> <span class="pl-v">b</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">SaintBernard</span>
+res0<span class="pl-k">:</span> <span class="pl-en">SaintBernard</span> <span class="pl-k">=</span> <span class="pl-en">SaintBernard</span><span class="pl-k">@</span>3e57cd70  
+scala<span class="pl-k">&gt;</span> b.breed  
+res1<span class="pl-k">:</span> <span class="pl-en">String</span> <span class="pl-k">=</span> <span class="pl-en">Saint</span> <span class="pl-en">Bernard</span>  
+scala<span class="pl-k">&gt;</span> b.bark  
+res2<span class="pl-k">:</span> <span class="pl-en">Boolean</span> <span class="pl-k">=</span> <span class="pl-c1">true</span>  
+scala<span class="pl-k">&gt;</span> b.bite  
+res3<span class="pl-k">:</span> <span class="pl-en">Boolean</span> <span class="pl-k">=</span> <span class="pl-c1">false</span>  
+
+<span class="pl-c"><span class="pl-c">//</span> A trait can also be used as Mixin. The class "extends" the first trait,</span>
+<span class="pl-c"><span class="pl-c">//</span> but the keyword "with" can add additional traits.</span>
+
+<span class="pl-k">trait</span> <span class="pl-en">Bark</span> {
+	<span class="pl-k">def</span> <span class="pl-en">bark</span><span class="pl-k">:</span> <span class="pl-en">String</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Woof<span class="pl-pds">"</span></span>
+}
+<span class="pl-k">trait</span> <span class="pl-en">Dog</span> {
+	<span class="pl-k">def</span> <span class="pl-en">breed</span><span class="pl-k">:</span> <span class="pl-en">String</span>
+	<span class="pl-k">def</span> <span class="pl-en">color</span><span class="pl-k">:</span> <span class="pl-en">String</span>
+}
+<span class="pl-k">class</span> <span class="pl-en">SaintBernard</span> <span class="pl-k">extends</span> <span class="pl-en">Dog</span> <span class="pl-k">with</span> <span class="pl-en">Bark</span> {
+	<span class="pl-k">val</span> <span class="pl-v">breed</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Saint Bernard<span class="pl-pds">"</span></span>
+	<span class="pl-k">val</span> <span class="pl-v">color</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>brown<span class="pl-pds">"</span></span>
+}
+
+scala<span class="pl-k">&gt;</span> <span class="pl-k">val</span> <span class="pl-v">b</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">SaintBernard</span>
+b<span class="pl-k">:</span> <span class="pl-en">SaintBernard</span> <span class="pl-k">=</span> <span class="pl-en">SaintBernard</span><span class="pl-k">@</span>7b69c6ba
+scala<span class="pl-k">&gt;</span> b.bark
+res0<span class="pl-k">:</span> <span class="pl-en">String</span> <span class="pl-k">=</span> <span class="pl-en">Woof</span>
+
+
+<span class="pl-c"><span class="pl-c">//</span>///////////////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> 6. Pattern Matching</span>
+<span class="pl-c"><span class="pl-c">//</span>///////////////////////////////////////////////</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Pattern matching is a powerful and commonly used feature in Scala. Here's how</span>
+<span class="pl-c"><span class="pl-c">//</span> you pattern match a case class. NB: Unlike other languages, Scala cases do</span>
+<span class="pl-c"><span class="pl-c">//</span> not need breaks, fall-through does not happen.</span>
+
+<span class="pl-k">def</span> <span class="pl-en">matchPerson</span>(<span class="pl-v">person</span>: <span class="pl-en">Person</span>)<span class="pl-k">:</span> <span class="pl-en">String</span> <span class="pl-k">=</span> person <span class="pl-k">match</span> {
+  <span class="pl-c"><span class="pl-c">//</span> Then you specify the patterns:</span>
+  <span class="pl-k">case</span> <span class="pl-en">Person</span>(<span class="pl-s"><span class="pl-pds">"</span>George<span class="pl-pds">"</span></span>, number) <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>We found George! His number is <span class="pl-pds">"</span></span> <span class="pl-k">+</span> number
+  <span class="pl-k">case</span> <span class="pl-en">Person</span>(<span class="pl-s"><span class="pl-pds">"</span>Kate<span class="pl-pds">"</span></span>, number)   <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>We found Kate! Her number is <span class="pl-pds">"</span></span> <span class="pl-k">+</span> number
+  <span class="pl-k">case</span> <span class="pl-en">Person</span>(name, number)     <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>We matched someone : <span class="pl-pds">"</span></span> <span class="pl-k">+</span> name <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span>, phone : <span class="pl-pds">"</span></span> <span class="pl-k">+</span> number
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Regular expressions are also built in.</span>
+<span class="pl-c"><span class="pl-c">//</span> Create a regex with the `r` method on a string:</span>
+<span class="pl-k">val</span> <span class="pl-v">email</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>(.*)@(.*)<span class="pl-pds">"</span></span>.r
+
+<span class="pl-c"><span class="pl-c">//</span> Pattern matching might look familiar to the switch statements in the C family</span>
+<span class="pl-c"><span class="pl-c">//</span> of languages, but this is much more powerful. In Scala, you can match much</span>
+<span class="pl-c"><span class="pl-c">//</span> more:</span>
+<span class="pl-k">def</span> <span class="pl-en">matchEverything</span>(<span class="pl-v">obj</span>: <span class="pl-en">Any</span>)<span class="pl-k">:</span> <span class="pl-en">String</span> <span class="pl-k">=</span> obj <span class="pl-k">match</span> {
+  <span class="pl-c"><span class="pl-c">//</span> You can match values:</span>
+  <span class="pl-k">case</span> <span class="pl-s"><span class="pl-pds">"</span>Hello world<span class="pl-pds">"</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>Got the string Hello world<span class="pl-pds">"</span></span>
+
+  <span class="pl-c"><span class="pl-c">//</span> You can match by type:</span>
+  <span class="pl-k">case</span> <span class="pl-v">x</span>: <span class="pl-en">Double</span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>Got a Double: <span class="pl-pds">"</span></span> <span class="pl-k">+</span> x
+
+  <span class="pl-c"><span class="pl-c">//</span> You can specify conditions:</span>
+  <span class="pl-k">case</span> <span class="pl-v">x</span>: <span class="pl-en">Int</span> <span class="pl-k">if</span> x <span class="pl-k">&gt;</span> <span class="pl-c1">10000</span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>Got a pretty big number!<span class="pl-pds">"</span></span>
+
+  <span class="pl-c"><span class="pl-c">//</span> You can match case classes as before:</span>
+  <span class="pl-k">case</span> <span class="pl-en">Person</span>(name, number) <span class="pl-k">=&gt;</span> <span class="pl-k">s</span><span class="pl-s">"</span><span class="pl-s">Got contact info for </span>$name<span class="pl-s">!</span><span class="pl-s">"</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> You can match regular expressions:</span>
+  <span class="pl-k">case</span> email(name, domain) <span class="pl-k">=&gt;</span> <span class="pl-k">s</span><span class="pl-s">"</span><span class="pl-s">Got email address </span>$name<span class="pl-s">@</span>$domain<span class="pl-s">"</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> You can match tuples:</span>
+  <span class="pl-k">case</span> (<span class="pl-v">a</span>: <span class="pl-en">Int</span>, <span class="pl-v">b</span>: <span class="pl-en">Double</span>, <span class="pl-v">c</span>: <span class="pl-en">String</span>) <span class="pl-k">=&gt;</span> <span class="pl-k">s</span><span class="pl-s">"</span><span class="pl-s">Got a tuple: </span>$a<span class="pl-s">, </span>$b<span class="pl-s">, </span>$c<span class="pl-s">"</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> You can match data structures:</span>
+  <span class="pl-k">case</span> <span class="pl-en">List</span>(<span class="pl-c1">1</span>, b, c) <span class="pl-k">=&gt;</span> <span class="pl-k">s</span><span class="pl-s">"</span><span class="pl-s">Got a list with three elements and starts with 1: 1, </span>$b<span class="pl-s">, </span>$c<span class="pl-s">"</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> You can nest patterns:</span>
+  <span class="pl-k">case</span> <span class="pl-en">List</span>(<span class="pl-en">List</span>((<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-s"><span class="pl-pds">"</span>YAY<span class="pl-pds">"</span></span>))) <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>Got a list of list of tuple<span class="pl-pds">"</span></span>
+
+  <span class="pl-c"><span class="pl-c">//</span> Match any case (default) if all previous haven't matched</span>
+  <span class="pl-k">case</span> _ <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>Got unknown object<span class="pl-pds">"</span></span>
+}
+
+<span class="pl-c"><span class="pl-c">//</span> In fact, you can pattern match any object with an "unapply" method. This</span>
+<span class="pl-c"><span class="pl-c">//</span> feature is so powerful that Scala lets you define whole functions as</span>
+<span class="pl-c"><span class="pl-c">//</span> patterns:</span>
+<span class="pl-k">val</span> <span class="pl-v">patternFunc</span><span class="pl-k">:</span> <span class="pl-en">Person</span> <span class="pl-k">=&gt;</span> <span class="pl-en">String</span> <span class="pl-k">=</span> {
+  <span class="pl-k">case</span> <span class="pl-en">Person</span>(<span class="pl-s"><span class="pl-pds">"</span>George<span class="pl-pds">"</span></span>, number) <span class="pl-k">=&gt;</span> <span class="pl-k">s</span><span class="pl-s">"</span><span class="pl-s">George's number: </span>$number<span class="pl-s">"</span>
+  <span class="pl-k">case</span> <span class="pl-en">Person</span>(name, number) <span class="pl-k">=&gt;</span> <span class="pl-k">s</span><span class="pl-s">"</span><span class="pl-s">Random person's number: </span>$number<span class="pl-s">"</span>
+}
+
+
+<span class="pl-c"><span class="pl-c">//</span>///////////////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> 7. Functional Programming</span>
+<span class="pl-c"><span class="pl-c">//</span>///////////////////////////////////////////////</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Scala allows methods and functions to return, or take as parameters, other</span>
+<span class="pl-c"><span class="pl-c">//</span> functions or methods.</span>
+
+<span class="pl-k">val</span> <span class="pl-v">add10</span><span class="pl-k">:</span> <span class="pl-en">Int</span> <span class="pl-k">=&gt;</span> <span class="pl-en">Int</span> <span class="pl-k">=</span> _ <span class="pl-k">+</span> <span class="pl-c1">10</span> <span class="pl-c"><span class="pl-c">//</span> A function taking an Int and returning an Int</span>
+<span class="pl-en">List</span>(<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>) map add10 <span class="pl-c"><span class="pl-c">//</span> List(11, 12, 13) - add10 is applied to each element</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Anonymous functions can be used instead of named functions:</span>
+<span class="pl-en">List</span>(<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>) map (x <span class="pl-k">=&gt;</span> x <span class="pl-k">+</span> <span class="pl-c1">10</span>)
+
+<span class="pl-c"><span class="pl-c">//</span> And the underscore symbol, can be used if there is just one argument to the</span>
+<span class="pl-c"><span class="pl-c">//</span> anonymous function. It gets bound as the variable</span>
+<span class="pl-en">List</span>(<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>) map (_ <span class="pl-k">+</span> <span class="pl-c1">10</span>)
+
+<span class="pl-c"><span class="pl-c">//</span> If the anonymous block AND the function you are applying both take one</span>
+<span class="pl-c"><span class="pl-c">//</span> argument, you can even omit the underscore</span>
+<span class="pl-en">List</span>(<span class="pl-s"><span class="pl-pds">"</span>Dom<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Bob<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Natalia<span class="pl-pds">"</span></span>) foreach println
+
+
+<span class="pl-c"><span class="pl-c">//</span> Combinators</span>
+<span class="pl-c"><span class="pl-c">//</span> Using `s` from above:</span>
+<span class="pl-c"><span class="pl-c">//</span> val s = Set(1, 3, 7)</span>
+
+s.map(sq)
+
+<span class="pl-k">val</span> <span class="pl-v">sSquared</span> <span class="pl-k">=</span> s.map(sq)
+
+sSquared.filter(_ <span class="pl-k">&lt;</span> <span class="pl-c1">10</span>)
+
+sSquared.reduce (_<span class="pl-k">+</span>_)
+
+<span class="pl-c"><span class="pl-c">//</span> The filter function takes a predicate (a function from A -&gt; Boolean) and</span>
+<span class="pl-c"><span class="pl-c">//</span> selects all elements which satisfy the predicate</span>
+<span class="pl-en">List</span>(<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>) filter (_ <span class="pl-k">&gt;</span> <span class="pl-c1">2</span>) <span class="pl-c"><span class="pl-c">//</span> List(3)</span>
+<span class="pl-k">case</span> <span class="pl-k">class</span> <span class="pl-en">Person</span>(<span class="pl-v">name</span>: <span class="pl-en">String</span>, <span class="pl-v">age</span>: <span class="pl-en">Int</span>)
+<span class="pl-en">List</span>(
+  <span class="pl-en">Person</span>(name <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Dom<span class="pl-pds">"</span></span>, age <span class="pl-k">=</span> <span class="pl-c1">23</span>),
+  <span class="pl-en">Person</span>(name <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Bob<span class="pl-pds">"</span></span>, age <span class="pl-k">=</span> <span class="pl-c1">30</span>)
+).filter(_.age <span class="pl-k">&gt;</span> <span class="pl-c1">25</span>) <span class="pl-c"><span class="pl-c">//</span> List(Person("Bob", 30))</span>
+
+
+<span class="pl-c"><span class="pl-c">//</span> Certain collections (such as List) in Scala have a `foreach` method,</span>
+<span class="pl-c"><span class="pl-c">//</span> which takes as an argument a type returning Unit - that is, a void method</span>
+<span class="pl-k">val</span> <span class="pl-v">aListOfNumbers</span> <span class="pl-k">=</span> <span class="pl-en">List</span>(<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span>, <span class="pl-c1">10</span>, <span class="pl-c1">20</span>, <span class="pl-c1">100</span>)
+aListOfNumbers foreach (x <span class="pl-k">=&gt;</span> println(x))
+aListOfNumbers foreach println
+
+<span class="pl-c"><span class="pl-c">//</span> For comprehensions</span>
+
+<span class="pl-k">for</span> { n <span class="pl-k">&lt;</span><span class="pl-k">-</span> s } <span class="pl-k">yield</span> sq(n)
+
+<span class="pl-k">val</span> <span class="pl-v">nSquared2</span> <span class="pl-k">=</span> <span class="pl-k">for</span> { n <span class="pl-k">&lt;</span><span class="pl-k">-</span> s } <span class="pl-k">yield</span> sq(n)
+
+<span class="pl-k">for</span> { n <span class="pl-k">&lt;</span><span class="pl-k">-</span> nSquared2 <span class="pl-k">if</span> n <span class="pl-k">&lt;</span> <span class="pl-c1">10</span> } <span class="pl-k">yield</span> n
+
+<span class="pl-k">for</span> { n <span class="pl-k">&lt;</span><span class="pl-k">-</span> s; nSquared <span class="pl-k">=</span> n <span class="pl-k">*</span> n <span class="pl-k">if</span> nSquared <span class="pl-k">&lt;</span> <span class="pl-c1">10</span>} <span class="pl-k">yield</span> nSquared
+
+<span class="pl-c"><span class="pl-c">/*</span> NB Those were not for loops. The semantics of a for loop is 'repeat', whereas</span>
+<span class="pl-c">   a for-comprehension defines a relationship between two sets of data. <span class="pl-c">*/</span></span>
+
+
+<span class="pl-c"><span class="pl-c">//</span>///////////////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> 8. Implicits</span>
+<span class="pl-c"><span class="pl-c">//</span>///////////////////////////////////////////////</span>
+
+<span class="pl-c"><span class="pl-c">/*</span> WARNING WARNING: Implicits are a set of powerful features of Scala, and</span>
+<span class="pl-c"> * therefore it is easy to abuse them. Beginners to Scala should resist the</span>
+<span class="pl-c"> * temptation to use them until they understand not only how they work, but also</span>
+<span class="pl-c"> * best practices around them. We only include this section in the tutorial</span>
+<span class="pl-c"> * because they are so commonplace in Scala libraries that it is impossible to</span>
+<span class="pl-c"> * do anything meaningful without using a library that has implicits. This is</span>
+<span class="pl-c"> * meant for you to understand and work with implicits, not declare your own.</span>
+<span class="pl-c"> <span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span> Any value (vals, functions, objects, etc) can be declared to be implicit by</span>
+<span class="pl-c"><span class="pl-c">//</span> using the, you guessed it, "implicit" keyword. Note we are using the Dog</span>
+<span class="pl-c"><span class="pl-c">//</span> class from section 5 in these examples.</span>
+<span class="pl-k">implicit</span> <span class="pl-k">val</span> <span class="pl-v">myImplicitInt</span> <span class="pl-k">=</span> <span class="pl-c1">100</span>
+<span class="pl-k">implicit</span> <span class="pl-k">def</span> <span class="pl-en">myImplicitFunction</span>(<span class="pl-v">breed</span>: <span class="pl-en">String</span>) <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Dog</span>(<span class="pl-s"><span class="pl-pds">"</span>Golden <span class="pl-pds">"</span></span> <span class="pl-k">+</span> breed)
+
+<span class="pl-c"><span class="pl-c">//</span> By itself, implicit keyword doesn't change the behavior of the value, so</span>
+<span class="pl-c"><span class="pl-c">//</span> above values can be used as usual.</span>
+myImplicitInt <span class="pl-k">+</span> <span class="pl-c1">2</span>                   <span class="pl-c"><span class="pl-c">//</span> =&gt; 102</span>
+myImplicitFunction(<span class="pl-s"><span class="pl-pds">"</span>Pitbull<span class="pl-pds">"</span></span>).breed <span class="pl-c"><span class="pl-c">//</span> =&gt; "Golden Pitbull"</span>
+
+<span class="pl-c"><span class="pl-c">//</span> The difference is that these values are now eligible to be used when another</span>
+<span class="pl-c"><span class="pl-c">//</span> piece of code "needs" an implicit value. One such situation is implicit</span>
+<span class="pl-c"><span class="pl-c">//</span> function arguments:</span>
+<span class="pl-k">def</span> <span class="pl-en">sendGreetings</span>(<span class="pl-v">toWhom</span>: <span class="pl-en">String</span>)(<span class="pl-k">implicit</span> <span class="pl-v">howMany</span>: <span class="pl-en">Int</span>) <span class="pl-k">=</span>
+  <span class="pl-k">s</span><span class="pl-s">"</span><span class="pl-s">Hello </span>$toWhom<span class="pl-s">, </span>$howMany<span class="pl-s"> blessings to you and yours!</span><span class="pl-s">"</span>
+
+<span class="pl-c"><span class="pl-c">//</span> If we supply a value for "howMany", the function behaves as usual</span>
+sendGreetings(<span class="pl-s"><span class="pl-pds">"</span>John<span class="pl-pds">"</span></span>)(<span class="pl-c1">1000</span>)  <span class="pl-c"><span class="pl-c">//</span> =&gt; "Hello John, 1000 blessings to you and yours!"</span>
+
+<span class="pl-c"><span class="pl-c">//</span> But if we omit the implicit parameter, an implicit value of the same type is</span>
+<span class="pl-c"><span class="pl-c">//</span> used, in this case, "myImplicitInt":</span>
+sendGreetings(<span class="pl-s"><span class="pl-pds">"</span>Jane<span class="pl-pds">"</span></span>)  <span class="pl-c"><span class="pl-c">//</span> =&gt; "Hello Jane, 100 blessings to you and yours!"</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Implicit function parameters enable us to simulate type classes in other</span>
+<span class="pl-c"><span class="pl-c">//</span> functional languages. It is so often used that it gets its own shorthand. The</span>
+<span class="pl-c"><span class="pl-c">//</span> following two lines mean the same thing:</span>
+<span class="pl-c"><span class="pl-c">//</span> def foo[T](implicit c: C[T]) = ...</span>
+<span class="pl-c"><span class="pl-c">//</span> def foo[T : C] = ...</span>
+
+
+<span class="pl-c"><span class="pl-c">//</span> Another situation in which the compiler looks for an implicit is if you have</span>
+<span class="pl-c"><span class="pl-c">//</span>   obj.method(...)</span>
+<span class="pl-c"><span class="pl-c">//</span> but "obj" doesn't have "method" as a method. In this case, if there is an</span>
+<span class="pl-c"><span class="pl-c">//</span> implicit conversion of type A =&gt; B, where A is the type of obj, and B has a</span>
+<span class="pl-c"><span class="pl-c">//</span> method called "method", that conversion is applied. So having</span>
+<span class="pl-c"><span class="pl-c">//</span> myImplicitFunction above in scope, we can say:</span>
+<span class="pl-s"><span class="pl-pds">"</span>Retriever<span class="pl-pds">"</span></span>.breed <span class="pl-c"><span class="pl-c">//</span> =&gt; "Golden Retriever"</span>
+<span class="pl-s"><span class="pl-pds">"</span>Sheperd<span class="pl-pds">"</span></span>.bark    <span class="pl-c"><span class="pl-c">//</span> =&gt; "Woof, woof!"</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Here the String is first converted to Dog using our function above, and then</span>
+<span class="pl-c"><span class="pl-c">//</span> the appropriate method is called. This is an extremely powerful feature, but</span>
+<span class="pl-c"><span class="pl-c">//</span> again, it is not to be used lightly. In fact, when you defined the implicit</span>
+<span class="pl-c"><span class="pl-c">//</span> function above, your compiler should have given you a warning, that you</span>
+<span class="pl-c"><span class="pl-c">//</span> shouldn't do this unless you really know what you're doing.</span>
+
+
+<span class="pl-c"><span class="pl-c">//</span>///////////////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> 9. Misc</span>
+<span class="pl-c"><span class="pl-c">//</span>///////////////////////////////////////////////</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Importing things</span>
+<span class="pl-k">import</span> <span class="pl-en">scala</span>.<span class="pl-en">collection</span>.<span class="pl-en">immutable</span>.<span class="pl-en">List</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Import all "sub packages"</span>
+<span class="pl-k">import</span> <span class="pl-en">scala</span>.<span class="pl-en">collection</span>.<span class="pl-en">immutable</span>.<span class="pl-en">_</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Import multiple classes in one statement</span>
+<span class="pl-k">import</span> <span class="pl-en">scala</span>.<span class="pl-en">collection</span>.<span class="pl-en">immutable</span>.{<span class="pl-en">List</span>, <span class="pl-en">Map</span>}
+
+<span class="pl-c"><span class="pl-c">//</span> Rename an import using '=&gt;'</span>
+<span class="pl-k">import</span> <span class="pl-en">scala</span>.<span class="pl-en">collection</span>.<span class="pl-en">immutable</span>.{<span class="pl-en">List</span> <span class="pl-k">=&gt;</span> <span class="pl-en">ImmutableList</span>}
+
+<span class="pl-c"><span class="pl-c">//</span> Import all classes, except some. The following excludes Map and Set:</span>
+<span class="pl-k">import</span> <span class="pl-en">scala</span>.<span class="pl-en">collection</span>.<span class="pl-en">immutable</span>.{<span class="pl-en">Map</span> <span class="pl-k">=&gt;</span> <span class="pl-en">_</span>, <span class="pl-en">Set</span> <span class="pl-k">=&gt;</span> <span class="pl-en">_</span>, <span class="pl-en">_</span>}
+
+<span class="pl-c"><span class="pl-c">//</span> Java classes can also be imported. Scala syntax can be used</span>
+<span class="pl-k">import</span> <span class="pl-en">java</span>.<span class="pl-en">swing</span>.{<span class="pl-en">JFrame</span>, <span class="pl-en">JWindow</span>}
+
+<span class="pl-c"><span class="pl-c">//</span> Your program's entry point is defined in a scala file using an object, with a</span>
+<span class="pl-c"><span class="pl-c">//</span> single method, main:</span>
+<span class="pl-k">object</span> <span class="pl-en">Application</span> {
+  <span class="pl-k">def</span> <span class="pl-en">main</span>(<span class="pl-v">args</span>: <span class="pl-en">Array</span>[<span class="pl-en">String</span>])<span class="pl-k">:</span> <span class="pl-en">Unit</span> <span class="pl-k">=</span> {
+    <span class="pl-c"><span class="pl-c">//</span> stuff goes here.</span>
+  }
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Files can contain multiple classes and objects. Compile with scalac</span>
+
+
+
+
+<span class="pl-c"><span class="pl-c">//</span> Input and output</span>
+
+<span class="pl-c"><span class="pl-c">//</span> To read a file line by line</span>
+<span class="pl-k">import</span> <span class="pl-en">scala</span>.<span class="pl-en">io</span>.<span class="pl-en">Source</span>
+<span class="pl-k">for</span>(line <span class="pl-k">&lt;</span><span class="pl-k">-</span> <span class="pl-en">Source</span>.fromFile(<span class="pl-s"><span class="pl-pds">"</span>myfile.txt<span class="pl-pds">"</span></span>).getLines())
+  println(line)
+
+<span class="pl-c"><span class="pl-c">//</span> To write a file use Java's PrintWriter</span>
+<span class="pl-k">val</span> <span class="pl-v">writer</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">PrintWriter</span>(<span class="pl-s"><span class="pl-pds">"</span>myfile.txt<span class="pl-pds">"</span></span>)
+writer.write(<span class="pl-s"><span class="pl-pds">"</span>Writing line for line<span class="pl-pds">"</span></span> <span class="pl-k">+</span> util.<span class="pl-en">Properties</span>.lineSeparator)
+writer.write(<span class="pl-s"><span class="pl-pds">"</span>Another line here<span class="pl-pds">"</span></span> <span class="pl-k">+</span> util.<span class="pl-en">Properties</span>.lineSeparator)
+writer.close()
+</pre></div>
+<h2>Further resources</h2>
+<ul>
+<li><a href="http://horstmann.com/scala/" rel="nofollow">Scala for the impatient</a></li>
+<li><a href="http://twitter.github.io/scala_school/" rel="nofollow">Twitter Scala school</a></li>
+<li><a href="http://docs.scala-lang.org/" rel="nofollow">The scala documentation</a></li>
+<li><a href="http://scalatutorials.com/tour/" rel="nofollow">Try Scala in your browser</a></li>
+<li>Join the <a href="https://groups.google.com/forum/#!forum/scala-user" rel="nofollow">Scala user group</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["George Petrov", "http://github.com/petrovg"]
+- ["Dominic Bou-Samra", "http://dbousamra.github.com"]
+- ["Geoff Liu", "http://geoffliu.me"]
+- ["Ha-Duong Nguyen", "http://reference-error.org"]
+</code></pre>

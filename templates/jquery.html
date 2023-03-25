@@ -1,0 +1,124 @@
+<h1>jQuery</h1>
+<p>jQuery is a JavaScript library that helps you "do more, write less". It makes many common JavaScript tasks and makes them easier to write. jQuery is used by many big companies and developers everywhere. It makes AJAX, event handling, document manipulation, and much more, easier and faster.</p>
+<p>Because jQuery is a JavaScript library you should <a href="https://learnxinyminutes.com/docs/javascript/" rel="nofollow">learn JavaScript first</a></p>
+<p><strong>NOTE</strong>: jQuery has fallen out of the limelight in recent years, since you can achieve the same thing with the vanilla DOM (Document Object Model) API. So the only thing it is used for is a couple of handy features, such as the <a href="https://api.jqueryui.com/datepicker" rel="nofollow">jQuery date picker</a> (which actually has a standard, unlike the <code class="notranslate">&lt;input type="date"&gt;</code> HTML element), and the obvious decrease in the code length.</p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-c">///////////////////////////////////</span>
+<span class="pl-c">// 1. Selectors</span>
+
+<span class="pl-c">// Selectors in jQuery are used to select an element</span>
+<span class="pl-k">var</span> <span class="pl-s1">page</span> <span class="pl-c1">=</span> <span class="pl-en">$</span><span class="pl-kos">(</span><span class="pl-smi">window</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Selects the whole viewport</span>
+
+<span class="pl-c">// Selectors can also be CSS selector</span>
+<span class="pl-k">var</span> <span class="pl-s1">paragraph</span> <span class="pl-c1">=</span> <span class="pl-en">$</span><span class="pl-kos">(</span><span class="pl-s">'p'</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Selects all paragraph elements</span>
+<span class="pl-k">var</span> <span class="pl-s1">table1</span> <span class="pl-c1">=</span> <span class="pl-en">$</span><span class="pl-kos">(</span><span class="pl-s">'#table1'</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Selects element with id 'table1'</span>
+<span class="pl-k">var</span> <span class="pl-s1">squares</span> <span class="pl-c1">=</span> <span class="pl-en">$</span><span class="pl-kos">(</span><span class="pl-s">'.square'</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Selects all elements with the class 'square'</span>
+<span class="pl-k">var</span> <span class="pl-s1">square_p</span> <span class="pl-c1">=</span> <span class="pl-en">$</span><span class="pl-kos">(</span><span class="pl-s">'p.square'</span><span class="pl-kos">)</span> <span class="pl-c">// Selects paragraphs with the 'square' class</span>
+
+
+<span class="pl-c">///////////////////////////////////</span>
+<span class="pl-c">// 2. Events and Effects</span>
+<span class="pl-c">// jQuery is very good at handling what happens when an event is triggered</span>
+<span class="pl-c">// A very common event used is the ready event on the document</span>
+<span class="pl-c">// You can use the 'ready' method to wait until the element has finished loading</span>
+<span class="pl-en">$</span><span class="pl-kos">(</span><span class="pl-smi">document</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">ready</span><span class="pl-kos">(</span><span class="pl-k">function</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+  <span class="pl-c">// Code won't execute until the document is loaded</span>
+<span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-c">// You can also use defined functions</span>
+<span class="pl-k">function</span> <span class="pl-en">onAction</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+  <span class="pl-c">// This is executed when the event is triggered</span>
+<span class="pl-kos">}</span>
+<span class="pl-en">$</span><span class="pl-kos">(</span><span class="pl-s">'#btn'</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">click</span><span class="pl-kos">(</span><span class="pl-s1">onAction</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Invokes onAction on click</span>
+
+<span class="pl-c">// Some other common events are:</span>
+<span class="pl-en">$</span><span class="pl-kos">(</span><span class="pl-s">'#btn'</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">dblclick</span><span class="pl-kos">(</span><span class="pl-s1">onAction</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Double click</span>
+<span class="pl-en">$</span><span class="pl-kos">(</span><span class="pl-s">'#btn'</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">hover</span><span class="pl-kos">(</span><span class="pl-s1">onAction</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Hovering over</span>
+<span class="pl-en">$</span><span class="pl-kos">(</span><span class="pl-s">'#btn'</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">focus</span><span class="pl-kos">(</span><span class="pl-s1">onAction</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// On focus</span>
+<span class="pl-en">$</span><span class="pl-kos">(</span><span class="pl-s">'#btn'</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">blur</span><span class="pl-kos">(</span><span class="pl-s1">onAction</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Losses focus</span>
+<span class="pl-en">$</span><span class="pl-kos">(</span><span class="pl-s">'#btn'</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">submit</span><span class="pl-kos">(</span><span class="pl-s1">onAction</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// On submit</span>
+<span class="pl-en">$</span><span class="pl-kos">(</span><span class="pl-s">'#btn'</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">select</span><span class="pl-kos">(</span><span class="pl-s1">onAction</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// When an element is selected</span>
+<span class="pl-en">$</span><span class="pl-kos">(</span><span class="pl-s">'#btn'</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">keydown</span><span class="pl-kos">(</span><span class="pl-s1">onAction</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// When a key is pushed down</span>
+<span class="pl-en">$</span><span class="pl-kos">(</span><span class="pl-s">'#btn'</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">keyup</span><span class="pl-kos">(</span><span class="pl-s1">onAction</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// When a key is released</span>
+<span class="pl-en">$</span><span class="pl-kos">(</span><span class="pl-s">'#btn'</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">keypress</span><span class="pl-kos">(</span><span class="pl-s1">onAction</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// When a key is pressed</span>
+<span class="pl-en">$</span><span class="pl-kos">(</span><span class="pl-s">'#btn'</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">mousemove</span><span class="pl-kos">(</span><span class="pl-s1">onAction</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// When the mouse is moved</span>
+<span class="pl-en">$</span><span class="pl-kos">(</span><span class="pl-s">'#btn'</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">mouseenter</span><span class="pl-kos">(</span><span class="pl-s1">onAction</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Mouse enters the element</span>
+<span class="pl-en">$</span><span class="pl-kos">(</span><span class="pl-s">'#btn'</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">mouseleave</span><span class="pl-kos">(</span><span class="pl-s1">onAction</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Mouse leaves the element</span>
+
+
+<span class="pl-c">// These can all also trigger the event instead of handling it</span>
+<span class="pl-c">// by simply not giving any parameters</span>
+<span class="pl-en">$</span><span class="pl-kos">(</span><span class="pl-s">'#btn'</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">dblclick</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Fires double click on the element</span>
+
+<span class="pl-c">// You can handle multiple events while only using the selector once</span>
+<span class="pl-en">$</span><span class="pl-kos">(</span><span class="pl-s">'#btn'</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">on</span><span class="pl-kos">(</span>
+  <span class="pl-kos">{</span><span class="pl-c1">dblclick</span>: <span class="pl-s1">myFunction1</span><span class="pl-kos">}</span> <span class="pl-c">// Triggered on double click</span>
+  <span class="pl-kos">{</span><span class="pl-c1">blur</span>: <span class="pl-s1">myFunction1</span><span class="pl-kos">}</span> <span class="pl-c">// Triggered on blur</span>
+<span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// You can move and hide elements with some effect methods</span>
+<span class="pl-en">$</span><span class="pl-kos">(</span><span class="pl-s">'.table'</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">hide</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Hides the element(s)</span>
+
+<span class="pl-c">// Note: calling a function in these methods will still hide the element</span>
+<span class="pl-en">$</span><span class="pl-kos">(</span><span class="pl-s">'.table'</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">hide</span><span class="pl-kos">(</span><span class="pl-k">function</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+    <span class="pl-c">// Element hidden then function executed</span>
+<span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// You can store selectors in variables</span>
+<span class="pl-k">var</span> <span class="pl-s1">tables</span> <span class="pl-c1">=</span> <span class="pl-en">$</span><span class="pl-kos">(</span><span class="pl-s">'.table'</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// Some basic document manipulation methods are:</span>
+<span class="pl-s1">tables</span><span class="pl-kos">.</span><span class="pl-en">hide</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Hides element(s)</span>
+<span class="pl-s1">tables</span><span class="pl-kos">.</span><span class="pl-en">show</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Shows (un-hides) element(s)</span>
+<span class="pl-s1">tables</span><span class="pl-kos">.</span><span class="pl-en">toggle</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Changes the hide/show state</span>
+<span class="pl-s1">tables</span><span class="pl-kos">.</span><span class="pl-en">fadeOut</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Fades out</span>
+<span class="pl-s1">tables</span><span class="pl-kos">.</span><span class="pl-en">fadeIn</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Fades in</span>
+<span class="pl-s1">tables</span><span class="pl-kos">.</span><span class="pl-en">fadeToggle</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Fades in or out</span>
+<span class="pl-s1">tables</span><span class="pl-kos">.</span><span class="pl-en">fadeTo</span><span class="pl-kos">(</span><span class="pl-c1">0.5</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Fades to an opacity (between 0 and 1)</span>
+<span class="pl-s1">tables</span><span class="pl-kos">.</span><span class="pl-en">slideUp</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Slides up</span>
+<span class="pl-s1">tables</span><span class="pl-kos">.</span><span class="pl-en">slideDown</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Slides down</span>
+<span class="pl-s1">tables</span><span class="pl-kos">.</span><span class="pl-en">slideToggle</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Slides up or down</span>
+
+<span class="pl-c">// All of the above take a speed (milliseconds) and callback function</span>
+<span class="pl-s1">tables</span><span class="pl-kos">.</span><span class="pl-en">hide</span><span class="pl-kos">(</span><span class="pl-c1">1000</span><span class="pl-kos">,</span> <span class="pl-s1">myFunction</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// 1 second hide animation then function</span>
+
+<span class="pl-c">// fadeTo has a required opacity as its second parameter</span>
+<span class="pl-s1">tables</span><span class="pl-kos">.</span><span class="pl-en">fadeTo</span><span class="pl-kos">(</span><span class="pl-c1">2000</span><span class="pl-kos">,</span> <span class="pl-c1">0.1</span><span class="pl-kos">,</span> <span class="pl-s1">myFunction</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// 2 sec. fade to 0.1 opacity then function</span>
+
+<span class="pl-c">// You can get slightly more advanced with the animate method</span>
+<span class="pl-s1">tables</span><span class="pl-kos">.</span><span class="pl-en">animate</span><span class="pl-kos">(</span><span class="pl-kos">{</span><span class="pl-s1">margin</span><span class="pl-c1">-</span><span class="pl-c1">top</span>:<span class="pl-s">"+=50"</span><span class="pl-kos">,</span> <span class="pl-c1">height</span>: <span class="pl-s">"100px"</span><span class="pl-kos">}</span><span class="pl-kos">,</span> <span class="pl-c1">500</span><span class="pl-kos">,</span> <span class="pl-s1">myFunction</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-c">// The animate method takes an object of css and values to end with,</span>
+<span class="pl-c">// optional options parameter to tune the animation,</span>
+<span class="pl-c">// and of course the callback function</span>
+
+<span class="pl-c">///////////////////////////////////</span>
+<span class="pl-c">// 3. Manipulation</span>
+
+<span class="pl-c">// These are similar to effects but can do more</span>
+<span class="pl-en">$</span><span class="pl-kos">(</span><span class="pl-s">'div'</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">addClass</span><span class="pl-kos">(</span><span class="pl-s">'taming-slim-20'</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Adds class taming-slim-20 to all div</span>
+
+<span class="pl-c">// Common manipulation methods</span>
+<span class="pl-en">$</span><span class="pl-kos">(</span><span class="pl-s">'p'</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">append</span><span class="pl-kos">(</span><span class="pl-s">'Hello world'</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Adds to end of element</span>
+<span class="pl-en">$</span><span class="pl-kos">(</span><span class="pl-s">'p'</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">attr</span><span class="pl-kos">(</span><span class="pl-s">'class'</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Gets attribute</span>
+<span class="pl-en">$</span><span class="pl-kos">(</span><span class="pl-s">'p'</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">attr</span><span class="pl-kos">(</span><span class="pl-s">'class'</span><span class="pl-kos">,</span> <span class="pl-s">'content'</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Sets attribute</span>
+<span class="pl-en">$</span><span class="pl-kos">(</span><span class="pl-s">'p'</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">hasClass</span><span class="pl-kos">(</span><span class="pl-s">'taming-slim-20'</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Returns true if it has the class</span>
+<span class="pl-en">$</span><span class="pl-kos">(</span><span class="pl-s">'p'</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">height</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Gets height of element or sets height</span>
+
+
+<span class="pl-c">// For many manipulation methods, getting info on an element</span>
+<span class="pl-c">// will ONLY get the first matching element</span>
+<span class="pl-en">$</span><span class="pl-kos">(</span><span class="pl-s">'p'</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">height</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Gets only the first 'p' tag's height</span>
+
+<span class="pl-c">// You can use each to loop through all the elements</span>
+<span class="pl-k">var</span> <span class="pl-s1">heights</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span><span class="pl-kos">]</span><span class="pl-kos">;</span>
+<span class="pl-en">$</span><span class="pl-kos">(</span><span class="pl-s">'p'</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">each</span><span class="pl-kos">(</span><span class="pl-k">function</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+  <span class="pl-s1">heights</span><span class="pl-kos">.</span><span class="pl-en">push</span><span class="pl-kos">(</span><span class="pl-en">$</span><span class="pl-kos">(</span><span class="pl-smi">this</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">height</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Adds all 'p' tag heights to array</span>
+<span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+</pre></div>
+<h2>Further Reading</h2>
+<ul>
+<li><a href="https://www.codecademy.com/learn/learn-jquery" rel="nofollow">Codecademy - jQuery</a> A good introduction to jQuery in a "learn by doing it" format.</li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Sawyer Charles", "https://github.com/xssc"]
+- ["Devansh Patil", "https://github.com/subtra3t"]
+</code></pre>

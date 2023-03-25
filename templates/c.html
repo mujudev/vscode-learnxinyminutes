@@ -1,0 +1,913 @@
+<h1>C</h1>
+<p>Ah, C. Still <strong>the</strong> language of modern high-performance computing.</p>
+<p>C is the lowest-level language most programmers will ever use, but<br>
+it more than makes up for it with raw speed. Just be aware of its manual<br>
+memory management and C will take you as far as you need to go.</p>
+<blockquote>
+<p><strong>About compiler flags</strong></p>
+<p>By default, gcc and clang are pretty quiet about compilation warnings and<br>
+errors, which can be very useful information. Explicitly using stricter<br>
+compiler flags is recommended. Here are some recommended defaults:</p>
+<p><code class="notranslate">-Wall -Wextra -Werror -O2 -std=c99 -pedantic</code></p>
+<p>For information on what these flags do as well as other flags, consult the man page for your C compiler (e.g. <code class="notranslate">man 1 gcc</code>) or just search online.</p>
+</blockquote>
+<div class="highlight highlight-source-c"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> Single-line comments start with // - only available in C99 and later.</span>
+
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">Multi-line comments look like this. They work in C89 as well.</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">Multi-line comments don't nest /* Be careful <span class="pl-c">*/</span></span>  <span class="pl-c"><span class="pl-c">//</span> comment ends on this line...</span>
+<span class="pl-ii">*/ // ...not this one!</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Constants: #define &lt;keyword&gt;</span>
+<span class="pl-c"><span class="pl-c">//</span> Constants are written in all-caps out of convention, not requirement</span>
+#<span class="pl-k">define</span> <span class="pl-en">DAYS_IN_YEAR</span> <span class="pl-c1">365</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Enumeration constants are also ways to declare constants.</span>
+<span class="pl-c"><span class="pl-c">//</span> All statements must end with a semicolon</span>
+<span class="pl-k">enum</span> days {SUN, MON, TUE, WED, THU, FRI, SAT};
+<span class="pl-c"><span class="pl-c">//</span> SUN gets 0, MON gets 1, TUE gets 2, etc.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Enumeration values can also be specified</span>
+<span class="pl-k">enum</span> days {SUN = <span class="pl-c1">1</span>, MON, TUE, WED = <span class="pl-c1">99</span>, THU, FRI, SAT};
+<span class="pl-c"><span class="pl-c">//</span> MON gets 2 automatically, TUE gets 3, etc.</span>
+<span class="pl-c"><span class="pl-c">//</span> WED get 99, THU gets 100, FRI gets 101, etc.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Import headers with #include</span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>stdlib.h<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>stdio.h<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>string.h<span class="pl-pds">&gt;</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span> File names between &lt;angle brackets&gt; tell the compiler to look in your system</span>
+<span class="pl-c"><span class="pl-c">//</span> libraries for the headers.</span>
+<span class="pl-c"><span class="pl-c">//</span> For your own headers, use double quotes instead of angle brackets, and</span>
+<span class="pl-c"><span class="pl-c">//</span> provide the path:</span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">"</span>my_header.h<span class="pl-pds">"</span></span> 		<span class="pl-c"><span class="pl-c">//</span> local file</span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">"</span>../my_lib/my_lib_header.h<span class="pl-pds">"</span></span> <span class="pl-c"><span class="pl-c">//</span>relative path</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Declare function signatures in advance in a .h file, or at the top of</span>
+<span class="pl-c"><span class="pl-c">//</span> your .c file.</span>
+<span class="pl-k">void</span> <span class="pl-en">function_1</span>();
+<span class="pl-k">int</span> <span class="pl-en">function_2</span>(<span class="pl-k">void</span>);
+
+<span class="pl-c"><span class="pl-c">//</span> At a minimum, you must declare a 'function prototype' before its use in any function.</span>
+<span class="pl-c"><span class="pl-c">//</span> Normally, prototypes are placed at the top of a file before any function definition.</span>
+<span class="pl-k">int</span> <span class="pl-en">add_two_ints</span>(<span class="pl-k">int</span> x1, <span class="pl-k">int</span> x2); <span class="pl-c"><span class="pl-c">//</span> function prototype</span>
+<span class="pl-c"><span class="pl-c">//</span> although `int add_two_ints(int, int);` is also valid (no need to name the args),</span>
+<span class="pl-c"><span class="pl-c">//</span> it is recommended to name arguments in the prototype as well for easier inspection</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Function prototypes are not necessary if the function definition comes before</span>
+<span class="pl-c"><span class="pl-c">//</span> any other function that calls that function. However, it's standard practice to</span>
+<span class="pl-c"><span class="pl-c">//</span> always add the function prototype to a header file (*.h) and then #include that</span>
+<span class="pl-c"><span class="pl-c">//</span> file at the top. This prevents any issues where a function might be called</span>
+<span class="pl-c"><span class="pl-c">//</span> before the compiler knows of its existence, while also giving the developer a</span>
+<span class="pl-c"><span class="pl-c">//</span> clean header file to share with the rest of the project.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Your program's entry point is a function called "main". The return type can</span>
+<span class="pl-c"><span class="pl-c">//</span> be anything, however most operating systems expect a return type of `int` for</span>
+<span class="pl-c"><span class="pl-c">//</span> error code processing.</span>
+<span class="pl-k">int</span> <span class="pl-en">main</span>(<span class="pl-k">void</span>) {
+  <span class="pl-c"><span class="pl-c">//</span> your program</span>
+}
+
+<span class="pl-c"><span class="pl-c">//</span> The command line arguments used to run your program are also passed to main</span>
+<span class="pl-c"><span class="pl-c">//</span> argc being the number of arguments - your program's name counts as 1</span>
+<span class="pl-c"><span class="pl-c">//</span> argv is an array of character arrays - containing the arguments themselves</span>
+<span class="pl-c"><span class="pl-c">//</span> argv[0] = name of your program, argv[1] = first argument, etc.</span>
+<span class="pl-k">int</span> <span class="pl-en">main</span> (<span class="pl-k">int</span> argc, <span class="pl-k">char</span>** argv)
+{
+  <span class="pl-c"><span class="pl-c">//</span> print output using printf, for "print formatted"</span>
+  <span class="pl-c"><span class="pl-c">//</span> %d is an integer, \n is a newline</span>
+  <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%d</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, <span class="pl-c1">0</span>); <span class="pl-c"><span class="pl-c">//</span> =&gt; Prints 0</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> take input using scanf</span>
+  <span class="pl-c"><span class="pl-c">//</span> '&amp;' is used to define the location</span>
+  <span class="pl-c"><span class="pl-c">//</span> where we want to store the input value</span>
+  <span class="pl-k">int</span> input;
+  <span class="pl-c1">scanf</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%d</span><span class="pl-pds">"</span></span>, &amp;input);
+
+  <span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+  <span class="pl-c"><span class="pl-c">//</span> Types</span>
+  <span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> Compilers that are not C99-compliant require that variables MUST be</span>
+  <span class="pl-c"><span class="pl-c">//</span> declared at the top of the current block scope.</span>
+  <span class="pl-c"><span class="pl-c">//</span> Compilers that ARE C99-compliant allow declarations near the point where</span>
+  <span class="pl-c"><span class="pl-c">//</span> the value is used.</span>
+  <span class="pl-c"><span class="pl-c">//</span> For the sake of the tutorial, variables are declared dynamically under</span>
+  <span class="pl-c"><span class="pl-c">//</span> C99-compliant standards.</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> ints are usually 4 bytes (use the `sizeof` operator to check)</span>
+  <span class="pl-k">int</span> x_int = <span class="pl-c1">0</span>;
+
+  <span class="pl-c"><span class="pl-c">//</span> shorts are usually 2 bytes (use the `sizeof` operator to check)</span>
+  <span class="pl-k">short</span> x_short = <span class="pl-c1">0</span>;
+
+  <span class="pl-c"><span class="pl-c">//</span> chars are defined as the smallest addressable unit for a processor.</span>
+  <span class="pl-c"><span class="pl-c">//</span> This is usually 1 byte, but for some systems it can be more (ex. for TMS320 from TI it's 2 bytes).</span>
+  <span class="pl-k">char</span> x_char = <span class="pl-c1">0</span>;
+  <span class="pl-k">char</span> y_char = <span class="pl-s"><span class="pl-pds">'</span>y<span class="pl-pds">'</span></span>; <span class="pl-c"><span class="pl-c">//</span> Char literals are quoted with ''</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> longs are often 4 to 8 bytes; long longs are guaranteed to be at least</span>
+  <span class="pl-c"><span class="pl-c">//</span> 8 bytes</span>
+  <span class="pl-k">long</span> x_long = <span class="pl-c1">0</span>;
+  <span class="pl-k">long</span> <span class="pl-k">long</span> x_long_long = <span class="pl-c1">0</span>;
+
+  <span class="pl-c"><span class="pl-c">//</span> floats are usually 32-bit floating point numbers</span>
+  <span class="pl-k">float</span> x_float = <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>; <span class="pl-c"><span class="pl-c">//</span> 'f' suffix here denotes floating point literal</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> doubles are usually 64-bit floating-point numbers</span>
+  <span class="pl-k">double</span> x_double = <span class="pl-c1">0.0</span>; <span class="pl-c"><span class="pl-c">//</span> real numbers without any suffix are doubles</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> integer types may be unsigned (greater than or equal to zero)</span>
+  <span class="pl-k">unsigned</span> <span class="pl-k">short</span> ux_short;
+  <span class="pl-k">unsigned</span> <span class="pl-k">int</span> ux_int;
+  <span class="pl-k">unsigned</span> <span class="pl-k">long</span> <span class="pl-k">long</span> ux_long_long;
+
+  <span class="pl-c"><span class="pl-c">//</span> chars inside single quotes are integers in machine's character set.</span>
+  <span class="pl-s"><span class="pl-pds">'</span>0<span class="pl-pds">'</span></span>; <span class="pl-c"><span class="pl-c">//</span> =&gt; 48 in the ASCII character set.</span>
+  <span class="pl-s"><span class="pl-pds">'</span>A<span class="pl-pds">'</span></span>; <span class="pl-c"><span class="pl-c">//</span> =&gt; 65 in the ASCII character set.</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> sizeof(T) gives you the size of a variable with type T in bytes</span>
+  <span class="pl-c"><span class="pl-c">//</span> sizeof(obj) yields the size of the expression (variable, literal, etc.).</span>
+  <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%zu</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, <span class="pl-k">sizeof</span>(<span class="pl-k">int</span>)); <span class="pl-c"><span class="pl-c">//</span> =&gt; 4 (on most machines with 4-byte words)</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> If the argument of the `sizeof` operator is an expression, then its argument</span>
+  <span class="pl-c"><span class="pl-c">//</span> is not evaluated (except VLAs (see below)).</span>
+  <span class="pl-c"><span class="pl-c">//</span> The value it yields in this case is a compile-time constant.</span>
+  <span class="pl-k">int</span> a = <span class="pl-c1">1</span>;
+  <span class="pl-c"><span class="pl-c">//</span> size_t is an unsigned integer type of at least 2 bytes used to represent</span>
+  <span class="pl-c"><span class="pl-c">//</span> the size of an object.</span>
+  <span class="pl-c1">size_t</span> size = <span class="pl-k">sizeof</span>(a++); <span class="pl-c"><span class="pl-c">//</span> a++ is not evaluated</span>
+  <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span>sizeof(a++) = <span class="pl-c1">%zu</span> where a = <span class="pl-c1">%d</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, size, a);
+  <span class="pl-c"><span class="pl-c">//</span> prints "sizeof(a++) = 4 where a = 1" (on a 32-bit architecture)</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> Arrays must be initialized with a concrete size.</span>
+  <span class="pl-k">char</span> my_char_array[<span class="pl-c1">20</span>]; <span class="pl-c"><span class="pl-c">//</span> This array occupies 1 * 20 = 20 bytes</span>
+  <span class="pl-k">int</span> my_int_array[<span class="pl-c1">20</span>]; <span class="pl-c"><span class="pl-c">//</span> This array occupies 4 * 20 = 80 bytes</span>
+  <span class="pl-c"><span class="pl-c">//</span> (assuming 4-byte words)</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> You can initialize an array of twenty ints that all equal 0 thusly:</span>
+  <span class="pl-k">int</span> my_array[<span class="pl-c1">20</span>] = {<span class="pl-c1">0</span>};
+  <span class="pl-c"><span class="pl-c">//</span> where the "{0}" part is called an "array initializer".</span>
+  <span class="pl-c"><span class="pl-c">//</span> All elements (if any) past the ones in the initializer are initialized to 0:</span>
+  <span class="pl-k">int</span> my_array[<span class="pl-c1">5</span>] = {<span class="pl-c1">1</span>, <span class="pl-c1">2</span>};
+  <span class="pl-c"><span class="pl-c">//</span> So my_array now has five elements, all but the first two of which are 0:</span>
+  <span class="pl-c"><span class="pl-c">//</span> [1, 2, 0, 0, 0]</span>
+  <span class="pl-c"><span class="pl-c">//</span> NOTE that you get away without explicitly declaring the size</span>
+  <span class="pl-c"><span class="pl-c">//</span> of the array IF you initialize the array on the same line:</span>
+  <span class="pl-k">int</span> my_array[] = {<span class="pl-c1">0</span>};
+  <span class="pl-c"><span class="pl-c">//</span> NOTE that, when not declaring the size, the size of the array is the number</span>
+  <span class="pl-c"><span class="pl-c">//</span> of elements in the initializer. With "{0}", my_array is now of size one: [0]</span>
+  <span class="pl-c"><span class="pl-c">//</span> To evaluate the size of the array at run-time, divide its byte size by the</span>
+  <span class="pl-c"><span class="pl-c">//</span> byte size of its element type:</span>
+  <span class="pl-c1">size_t</span> my_array_size = <span class="pl-k">sizeof</span>(my_array) / <span class="pl-k">sizeof</span>(my_array[<span class="pl-c1">0</span>]);
+  <span class="pl-c"><span class="pl-c">//</span> WARNING You should evaluate the size *before* you begin passing the array</span>
+  <span class="pl-c"><span class="pl-c">//</span> to functions (see later discussion) because arrays get "downgraded" to</span>
+  <span class="pl-c"><span class="pl-c">//</span> raw pointers when they are passed to functions (so the statement above</span>
+  <span class="pl-c"><span class="pl-c">//</span> will produce the wrong result inside the function).</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> Indexing an array is like other languages -- or,</span>
+  <span class="pl-c"><span class="pl-c">//</span> rather, other languages are like C</span>
+  my_array[<span class="pl-c1">0</span>]; <span class="pl-c"><span class="pl-c">//</span> =&gt; 0</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> Arrays are mutable; it's just memory!</span>
+  my_array[<span class="pl-c1">1</span>] = <span class="pl-c1">2</span>;
+  <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%d</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, my_array[<span class="pl-c1">1</span>]); <span class="pl-c"><span class="pl-c">//</span> =&gt; 2</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> In C99 (and as an optional feature in C11), variable-length arrays (VLAs)</span>
+  <span class="pl-c"><span class="pl-c">//</span> can be declared as well. The size of such an array need not be a compile</span>
+  <span class="pl-c"><span class="pl-c">//</span> time constant:</span>
+  <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span>Enter the array size: <span class="pl-pds">"</span></span>); <span class="pl-c"><span class="pl-c">//</span> ask the user for an array size</span>
+  <span class="pl-k">int</span> array_size;
+  <span class="pl-c1">fscanf</span>(stdin, <span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%d</span><span class="pl-pds">"</span></span>, &amp;array_size);
+  <span class="pl-k">int</span> var_length_array[array_size]; <span class="pl-c"><span class="pl-c">//</span> declare the VLA</span>
+  <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span>sizeof array = <span class="pl-c1">%zu</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, <span class="pl-k">sizeof</span> var_length_array);
+
+  <span class="pl-c"><span class="pl-c">//</span> Example:</span>
+  <span class="pl-c"><span class="pl-c">//</span> &gt; Enter the array size: 10</span>
+  <span class="pl-c"><span class="pl-c">//</span> &gt; sizeof array = 40</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> Strings are just arrays of chars terminated by a NULL (0x00) byte,</span>
+  <span class="pl-c"><span class="pl-c">//</span> represented in strings as the special character '\0'.</span>
+  <span class="pl-c"><span class="pl-c">//</span> (We don't have to include the NULL byte in string literals; the compiler</span>
+  <span class="pl-c"><span class="pl-c">//</span>  inserts it at the end of the array for us.)</span>
+  <span class="pl-k">char</span> a_string[<span class="pl-c1">20</span>] = <span class="pl-s"><span class="pl-pds">"</span>This is a string<span class="pl-pds">"</span></span>;
+  <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%s</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, a_string); <span class="pl-c"><span class="pl-c">//</span> %s formats a string</span>
+
+  <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%d</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, a_string[<span class="pl-c1">16</span>]); <span class="pl-c"><span class="pl-c">//</span> =&gt; 0</span>
+  <span class="pl-c"><span class="pl-c">//</span> i.e., byte #17 is 0 (as are 18, 19, and 20)</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> If we have characters between single quotes, that's a character literal.</span>
+  <span class="pl-c"><span class="pl-c">//</span> It's of type `int`, and *not* `char` (for historical reasons).</span>
+  <span class="pl-k">int</span> cha = <span class="pl-s"><span class="pl-pds">'</span>a<span class="pl-pds">'</span></span>; <span class="pl-c"><span class="pl-c">//</span> fine</span>
+  <span class="pl-k">char</span> chb = <span class="pl-s"><span class="pl-pds">'</span>a<span class="pl-pds">'</span></span>; <span class="pl-c"><span class="pl-c">//</span> fine too (implicit conversion from int to char)</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> Multi-dimensional arrays:</span>
+  <span class="pl-k">int</span> multi_array[<span class="pl-c1">2</span>][<span class="pl-c1">5</span>] = {
+    {<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span>, <span class="pl-c1">5</span>},
+    {<span class="pl-c1">6</span>, <span class="pl-c1">7</span>, <span class="pl-c1">8</span>, <span class="pl-c1">9</span>, <span class="pl-c1">0</span>}
+  };
+  <span class="pl-c"><span class="pl-c">//</span> access elements:</span>
+  <span class="pl-k">int</span> array_int = multi_array[<span class="pl-c1">0</span>][<span class="pl-c1">2</span>]; <span class="pl-c"><span class="pl-c">//</span> =&gt; 3</span>
+
+  <span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+  <span class="pl-c"><span class="pl-c">//</span> Operators</span>
+  <span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> Shorthands for multiple declarations:</span>
+  <span class="pl-k">int</span> i1 = <span class="pl-c1">1</span>, i2 = <span class="pl-c1">2</span>;
+  <span class="pl-k">float</span> f1 = <span class="pl-c1">1.0</span>, f2 = <span class="pl-c1">2.0</span>;
+
+  <span class="pl-k">int</span> b, c;
+  b = c = <span class="pl-c1">0</span>;
+
+  <span class="pl-c"><span class="pl-c">//</span> Arithmetic is straightforward</span>
+  i1 + i2; <span class="pl-c"><span class="pl-c">//</span> =&gt; 3</span>
+  i2 - i1; <span class="pl-c"><span class="pl-c">//</span> =&gt; 1</span>
+  i2 * i1; <span class="pl-c"><span class="pl-c">//</span> =&gt; 2</span>
+  i1 / i2; <span class="pl-c"><span class="pl-c">//</span> =&gt; 0 (0.5, but truncated towards 0)</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> You need to cast at least one integer to float to get a floating-point result</span>
+  (<span class="pl-k">float</span>)i1 / i2; <span class="pl-c"><span class="pl-c">//</span> =&gt; 0.5f</span>
+  i1 / (<span class="pl-k">double</span>)i2; <span class="pl-c"><span class="pl-c">//</span> =&gt; 0.5 // Same with double</span>
+  f1 / f2; <span class="pl-c"><span class="pl-c">//</span> =&gt; 0.5, plus or minus epsilon</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> Floating-point numbers are defined by IEEE 754, thus cannot store perfectly</span>
+  <span class="pl-c"><span class="pl-c">//</span> exact values. For instance, the following does not produce expected results</span>
+  <span class="pl-c"><span class="pl-c">//</span> because 0.1 might actually be 0.099999999999 inside the computer, and 0.3</span>
+  <span class="pl-c"><span class="pl-c">//</span> might be stored as 0.300000000001.</span>
+  (<span class="pl-c1">0.1</span> + <span class="pl-c1">0.1</span> + <span class="pl-c1">0.1</span>) != <span class="pl-c1">0.3</span>; <span class="pl-c"><span class="pl-c">//</span> =&gt; 1 (true)</span>
+  <span class="pl-c"><span class="pl-c">//</span> and it is NOT associative due to reasons mentioned above.</span>
+  <span class="pl-c1">1</span> + (<span class="pl-c1">1e123</span> - <span class="pl-c1">1e123</span>) != (<span class="pl-c1">1</span> + <span class="pl-c1">1e123</span>) - <span class="pl-c1">1e123</span>; <span class="pl-c"><span class="pl-c">//</span> =&gt; 1 (true)</span>
+  <span class="pl-c"><span class="pl-c">//</span> this notation is scientific notations for numbers: 1e123 = 1*10^123</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> It is important to note that most all systems have used IEEE 754 to</span>
+  <span class="pl-c"><span class="pl-c">//</span> represent floating points. Even python, used for scientific computing,</span>
+  <span class="pl-c"><span class="pl-c">//</span> eventually calls C which uses IEEE 754. It is mentioned this way not to</span>
+  <span class="pl-c"><span class="pl-c">//</span> indicate that this is a poor implementation, but instead as a warning</span>
+  <span class="pl-c"><span class="pl-c">//</span> that when doing floating point comparisons, a little bit of error (epsilon)</span>
+  <span class="pl-c"><span class="pl-c">//</span> needs to be considered.</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> Modulo is there as well, but be careful if arguments are negative</span>
+  <span class="pl-c1">11</span> % <span class="pl-c1">3</span>;    <span class="pl-c"><span class="pl-c">//</span> =&gt; 2 as 11 = 2 + 3*x (x=3)</span>
+  (-<span class="pl-c1">11</span>) % <span class="pl-c1">3</span>; <span class="pl-c"><span class="pl-c">//</span> =&gt; -2, as one would expect</span>
+  <span class="pl-c1">11</span> % (-<span class="pl-c1">3</span>); <span class="pl-c"><span class="pl-c">//</span> =&gt; 2 and not -2, and it's quite counter intuitive</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> Comparison operators are probably familiar, but</span>
+  <span class="pl-c"><span class="pl-c">//</span> there is no Boolean type in C. We use ints instead.</span>
+  <span class="pl-c"><span class="pl-c">//</span> (C99 introduced the _Bool type provided in stdbool.h)</span>
+  <span class="pl-c"><span class="pl-c">//</span> 0 is false, anything else is true. (The comparison</span>
+  <span class="pl-c"><span class="pl-c">//</span> operators always yield 0 or 1.)</span>
+  <span class="pl-c1">3</span> == <span class="pl-c1">2</span>; <span class="pl-c"><span class="pl-c">//</span> =&gt; 0 (false)</span>
+  <span class="pl-c1">3</span> != <span class="pl-c1">2</span>; <span class="pl-c"><span class="pl-c">//</span> =&gt; 1 (true)</span>
+  <span class="pl-c1">3</span> &gt; <span class="pl-c1">2</span>;  <span class="pl-c"><span class="pl-c">//</span> =&gt; 1</span>
+  <span class="pl-c1">3</span> &lt; <span class="pl-c1">2</span>;  <span class="pl-c"><span class="pl-c">//</span> =&gt; 0</span>
+  <span class="pl-c1">2</span> &lt;= <span class="pl-c1">2</span>; <span class="pl-c"><span class="pl-c">//</span> =&gt; 1</span>
+  <span class="pl-c1">2</span> &gt;= <span class="pl-c1">2</span>; <span class="pl-c"><span class="pl-c">//</span> =&gt; 1</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> C is not Python - comparisons do NOT chain.</span>
+  <span class="pl-c"><span class="pl-c">//</span> Warning: The line below will compile, but it means `(0 &lt; a) &lt; 2`.</span>
+  <span class="pl-c"><span class="pl-c">//</span> This expression is always true, because (0 &lt; a) could be either 1 or 0.</span>
+  <span class="pl-c"><span class="pl-c">//</span> In this case it's 1, because (0 &lt; 1).</span>
+  <span class="pl-k">int</span> between_0_and_2 = <span class="pl-c1">0</span> &lt; a &lt; <span class="pl-c1">2</span>;
+  <span class="pl-c"><span class="pl-c">//</span> Instead use:</span>
+  <span class="pl-k">int</span> between_0_and_2 = <span class="pl-c1">0</span> &lt; a &amp;&amp; a &lt; <span class="pl-c1">2</span>;
+
+  <span class="pl-c"><span class="pl-c">//</span> Logic works on ints</span>
+  !<span class="pl-c1">3</span>; <span class="pl-c"><span class="pl-c">//</span> =&gt; 0 (Logical not)</span>
+  !<span class="pl-c1">0</span>; <span class="pl-c"><span class="pl-c">//</span> =&gt; 1</span>
+  <span class="pl-c1">1</span> &amp;&amp; <span class="pl-c1">1</span>; <span class="pl-c"><span class="pl-c">//</span> =&gt; 1 (Logical and)</span>
+  <span class="pl-c1">0</span> &amp;&amp; <span class="pl-c1">1</span>; <span class="pl-c"><span class="pl-c">//</span> =&gt; 0</span>
+  <span class="pl-c1">0</span> || <span class="pl-c1">1</span>; <span class="pl-c"><span class="pl-c">//</span> =&gt; 1 (Logical or)</span>
+  <span class="pl-c1">0</span> || <span class="pl-c1">0</span>; <span class="pl-c"><span class="pl-c">//</span> =&gt; 0</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> Conditional ternary expression ( ? : )</span>
+  <span class="pl-k">int</span> e = <span class="pl-c1">5</span>;
+  <span class="pl-k">int</span> f = <span class="pl-c1">10</span>;
+  <span class="pl-k">int</span> z;
+  z = (e &gt; f) ? e : f; <span class="pl-c"><span class="pl-c">//</span> =&gt; 10 "if e &gt; f return e, else return f."</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> Increment and decrement operators:</span>
+  <span class="pl-k">int</span> j = <span class="pl-c1">0</span>;
+  <span class="pl-k">int</span> s = j++; <span class="pl-c"><span class="pl-c">//</span> Return j THEN increase j. (s = 0, j = 1)</span>
+  s = ++j; <span class="pl-c"><span class="pl-c">//</span> Increase j THEN return j. (s = 2, j = 2)</span>
+  <span class="pl-c"><span class="pl-c">//</span> same with j-- and --j</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> Bitwise operators!</span>
+  ~<span class="pl-c1">0x0F</span>; <span class="pl-c"><span class="pl-c">//</span> =&gt; 0xFFFFFFF0 (bitwise negation, "1's complement", example result for 32-bit int)</span>
+  <span class="pl-c1">0x0F</span> &amp; <span class="pl-c1">0xF0</span>; <span class="pl-c"><span class="pl-c">//</span> =&gt; 0x00 (bitwise AND)</span>
+  <span class="pl-c1">0x0F</span> | <span class="pl-c1">0xF0</span>; <span class="pl-c"><span class="pl-c">//</span> =&gt; 0xFF (bitwise OR)</span>
+  <span class="pl-c1">0x04</span> ^ <span class="pl-c1">0x0F</span>; <span class="pl-c"><span class="pl-c">//</span> =&gt; 0x0B (bitwise XOR)</span>
+  <span class="pl-c1">0x01</span> &lt;&lt; <span class="pl-c1">1</span>; <span class="pl-c"><span class="pl-c">//</span> =&gt; 0x02 (bitwise left shift (by 1))</span>
+  <span class="pl-c1">0x02</span> &gt;&gt; <span class="pl-c1">1</span>; <span class="pl-c"><span class="pl-c">//</span> =&gt; 0x01 (bitwise right shift (by 1))</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> Be careful when shifting signed integers - the following are undefined:</span>
+  <span class="pl-c"><span class="pl-c">//</span> - shifting into the sign bit of a signed integer (int a = 1 &lt;&lt; 31)</span>
+  <span class="pl-c"><span class="pl-c">//</span> - left-shifting a negative number (int a = -1 &lt;&lt; 2)</span>
+  <span class="pl-c"><span class="pl-c">//</span> - shifting by an offset which is &gt;= the width of the type of the LHS:</span>
+  <span class="pl-c"><span class="pl-c">//</span>   int a = 1 &lt;&lt; 32; // UB if int is 32 bits wide</span>
+
+  <span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+  <span class="pl-c"><span class="pl-c">//</span> Control Structures</span>
+  <span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+
+  <span class="pl-k">if</span> (<span class="pl-c1">0</span>) {
+    <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span>I am never run<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>);
+  } <span class="pl-k">else</span> <span class="pl-k">if</span> (<span class="pl-c1">0</span>) {
+    <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span>I am also never run<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>);
+  } <span class="pl-k">else</span> {
+    <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span>I print<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>);
+  }
+
+  <span class="pl-c"><span class="pl-c">//</span> While loops exist</span>
+  <span class="pl-k">int</span> ii = <span class="pl-c1">0</span>;
+  <span class="pl-k">while</span> (ii &lt; <span class="pl-c1">10</span>) { <span class="pl-c"><span class="pl-c">//</span>ANY value less than ten is true.</span>
+    <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%d</span>, <span class="pl-pds">"</span></span>, ii++); <span class="pl-c"><span class="pl-c">//</span> ii++ increments ii AFTER using its current value.</span>
+  } <span class="pl-c"><span class="pl-c">//</span> =&gt; prints "0, 1, 2, 3, 4, 5, 6, 7, 8, 9, "</span>
+
+  <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>);
+
+  <span class="pl-k">int</span> kk = <span class="pl-c1">0</span>;
+  <span class="pl-k">do</span> {
+    <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%d</span>, <span class="pl-pds">"</span></span>, kk);
+  } <span class="pl-k">while</span> (++kk &lt; <span class="pl-c1">10</span>); <span class="pl-c"><span class="pl-c">//</span> ++kk increments kk BEFORE using its current value.</span>
+  <span class="pl-c"><span class="pl-c">//</span> =&gt; prints "0, 1, 2, 3, 4, 5, 6, 7, 8, 9, "</span>
+
+  <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>);
+
+  <span class="pl-c"><span class="pl-c">//</span> For loops too</span>
+  <span class="pl-k">int</span> jj;
+  <span class="pl-k">for</span> (jj=<span class="pl-c1">0</span>; jj &lt; <span class="pl-c1">10</span>; jj++) {
+    <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%d</span>, <span class="pl-pds">"</span></span>, jj);
+  } <span class="pl-c"><span class="pl-c">//</span> =&gt; prints "0, 1, 2, 3, 4, 5, 6, 7, 8, 9, "</span>
+
+  <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>);
+
+  <span class="pl-c"><span class="pl-c">//</span> *****NOTES*****:</span>
+  <span class="pl-c"><span class="pl-c">//</span> Loops and Functions MUST have a body. If no body is needed:</span>
+  <span class="pl-k">int</span> i;
+  <span class="pl-k">for</span> (i = <span class="pl-c1">0</span>; i &lt;= <span class="pl-c1">5</span>; i++) {
+    ; <span class="pl-c"><span class="pl-c">//</span> use semicolon to act as the body (null statement)</span>
+  }
+  <span class="pl-c"><span class="pl-c">//</span> Or</span>
+  <span class="pl-k">for</span> (i = <span class="pl-c1">0</span>; i &lt;= <span class="pl-c1">5</span>; i++);
+
+  <span class="pl-c"><span class="pl-c">//</span> branching with multiple choices: switch()</span>
+  <span class="pl-k">switch</span> (a) {
+  <span class="pl-k">case</span> <span class="pl-c1">0</span>: <span class="pl-c"><span class="pl-c">//</span> labels need to be integral *constant* expressions (such as enums)</span>
+    <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span>Hey, 'a' equals 0!<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>);
+    <span class="pl-k">break</span>; <span class="pl-c"><span class="pl-c">//</span> if you don't break, control flow falls over labels</span>
+  <span class="pl-k">case</span> <span class="pl-c1">1</span>:
+    <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span>Huh, 'a' equals 1!<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>);
+    <span class="pl-k">break</span>;
+    <span class="pl-c"><span class="pl-c">//</span> Be careful - without a "break", execution continues until the</span>
+    <span class="pl-c"><span class="pl-c">//</span> next "break" is reached.</span>
+  <span class="pl-k">case</span> <span class="pl-c1">3</span>:
+  <span class="pl-k">case</span> <span class="pl-c1">4</span>:
+    <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span>Look at that.. 'a' is either 3, or 4<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>);
+    <span class="pl-k">break</span>;
+  <span class="pl-k">default</span>:
+    <span class="pl-c"><span class="pl-c">//</span> if `some_integral_expression` didn't match any of the labels</span>
+    <span class="pl-c1">fputs</span>(<span class="pl-s"><span class="pl-pds">"</span>Error!<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, stderr);
+    <span class="pl-c1">exit</span>(-<span class="pl-c1">1</span>);
+    <span class="pl-k">break</span>;
+  }
+  <span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">    Using "goto" in C</span>
+<span class="pl-c">  <span class="pl-c">*/</span></span>
+  <span class="pl-k">typedef</span> <span class="pl-k">enum</span> { <span class="pl-c1">false</span>, <span class="pl-c1">true</span> } <span class="pl-k">bool</span>;
+  <span class="pl-c"><span class="pl-c">//</span> for C don't have bool as data type before C99 :(</span>
+  <span class="pl-k">bool</span> disaster = <span class="pl-c1">false</span>;
+  <span class="pl-k">int</span> i, j;
+  <span class="pl-k">for</span>(i=<span class="pl-c1">0</span>; i&lt;<span class="pl-c1">100</span>; ++i)
+  <span class="pl-k">for</span>(j=<span class="pl-c1">0</span>; j&lt;<span class="pl-c1">100</span>; ++j)
+  {
+    <span class="pl-k">if</span>((i + j) &gt;= <span class="pl-c1">150</span>)
+        disaster = <span class="pl-c1">true</span>;
+    <span class="pl-k">if</span>(disaster)
+        <span class="pl-k">goto</span> error;  <span class="pl-c"><span class="pl-c">//</span> exit both for loops</span>
+  }
+  error: <span class="pl-c"><span class="pl-c">//</span> this is a label that you can "jump" to with "goto error;"</span>
+  <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span>Error occurred at i = <span class="pl-c1">%d</span> &amp; j = <span class="pl-c1">%d</span>.<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, i, j);
+  <span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">    https://ideone.com/GuPhd6</span>
+<span class="pl-c">    this will print out "Error occurred at i = 51 &amp; j = 99."</span>
+<span class="pl-c">  <span class="pl-c">*/</span></span>
+  <span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">    it is generally considered bad practice to do so, except if</span>
+<span class="pl-c">    you really know what you are doing. See</span>
+<span class="pl-c">    https://en.wikipedia.org/wiki/Spaghetti_code#Meaning</span>
+<span class="pl-c">  <span class="pl-c">*/</span></span>
+
+  <span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+  <span class="pl-c"><span class="pl-c">//</span> Typecasting</span>
+  <span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> Every value in C has a type, but you can cast one value into another type</span>
+  <span class="pl-c"><span class="pl-c">//</span> if you want (with some constraints).</span>
+
+  <span class="pl-k">int</span> x_hex = <span class="pl-c1">0x01</span>; <span class="pl-c"><span class="pl-c">//</span> You can assign vars with hex literals</span>
+                    <span class="pl-c"><span class="pl-c">//</span> binary is not in the standard, but allowed by some</span>
+                    <span class="pl-c"><span class="pl-c">//</span> compilers (x_bin = 0b0010010110)</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> Casting between types will attempt to preserve their numeric values</span>
+  <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%d</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, x_hex); <span class="pl-c"><span class="pl-c">//</span> =&gt; Prints 1</span>
+  <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%d</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, (<span class="pl-k">short</span>) x_hex); <span class="pl-c"><span class="pl-c">//</span> =&gt; Prints 1</span>
+  <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%d</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, (<span class="pl-k">char</span>) x_hex); <span class="pl-c"><span class="pl-c">//</span> =&gt; Prints 1</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> If you assign a value greater than a types max val, it will rollover</span>
+  <span class="pl-c"><span class="pl-c">//</span> without warning.</span>
+  <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%d</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, (<span class="pl-k">unsigned</span> <span class="pl-k">char</span>) <span class="pl-c1">257</span>); <span class="pl-c"><span class="pl-c">//</span> =&gt; 1 (Max char = 255 if char is 8 bits long)</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> For determining the max value of a `char`, a `signed char` and an `unsigned char`,</span>
+  <span class="pl-c"><span class="pl-c">//</span> respectively, use the CHAR_MAX, SCHAR_MAX and UCHAR_MAX macros from &lt;limits.h&gt;</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> Integral types can be cast to floating-point types, and vice-versa.</span>
+  <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%f</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, (<span class="pl-k">double</span>) <span class="pl-c1">100</span>); <span class="pl-c"><span class="pl-c">//</span> %f always formats a double...</span>
+  <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%f</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, (<span class="pl-k">float</span>)  <span class="pl-c1">100</span>); <span class="pl-c"><span class="pl-c">//</span> ...even with a float.</span>
+  <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%d</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, (<span class="pl-k">char</span>)<span class="pl-c1">100.0</span>);
+
+  <span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+  <span class="pl-c"><span class="pl-c">//</span> Pointers</span>
+  <span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> A pointer is a variable declared to store a memory address. Its declaration will</span>
+  <span class="pl-c"><span class="pl-c">//</span> also tell you the type of data it points to. You can retrieve the memory address</span>
+  <span class="pl-c"><span class="pl-c">//</span> of your variables, then mess with them.</span>
+
+  <span class="pl-k">int</span> x = <span class="pl-c1">0</span>;
+  <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%p</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, (<span class="pl-k">void</span> *)&amp;x); <span class="pl-c"><span class="pl-c">//</span> Use &amp; to retrieve the address of a variable</span>
+  <span class="pl-c"><span class="pl-c">//</span> (%p formats an object pointer of type void *)</span>
+  <span class="pl-c"><span class="pl-c">//</span> =&gt; Prints some address in memory;</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> Pointers start with * in their declaration</span>
+  <span class="pl-k">int</span> *px, not_a_pointer; <span class="pl-c"><span class="pl-c">//</span> px is a pointer to an int</span>
+  px = &amp;x; <span class="pl-c"><span class="pl-c">//</span> Stores the address of x in px</span>
+  <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%p</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, (<span class="pl-k">void</span> *)px); <span class="pl-c"><span class="pl-c">//</span> =&gt; Prints some address in memory</span>
+  <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%zu</span>, <span class="pl-c1">%zu</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, <span class="pl-k">sizeof</span>(px), <span class="pl-k">sizeof</span>(not_a_pointer));
+  <span class="pl-c"><span class="pl-c">//</span> =&gt; Prints "8, 4" on a typical 64-bit system</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> To retrieve the value at the address a pointer is pointing to,</span>
+  <span class="pl-c"><span class="pl-c">//</span> put * in front to dereference it.</span>
+  <span class="pl-c"><span class="pl-c">//</span> Note: yes, it may be confusing that '*' is used for _both_ declaring a</span>
+  <span class="pl-c"><span class="pl-c">//</span> pointer and dereferencing it.</span>
+  <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%d</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, *px); <span class="pl-c"><span class="pl-c">//</span> =&gt; Prints 0, the value of x</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> You can also change the value the pointer is pointing to.</span>
+  <span class="pl-c"><span class="pl-c">//</span> We'll have to wrap the dereference in parenthesis because</span>
+  <span class="pl-c"><span class="pl-c">//</span> ++ has a higher precedence than *.</span>
+  (*px)++; <span class="pl-c"><span class="pl-c">//</span> Increment the value px is pointing to by 1</span>
+  <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%d</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, *px); <span class="pl-c"><span class="pl-c">//</span> =&gt; Prints 1</span>
+  <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%d</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, x); <span class="pl-c"><span class="pl-c">//</span> =&gt; Prints 1</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> Arrays are a good way to allocate a contiguous block of memory</span>
+  <span class="pl-k">int</span> x_array[<span class="pl-c1">20</span>]; <span class="pl-c"><span class="pl-c">//</span>declares array of size 20 (cannot change size)</span>
+  <span class="pl-k">int</span> xx;
+  <span class="pl-k">for</span> (xx = <span class="pl-c1">0</span>; xx &lt; <span class="pl-c1">20</span>; xx++) {
+    x_array[xx] = <span class="pl-c1">20</span> - xx;
+  } <span class="pl-c"><span class="pl-c">//</span> Initialize x_array to 20, 19, 18,... 2, 1</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> Declare a pointer of type int and initialize it to point to x_array</span>
+  <span class="pl-k">int</span>* x_ptr = x_array;
+  <span class="pl-c"><span class="pl-c">//</span> x_ptr now points to the first element in the array (the integer 20).</span>
+  <span class="pl-c"><span class="pl-c">//</span> This works because arrays often decay into pointers to their first element.</span>
+  <span class="pl-c"><span class="pl-c">//</span> For example, when an array is passed to a function or is assigned to a pointer,</span>
+  <span class="pl-c"><span class="pl-c">//</span> it decays into (implicitly converted to) a pointer.</span>
+  <span class="pl-c"><span class="pl-c">//</span> Exceptions: when the array is the argument of the `&amp;` (address-of) operator:</span>
+  <span class="pl-k">int</span> arr[<span class="pl-c1">10</span>];
+  <span class="pl-c1">int</span> (*ptr_to_arr)[<span class="pl-c1">10</span>] = &amp;arr; <span class="pl-c"><span class="pl-c">//</span> &amp;arr is NOT of type `int *`!</span>
+  <span class="pl-c"><span class="pl-c">//</span> It's of type "pointer to array" (of ten `int`s).</span>
+  <span class="pl-c"><span class="pl-c">//</span> or when the array is a string literal used for initializing a char array:</span>
+  <span class="pl-k">char</span> otherarr[] = <span class="pl-s"><span class="pl-pds">"</span>foobarbazquirk<span class="pl-pds">"</span></span>;
+  <span class="pl-c"><span class="pl-c">//</span> or when it's the argument of the `sizeof` or `alignof` operator:</span>
+  <span class="pl-k">int</span> arraythethird[<span class="pl-c1">10</span>];
+  <span class="pl-k">int</span> *ptr = arraythethird; <span class="pl-c"><span class="pl-c">//</span> equivalent with int *ptr = &amp;arr[0];</span>
+  <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%zu</span>, <span class="pl-c1">%zu</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, <span class="pl-k">sizeof</span>(arraythethird), <span class="pl-k">sizeof</span>(ptr));
+  <span class="pl-c"><span class="pl-c">//</span> probably prints "40, 4" or "40, 8"</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> Pointers are incremented and decremented based on their type</span>
+  <span class="pl-c"><span class="pl-c">//</span> (this is called pointer arithmetic)</span>
+  <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%d</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, *(x_ptr + <span class="pl-c1">1</span>)); <span class="pl-c"><span class="pl-c">//</span> =&gt; Prints 19</span>
+  <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%d</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, x_array[<span class="pl-c1">1</span>]); <span class="pl-c"><span class="pl-c">//</span> =&gt; Prints 19</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> You can also dynamically allocate contiguous blocks of memory with the</span>
+  <span class="pl-c"><span class="pl-c">//</span> standard library function malloc, which takes one argument of type size_t</span>
+  <span class="pl-c"><span class="pl-c">//</span> representing the number of bytes to allocate (usually from the heap, although this</span>
+  <span class="pl-c"><span class="pl-c">//</span> may not be true on e.g. embedded systems - the C standard says nothing about it).</span>
+  <span class="pl-k">int</span> *my_ptr = <span class="pl-c1">malloc</span>(<span class="pl-k">sizeof</span>(*my_ptr) * <span class="pl-c1">20</span>);
+  <span class="pl-k">for</span> (xx = <span class="pl-c1">0</span>; xx &lt; <span class="pl-c1">20</span>; xx++) {
+    *(my_ptr + xx) = <span class="pl-c1">20</span> - xx; <span class="pl-c"><span class="pl-c">//</span> my_ptr[xx] = 20-xx</span>
+  } <span class="pl-c"><span class="pl-c">//</span> Initialize memory to 20, 19, 18, 17... 2, 1 (as ints)</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> Be careful passing user-provided values to malloc! If you want</span>
+  <span class="pl-c"><span class="pl-c">//</span> to be safe, you can use calloc instead (which, unlike malloc, also zeros out the memory)</span>
+  <span class="pl-k">int</span>* my_other_ptr = <span class="pl-c1">calloc</span>(<span class="pl-c1">20</span>, <span class="pl-k">sizeof</span>(<span class="pl-k">int</span>));
+
+  <span class="pl-c"><span class="pl-c">//</span> Note that there is no standard way to get the length of a</span>
+  <span class="pl-c"><span class="pl-c">//</span> dynamically allocated array in C. Because of this, if your arrays are</span>
+  <span class="pl-c"><span class="pl-c">//</span> going to be passed around your program a lot, you need another variable</span>
+  <span class="pl-c"><span class="pl-c">//</span> to keep track of the number of elements (size) of an array. See the</span>
+  <span class="pl-c"><span class="pl-c">//</span> functions section for more info.</span>
+  <span class="pl-c1">size_t</span> size = <span class="pl-c1">10</span>;
+  <span class="pl-k">int</span> *my_arr = <span class="pl-c1">calloc</span>(size, <span class="pl-k">sizeof</span>(<span class="pl-k">int</span>));
+  <span class="pl-c"><span class="pl-c">//</span> Add an element to the array</span>
+  size++;
+  my_arr = <span class="pl-c1">realloc</span>(my_arr, <span class="pl-k">sizeof</span>(<span class="pl-k">int</span>) * size);
+  <span class="pl-k">if</span> (my_arr == <span class="pl-c1">NULL</span>) {
+    <span class="pl-c"><span class="pl-c">//</span>Remember to check for realloc failure!</span>
+    <span class="pl-k">return</span>
+  }
+  my_arr[<span class="pl-c1">10</span>] = <span class="pl-c1">5</span>;
+
+  <span class="pl-c"><span class="pl-c">//</span> Dereferencing memory that you haven't allocated gives</span>
+  <span class="pl-c"><span class="pl-c">//</span> "unpredictable results" - the program is said to invoke "undefined behavior"</span>
+  <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%d</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, *(my_ptr + <span class="pl-c1">21</span>)); <span class="pl-c"><span class="pl-c">//</span> =&gt; Prints who-knows-what? It may even crash.</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> When you're done with a malloc'd block of memory, you need to free it,</span>
+  <span class="pl-c"><span class="pl-c">//</span> or else no one else can use it until your program terminates</span>
+  <span class="pl-c"><span class="pl-c">//</span> (this is called a "memory leak"):</span>
+  <span class="pl-c1">free</span>(my_ptr);
+
+  <span class="pl-c"><span class="pl-c">//</span> Strings are arrays of char, but they are usually represented as a</span>
+  <span class="pl-c"><span class="pl-c">//</span> pointer-to-char (which is a pointer to the first element of the array).</span>
+  <span class="pl-c"><span class="pl-c">//</span> It's good practice to use `const char *' when referring to a string literal,</span>
+  <span class="pl-c"><span class="pl-c">//</span> since string literals shall not be modified (i.e. "foo"[0] = 'a' is ILLEGAL.)</span>
+  <span class="pl-k">const</span> <span class="pl-k">char</span> *my_str = <span class="pl-s"><span class="pl-pds">"</span>This is my very own string literal<span class="pl-pds">"</span></span>;
+  <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%c</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, *my_str); <span class="pl-c"><span class="pl-c">//</span> =&gt; 'T'</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> This is not the case if the string is an array</span>
+  <span class="pl-c"><span class="pl-c">//</span> (potentially initialized with a string literal)</span>
+  <span class="pl-c"><span class="pl-c">//</span> that resides in writable memory, as in:</span>
+  <span class="pl-k">char</span> foo[] = <span class="pl-s"><span class="pl-pds">"</span>foo<span class="pl-pds">"</span></span>;
+  foo[<span class="pl-c1">0</span>] = <span class="pl-s"><span class="pl-pds">'</span>a<span class="pl-pds">'</span></span>; <span class="pl-c"><span class="pl-c">//</span> this is legal, foo now contains "aoo"</span>
+
+  <span class="pl-c1">function_1</span>();
+} <span class="pl-c"><span class="pl-c">//</span> end main function</span>
+
+<span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> Functions</span>
+<span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Function declaration syntax:</span>
+<span class="pl-c"><span class="pl-c">//</span> &lt;return type&gt; &lt;function name&gt;(&lt;args&gt;)</span>
+
+<span class="pl-k">int</span> <span class="pl-en">add_two_ints</span>(<span class="pl-k">int</span> x1, <span class="pl-k">int</span> x2)
+{
+  <span class="pl-k">return</span> x1 + x2; <span class="pl-c"><span class="pl-c">//</span> Use return to return a value</span>
+}
+
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">Functions are call by value. When a function is called, the arguments passed to</span>
+<span class="pl-c">the function are copies of the original arguments (except arrays). Anything you</span>
+<span class="pl-c">do to the arguments in the function do not change the value of the original</span>
+<span class="pl-c">argument where the function was called.</span>
+<span class="pl-c"></span>
+<span class="pl-c">Use pointers if you need to edit the original argument values (arrays are always</span>
+<span class="pl-c">passed in as pointers).</span>
+<span class="pl-c"></span>
+<span class="pl-c">Example: in-place string reversal</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span> A void function returns no value</span>
+<span class="pl-k">void</span> <span class="pl-en">str_reverse</span>(<span class="pl-k">char</span> *str_in)
+{
+  <span class="pl-k">char</span> tmp;
+  <span class="pl-c1">size_t</span> ii = <span class="pl-c1">0</span>;
+  <span class="pl-c1">size_t</span> len = <span class="pl-c1">strlen</span>(str_in); <span class="pl-c"><span class="pl-c">//</span> `strlen()` is part of the c standard library</span>
+                               <span class="pl-c"><span class="pl-c">//</span> NOTE: length returned by `strlen` DOESN'T</span>
+                               <span class="pl-c"><span class="pl-c">//</span>       include the terminating NULL byte ('\0')</span>
+  <span class="pl-c"><span class="pl-c">//</span> in C99 and newer versions, you can directly declare loop control variables</span>
+  <span class="pl-c"><span class="pl-c">//</span> in the loop's parentheses. e.g., `for (size_t ii = 0; ...`</span>
+  <span class="pl-k">for</span> (ii = <span class="pl-c1">0</span>; ii &lt; len / <span class="pl-c1">2</span>; ii++) {
+    tmp = str_in[ii];
+    str_in[ii] = str_in[len - ii - <span class="pl-c1">1</span>]; <span class="pl-c"><span class="pl-c">//</span> ii-th char from end</span>
+    str_in[len - ii - <span class="pl-c1">1</span>] = tmp;
+  }
+}
+<span class="pl-c"><span class="pl-c">//</span>NOTE: string.h header file needs to be included to use strlen()</span>
+
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">char c[] = "This is a test.";</span>
+<span class="pl-c">str_reverse(c);</span>
+<span class="pl-c">printf("%s\n", c); // =&gt; ".tset a si sihT"</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">as we can return only one variable</span>
+<span class="pl-c">to change values of more than one variables we use call by reference</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+<span class="pl-k">void</span> <span class="pl-en">swapTwoNumbers</span>(<span class="pl-k">int</span> *a, <span class="pl-k">int</span> *b)
+{
+    <span class="pl-k">int</span> temp = *a;
+    *a = *b;
+    *b = temp;
+}
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">int first = 10;</span>
+<span class="pl-c">int second = 20;</span>
+<span class="pl-c">printf("first: %d\nsecond: %d\n", first, second);</span>
+<span class="pl-c">swapTwoNumbers(&amp;first, &amp;second);</span>
+<span class="pl-c">printf("first: %d\nsecond: %d\n", first, second);</span>
+<span class="pl-c">// values will be swapped</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span> Return multiple values.</span>
+<span class="pl-c"><span class="pl-c">//</span> C does not allow for returning multiple values with the return statement. If</span>
+<span class="pl-c"><span class="pl-c">//</span> you would like to return multiple values, then the caller must pass in the</span>
+<span class="pl-c"><span class="pl-c">//</span> variables where they would like the returned values to go. These variables must</span>
+<span class="pl-c"><span class="pl-c">//</span> be passed in as pointers such that the function can modify them.</span>
+<span class="pl-k">int</span> <span class="pl-en">return_multiple</span>( <span class="pl-k">int</span> *array_of_3, <span class="pl-k">int</span> *ret1, <span class="pl-k">int</span> *ret2, <span class="pl-k">int</span> *ret3)
+{
+    <span class="pl-k">if</span>(array_of_3 == <span class="pl-c1">NULL</span>)
+        <span class="pl-k">return</span> <span class="pl-c1">0</span>; <span class="pl-c"><span class="pl-c">//</span>return error code (false)</span>
+
+    <span class="pl-c"><span class="pl-c">//</span>de-reference the pointer so we modify its value</span>
+   *ret1 = array_of_3[<span class="pl-c1">0</span>];
+   *ret2 = array_of_3[<span class="pl-c1">1</span>];
+   *ret3 = array_of_3[<span class="pl-c1">2</span>];
+
+   <span class="pl-k">return</span> <span class="pl-c1">1</span>; <span class="pl-c"><span class="pl-c">//</span>return error code (true)</span>
+}
+
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">With regards to arrays, they will always be passed to functions</span>
+<span class="pl-c">as pointers. Even if you statically allocate an array like `arr[10]`,</span>
+<span class="pl-c">it still gets passed as a pointer to the first element in any function calls.</span>
+<span class="pl-c">Again, there is no standard way to get the size of a dynamically allocated</span>
+<span class="pl-c">array in C.</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+<span class="pl-c"><span class="pl-c">//</span> Size must be passed!</span>
+<span class="pl-c"><span class="pl-c">//</span> Otherwise, this function has no way of knowing how big the array is.</span>
+<span class="pl-k">void</span> <span class="pl-en">printIntArray</span>(<span class="pl-k">int</span> *arr, <span class="pl-c1">size_t</span> size) {
+    <span class="pl-k">int</span> i;
+    <span class="pl-k">for</span> (i = <span class="pl-c1">0</span>; i &lt; size; i++) {
+        <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span>arr[<span class="pl-c1">%d</span>] is: <span class="pl-c1">%d</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, i, arr[i]);
+    }
+}
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">int my_arr[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };</span>
+<span class="pl-c">int size = 10;</span>
+<span class="pl-c">printIntArray(my_arr, size);</span>
+<span class="pl-c">// will print "arr[0] is: 1" etc</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span> if referring to external variables outside function, you should use the extern keyword.</span>
+<span class="pl-k">int</span> i = <span class="pl-c1">0</span>;
+<span class="pl-k">void</span> <span class="pl-en">testFunc</span>() {
+  <span class="pl-k">extern</span> <span class="pl-k">int</span> i; <span class="pl-c"><span class="pl-c">//</span>i here is now using external variable i</span>
+}
+
+<span class="pl-c"><span class="pl-c">//</span> make external variables private to source file with static:</span>
+<span class="pl-k">static</span> <span class="pl-k">int</span> j = <span class="pl-c1">0</span>; <span class="pl-c"><span class="pl-c">//</span>other files using testFunc2() cannot access variable j</span>
+<span class="pl-k">void</span> <span class="pl-en">testFunc2</span>() {
+  <span class="pl-k">extern</span> <span class="pl-k">int</span> j;
+}
+<span class="pl-c"><span class="pl-c">//</span> The static keyword makes a variable inaccessible to code outside the</span>
+<span class="pl-c"><span class="pl-c">//</span> compilation unit. (On almost all systems, a "compilation unit" is a .c</span>
+<span class="pl-c"><span class="pl-c">//</span> file.) static can apply both to global (to the compilation unit) variables,</span>
+<span class="pl-c"><span class="pl-c">//</span> functions, and function-local variables. When using static with</span>
+<span class="pl-c"><span class="pl-c">//</span> function-local variables, the variable is effectively global and retains its</span>
+<span class="pl-c"><span class="pl-c">//</span> value across function calls, but is only accessible within the function it</span>
+<span class="pl-c"><span class="pl-c">//</span> is declared in. Additionally, static variables are initialized to 0 if not</span>
+<span class="pl-c"><span class="pl-c">//</span> declared with some other starting value.</span>
+<span class="pl-c"><span class="pl-c">//</span>**You may also declare functions as static to make them private**</span>
+
+<span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> User-defined types and structs</span>
+<span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Typedefs can be used to create type aliases</span>
+<span class="pl-k">typedef</span> <span class="pl-k">int</span> my_type;
+my_type my_type_var = <span class="pl-c1">0</span>;
+
+<span class="pl-c"><span class="pl-c">//</span> Structs are just collections of data, the members are allocated sequentially,</span>
+<span class="pl-c"><span class="pl-c">//</span> in the order they are written:</span>
+<span class="pl-k">struct</span> rectangle {
+  <span class="pl-k">int</span> width;
+  <span class="pl-k">int</span> height;
+};
+
+<span class="pl-c"><span class="pl-c">//</span> It's not generally true that</span>
+<span class="pl-c"><span class="pl-c">//</span> sizeof(struct rectangle) == sizeof(int) + sizeof(int)</span>
+<span class="pl-c"><span class="pl-c">//</span> due to potential padding between the structure members (this is for alignment</span>
+<span class="pl-c"><span class="pl-c">//</span> reasons). [1]</span>
+
+<span class="pl-k">void</span> <span class="pl-en">function_1</span>()
+{
+  <span class="pl-k">struct</span> rectangle my_rec = { <span class="pl-c1">1</span>, <span class="pl-c1">2</span> }; <span class="pl-c"><span class="pl-c">//</span> Fields can be initialized immediately</span>
+
+  <span class="pl-c"><span class="pl-c">//</span> Access struct members with .</span>
+  my_rec.<span class="pl-smi">width</span> = <span class="pl-c1">10</span>;
+  my_rec.<span class="pl-smi">height</span> = <span class="pl-c1">20</span>;
+
+  <span class="pl-c"><span class="pl-c">//</span> You can declare pointers to structs</span>
+  <span class="pl-k">struct</span> rectangle *my_rec_ptr = &amp;my_rec;
+
+  <span class="pl-c"><span class="pl-c">//</span> Use dereferencing to set struct pointer members...</span>
+  (*my_rec_ptr).<span class="pl-smi">width</span> = <span class="pl-c1">30</span>;
+
+  <span class="pl-c"><span class="pl-c">//</span> ... or even better: prefer the -&gt; shorthand for the sake of readability</span>
+  my_rec_ptr-&gt;<span class="pl-smi">height</span> = <span class="pl-c1">10</span>; <span class="pl-c"><span class="pl-c">//</span> Same as (*my_rec_ptr).height = 10;</span>
+}
+
+<span class="pl-c"><span class="pl-c">//</span> You can apply a typedef to a struct for convenience</span>
+<span class="pl-k">typedef</span> <span class="pl-k">struct</span> rectangle rect;
+
+<span class="pl-k">int</span> <span class="pl-en">area</span>(rect r)
+{
+  <span class="pl-k">return</span> r.<span class="pl-smi">width</span> * r.<span class="pl-smi">height</span>;
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Typedefs can also be defined right during struct definition</span>
+<span class="pl-k">typedef</span> <span class="pl-k">struct</span> {
+  <span class="pl-k">int</span> width;
+  <span class="pl-k">int</span> height;
+} rect;
+<span class="pl-c"><span class="pl-c">//</span> Like before, doing this means one can type</span>
+rect r;
+<span class="pl-c"><span class="pl-c">//</span> instead of having to type</span>
+<span class="pl-k">struct</span> rectangle r;
+
+<span class="pl-c"><span class="pl-c">//</span> if you have large structs, you can pass them "by pointer" to avoid copying</span>
+<span class="pl-c"><span class="pl-c">//</span> the whole struct:</span>
+<span class="pl-k">int</span> <span class="pl-en">areaptr</span>(<span class="pl-k">const</span> rect *r)
+{
+  <span class="pl-k">return</span> r-&gt;<span class="pl-smi">width</span> * r-&gt;<span class="pl-smi">height</span>;
+}
+
+<span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> Function pointers</span>
+<span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">At run time, functions are located at known memory addresses. Function pointers are</span>
+<span class="pl-c">much like any other pointer (they just store a memory address), but can be used</span>
+<span class="pl-c">to invoke functions directly, and to pass handlers (or callback functions) around.</span>
+<span class="pl-c">However, definition syntax may be initially confusing.</span>
+<span class="pl-c"></span>
+<span class="pl-c">Example: use str_reverse from a pointer</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+<span class="pl-k">void</span> <span class="pl-en">str_reverse_through_pointer</span>(<span class="pl-k">char</span> *str_in) {
+  <span class="pl-c"><span class="pl-c">//</span> Define a function pointer variable, named f.</span>
+  <span class="pl-c1">void</span> (*f)(<span class="pl-k">char</span> *); <span class="pl-c"><span class="pl-c">//</span> Signature should exactly match the target function.</span>
+  f = &amp;str_reverse; <span class="pl-c"><span class="pl-c">//</span> Assign the address for the actual function (determined at run time)</span>
+  <span class="pl-c"><span class="pl-c">//</span> f = str_reverse; would work as well - functions decay into pointers, similar to arrays</span>
+  (*f)(str_in); <span class="pl-c"><span class="pl-c">//</span> Just calling the function through the pointer</span>
+  <span class="pl-c"><span class="pl-c">//</span> f(str_in); // That's an alternative but equally valid syntax for calling it.</span>
+}
+
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">As long as function signatures match, you can assign any function to the same pointer.</span>
+<span class="pl-c">Function pointers are usually typedef'd for simplicity and readability, as follows:</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+
+<span class="pl-k">typedef</span> <span class="pl-en">void</span> (*my_fnp_type)(<span class="pl-k">char</span> *);
+
+<span class="pl-c"><span class="pl-c">//</span> Then used when declaring the actual pointer variable:</span>
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+<span class="pl-c"><span class="pl-c">//</span> my_fnp_type f;</span>
+
+
+<span class="pl-c"><span class="pl-c">//</span>///////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> Printing characters with printf()</span>
+<span class="pl-c"><span class="pl-c">//</span>///////////////////////////</span>
+
+<span class="pl-c"><span class="pl-c">//</span>Special characters:</span>
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">'\a'; // alert (bell) character</span>
+<span class="pl-c">'\n'; // newline character</span>
+<span class="pl-c">'\t'; // tab character (left justifies text)</span>
+<span class="pl-c">'\v'; // vertical tab</span>
+<span class="pl-c">'\f'; // new page (form feed)</span>
+<span class="pl-c">'\r'; // carriage return</span>
+<span class="pl-c">'\b'; // backspace character</span>
+<span class="pl-c">'\0'; // NULL character. Usually put at end of strings in C.</span>
+<span class="pl-c">//   hello\n\0. \0 used by convention to mark end of string.</span>
+<span class="pl-c">'\\'; // backslash</span>
+<span class="pl-c">'\?'; // question mark</span>
+<span class="pl-c">'\''; // single quote</span>
+<span class="pl-c">'\"'; // double quote</span>
+<span class="pl-c">'\xhh'; // hexadecimal number. Example: '\xb' = vertical tab character</span>
+<span class="pl-c">'\0oo'; // octal number. Example: '\013' = vertical tab character</span>
+<span class="pl-c"></span>
+<span class="pl-c">//print formatting:</span>
+<span class="pl-c">"%d";    // integer</span>
+<span class="pl-c">"%3d";   // integer with minimum of length 3 digits (right justifies text)</span>
+<span class="pl-c">"%s";    // string</span>
+<span class="pl-c">"%f";    // float</span>
+<span class="pl-c">"%ld";   // long</span>
+<span class="pl-c">"%3.2f"; // minimum 3 digits left and 2 digits right decimal float</span>
+<span class="pl-c">"%7.4s"; // (can do with strings too)</span>
+<span class="pl-c">"%c";    // char</span>
+<span class="pl-c">"%p";    // pointer. NOTE: need to (void *)-cast the pointer, before passing</span>
+<span class="pl-c">         //                it as an argument to `printf`.</span>
+<span class="pl-c">"%x";    // hexadecimal</span>
+<span class="pl-c">"%o";    // octal</span>
+<span class="pl-c">"%%";    // prints %</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> Order of Evaluation</span>
+<span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+
+<span class="pl-c"><span class="pl-c">//</span> From top to bottom, top has higher precedence</span>
+<span class="pl-c"><span class="pl-c">//</span>---------------------------------------------------//</span>
+<span class="pl-c"><span class="pl-c">//</span>        Operators                  | Associativity //</span>
+<span class="pl-c"><span class="pl-c">//</span>---------------------------------------------------//</span>
+<span class="pl-c"><span class="pl-c">//</span> () [] -&gt; .                        | left to right //</span>
+<span class="pl-c"><span class="pl-c">//</span> ! ~ ++ -- + = *(type) sizeof      | right to left //</span>
+<span class="pl-c"><span class="pl-c">//</span> * / %                             | left to right //</span>
+<span class="pl-c"><span class="pl-c">//</span> + -                               | left to right //</span>
+<span class="pl-c"><span class="pl-c">//</span> &lt;&lt; &gt;&gt;                             | left to right //</span>
+<span class="pl-c"><span class="pl-c">//</span> &lt; &lt;= &gt; &gt;=                         | left to right //</span>
+<span class="pl-c"><span class="pl-c">//</span> == !=                             | left to right //</span>
+<span class="pl-c"><span class="pl-c">//</span> &amp;                                 | left to right //</span>
+<span class="pl-c"><span class="pl-c">//</span> ^                                 | left to right //</span>
+<span class="pl-c"><span class="pl-c">//</span> |                                 | left to right //</span>
+<span class="pl-c"><span class="pl-c">//</span> &amp;&amp;                                | left to right //</span>
+<span class="pl-c"><span class="pl-c">//</span> ||                                | left to right //</span>
+<span class="pl-c"><span class="pl-c">//</span> ?:                                | right to left //</span>
+<span class="pl-c"><span class="pl-c">//</span> = += -= *= /= %= &amp;= ^= |= &lt;&lt;= &gt;&gt;= | right to left //</span>
+<span class="pl-c"><span class="pl-c">//</span> ,                                 | left to right //</span>
+<span class="pl-c"><span class="pl-c">//</span>---------------------------------------------------//</span>
+
+<span class="pl-c"><span class="pl-c">/*</span>****************************** Header Files **********************************</span>
+<span class="pl-c"></span>
+<span class="pl-c">Header files are an important part of C as they allow for the connection of C</span>
+<span class="pl-c">source files and can simplify code and definitions by separating them into</span>
+<span class="pl-c">separate files.</span>
+<span class="pl-c"></span>
+<span class="pl-c">Header files are syntactically similar to C source files but reside in ".h"</span>
+<span class="pl-c">files. They can be included in your C source file by using the precompiler</span>
+<span class="pl-c">command #include "example.h", given that example.h exists in the same directory</span>
+<span class="pl-c">as the C file.</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">/*</span> A safe guard to prevent the header from being defined too many times. This <span class="pl-c">*/</span></span>
+<span class="pl-c"><span class="pl-c">/*</span> happens in the case of circle dependency, the contents of the header is    <span class="pl-c">*/</span></span>
+<span class="pl-c"><span class="pl-c">/*</span> already defined.                                                           <span class="pl-c">*/</span></span>
+#<span class="pl-k">ifndef</span> EXAMPLE_H <span class="pl-c"><span class="pl-c">/*</span> if EXAMPLE_H is not yet defined. <span class="pl-c">*/</span></span>
+#<span class="pl-k">define</span> <span class="pl-en">EXAMPLE_H</span> <span class="pl-c"><span class="pl-c">/*</span> Define the macro EXAMPLE_H. <span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">/*</span> Other headers can be included in headers and therefore transitively <span class="pl-c">*/</span></span>
+<span class="pl-c"><span class="pl-c">/*</span> included into files that include this header.                       <span class="pl-c">*/</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>string.h<span class="pl-pds">&gt;</span></span>
+
+<span class="pl-c"><span class="pl-c">/*</span> Like for c source files, macros can be defined in headers <span class="pl-c">*/</span></span>
+<span class="pl-c"><span class="pl-c">/*</span> and used in files that include this header file.          <span class="pl-c">*/</span></span>
+#<span class="pl-k">define</span> <span class="pl-en">EXAMPLE_NAME</span> <span class="pl-s"><span class="pl-pds">"</span>Dennis Ritchie<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">/*</span> Function macros can also be defined.  <span class="pl-c">*/</span></span>
+#<span class="pl-k">define</span> <span class="pl-en">ADD</span>(<span class="pl-v">a, b</span>) ((a) + (b))
+
+<span class="pl-c"><span class="pl-c">/*</span> Notice the parenthesis surrounding the arguments -- this is important to   <span class="pl-c">*/</span></span>
+<span class="pl-c"><span class="pl-c">/*</span> ensure that a and b don't get expanded in an unexpected way (e.g. consider <span class="pl-c">*/</span></span>
+<span class="pl-c"><span class="pl-c">/*</span> MUL(x, y) (x * y); MUL(1 + 2, 3) would expand to (1 + 2 * 3), yielding an  <span class="pl-c">*/</span></span>
+<span class="pl-c"><span class="pl-c">/*</span> incorrect result)                                                          <span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">/*</span> Structs and typedefs can be used for consistency between files. <span class="pl-c">*/</span></span>
+<span class="pl-k">typedef</span> <span class="pl-k">struct</span> Node
+{
+    <span class="pl-k">int</span> val;
+    <span class="pl-k">struct</span> Node *next;
+} Node;
+
+<span class="pl-c"><span class="pl-c">/*</span> So can enumerations. <span class="pl-c">*/</span></span>
+<span class="pl-k">enum</span> traffic_light_state {GREEN, YELLOW, RED};
+
+<span class="pl-c"><span class="pl-c">/*</span> Function prototypes can also be defined here for use in multiple files,  <span class="pl-c">*/</span></span>
+<span class="pl-c"><span class="pl-c">/*</span> but it is bad practice to define the function in the header. Definitions <span class="pl-c">*/</span></span>
+<span class="pl-c"><span class="pl-c">/*</span> should instead be put in a C file.                                       <span class="pl-c">*/</span></span>
+Node <span class="pl-en">createLinkedList</span>(<span class="pl-k">int</span> *vals, <span class="pl-k">int</span> len);
+
+<span class="pl-c"><span class="pl-c">/*</span> Beyond the above elements, other definitions should be left to a C source <span class="pl-c">*/</span></span>
+<span class="pl-c"><span class="pl-c">/*</span> file. Excessive includes or definitions should also not be contained in   <span class="pl-c">*/</span></span>
+<span class="pl-c"><span class="pl-c">/*</span> a header file but instead put into separate headers or a C file.          <span class="pl-c">*/</span></span>
+
+#<span class="pl-k">endif</span> <span class="pl-c"><span class="pl-c">/*</span> End of the if precompiler directive. <span class="pl-c">*/</span></span>
+</pre></div>
+<h2>Further Reading</h2>
+<p>Best to find yourself a copy of <a href="https://en.wikipedia.org/wiki/The_C_Programming_Language" rel="nofollow">K&amp;R, aka "The C Programming Language"</a><br>
+It is <em>the</em> book about C, written by Dennis Ritchie, the creator of C, and Brian Kernighan. Be careful, though - it's ancient and it contains some<br>
+inaccuracies (well, ideas that are not considered good anymore) or now-changed practices.</p>
+<p>Another good resource is <a href="http://learncodethehardway.org/c/" rel="nofollow">Learn C The Hard Way</a> (not free).</p>
+<p>If you have a question, read the <a href="http://c-faq.com" rel="nofollow">compl.lang.c Frequently Asked Questions</a>.</p>
+<p>It's very important to use proper spacing, indentation and to be consistent with your coding style in general.<br>
+Readable code is better than clever code and fast code. For a good, sane coding style to adopt, see the<br>
+<a href="https://www.kernel.org/doc/Documentation/process/coding-style.rst" rel="nofollow">Linux kernel coding style</a>.</p>
+<p>Other than that, Google is your friend.</p>
+<p>[1] <a href="https://stackoverflow.com/questions/119123/why-isnt-sizeof-for-a-struct-equal-to-the-sum-of-sizeof-of-each-member" rel="nofollow">Why isn't sizeof for a struct equal to the sum of sizeof of each member?</a></p>
+<hr>
+<h2>Contributors</h2>
+<ul>
+<li>["Adam Bard", "http://adambard.com/"]</li>
+<li>["Árpád Goretity", "http://twitter.com/H2CO3_iOS"]</li>
+<li>["Jakub Trzebiatowski", "http://cbs.stgn.pl"]</li>
+<li>["Marco Scannadinari", "https://marcoms.github.io"]</li>
+<li>["Zachary Ferguson", "https://github.io/zfergus2"]</li>
+<li>["himanshu", "https://github.com/himanshu81494"]</li>
+<li>["Joshua Li", "https://github.com/JoshuaRLi"]</li>
+<li>["Dragos B. Chirila", "https://github.com/dchirila"]</li>
+<li>["Heitor P. de Bittencourt", "https://github.com/heitorPB/"]</li>
+</ul>

@@ -1,0 +1,233 @@
+<h1>Whip</h1>
+<p>Whip is a LISP-dialect made for scripting and simplified concepts.<br>
+It has also borrowed a lot of functions and syntax from Haskell (a non-related language).</p>
+<p>These docs were written by the creator of the language himself. So is this line.</p>
+<div class="highlight highlight-source-scheme"><pre class="notranslate"><span class="pl-c"><span class="pl-c">;</span> Comments are like LISP. Semi-colons...</span>
+
+<span class="pl-c"><span class="pl-c">;</span> Majority of first-level statements are inside "forms"</span>
+<span class="pl-c"><span class="pl-c">;</span> which are just things inside parens separated by whitespace</span>
+not_in_form
+(in_form)
+
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c"><span class="pl-c">;</span> 1. Numbers, Strings, and Operators</span>
+
+<span class="pl-c"><span class="pl-c">;</span> Whip has one number type (which is a 64-bit IEEE 754 double, from JavaScript).</span>
+3 <span class="pl-c"><span class="pl-c">;</span> =&gt; 3</span>
+1.5 <span class="pl-c"><span class="pl-c">;</span> =&gt; 1.5</span>
+
+<span class="pl-c"><span class="pl-c">;</span> Functions are called if they are the first element in a form</span>
+(called_function args)
+
+<span class="pl-c"><span class="pl-c">;</span> Majority of operations are done with functions</span>
+<span class="pl-c"><span class="pl-c">;</span> All the basic arithmetic is pretty straight forward</span>
+(<span class="pl-k">+</span> <span class="pl-c1">1</span> <span class="pl-c1">1</span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; 2</span>
+(<span class="pl-k">-</span> <span class="pl-c1">2</span> <span class="pl-c1">1</span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; 1</span>
+(<span class="pl-k">*</span> <span class="pl-c1">1</span> <span class="pl-c1">2</span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; 2</span>
+(<span class="pl-k">/</span> <span class="pl-c1">2</span> <span class="pl-c1">1</span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; 2</span>
+<span class="pl-c"><span class="pl-c">;</span> even modulo</span>
+(% <span class="pl-c1">9</span> <span class="pl-c1">4</span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; 1</span>
+<span class="pl-c"><span class="pl-c">;</span> JavaScript-style uneven division.</span>
+(<span class="pl-k">/</span> <span class="pl-c1">5</span> <span class="pl-c1">2</span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; 2.5</span>
+
+<span class="pl-c"><span class="pl-c">;</span> Nesting forms works as you expect.</span>
+(<span class="pl-k">*</span> <span class="pl-c1">2</span> (<span class="pl-k">+</span> <span class="pl-c1">1</span> <span class="pl-c1">3</span>)) <span class="pl-c"><span class="pl-c">;</span> =&gt; 8</span>
+
+<span class="pl-c"><span class="pl-c">;</span> There's a boolean type.</span>
+true
+false
+
+<span class="pl-c"><span class="pl-c">;</span> Strings are created with ".</span>
+<span class="pl-s"><span class="pl-pds">"</span>Hello, world<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">;</span> Single chars are created with '.</span>
+<span class="pl-c1">'a</span><span class="pl-s">'</span>
+
+<span class="pl-c"><span class="pl-c">;</span> Negation uses the 'not' function.</span>
+(<span class="pl-c1">not</span> true) <span class="pl-c"><span class="pl-c">;</span> =&gt; false</span>
+(<span class="pl-c1">not</span> false) <span class="pl-c"><span class="pl-c">;</span> =&gt; true</span>
+
+<span class="pl-c"><span class="pl-c">;</span> But the majority of non-haskell functions have shortcuts</span>
+<span class="pl-c"><span class="pl-c">;</span> not's shortcut is a '!'.</span>
+(! (! true)) <span class="pl-c"><span class="pl-c">;</span> =&gt; true</span>
+
+<span class="pl-c"><span class="pl-c">;</span> Equality is `equal` or `=`.</span>
+(<span class="pl-k">=</span> <span class="pl-c1">1</span> <span class="pl-c1">1</span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; true</span>
+(equal <span class="pl-c1">2</span> <span class="pl-c1">1</span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; false</span>
+
+<span class="pl-c"><span class="pl-c">;</span> For example, inequality would be combining the not and equal functions.</span>
+(! (<span class="pl-k">=</span> <span class="pl-c1">2</span> <span class="pl-c1">1</span>)) <span class="pl-c"><span class="pl-c">;</span> =&gt; true</span>
+
+<span class="pl-c"><span class="pl-c">;</span> More comparisons</span>
+(<span class="pl-k">&lt;</span> <span class="pl-c1">1</span> <span class="pl-c1">10</span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; true</span>
+(<span class="pl-k">&gt;</span> <span class="pl-c1">1</span> <span class="pl-c1">10</span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; false</span>
+<span class="pl-c"><span class="pl-c">;</span> and their word counterpart.</span>
+(lesser <span class="pl-c1">1</span> <span class="pl-c1">10</span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; true</span>
+(greater <span class="pl-c1">1</span> <span class="pl-c1">10</span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; false</span>
+
+<span class="pl-c"><span class="pl-c">;</span> Strings can be concatenated with +.</span>
+(<span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span>Hello <span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>world!<span class="pl-pds">"</span></span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; "Hello world!"</span>
+
+<span class="pl-c"><span class="pl-c">;</span> You can use JavaScript's comparative abilities.</span>
+(<span class="pl-k">&lt;</span> <span class="pl-c1">'a</span><span class="pl-s">' <span class="pl-c1">'b</span><span class="pl-s">'</span></span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; true</span>
+<span class="pl-c"><span class="pl-c">;</span> ...and type coercion</span>
+(<span class="pl-k">=</span> <span class="pl-c1">'5' 5</span>)
+
+<span class="pl-c"><span class="pl-c">;</span> The `at` or @ function will access characters in strings, starting at 0.</span>
+(at <span class="pl-c1">0</span> <span class="pl-c1">'a</span><span class="pl-s">'</span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; 'a'</span>
+(@ <span class="pl-c1">3</span> <span class="pl-s"><span class="pl-pds">"</span>foobar<span class="pl-pds">"</span></span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; 'b'</span>
+
+<span class="pl-c"><span class="pl-c">;</span> There is also the `null` and `undefined` variables.</span>
+null <span class="pl-c"><span class="pl-c">;</span> used to indicate a deliberate non-value</span>
+undefined <span class="pl-c"><span class="pl-c">;</span> user to indicate a value that hasn't been set</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c"><span class="pl-c">;</span> 2. Variables, Lists, and Dicts</span>
+
+<span class="pl-c"><span class="pl-c">;</span> Variables are declared with the `def` or `let` functions.</span>
+<span class="pl-c"><span class="pl-c">;</span> Variables that haven't been set will be `undefined`.</span>
+(def some_var <span class="pl-c1">5</span>)
+<span class="pl-c"><span class="pl-c">;</span> `def` will keep the variable in the global context.</span>
+<span class="pl-c"><span class="pl-c">;</span> `let` will only have the variable inside its context, and has a weirder syntax.</span>
+(<span class="pl-k">let</span> ((a_var <span class="pl-c1">5</span>)) (<span class="pl-k">+</span> a_var <span class="pl-c1">5</span>)) <span class="pl-c"><span class="pl-c">;</span> =&gt; 10</span>
+(<span class="pl-k">+</span> a_var <span class="pl-c1">5</span>) <span class="pl-c"><span class="pl-c">;</span> = undefined + 5 =&gt; undefined</span>
+
+<span class="pl-c"><span class="pl-c">;</span> Lists are arrays of values of any type.</span>
+<span class="pl-c"><span class="pl-c">;</span> They basically are just forms without functions at the beginning.</span>
+(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; [1, 2, 3] (JavaScript syntax)</span>
+
+<span class="pl-c"><span class="pl-c">;</span> Dictionaries are Whip's equivalent to JavaScript 'objects' or Python 'dicts'</span>
+<span class="pl-c"><span class="pl-c">;</span> or Ruby 'hashes': an unordered collection of key-value pairs.</span>
+{<span class="pl-s"><span class="pl-pds">"</span>key1<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>value1<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>key2<span class="pl-pds">"</span></span> 2 3 3}
+
+<span class="pl-c"><span class="pl-c">;</span> Keys are just values, either identifier, number, or string.</span>
+(def my_dict {my_key <span class="pl-s"><span class="pl-pds">"</span>my_value<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>my other key<span class="pl-pds">"</span></span> 4})
+<span class="pl-c"><span class="pl-c">;</span> But in Whip, dictionaries get parsed like: value, whitespace, value;</span>
+<span class="pl-c"><span class="pl-c">;</span> with more whitespace between each. So that means</span>
+{<span class="pl-s"><span class="pl-pds">"</span>key<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>value<span class="pl-pds">"</span></span>
+<span class="pl-s"><span class="pl-pds">"</span>another key<span class="pl-pds">"</span></span>
+1234
+}
+<span class="pl-c"><span class="pl-c">;</span> is evaluated to the same as</span>
+{<span class="pl-s"><span class="pl-pds">"</span>key<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>value<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>another key<span class="pl-pds">"</span></span> 1234}
+
+<span class="pl-c"><span class="pl-c">;</span> Dictionary definitions can be accessed used the `at` function</span>
+<span class="pl-c"><span class="pl-c">;</span> (like strings and lists.)</span>
+(@ <span class="pl-s"><span class="pl-pds">"</span>my other key<span class="pl-pds">"</span></span> my_dict) <span class="pl-c"><span class="pl-c">;</span> =&gt; 4</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c"><span class="pl-c">;</span> 3. Logic and Control sequences</span>
+
+<span class="pl-c"><span class="pl-c">;</span> The `if` function is pretty simple, though different than most imperative langs.</span>
+(<span class="pl-k">if</span> true <span class="pl-s"><span class="pl-pds">"</span>returned if first arg is true<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>returned if first arg is false<span class="pl-pds">"</span></span>)
+<span class="pl-c"><span class="pl-c">;</span> =&gt; "returned if first arg is true"</span>
+
+<span class="pl-c"><span class="pl-c">;</span> And for the sake of ternary operator legacy</span>
+<span class="pl-c"><span class="pl-c">;</span> `?` is if's unused shortcut.</span>
+(? false true false) <span class="pl-c"><span class="pl-c">;</span> =&gt; false</span>
+
+<span class="pl-c"><span class="pl-c">;</span> `both` is a logical 'and' statement, and `either` is a logical 'or'.</span>
+(both true true) <span class="pl-c"><span class="pl-c">;</span> =&gt; true</span>
+(both true false) <span class="pl-c"><span class="pl-c">;</span> =&gt; false</span>
+(either true false) <span class="pl-c"><span class="pl-c">;</span> =&gt; true</span>
+(either false false) <span class="pl-c"><span class="pl-c">;</span> =&gt; false</span>
+<span class="pl-c"><span class="pl-c">;</span> And their shortcuts are</span>
+<span class="pl-c"><span class="pl-c">;</span> &amp; =&gt; both</span>
+<span class="pl-c"><span class="pl-c">;</span> ^ =&gt; either</span>
+(&amp; true true) <span class="pl-c"><span class="pl-c">;</span> =&gt; true</span>
+(^ false true) <span class="pl-c"><span class="pl-c">;</span> =&gt; true</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;</span>
+<span class="pl-c"><span class="pl-c">;</span> Lambdas</span>
+
+<span class="pl-c"><span class="pl-c">;</span> Lambdas in Whip are declared with the `lambda` or `-&gt;` function.</span>
+<span class="pl-c"><span class="pl-c">;</span> And functions are really just lambdas with names.</span>
+(def my_function (-&gt; (x y) (<span class="pl-k">+</span> (<span class="pl-k">+</span> x y) <span class="pl-c1">10</span>)))
+<span class="pl-c"><span class="pl-c">;</span>         |       |    |          |</span>
+<span class="pl-c"><span class="pl-c">;</span>         |       |    |    returned value(with scope containing argument vars)</span>
+<span class="pl-c"><span class="pl-c">;</span>         |       | arguments</span>
+<span class="pl-c"><span class="pl-c">;</span>         | lambda declaration function</span>
+<span class="pl-c"><span class="pl-c">;</span>         |</span>
+<span class="pl-c"><span class="pl-c">;</span>   name of the to-be-declared lambda</span>
+
+(my_function <span class="pl-c1">10</span> <span class="pl-c1">10</span>) <span class="pl-c"><span class="pl-c">;</span> = (+ (+ 10 10) 10) =&gt; 30</span>
+
+<span class="pl-c"><span class="pl-c">;</span> Obviously, all lambdas by definition are anonymous and</span>
+<span class="pl-c"><span class="pl-c">;</span> technically always used anonymously. Redundancy.</span>
+((<span class="pl-k">lambda</span> (<span class="pl-v">x</span>) x) <span class="pl-c1">10</span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; 10</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;</span>
+<span class="pl-c"><span class="pl-c">;</span> Comprehensions</span>
+
+<span class="pl-c"><span class="pl-c">;</span> `range` or `..` generates a list of numbers for</span>
+<span class="pl-c"><span class="pl-c">;</span> each number between its two args.</span>
+(range <span class="pl-c1">1</span> <span class="pl-c1">5</span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; (1 2 3 4 5)</span>
+(.. <span class="pl-c1">0</span> <span class="pl-c1">2</span>)    <span class="pl-c"><span class="pl-c">;</span> =&gt; (0 1 2)</span>
+
+<span class="pl-c"><span class="pl-c">;</span> `map` applies its first arg (which should be a lambda/function)</span>
+<span class="pl-c"><span class="pl-c">;</span> to each item in the following arg (which should be a list)</span>
+(<span class="pl-c1">map</span> (-&gt; (x) (<span class="pl-k">+</span> x <span class="pl-c1">1</span>)) (<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)) <span class="pl-c"><span class="pl-c">;</span> =&gt; (2 3 4)</span>
+
+<span class="pl-c"><span class="pl-c">;</span> Reduce</span>
+(reduce <span class="pl-k">+</span> (.. <span class="pl-c1">1</span> <span class="pl-c1">5</span>))
+<span class="pl-c"><span class="pl-c">;</span> equivalent to</span>
+((<span class="pl-k">+</span> (<span class="pl-k">+</span> (<span class="pl-k">+</span> <span class="pl-c1">1</span> <span class="pl-c1">2</span>) <span class="pl-c1">3</span>) <span class="pl-c1">4</span>) <span class="pl-c1">5</span>)
+
+<span class="pl-c"><span class="pl-c">;</span> Note: map and reduce don't have shortcuts</span>
+
+<span class="pl-c"><span class="pl-c">;</span> `slice` or `\` is just like JavaScript's .slice()</span>
+<span class="pl-c"><span class="pl-c">;</span> But do note, it takes the list as the first argument, not the last.</span>
+(slice (.. <span class="pl-c1">1</span> <span class="pl-c1">5</span>) <span class="pl-c1">2</span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; (3 4 5)</span>
+(\ (.. <span class="pl-c1">0</span> <span class="pl-c1">100</span>) -5) <span class="pl-c"><span class="pl-c">;</span> =&gt; (96 97 98 99 100)</span>
+
+<span class="pl-c"><span class="pl-c">;</span> `append` or `&lt;&lt;` is self explanatory</span>
+(<span class="pl-c1">append</span> <span class="pl-c1">4</span> (<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)) <span class="pl-c"><span class="pl-c">;</span> =&gt; (1 2 3 4)</span>
+(&lt;&lt; <span class="pl-s"><span class="pl-pds">"</span>bar<span class="pl-pds">"</span></span> (<span class="pl-s"><span class="pl-pds">"</span>foo<span class="pl-pds">"</span></span>)) <span class="pl-c"><span class="pl-c">;</span> =&gt; ("foo" "bar")</span>
+
+<span class="pl-c"><span class="pl-c">;</span> Length is self explanatory.</span>
+(<span class="pl-c1">length</span> (<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)) <span class="pl-c"><span class="pl-c">;</span> =&gt; 3</span>
+(_ <span class="pl-s"><span class="pl-pds">"</span>foobar<span class="pl-pds">"</span></span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; 6</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;</span>
+<span class="pl-c"><span class="pl-c">;</span> Haskell fluff</span>
+
+<span class="pl-c"><span class="pl-c">;</span> First item in list</span>
+(head (<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)) <span class="pl-c"><span class="pl-c">;</span> =&gt; 1</span>
+<span class="pl-c"><span class="pl-c">;</span> List from second to last elements in list</span>
+(tail (<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)) <span class="pl-c"><span class="pl-c">;</span> =&gt; (2 3)</span>
+<span class="pl-c"><span class="pl-c">;</span> Last item in list</span>
+(last (<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)) <span class="pl-c"><span class="pl-c">;</span> =&gt; 3</span>
+<span class="pl-c"><span class="pl-c">;</span> Reverse of `tail`</span>
+(init (<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)) <span class="pl-c"><span class="pl-c">;</span> =&gt; (1 2)</span>
+<span class="pl-c"><span class="pl-c">;</span> List from first to specified elements in list</span>
+(take <span class="pl-c1">1</span> (<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span>)) <span class="pl-c"><span class="pl-c">;</span> (1 2)</span>
+<span class="pl-c"><span class="pl-c">;</span> Reverse of `take`</span>
+(drop <span class="pl-c1">1</span> (<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span>)) <span class="pl-c"><span class="pl-c">;</span> (3 4)</span>
+<span class="pl-c"><span class="pl-c">;</span> Lowest value in list</span>
+(<span class="pl-c1">min</span> (<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span>)) <span class="pl-c"><span class="pl-c">;</span> 1</span>
+<span class="pl-c"><span class="pl-c">;</span> Highest value in list</span>
+(<span class="pl-c1">max</span> (<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span>)) <span class="pl-c"><span class="pl-c">;</span> 4</span>
+<span class="pl-c"><span class="pl-c">;</span> If value is in list or object</span>
+(elem <span class="pl-c1">1</span> (<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)) <span class="pl-c"><span class="pl-c">;</span> true</span>
+(elem <span class="pl-s"><span class="pl-pds">"</span>foo<span class="pl-pds">"</span></span> {<span class="pl-s"><span class="pl-pds">"</span>foo<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>bar<span class="pl-pds">"</span></span>}) <span class="pl-c"><span class="pl-c">;</span> true</span>
+(elem <span class="pl-s"><span class="pl-pds">"</span>bar<span class="pl-pds">"</span></span> {<span class="pl-s"><span class="pl-pds">"</span>foo<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>bar<span class="pl-pds">"</span></span>}) <span class="pl-c"><span class="pl-c">;</span> false</span>
+<span class="pl-c"><span class="pl-c">;</span> Reverse list order</span>
+(<span class="pl-c1">reverse</span> (<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span>)) <span class="pl-c"><span class="pl-c">;</span> =&gt; (4 3 2 1)</span>
+<span class="pl-c"><span class="pl-c">;</span> If value is even or odd</span>
+(even <span class="pl-c1">1</span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; false</span>
+(odd <span class="pl-c1">1</span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; true</span>
+<span class="pl-c"><span class="pl-c">;</span> Split string into list of strings by whitespace</span>
+(words <span class="pl-s"><span class="pl-pds">"</span>foobar nachos cheese<span class="pl-pds">"</span></span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; ("foobar" "nachos" "cheese")</span>
+<span class="pl-c"><span class="pl-c">;</span> Join list of strings together.</span>
+(unwords (<span class="pl-s"><span class="pl-pds">"</span>foo<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>bar<span class="pl-pds">"</span></span>)) <span class="pl-c"><span class="pl-c">;</span> =&gt; "foobar"</span>
+<span class="pl-c"><span class="pl-c">;</span> Successor and Predecessor</span>
+(pred <span class="pl-c1">21</span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; 20</span>
+(succ <span class="pl-c1">20</span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; 21</span></pre></div>
+<p>For more info, check out the <a href="https://github.com/L8D/whip">repo</a></p>
+<hr>
+<h2>Contributors</h2>
+<ul>
+<li>["Tenor Biel", "http://github.com/L8D"]</li>
+<li>["Saurabh Sandav", "http://github.com/SaurabhSandav"]</li>
+<li>["Paulo Henrique Rodrigues Pinheiro", "https://github.com/paulohrpinheiro"]</li>
+</ul>

@@ -1,0 +1,203 @@
+<h1>Red</h1>
+<p>Red was created out of the need to get work done, and the tool the author wanted to use, the language of REBOL, had a couple of drawbacks.<br>
+It was not Open Sourced at that time and it is an interpreted language, what means that it is on average slow compared to a compiled language.</p>
+<p>Red, together with its C-level dialect Red/System, provides a language that covers the entire programming space you ever need to program something in.<br>
+Red is a language heavily based on the language of REBOL. Where Red itself reproduces the flexibility of the REBOL language, the underlying language Red will be built upon,<br>
+Red/System, covers the more basic needs of programming like C can, being closer to the metal.</p>
+<p>Red will be the world's first Full Stack Programming Language. This means that it will be an effective tool to do (almost) any programming task on every level<br>
+from the metal to the meta without the aid of other stack tools.<br>
+Furthermore Red will be able to cross-compile Red source code without using any GCC like toolchain<br>
+from any platform to any other platform. And it will do this all from a binary executable that is supposed to stay under 1 MB.</p>
+<p>Ready to learn your first Red?</p>
+<pre class="notranslate"><code class="notranslate">All text before the header will be treated as comment, as long as you avoid
+using the word "red" starting with a capital "R" in this pre-header text.
+This is a temporary shortcoming of the used lexer but most of the time you
+start your script or program with the header itself.
+
+The header of a red script is the capitalized word "red" followed by a
+whitespace character followed by a block of square brackets []. The block of
+brackets can be filled with useful information about this script or program:
+the author's name, the filename, the version, the license, a summary of what
+the program does or any other files it needs. The red/System header is just
+like the red header, only saying "red/System" and not "red".
+</code></pre>
+<div class="highlight highlight-source-red"><pre class="notranslate">Red []
+
+<span class="pl-c">;this is a commented line</span>
+
+<span class="pl-c1">print</span> <span class="pl-s">"Hello Red World"</span>    <span class="pl-c">; this is another comment</span>
+
+<span class="pl-c">comment {</span>
+<span class="pl-c">    This is a multiline comment.</span>
+<span class="pl-c">    You just saw the Red version of the "Hello World" program.</span>
+<span class="pl-c">}</span>
+
+<span class="pl-c">; Your program's entry point is the first executable code that is found</span>
+<span class="pl-c">; no need to restrict this to a 'main' function.</span>
+
+<span class="pl-c">; Valid variable names start with a letter and can contain numbers,</span>
+<span class="pl-c">; variables containing only capital A through F and numbers and ending with 'h'</span>
+<span class="pl-c">; are forbidden, because that is how hexadecimal numbers are expressed in Red</span>
+<span class="pl-c">; and Red/System.</span>
+
+<span class="pl-c">; assign a value to a variable using a colon ":"</span>
+<span class="pl-c1">my-name:</span> <span class="pl-s">"Red"</span>
+<span class="pl-c1">reason-for-using-the-colon:</span> <span class="pl-s">{Assigning values using the colon makes</span>
+<span class="pl-s"> the equality sign "=" exclusively usable for comparisons purposes,</span>
+<span class="pl-s"> exactly what "=" was intended for in the first place!</span>
+<span class="pl-s"> Remember this y = x + 1 and x = 1 =&gt; y = 2 stuff from school?</span>
+<span class="pl-s">}</span>
+<span class="pl-c1">is-this-name-valid?:</span> true
+
+<span class="pl-c">; print output using print, or prin for printing without a newline or linefeed</span>
+<span class="pl-c">; at the end of the printed text.</span>
+
+<span class="pl-c1">prin</span> <span class="pl-s">" My name is "</span> <span class="pl-c1">print</span> my-name
+My name is Red
+
+<span class="pl-c1">print</span> [<span class="pl-s">"My name is "</span> my-name lf]
+My name is Red
+
+<span class="pl-c">; If you haven't already noticed: statements do NOT end with a semicolon ;-)</span>
+
+<span class="pl-c">;</span>
+<span class="pl-c">; Datatypes</span>
+<span class="pl-c">;</span>
+<span class="pl-c">; If you know Rebol, you probably have noticed it has lots of datatypes. Red</span>
+<span class="pl-c">; does not have yet all those types, but as Red want to be close to Rebol it</span>
+<span class="pl-c">; will have a lot of datatypes.</span>
+<span class="pl-c">; You can recognize types by the exclamation sign at the end. But beware</span>
+<span class="pl-c">; names ending with an exclamation sign are allowed.</span>
+<span class="pl-c">; Some of the available types are integer! string! block!</span>
+
+<span class="pl-c">; Declaring variables before using them?</span>
+<span class="pl-c">; Red knows by itself what variable is best to use for the data you want to</span>
+<span class="pl-c">; use it for.</span>
+<span class="pl-c">; A variable declaration is not always necessary.</span>
+<span class="pl-c">; It is considered good coding practise to declare your variables,</span>
+<span class="pl-c">; but it is not forced upon you by Red.</span>
+<span class="pl-c">; You can declare a variable and specify its type. a variable's type</span>
+<span class="pl-c">; determines its size in bytes.</span>
+
+<span class="pl-c">; Variables of integer! type are usually 4 bytes or 32 bits</span>
+<span class="pl-c1">my-integer:</span> <span class="pl-c1">0</span>
+<span class="pl-c">; Red's integers are signed. No support for unsigned atm but that will come.</span>
+
+<span class="pl-c">; To find out the type of variable use type?</span>
+<span class="pl-c1">type?</span> my-integer
+<span class="pl-c1">integer!</span>
+
+<span class="pl-c">; A variable can be initialized using another variable that gets initialized</span>
+<span class="pl-c">; at the same time. Initialize here refers to both declaring a variable and</span>
+<span class="pl-c">; assigning a value to it.</span>
+<span class="pl-c1">i2:</span> <span class="pl-c1">1</span> <span class="pl-k">+</span> <span class="pl-c1">i1:</span> <span class="pl-c1">1</span>
+
+<span class="pl-c">; Arithmetic is straightforward</span>
+i1 <span class="pl-k">+</span> i2 <span class="pl-c">; result 3</span>
+i2 <span class="pl-k">-</span> i1 <span class="pl-c">; result 1</span>
+i2 <span class="pl-k">*</span> i1 <span class="pl-c">; result 2</span>
+i1 <span class="pl-k">/</span> i2 <span class="pl-c">; result 0 (0.5, but truncated towards 0)</span>
+
+<span class="pl-c">; Comparison operators are probably familiar, and unlike in other languages</span>
+<span class="pl-c">; you only need a single '=' sign for comparison. Inequality is '&lt;&gt;' like in Pascal.</span>
+<span class="pl-c">; There is a boolean like type in Red. It has values true and false, but also</span>
+<span class="pl-c">; the values on/off or yes/no can be used</span>
+
+<span class="pl-c1">3</span> <span class="pl-k">=</span> <span class="pl-c1">2</span> <span class="pl-c">; result false</span>
+<span class="pl-c1">3</span> <span class="pl-k">&lt;&gt;</span> <span class="pl-c1">2</span> <span class="pl-c">; result true</span>
+<span class="pl-c1">3</span> <span class="pl-k">&gt;</span> <span class="pl-c1">2</span> <span class="pl-c">; result true</span>
+<span class="pl-c1">3</span> <span class="pl-k">&lt;</span> <span class="pl-c1">2</span> <span class="pl-c">; result false</span>
+<span class="pl-c1">2</span> <span class="pl-k">&lt;=</span> <span class="pl-c1">2</span> <span class="pl-c">; result true</span>
+<span class="pl-c1">2</span> <span class="pl-k">&gt;=</span> <span class="pl-c1">2</span> <span class="pl-c">; result true</span>
+
+<span class="pl-c">;</span>
+<span class="pl-c">; Control Structures</span>
+<span class="pl-c">;</span>
+<span class="pl-c">; if</span>
+<span class="pl-c">; Evaluate a block of code if a given condition is true. IF returns</span>
+<span class="pl-c">; the resulting value of the block or 'none' if the condition was false.</span>
+<span class="pl-c1">if</span> a <span class="pl-k">&lt;</span> <span class="pl-c1">0</span> [<span class="pl-c1">print</span> <span class="pl-s">"a is negative"</span>]
+
+<span class="pl-c">; either</span>
+<span class="pl-c">; Evaluate a block of code if a given condition is true, else evaluate an</span>
+<span class="pl-c">; alternative block of code. If the last expressions in both blocks have the</span>
+<span class="pl-c">; same type, EITHER can be used inside an expression.</span>
+<span class="pl-c1">either</span> a <span class="pl-k">&gt;</span> <span class="pl-c1">0</span> [
+   <span class="pl-c1">msg:</span> <span class="pl-s">"positive"</span>
+][
+   <span class="pl-c1">either</span> a <span class="pl-k">=</span> <span class="pl-c1">0</span> [
+       <span class="pl-c1">msg:</span> <span class="pl-s">"zero"</span>
+   ][
+       <span class="pl-c1">msg:</span> <span class="pl-s">"negative"</span>
+   ]
+]
+
+<span class="pl-c1">print</span> [<span class="pl-s">"a is "</span> msg lf]
+
+<span class="pl-c">; There is an alternative way to write this</span>
+<span class="pl-c">; (Which is allowed because all code paths return a value of the same type):</span>
+
+<span class="pl-c1">msg:</span> <span class="pl-c1">either</span> a <span class="pl-k">&gt;</span> <span class="pl-c1">0</span> [
+   <span class="pl-s">"positive"</span>
+][
+   <span class="pl-c1">either</span> a <span class="pl-k">=</span> <span class="pl-c1">0</span> [
+       <span class="pl-s">"zero"</span>
+   ][
+       <span class="pl-s">"negative"</span>
+   ]
+]
+<span class="pl-c1">print</span> [<span class="pl-s">"a is "</span> msg lf]
+
+<span class="pl-c">; until</span>
+<span class="pl-c">; Loop over a block of code until the condition at end of block, is met.</span>
+<span class="pl-c">; UNTIL always returns the 'true' value from the final evaluation of the last expression.</span>
+<span class="pl-c1">c:</span> <span class="pl-c1">5</span>
+<span class="pl-c1">until</span> [
+   <span class="pl-c1">prin</span> <span class="pl-s">"o"</span>
+   <span class="pl-c1">c:</span> c <span class="pl-k">-</span> <span class="pl-c1">1</span>
+   c <span class="pl-k">=</span> <span class="pl-c1">0</span>    <span class="pl-c">; the condition to end the until loop</span>
+]
+<span class="pl-c">;   will output:</span>
+ooooo
+<span class="pl-c">; Note that the loop will always be evaluated at least once, even if the</span>
+<span class="pl-c">; condition is not met from the beginning.</span>
+
+<span class="pl-c">; while</span>
+<span class="pl-c">; While a given condition is met, evaluate a block of code.</span>
+<span class="pl-c">; WHILE does not return any value, so it cannot be used in an expression.</span>
+<span class="pl-c1">c:</span> <span class="pl-c1">5</span>
+<span class="pl-c1">while</span> [c <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>][
+   <span class="pl-c1">prin</span> <span class="pl-s">"o"</span>
+   <span class="pl-c1">c:</span> c <span class="pl-k">-</span> <span class="pl-c1">1</span>
+]
+<span class="pl-c">; will output:</span>
+ooooo
+
+<span class="pl-c">;</span>
+<span class="pl-c">; Functions</span>
+<span class="pl-c">;</span>
+<span class="pl-c">; function example</span>
+<span class="pl-c1">twice</span>: <span class="pl-k">function</span> <span class="pl-c1">[</span>a [<span class="pl-c1">integer!</span>] <span class="pl-k">/one</span> <span class="pl-c1">return:</span> [<span class="pl-c1">integer!</span>]<span class="pl-c1">]</span>[
+        <span class="pl-c1">c:</span> <span class="pl-c1">2</span>
+        <span class="pl-c1">a:</span> a <span class="pl-k">*</span> c
+        <span class="pl-c1">either</span> one [a <span class="pl-k">+</span> <span class="pl-c1">1</span>][a]
+]
+<span class="pl-c1">b:</span> <span class="pl-c1">3</span>
+<span class="pl-c1">print</span> twice b   <span class="pl-c">; will output 6.</span>
+
+<span class="pl-c">; Import external files with #include and filenames start with a % sign</span>
+<span class="pl-s">#include</span> <span class="pl-s">%includefile.red</span>
+<span class="pl-c">; Now the functions in the included file can be used too.</span>
+</pre></div>
+<h2>Further Reading</h2>
+<p>The main source for information about Red is the <a href="http://www.red-lang.org" rel="nofollow">Red language homepage</a>.</p>
+<p>The source can be found on <a href="https://github.com/red/red">github</a>.</p>
+<p>The Red/System language specification can be found <a href="http://static.red-lang.org/red-system-specs-light.html" rel="nofollow">here</a>.</p>
+<p>To learn more about Rebol and Red join the <a href="https://gitter.im/red/red" rel="nofollow">chat on Gitter</a>. And if that is not working for you drop a mail to us on the [Red mailing list](mailto: <a href="mailto:red-langNO_SPAM@googlegroups.com">red-langNO_SPAM@googlegroups.com</a>) (remove NO_SPAM).</p>
+<p>Browse or ask questions on <a href="https://stackoverflow.com/questions/tagged/red" rel="nofollow">Stack Overflow</a>.</p>
+<p>Maybe you want to try Red right away? That is possible on the <a href="http://tryrebol.esperconsultancy.nl" rel="nofollow">try Rebol and Red site</a>.</p>
+<p>You can also learn Red by learning some <a href="http://www.rebol.com/docs.html" rel="nofollow">Rebol</a>.</p>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Arnold van Hofwegen", "https://github.com/iArnold"]
+</code></pre>

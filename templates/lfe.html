@@ -1,0 +1,446 @@
+<h1>LFE</h1>
+<p>Lisp Flavoured Erlang(LFE) is a functional, concurrent, general-purpose programming<br>
+language and Lisp dialect(Lisp-2) built on top of Core Erlang and the Erlang Virtual Machine(BEAM).</p>
+<p>LFE can be obtained from <a href="https://github.com/rvirding/lfe">LFE</a></p>
+<p>The classic starting point is <a href="http://docs.lfe.io" rel="nofollow">LFE DOCS.</a></p>
+<p>Another new site is being built to replace it.<a href="http://docs.lfe.io/dev" rel="nofollow">LFE DEV.</a></p>
+<div class="highlight highlight-source-lisp"><pre class="notranslate"><span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c"><span class="pl-c">;</span>;; 0. Syntax</span>
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; General form.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Lisp comprises of two syntax called: the ATOM and the S-expression.</span>
+<span class="pl-c"><span class="pl-c">;</span>; `forms` are known as grouped S-expressions.</span>
+
+<span class="pl-c1">8</span>  <span class="pl-c"><span class="pl-c">;</span> an atom; it evaluates to itself</span>
+
+:ERLANG <span class="pl-c"><span class="pl-c">;</span>Atom; evaluates to the symbol :ERLANG.</span>
+
+<span class="pl-c1">t</span>  <span class="pl-c"><span class="pl-c">;</span> another atom which denotes true.</span>
+
+(* <span class="pl-c1">2</span> <span class="pl-c1">21</span>) <span class="pl-c"><span class="pl-c">;</span> an S- expression</span>
+
+'(<span class="pl-c1">8</span> :foo <span class="pl-c1">t</span>)  <span class="pl-c"><span class="pl-c">;</span>another one</span>
+
+
+<span class="pl-c"><span class="pl-c">;</span>;; Comments</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Single line comments start with a semicolon; use two for normal</span>
+<span class="pl-c"><span class="pl-c">;</span>; comments, three for section comments, and four fo file-level</span>
+<span class="pl-c"><span class="pl-c">;</span>; comments.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Block Comment</span>
+
+   #| comment text |#
+
+<span class="pl-c"><span class="pl-c">;</span>;; Environment</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; LFE is the de-facto standard.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Libraries can be used directly from the Erlang ecosystem. Rebar3 is the build tool.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; LFE is usually developed with a text editor(preferably Emacs) and a REPL</span>
+<span class="pl-c"><span class="pl-c">;</span>; (Read Evaluate Print Loop) running at the same time. The REPL </span>
+<span class="pl-c"><span class="pl-c">;</span>; allows for interactive exploration of the program as it is "live"</span>
+<span class="pl-c"><span class="pl-c">;</span>; in the system.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c"><span class="pl-c">;</span>;; 1. Literals and Special Syntactic Rules</span>
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Integers</span>
+
+<span class="pl-c1">1234</span> -<span class="pl-c1">123</span>	        <span class="pl-c"><span class="pl-c">;</span> Regular decimal notation</span>
+<span class="pl-c1">#b0</span> <span class="pl-c1">#b10101</span>	        <span class="pl-c"><span class="pl-c">;</span> Binary notation</span>
+<span class="pl-c1">#0</span> <span class="pl-c1">#10101</span>	        <span class="pl-c"><span class="pl-c">;</span> Binary notation (alternative form)</span>
+<span class="pl-c1">#o377</span> <span class="pl-c1">#o-111</span>	    <span class="pl-c"><span class="pl-c">;</span> Octal notation</span>
+<span class="pl-c1">#d123456789</span> <span class="pl-c1">#d+123</span>	<span class="pl-c"><span class="pl-c">;</span> Explicitly decimal notation</span>
+<span class="pl-c1">#xc0ffe</span> <span class="pl-c1">0x</span>-<span class="pl-c1">01</span>	    <span class="pl-c"><span class="pl-c">;</span> Hexadecimal notation</span>
+<span class="pl-c1">#2r1010</span> <span class="pl-c1">#8r377</span> 	    <span class="pl-c"><span class="pl-c">;</span>Notation with explicit base (up to 36)</span>
+<span class="pl-c1">#\a</span> #$ <span class="pl-c1">#\</span>ä <span class="pl-c1">#\</span>🐭     <span class="pl-c"><span class="pl-c">;</span>Character notation (the value is the Unicode code point of the character)</span>
+<span class="pl-c1">#\x1f42d;</span>	        <span class="pl-c"><span class="pl-c">;</span>Character notation with the value in hexadecimal</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Floating point numbers</span>
+<span class="pl-c1">1.0</span> +<span class="pl-c1">2.0</span> -<span class="pl-c1">1.5</span> <span class="pl-c1">1.0e10</span> <span class="pl-c1">1.111e-10</span>     
+
+<span class="pl-c"><span class="pl-c">;</span>;; Strings</span>
+
+<span class="pl-s"><span class="pl-pds">"</span>any text between double quotes where <span class="pl-cce">\"</span> and other special characters like <span class="pl-cce">\n</span> can be escaped<span class="pl-pds">"</span></span>.
+<span class="pl-c"><span class="pl-c">;</span> List String</span>
+<span class="pl-s"><span class="pl-pds">"</span>Cat: <span class="pl-cce">\x</span>1f639;<span class="pl-pds">"</span></span> <span class="pl-c"><span class="pl-c">;</span> writing unicode in string for regular font ending with semicolon.</span>
+
+<span class="pl-c1">#"This</span> is a binary string \n with some \<span class="pl-s"><span class="pl-pds">"</span>escaped<span class="pl-cce">\"</span> and quoted (<span class="pl-cce">\x</span>1f639;) characters<span class="pl-pds">"</span></span>
+<span class="pl-c"><span class="pl-c">;</span> Binary strings are just strings but function different in the VM. </span>
+<span class="pl-c"><span class="pl-c">;</span> Other ways of writing it are:  #B("a"), #"a", and #B(97).</span>
+
+
+<span class="pl-c"><span class="pl-c">;</span>;; Character escaping</span>
+
+\b	<span class="pl-c"><span class="pl-c">;</span> =&gt; Backspace</span>
+\<span class="pl-c1">t</span>	<span class="pl-c"><span class="pl-c">;</span> =&gt; Tab</span>
+\n	<span class="pl-c"><span class="pl-c">;</span> =&gt; Newline</span>
+\v	<span class="pl-c"><span class="pl-c">;</span> =&gt; Vertical tab</span>
+\f	<span class="pl-c"><span class="pl-c">;</span> =&gt; Form Feed</span>
+\r	<span class="pl-c"><span class="pl-c">;</span> =&gt; Carriage Return</span>
+\e	<span class="pl-c"><span class="pl-c">;</span> =&gt; Escape</span>
+\s	<span class="pl-c"><span class="pl-c">;</span> =&gt; Space</span>
+\d	<span class="pl-c"><span class="pl-c">;</span> =&gt; Delete</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Binaries</span>
+<span class="pl-c"><span class="pl-c">;</span>; It is used to create binaries with any contents.</span>
+<span class="pl-c1">#B</span>((<span class="pl-c1">#"a"</span> binary) (<span class="pl-c1">#"b"</span> binary))	               <span class="pl-c"><span class="pl-c">;</span> #"ab" (Evaluated form)</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Lists are: () or (foo bar baz)</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Tuples are written in: #(value1 value2 ...). Empty tuple #() is also valid.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Maps are written as: #M(key1 value1 key2 value2 ...). Empty map #M() is also valid.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Symbols: Things that cannot be parsed. Eg: foo, Foo, foo-bar, :foo</span>
+| foo | <span class="pl-c"><span class="pl-c">;</span> explicit construction of symbol by wrapping vertical bars.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Evaluation </span>
+
+<span class="pl-c"><span class="pl-c">;</span>; #.(... some expression ...). E.g. '#.(+ 1 1) will evaluate the (+ 1 1) while it            ;; reads the expression and then be effectively '2.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; List comprehension in LFE REPL</span>
+
+lfe&gt; (list-comp
+          ((&lt;- x '(<span class="pl-c1">0</span> <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)))
+          (trunc (math:pow <span class="pl-c1">3</span> x)))
+       (<span class="pl-c1">1</span> <span class="pl-c1">3</span> <span class="pl-c1">9</span> <span class="pl-c1">27</span>)
+
+
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c"><span class="pl-c">;</span>; 2. Core forms</span>
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; These forms are same as those found at Common Lisp and Scheme.</span>
+
+(<span class="pl-c1">quote</span> e)
+(<span class="pl-c1">cons</span> head tail)
+(<span class="pl-c1">car</span> e)
+(<span class="pl-c1">cdr</span> e)
+(<span class="pl-c1">list</span> e ... )
+(tuple e ... )
+(binary seg ... )
+(map key val ...), (map-get m k), (map-set m k v ...), (map-update m k v ...)
+
+(<span class="pl-c1">lambda</span> (arg ...) ...)
+  (match-lambda
+    ((arg ... ) {{(<span class="pl-k">when</span> e ...)}} ...) <span class="pl-c"><span class="pl-c">;</span> Matches clauses</span>
+    ... )
+(<span class="pl-k">let</span> ((pat {{(<span class="pl-k">when</span> e ...)}} e)
+      ...)
+  ... )
+(<span class="pl-k">let</span>-function ((name <span class="pl-c1">lambda</span>|match-lambda) <span class="pl-c"><span class="pl-c">;</span> Only define local</span>
+               ... )                      <span class="pl-c"><span class="pl-c">;</span> functions</span>
+  ... )
+(letrec-function ((name <span class="pl-c1">lambda</span>|match-lambda) <span class="pl-c"><span class="pl-c">;</span> Only define local</span>
+                  ... )                      <span class="pl-c"><span class="pl-c">;</span> functions</span>
+  ... )
+(<span class="pl-k">let</span>-macro ((name lambda-match-lambda) <span class="pl-c"><span class="pl-c">;</span> Only define local</span>
+            ...)                       <span class="pl-c"><span class="pl-c">;</span> macros</span>
+  ...)
+(<span class="pl-c1">progn</span> ... )
+(<span class="pl-k">if</span> test true-expr {{false-expr}})
+(<span class="pl-k">case</span> e
+  (pat {{(<span class="pl-k">when</span> e ...)}} ...)
+   ... ))
+(receive
+  (pat {{(<span class="pl-k">when</span> e ...)}} ... )
+  ...
+  (after timeout ... ))
+(catch ... )
+(try
+  e
+  {{(<span class="pl-k">case</span> ((pat {{(<span class="pl-k">when</span> e ...)}} ... )
+          ... ))}}
+  {{(catch
+     <span class="pl-c"><span class="pl-c">;</span> Next must be tuple of length 3!</span>
+     (((tuple type value ignore) {{(<span class="pl-k">when</span> e ...)}}
+      ... )
+     ... )}}
+  {{(after ... )}})
+
+(funcall func arg ... )
+(call mod func arg ... ) - Call to Erlang Mod:Func(Arg, ... )
+(define-module name declaration ... )
+(extend-module declaration ... ) - Define/extend module <span class="pl-k">and</span> declarations.
+(define-function name <span class="pl-c1">lambda</span>|match-lambda)
+(define-macro name <span class="pl-c1">lambda</span>|match-lambda) - Define functions/macros at top-level.
+
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c"><span class="pl-c">;</span>; 3. Macros</span>
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Macros are part of the language to allow you to create abstractions </span>
+<span class="pl-c"><span class="pl-c">;</span>; on top of the core language and standard library that move you closer </span>
+<span class="pl-c"><span class="pl-c">;</span>; toward being able to directly express the things you want to express.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Top-level function</span>
+
+(<span class="pl-k">defun</span> <span class="pl-en">name</span> (arg ...) ...)
+
+<span class="pl-c"><span class="pl-c">;</span>; Adding comments in functions</span>
+
+(<span class="pl-k">defun</span> <span class="pl-en">name</span>
+  <span class="pl-s"><span class="pl-pds">"</span>Toplevel function with pattern-matching arguments<span class="pl-pds">"</span></span>
+  ((argpat ...) ...)
+  ...)
+
+<span class="pl-c"><span class="pl-c">;</span>; Top-level macro</span>
+
+(<span class="pl-k">defmacro</span> <span class="pl-en">name</span> (arg ...) ...)
+(<span class="pl-k">defmacro</span> <span class="pl-en">name</span> arg ...)
+
+<span class="pl-c"><span class="pl-c">;</span>; Top-level macro with pattern matching arguments</span>
+
+(<span class="pl-k">defmacro</span> <span class="pl-en">name</span>
+  ((argpat ...) ...)
+  ...)
+
+<span class="pl-c"><span class="pl-c">;</span>; Top-level macro using Scheme inspired syntax-rules format </span>
+
+(defsyntax name
+  (pat exp)
+  ...)
+
+<span class="pl-c"><span class="pl-c">;</span>;; Local macros in macro or syntax-rule format</span>
+
+(macrolet ((name (arg ... ) ... )
+            ... )
+    ... )
+    
+(syntaxlet ((name (pat exp) ...)
+             ...)
+ ...)
+
+<span class="pl-c"><span class="pl-c">;</span>; Like CLISP</span>
+
+(prog1 ...)
+(prog2 ...)
+
+<span class="pl-c"><span class="pl-c">;</span>; Erlang LFE module</span>
+
+(defmodule name ...)
+
+<span class="pl-c"><span class="pl-c">;</span>; Erlang LFE record</span>
+
+(defrecord name ...)
+
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c"><span class="pl-c">;</span>; 4. Patterns and Guards</span>
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Using patterns in LFE compared to that of Erlang</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Erlang                     ;; LFE</span>
+<span class="pl-c"><span class="pl-c">;</span>; {ok, X}                       (tuple 'ok x)</span>
+<span class="pl-c"><span class="pl-c">;</span>; error                         'error</span>
+<span class="pl-c"><span class="pl-c">;</span>; {yes, [X|Xs]}                 (tuple 'yes (cons x xs))</span>
+<span class="pl-c"><span class="pl-c">;</span>; &lt;&lt;34,F/float&gt;&gt;                (binary 34 (f float))</span>
+<span class="pl-c"><span class="pl-c">;</span>; [P|Ps]=All                    (= (cons p ps) all)</span>
+
+  _    <span class="pl-c"><span class="pl-c">;</span> =&gt; is don't care while pattern matching</span>
+  
+  (= pattern1 pattern2)     <span class="pl-c"><span class="pl-c">;</span> =&gt; easier, better version of pattern matching</span>
+  
+<span class="pl-c"><span class="pl-c">;</span>; Guards</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Whenever pattern occurs(let, case, receive, lc, etc) it can be followed by an optional</span>
+<span class="pl-c"><span class="pl-c">;</span>; guard which has the form (when test ...).</span>
+
+(<span class="pl-c1">progn</span> gtest ...)             <span class="pl-c"><span class="pl-c">;</span>; =&gt; Sequence of guard tests</span>
+(<span class="pl-k">if</span> gexpr gexpr gexpr)
+(type-test e)
+(guard-bif ...)               <span class="pl-c"><span class="pl-c">;</span>; =&gt; Guard BIFs, arithmetic, boolean and comparison operators</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; REPL</span>
+
+lfe&gt;(set (tuple len status msg) #(<span class="pl-c1">8</span> ok <span class="pl-s"><span class="pl-pds">"</span>Trillian<span class="pl-pds">"</span></span>))
+    #(<span class="pl-c1">8</span> ok <span class="pl-s"><span class="pl-pds">"</span>Trillian<span class="pl-pds">"</span></span>)
+lfe&gt;msg
+    <span class="pl-s"><span class="pl-pds">"</span>Trillian<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Program illustrating use of Guards</span>
+
+(<span class="pl-k">defun</span> <span class="pl-en">right-number?</span>
+        ((x) (<span class="pl-k">when</span> (orelse (== x <span class="pl-c1">42</span>) (== x <span class="pl-c1">276709</span>)))
+          'true)
+        ((_) 'false))
+
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c"><span class="pl-c">;</span>; 5. Functions</span>
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; A simple function using if.</span>
+
+(<span class="pl-k">defun</span> <span class="pl-en">max</span> (x y)
+  <span class="pl-s"><span class="pl-pds">"</span>The max function.<span class="pl-pds">"</span></span>
+  (<span class="pl-k">if</span> (&gt;= x y) x y))
+
+<span class="pl-c"><span class="pl-c">;</span>; Same function using more clause</span>
+
+(<span class="pl-k">defun</span> <span class="pl-en">max</span>
+  <span class="pl-s"><span class="pl-pds">"</span>The max function.<span class="pl-pds">"</span></span>
+  ((x y) (<span class="pl-k">when</span> (&gt;= x y)) x)
+  ((x y) y))
+
+<span class="pl-c"><span class="pl-c">;</span>; Same function using similar style but using local functions defined by flet or fletrec</span>
+
+(<span class="pl-k">defun</span> <span class="pl-en">foo</span> (x y)
+  <span class="pl-s"><span class="pl-pds">"</span>The max function.<span class="pl-pds">"</span></span>
+  (<span class="pl-k">flet</span> ((m (a b) <span class="pl-s"><span class="pl-pds">"</span>Local comment.<span class="pl-pds">"</span></span>
+            (<span class="pl-k">if</span> (&gt;= a b) a b)))
+    (m x y)))
+
+<span class="pl-c"><span class="pl-c">;</span>; LFE being Lisp-2 has separate namespaces for variables and functions</span>
+<span class="pl-c"><span class="pl-c">;</span>; Both variables and function/macros are lexically scoped.</span>
+<span class="pl-c"><span class="pl-c">;</span>; Variables are bound by lambda, match-lambda and let.</span>
+<span class="pl-c"><span class="pl-c">;</span>; Functions are bound by top-level defun, flet and fletrec.</span>
+<span class="pl-c"><span class="pl-c">;</span>; Macros are bound by top-level defmacro/defsyntax and by macrolet/syntaxlet.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; (funcall func arg ...) like CL to call lambdas/match-lambdas </span>
+<span class="pl-c"><span class="pl-c">;</span>; (funs) bound to variables are used.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; separate bindings and special for apply.</span>
+apply _F (...), 
+apply _F/<span class="pl-c1">3</span> ( a1, a2, a3 )
+    
+<span class="pl-c"><span class="pl-c">;</span>; Cons'ing in function heads</span>
+(<span class="pl-k">defun</span> <span class="pl-en">sum</span> (l) (sum l <span class="pl-c1">0</span>))
+  (<span class="pl-k">defun</span> <span class="pl-en">sum</span>
+    (('() total) total)
+    (((<span class="pl-c1">cons</span> h <span class="pl-c1">t</span>) total) (sum <span class="pl-c1">t</span> (+ h total))))
+    
+<span class="pl-c"><span class="pl-c">;</span>; ``cons`` literal instead of constructor form</span>
+      (<span class="pl-k">defun</span> <span class="pl-en">sum</span> (l) (sum l <span class="pl-c1">0</span>))
+      (<span class="pl-k">defun</span> <span class="pl-en">sum</span>
+        (('() total) total)
+        ((`(,h . ,<span class="pl-c1">t</span>) total) (sum <span class="pl-c1">t</span> (+ h total))))
+
+<span class="pl-c"><span class="pl-c">;</span>; Matching records in function heads</span>
+
+(<span class="pl-k">defun</span> <span class="pl-en">handle_info</span>
+  (('ping (= (match-state remote-pid 'undefined) state))
+    (gen_server:cast (self) 'ping)
+    `#(noreply ,state))
+  (('ping state)
+   `#(noreply ,state)))
+
+<span class="pl-c"><span class="pl-c">;</span>; Receiving Messages</span>
+      (<span class="pl-k">defun</span> <span class="pl-en">universal-server</span> ()
+        (receive
+          ((tuple 'become func)
+           (funcall func))))
+           
+<span class="pl-c"><span class="pl-c">;</span>; another way for receiving messages</span>
+
+ (<span class="pl-k">defun</span> <span class="pl-en">universal-server</span> ()
+        (receive
+          (`#(become ,func)
+            (funcall func))))
+
+<span class="pl-c"><span class="pl-c">;</span>; Composing a complete function for specific tasks</span>
+
+(<span class="pl-k">defun</span> <span class="pl-en">compose</span> (f g)
+  (<span class="pl-c1">lambda</span> (x)
+   (funcall f
+     (funcall g x))))
+
+(<span class="pl-k">defun</span> <span class="pl-en">check</span> ()
+  (<span class="pl-k">let</span>* ((sin-asin (compose <span class="pl-c1">#'sin/1</span> <span class="pl-c1">#'asin/1</span>))
+         (expected (sin (asin <span class="pl-c1">0.5</span>)))
+         (compose-result (funcall sin-asin <span class="pl-c1">0.5</span>)))
+    (io:<span class="pl-c1">format</span> <span class="pl-s"><span class="pl-pds">"</span>Expected answer: ~p~n<span class="pl-pds">"</span></span> (<span class="pl-c1">list</span> expected))
+    (io:<span class="pl-c1">format</span> <span class="pl-s"><span class="pl-pds">"</span>Answer with compose: ~p~n<span class="pl-pds">"</span></span> (<span class="pl-c1">list</span> compose-result))))
+
+
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c"><span class="pl-c">;</span>; 6. Concurrency</span>
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Message passing as done by Erlang's light-weight "processes".</span>
+
+(defmodule messenger-back
+ (export (print-result <span class="pl-c1">0</span>) (send-message <span class="pl-c1">2</span>)))
+
+(<span class="pl-k">defun</span> <span class="pl-en">print-result</span> ()
+  (receive
+    ((tuple pid msg)
+      (io:<span class="pl-c1">format</span> <span class="pl-s"><span class="pl-pds">"</span>Received message: '~s'~n<span class="pl-pds">"</span></span> (<span class="pl-c1">list</span> msg))
+      (io:<span class="pl-c1">format</span> <span class="pl-s"><span class="pl-pds">"</span>Sending message to process ~p ...~n<span class="pl-pds">"</span></span> (<span class="pl-c1">list</span> pid))
+      (! pid (tuple msg))
+      (print-result))))
+
+(<span class="pl-k">defun</span> <span class="pl-en">send-message</span> (calling-pid msg)
+  (<span class="pl-k">let</span> ((spawned-pid (spawn 'messenger-back 'print-result ())))
+    (! spawned-pid (tuple calling-pid msg))))
+    
+<span class="pl-c"><span class="pl-c">;</span>; Multiple simultaneous HTTP Requests:</span>
+
+(<span class="pl-k">defun</span> <span class="pl-en">parse-args</span> (flag)
+  <span class="pl-s"><span class="pl-pds">"</span>Given one or more command-line arguments, extract the passed values.</span>
+<span class="pl-s"></span>
+<span class="pl-s">  For example, if the following was passed via the command line:</span>
+<span class="pl-s"></span>
+<span class="pl-s">    $ erl -my-flag my-value-1 -my-flag my-value-2</span>
+<span class="pl-s"></span>
+<span class="pl-s">  One could then extract it in an LFE program by calling this function:</span>
+<span class="pl-s"></span>
+<span class="pl-s">    (let ((args (parse-args 'my-flag)))</span>
+<span class="pl-s">      ...</span>
+<span class="pl-s">      )</span>
+<span class="pl-s">  In this example, the value assigned to the arg variable would be a list</span>
+<span class="pl-s">  containing the values my-value-1 and my-value-2.<span class="pl-pds">"</span></span>
+  (<span class="pl-k">let</span> ((`#(ok ,data) (init:get_argument flag)))
+    (lists:merge data)))
+
+(<span class="pl-k">defun</span> <span class="pl-en">get-pages</span> ()
+  <span class="pl-s"><span class="pl-pds">"</span>With no argument, assume 'url parameter was passed via command line.<span class="pl-pds">"</span></span>
+  (<span class="pl-k">let</span> ((urls (parse-args 'url)))
+    (get-pages urls)))
+
+(<span class="pl-k">defun</span> <span class="pl-en">get-pages</span> (urls)
+  <span class="pl-s"><span class="pl-pds">"</span>Start inets and make (potentially many) HTTP requests.<span class="pl-pds">"</span></span>
+  (inets:start)
+  (plists:map
+    (<span class="pl-c1">lambda</span> (x)
+      (get-page x)) urls))
+
+(<span class="pl-k">defun</span> <span class="pl-en">get-page</span> (url)
+  <span class="pl-s"><span class="pl-pds">"</span>Make a single HTTP request.<span class="pl-pds">"</span></span>
+  (<span class="pl-k">let</span>* ((method 'get)
+         (headers '())
+         (request-data `#(,url ,headers))
+         (http-options ())
+         (request-options '(#(sync false))))
+    (httpc:request method request-data http-options request-options)
+    (receive
+      (`#(http #(,request-id #(error ,reason)))
+       (io:<span class="pl-c1">format</span> <span class="pl-s"><span class="pl-pds">"</span>Error: ~p~n<span class="pl-pds">"</span></span> `(,reason)))
+      (`#(http #(,request-id ,result))
+       (io:<span class="pl-c1">format</span> <span class="pl-s"><span class="pl-pds">"</span>Result: ~p~n<span class="pl-pds">"</span></span> `(,result))))))
+
+
+<span class="pl-c"><span class="pl-c">;</span>; Check out Erlang's documentation for more concurrency and OTP docs.</span></pre></div>
+<h2>Further Reading</h2>
+<ul>
+<li><a href="http://docs.lfe.io" rel="nofollow">LFE DOCS</a></li>
+<li><a href="https://lfe.gitbooks.io/reference-guide/index.html" rel="nofollow">LFE GitBook</a></li>
+<li><a href="https://en.wikipedia.org/wiki/LFE_(programming_language)" rel="nofollow">LFE Wiki</a></li>
+</ul>
+<h2>Extra Info</h2>
+<ul>
+<li><a href="http://www.erlang-factory.com/upload/presentations/61/Robertvirding-LispFlavouredErlang.pdf" rel="nofollow">LFE PDF</a></li>
+<li><a href="https://groups.google.com/d/msg/lisp-flavoured-erlang/XA5HeLbQQDk/TUHabZCHXB0J" rel="nofollow">LFE mail</a></li>
+</ul>
+<h2>Credits</h2>
+<p>Lots of thanks to Robert Virding for creating LFE, Duncan McGreggor for documenting it and other LFE contributors who made LFE awesome.</p>
+<hr>
+<h2>Contributors:</h2>
+<ul>
+<li>["Pratik Karki", "https://github.com/prertik"]</li>
+</ul>

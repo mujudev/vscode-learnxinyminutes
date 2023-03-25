@@ -1,0 +1,319 @@
+<h1>FunC</h1>
+<p>The FunC language is used to program smart contracts on the <a href="https://ton.org" rel="nofollow">The Open Network</a> blockchain. Contract logic is executed in TVM, the stack-based TON Virtual Machine.</p>
+<p>FunC is a statically typed, which is similar to C.</p>
+<h1>Basic syntax, the first Smart Contract — Data Types, Storage, Functions</h1>
+<div class="highlight highlight-source-c"><pre class="notranslate">;; Single line comment
+
+	{- This is a multi-line comment
+		{- this is a comment in the comment -}
+	-}
+	
+	(<span class="pl-k">int</span>) sum(<span class="pl-k">int</span> a, <span class="pl-k">int</span> b) { 
+    ;; This is a function that <span class="pl-c1">gets</span> two integer parameters 
+    ;; and <span class="pl-k">return</span> integer result
+	  <span class="pl-k">return</span> a + b;  
+    ;; All integers are <span class="pl-k">signed</span> and are <span class="pl-c1">257</span> bit <span class="pl-k">long</span>. Overflow throws <span class="pl-c1">exception</span>
+    ;; expressions must end with a semicolon
+	}
+	
+	() f(<span class="pl-k">int</span> i, cell c, slice s, builder b, cont c, tuple t) {
+	  ;; FunC has <span class="pl-c1">7</span> atomic types: 
+	  ;; <span class="pl-k">int</span> - <span class="pl-c1">257</span> bit <span class="pl-k">signed</span> integers,
+	  ;; cell - basic <span class="pl-k">for</span> TON opaque data structure,
+      ;; which contains up to <span class="pl-c1">1</span>,<span class="pl-c1">023</span> bits and up to <span class="pl-c1">4</span> references to other cells,
+	  ;; slice and builder - special objects to <span class="pl-c1">read</span> from and <span class="pl-c1">write</span> to cells,
+	  ;; continuation - another flavor of cell that contains 
+      ;; ready-to-execute TVM byte-code.
+	  ;; tuple is an ordered collection of up to <span class="pl-c1">255</span> components,
+      ;; having arbitrary value types, possibly distinct.
+	  ;; Finally tensor <span class="pl-smi">type</span> (A,B, ...) is an ordered collection ready <span class="pl-k">for</span>
+      ;; mass assigning like: (<span class="pl-k">int</span>, <span class="pl-k">int</span>) a = (<span class="pl-c1">3</span>, <span class="pl-c1">5</span>);
+	  ;; Special <span class="pl-k">case</span> of tensor type is the unit <span class="pl-smi">type</span> ().
+	  ;; It represents that a function doesn’t <span class="pl-k">return</span> any value,
+      ;; or has no arguments.
+	}
+	
+	;; During execution, the contract has read access to local context:
+    ;; its storage, balance, time, network config, etc.
+	;; Contract may change its storage and code,
+    ;; and also may send messages to other contracts
+
+	;; Let’s write a counter smart contract that gets a number
+    ;; from an incoming message,
+	;; adds to already stored numbers and stores result in “storage”
+
+	;; For handling special events, smart contracts have reserved methods:
+	;; recv_internal() handles internal messages from other smart contracts
+	;; recv_external() handles external messages from the outside world —
+    ;; e.g., from a user.
+
+	() recv_internal(slice in_msg_body) {
+	  ;; Cells play the role of memory in the stack-based TVM.
+      ;; A cell can be transformed into a slice,
+	  ;; and then the data bits and references to
+      ;; other cells from the cell can be obtained
+	  ;; by loading them from the slice.
+      ;; Data bits and references to other cells can be stored
+	  ;; into a builder, and then the builder can be finalized into a new cell.
+	  ;; recv_internal <span class="pl-c1">gets</span> the slice
+      ;; with incoming message data as an argument.
+
+	  ;; As everything <span class="pl-k">else</span> on TON, permanent storage data is stored as a cell.
+	  ;; It can be retrieved via the <span class="pl-smi">get_data</span>() method
+	  ;; begin_parse - converts a cell with data into a readable slice
+
+	  slice ds = <span class="pl-c1">get_data</span>().<span class="pl-c1">begin_parse</span>(); 
+      ;; `.` is a syntax sugar: a.<span class="pl-c1">b</span>() is equivalent to <span class="pl-smi">b</span>(a)
+
+	  ;; load_uint is a function from the FunC standard library;
+      ;; it loads an <span class="pl-k">unsigned</span> n-bit integer from a slice
+	  <span class="pl-k">int</span> total = ds~<span class="pl-c1">load_uint</span>(<span class="pl-c1">64</span>); ;; `~` is a <span class="pl-s"><span class="pl-pds">"</span>modifying<span class="pl-pds">"</span></span> method:
+	  ;; essentially, it is a syntax sugar: `r = a~<span class="pl-c1">b</span>(x)` 
+      ;; is equivalent <span class="pl-smi">to</span> (a,r) = <span class="pl-c1">b</span>(a,x)
+	  
+	  ;; Now let’s <span class="pl-c1">read</span> the incoming value from the message body slice
+	  <span class="pl-k">int</span> n = in_msg_body~<span class="pl-c1">load_uint</span>(<span class="pl-c1">32</span>);
+
+	  total += n;
+      ;; integers support usual +-<span class="pl-ii">*/ operations as well as (+-*/)= syntax sugar</span>
+
+	  ;; In order to keep a store integer value, we need to <span class="pl-k">do</span> four things:
+	  ;; create a Builder <span class="pl-k">for</span> the future cell - <span class="pl-c1">begin_cell</span>()
+	  ;; <span class="pl-c1">write</span> a value to total - <span class="pl-c1">store_uint</span>(value, bit_size)
+	  ;; create a Cell from the Builder - <span class="pl-c1">end_cell</span>()
+	  ;; <span class="pl-c1">write</span> the resulting cell into permanent storage - <span class="pl-c1">set_data</span>()
+
+	  <span class="pl-c1">set_data</span>(<span class="pl-c1">begin_cell</span>().<span class="pl-c1">store_uint</span>(total, <span class="pl-c1">64</span>).<span class="pl-c1">end_cell</span>());
+	}
+
+
+
+	;; The FunC program is essentially a list of
+    function declarations/definitions and global variable declarations.
+
+	;; Any function in FunC matches the following pattern:
+	;; [&lt;forall declarator&gt;] &lt;return_type&gt; &lt;function_name&gt;(&lt;comma_separated_function_args&gt;) &lt;specifiers&gt;
+
+
+	;; Specifiers:
+	;; The impure specifier indicates that
+    ;; function calls should not be optimized
+    ;; (whether its result is used or not)
+	;; it is important <span class="pl-k">for</span> methods that change the smart contract data
+    ;; or send messages
+
+	;; The method_id specifier allows you to call a GET function by name
+	
+	;; For instance, we can create a get method <span class="pl-k">for</span> the contract above
+    ;; to allow outside viewers to read counter
+
+	<span class="pl-k">int</span> <span class="pl-en">get_total</span>() method_id {
+	  slice ds = <span class="pl-c1">get_data</span>().<span class="pl-c1">begin_parse</span>();
+	  <span class="pl-k">int</span> total = ds~<span class="pl-c1">load_uint</span>(<span class="pl-c1">64</span>);
+
+	  ;; Note <span class="pl-smi">that</span> (<span class="pl-k">int</span>) and <span class="pl-k">int</span> is the same,
+      ;; thus brackets in the function declaration
+      ;; and in the <span class="pl-k">return</span> statement are omitted.
+	  <span class="pl-k">return</span> total;
+	}
+	;; Now any observer can read get_total value via lite-client or explorer</pre></div>
+<h1>Messages</h1>
+<p>The actor model is a model of concurrent computation and is at the heart of TON smart contracts. Each smart contract can process one message at a time, change its own state, or send one or several messages. Processing of the message occurs in one transaction, that is, it cannot be interrupted. Messages to one contract are processed consequently one by one. As a result, the execution of each transaction is local and can be parallelized at the blockchain level, which allows for on-demand throughput horizontal scaling and hosting an unlimited number of users and transactions.</p>
+<div class="highlight highlight-source-c"><pre class="notranslate">;; For <span class="pl-c1">normal</span> internal message-triggered transactions,
+;; before passing control to recv_internal TVM puts the following
+;; elements on stack.
+;;;; Smart contract <span class="pl-en">balance</span> (in nanoTons)
+;;;; Incoming message <span class="pl-en">balance</span> (in nanoTons)
+;;;; Cell with an incoming message
+;;;; Incoming message body, slice type
+;; In turn, recv_internal may use only
+;; the required number of <span class="pl-en">fields</span> (like <span class="pl-c1">1</span> in the example above or <span class="pl-c1">4</span> below)
+
+;; Let’s dive into message sending
+
+() recv_internal (
+    <span class="pl-k">int</span> balance, <span class="pl-k">int</span> msg_value, cell in_msg_full, slice in_msg_body) {
+    ;; 
+    ;; Every message has a strict layout, thus by parsing it,
+    ;; we can get the sender’s address
+    ;; first, we need to <span class="pl-c1">read</span> some tech flags and
+    ;; then take the address using load_msg_addr
+    ;; function from FunC standard library - ()
+    var cs = in_msg_full.<span class="pl-c1">begin_parse</span>();
+    var flags = cs~<span class="pl-c1">load_uint</span>(<span class="pl-c1">4</span>);
+    slice sender_address = cs~<span class="pl-c1">load_msg_addr</span>();
+
+    ;; <span class="pl-k">if</span> we want to send a message, we first need to construct it
+    ;; message serialization in most cases may be reduced to
+    var msg = <span class="pl-c1">begin_cell</span>()
+    .<span class="pl-c1">store_uint</span>(<span class="pl-c1">0x18</span>, <span class="pl-c1">6</span>) ;; tech flags
+    .<span class="pl-c1">store_slice</span>(addr)   ;; destination address
+    .<span class="pl-c1">store_coins</span>(amount) ;; attached value
+    .<span class="pl-c1">store_uint</span>(<span class="pl-c1">0</span>, <span class="pl-c1">107</span>) ;; more tech flags :)
+    .<span class="pl-c1">store_slice</span>(in_msg_body) ;; just put some payload here
+    .<span class="pl-c1">end_cell</span>();
+
+    ;; to send messages, use send_raw_message from the standard library.
+    ;; it accepts two arguments message and mode
+    <span class="pl-c1">send_raw_message</span>(msg, <span class="pl-c1">64</span>);
+
+    ;; mode parameter specifies how to process the funds passed into
+    ;; the smart contract with the message and the smart contract funds
+    ;; <span class="pl-c1">64</span> means send everything from the incoming message — 
+    ;; what’s left after the commission is deducted
+
+    ;; Exceptions can be thrown by conditional primitives throw_if and
+    ;; throw_unless and by unconditional throw
+    ;; by <span class="pl-k">default</span>, it will automatically cause a bounce message with <span class="pl-c1">64</span> mode
+
+    var some  = <span class="pl-c1">7</span>;
+    <span class="pl-c1">throw_if</span>(<span class="pl-c1">102</span>, some == <span class="pl-c1">10</span>);
+    ;; Throw <span class="pl-c1">exception</span> with code <span class="pl-c1">102</span> conditionally
+    <span class="pl-c1">throw_unless</span>(<span class="pl-c1">103</span>, some != <span class="pl-c1">10</span>);
+    ;; Throw <span class="pl-c1">exception</span> with code <span class="pl-c1">103</span> conditionally
+    <span class="pl-c1">throw</span>(<span class="pl-c1">101</span>);    ;; Throw <span class="pl-c1">exception</span> with code <span class="pl-c1">101</span> unconditionally
+}</pre></div>
+<h1>Flow control: Conditional Statements and Loops; Dictionaries</h1>
+<div class="highlight highlight-source-c"><pre class="notranslate">;; FunC, of course, supports <span class="pl-k">if</span> statements
+
+;;;; usual <span class="pl-k">if</span>-<span class="pl-k">else</span>
+<span class="pl-k">if</span> (flag) {
+    ;;<span class="pl-c1">do_something</span>();
+}
+<span class="pl-k">else</span> {
+    ;;<span class="pl-c1">do_alternative</span>();
+}
+
+;; If statements are often used as an operation identifier
+;; <span class="pl-k">for</span> a smart contract, <span class="pl-k">for</span> example:
+
+() recv_internal (
+    <span class="pl-k">int</span> balance, <span class="pl-k">int</span> msg_value, cell in_msg_full, slice in_msg_body) {
+    <span class="pl-k">int</span> op = in_msg_body~<span class="pl-c1">load_int</span>(<span class="pl-c1">32</span>);
+    <span class="pl-k">if</span> (op == <span class="pl-c1">1</span>) {
+    ;; smth here
+    } <span class="pl-k">else</span> {
+    <span class="pl-k">if</span> (op == <span class="pl-c1">2</span>) {
+        ;; smth here
+    } <span class="pl-k">else</span> {
+        ;; smth here
+    }
+    }
+}
+
+;; Loops
+;; FunC supports repeat, <span class="pl-k">while</span> and <span class="pl-k">do</span> { ... } until loops.
+;; <span class="pl-k">for</span> loop is not supported.
+
+;; repeat
+<span class="pl-k">int</span> x = <span class="pl-c1">1</span>;
+<span class="pl-en">repeat</span>(<span class="pl-c1">10</span>) {
+    x *= <span class="pl-c1">2</span>;
+}
+;; x = <span class="pl-c1">1024</span>
+
+;; <span class="pl-k">while</span>
+<span class="pl-k">int</span> x = <span class="pl-c1">2</span>;
+<span class="pl-k">while</span> (x &lt; <span class="pl-c1">100</span>) {
+    x = x * x;
+}
+;; x = <span class="pl-c1">256</span>
+
+;; until loops
+<span class="pl-k">int</span> x = <span class="pl-c1">0</span>;
+<span class="pl-k">do</span> {
+    x += <span class="pl-c1">3</span>;
+} until (x % <span class="pl-c1">17</span> == <span class="pl-c1">0</span>);
+;; x = <span class="pl-c1">51</span>
+
+;; In practice, loops in TON smart contracts are often used to work with
+;;  dictionaries, or as they are also called in TON hashmaps
+
+;; A hashmap is a data structure represented by a tree.
+;; Hashmap maps keys to values ​​of arbitrary type so that
+;; quick lookup and modification are possible. 
+
+;; udict_get_next? from FunC standard library in combination with
+;; the loop will help, go through the dictionary
+
+<span class="pl-k">int</span> key = -<span class="pl-c1">1</span>;
+<span class="pl-k">do</span> {
+    (key, slice cs, <span class="pl-k">int</span> f) = dic.<span class="pl-smi">udict_get_next</span>?(<span class="pl-c1">256</span>, key);
+
+} until (~ f);
+
+;; udict_get_next? - Calculates the minimum key k in the dictionary dict
+;; that is greater than some given value and returns k,
+;; the associated value, and a flag indicating success.
+;; If the dictionary is empty, returns (null, null, <span class="pl-c1">0</span>).</pre></div>
+<h1>Functions</h1>
+<div class="highlight highlight-source-c"><pre class="notranslate">;; Most useful functions are slice reader and builder writer primitives,
+;; storage handlers and sending messages
+
+;; slice <span class="pl-en">begin_parse</span>(cell c) - Converts a cell into a slice
+;; (slice, <span class="pl-k">int</span>) load_int(slice s, <span class="pl-k">int</span> len) - 
+;; Loads a <span class="pl-k">signed</span> len-bit integer from a slice.
+;; (slice, <span class="pl-k">int</span>) load_uint(slice s, <span class="pl-k">int</span> len) - 
+;; Loads a <span class="pl-k">unsigned</span> len-bit integer from a slice.
+;; (slice, slice) load_bits(slice s, <span class="pl-k">int</span> len) - 
+;; Loads the first <span class="pl-c1">0</span> ≤ len ≤ <span class="pl-c1">1023</span> bits from slice into a separate slice.
+;; (slice, cell) load_ref(slice s) - Loads the reference cell from the slice.
+
+;; builder <span class="pl-en">begin_cell</span>() - Creates a new empty builder.
+;; cell <span class="pl-en">end_cell</span>(builder b) - Converts a builder into an ordinary cell.
+;; builder <span class="pl-en">store_int</span>(builder b, <span class="pl-k">int</span> x, <span class="pl-k">int</span> len) -
+;; Stores a <span class="pl-k">signed</span> len-bit integer x into b <span class="pl-k">for</span> <span class="pl-c1">0</span> ≤ len ≤ <span class="pl-c1">257</span>.
+;; builder <span class="pl-en">store_uint</span>(builder b, <span class="pl-k">int</span> x, <span class="pl-k">int</span> len) -
+;; Stores an <span class="pl-k">unsigned</span> len-bit integer x into b <span class="pl-k">for</span> <span class="pl-c1">0</span> ≤ len ≤ <span class="pl-c1">256</span>.
+;; builder <span class="pl-en">store_slice</span>(builder b, slice s) - Stores slice s into builder b.
+;; builder <span class="pl-en">store_ref</span>(builder b, cell c) -
+;; Stores a reference to cell c into builder b.
+
+;; cell <span class="pl-en">get_data</span>() - Returns the persistent contract storage cell. 
+;; () set_data(cell c) - Sets cell c as persistent contract data.
+
+;; () send_raw_message(cell msg, <span class="pl-k">int</span> mode) -
+;; put message msg into sending queue with mode.
+;; Note, that message will be sent after a successful execution
+;; of the whole transaction
+
+;; Detailed descriptions of all standard functions can be found
+;; in docs https:<span class="pl-c"><span class="pl-c">//</span>ton.org/docs/#/func/stdlib</span>
+;; </pre></div>
+<h2>Additional resources</h2>
+<ul>
+<li><a href="https://github.com/romanovichim/TonFunClessons_Eng">FunC Lessons</a></li>
+<li><a href="https://www.tonspace.co" rel="nofollow">TON Development Onboarding</a></li>
+<li><a href="https://ton.org/docs/#/" rel="nofollow">TON Documentation</a></li>
+<li><a href="https://ton.org/docs/#/func/overview" rel="nofollow">FunC Documentation</a></li>
+<li><a href="https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont">TON Smart Contracts examples</a></li>
+<li><a href="https://society.ton.org" rel="nofollow">Community portal</a></li>
+<li><a href="https://ton.org" rel="nofollow">Blockchain portal</a></li>
+<li><a href="https://stackoverflow.com/questions/tagged/ton" rel="nofollow">Stackoverflow</a></li>
+</ul>
+<h2>Social</h2>
+<ul>
+<li><a href="https://t.me/tondev_eng" rel="nofollow">Developer community</a></li>
+<li><a href="https://t.me/ton_learn" rel="nofollow">TON Learn</a></li>
+<li><a href="https://github.com/romanovichim/TonFunClessons_Eng">FunC Lessons Channel</a></li>
+<li><a href="https://t.me/func_guide" rel="nofollow">FunC onboarding</a></li>
+<li><a href="https://t.me/tondevnews" rel="nofollow">Tondev News</a></li>
+</ul>
+<h2>Useful blogposts</h2>
+<ul>
+<li><a href="https://society.ton.org/setting-up-a-ton-development-environment" rel="nofollow">Setting up a TON Development Environment</a></li>
+<li><a href="https://society.ton.org/ton-hello-world-step-by-step-guide-for-writing-your-first-smart-contract-in-func" rel="nofollow">Hello World on TON</a></li>
+</ul>
+<h2>Future To Dos</h2>
+<ul>
+<li>Add smart contracts examples</li>
+<li>Add more posts</li>
+</ul>
+<p>This file is mostly copied from <a href="https://github.com/romanovichim/TonFunClessons_Eng/blob/main/13lesson/15min.md">TonFunClessons 15 minutes intro</a>.</p>
+<p>P.S. If by any chance you're familiar with <a href="https://learnxinyminutes.com/docs/forth/" rel="nofollow">Forth</a>, you can also take a look at <a href="https://ton-blockchain.github.io/docs/fiftbase.pdf" rel="nofollow">Fift</a>.</p>
+<hr>
+<h2>Contributors</h2>
+<ul>
+<li>["Ivan Romanovich", "https://t.me/ton_learn"]</li>
+<li>["Kirill Malev", "https://fslabs.io"]</li>
+</ul>

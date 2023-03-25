@@ -1,0 +1,678 @@
+<h1>Common Lisp</h1>
+<p>Common Lisp is a general-purpose, multi-paradigm programming language suited for a wide variety of<br>
+industry applications. It is frequently referred to as a programmable programming language.</p>
+<p>The classic starting point is <a href="http://www.gigamonkeys.com/book/" rel="nofollow">Practical Common Lisp</a>. Another<br>
+popular and recent book is <a href="http://landoflisp.com/" rel="nofollow">Land of Lisp</a>. A new book about best practices,<br>
+<a href="http://weitz.de/cl-recipes/" rel="nofollow">Common Lisp Recipes</a>, was recently published.</p>
+<div class="highlight highlight-source-lisp"><pre class="notranslate"><span class="pl-c"><span class="pl-c">;</span>;;-----------------------------------------------------------------------------</span>
+<span class="pl-c"><span class="pl-c">;</span>;; 0. Syntax</span>
+<span class="pl-c"><span class="pl-c">;</span>;;-----------------------------------------------------------------------------</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; General form</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; CL has two fundamental pieces of syntax: ATOM and S-EXPRESSION.</span>
+<span class="pl-c"><span class="pl-c">;</span>;; Typically, grouped S-expressions are called `forms`.</span>
+
+<span class="pl-c1">10</span>            <span class="pl-c"><span class="pl-c">;</span> an atom; it evaluates to itself</span>
+:thing        <span class="pl-c"><span class="pl-c">;</span> another atom; evaluating to the symbol :thing</span>
+<span class="pl-c1">t</span>             <span class="pl-c"><span class="pl-c">;</span> another atom, denoting true</span>
+(+ <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span>)   <span class="pl-c"><span class="pl-c">;</span> an s-expression</span>
+'(<span class="pl-c1">4</span> :foo <span class="pl-c1">t</span>)   <span class="pl-c"><span class="pl-c">;</span> another s-expression</span>
+
+
+<span class="pl-c"><span class="pl-c">;</span>;; Comments</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Single-line comments start with a semicolon; use four for file-level</span>
+<span class="pl-c"><span class="pl-c">;</span>;; comments, three for section descriptions, two inside definitions, and one</span>
+<span class="pl-c"><span class="pl-c">;</span>;; for single lines. For example,</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;;; life.lisp</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Foo bar baz, because quu quux. Optimized for maximum krakaboom and umph.</span>
+<span class="pl-c"><span class="pl-c">;</span>;; Needed by the function LINULUKO.</span>
+
+(<span class="pl-k">defun</span> <span class="pl-en">meaning</span> (life)
+  <span class="pl-s"><span class="pl-pds">"</span>Return the computed meaning of LIFE<span class="pl-pds">"</span></span>
+  (<span class="pl-k">let</span> ((meh <span class="pl-s"><span class="pl-pds">"</span>abc<span class="pl-pds">"</span></span>))
+    <span class="pl-c"><span class="pl-c">;</span>; Invoke krakaboom</span>
+    (<span class="pl-k">loop</span> :for x :across meh
+       :collect x)))                    <span class="pl-c"><span class="pl-c">;</span> store values into x, then return it</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Block comments, on the other hand, allow for free-form comments. They are</span>
+<span class="pl-c"><span class="pl-c">;</span>;; delimited with #| and |#</span>
+
+#| This is a block comment which
+   can span multiple lines <span class="pl-k">and</span>
+    #|
+       they can be nested!
+    |#
+|#
+
+
+<span class="pl-c"><span class="pl-c">;</span>;; Environment</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; A variety of implementations exist; most are standards-conformant. SBCL</span>
+<span class="pl-c"><span class="pl-c">;</span>;; is a good starting point. Third party libraries can be easily installed with</span>
+<span class="pl-c"><span class="pl-c">;</span>;; Quicklisp</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; CL is usually developed with a text editor and a Read Eval Print</span>
+<span class="pl-c"><span class="pl-c">;</span>;; Loop (REPL) running at the same time. The REPL allows for interactive</span>
+<span class="pl-c"><span class="pl-c">;</span>;; exploration of the program while it is running "live".</span>
+
+
+<span class="pl-c"><span class="pl-c">;</span>;;-----------------------------------------------------------------------------</span>
+<span class="pl-c"><span class="pl-c">;</span>;; 1. Primitive datatypes and operators</span>
+<span class="pl-c"><span class="pl-c">;</span>;;-----------------------------------------------------------------------------</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Symbols</span>
+
+'foo <span class="pl-c"><span class="pl-c">;</span> =&gt; FOO  Notice that the symbol is upper-cased automatically.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; INTERN manually creates a symbol from a string.</span>
+
+(intern <span class="pl-s"><span class="pl-pds">"</span>AAAA<span class="pl-pds">"</span></span>)        <span class="pl-c"><span class="pl-c">;</span> =&gt; AAAA</span>
+(intern <span class="pl-s"><span class="pl-pds">"</span>aaa<span class="pl-pds">"</span></span>)         <span class="pl-c"><span class="pl-c">;</span> =&gt; |aaa|</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Numbers</span>
+
+<span class="pl-c1">9999999999999999999999</span> <span class="pl-c"><span class="pl-c">;</span> integers</span>
+<span class="pl-c1">#b111</span>                  <span class="pl-c"><span class="pl-c">;</span> binary =&gt; 7</span>
+<span class="pl-c1">#o111</span>                  <span class="pl-c"><span class="pl-c">;</span> octal =&gt; 73</span>
+<span class="pl-c1">#x111</span>                  <span class="pl-c"><span class="pl-c">;</span> hexadecimal =&gt; 273</span>
+<span class="pl-c1">3.</span>14159s0              <span class="pl-c"><span class="pl-c">;</span> single</span>
+<span class="pl-c1">3.</span>14159d0              <span class="pl-c"><span class="pl-c">;</span> double</span>
+<span class="pl-c1">1</span>/<span class="pl-c1">2</span>                    <span class="pl-c"><span class="pl-c">;</span> ratios</span>
+<span class="pl-c1">#C</span>(<span class="pl-c1">1</span> <span class="pl-c1">2</span>)                <span class="pl-c"><span class="pl-c">;</span> complex numbers</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Function application are written as (f x y z ...) where f is a function and</span>
+<span class="pl-c"><span class="pl-c">;</span>;; x, y, z, ... are the arguments.</span>
+
+(+ <span class="pl-c1">1</span> <span class="pl-c1">2</span>)                <span class="pl-c"><span class="pl-c">;</span> =&gt; 3</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; If you want to create literal data, use QUOTE to prevent it from being</span>
+<span class="pl-c"><span class="pl-c">;</span>;; evaluated</span>
+
+(<span class="pl-c1">quote</span> (+ <span class="pl-c1">1</span> <span class="pl-c1">2</span>))        <span class="pl-c"><span class="pl-c">;</span> =&gt; (+ 1 2)</span>
+(<span class="pl-c1">quote</span> a)              <span class="pl-c"><span class="pl-c">;</span> =&gt; A</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; The shorthand for QUOTE is '</span>
+
+'(+ <span class="pl-c1">1</span> <span class="pl-c1">2</span>)               <span class="pl-c"><span class="pl-c">;</span> =&gt; (+ 1 2)</span>
+'a                     <span class="pl-c"><span class="pl-c">;</span> =&gt; A</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Basic arithmetic operations</span>
+
+(+ <span class="pl-c1">1</span> <span class="pl-c1">1</span>)                <span class="pl-c"><span class="pl-c">;</span> =&gt; 2</span>
+(- <span class="pl-c1">8</span> <span class="pl-c1">1</span>)                <span class="pl-c"><span class="pl-c">;</span> =&gt; 7</span>
+(* <span class="pl-c1">10</span> <span class="pl-c1">2</span>)               <span class="pl-c"><span class="pl-c">;</span> =&gt; 20</span>
+(expt <span class="pl-c1">2</span> <span class="pl-c1">3</span>)             <span class="pl-c"><span class="pl-c">;</span> =&gt; 8</span>
+(mod <span class="pl-c1">5</span> <span class="pl-c1">2</span>)              <span class="pl-c"><span class="pl-c">;</span> =&gt; 1</span>
+(/ <span class="pl-c1">35</span> <span class="pl-c1">5</span>)               <span class="pl-c"><span class="pl-c">;</span> =&gt; 7</span>
+(/ <span class="pl-c1">1</span> <span class="pl-c1">3</span>)                <span class="pl-c"><span class="pl-c">;</span> =&gt; 1/3</span>
+(+ <span class="pl-c1">#C</span>(<span class="pl-c1">1</span> <span class="pl-c1">2</span>) <span class="pl-c1">#C</span>(<span class="pl-c1">6</span> -<span class="pl-c1">4</span>))   <span class="pl-c"><span class="pl-c">;</span> =&gt; #C(7 -2)</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Booleans</span>
+
+<span class="pl-c1">t</span>                      <span class="pl-c"><span class="pl-c">;</span> true; any non-NIL value is true</span>
+<span class="pl-c1">nil</span>                    <span class="pl-c"><span class="pl-c">;</span> false; also, the empty list: ()</span>
+(<span class="pl-k">not</span> <span class="pl-c1">nil</span>)              <span class="pl-c"><span class="pl-c">;</span> =&gt; T</span>
+(<span class="pl-k">and</span> <span class="pl-c1">0</span> <span class="pl-c1">t</span>)              <span class="pl-c"><span class="pl-c">;</span> =&gt; T</span>
+(<span class="pl-k">or</span> <span class="pl-c1">0</span> <span class="pl-c1">nil</span>)             <span class="pl-c"><span class="pl-c">;</span> =&gt; 0</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Characters</span>
+
+<span class="pl-c1">#\A</span>                    <span class="pl-c"><span class="pl-c">;</span> =&gt; #\A</span>
+<span class="pl-c1">#\</span>λ                    <span class="pl-c"><span class="pl-c">;</span> =&gt; #\GREEK_SMALL_LETTER_LAMDA</span>
+<span class="pl-c1">#\u03BB</span>                <span class="pl-c"><span class="pl-c">;</span> =&gt; #\GREEK_SMALL_LETTER_LAMDA</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Strings are fixed-length arrays of characters</span>
+
+<span class="pl-s"><span class="pl-pds">"</span>Hello, world!<span class="pl-pds">"</span></span>
+<span class="pl-s"><span class="pl-pds">"</span>Benjamin <span class="pl-cce">\"</span>Bugsy<span class="pl-cce">\"</span> Siegel<span class="pl-pds">"</span></span>   <span class="pl-c"><span class="pl-c">;</span> backslash is an escaping character</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Strings can be concatenated</span>
+
+(concatenate 'string <span class="pl-s"><span class="pl-pds">"</span>Hello, <span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>world!<span class="pl-pds">"</span></span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; "Hello, world!"</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; A string can be treated like a sequence of characters</span>
+
+(elt <span class="pl-s"><span class="pl-pds">"</span>Apple<span class="pl-pds">"</span></span> <span class="pl-c1">0</span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; #\A</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; FORMAT is used to create formatted output, which ranges from simple string</span>
+<span class="pl-c"><span class="pl-c">;</span>;; interpolation to loops and conditionals. The first argument to FORMAT</span>
+<span class="pl-c"><span class="pl-c">;</span>;; determines where will the formatted string go. If it is NIL, FORMAT</span>
+<span class="pl-c"><span class="pl-c">;</span>;; simply returns the formatted string as a value; if it is T, FORMAT outputs</span>
+<span class="pl-c"><span class="pl-c">;</span>;; to the standard output, usually the screen, then it returns NIL.</span>
+
+(<span class="pl-c1">format</span> <span class="pl-c1">nil</span> <span class="pl-s"><span class="pl-pds">"</span>~A, ~A!<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>Hello<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>world<span class="pl-pds">"</span></span>)   <span class="pl-c"><span class="pl-c">;</span> =&gt; "Hello, world!"</span>
+(<span class="pl-c1">format</span> <span class="pl-c1">t</span> <span class="pl-s"><span class="pl-pds">"</span>~A, ~A!<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>Hello<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>world<span class="pl-pds">"</span></span>)     <span class="pl-c"><span class="pl-c">;</span> =&gt; NIL</span>
+
+
+<span class="pl-c"><span class="pl-c">;</span>;;-----------------------------------------------------------------------------</span>
+<span class="pl-c"><span class="pl-c">;</span>;; 2. Variables</span>
+<span class="pl-c"><span class="pl-c">;</span>;;-----------------------------------------------------------------------------</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; You can create a global (dynamically scoped) variable using DEFVAR and</span>
+<span class="pl-c"><span class="pl-c">;</span>;; DEFPARAMETER. The variable name can use any character except: ()",'`;#|\</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; The difference between DEFVAR and DEFPARAMETER is that re-evaluating a</span>
+<span class="pl-c"><span class="pl-c">;</span>;; DEFVAR expression doesn't change the value of the variable. DEFPARAMETER,</span>
+<span class="pl-c"><span class="pl-c">;</span>;; on the other hand, does.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; By convention, dynamically scoped variables have earmuffs in their name.</span>
+
+(<span class="pl-k">defparameter</span> <span class="pl-smi">*some-var*</span> <span class="pl-c1">5</span>)
+<span class="pl-smi">*some-var*</span> <span class="pl-c"><span class="pl-c">;</span> =&gt; 5</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; You can also use unicode characters.</span>
+(<span class="pl-k">defparameter</span> <span class="pl-smi">*AΛB*</span> <span class="pl-c1">nil</span>)
+
+<span class="pl-c"><span class="pl-c">;</span>;; Accessing a previously unbound variable results in an UNBOUND-VARIABLE</span>
+<span class="pl-c"><span class="pl-c">;</span>;; error, however it is defined behavior. Don't do it.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; You can create local bindings with LET. In the following snippet, `me` is</span>
+<span class="pl-c"><span class="pl-c">;</span>;; bound to "dance with you" only within the (let ...). LET always returns</span>
+<span class="pl-c"><span class="pl-c">;</span>;; the value of the last `form` in the LET form.</span>
+
+(<span class="pl-k">let</span> ((me <span class="pl-s"><span class="pl-pds">"</span>dance with you<span class="pl-pds">"</span></span>)) me) <span class="pl-c"><span class="pl-c">;</span> =&gt; "dance with you"</span>
+
+
+<span class="pl-c"><span class="pl-c">;</span>;;-----------------------------------------------------------------------------;</span>
+<span class="pl-c"><span class="pl-c">;</span>;; 3. Structs and collections</span>
+<span class="pl-c"><span class="pl-c">;</span>;;-----------------------------------------------------------------------------;</span>
+
+
+<span class="pl-c"><span class="pl-c">;</span>;; Structs</span>
+
+(<span class="pl-k">defstruct</span> <span class="pl-en">dog</span> name breed age)
+(<span class="pl-k">defparameter</span> <span class="pl-smi">*rover*</span>
+    (make-dog :name <span class="pl-s"><span class="pl-pds">"</span>rover<span class="pl-pds">"</span></span>
+              :breed <span class="pl-s"><span class="pl-pds">"</span>collie<span class="pl-pds">"</span></span>
+              :age <span class="pl-c1">5</span>))
+<span class="pl-smi">*rover*</span>            <span class="pl-c"><span class="pl-c">;</span> =&gt; #S(DOG :NAME "rover" :BREED "collie" :AGE 5)</span>
+(dog-p <span class="pl-smi">*rover*</span>)    <span class="pl-c"><span class="pl-c">;</span> =&gt; T</span>
+(dog-name <span class="pl-smi">*rover*</span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; "rover"</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; DOG-P, MAKE-DOG, and DOG-NAME are all automatically created by DEFSTRUCT</span>
+
+
+<span class="pl-c"><span class="pl-c">;</span>;; Pairs</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; CONS constructs pairs. CAR and CDR return the head and tail of a CONS-pair.</span>
+
+(<span class="pl-c1">cons</span> 'SUBJECT 'VERB)         <span class="pl-c"><span class="pl-c">;</span> =&gt; '(SUBJECT . VERB)</span>
+(<span class="pl-c1">car</span> (<span class="pl-c1">cons</span> 'SUBJECT 'VERB))   <span class="pl-c"><span class="pl-c">;</span> =&gt; SUBJECT</span>
+(<span class="pl-c1">cdr</span> (<span class="pl-c1">cons</span> 'SUBJECT 'VERB))   <span class="pl-c"><span class="pl-c">;</span> =&gt; VERB</span>
+
+
+<span class="pl-c"><span class="pl-c">;</span>;; Lists</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Lists are linked-list data structures, made of CONS pairs and end with a</span>
+<span class="pl-c"><span class="pl-c">;</span>;; NIL (or '()) to mark the end of the list</span>
+
+(<span class="pl-c1">cons</span> <span class="pl-c1">1</span> (<span class="pl-c1">cons</span> <span class="pl-c1">2</span> (<span class="pl-c1">cons</span> <span class="pl-c1">3</span> <span class="pl-c1">nil</span>)))     <span class="pl-c"><span class="pl-c">;</span> =&gt; '(1 2 3)</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; LIST is a convenience variadic constructor for lists</span>
+
+(<span class="pl-c1">list</span> <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)                       <span class="pl-c"><span class="pl-c">;</span> =&gt; '(1 2 3)</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; When the first argument to CONS is an atom and the second argument is a</span>
+<span class="pl-c"><span class="pl-c">;</span>;; list, CONS returns a new CONS-pair with the first argument as the first</span>
+<span class="pl-c"><span class="pl-c">;</span>;; item and the second argument as the rest of the CONS-pair</span>
+
+(<span class="pl-c1">cons</span> <span class="pl-c1">4</span> '(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>))                  <span class="pl-c"><span class="pl-c">;</span> =&gt; '(4 1 2 3)</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Use APPEND to join lists</span>
+
+(<span class="pl-c1">append</span> '(<span class="pl-c1">1</span> <span class="pl-c1">2</span>) '(<span class="pl-c1">3</span> <span class="pl-c1">4</span>))             <span class="pl-c"><span class="pl-c">;</span> =&gt; '(1 2 3 4)</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Or CONCATENATE</span>
+
+(concatenate '<span class="pl-c1">list</span> '(<span class="pl-c1">1</span> <span class="pl-c1">2</span>) '(<span class="pl-c1">3</span> <span class="pl-c1">4</span>))  <span class="pl-c"><span class="pl-c">;</span> =&gt; '(1 2 3 4)</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Lists are a very central type, so there is a wide variety of functionality for</span>
+<span class="pl-c"><span class="pl-c">;</span>;; them, a few examples:</span>
+
+(mapcar <span class="pl-c1">#'1+</span> '(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>))             <span class="pl-c"><span class="pl-c">;</span> =&gt; '(2 3 4)</span>
+(mapcar <span class="pl-c1">#'+</span> '(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>) '(<span class="pl-c1">10</span> <span class="pl-c1">20</span> <span class="pl-c1">30</span>))  <span class="pl-c"><span class="pl-c">;</span> =&gt; '(11 22 33)</span>
+(remove-<span class="pl-k">if</span>-<span class="pl-k">not</span> <span class="pl-c1">#'evenp</span> '(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span>)) <span class="pl-c"><span class="pl-c">;</span> =&gt; '(2 4)</span>
+(every <span class="pl-c1">#'evenp</span> '(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span>))         <span class="pl-c"><span class="pl-c">;</span> =&gt; NIL</span>
+(some <span class="pl-c1">#'oddp</span> '(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span>))           <span class="pl-c"><span class="pl-c">;</span> =&gt; T</span>
+(butlast '(subject verb object))   <span class="pl-c"><span class="pl-c">;</span> =&gt; (SUBJECT VERB)</span>
+
+
+<span class="pl-c"><span class="pl-c">;</span>;; Vectors</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Vector's literals are fixed-length arrays</span>
+
+#(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; #(1 2 3)</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Use CONCATENATE to add vectors together</span>
+
+(concatenate 'vector #(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>) #(<span class="pl-c1">4</span> <span class="pl-c1">5</span> <span class="pl-c1">6</span>)) <span class="pl-c"><span class="pl-c">;</span> =&gt; #(1 2 3 4 5 6)</span>
+
+
+<span class="pl-c"><span class="pl-c">;</span>;; Arrays</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Both vectors and strings are special-cases of arrays.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; 2D arrays</span>
+
+(make-array (<span class="pl-c1">list</span> <span class="pl-c1">2</span> <span class="pl-c1">2</span>))         <span class="pl-c"><span class="pl-c">;</span> =&gt; #2A((0 0) (0 0))</span>
+(make-array '(<span class="pl-c1">2</span> <span class="pl-c1">2</span>))             <span class="pl-c"><span class="pl-c">;</span> =&gt; #2A((0 0) (0 0))</span>
+(make-array (<span class="pl-c1">list</span> <span class="pl-c1">2</span> <span class="pl-c1">2</span> <span class="pl-c1">2</span>))       <span class="pl-c"><span class="pl-c">;</span> =&gt; #3A(((0 0) (0 0)) ((0 0) (0 0)))</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Caution: the default initial values of MAKE-ARRAY are implementation-defined.</span>
+<span class="pl-c"><span class="pl-c">;</span>;; To explicitly specify them:</span>
+
+(make-array '(<span class="pl-c1">2</span>) :initial-element 'unset)  <span class="pl-c"><span class="pl-c">;</span> =&gt; #(UNSET UNSET)</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; To access the element at 1, 1, 1:</span>
+
+(aref (make-array (<span class="pl-c1">list</span> <span class="pl-c1">2</span> <span class="pl-c1">2</span> <span class="pl-c1">2</span>)) <span class="pl-c1">1</span> <span class="pl-c1">1</span> <span class="pl-c1">1</span>)     <span class="pl-c"><span class="pl-c">;</span>  =&gt; 0</span>
+<span class="pl-c"><span class="pl-c">;</span>;; This value is implementation-defined:</span>
+<span class="pl-c"><span class="pl-c">;</span>;; NIL on ECL, 0 on SBCL and CCL.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Adjustable vectors</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Adjustable vectors have the same printed representation as</span>
+<span class="pl-c"><span class="pl-c">;</span>;; fixed-length vector's literals.</span>
+
+(<span class="pl-k">defparameter</span> <span class="pl-smi">*adjvec*</span> (make-array '(<span class="pl-c1">3</span>) :initial-contents '(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)
+                                   :adjustable <span class="pl-c1">t</span> :fill-pointer <span class="pl-c1">t</span>))
+<span class="pl-smi">*adjvec*</span> <span class="pl-c"><span class="pl-c">;</span> =&gt; #(1 2 3)</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Adding new elements</span>
+
+(vector-push-extend <span class="pl-c1">4</span> <span class="pl-smi">*adjvec*</span>)   <span class="pl-c"><span class="pl-c">;</span> =&gt; 3</span>
+<span class="pl-smi">*adjvec*</span>                          <span class="pl-c"><span class="pl-c">;</span> =&gt; #(1 2 3 4)</span>
+
+
+<span class="pl-c"><span class="pl-c">;</span>;; Sets, naively, are just lists:</span>
+
+(set-difference '(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span>) '(<span class="pl-c1">4</span> <span class="pl-c1">5</span> <span class="pl-c1">6</span> <span class="pl-c1">7</span>))   <span class="pl-c"><span class="pl-c">;</span> =&gt; (3 2 1)</span>
+(intersection '(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span>) '(<span class="pl-c1">4</span> <span class="pl-c1">5</span> <span class="pl-c1">6</span> <span class="pl-c1">7</span>))     <span class="pl-c"><span class="pl-c">;</span> =&gt; 4</span>
+(union '(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span>) '(<span class="pl-c1">4</span> <span class="pl-c1">5</span> <span class="pl-c1">6</span> <span class="pl-c1">7</span>))            <span class="pl-c"><span class="pl-c">;</span> =&gt; (3 2 1 4 5 6 7)</span>
+(adjoin <span class="pl-c1">4</span> '(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span>))                    <span class="pl-c"><span class="pl-c">;</span> =&gt; (1 2 3 4)</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; However, you'll need a better data structure than linked lists when working</span>
+<span class="pl-c"><span class="pl-c">;</span>;; with larger data sets</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Dictionaries are implemented as hash tables.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Create a hash table</span>
+
+(<span class="pl-k">defparameter</span> <span class="pl-smi">*m*</span> (make-hash-table))
+
+<span class="pl-c"><span class="pl-c">;</span>;; Set value</span>
+
+(<span class="pl-c1">setf</span> (gethash 'a <span class="pl-smi">*m*</span>) <span class="pl-c1">1</span>)
+
+<span class="pl-c"><span class="pl-c">;</span>;; Retrieve value</span>
+
+(gethash 'a <span class="pl-smi">*m*</span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; 1, T</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; CL expressions have the ability to return multiple values.</span>
+
+(values <span class="pl-c1">1</span> <span class="pl-c1">2</span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; 1, 2</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; which can be bound with MULTIPLE-VALUE-BIND</span>
+
+(multiple-value-bind (x y)
+    (values <span class="pl-c1">1</span> <span class="pl-c1">2</span>)
+  (<span class="pl-c1">list</span> y x))
+
+<span class="pl-c"><span class="pl-c">;</span> =&gt; '(2 1)</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; GETHASH is an example of a function that returns multiple values. The first</span>
+<span class="pl-c"><span class="pl-c">;</span>;; value it return is the value of the key in the hash table; if the key is</span>
+<span class="pl-c"><span class="pl-c">;</span>;; not found it returns NIL.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; The second value determines if that key is indeed present in the hash</span>
+<span class="pl-c"><span class="pl-c">;</span>;; table. If a key is not found in the table it returns NIL. This behavior</span>
+<span class="pl-c"><span class="pl-c">;</span>;; allows us to check if the value of a key is actually NIL.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Retrieving a non-present value returns nil</span>
+
+(gethash 'd <span class="pl-smi">*m*</span>) <span class="pl-c"><span class="pl-c">;</span>=&gt; NIL, NIL</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; You can provide a default value for missing keys</span>
+
+(gethash 'd <span class="pl-smi">*m*</span> :<span class="pl-k">not</span>-found) <span class="pl-c"><span class="pl-c">;</span> =&gt; :NOT-FOUND</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Let's handle the multiple return values here in code.</span>
+
+(multiple-value-bind (a b)
+    (gethash 'd <span class="pl-smi">*m*</span>)
+  (<span class="pl-c1">list</span> a b))
+<span class="pl-c"><span class="pl-c">;</span> =&gt; (NIL NIL)</span>
+
+(multiple-value-bind (a b)
+    (gethash 'a <span class="pl-smi">*m*</span>)
+  (<span class="pl-c1">list</span> a b))
+<span class="pl-c"><span class="pl-c">;</span> =&gt; (1 T)</span>
+
+
+<span class="pl-c"><span class="pl-c">;</span>;;-----------------------------------------------------------------------------</span>
+<span class="pl-c"><span class="pl-c">;</span>;; 3. Functions</span>
+<span class="pl-c"><span class="pl-c">;</span>;;-----------------------------------------------------------------------------</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Use LAMBDA to create anonymous functions. Functions always returns the</span>
+<span class="pl-c"><span class="pl-c">;</span>;; value of the last expression. The exact printable representation of a</span>
+<span class="pl-c"><span class="pl-c">;</span>;; function varies between implementations.</span>
+
+(<span class="pl-c1">lambda</span> () <span class="pl-s"><span class="pl-pds">"</span>Hello World<span class="pl-pds">"</span></span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; #&lt;FUNCTION (LAMBDA ()) {1004E7818B}&gt;</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Use FUNCALL to call anonymous functions</span>
+
+(funcall (<span class="pl-c1">lambda</span> () <span class="pl-s"><span class="pl-pds">"</span>Hello World<span class="pl-pds">"</span></span>))   <span class="pl-c"><span class="pl-c">;</span> =&gt; "Hello World"</span>
+(funcall <span class="pl-c1">#'+</span> <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)                   <span class="pl-c"><span class="pl-c">;</span> =&gt; 6</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; A call to FUNCALL is also implied when the lambda expression is the CAR of</span>
+<span class="pl-c"><span class="pl-c">;</span>;; an unquoted list</span>
+
+((<span class="pl-c1">lambda</span> () <span class="pl-s"><span class="pl-pds">"</span>Hello World<span class="pl-pds">"</span></span>))           <span class="pl-c"><span class="pl-c">;</span> =&gt; "Hello World"</span>
+((<span class="pl-c1">lambda</span> (val) val) <span class="pl-s"><span class="pl-pds">"</span>Hello World<span class="pl-pds">"</span></span>)    <span class="pl-c"><span class="pl-c">;</span> =&gt; "Hello World"</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; FUNCALL is used when the arguments are known beforehand. Otherwise, use APPLY</span>
+
+(apply <span class="pl-c1">#'+</span> '(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>))   <span class="pl-c"><span class="pl-c">;</span> =&gt; 6</span>
+(apply (<span class="pl-c1">lambda</span> () <span class="pl-s"><span class="pl-pds">"</span>Hello World<span class="pl-pds">"</span></span>) <span class="pl-c1">nil</span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; "Hello World"</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; To name a function, use DEFUN</span>
+
+(<span class="pl-k">defun</span> <span class="pl-en">hello-world</span> () <span class="pl-s"><span class="pl-pds">"</span>Hello World<span class="pl-pds">"</span></span>)
+(hello-world) <span class="pl-c"><span class="pl-c">;</span> =&gt; "Hello World"</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; The () in the definition above is the list of arguments</span>
+
+(<span class="pl-k">defun</span> <span class="pl-en">hello</span> (name) (<span class="pl-c1">format</span> <span class="pl-c1">nil</span> <span class="pl-s"><span class="pl-pds">"</span>Hello, ~A<span class="pl-pds">"</span></span> name))
+(hello <span class="pl-s"><span class="pl-pds">"</span>Steve<span class="pl-pds">"</span></span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; "Hello, Steve"</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Functions can have optional arguments; they default to NIL</span>
+
+(<span class="pl-k">defun</span> <span class="pl-en">hello</span> (name &amp;optional from)
+  (<span class="pl-k">if</span> from
+      (<span class="pl-c1">format</span> <span class="pl-c1">t</span> <span class="pl-s"><span class="pl-pds">"</span>Hello, ~A, from ~A<span class="pl-pds">"</span></span> name from)
+      (<span class="pl-c1">format</span> <span class="pl-c1">t</span> <span class="pl-s"><span class="pl-pds">"</span>Hello, ~A<span class="pl-pds">"</span></span> name)))
+
+(hello <span class="pl-s"><span class="pl-pds">"</span>Jim<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>Alpacas<span class="pl-pds">"</span></span>)       <span class="pl-c"><span class="pl-c">;</span> =&gt; Hello, Jim, from Alpacas</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; The default values can also be specified</span>
+
+(<span class="pl-k">defun</span> <span class="pl-en">hello</span> (name &amp;optional (from <span class="pl-s"><span class="pl-pds">"</span>The world<span class="pl-pds">"</span></span>))
+   (<span class="pl-c1">format</span> <span class="pl-c1">nil</span> <span class="pl-s"><span class="pl-pds">"</span>Hello, ~A, from ~A<span class="pl-pds">"</span></span> name from))
+
+(hello <span class="pl-s"><span class="pl-pds">"</span>Steve<span class="pl-pds">"</span></span>)               <span class="pl-c"><span class="pl-c">;</span> =&gt; Hello, Steve, from The world</span>
+(hello <span class="pl-s"><span class="pl-pds">"</span>Steve<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>the alpacas<span class="pl-pds">"</span></span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; Hello, Steve, from the alpacas</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Functions also have keyword arguments to allow non-positional arguments</span>
+
+(<span class="pl-k">defun</span> <span class="pl-en">generalized-greeter</span> (name &amp;key (from <span class="pl-s"><span class="pl-pds">"</span>the world<span class="pl-pds">"</span></span>) (honorific <span class="pl-s"><span class="pl-pds">"</span>Mx<span class="pl-pds">"</span></span>))
+  (<span class="pl-c1">format</span> <span class="pl-c1">t</span> <span class="pl-s"><span class="pl-pds">"</span>Hello, ~A ~A, from ~A<span class="pl-pds">"</span></span> honorific name from))
+
+(generalized-greeter <span class="pl-s"><span class="pl-pds">"</span>Jim<span class="pl-pds">"</span></span>)
+<span class="pl-c"><span class="pl-c">;</span> =&gt; Hello, Mx Jim, from the world</span>
+
+(generalized-greeter <span class="pl-s"><span class="pl-pds">"</span>Jim<span class="pl-pds">"</span></span> :from <span class="pl-s"><span class="pl-pds">"</span>the alpacas you met last summer<span class="pl-pds">"</span></span> :honorific <span class="pl-s"><span class="pl-pds">"</span>Mr<span class="pl-pds">"</span></span>)
+<span class="pl-c"><span class="pl-c">;</span> =&gt; Hello, Mr Jim, from the alpacas you met last summer</span>
+
+
+<span class="pl-c"><span class="pl-c">;</span>;;-----------------------------------------------------------------------------</span>
+<span class="pl-c"><span class="pl-c">;</span>;; 4. Equality</span>
+<span class="pl-c"><span class="pl-c">;</span>;;-----------------------------------------------------------------------------</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; CL has a sophisticated equality system. Some are covered here.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; For numbers, use `='</span>
+(= <span class="pl-c1">3</span> <span class="pl-c1">3.0</span>)               <span class="pl-c"><span class="pl-c">;</span> =&gt; T</span>
+(= <span class="pl-c1">2</span> <span class="pl-c1">1</span>)                 <span class="pl-c"><span class="pl-c">;</span> =&gt; NIL</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; For object identity (approximately) use EQL</span>
+(eql <span class="pl-c1">3</span> <span class="pl-c1">3</span>)               <span class="pl-c"><span class="pl-c">;</span> =&gt; T</span>
+(eql <span class="pl-c1">3</span> <span class="pl-c1">3.0</span>)             <span class="pl-c"><span class="pl-c">;</span> =&gt; NIL</span>
+(eql (<span class="pl-c1">list</span> <span class="pl-c1">3</span>) (<span class="pl-c1">list</span> <span class="pl-c1">3</span>)) <span class="pl-c"><span class="pl-c">;</span> =&gt; NIL</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; for lists, strings, and bit-vectors use EQUAL</span>
+(equal (<span class="pl-c1">list</span> 'a 'b) (<span class="pl-c1">list</span> 'a 'b)) <span class="pl-c"><span class="pl-c">;</span> =&gt; T</span>
+(equal (<span class="pl-c1">list</span> 'a 'b) (<span class="pl-c1">list</span> 'b 'a)) <span class="pl-c"><span class="pl-c">;</span> =&gt; NIL</span>
+
+
+<span class="pl-c"><span class="pl-c">;</span>;;-----------------------------------------------------------------------------</span>
+<span class="pl-c"><span class="pl-c">;</span>;; 5. Control Flow</span>
+<span class="pl-c"><span class="pl-c">;</span>;;-----------------------------------------------------------------------------</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Conditionals</span>
+
+(<span class="pl-k">if</span> <span class="pl-c1">t</span>                <span class="pl-c"><span class="pl-c">;</span> test expression</span>
+    <span class="pl-s"><span class="pl-pds">"</span>this is true<span class="pl-pds">"</span></span>   <span class="pl-c"><span class="pl-c">;</span> then expression</span>
+    <span class="pl-s"><span class="pl-pds">"</span>this is false<span class="pl-pds">"</span></span>) <span class="pl-c"><span class="pl-c">;</span> else expression</span>
+<span class="pl-c"><span class="pl-c">;</span> =&gt; "this is true"</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; In conditionals, all non-NIL values are treated as true</span>
+
+(member 'Groucho '(Harpo Groucho Zeppo)) <span class="pl-c"><span class="pl-c">;</span> =&gt; '(GROUCHO ZEPPO)</span>
+(<span class="pl-k">if</span> (member 'Groucho '(Harpo Groucho Zeppo))
+    'yep
+    'nope)
+<span class="pl-c"><span class="pl-c">;</span> =&gt; 'YEP</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; COND chains a series of tests to select a result</span>
+(<span class="pl-c1">cond</span> ((&gt; <span class="pl-c1">2</span> <span class="pl-c1">2</span>) (error <span class="pl-s"><span class="pl-pds">"</span>wrong!<span class="pl-pds">"</span></span>))
+      ((&lt; <span class="pl-c1">2</span> <span class="pl-c1">2</span>) (error <span class="pl-s"><span class="pl-pds">"</span>wrong again!<span class="pl-pds">"</span></span>))
+      (<span class="pl-c1">t</span> 'ok)) <span class="pl-c"><span class="pl-c">;</span> =&gt; 'OK</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; TYPECASE switches on the type of the value</span>
+(<span class="pl-k">typecase</span> <span class="pl-c1">1</span>
+  (string :string)
+  (integer :int))
+<span class="pl-c"><span class="pl-c">;</span> =&gt; :int</span>
+
+
+<span class="pl-c"><span class="pl-c">;</span>;; Looping</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Recursion</span>
+
+(<span class="pl-k">defun</span> <span class="pl-en">fact</span> (n)
+  (<span class="pl-k">if</span> (&lt; n <span class="pl-c1">2</span>)
+      <span class="pl-c1">1</span>
+    (* n (fact(- n <span class="pl-c1">1</span>)))))
+
+(fact <span class="pl-c1">5</span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; 120</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Iteration</span>
+
+(<span class="pl-k">defun</span> <span class="pl-en">fact</span> (n)
+  (<span class="pl-k">loop</span> :for result = <span class="pl-c1">1</span> :then (* result i)
+     :for i :from <span class="pl-c1">2</span> :to n
+     :finally (return result)))
+
+(fact <span class="pl-c1">5</span>) <span class="pl-c"><span class="pl-c">;</span> =&gt; 120</span>
+
+(<span class="pl-k">loop</span> :for x :across <span class="pl-s"><span class="pl-pds">"</span>abcd<span class="pl-pds">"</span></span> :collect x)
+<span class="pl-c"><span class="pl-c">;</span> =&gt; (#\a #\b #\c #\d)</span>
+
+(<span class="pl-k">dolist</span> (i '(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span>))
+  (<span class="pl-c1">format</span> <span class="pl-c1">t</span> <span class="pl-s"><span class="pl-pds">"</span>~A<span class="pl-pds">"</span></span> i))
+<span class="pl-c"><span class="pl-c">;</span> =&gt; 1234</span>
+
+
+<span class="pl-c"><span class="pl-c">;</span>;;-----------------------------------------------------------------------------</span>
+<span class="pl-c"><span class="pl-c">;</span>;; 6. Mutation</span>
+<span class="pl-c"><span class="pl-c">;</span>;;-----------------------------------------------------------------------------</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Use SETF to assign a new value to an existing variable. This was</span>
+<span class="pl-c"><span class="pl-c">;</span>;; demonstrated earlier in the hash table example.</span>
+
+(<span class="pl-k">let</span> ((variable <span class="pl-c1">10</span>))
+    (<span class="pl-c1">setf</span> variable <span class="pl-c1">2</span>))
+<span class="pl-c"><span class="pl-c">;</span> =&gt; 2</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Good Lisp style is to minimize the use of destructive functions and to avoid</span>
+<span class="pl-c"><span class="pl-c">;</span>;; mutation when reasonable.</span>
+
+
+<span class="pl-c"><span class="pl-c">;</span>;;-----------------------------------------------------------------------------</span>
+<span class="pl-c"><span class="pl-c">;</span>;; 7. Classes and objects</span>
+<span class="pl-c"><span class="pl-c">;</span>;;-----------------------------------------------------------------------------</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; No more animal classes. Let's have Human-Powered Mechanical</span>
+<span class="pl-c"><span class="pl-c">;</span>;; Conveyances.</span>
+
+(<span class="pl-k">defclass</span> <span class="pl-en">human-powered-conveyance</span> ()
+  ((velocity
+    :accessor velocity
+    :initarg :velocity)
+   (average-efficiency
+    :accessor average-efficiency
+   :initarg :average-efficiency))
+  (:documentation <span class="pl-s"><span class="pl-pds">"</span>A human powered conveyance<span class="pl-pds">"</span></span>))
+
+<span class="pl-c"><span class="pl-c">;</span>;; The arguments to DEFCLASS, in order are:</span>
+<span class="pl-c"><span class="pl-c">;</span>;; 1. class name</span>
+<span class="pl-c"><span class="pl-c">;</span>;; 2. superclass list</span>
+<span class="pl-c"><span class="pl-c">;</span>;; 3. slot list</span>
+<span class="pl-c"><span class="pl-c">;</span>;; 4. optional specifiers</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; When no superclass list is set, the empty list defaults to the</span>
+<span class="pl-c"><span class="pl-c">;</span>;; standard-object class. This *can* be changed, but not until you</span>
+<span class="pl-c"><span class="pl-c">;</span>;; know what you're doing. Look up the Art of the Metaobject Protocol</span>
+<span class="pl-c"><span class="pl-c">;</span>;; for more information.</span>
+
+(<span class="pl-k">defclass</span> <span class="pl-en">bicycle</span> (human-powered-conveyance)
+  ((wheel-size
+    :accessor wheel-size
+    :initarg :wheel-size
+    :documentation <span class="pl-s"><span class="pl-pds">"</span>Diameter of the wheel.<span class="pl-pds">"</span></span>)
+   (height
+    :accessor height
+    :initarg :height)))
+
+(<span class="pl-k">defclass</span> <span class="pl-en">recumbent</span> (bicycle)
+  ((chain-type
+    :accessor chain-type
+    :initarg :chain-type)))
+
+(<span class="pl-k">defclass</span> <span class="pl-en">unicycle</span> (human-powered-conveyance) <span class="pl-c1">nil</span>)
+
+(<span class="pl-k">defclass</span> <span class="pl-en">canoe</span> (human-powered-conveyance)
+  ((number-of-rowers
+    :accessor number-of-rowers
+    :initarg :number-of-rowers)))
+
+<span class="pl-c"><span class="pl-c">;</span>;; Calling DESCRIBE on the HUMAN-POWERED-CONVEYANCE class in the REPL gives:</span>
+
+(describe 'human-powered-conveyance)
+
+<span class="pl-c"><span class="pl-c">;</span> COMMON-LISP-USER::HUMAN-POWERED-CONVEYANCE</span>
+<span class="pl-c"><span class="pl-c">;</span>  [symbol]</span>
+<span class="pl-c"><span class="pl-c">;</span></span>
+<span class="pl-c"><span class="pl-c">;</span> HUMAN-POWERED-CONVEYANCE names the standard-class #&lt;STANDARD-CLASS</span>
+<span class="pl-c"><span class="pl-c">;</span>                                                    HUMAN-POWERED-CONVEYANCE&gt;:</span>
+<span class="pl-c"><span class="pl-c">;</span>  Documentation:</span>
+<span class="pl-c"><span class="pl-c">;</span>    A human powered conveyance</span>
+<span class="pl-c"><span class="pl-c">;</span>  Direct superclasses: STANDARD-OBJECT</span>
+<span class="pl-c"><span class="pl-c">;</span>  Direct subclasses: UNICYCLE, BICYCLE, CANOE</span>
+<span class="pl-c"><span class="pl-c">;</span>  Not yet finalized.</span>
+<span class="pl-c"><span class="pl-c">;</span>  Direct slots:</span>
+<span class="pl-c"><span class="pl-c">;</span>    VELOCITY</span>
+<span class="pl-c"><span class="pl-c">;</span>      Readers: VELOCITY</span>
+<span class="pl-c"><span class="pl-c">;</span>      Writers: (SETF VELOCITY)</span>
+<span class="pl-c"><span class="pl-c">;</span>    AVERAGE-EFFICIENCY</span>
+<span class="pl-c"><span class="pl-c">;</span>      Readers: AVERAGE-EFFICIENCY</span>
+<span class="pl-c"><span class="pl-c">;</span>      Writers: (SETF AVERAGE-EFFICIENCY)</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Note the reflective behavior available. CL was designed to be an</span>
+<span class="pl-c"><span class="pl-c">;</span>;; interactive system</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; To define a method, let's find out what our circumference of the</span>
+<span class="pl-c"><span class="pl-c">;</span>;; bike wheel turns out to be using the equation: C = d * pi</span>
+
+(<span class="pl-k">defmethod</span> <span class="pl-en">circumference</span> ((object bicycle))
+  (* pi (wheel-size object)))
+
+<span class="pl-c"><span class="pl-c">;</span>;; PI is defined as a built-in in CL</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Let's suppose we find out that the efficiency value of the number</span>
+<span class="pl-c"><span class="pl-c">;</span>;; of rowers in a canoe is roughly logarithmic. This should probably be set</span>
+<span class="pl-c"><span class="pl-c">;</span>;; in the constructor/initializer.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; To initialize your instance after CL gets done constructing it:</span>
+
+(<span class="pl-k">defmethod</span> <span class="pl-en">initialize-instance</span> :after ((object canoe) &amp;rest args)
+  (<span class="pl-c1">setf</span> (average-efficiency object)  (log (<span class="pl-c1">1</span>+ (number-of-rowers object)))))
+
+<span class="pl-c"><span class="pl-c">;</span>;; Then to construct an instance and check the average efficiency...</span>
+
+(average-efficiency (make-instance 'canoe :number-of-rowers <span class="pl-c1">15</span>))
+<span class="pl-c"><span class="pl-c">;</span> =&gt; 2.7725887</span>
+
+
+<span class="pl-c"><span class="pl-c">;</span>;;-----------------------------------------------------------------------------</span>
+<span class="pl-c"><span class="pl-c">;</span>;; 8. Macros</span>
+<span class="pl-c"><span class="pl-c">;</span>;;-----------------------------------------------------------------------------</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Macros let you extend the syntax of the language. CL doesn't come</span>
+<span class="pl-c"><span class="pl-c">;</span>;; with a WHILE loop, however, it's trivial to write one. If we obey our</span>
+<span class="pl-c"><span class="pl-c">;</span>;; assembler instincts, we wind up with:</span>
+
+(<span class="pl-k">defmacro</span> <span class="pl-en">while</span> (condition &amp;body body)
+    <span class="pl-s"><span class="pl-pds">"</span>While `condition` is true, `body` is executed.</span>
+<span class="pl-s">`condition` is tested prior to each execution of `body`<span class="pl-pds">"</span></span>
+    (<span class="pl-k">let</span> ((block-name (gensym)) (done (gensym)))
+        `(tagbody
+           ,block-name
+           (<span class="pl-k">unless</span> ,condition
+               (go ,done))
+           (<span class="pl-c1">progn</span>
+           ,@body)
+           (go ,block-name)
+           ,done)))
+
+<span class="pl-c"><span class="pl-c">;</span>;; Let's look at the high-level version of this:</span>
+
+(<span class="pl-k">defmacro</span> <span class="pl-en">while</span> (condition &amp;body body)
+    <span class="pl-s"><span class="pl-pds">"</span>While `condition` is true, `body` is executed.</span>
+<span class="pl-s">`condition` is tested prior to each execution of `body`<span class="pl-pds">"</span></span>
+  `(<span class="pl-k">loop</span> while ,condition
+         <span class="pl-k">do</span>
+         (<span class="pl-c1">progn</span>
+            ,@body)))
+
+<span class="pl-c"><span class="pl-c">;</span>;; However, with a modern compiler, this is not required; the LOOP form</span>
+<span class="pl-c"><span class="pl-c">;</span>;; compiles equally well and is easier to read.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; Note that ``` is used, as well as `,` and `@`. ``` is a quote-type operator</span>
+<span class="pl-c"><span class="pl-c">;</span>;; known as quasiquote; it allows the use of `,` . `,` allows "unquoting"</span>
+<span class="pl-c"><span class="pl-c">;</span>;; variables. @ interpolates lists.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; GENSYM creates a unique symbol guaranteed to not exist elsewhere in</span>
+<span class="pl-c"><span class="pl-c">;</span>;; the system. This is because macros are expanded at compile time and</span>
+<span class="pl-c"><span class="pl-c">;</span>;; variables declared in the macro can collide with variables used in</span>
+<span class="pl-c"><span class="pl-c">;</span>;; regular code.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;; See Practical Common Lisp and On Lisp for more information on macros.</span></pre></div>
+<h2>Further reading</h2>
+<ul>
+<li><a href="http://www.gigamonkeys.com/book/" rel="nofollow">Practical Common Lisp</a></li>
+<li><a href="https://www.cs.cmu.edu/~dst/LispBook/book.pdf" rel="nofollow">Common Lisp: A Gentle Introduction to Symbolic Computation</a></li>
+</ul>
+<h2>Extra information</h2>
+<ul>
+<li><a href="http://www.cliki.net/" rel="nofollow">CLiki</a></li>
+<li><a href="https://common-lisp.net/" rel="nofollow">common-lisp.net</a></li>
+<li><a href="https://github.com/CodyReichert/awesome-cl">Awesome Common Lisp</a></li>
+<li><a href="http://lisp-lang.org/" rel="nofollow">Lisp Lang</a></li>
+</ul>
+<h2>Credits</h2>
+<p>Lots of thanks to the Scheme people for rolling up a great starting<br>
+point which could be easily moved to Common Lisp.</p>
+<ul>
+<li><a href="https://github.com/pkhuong">Paul Khuong</a> for some great reviewing.</li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<ul>
+<li>["Paul Nathan", "https://github.com/pnathan"]</li>
+<li>["Rommel Martinez", "https://ebzzry.io"]</li>
+</ul>

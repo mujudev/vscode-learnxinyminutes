@@ -1,0 +1,68 @@
+<h1>PyQt</h1>
+<p><strong>Qt</strong> is a widely-known framework for developing cross-platform software that can be run on various software and hardware platforms with little or no change in the code, while having the power and speed of native applications. Though <strong>Qt</strong> was originally written in <em>C++</em>.</p>
+<p>This is an adaption on the C++ intro to QT by <a href="https://github.com/vortexxx192">Aleksey Kholovchuk</a>, some of the code examples should result in the same functionality<br>
+this version just having been done using pyqt!</p>
+<div class="highlight highlight-source-python"><pre class="notranslate"><span class="pl-k">import</span> <span class="pl-s1">sys</span>
+<span class="pl-k">from</span> <span class="pl-v">PyQt4</span> <span class="pl-k">import</span> <span class="pl-v">QtGui</span>
+	
+<span class="pl-k">def</span> <span class="pl-en">window</span>():
+	<span class="pl-c"># Create an application object </span>
+    <span class="pl-s1">app</span> <span class="pl-c1">=</span> <span class="pl-v">QtGui</span>.<span class="pl-v">QApplication</span>(<span class="pl-s1">sys</span>.<span class="pl-s1">argv</span>)
+	<span class="pl-c"># Create a widget where our label will be placed in</span>
+    <span class="pl-s1">w</span> <span class="pl-c1">=</span> <span class="pl-v">QtGui</span>.<span class="pl-v">QWidget</span>()
+	<span class="pl-c"># Add a label to the widget </span>
+    <span class="pl-s1">b</span> <span class="pl-c1">=</span> <span class="pl-v">QtGui</span>.<span class="pl-v">QLabel</span>(<span class="pl-s1">w</span>)
+	<span class="pl-c"># Set some text for the label </span>
+    <span class="pl-s1">b</span>.<span class="pl-en">setText</span>(<span class="pl-s">"Hello World!"</span>)
+	<span class="pl-c"># Give some size and placement information </span>
+    <span class="pl-s1">w</span>.<span class="pl-en">setGeometry</span>(<span class="pl-c1">100</span>, <span class="pl-c1">100</span>, <span class="pl-c1">200</span>, <span class="pl-c1">50</span>)
+    <span class="pl-s1">b</span>.<span class="pl-en">move</span>(<span class="pl-c1">50</span>, <span class="pl-c1">20</span>)
+	<span class="pl-c"># Give our window a nice title </span>
+    <span class="pl-s1">w</span>.<span class="pl-en">setWindowTitle</span>(<span class="pl-s">"PyQt"</span>)
+	<span class="pl-c"># Have everything display</span>
+    <span class="pl-s1">w</span>.<span class="pl-en">show</span>()
+	<span class="pl-c"># Execute what we have asked for, once all setup</span>
+    <span class="pl-s1">sys</span>.<span class="pl-en">exit</span>(<span class="pl-s1">app</span>.<span class="pl-en">exec_</span>())
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">'__main__'</span>:
+    <span class="pl-en">window</span>()</pre></div>
+<p>In order to get some of the more advanced features in <strong>pyqt</strong> we need to start looking at building additional elements.<br>
+Here we show how to introduce a dialog popup box, useful for asking the user to confirm a decision or to provide information.</p>
+<div class="highlight highlight-source-python"><pre class="notranslate"><span class="pl-k">import</span> <span class="pl-s1">sys</span>
+<span class="pl-k">from</span> <span class="pl-v">PyQt4</span>.<span class="pl-v">QtGui</span> <span class="pl-k">import</span> <span class="pl-c1">*</span>
+<span class="pl-k">from</span> <span class="pl-v">PyQt4</span>.<span class="pl-v">QtCore</span> <span class="pl-k">import</span> <span class="pl-c1">*</span>
+
+
+<span class="pl-k">def</span> <span class="pl-en">window</span>():
+    <span class="pl-s1">app</span> <span class="pl-c1">=</span> <span class="pl-v">QApplication</span>(<span class="pl-s1">sys</span>.<span class="pl-s1">argv</span>)
+    <span class="pl-s1">w</span> <span class="pl-c1">=</span> <span class="pl-v">QWidget</span>()
+    <span class="pl-c"># Create a button and attach to widget w</span>
+    <span class="pl-s1">b</span> <span class="pl-c1">=</span> <span class="pl-v">QPushButton</span>(<span class="pl-s1">w</span>)
+    <span class="pl-s1">b</span>.<span class="pl-en">setText</span>(<span class="pl-s">"Press me"</span>)
+    <span class="pl-s1">b</span>.<span class="pl-en">move</span>(<span class="pl-c1">50</span>, <span class="pl-c1">50</span>)
+    <span class="pl-c"># Tell b to call this function when clicked</span>
+    <span class="pl-c"># notice the lack of "()" on the function call</span>
+    <span class="pl-s1">b</span>.<span class="pl-s1">clicked</span>.<span class="pl-en">connect</span>(<span class="pl-s1">showdialog</span>)
+    <span class="pl-s1">w</span>.<span class="pl-en">setWindowTitle</span>(<span class="pl-s">"PyQt Dialog"</span>)
+    <span class="pl-s1">w</span>.<span class="pl-en">show</span>()
+    <span class="pl-s1">sys</span>.<span class="pl-en">exit</span>(<span class="pl-s1">app</span>.<span class="pl-en">exec_</span>())
+	
+<span class="pl-c"># This function should create a dialog window with a button</span>
+<span class="pl-c"># that waits to be clicked and then exits the program</span>
+<span class="pl-k">def</span> <span class="pl-en">showdialog</span>():
+    <span class="pl-s1">d</span> <span class="pl-c1">=</span> <span class="pl-v">QDialog</span>()
+    <span class="pl-s1">b1</span> <span class="pl-c1">=</span> <span class="pl-v">QPushButton</span>(<span class="pl-s">"ok"</span>, <span class="pl-s1">d</span>)
+    <span class="pl-s1">b1</span>.<span class="pl-en">move</span>(<span class="pl-c1">50</span>, <span class="pl-c1">50</span>)
+    <span class="pl-s1">d</span>.<span class="pl-en">setWindowTitle</span>(<span class="pl-s">"Dialog"</span>)
+    <span class="pl-c"># This modality tells the popup to block the parent whilst it's active</span>
+    <span class="pl-s1">d</span>.<span class="pl-en">setWindowModality</span>(<span class="pl-v">Qt</span>.<span class="pl-v">ApplicationModal</span>)
+    <span class="pl-c"># On click I'd like the entire process to end</span>
+    <span class="pl-s1">b1</span>.<span class="pl-s1">clicked</span>.<span class="pl-en">connect</span>(<span class="pl-s1">sys</span>.<span class="pl-s1">exit</span>)
+    <span class="pl-s1">d</span>.<span class="pl-en">exec_</span>()
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">'__main__'</span>:
+    <span class="pl-en">window</span>()</pre></div>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Nathan Hughes", "https://github.com/sirsharpest"]
+</code></pre>

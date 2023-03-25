@@ -1,0 +1,1203 @@
+<h1>C++</h1>
+<p>C++ is a systems programming language that,<br>
+<a href="https://channel9.msdn.com/Events/Lang-NEXT/Lang-NEXT-2014/Keynote" rel="nofollow">according to its inventor Bjarne Stroustrup</a>,<br>
+was designed to</p>
+<ul>
+<li>be a "better C"</li>
+<li>support data abstraction</li>
+<li>support object-oriented programming</li>
+<li>support generic programming</li>
+</ul>
+<p>Though its syntax can be more difficult or complex than newer languages,<br>
+it is widely used because it compiles to native instructions that can be<br>
+directly run by the processor and offers tight control over hardware (like C)<br>
+while offering high-level features such as generics, exceptions, and classes.<br>
+This combination of speed and functionality makes C++<br>
+one of the most widely-used programming languages.</p>
+<div class="highlight highlight-source-c++"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span>////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> Comparison to C</span>
+<span class="pl-c"><span class="pl-c">//</span>////////////////</span>
+
+<span class="pl-c"><span class="pl-c">//</span> C++ is _almost_ a superset of C and shares its basic syntax for</span>
+<span class="pl-c"><span class="pl-c">//</span> variable declarations, primitive types, and functions.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Just like in C, your program's entry point is a function called</span>
+<span class="pl-c"><span class="pl-c">//</span> main with an integer return type.</span>
+<span class="pl-c"><span class="pl-c">//</span> This value serves as the program's exit status.</span>
+<span class="pl-c"><span class="pl-c">//</span> See https://en.wikipedia.org/wiki/Exit_status for more information.</span>
+<span class="pl-k">int</span> <span class="pl-en">main</span>(<span class="pl-k">int</span> argc, <span class="pl-k">char</span>** argv)
+{
+    <span class="pl-c"><span class="pl-c">//</span> Command line arguments are passed in by argc and argv in the same way</span>
+    <span class="pl-c"><span class="pl-c">//</span> they are in C.</span>
+    <span class="pl-c"><span class="pl-c">//</span> argc indicates the number of arguments,</span>
+    <span class="pl-c"><span class="pl-c">//</span> and argv is an array of C-style strings (char*)</span>
+    <span class="pl-c"><span class="pl-c">//</span> representing the arguments.</span>
+    <span class="pl-c"><span class="pl-c">//</span> The first argument is the name by which the program was called.</span>
+    <span class="pl-c"><span class="pl-c">//</span> argc and argv can be omitted if you do not care about arguments,</span>
+    <span class="pl-c"><span class="pl-c">//</span> giving the function signature of int main()</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> An exit status of 0 indicates success.</span>
+    <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+}
+
+<span class="pl-c"><span class="pl-c">//</span> However, C++ varies in some of the following ways:</span>
+
+<span class="pl-c"><span class="pl-c">//</span> In C++, character literals are chars</span>
+<span class="pl-k">sizeof</span>(<span class="pl-s"><span class="pl-pds">'</span>c<span class="pl-pds">'</span></span>) == <span class="pl-k">sizeof</span>(<span class="pl-k">char</span>) == <span class="pl-c1">1</span>
+
+<span class="pl-c"><span class="pl-c">//</span> In C, character literals are ints</span>
+<span class="pl-k">sizeof</span>(<span class="pl-s"><span class="pl-pds">'</span>c<span class="pl-pds">'</span></span>) == <span class="pl-k">sizeof</span>(<span class="pl-k">int</span>)
+
+
+<span class="pl-c"><span class="pl-c">//</span> C++ has strict prototyping</span>
+<span class="pl-k">void</span> <span class="pl-en">func</span>(); <span class="pl-c"><span class="pl-c">//</span> function which accepts no arguments</span>
+
+<span class="pl-c"><span class="pl-c">//</span> In C</span>
+<span class="pl-k">void</span> <span class="pl-en">func</span>(); <span class="pl-c"><span class="pl-c">//</span> function which may accept any number of arguments</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Use nullptr instead of NULL in C++</span>
+<span class="pl-k">int</span>* ip = <span class="pl-c1">nullptr</span>;
+
+<span class="pl-c"><span class="pl-c">//</span> C standard headers are available in C++.</span>
+<span class="pl-c"><span class="pl-c">//</span> C headers end in .h, while</span>
+<span class="pl-c"><span class="pl-c">//</span> C++ headers are prefixed with "c" and have no ".h" suffix.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> The C++ standard version:</span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>cstdio<span class="pl-pds">&gt;</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span> The C standard version:</span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>stdio.h<span class="pl-pds">&gt;</span></span>
+
+<span class="pl-k">int</span> <span class="pl-en">main</span>()
+{
+    <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span>Hello, world!<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>);
+    <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+}
+
+<span class="pl-c"><span class="pl-c">//</span>/////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> Function overloading</span>
+<span class="pl-c"><span class="pl-c">//</span>/////////////////////</span>
+
+<span class="pl-c"><span class="pl-c">//</span> C++ supports function overloading</span>
+<span class="pl-c"><span class="pl-c">//</span> provided each function takes different parameters.</span>
+
+<span class="pl-k">void</span> <span class="pl-en">print</span>(<span class="pl-k">char</span> <span class="pl-k">const</span>* myString)
+{
+    <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span>String %s<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, myString);
+}
+
+<span class="pl-k">void</span> <span class="pl-en">print</span>(<span class="pl-k">int</span> myInt)
+{
+    <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span>My int is %d<span class="pl-pds">"</span></span>, myInt);
+}
+
+<span class="pl-k">int</span> <span class="pl-en">main</span>()
+{
+    <span class="pl-c1">print</span>(<span class="pl-s"><span class="pl-pds">"</span>Hello<span class="pl-pds">"</span></span>); <span class="pl-c"><span class="pl-c">//</span> Resolves to void print(const char*)</span>
+    <span class="pl-c1">print</span>(<span class="pl-c1">15</span>); <span class="pl-c"><span class="pl-c">//</span> Resolves to void print(int)</span>
+}
+
+<span class="pl-c"><span class="pl-c">//</span>///////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> Default function arguments</span>
+<span class="pl-c"><span class="pl-c">//</span>///////////////////////////</span>
+
+<span class="pl-c"><span class="pl-c">//</span> You can provide default arguments for a function</span>
+<span class="pl-c"><span class="pl-c">//</span> if they are not provided by the caller.</span>
+
+<span class="pl-k">void</span> <span class="pl-en">doSomethingWithInts</span>(<span class="pl-k">int</span> a = <span class="pl-c1">1</span>, <span class="pl-k">int</span> b = <span class="pl-c1">4</span>)
+{
+    <span class="pl-c"><span class="pl-c">//</span> Do something with the ints here</span>
+}
+
+<span class="pl-k">int</span> <span class="pl-en">main</span>()
+{
+    <span class="pl-c1">doSomethingWithInts</span>();      <span class="pl-c"><span class="pl-c">//</span> a = 1,  b = 4</span>
+    <span class="pl-c1">doSomethingWithInts</span>(<span class="pl-c1">20</span>);    <span class="pl-c"><span class="pl-c">//</span> a = 20, b = 4</span>
+    <span class="pl-c1">doSomethingWithInts</span>(<span class="pl-c1">20</span>, <span class="pl-c1">5</span>); <span class="pl-c"><span class="pl-c">//</span> a = 20, b = 5</span>
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Default arguments must be at the end of the arguments list.</span>
+
+<span class="pl-k">void</span> <span class="pl-en">invalidDeclaration</span>(<span class="pl-k">int</span> a = <span class="pl-c1">1</span>, <span class="pl-k">int</span> b) <span class="pl-c"><span class="pl-c">//</span> Error!</span>
+{
+}
+
+
+<span class="pl-c"><span class="pl-c">//</span>///////////</span>
+<span class="pl-c"><span class="pl-c">//</span> Namespaces</span>
+<span class="pl-c"><span class="pl-c">//</span>///////////</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Namespaces provide separate scopes for variable, function,</span>
+<span class="pl-c"><span class="pl-c">//</span> and other declarations.</span>
+<span class="pl-c"><span class="pl-c">//</span> Namespaces can be nested.</span>
+
+<span class="pl-k">namespace</span> <span class="pl-en">First</span> {
+    <span class="pl-k">namespace</span> <span class="pl-en">Nested</span> {
+        <span class="pl-k">void</span> <span class="pl-en">foo</span>()
+        {
+            <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span>This is First::Nested::foo<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>);
+        }
+    } <span class="pl-c"><span class="pl-c">//</span> end namespace Nested</span>
+} <span class="pl-c"><span class="pl-c">//</span> end namespace First</span>
+
+<span class="pl-k">namespace</span> <span class="pl-en">Second</span> {
+    <span class="pl-k">void</span> <span class="pl-en">foo</span>()
+    {
+        <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span>This is Second::foo<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>);
+    }
+    <span class="pl-k">void</span> <span class="pl-en">bar</span>()
+    {
+    	<span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span>This is Second::bar<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>);
+    }
+}
+
+<span class="pl-k">void</span> <span class="pl-en">foo</span>()
+{
+    <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span>This is global foo<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>);
+}
+
+<span class="pl-k">int</span> <span class="pl-en">main</span>()
+{
+    <span class="pl-c"><span class="pl-c">//</span> Includes all symbols from namespace Second into the current scope. Note</span>
+    <span class="pl-c"><span class="pl-c">//</span> that while bar() works, simply using foo() no longer works, since it is</span>
+    <span class="pl-c"><span class="pl-c">//</span> now ambiguous whether we're calling the foo in namespace Second or the</span>
+    <span class="pl-c"><span class="pl-c">//</span> top level.</span>
+    <span class="pl-k">using</span> <span class="pl-k">namespace</span> <span class="pl-en">Second</span><span class="pl-k">;</span>
+
+    <span class="pl-c1">bar</span>(); <span class="pl-c"><span class="pl-c">//</span> prints "This is Second::bar"</span>
+    <span class="pl-c1">Second::foo</span>(); <span class="pl-c"><span class="pl-c">//</span> prints "This is Second::foo"</span>
+    <span class="pl-c1">First::Nested::foo</span>(); <span class="pl-c"><span class="pl-c">//</span> prints "This is First::Nested::foo"</span>
+    <span class="pl-en">::foo</span>(); <span class="pl-c"><span class="pl-c">//</span> prints "This is global foo"</span>
+}
+
+<span class="pl-c"><span class="pl-c">//</span>/////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> Input/Output</span>
+<span class="pl-c"><span class="pl-c">//</span>/////////////</span>
+
+<span class="pl-c"><span class="pl-c">//</span> C++ input and output uses streams</span>
+<span class="pl-c"><span class="pl-c">//</span> cin, cout, and cerr represent stdin, stdout, and stderr.</span>
+<span class="pl-c"><span class="pl-c">//</span> &lt;&lt; is the insertion operator and &gt;&gt; is the extraction operator.</span>
+
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>iostream<span class="pl-pds">&gt;</span></span> <span class="pl-c"><span class="pl-c">//</span> Include for I/O streams</span>
+
+<span class="pl-k">using</span> <span class="pl-k">namespace</span> <span class="pl-en">std</span><span class="pl-k">;</span> <span class="pl-c"><span class="pl-c">//</span> Streams are in the std namespace (standard library)</span>
+
+<span class="pl-k">int</span> <span class="pl-en">main</span>()
+{
+   <span class="pl-k">int</span> myInt;
+
+   <span class="pl-c"><span class="pl-c">//</span> Prints to stdout (or terminal/screen)</span>
+   cout &lt;&lt; <span class="pl-s"><span class="pl-pds">"</span>Enter your favorite number:<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>;
+   <span class="pl-c"><span class="pl-c">//</span> Takes in input</span>
+   cin &gt;&gt; myInt;
+
+   <span class="pl-c"><span class="pl-c">//</span> cout can also be formatted</span>
+   cout &lt;&lt; <span class="pl-s"><span class="pl-pds">"</span>Your favorite number is <span class="pl-pds">"</span></span> &lt;&lt; myInt &lt;&lt; <span class="pl-s"><span class="pl-pds">'</span><span class="pl-cce">\n</span><span class="pl-pds">'</span></span>;
+   <span class="pl-c"><span class="pl-c">//</span> prints "Your favorite number is &lt;myInt&gt;"</span>
+
+   cerr &lt;&lt; <span class="pl-s"><span class="pl-pds">"</span>Used for error messages<span class="pl-pds">"</span></span>;
+}
+
+<span class="pl-c"><span class="pl-c">//</span>////////</span>
+<span class="pl-c"><span class="pl-c">//</span> Strings</span>
+<span class="pl-c"><span class="pl-c">//</span>////////</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Strings in C++ are objects and have many member functions</span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>string<span class="pl-pds">&gt;</span></span>
+
+<span class="pl-k">using</span> <span class="pl-k">namespace</span> <span class="pl-en">std</span><span class="pl-k">;</span> <span class="pl-c"><span class="pl-c">//</span> Strings are also in the namespace std (standard library)</span>
+
+string myString = <span class="pl-s"><span class="pl-pds">"</span>Hello<span class="pl-pds">"</span></span>;
+string myOtherString = <span class="pl-s"><span class="pl-pds">"</span> World<span class="pl-pds">"</span></span>;
+
+<span class="pl-c"><span class="pl-c">//</span> + is used for concatenation.</span>
+cout &lt;&lt; myString + myOtherString; <span class="pl-c"><span class="pl-c">//</span> "Hello World"</span>
+
+cout &lt;&lt; myString + <span class="pl-s"><span class="pl-pds">"</span> You<span class="pl-pds">"</span></span>; <span class="pl-c"><span class="pl-c">//</span> "Hello You"</span>
+
+<span class="pl-c"><span class="pl-c">//</span> C++ strings are mutable.</span>
+myString.append(<span class="pl-s"><span class="pl-pds">"</span> Dog<span class="pl-pds">"</span></span>);
+cout &lt;&lt; myString; <span class="pl-c"><span class="pl-c">//</span> "Hello Dog"</span>
+
+
+<span class="pl-c"><span class="pl-c">//</span>///////////</span>
+<span class="pl-c"><span class="pl-c">//</span> References</span>
+<span class="pl-c"><span class="pl-c">//</span>///////////</span>
+
+<span class="pl-c"><span class="pl-c">//</span> In addition to pointers like the ones in C,</span>
+<span class="pl-c"><span class="pl-c">//</span> C++ has _references_.</span>
+<span class="pl-c"><span class="pl-c">//</span> These are pointer types that cannot be reassigned once set</span>
+<span class="pl-c"><span class="pl-c">//</span> and cannot be null.</span>
+<span class="pl-c"><span class="pl-c">//</span> They also have the same syntax as the variable itself:</span>
+<span class="pl-c"><span class="pl-c">//</span> No * is needed for dereferencing and</span>
+<span class="pl-c"><span class="pl-c">//</span> &amp; (address of) is not used for assignment.</span>
+
+<span class="pl-k">using</span> <span class="pl-k">namespace</span> <span class="pl-en">std</span><span class="pl-k">;</span>
+
+string foo = <span class="pl-s"><span class="pl-pds">"</span>I am foo<span class="pl-pds">"</span></span>;
+string bar = <span class="pl-s"><span class="pl-pds">"</span>I am bar<span class="pl-pds">"</span></span>;
+
+
+string&amp; fooRef = foo; <span class="pl-c"><span class="pl-c">//</span> This creates a reference to foo.</span>
+fooRef += <span class="pl-s"><span class="pl-pds">"</span>. Hi!<span class="pl-pds">"</span></span>; <span class="pl-c"><span class="pl-c">//</span> Modifies foo through the reference</span>
+cout &lt;&lt; fooRef; <span class="pl-c"><span class="pl-c">//</span> Prints "I am foo. Hi!"</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Doesn't reassign "fooRef". This is the same as "foo = bar", and</span>
+<span class="pl-c"><span class="pl-c">//</span>   foo == "I am bar"</span>
+<span class="pl-c"><span class="pl-c">//</span> after this line.</span>
+cout &lt;&lt; &amp;fooRef &lt;&lt; endl; <span class="pl-c"><span class="pl-c">//</span>Prints the address of foo</span>
+fooRef = bar;
+cout &lt;&lt; &amp;fooRef &lt;&lt; endl; <span class="pl-c"><span class="pl-c">//</span>Still prints the address of foo</span>
+cout &lt;&lt; fooRef;  <span class="pl-c"><span class="pl-c">//</span> Prints "I am bar"</span>
+
+<span class="pl-c"><span class="pl-c">//</span> The address of fooRef remains the same, i.e. it is still referring to foo.</span>
+
+
+<span class="pl-k">const</span> string&amp; barRef = bar; <span class="pl-c"><span class="pl-c">//</span> Create a const reference to bar.</span>
+<span class="pl-c"><span class="pl-c">//</span> Like C, const values (and pointers and references) cannot be modified.</span>
+barRef += <span class="pl-s"><span class="pl-pds">"</span>. Hi!<span class="pl-pds">"</span></span>; <span class="pl-c"><span class="pl-c">//</span> Error, const references cannot be modified.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Sidetrack: Before we talk more about references, we must introduce a concept</span>
+<span class="pl-c"><span class="pl-c">//</span> called a temporary object. Suppose we have the following code:</span>
+string <span class="pl-en">tempObjectFun</span>() { ... }
+string retVal = tempObjectFun();
+
+<span class="pl-c"><span class="pl-c">//</span> What happens in the second line is actually:</span>
+<span class="pl-c"><span class="pl-c">//</span>   - a string object is returned from tempObjectFun</span>
+<span class="pl-c"><span class="pl-c">//</span>   - a new string is constructed with the returned object as argument to the</span>
+<span class="pl-c"><span class="pl-c">//</span>     constructor</span>
+<span class="pl-c"><span class="pl-c">//</span>   - the returned object is destroyed</span>
+<span class="pl-c"><span class="pl-c">//</span> The returned object is called a temporary object. Temporary objects are</span>
+<span class="pl-c"><span class="pl-c">//</span> created whenever a function returns an object, and they are destroyed at the</span>
+<span class="pl-c"><span class="pl-c">//</span> end of the evaluation of the enclosing expression (Well, this is what the</span>
+<span class="pl-c"><span class="pl-c">//</span> standard says, but compilers are allowed to change this behavior. Look up</span>
+<span class="pl-c"><span class="pl-c">//</span> "return value optimization" if you're into this kind of details). So in this</span>
+<span class="pl-c"><span class="pl-c">//</span> code:</span>
+<span class="pl-en">foo</span>(bar(tempObjectFun()))
+
+<span class="pl-c"><span class="pl-c">//</span> assuming foo and bar exist, the object returned from tempObjectFun is</span>
+<span class="pl-c"><span class="pl-c">//</span> passed to bar, and it is destroyed before foo is called.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Now back to references. The exception to the "at the end of the enclosing</span>
+<span class="pl-c"><span class="pl-c">//</span> expression" rule is if a temporary object is bound to a const reference, in</span>
+<span class="pl-c"><span class="pl-c">//</span> which case its life gets extended to the current scope:</span>
+
+void constReferenceTempObjectFun() {
+  <span class="pl-c"><span class="pl-c">//</span> constRef gets the temporary object, and it is valid until the end of this</span>
+  <span class="pl-c"><span class="pl-c">//</span> function.</span>
+  <span class="pl-k">const</span> string&amp; constRef = <span class="pl-c1">tempObjectFun</span>();
+  ...
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Another kind of reference introduced in C++11 is specifically for temporary</span>
+<span class="pl-c"><span class="pl-c">//</span> objects. You cannot have a variable of its type, but it takes precedence in</span>
+<span class="pl-c"><span class="pl-c">//</span> overload resolution:</span>
+
+<span class="pl-k">void</span> <span class="pl-en">someFun</span>(string&amp; s) { ... }  <span class="pl-c"><span class="pl-c">//</span> Regular reference</span>
+<span class="pl-k">void</span> <span class="pl-en">someFun</span>(string&amp;&amp; s) { ... }  <span class="pl-c"><span class="pl-c">//</span> Reference to temporary object</span>
+
+string foo;
+<span class="pl-en">someFun</span>(foo);  <span class="pl-c"><span class="pl-c">//</span> Calls the version with regular reference</span>
+<span class="pl-en">someFun</span>(tempObjectFun());  <span class="pl-c"><span class="pl-c">//</span> Calls the version with temporary reference</span>
+
+<span class="pl-c"><span class="pl-c">//</span> For example, you will see these two versions of constructors for</span>
+<span class="pl-c"><span class="pl-c">//</span> std::basic_string:</span>
+<span class="pl-en">basic_string</span>(<span class="pl-k">const</span> basic_string&amp; other);
+<span class="pl-en">basic_string</span>(basic_string&amp;&amp; other);
+
+<span class="pl-c"><span class="pl-c">//</span> Idea being if we are constructing a new string from a temporary object (which</span>
+<span class="pl-c"><span class="pl-c">//</span> is going to be destroyed soon anyway), we can have a more efficient</span>
+<span class="pl-c"><span class="pl-c">//</span> constructor that "salvages" parts of that temporary string. You will see this</span>
+<span class="pl-c"><span class="pl-c">//</span> concept referred to as "move semantics".</span>
+
+<span class="pl-c"><span class="pl-c">//</span>///////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> Enums</span>
+<span class="pl-c"><span class="pl-c">//</span>///////////////////</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Enums are a way to assign a value to a constant most commonly used for</span>
+<span class="pl-c"><span class="pl-c">//</span> easier visualization and reading of code</span>
+<span class="pl-k">enum</span> ECarTypes
+{
+  Sedan,
+  Hatchback,
+  SUV,
+  Wagon
+};
+
+ECarTypes <span class="pl-en">GetPreferredCarType</span>()
+{
+	<span class="pl-k">return</span> ECarTypes::Hatchback;
+}
+
+<span class="pl-c"><span class="pl-c">//</span> As of C++11 there is an easy way to assign a type to the enum which can be</span>
+<span class="pl-c"><span class="pl-c">//</span> useful in serialization of data and converting enums back-and-forth between</span>
+<span class="pl-c"><span class="pl-c">//</span> the desired type and their respective constants</span>
+<span class="pl-k">enum</span> ECarTypes : <span class="pl-c1">uint8_t</span>
+{
+  Sedan, <span class="pl-c"><span class="pl-c">//</span> 0</span>
+  Hatchback, <span class="pl-c"><span class="pl-c">//</span> 1</span>
+  SUV = <span class="pl-c1">254</span>, <span class="pl-c"><span class="pl-c">//</span> 254</span>
+  Hybrid <span class="pl-c"><span class="pl-c">//</span> 255</span>
+};
+
+<span class="pl-k">void</span> <span class="pl-en">WriteByteToFile</span>(<span class="pl-c1">uint8_t</span> InputValue)
+{
+	<span class="pl-c"><span class="pl-c">//</span> Serialize the InputValue to a file</span>
+}
+
+<span class="pl-k">void</span> <span class="pl-en">WritePreferredCarTypeToFile</span>(ECarTypes InputCarType)
+{
+	<span class="pl-c"><span class="pl-c">//</span> The enum is implicitly converted to a uint8_t due to its declared enum type</span>
+	<span class="pl-c1">WriteByteToFile</span>(InputCarType);
+}
+
+<span class="pl-c"><span class="pl-c">//</span> On the other hand you may not want enums to be accidentally cast to an integer</span>
+<span class="pl-c"><span class="pl-c">//</span> type or to other enums so it is instead possible to create an enum class which</span>
+<span class="pl-c"><span class="pl-c">//</span> won't be implicitly converted</span>
+<span class="pl-k">enum</span> <span class="pl-k">class</span> <span class="pl-en">ECarTypes</span> : <span class="pl-c1">uint8_t</span>
+{
+  Sedan, <span class="pl-c"><span class="pl-c">//</span> 0</span>
+  Hatchback, <span class="pl-c"><span class="pl-c">//</span> 1</span>
+  SUV = <span class="pl-c1">254</span>, <span class="pl-c"><span class="pl-c">//</span> 254</span>
+  Hybrid <span class="pl-c"><span class="pl-c">//</span> 255</span>
+};
+
+<span class="pl-k">void</span> <span class="pl-en">WriteByteToFile</span>(<span class="pl-c1">uint8_t</span> InputValue)
+{
+	<span class="pl-c"><span class="pl-c">//</span> Serialize the InputValue to a file</span>
+}
+
+<span class="pl-k">void</span> <span class="pl-en">WritePreferredCarTypeToFile</span>(ECarTypes InputCarType)
+{
+	<span class="pl-c"><span class="pl-c">//</span> Won't compile even though ECarTypes is a uint8_t due to the enum</span>
+	<span class="pl-c"><span class="pl-c">//</span> being declared as an "enum class"!</span>
+	<span class="pl-c1">WriteByteToFile</span>(InputCarType);
+}
+
+<span class="pl-c"><span class="pl-c">//</span>////////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> Classes and object-oriented programming</span>
+<span class="pl-c"><span class="pl-c">//</span>////////////////////////////////////////</span>
+
+<span class="pl-c"><span class="pl-c">//</span> First example of classes</span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>iostream<span class="pl-pds">&gt;</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span> Declare a class.</span>
+<span class="pl-c"><span class="pl-c">//</span> Classes are usually declared in header (.h or .hpp) files.</span>
+<span class="pl-k">class</span> <span class="pl-en">Dog</span> {
+    <span class="pl-c"><span class="pl-c">//</span> Member variables and functions are private by default.</span>
+    std::string name;
+    <span class="pl-k">int</span> weight;
+
+<span class="pl-c"><span class="pl-c">//</span> All members following this are public</span>
+<span class="pl-c"><span class="pl-c">//</span> until "private:" or "protected:" is found.</span>
+<span class="pl-k">public:</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> Default constructor</span>
+    <span class="pl-en">Dog</span>();
+
+    <span class="pl-c"><span class="pl-c">//</span> Member function declarations (implementations to follow)</span>
+    <span class="pl-c"><span class="pl-c">//</span> Note that we use std::string here instead of placing</span>
+    <span class="pl-c"><span class="pl-c">//</span> using namespace std;</span>
+    <span class="pl-c"><span class="pl-c">//</span> above.</span>
+    <span class="pl-c"><span class="pl-c">//</span> Never put a "using namespace" statement in a header.</span>
+    <span class="pl-k">void</span> <span class="pl-en">setName</span>(<span class="pl-k">const</span> std::string&amp; dogsName);
+
+    <span class="pl-k">void</span> <span class="pl-en">setWeight</span>(<span class="pl-k">int</span> dogsWeight);
+
+    <span class="pl-c"><span class="pl-c">//</span> Functions that do not modify the state of the object</span>
+    <span class="pl-c"><span class="pl-c">//</span> should be marked as const.</span>
+    <span class="pl-c"><span class="pl-c">//</span> This allows you to call them if given a const reference to the object.</span>
+    <span class="pl-c"><span class="pl-c">//</span> Also note the functions must be explicitly declared as _virtual_</span>
+    <span class="pl-c"><span class="pl-c">//</span> in order to be overridden in derived classes.</span>
+    <span class="pl-c"><span class="pl-c">//</span> Functions are not virtual by default for performance reasons.</span>
+    <span class="pl-k">virtual</span> <span class="pl-k">void</span> <span class="pl-en">print</span>() <span class="pl-k">const</span>;
+
+    <span class="pl-c"><span class="pl-c">//</span> Functions can also be defined inside the class body.</span>
+    <span class="pl-c"><span class="pl-c">//</span> Functions defined as such are automatically inlined.</span>
+    <span class="pl-k">void</span> <span class="pl-en">bark</span>() <span class="pl-k">const</span> { std::cout &lt;&lt; name &lt;&lt; <span class="pl-s"><span class="pl-pds">"</span> barks!<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>; }
+
+    <span class="pl-c"><span class="pl-c">//</span> Along with constructors, C++ provides destructors.</span>
+    <span class="pl-c"><span class="pl-c">//</span> These are called when an object is deleted or falls out of scope.</span>
+    <span class="pl-c"><span class="pl-c">//</span> This enables powerful paradigms such as RAII</span>
+    <span class="pl-c"><span class="pl-c">//</span> (see below)</span>
+    <span class="pl-c"><span class="pl-c">//</span> The destructor should be virtual if a class is to be derived from;</span>
+    <span class="pl-c"><span class="pl-c">//</span> if it is not virtual, then the derived class' destructor will</span>
+    <span class="pl-c"><span class="pl-c">//</span> not be called if the object is destroyed through a base-class reference</span>
+    <span class="pl-c"><span class="pl-c">//</span> or pointer.</span>
+    <span class="pl-k">virtual</span> <span class="pl-en">~Dog</span>();
+
+}; <span class="pl-c"><span class="pl-c">//</span> A semicolon must follow the class definition.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Class member functions are usually implemented in .cpp files.</span>
+<span class="pl-en">Dog::Dog</span>()
+{
+    std::cout &lt;&lt; <span class="pl-s"><span class="pl-pds">"</span>A dog has been constructed<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>;
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Objects (such as strings) should be passed by reference</span>
+<span class="pl-c"><span class="pl-c">//</span> if you are modifying them or const reference if you are not.</span>
+<span class="pl-k">void</span> <span class="pl-en">Dog::setName</span>(<span class="pl-k">const</span> std::string&amp; dogsName)
+{
+    name = dogsName;
+}
+
+<span class="pl-k">void</span> <span class="pl-en">Dog::setWeight</span>(<span class="pl-k">int</span> dogsWeight)
+{
+    weight = dogsWeight;
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Notice that "virtual" is only needed in the declaration, not the definition.</span>
+<span class="pl-k">void</span> <span class="pl-en">Dog::print</span>() <span class="pl-k">const</span>
+{
+    std::cout &lt;&lt; <span class="pl-s"><span class="pl-pds">"</span>Dog is <span class="pl-pds">"</span></span> &lt;&lt; name &lt;&lt; <span class="pl-s"><span class="pl-pds">"</span> and weighs <span class="pl-pds">"</span></span> &lt;&lt; weight &lt;&lt; <span class="pl-s"><span class="pl-pds">"</span>kg<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>;
+}
+
+<span class="pl-en">Dog::~Dog</span>()
+{
+    std::cout &lt;&lt; <span class="pl-s"><span class="pl-pds">"</span>Goodbye <span class="pl-pds">"</span></span> &lt;&lt; name &lt;&lt; <span class="pl-s"><span class="pl-pds">'</span><span class="pl-cce">\n</span><span class="pl-pds">'</span></span>;
+}
+
+<span class="pl-k">int</span> <span class="pl-en">main</span>() {
+    Dog myDog; <span class="pl-c"><span class="pl-c">//</span> prints "A dog has been constructed"</span>
+    myDog.<span class="pl-c1">setName</span>(<span class="pl-s"><span class="pl-pds">"</span>Barkley<span class="pl-pds">"</span></span>);
+    myDog.<span class="pl-c1">setWeight</span>(<span class="pl-c1">10</span>);
+    myDog.<span class="pl-c1">print</span>(); <span class="pl-c"><span class="pl-c">//</span> prints "Dog is Barkley and weighs 10 kg"</span>
+    <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+} <span class="pl-c"><span class="pl-c">//</span> prints "Goodbye Barkley"</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Inheritance:</span>
+
+<span class="pl-c"><span class="pl-c">//</span> This class inherits everything public and protected from the Dog class</span>
+<span class="pl-c"><span class="pl-c">//</span> as well as private but may not directly access private members/methods</span>
+<span class="pl-c"><span class="pl-c">//</span> without a public or protected method for doing so</span>
+<span class="pl-k">class</span> <span class="pl-en">OwnedDog</span> : <span class="pl-k">public</span> <span class="pl-en">Dog</span> {
+
+<span class="pl-k">public:</span>
+    <span class="pl-k">void</span> <span class="pl-en">setOwner</span>(<span class="pl-k">const</span> std::string&amp; dogsOwner);
+
+    <span class="pl-c"><span class="pl-c">//</span> Override the behavior of the print function for all OwnedDogs. See</span>
+    <span class="pl-c"><span class="pl-c">//</span> https://en.wikipedia.org/wiki/Polymorphism_(computer_science)#Subtyping</span>
+    <span class="pl-c"><span class="pl-c">//</span> for a more general introduction if you are unfamiliar with</span>
+    <span class="pl-c"><span class="pl-c">//</span> subtype polymorphism.</span>
+    <span class="pl-c"><span class="pl-c">//</span> The override keyword is optional but makes sure you are actually</span>
+    <span class="pl-c"><span class="pl-c">//</span> overriding the method in a base class.</span>
+    <span class="pl-k">void</span> <span class="pl-en">print</span>() <span class="pl-k">const</span> <span class="pl-k">override</span>;
+
+<span class="pl-k">private:</span>
+    std::string owner;
+};
+
+<span class="pl-c"><span class="pl-c">//</span> Meanwhile, in the corresponding .cpp file:</span>
+
+<span class="pl-k">void</span> <span class="pl-en">OwnedDog::setOwner</span>(<span class="pl-k">const</span> std::string&amp; dogsOwner)
+{
+    owner = dogsOwner;
+}
+
+<span class="pl-k">void</span> <span class="pl-en">OwnedDog::print</span>() <span class="pl-k">const</span>
+{
+    <span class="pl-c1">Dog::print</span>(); <span class="pl-c"><span class="pl-c">//</span> Call the print function in the base Dog class</span>
+    std::cout &lt;&lt; <span class="pl-s"><span class="pl-pds">"</span>Dog is owned by <span class="pl-pds">"</span></span> &lt;&lt; owner &lt;&lt; <span class="pl-s"><span class="pl-pds">'</span><span class="pl-cce">\n</span><span class="pl-pds">'</span></span>;
+    <span class="pl-c"><span class="pl-c">//</span> Prints "Dog is &lt;name&gt; and weights &lt;weight&gt;"</span>
+    <span class="pl-c"><span class="pl-c">//</span>        "Dog is owned by &lt;owner&gt;"</span>
+}
+
+<span class="pl-c"><span class="pl-c">//</span>////////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> Initialization and Operator Overloading</span>
+<span class="pl-c"><span class="pl-c">//</span>////////////////////////////////////////</span>
+
+<span class="pl-c"><span class="pl-c">//</span> In C++ you can overload the behavior of operators such as +, -, *, /, etc.</span>
+<span class="pl-c"><span class="pl-c">//</span> This is done by defining a function which is called</span>
+<span class="pl-c"><span class="pl-c">//</span> whenever the operator is used.</span>
+
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>iostream<span class="pl-pds">&gt;</span></span>
+<span class="pl-k">using</span> <span class="pl-k">namespace</span> <span class="pl-en">std</span><span class="pl-k">;</span>
+
+<span class="pl-k">class</span> <span class="pl-en">Point</span> {
+<span class="pl-k">public:</span>
+    <span class="pl-c"><span class="pl-c">//</span> Member variables can be given default values in this manner.</span>
+    <span class="pl-k">double</span> x = <span class="pl-c1">0</span>;
+    <span class="pl-k">double</span> y = <span class="pl-c1">0</span>;
+
+    <span class="pl-c"><span class="pl-c">//</span> Define a default constructor which does nothing</span>
+    <span class="pl-c"><span class="pl-c">//</span> but initialize the Point to the default value (0, 0)</span>
+    <span class="pl-en">Point</span>() { };
+
+    <span class="pl-c"><span class="pl-c">//</span> The following syntax is known as an initialization list</span>
+    <span class="pl-c"><span class="pl-c">//</span> and is the proper way to initialize class member values</span>
+    <span class="pl-en">Point</span> (<span class="pl-k">double</span> a, <span class="pl-k">double</span> b) :
+        <span class="pl-en">x</span>(a),
+        <span class="pl-en">y</span>(b)
+    { <span class="pl-c"><span class="pl-c">/*</span> Do nothing except initialize the values <span class="pl-c">*/</span></span> }
+
+    <span class="pl-c"><span class="pl-c">//</span> Overload the + operator.</span>
+    <span class="pl-c1">Point</span> <span class="pl-k">operator</span>+(<span class="pl-k">const</span> <span class="pl-c1">Point</span>&amp; rhs) <span class="pl-k">const</span>;
+
+    <span class="pl-c"><span class="pl-c">//</span> Overload the += operator</span>
+    <span class="pl-c1">Point</span>&amp; <span class="pl-k">operator</span>+=(<span class="pl-k">const</span> <span class="pl-c1">Point</span>&amp; rhs);
+
+    <span class="pl-c"><span class="pl-c">//</span> It would also make sense to add the - and -= operators,</span>
+    <span class="pl-c"><span class="pl-c">//</span> but we will skip those for brevity.</span>
+};
+
+<span class="pl-c1">Point</span> <span class="pl-c1">Point</span>::<span class="pl-k">operator</span>+(<span class="pl-k">const</span> <span class="pl-c1">Point</span>&amp; rhs) <span class="pl-k">const</span>
+{
+    <span class="pl-c"><span class="pl-c">//</span> Create a new point that is the sum of this one and rhs.</span>
+    <span class="pl-k">return</span> <span class="pl-c1">Point</span>(x + rhs.<span class="pl-smi">x</span>, y + rhs.<span class="pl-smi">y</span>);
+}
+
+<span class="pl-c"><span class="pl-c">//</span> It's good practice to return a reference to the leftmost variable of</span>
+<span class="pl-c"><span class="pl-c">//</span> an assignment. `(a += b) == c` will work this way.</span>
+<span class="pl-c1">Point</span>&amp; <span class="pl-c1">Point</span>::<span class="pl-k">operator</span>+=(<span class="pl-k">const</span> <span class="pl-c1">Point</span>&amp; rhs)
+{
+    x += rhs.<span class="pl-smi">x</span>;
+    y += rhs.<span class="pl-smi">y</span>;
+    
+    <span class="pl-c"><span class="pl-c">//</span> `this` is a pointer to the object, on which a method is called.</span>
+    <span class="pl-k">return</span> *<span class="pl-c1">this</span>;
+}
+
+<span class="pl-k">int</span> <span class="pl-en">main</span> () {
+    <span class="pl-c1">Point</span> <span class="pl-smi">up</span> (<span class="pl-c1">0</span>,<span class="pl-c1">1</span>);
+    <span class="pl-c1">Point</span> <span class="pl-smi">right</span> (<span class="pl-c1">1</span>,<span class="pl-c1">0</span>);
+    <span class="pl-c"><span class="pl-c">//</span> This calls the Point + operator</span>
+    <span class="pl-c"><span class="pl-c">//</span> Point up calls the + (function) with right as its parameter</span>
+    <span class="pl-c1">Point</span> result = up + right;
+    <span class="pl-c"><span class="pl-c">//</span> Prints "Result is upright (1,1)"</span>
+    cout &lt;&lt; <span class="pl-s"><span class="pl-pds">"</span>Result is upright (<span class="pl-pds">"</span></span> &lt;&lt; result.<span class="pl-smi">x</span> &lt;&lt; <span class="pl-s"><span class="pl-pds">'</span>,<span class="pl-pds">'</span></span> &lt;&lt; result.<span class="pl-smi">y</span> &lt;&lt; <span class="pl-s"><span class="pl-pds">"</span>)<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>;
+    <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+}
+
+<span class="pl-c"><span class="pl-c">//</span>///////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> Templates</span>
+<span class="pl-c"><span class="pl-c">//</span>///////////////////</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Templates in C++ are mostly used for generic programming, though they are</span>
+<span class="pl-c"><span class="pl-c">//</span> much more powerful than generic constructs in other languages. They also</span>
+<span class="pl-c"><span class="pl-c">//</span> support explicit and partial specialization and functional-style type</span>
+<span class="pl-c"><span class="pl-c">//</span> classes; in fact, they are a Turing-complete functional language embedded</span>
+<span class="pl-c"><span class="pl-c">//</span> in C++!</span>
+
+<span class="pl-c"><span class="pl-c">//</span> We start with the kind of generic programming you might be familiar with. To</span>
+<span class="pl-c"><span class="pl-c">//</span> define a class or function that takes a type parameter:</span>
+<span class="pl-k">template</span>&lt;<span class="pl-k">class</span> <span class="pl-en">T</span>&gt;
+<span class="pl-k">class</span> <span class="pl-en">Box</span> {
+<span class="pl-k">public:</span>
+    <span class="pl-c"><span class="pl-c">//</span> In this class, T can be used as any other type.</span>
+    <span class="pl-k">void</span> <span class="pl-en">insert</span>(<span class="pl-k">const</span> T&amp;) { ... }
+};
+
+<span class="pl-c"><span class="pl-c">//</span> During compilation, the compiler actually generates copies of each template</span>
+<span class="pl-c"><span class="pl-c">//</span> with parameters substituted, so the full definition of the class must be</span>
+<span class="pl-c"><span class="pl-c">//</span> present at each invocation. This is why you will see template classes defined</span>
+<span class="pl-c"><span class="pl-c">//</span> entirely in header files.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> To instantiate a template class on the stack:</span>
+Box&lt;<span class="pl-k">int</span>&gt; intBox;
+
+<span class="pl-c"><span class="pl-c">//</span> and you can use it as you would expect:</span>
+intBox.insert(<span class="pl-c1">123</span>);
+
+<span class="pl-c"><span class="pl-c">//</span> You can, of course, nest templates:</span>
+Box&lt;Box&lt;<span class="pl-k">int</span>&gt; &gt; boxOfBox;
+boxOfBox.insert(intBox);
+
+<span class="pl-c"><span class="pl-c">//</span> Until C++11, you had to place a space between the two '&gt;'s, otherwise '&gt;&gt;'</span>
+<span class="pl-c"><span class="pl-c">//</span> would be parsed as the right shift operator.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> You will sometimes see</span>
+<span class="pl-c"><span class="pl-c">//</span>   template&lt;typename T&gt;</span>
+<span class="pl-c"><span class="pl-c">//</span> instead. The 'class' keyword and 'typename' keywords are _mostly_</span>
+<span class="pl-c"><span class="pl-c">//</span> interchangeable in this case. For the full explanation, see</span>
+<span class="pl-c"><span class="pl-c">//</span>   https://en.wikipedia.org/wiki/Typename</span>
+<span class="pl-c"><span class="pl-c">//</span> (yes, that keyword has its own Wikipedia page).</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Similarly, a template function:</span>
+<span class="pl-k">template</span>&lt;<span class="pl-k">class</span> <span class="pl-en">T</span>&gt;
+<span class="pl-k">void</span> <span class="pl-en">barkThreeTimes</span>(<span class="pl-k">const</span> T&amp; input)
+{
+    input.<span class="pl-c1">bark</span>();
+    input.<span class="pl-c1">bark</span>();
+    input.<span class="pl-c1">bark</span>();
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Notice that nothing is specified about the type parameters here. The compiler</span>
+<span class="pl-c"><span class="pl-c">//</span> will generate and then type-check every invocation of the template, so the</span>
+<span class="pl-c"><span class="pl-c">//</span> above function works with any type 'T' that has a const 'bark' method!</span>
+
+Dog fluffy;
+fluffy.setName(<span class="pl-s"><span class="pl-pds">"</span>Fluffy<span class="pl-pds">"</span></span>)
+<span class="pl-en">barkThreeTimes</span>(fluffy); <span class="pl-c"><span class="pl-c">//</span> Prints "Fluffy barks" three times.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Template parameters don't have to be classes:</span>
+<span class="pl-k">template</span>&lt;<span class="pl-k">int</span> Y&gt;
+<span class="pl-k">void</span> <span class="pl-en">printMessage</span>() {
+  cout &lt;&lt; <span class="pl-s"><span class="pl-pds">"</span>Learn C++ in <span class="pl-pds">"</span></span> &lt;&lt; Y &lt;&lt; <span class="pl-s"><span class="pl-pds">"</span> minutes!<span class="pl-pds">"</span></span> &lt;&lt; endl;
+}
+
+<span class="pl-c"><span class="pl-c">//</span> And you can explicitly specialize templates for more efficient code. Of</span>
+<span class="pl-c"><span class="pl-c">//</span> course, most real-world uses of specialization are not as trivial as this.</span>
+<span class="pl-c"><span class="pl-c">//</span> Note that you still need to declare the function (or class) as a template</span>
+<span class="pl-c"><span class="pl-c">//</span> even if you explicitly specified all parameters.</span>
+<span class="pl-k">template</span>&lt;&gt;
+<span class="pl-k">void</span> printMessage&lt;<span class="pl-c1">10</span>&gt;() {
+  cout &lt;&lt; <span class="pl-s"><span class="pl-pds">"</span>Learn C++ faster in only 10 minutes!<span class="pl-pds">"</span></span> &lt;&lt; endl;
+}
+
+printMessage&lt;<span class="pl-c1">20</span>&gt;();  <span class="pl-c"><span class="pl-c">//</span> Prints "Learn C++ in 20 minutes!"</span>
+printMessage&lt;<span class="pl-c1">10</span>&gt;();  <span class="pl-c"><span class="pl-c">//</span> Prints "Learn C++ faster in only 10 minutes!"</span>
+
+
+<span class="pl-c"><span class="pl-c">//</span>///////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> Exception Handling</span>
+<span class="pl-c"><span class="pl-c">//</span>///////////////////</span>
+
+<span class="pl-c"><span class="pl-c">//</span> The standard library provides a few exception types</span>
+<span class="pl-c"><span class="pl-c">//</span> (see https://en.cppreference.com/w/cpp/error/exception)</span>
+<span class="pl-c"><span class="pl-c">//</span> but any type can be thrown as an exception</span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>exception<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>stdexcept<span class="pl-pds">&gt;</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span> All exceptions thrown inside the _try_ block can be caught by subsequent</span>
+<span class="pl-c"><span class="pl-c">//</span> _catch_ handlers.</span>
+<span class="pl-k">try</span> {
+    <span class="pl-c"><span class="pl-c">//</span> Do not allocate exceptions on the heap using _new_.</span>
+    <span class="pl-k">throw</span> <span class="pl-smi">std::runtime_error</span>(<span class="pl-s"><span class="pl-pds">"</span>A problem occurred<span class="pl-pds">"</span></span>);
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Catch exceptions by const reference if they are objects</span>
+<span class="pl-k">catch</span> (<span class="pl-k">const</span> std::<span class="pl-c1">exception</span>&amp; ex)
+{
+    std::cout &lt;&lt; ex.<span class="pl-c1">what</span>();
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Catches any exception not caught by previous _catch_ blocks</span>
+<span class="pl-k">catch</span> (...)
+{
+    std::cout &lt;&lt; <span class="pl-s"><span class="pl-pds">"</span>Unknown exception caught<span class="pl-pds">"</span></span>;
+    <span class="pl-k">throw</span>; <span class="pl-c"><span class="pl-c">//</span> Re-throws the exception</span>
+}
+
+<span class="pl-c"><span class="pl-c">//</span>/////</span>
+<span class="pl-c"><span class="pl-c">//</span> RAII</span>
+<span class="pl-c"><span class="pl-c">//</span>/////</span>
+
+<span class="pl-c"><span class="pl-c">//</span> RAII stands for "Resource Acquisition Is Initialization".</span>
+<span class="pl-c"><span class="pl-c">//</span> It is often considered the most powerful paradigm in C++</span>
+<span class="pl-c"><span class="pl-c">//</span> and is the simple concept that a constructor for an object</span>
+<span class="pl-c"><span class="pl-c">//</span> acquires that object's resources and the destructor releases them.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> To understand how this is useful,</span>
+<span class="pl-c"><span class="pl-c">//</span> consider a function that uses a C file handle:</span>
+<span class="pl-k">void</span> <span class="pl-en">doSomethingWithAFile</span>(<span class="pl-k">const</span> <span class="pl-k">char</span>* filename)
+{
+    <span class="pl-c"><span class="pl-c">//</span> To begin with, assume nothing can fail.</span>
+
+    FILE* fh = <span class="pl-c1">fopen</span>(filename, <span class="pl-s"><span class="pl-pds">"</span>r<span class="pl-pds">"</span></span>); <span class="pl-c"><span class="pl-c">//</span> Open the file in read mode.</span>
+
+    <span class="pl-c1">doSomethingWithTheFile</span>(fh);
+    <span class="pl-c1">doSomethingElseWithIt</span>(fh);
+
+    <span class="pl-c1">fclose</span>(fh); <span class="pl-c"><span class="pl-c">//</span> Close the file handle.</span>
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Unfortunately, things are quickly complicated by error handling.</span>
+<span class="pl-c"><span class="pl-c">//</span> Suppose fopen can fail, and that doSomethingWithTheFile and</span>
+<span class="pl-c"><span class="pl-c">//</span> doSomethingElseWithIt return error codes if they fail.</span>
+<span class="pl-c"><span class="pl-c">//</span>  (Exceptions are the preferred way of handling failure,</span>
+<span class="pl-c"><span class="pl-c">//</span>   but some programmers, especially those with a C background,</span>
+<span class="pl-c"><span class="pl-c">//</span>   disagree on the utility of exceptions).</span>
+<span class="pl-c"><span class="pl-c">//</span> We now have to check each call for failure and close the file handle</span>
+<span class="pl-c"><span class="pl-c">//</span> if a problem occurred.</span>
+<span class="pl-k">bool</span> <span class="pl-en">doSomethingWithAFile</span>(<span class="pl-k">const</span> <span class="pl-k">char</span>* filename)
+{
+    FILE* fh = <span class="pl-c1">fopen</span>(filename, <span class="pl-s"><span class="pl-pds">"</span>r<span class="pl-pds">"</span></span>); <span class="pl-c"><span class="pl-c">//</span> Open the file in read mode</span>
+    <span class="pl-k">if</span> (fh == <span class="pl-c1">nullptr</span>) <span class="pl-c"><span class="pl-c">//</span> The returned pointer is null on failure.</span>
+        <span class="pl-k">return</span> <span class="pl-c1">false</span>; <span class="pl-c"><span class="pl-c">//</span> Report that failure to the caller.</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> Assume each function returns false if it failed</span>
+    <span class="pl-k">if</span> (!<span class="pl-c1">doSomethingWithTheFile</span>(fh)) {
+        <span class="pl-c1">fclose</span>(fh); <span class="pl-c"><span class="pl-c">//</span> Close the file handle so it doesn't leak.</span>
+        <span class="pl-k">return</span> <span class="pl-c1">false</span>; <span class="pl-c"><span class="pl-c">//</span> Propagate the error.</span>
+    }
+    <span class="pl-k">if</span> (!<span class="pl-c1">doSomethingElseWithIt</span>(fh)) {
+        <span class="pl-c1">fclose</span>(fh); <span class="pl-c"><span class="pl-c">//</span> Close the file handle so it doesn't leak.</span>
+        <span class="pl-k">return</span> <span class="pl-c1">false</span>; <span class="pl-c"><span class="pl-c">//</span> Propagate the error.</span>
+    }
+
+    <span class="pl-c1">fclose</span>(fh); <span class="pl-c"><span class="pl-c">//</span> Close the file handle so it doesn't leak.</span>
+    <span class="pl-k">return</span> <span class="pl-c1">true</span>; <span class="pl-c"><span class="pl-c">//</span> Indicate success</span>
+}
+
+<span class="pl-c"><span class="pl-c">//</span> C programmers often clean this up a little bit using goto:</span>
+<span class="pl-k">bool</span> <span class="pl-en">doSomethingWithAFile</span>(<span class="pl-k">const</span> <span class="pl-k">char</span>* filename)
+{
+    FILE* fh = <span class="pl-c1">fopen</span>(filename, <span class="pl-s"><span class="pl-pds">"</span>r<span class="pl-pds">"</span></span>);
+    <span class="pl-k">if</span> (fh == <span class="pl-c1">nullptr</span>)
+        <span class="pl-k">return</span> <span class="pl-c1">false</span>;
+
+    <span class="pl-k">if</span> (!<span class="pl-c1">doSomethingWithTheFile</span>(fh))
+        <span class="pl-k">goto</span> failure;
+
+    <span class="pl-k">if</span> (!<span class="pl-c1">doSomethingElseWithIt</span>(fh))
+        <span class="pl-k">goto</span> failure;
+
+    <span class="pl-c1">fclose</span>(fh); <span class="pl-c"><span class="pl-c">//</span> Close the file</span>
+    <span class="pl-k">return</span> <span class="pl-c1">true</span>; <span class="pl-c"><span class="pl-c">//</span> Indicate success</span>
+
+failure:
+    <span class="pl-c1">fclose</span>(fh);
+    <span class="pl-k">return</span> <span class="pl-c1">false</span>; <span class="pl-c"><span class="pl-c">//</span> Propagate the error</span>
+}
+
+<span class="pl-c"><span class="pl-c">//</span> If the functions indicate errors using exceptions,</span>
+<span class="pl-c"><span class="pl-c">//</span> things are a little cleaner, but still sub-optimal.</span>
+<span class="pl-k">void</span> <span class="pl-en">doSomethingWithAFile</span>(<span class="pl-k">const</span> <span class="pl-k">char</span>* filename)
+{
+    FILE* fh = <span class="pl-c1">fopen</span>(filename, <span class="pl-s"><span class="pl-pds">"</span>r<span class="pl-pds">"</span></span>); <span class="pl-c"><span class="pl-c">//</span> Open the file in shared_ptrread mode</span>
+    <span class="pl-k">if</span> (fh == <span class="pl-c1">nullptr</span>)
+        <span class="pl-k">throw</span> <span class="pl-smi">std::runtime_error</span>(<span class="pl-s"><span class="pl-pds">"</span>Could not open the file.<span class="pl-pds">"</span></span>);
+
+    <span class="pl-k">try</span> {
+        <span class="pl-c1">doSomethingWithTheFile</span>(fh);
+        <span class="pl-c1">doSomethingElseWithIt</span>(fh);
+    }
+    <span class="pl-k">catch</span> (...) {
+        <span class="pl-c1">fclose</span>(fh); <span class="pl-c"><span class="pl-c">//</span> Be sure to close the file if an error occurs.</span>
+        <span class="pl-k">throw</span>; <span class="pl-c"><span class="pl-c">//</span> Then re-throw the exception.</span>
+    }
+
+    <span class="pl-c1">fclose</span>(fh); <span class="pl-c"><span class="pl-c">//</span> Close the file</span>
+    <span class="pl-c"><span class="pl-c">//</span> Everything succeeded</span>
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Compare this to the use of C++'s file stream class (fstream)</span>
+<span class="pl-c"><span class="pl-c">//</span> fstream uses its destructor to close the file.</span>
+<span class="pl-c"><span class="pl-c">//</span> Recall from above that destructors are automatically called</span>
+<span class="pl-c"><span class="pl-c">//</span> whenever an object falls out of scope.</span>
+<span class="pl-k">void</span> <span class="pl-en">doSomethingWithAFile</span>(<span class="pl-k">const</span> std::string&amp; filename)
+{
+    <span class="pl-c"><span class="pl-c">//</span> ifstream is short for input file stream</span>
+    std::ifstream <span class="pl-smi">fh</span>(filename); <span class="pl-c"><span class="pl-c">//</span> Open the file</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> Do things with the file</span>
+    <span class="pl-c1">doSomethingWithTheFile</span>(fh);
+    <span class="pl-c1">doSomethingElseWithIt</span>(fh);
+
+} <span class="pl-c"><span class="pl-c">//</span> The file is automatically closed here by the destructor</span>
+
+<span class="pl-c"><span class="pl-c">//</span> This has _massive_ advantages:</span>
+<span class="pl-c"><span class="pl-c">//</span> 1. No matter what happens,</span>
+<span class="pl-c"><span class="pl-c">//</span>    the resource (in this case the file handle) will be cleaned up.</span>
+<span class="pl-c"><span class="pl-c">//</span>    Once you write the destructor correctly,</span>
+<span class="pl-c"><span class="pl-c">//</span>    It is _impossible_ to forget to close the handle and leak the resource.</span>
+<span class="pl-c"><span class="pl-c">//</span> 2. Note that the code is much cleaner.</span>
+<span class="pl-c"><span class="pl-c">//</span>    The destructor handles closing the file behind the scenes</span>
+<span class="pl-c"><span class="pl-c">//</span>    without you having to worry about it.</span>
+<span class="pl-c"><span class="pl-c">//</span> 3. The code is exception safe.</span>
+<span class="pl-c"><span class="pl-c">//</span>    An exception can be thrown anywhere in the function and cleanup</span>
+<span class="pl-c"><span class="pl-c">//</span>    will still occur.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> All idiomatic C++ code uses RAII extensively for all resources.</span>
+<span class="pl-c"><span class="pl-c">//</span> Additional examples include</span>
+<span class="pl-c"><span class="pl-c">//</span> - Memory using unique_ptr and shared_ptr</span>
+<span class="pl-c"><span class="pl-c">//</span> - Containers - the standard library linked list,</span>
+<span class="pl-c"><span class="pl-c">//</span>   vector (i.e. self-resizing array), hash maps, and so on</span>
+<span class="pl-c"><span class="pl-c">//</span>   all automatically destroy their contents when they fall out of scope.</span>
+<span class="pl-c"><span class="pl-c">//</span> - Mutexes using lock_guard and unique_lock</span>
+
+
+<span class="pl-c"><span class="pl-c">//</span>///////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> Smart Pointer</span>
+<span class="pl-c"><span class="pl-c">//</span>///////////////////</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Generally a smart pointer is a class which wraps a "raw pointer" (usage of "new"</span>
+<span class="pl-c"><span class="pl-c">//</span> respectively malloc/calloc in C). The goal is to be able to</span>
+<span class="pl-c"><span class="pl-c">//</span> manage the lifetime of the object being pointed to without ever needing to explicitly delete </span>
+<span class="pl-c"><span class="pl-c">//</span> the object. The term itself simply describes a set of pointers with the</span>
+<span class="pl-c"><span class="pl-c">//</span> mentioned abstraction.</span>
+<span class="pl-c"><span class="pl-c">//</span> Smart pointers should preferred over raw pointers, to prevent</span>
+<span class="pl-c"><span class="pl-c">//</span> risky memory leaks, which happen if you forget to delete an object.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Usage of a raw pointer:</span>
+Dog* ptr = <span class="pl-k">new</span> Dog();
+ptr-&gt;<span class="pl-en">bark</span>();
+<span class="pl-k">delete</span> ptr;
+
+<span class="pl-c"><span class="pl-c">//</span> By using a smart pointer, you don't have to worry about the deletion</span>
+<span class="pl-c"><span class="pl-c">//</span> of the object anymore.</span>
+<span class="pl-c"><span class="pl-c">//</span> A smart pointer describes a policy, to count the references to the</span>
+<span class="pl-c"><span class="pl-c">//</span> pointer. The object gets destroyed when the last</span>
+<span class="pl-c"><span class="pl-c">//</span> reference to the object gets destroyed.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Usage of "std::shared_ptr":</span>
+<span class="pl-k">void</span> <span class="pl-en">foo</span>()
+{
+<span class="pl-c"><span class="pl-c">//</span> It's no longer necessary to delete the Dog.</span>
+std::shared_ptr&lt;Dog&gt; <span class="pl-c1">doggo</span>(<span class="pl-k">new</span> <span class="pl-c1">Dog</span>());
+doggo-&gt;<span class="pl-c1">bark</span>();
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Beware of possible circular references!!!</span>
+<span class="pl-c"><span class="pl-c">//</span> There will be always a reference, so it will be never destroyed!</span>
+std::shared_ptr&lt;Dog&gt; <span class="pl-en">doggo_one</span>(<span class="pl-k">new</span> Dog());
+std::shared_ptr&lt;Dog&gt; <span class="pl-en">doggo_two</span>(<span class="pl-k">new</span> Dog());
+doggo_one = doggo_two; <span class="pl-c"><span class="pl-c">//</span> p1 references p2</span>
+doggo_two = doggo_one; <span class="pl-c"><span class="pl-c">//</span> p2 references p1</span>
+
+<span class="pl-c"><span class="pl-c">//</span> There are several kinds of smart pointers. </span>
+<span class="pl-c"><span class="pl-c">//</span> The way you have to use them is always the same.</span>
+<span class="pl-c"><span class="pl-c">//</span> This leads us to the question: when should we use each kind of smart pointer?</span>
+<span class="pl-c"><span class="pl-c">//</span> std::unique_ptr - use it when you just want to hold one reference to</span>
+<span class="pl-c"><span class="pl-c">//</span> the object.</span>
+<span class="pl-c"><span class="pl-c">//</span> std::shared_ptr - use it when you want to hold multiple references to the</span>
+<span class="pl-c"><span class="pl-c">//</span> same object and want to make sure that it's deallocated</span>
+<span class="pl-c"><span class="pl-c">//</span> when all references are gone.</span>
+<span class="pl-c"><span class="pl-c">//</span> std::weak_ptr - use it when you want to access</span>
+<span class="pl-c"><span class="pl-c">//</span> the underlying object of a std::shared_ptr without causing that object to stay allocated.</span>
+<span class="pl-c"><span class="pl-c">//</span> Weak pointers are used to prevent circular referencing.</span>
+
+
+<span class="pl-c"><span class="pl-c">//</span>///////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> Containers</span>
+<span class="pl-c"><span class="pl-c">//</span>///////////////////</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Containers or the Standard Template Library are some predefined templates.</span>
+<span class="pl-c"><span class="pl-c">//</span> They manage the storage space for its elements and provide</span>
+<span class="pl-c"><span class="pl-c">//</span> member functions to access and manipulate them.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Few containers are as follows:</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Vector (Dynamic array)</span>
+<span class="pl-c"><span class="pl-c">//</span> Allow us to Define the Array or list of objects at run time</span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>vector<span class="pl-pds">&gt;</span></span>
+string val;
+vector&lt;string&gt; my_vector; <span class="pl-c"><span class="pl-c">//</span> initialize the vector</span>
+cin &gt;&gt; val;
+my_vector.push_back(val); <span class="pl-c"><span class="pl-c">//</span> will push the value of 'val' into vector ("array") my_vector</span>
+my_vector.push_back(val); <span class="pl-c"><span class="pl-c">//</span> will push the value into the vector again (now having two elements)</span>
+
+<span class="pl-c"><span class="pl-c">//</span> To iterate through a vector we have 2 choices:</span>
+<span class="pl-c"><span class="pl-c">//</span> Either classic looping (iterating through the vector from index 0 to its last index):</span>
+<span class="pl-k">for</span> (<span class="pl-k">int</span> i = <span class="pl-c1">0</span>; i &lt; my_vector.size(); i++) {
+	cout &lt;&lt; my_vector[i] &lt;&lt; endl; <span class="pl-c"><span class="pl-c">//</span> for accessing a vector's element we can use the operator []</span>
+}
+
+<span class="pl-c"><span class="pl-c">//</span> or using an iterator:</span>
+vector&lt;string&gt;::iterator it; <span class="pl-c"><span class="pl-c">//</span> initialize the iterator for vector</span>
+<span class="pl-k">for</span> (it = my_vector.begin(); it != my_vector.end(); ++it) {
+	cout &lt;&lt; *it  &lt;&lt; endl;
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Set</span>
+<span class="pl-c"><span class="pl-c">//</span> Sets are containers that store unique elements following a specific order.</span>
+<span class="pl-c"><span class="pl-c">//</span> Set is a very useful container to store unique values in sorted order</span>
+<span class="pl-c"><span class="pl-c">//</span> without any other functions or code.</span>
+
+#<span class="pl-k">include</span><span class="pl-s"><span class="pl-pds">&lt;</span>set<span class="pl-pds">&gt;</span></span>
+set&lt;<span class="pl-k">int</span>&gt; ST;    <span class="pl-c"><span class="pl-c">//</span> Will initialize the set of int data type</span>
+ST.insert(<span class="pl-c1">30</span>);  <span class="pl-c"><span class="pl-c">//</span> Will insert the value 30 in set ST</span>
+ST.insert(<span class="pl-c1">10</span>);  <span class="pl-c"><span class="pl-c">//</span> Will insert the value 10 in set ST</span>
+ST.insert(<span class="pl-c1">20</span>);  <span class="pl-c"><span class="pl-c">//</span> Will insert the value 20 in set ST</span>
+ST.insert(<span class="pl-c1">30</span>);  <span class="pl-c"><span class="pl-c">//</span> Will insert the value 30 in set ST</span>
+<span class="pl-c"><span class="pl-c">//</span> Now elements of sets are as follows</span>
+<span class="pl-c"><span class="pl-c">//</span>  10 20 30</span>
+
+<span class="pl-c"><span class="pl-c">//</span> To erase an element</span>
+ST.erase(<span class="pl-c1">20</span>);  <span class="pl-c"><span class="pl-c">//</span> Will erase element with value 20</span>
+<span class="pl-c"><span class="pl-c">//</span> Set ST: 10 30</span>
+<span class="pl-c"><span class="pl-c">//</span> To iterate through Set we use iterators</span>
+set&lt;<span class="pl-k">int</span>&gt;::iterator it;
+<span class="pl-k">for</span>(it=ST.begin();it!=ST.end();it++) {
+	cout &lt;&lt; *it &lt;&lt; endl;
+}
+<span class="pl-c"><span class="pl-c">//</span> Output:</span>
+<span class="pl-c"><span class="pl-c">//</span> 10</span>
+<span class="pl-c"><span class="pl-c">//</span> 30</span>
+
+<span class="pl-c"><span class="pl-c">//</span> To clear the complete container we use Container_name.clear()</span>
+ST.clear();
+cout &lt;&lt; ST.size();  <span class="pl-c"><span class="pl-c">//</span> will print the size of set ST</span>
+<span class="pl-c"><span class="pl-c">//</span> Output: 0</span>
+
+<span class="pl-c"><span class="pl-c">//</span> NOTE: for duplicate elements we can use multiset</span>
+<span class="pl-c"><span class="pl-c">//</span> NOTE: For hash sets, use unordered_set. They are more efficient but</span>
+<span class="pl-c"><span class="pl-c">//</span> do not preserve order. unordered_set is available since C++11</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Map</span>
+<span class="pl-c"><span class="pl-c">//</span> Maps store elements formed by a combination of a key value</span>
+<span class="pl-c"><span class="pl-c">//</span> and a mapped value, following a specific order.</span>
+
+#<span class="pl-k">include</span><span class="pl-s"><span class="pl-pds">&lt;</span>map<span class="pl-pds">&gt;</span></span>
+map&lt;<span class="pl-k">char</span>, <span class="pl-k">int</span>&gt; mymap;  <span class="pl-c"><span class="pl-c">//</span> Will initialize the map with key as char and value as int</span>
+
+mymap.insert(pair&lt;<span class="pl-k">char</span>,<span class="pl-k">int</span>&gt;(<span class="pl-s"><span class="pl-pds">'</span>A<span class="pl-pds">'</span></span>,<span class="pl-c1">1</span>));
+<span class="pl-c"><span class="pl-c">//</span> Will insert value 1 for key A</span>
+mymap.insert(pair&lt;<span class="pl-k">char</span>,<span class="pl-k">int</span>&gt;(<span class="pl-s"><span class="pl-pds">'</span>Z<span class="pl-pds">'</span></span>,<span class="pl-c1">26</span>));
+<span class="pl-c"><span class="pl-c">//</span> Will insert value 26 for key Z</span>
+
+<span class="pl-c"><span class="pl-c">//</span> To iterate</span>
+map&lt;<span class="pl-k">char</span>,<span class="pl-k">int</span>&gt;::iterator it;
+<span class="pl-k">for</span> (it=mymap.begin(); it!=mymap.end(); ++it)
+    std::cout &lt;&lt; it-&gt;first &lt;&lt; <span class="pl-s"><span class="pl-pds">"</span>-&gt;<span class="pl-pds">"</span></span> &lt;&lt; it-&gt;second &lt;&lt; std::endl;
+<span class="pl-c"><span class="pl-c">//</span> Output:</span>
+<span class="pl-c"><span class="pl-c">//</span> A-&gt;1</span>
+<span class="pl-c"><span class="pl-c">//</span> Z-&gt;26</span>
+
+<span class="pl-c"><span class="pl-c">//</span> To find the value corresponding to a key</span>
+it = mymap.find(<span class="pl-s"><span class="pl-pds">'</span>Z<span class="pl-pds">'</span></span>);
+cout &lt;&lt; it-&gt;second;
+
+<span class="pl-c"><span class="pl-c">//</span> Output: 26</span>
+
+<span class="pl-c"><span class="pl-c">//</span> NOTE: For hash maps, use unordered_map. They are more efficient but do</span>
+<span class="pl-c"><span class="pl-c">//</span> not preserve order. unordered_map is available since C++11.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Containers with object keys of non-primitive values (custom classes) require</span>
+<span class="pl-c"><span class="pl-c">//</span> compare function in the object itself or as a function pointer. Primitives</span>
+<span class="pl-c"><span class="pl-c">//</span> have default comparators, but you can override it.</span>
+<span class="pl-k">class</span> <span class="pl-en">Foo</span> {
+<span class="pl-k">public:</span>
+    <span class="pl-k">int</span> j;
+    <span class="pl-en">Foo</span>(<span class="pl-k">int</span> a) : j(a) {}
+};
+<span class="pl-k">struct</span> <span class="pl-en">compareFunction</span> {
+    <span class="pl-k">bool</span> <span class="pl-en">operator</span>()(<span class="pl-k">const</span> Foo&amp; a, <span class="pl-k">const</span> Foo&amp; b) <span class="pl-k">const</span> {
+        <span class="pl-k">return</span> a.<span class="pl-smi">j</span> &lt; b.<span class="pl-smi">j</span>;
+    }
+};
+<span class="pl-c"><span class="pl-c">//</span> this isn't allowed (although it can vary depending on compiler)</span>
+<span class="pl-c"><span class="pl-c">//</span> std::map&lt;Foo, int&gt; fooMap;</span>
+std::map&lt;Foo, <span class="pl-k">int</span>, compareFunction&gt; fooMap;
+fooMap[Foo(<span class="pl-c1">1</span>)]  = <span class="pl-c1">1</span>;
+fooMap.find(Foo(<span class="pl-c1">1</span>)); <span class="pl-c"><span class="pl-c">//</span>true</span>
+
+
+<span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> Lambda Expressions (C++11 and above)</span>
+<span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+
+<span class="pl-c"><span class="pl-c">//</span> lambdas are a convenient way of defining an anonymous function</span>
+<span class="pl-c"><span class="pl-c">//</span> object right at the location where it is invoked or passed as</span>
+<span class="pl-c"><span class="pl-c">//</span> an argument to a function.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> For example, consider sorting a vector of pairs using the second</span>
+<span class="pl-c"><span class="pl-c">//</span> value of the pair</span>
+
+vector&lt;pair&lt;<span class="pl-k">int</span>, <span class="pl-k">int</span>&gt; &gt; tester;
+tester.push_back(make_pair(<span class="pl-c1">3</span>, <span class="pl-c1">6</span>));
+tester.push_back(make_pair(<span class="pl-c1">1</span>, <span class="pl-c1">9</span>));
+tester.push_back(make_pair(<span class="pl-c1">5</span>, <span class="pl-c1">0</span>));
+
+<span class="pl-c"><span class="pl-c">//</span> Pass a lambda expression as third argument to the sort function</span>
+<span class="pl-c"><span class="pl-c">//</span> sort is from the &lt;algorithm&gt; header</span>
+
+<span class="pl-en">sort</span>(tester.begin(), tester.end(), [](<span class="pl-k">const</span> pair&lt;<span class="pl-k">int</span>, <span class="pl-k">int</span>&gt;&amp; lhs, <span class="pl-k">const</span> pair&lt;<span class="pl-k">int</span>, <span class="pl-k">int</span>&gt;&amp; rhs) {
+        <span class="pl-k">return</span> lhs.<span class="pl-smi">second</span> &lt; rhs.<span class="pl-smi">second</span>;
+    });
+
+<span class="pl-c"><span class="pl-c">//</span> Notice the syntax of the lambda expression,</span>
+<span class="pl-c"><span class="pl-c">//</span> [] in the lambda is used to "capture" variables</span>
+<span class="pl-c"><span class="pl-c">//</span> The "Capture List" defines what from the outside of the lambda should be available inside the function body and how.</span>
+<span class="pl-c"><span class="pl-c">//</span> It can be either:</span>
+<span class="pl-c"><span class="pl-c">//</span>     1. a value : [x]</span>
+<span class="pl-c"><span class="pl-c">//</span>     2. a reference : [&amp;x]</span>
+<span class="pl-c"><span class="pl-c">//</span>     3. any variable currently in scope by reference [&amp;]</span>
+<span class="pl-c"><span class="pl-c">//</span>     4. same as 3, but by value [=]</span>
+<span class="pl-c"><span class="pl-c">//</span> Example:</span>
+
+vector&lt;<span class="pl-k">int</span>&gt; dog_ids;
+<span class="pl-c"><span class="pl-c">//</span> number_of_dogs = 3;</span>
+<span class="pl-k">for</span>(<span class="pl-k">int</span> i = <span class="pl-c1">0</span>; i &lt; <span class="pl-c1">3</span>; i++) {
+	dog_ids.<span class="pl-c1">push_back</span>(i);
+}
+
+<span class="pl-k">int</span> weight[<span class="pl-c1">3</span>] = {<span class="pl-c1">30</span>, <span class="pl-c1">50</span>, <span class="pl-c1">10</span>};
+
+<span class="pl-c"><span class="pl-c">//</span> Say you want to sort dog_ids according to the dogs' weights</span>
+<span class="pl-c"><span class="pl-c">//</span> So dog_ids should in the end become: [2, 0, 1]</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Here's where lambda expressions come in handy</span>
+
+<span class="pl-en">sort</span>(dog_ids.begin(), dog_ids.end(), [&amp;weight](<span class="pl-k">const</span> <span class="pl-k">int</span> &amp;lhs, <span class="pl-k">const</span> <span class="pl-k">int</span> &amp;rhs) {
+        <span class="pl-k">return</span> weight[lhs] &lt; weight[rhs];
+    });
+<span class="pl-c"><span class="pl-c">//</span> Note we captured "weight" by reference in the above example.</span>
+<span class="pl-c"><span class="pl-c">//</span> More on Lambdas in C++ : https://stackoverflow.com/questions/7627098/what-is-a-lambda-expression-in-c11</span>
+
+<span class="pl-c"><span class="pl-c">//</span>/////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> Range For (C++11 and above)</span>
+<span class="pl-c"><span class="pl-c">//</span>/////////////////////////////</span>
+
+<span class="pl-c"><span class="pl-c">//</span> You can use a range for loop to iterate over a container</span>
+<span class="pl-k">int</span> arr[] = {<span class="pl-c1">1</span>, <span class="pl-c1">10</span>, <span class="pl-c1">3</span>};
+
+<span class="pl-k">for</span>(<span class="pl-k">int</span> elem: arr){
+	cout &lt;&lt; elem &lt;&lt; endl;
+}
+
+<span class="pl-c"><span class="pl-c">//</span> You can use "auto" and not worry about the type of the elements of the container</span>
+<span class="pl-c"><span class="pl-c">//</span> For example:</span>
+
+<span class="pl-k">for</span>(<span class="pl-k">auto</span> elem: arr) {
+	<span class="pl-c"><span class="pl-c">//</span> Do something with each element of arr</span>
+}
+
+<span class="pl-c"><span class="pl-c">//</span>///////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> Fun stuff</span>
+<span class="pl-c"><span class="pl-c">//</span>///////////////////</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Aspects of C++ that may be surprising to newcomers (and even some veterans).</span>
+<span class="pl-c"><span class="pl-c">//</span> This section is, unfortunately, wildly incomplete; C++ is one of the easiest</span>
+<span class="pl-c"><span class="pl-c">//</span> languages with which to shoot yourself in the foot.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> You can override private methods!</span>
+<span class="pl-k">class</span> <span class="pl-en">Foo</span> {
+  <span class="pl-k">virtual</span> <span class="pl-k">void</span> <span class="pl-en">bar</span>();
+};
+<span class="pl-k">class</span> <span class="pl-en">FooSub</span> : <span class="pl-k">public</span> <span class="pl-en">Foo</span> {
+  <span class="pl-k">virtual</span> <span class="pl-k">void</span> <span class="pl-en">bar</span>();  <span class="pl-c"><span class="pl-c">//</span> Overrides Foo::bar!</span>
+};
+
+
+<span class="pl-c"><span class="pl-c">//</span> 0 == false == NULL (most of the time)!</span>
+<span class="pl-k">bool</span>* pt = <span class="pl-k">new</span> <span class="pl-k">bool</span>;
+*pt = <span class="pl-c1">0</span>; <span class="pl-c"><span class="pl-c">//</span> Sets the value points by 'pt' to false.</span>
+pt = <span class="pl-c1">0</span>;  <span class="pl-c"><span class="pl-c">//</span> Sets 'pt' to the null pointer. Both lines compile without warnings.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> nullptr is supposed to fix some of that issue:</span>
+<span class="pl-k">int</span>* pt2 = <span class="pl-k">new</span> <span class="pl-k">int</span>;
+*pt2 = <span class="pl-c1">nullptr</span>; <span class="pl-c"><span class="pl-c">//</span> Doesn't compile</span>
+pt2 = <span class="pl-c1">nullptr</span>;  <span class="pl-c"><span class="pl-c">//</span> Sets pt2 to null.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> There is an exception made for bools.</span>
+<span class="pl-c"><span class="pl-c">//</span> This is to allow you to test for null pointers with if(!ptr),</span>
+<span class="pl-c"><span class="pl-c">//</span> but as a consequence you can assign nullptr to a bool directly!</span>
+*pt = <span class="pl-c1">nullptr</span>;  <span class="pl-c"><span class="pl-c">//</span> This still compiles, even though '*pt' is a bool!</span>
+
+
+<span class="pl-c"><span class="pl-c">//</span> '=' != '=' != '='!</span>
+<span class="pl-c"><span class="pl-c">//</span> Calls Foo::Foo(const Foo&amp;) or some variant (see move semantics) copy</span>
+<span class="pl-c"><span class="pl-c">//</span> constructor.</span>
+Foo f2;
+Foo f1 = f2;
+
+<span class="pl-c"><span class="pl-c">//</span> Calls Foo::Foo(const Foo&amp;) or variant, but only copies the 'Foo' part of</span>
+<span class="pl-c"><span class="pl-c">//</span> 'fooSub'. Any extra members of 'fooSub' are discarded. This sometimes</span>
+<span class="pl-c"><span class="pl-c">//</span> horrifying behavior is called "object slicing."</span>
+FooSub fooSub;
+Foo f1 = fooSub;
+
+<span class="pl-c"><span class="pl-c">//</span> Calls Foo::operator=(Foo&amp;) or variant.</span>
+Foo f1;
+f1 = f2;
+
+
+<span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> Tuples (C++11 and above)</span>
+<span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+
+#<span class="pl-k">include</span><span class="pl-s"><span class="pl-pds">&lt;</span>tuple<span class="pl-pds">&gt;</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span> Conceptually, Tuples are similar to old data structures (C-like structs)</span>
+<span class="pl-c"><span class="pl-c">//</span> but instead of having named data members,</span>
+<span class="pl-c"><span class="pl-c">//</span> its elements are accessed by their order in the tuple.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> We start with constructing a tuple.</span>
+<span class="pl-c"><span class="pl-c">//</span> Packing values into tuple</span>
+<span class="pl-k">auto</span> first = make_tuple(<span class="pl-c1">10</span>, <span class="pl-s"><span class="pl-pds">'</span>A<span class="pl-pds">'</span></span>);
+<span class="pl-k">const</span> <span class="pl-k">int</span> maxN = <span class="pl-c1">1e9</span>;
+<span class="pl-k">const</span> <span class="pl-k">int</span> maxL = <span class="pl-c1">15</span>;
+<span class="pl-k">auto</span> second = make_tuple(maxN, maxL);
+
+<span class="pl-c"><span class="pl-c">//</span> Printing elements of 'first' tuple</span>
+cout &lt;&lt; get&lt;<span class="pl-c1">0</span>&gt;(first) &lt;&lt; <span class="pl-s"><span class="pl-pds">"</span> <span class="pl-pds">"</span></span> &lt;&lt; get&lt;<span class="pl-c1">1</span>&gt;(first) &lt;&lt; <span class="pl-s"><span class="pl-pds">'</span><span class="pl-cce">\n</span><span class="pl-pds">'</span></span>; <span class="pl-c"><span class="pl-c">//</span>prints : 10 A</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Printing elements of 'second' tuple</span>
+cout &lt;&lt; get&lt;<span class="pl-c1">0</span>&gt;(second) &lt;&lt; <span class="pl-s"><span class="pl-pds">"</span> <span class="pl-pds">"</span></span> &lt;&lt; get&lt;<span class="pl-c1">1</span>&gt;(second) &lt;&lt; <span class="pl-s"><span class="pl-pds">'</span><span class="pl-cce">\n</span><span class="pl-pds">'</span></span>; <span class="pl-c"><span class="pl-c">//</span> prints: 1000000000 15</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Unpacking tuple into variables</span>
+
+<span class="pl-k">int</span> first_int;
+<span class="pl-k">char</span> first_char;
+<span class="pl-en">tie</span>(first_int, first_char) = first;
+cout &lt;&lt; first_int &lt;&lt; <span class="pl-s"><span class="pl-pds">"</span> <span class="pl-pds">"</span></span> &lt;&lt; first_char &lt;&lt; <span class="pl-s"><span class="pl-pds">'</span><span class="pl-cce">\n</span><span class="pl-pds">'</span></span>;  <span class="pl-c"><span class="pl-c">//</span> prints : 10 A</span>
+
+<span class="pl-c"><span class="pl-c">//</span> We can also create tuple like this.</span>
+
+tuple&lt;<span class="pl-k">int</span>, <span class="pl-k">char</span>, <span class="pl-k">double</span>&gt; <span class="pl-en">third</span>(<span class="pl-c1">11</span>, <span class="pl-s"><span class="pl-pds">'</span>A<span class="pl-pds">'</span></span>, <span class="pl-c1">3.14141</span>);
+<span class="pl-c"><span class="pl-c">//</span> tuple_size returns number of elements in a tuple (as a constexpr)</span>
+
+cout &lt;&lt; tuple_size&lt;decltype(third)&gt;::value &lt;&lt; <span class="pl-s"><span class="pl-pds">'</span><span class="pl-cce">\n</span><span class="pl-pds">'</span></span>; <span class="pl-c"><span class="pl-c">//</span> prints: 3</span>
+
+<span class="pl-c"><span class="pl-c">//</span> tuple_cat concatenates the elements of all the tuples in the same order.</span>
+
+<span class="pl-k">auto</span> concatenated_tuple = tuple_cat(first, second, third);
+<span class="pl-c"><span class="pl-c">//</span> concatenated_tuple becomes = (10, 'A', 1e9, 15, 11, 'A', 3.14141)</span>
+
+cout &lt;&lt; get&lt;<span class="pl-c1">0</span>&gt;(concatenated_tuple) &lt;&lt; <span class="pl-s"><span class="pl-pds">'</span><span class="pl-cce">\n</span><span class="pl-pds">'</span></span>; <span class="pl-c"><span class="pl-c">//</span> prints: 10</span>
+cout &lt;&lt; get&lt;<span class="pl-c1">3</span>&gt;(concatenated_tuple) &lt;&lt; <span class="pl-s"><span class="pl-pds">'</span><span class="pl-cce">\n</span><span class="pl-pds">'</span></span>; <span class="pl-c"><span class="pl-c">//</span> prints: 15</span>
+cout &lt;&lt; get&lt;<span class="pl-c1">5</span>&gt;(concatenated_tuple) &lt;&lt; <span class="pl-s"><span class="pl-pds">'</span><span class="pl-cce">\n</span><span class="pl-pds">'</span></span>; <span class="pl-c"><span class="pl-c">//</span> prints: 'A'</span>
+
+
+<span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> Logical and Bitwise operators</span>
+<span class="pl-c"><span class="pl-c">//</span>////////////////////////////////</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Most of the operators in C++ are same as in other languages</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Logical operators</span>
+
+<span class="pl-c"><span class="pl-c">//</span> C++ uses Short-circuit evaluation for boolean expressions, i.e, the second argument is executed or</span>
+<span class="pl-c"><span class="pl-c">//</span> evaluated only if the first argument does not suffice to determine the value of the expression</span>
+
+<span class="pl-c1">true</span> &amp;&amp; <span class="pl-c1">false</span> <span class="pl-c"><span class="pl-c">//</span> Performs **logical and** to yield false</span>
+<span class="pl-c1">true</span> || <span class="pl-c1">false</span> <span class="pl-c"><span class="pl-c">//</span> Performs **logical or** to yield true</span>
+! <span class="pl-c1">true</span>        <span class="pl-c"><span class="pl-c">//</span> Performs **logical not** to yield false</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Instead of using symbols equivalent keywords can be used</span>
+<span class="pl-c1">true</span> <span class="pl-k">and</span> <span class="pl-c1">false</span> <span class="pl-c"><span class="pl-c">//</span> Performs **logical and** to yield false</span>
+<span class="pl-c1">true</span> <span class="pl-k">or</span> <span class="pl-c1">false</span>  <span class="pl-c"><span class="pl-c">//</span> Performs **logical or** to yield true</span>
+<span class="pl-k">not</span> <span class="pl-c1">true</span>       <span class="pl-c"><span class="pl-c">//</span> Performs **logical not** to yield false</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Bitwise operators</span>
+
+<span class="pl-c"><span class="pl-c">//</span> **&lt;&lt;** Left Shift Operator</span>
+<span class="pl-c"><span class="pl-c">//</span> &lt;&lt; shifts bits to the left</span>
+<span class="pl-c1">4</span> &lt;&lt; <span class="pl-c1">1</span> <span class="pl-c"><span class="pl-c">//</span> Shifts bits of 4 to left by 1 to give 8</span>
+<span class="pl-c"><span class="pl-c">//</span> x &lt;&lt; n can be thought as x * 2^n</span>
+
+
+<span class="pl-c"><span class="pl-c">//</span> **&gt;&gt;** Right Shift Operator</span>
+<span class="pl-c"><span class="pl-c">//</span> &gt;&gt; shifts bits to the right</span>
+<span class="pl-c1">4</span> &gt;&gt; <span class="pl-c1">1</span> <span class="pl-c"><span class="pl-c">//</span> Shifts bits of 4 to right by 1 to give 2</span>
+<span class="pl-c"><span class="pl-c">//</span> x &gt;&gt; n can be thought as x / 2^n</span>
+
+~<span class="pl-c1">4</span>    <span class="pl-c"><span class="pl-c">//</span> Performs a bitwise not</span>
+<span class="pl-c1">4</span> | <span class="pl-c1">3</span> <span class="pl-c"><span class="pl-c">//</span> Performs bitwise or</span>
+<span class="pl-c1">4</span> &amp; <span class="pl-c1">3</span> <span class="pl-c"><span class="pl-c">//</span> Performs bitwise and</span>
+<span class="pl-c1">4</span> ^ <span class="pl-c1">3</span> <span class="pl-c"><span class="pl-c">//</span> Performs bitwise xor</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Equivalent keywords are</span>
+<span class="pl-k">compl</span> <span class="pl-c1">4</span>    <span class="pl-c"><span class="pl-c">//</span> Performs a bitwise not</span>
+<span class="pl-c1">4</span> <span class="pl-k">bitor</span> <span class="pl-c1">3</span>  <span class="pl-c"><span class="pl-c">//</span> Performs bitwise or</span>
+<span class="pl-c1">4</span> <span class="pl-k">bitand</span> <span class="pl-c1">3</span> <span class="pl-c"><span class="pl-c">//</span> Performs bitwise and</span>
+<span class="pl-c1">4</span> <span class="pl-k">xor</span> <span class="pl-c1">3</span>    <span class="pl-c"><span class="pl-c">//</span> Performs bitwise xor</span>
+
+</pre></div>
+<p>Further Reading:</p>
+<ul>
+<li>An up-to-date language reference can be found at <a href="http://cppreference.com/w/cpp" rel="nofollow">CPP Reference</a>.</li>
+<li>A tutorial  for beginners or experts, covering many modern features and good practices: <a href="https://www.learncpp.com/" rel="nofollow">LearnCpp.com</a></li>
+<li>A tutorial covering basics of language and setting up coding environment is available at <a href="https://www.youtube.com/playlist?list=PLlrATfBNZ98dudnM48yfGUldqGD0S4FFb" rel="nofollow">TheChernoProject - C++</a>.</li>
+<li>Additional resources may be found at <a href="http://cplusplus.com" rel="nofollow">CPlusPlus</a>.</li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Steven Basart", "https://github.com/xksteven"]
+- ["Matt Kline", "https://github.com/mrkline"]
+- ["Geoff Liu", "http://geoffliu.me"]
+- ["Connor Waters", "https://github.com/connorwaters"]
+- ["Ankush Goyal", "https://github.com/ankushg07"]
+- ["Jatin Dhankhar", "https://github.com/jatindhankhar"]
+</code></pre>

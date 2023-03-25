@@ -1,0 +1,326 @@
+<h1>LaTeX</h1>
+<hr>
+<h2>language: latex<br>
+contributors:<br>
+- ["Chaitanya Krishna Ande", "http://icymist.github.io"]<br>
+- ["Colton Kohnke", "https://github.com/voltnor"]<br>
+- ["Sricharan Chiruvolu", "http://sricharan.xyz"]<br>
+- ["Ramanan Balakrishnan", "https://github.com/ramananbalakrishnan"]<br>
+- ["Svetlana Golubeva", "https://attillax.github.io/"]<br>
+- ["Oliver Kopp", "http://orcid.org/0000-0001-6962-4290"]<br>
+filename: learn-latex.tex</h2>
+<div class="highlight highlight-text-tex-latex"><pre class="notranslate"><span class="pl-c"><span class="pl-c">%</span> All comment lines start with %</span>
+<span class="pl-c"><span class="pl-c">%</span> There are no multi-line comments</span>
+
+<span class="pl-c"><span class="pl-c">%</span> LaTeX is NOT a "What You See Is What You Get" word processing software like</span>
+<span class="pl-c"><span class="pl-c">%</span> MS Word, or OpenOffice Writer</span>
+
+<span class="pl-c"><span class="pl-c">%</span> Every LaTeX command starts with a backslash (\)</span>
+
+<span class="pl-c"><span class="pl-c">%</span> LaTeX documents start with a defining the type of document it's compiling</span>
+<span class="pl-c"><span class="pl-c">%</span> Other document types include book, report, presentations, etc.</span>
+<span class="pl-c"><span class="pl-c">%</span> The options for the document appear in the [] brackets. In this case</span>
+<span class="pl-c"><span class="pl-c">%</span> it specifies we want to use 12pt font.</span>
+<span class="pl-k">\documentclass</span>[<span class="pl-v">12pt</span>]{<span class="pl-c1">article</span>}
+
+<span class="pl-c"><span class="pl-c">%</span> Next we define the packages the document uses.</span>
+<span class="pl-c"><span class="pl-c">%</span> If you want to include graphics, colored text, or</span>
+<span class="pl-c"><span class="pl-c">%</span> source code from another language file into your document,</span>
+<span class="pl-c"><span class="pl-c">%</span> you need to enhance the capabilities of LaTeX. This is done by adding packages.</span>
+<span class="pl-c"><span class="pl-c">%</span> I'm going to include the float and caption packages for figures</span>
+<span class="pl-c"><span class="pl-c">%</span> and hyperref package for hyperlinks</span>
+<span class="pl-k">\usepackage</span>{<span class="pl-c1">caption</span>}
+<span class="pl-k">\usepackage</span>{<span class="pl-c1">float</span>}
+<span class="pl-k">\usepackage</span>{<span class="pl-c1">hyperref</span>}
+
+<span class="pl-c"><span class="pl-c">%</span> We can define some other document properties too!</span>
+<span class="pl-c1">\author</span>{Chaitanya Krishna Ande, Colton Kohnke, Sricharan Chiruvolu <span class="pl-cce">\&amp;</span> <span class="pl-c1">\\</span>
+Svetlana Golubeva}
+<span class="pl-c1">\date</span>{<span class="pl-c1">\today</span>}
+<span class="pl-c1">\title</span>{Learn <span class="pl-c1">\LaTeX</span>{} in Y Minutes!}
+
+<span class="pl-c"><span class="pl-c">%</span> Now we're ready to begin the document</span>
+<span class="pl-c"><span class="pl-c">%</span> Everything before this line is called "The Preamble"</span>
+<span class="pl-c1">\begin</span>{<span class="pl-smi">document</span>}
+<span class="pl-c"><span class="pl-c">%</span> if we set the author, date, title fields, we can have LaTeX</span>
+<span class="pl-c"><span class="pl-c">%</span> create a title page for us.</span>
+<span class="pl-c1">\maketitle</span>
+
+<span class="pl-c"><span class="pl-c">%</span> If we have sections, we can create table of contents. We have to compile our</span>
+<span class="pl-c"><span class="pl-c">%</span> document twice to make it appear in right order.</span>
+<span class="pl-c"><span class="pl-c">%</span> It is a good practice to separate the table of contents form the body of the</span>
+<span class="pl-c"><span class="pl-c">%</span> document. To do so we use \newpage command</span>
+<span class="pl-c1">\newpage</span>
+<span class="pl-c1">\tableofcontents</span>
+
+<span class="pl-c1">\newpage</span>
+
+<span class="pl-c"><span class="pl-c">%</span> Most research papers have abstract, you can use the predefined commands for this.</span>
+<span class="pl-c"><span class="pl-c">%</span> This should appear in its logical order, therefore, after the top matter,</span>
+<span class="pl-c"><span class="pl-c">%</span> but before the main sections of the body.</span>
+<span class="pl-c"><span class="pl-c">%</span> This command is available in the document classes article and report.</span>
+<span class="pl-c1">\begin</span>{<span class="pl-smi">abstract</span>}
+ <span class="pl-c1">\LaTeX</span>{} documentation written as <span class="pl-c1">\LaTeX</span>! How novel and totally not
+ my idea!
+<span class="pl-c1">\end</span>{<span class="pl-smi">abstract</span>}
+
+<span class="pl-c"><span class="pl-c">%</span> Section commands are intuitive.</span>
+<span class="pl-c"><span class="pl-c">%</span> All the titles of the sections are added automatically to the table of contents.</span>
+<span class="pl-c1">\section</span>{<span class="pl-en">Introduction</span>}
+Hello, my name is Colton and together we're going to explore <span class="pl-c1">\LaTeX</span>!
+
+<span class="pl-c1">\section</span>{<span class="pl-en">Another section</span>}
+This is the text for another section. I think it needs a subsection.
+
+<span class="pl-c1">\subsection</span>{<span class="pl-en">This is a subsection</span>} <span class="pl-c"><span class="pl-c">%</span> Subsections are also intuitive.</span>
+I think we need another one.
+
+<span class="pl-c1">\subsubsection</span>{<span class="pl-en">Pythagoras</span>}
+Much better now.
+<span class="pl-k">\label</span>{<span class="pl-v">subsec:pythagoras</span>}
+
+<span class="pl-c"><span class="pl-c">%</span> By using the asterisk we can suppress LaTeX's inbuilt numbering.</span>
+<span class="pl-c"><span class="pl-c">%</span> This works for other LaTeX commands as well.</span>
+<span class="pl-c1">\section*</span>{<span class="pl-en">This is an unnumbered section</span>}
+However not all sections have to be numbered!
+
+<span class="pl-c1">\section</span>{<span class="pl-en">Some Text notes</span>}
+<span class="pl-c"><span class="pl-c">%</span>\section{Spacing} % Need to add more information about space intervals</span>
+<span class="pl-c1">\LaTeX</span>{} is generally pretty good about placing text where it should
+go. If
+a line <span class="pl-c1">\\</span> needs <span class="pl-c1">\\</span> to <span class="pl-c1">\\</span> break <span class="pl-c1">\\</span> you add <span class="pl-c1">\textbackslash\textbackslash</span>{}
+to the source code.
+
+Separate paragraphs by empty lines.
+
+You need to add a tilde after abbreviations (if not followed by a comma) for a
+non-breaking space, because otherwise the spacing after the dot is too large:
+E.g., i.e., etc.~are are such abbreviations.
+
+<span class="pl-c1">\section</span>{<span class="pl-en">Lists</span>}
+Lists are one of the easiest things to create in <span class="pl-c1">\LaTeX</span>! I need to go shopping
+tomorrow, so let's make a grocery list.
+<span class="pl-c1">\begin</span>{<span class="pl-smi">enumerate</span>} <span class="pl-c"><span class="pl-c">%</span> This creates an "enumerate" environment.</span>
+  <span class="pl-c"><span class="pl-c">%</span> \item tells the enumerate to increment</span>
+  <span class="pl-k">\item</span> Salad.
+  <span class="pl-k">\item</span> 27 watermelon.
+  <span class="pl-k">\item</span> A single jackrabbit.
+  <span class="pl-c"><span class="pl-c">%</span> we can even override the item number by using []</span>
+  <span class="pl-k">\item</span>[how many?] Medium sized squirt guns.
+
+  Not a list item, but still part of the enumerate.
+
+<span class="pl-c1">\end</span>{<span class="pl-smi">enumerate</span>} <span class="pl-c"><span class="pl-c">%</span> All environments must have an end.</span>
+
+<span class="pl-c1">\section</span>{<span class="pl-en">Math</span>}
+
+One of the primary uses for <span class="pl-c1">\LaTeX</span>{} is to produce academic articles
+or technical papers. Usually in the realm of math and science. As such,
+we need to be able to add special symbols to our paper!
+
+Math has many symbols, far beyond what you can find on a keyboard;
+Set and relation symbols, arrows, operators, and Greek letters to name a few.
+
+Sets and relations play a vital role in many mathematical research papers.
+Here's how you state all x that belong to X, <span class="pl-s"><span class="pl-pds">$</span><span class="pl-c1">\forall</span> x <span class="pl-c1">\in</span> X<span class="pl-pds">$</span></span>.
+<span class="pl-c"><span class="pl-c">%</span> Notice how I needed to add $ signs before and after the symbols. This is</span>
+<span class="pl-c"><span class="pl-c">%</span> because when writing, we are in text-mode.</span>
+<span class="pl-c"><span class="pl-c">%</span> However, the math symbols only exist in math-mode.</span>
+<span class="pl-c"><span class="pl-c">%</span> We can enter math-mode from text mode with the $ signs.</span>
+<span class="pl-c"><span class="pl-c">%</span> The opposite also holds true. Variable can also be rendered in math-mode.</span>
+<span class="pl-c"><span class="pl-c">%</span> We can also enter math mode with \[\]</span>
+
+<span class="pl-s"><span class="pl-pds">\[</span>a^2 + b^2 = c^2 <span class="pl-pds">\]</span></span>
+
+My favorite Greek letter is <span class="pl-s"><span class="pl-pds">$</span><span class="pl-c1">\xi</span><span class="pl-pds">$</span></span>. I also like <span class="pl-s"><span class="pl-pds">$</span><span class="pl-c1">\beta</span><span class="pl-pds">$</span></span>, <span class="pl-s"><span class="pl-pds">$</span><span class="pl-c1">\gamma</span><span class="pl-pds">$</span></span> and <span class="pl-s"><span class="pl-pds">$</span><span class="pl-c1">\sigma</span><span class="pl-pds">$</span></span>.
+I haven't found a Greek letter yet that <span class="pl-c1">\LaTeX</span>{} doesn't know
+about!
+
+Operators are essential parts of a mathematical document:
+trigonometric functions (<span class="pl-s"><span class="pl-pds">$</span><span class="pl-c1">\sin</span><span class="pl-pds">$</span></span>, <span class="pl-s"><span class="pl-pds">$</span><span class="pl-c1">\cos</span><span class="pl-pds">$</span></span>, <span class="pl-s"><span class="pl-pds">$</span><span class="pl-c1">\tan</span><span class="pl-pds">$</span></span>),
+logarithms and exponentials (<span class="pl-s"><span class="pl-pds">$</span><span class="pl-c1">\log</span><span class="pl-pds">$</span></span>, <span class="pl-s"><span class="pl-pds">$</span><span class="pl-c1">\exp</span><span class="pl-pds">$</span></span>),
+limits (<span class="pl-s"><span class="pl-pds">$</span><span class="pl-c1">\lim</span><span class="pl-pds">$</span></span>), etc.~have pre-defined LaTeX commands.
+Let's write an equation to see how it's done:
+<span class="pl-s"><span class="pl-pds">$</span><span class="pl-c1">\cos</span>(<span class="pl-c1">2</span><span class="pl-c1">\theta</span>) = <span class="pl-c1">\cos</span>^{2}(<span class="pl-c1">\theta</span>) - <span class="pl-c1">\sin</span>^{2}(<span class="pl-c1">\theta</span>)<span class="pl-pds">$</span></span>
+
+Fractions (Numerator-denominators) can be written in these forms:
+
+<span class="pl-c"><span class="pl-c">%</span> 10 / 7</span>
+<span class="pl-s"><span class="pl-pds">$$</span> ^{10}/_{7} <span class="pl-pds">$$</span></span>
+
+<span class="pl-c"><span class="pl-c">%</span> Relatively complex fractions can be written as</span>
+<span class="pl-c"><span class="pl-c">%</span> \frac{numerator}{denominator}</span>
+<span class="pl-s"><span class="pl-pds">$$</span> <span class="pl-c1">\frac</span>{n!}{k!(n - k)!} <span class="pl-pds">$$</span></span>
+
+We can also insert equations in an <span class="pl-s"><span class="pl-pds">``</span>equation environment<span class="pl-pds">''</span></span>.
+
+<span class="pl-c"><span class="pl-c">%</span> Display math with the equation 'environment'</span>
+<span class="pl-c1">\begin</span>{<span class="pl-smi">equation</span>}<span class="pl-s"> <span class="pl-c"><span class="pl-c">%</span> enters math-mode</span></span>
+<span class="pl-s">    c^2 = a^2 + b^2.</span>
+<span class="pl-s">    <span class="pl-k">\label</span>{<span class="pl-v">eq:pythagoras</span>} <span class="pl-c"><span class="pl-c">%</span> for referencing</span></span>
+<span class="pl-s"></span><span class="pl-c1">\end</span>{<span class="pl-smi">equation</span>} <span class="pl-c"><span class="pl-c">%</span> all \begin statements must have an end statement</span>
+
+We can then reference our new equation!
+Eqn.~<span class="pl-k">\ref</span>{<span class="pl-c1">eq:pythagoras</span>} is also known as the Pythagoras Theorem which is also
+the subject of Sec.~<span class="pl-k">\ref</span>{<span class="pl-c1">subsec:pythagoras</span>}. A lot of things can be labeled:
+figures, equations, sections, etc.
+
+Summations and Integrals are written with sum and int commands:
+
+<span class="pl-c"><span class="pl-c">%</span> Some LaTeX compilers will complain if there are blank lines</span>
+<span class="pl-c"><span class="pl-c">%</span> In an equation environment.</span>
+<span class="pl-c1">\begin</span>{<span class="pl-smi">equation</span>}<span class="pl-s"></span>
+<span class="pl-s">  <span class="pl-c1">\sum</span>_{i=0}^{5} f_{i}</span>
+<span class="pl-s"></span><span class="pl-c1">\end</span>{<span class="pl-smi">equation</span>}
+<span class="pl-c1">\begin</span>{<span class="pl-smi">equation</span>}<span class="pl-s"></span>
+<span class="pl-s">  <span class="pl-c1">\int</span>_{0}^{<span class="pl-c1">\infty</span>} <span class="pl-c1">\mathrm</span>{e}^{-x} <span class="pl-c1">\mathrm</span>{d}x</span>
+<span class="pl-s"></span><span class="pl-c1">\end</span>{<span class="pl-smi">equation</span>}
+
+<span class="pl-c1">\section</span>{<span class="pl-en">Figures</span>}
+
+Let's insert a figure. Figure placement can get a little tricky.
+Basic options are [t] for top, [b] for bottom, [h] for here (approximately).
+I definitely have to lookup the placement options each time.
+<span class="pl-c"><span class="pl-c">%</span> See https://en.wikibooks.org/wiki/LaTeX/Floats,_Figures_and_Captions for more details</span>
+
+<span class="pl-c1">\begin</span>{<span class="pl-smi">figure</span>}[H] <span class="pl-c"><span class="pl-c">%</span> H here denoted the placement option.</span>
+    <span class="pl-c1">\centering</span> <span class="pl-c"><span class="pl-c">%</span> centers the figure on the page</span>
+    <span class="pl-c"><span class="pl-c">%</span> Inserts a figure scaled to 0.8 the width of the page.</span>
+    <span class="pl-c"><span class="pl-c">%</span>\includegraphics[width=0.8\linewidth]{right-triangle.png}</span>
+    <span class="pl-c"><span class="pl-c">%</span> Commented out for compilation purposes. Please use your imagination.</span>
+    <span class="pl-c1">\caption</span>{Right triangle with sides <span class="pl-s"><span class="pl-pds">$</span>a<span class="pl-pds">$</span></span>, <span class="pl-s"><span class="pl-pds">$</span>b<span class="pl-pds">$</span></span>, <span class="pl-s"><span class="pl-pds">$</span>c<span class="pl-pds">$</span></span>}
+    <span class="pl-k">\label</span>{<span class="pl-v">fig:right-triangle</span>}
+<span class="pl-c1">\end</span>{<span class="pl-smi">figure</span>}
+
+<span class="pl-c1">\subsection</span>{<span class="pl-en">Table</span>}
+We can also insert Tables in the same way as figures.
+
+<span class="pl-c1">\begin</span>{<span class="pl-smi">table</span>}[H]
+  <span class="pl-c1">\caption</span>{Caption for the Table.}
+  <span class="pl-c"><span class="pl-c">%</span> the {} arguments below describe how each row of the table is drawn.</span>
+  <span class="pl-c"><span class="pl-c">%</span> The basics are simple: one letter for each column, to control alignment:</span>
+  <span class="pl-c"><span class="pl-c">%</span> basic options are: c, l, r and p for centered, left, right and paragraph</span>
+  <span class="pl-c"><span class="pl-c">%</span> optionally, you can add a | for a vertical line</span>
+  <span class="pl-c"><span class="pl-c">%</span> See https://en.wikibooks.org/wiki/LaTeX/Tables for more details</span>
+  <span class="pl-c1">\begin</span>{<span class="pl-smi">tabular</span>}{c|cc}  <span class="pl-c"><span class="pl-c">%</span> here it means "centered | vertical line, centered centered"</span>
+    Number &amp;  First Name &amp; Last Name \\ <span class="pl-c"><span class="pl-c">%</span> Column rows are separated by &amp;</span>
+    <span class="pl-c1">\hline</span> <span class="pl-c"><span class="pl-c">%</span> a horizontal line</span>
+    1 &amp; Biggus &amp; Dickus \\
+    2 &amp; Monty &amp; Python
+  <span class="pl-c1">\end</span>{<span class="pl-smi">tabular</span>}
+  <span class="pl-c"><span class="pl-c">%</span> it will approximately be displayed like this</span>
+  <span class="pl-c"><span class="pl-c">%</span> Number | First Name     Last Name</span>
+  <span class="pl-c"><span class="pl-c">%</span> -------|---------------------------  % because of \hline</span>
+  <span class="pl-c"><span class="pl-c">%</span>   1    |   Biggus        Dickus</span>
+  <span class="pl-c"><span class="pl-c">%</span>   2    |   Monty         Python</span>
+<span class="pl-c1">\end</span>{<span class="pl-smi">table</span>}
+
+<span class="pl-c1">\section</span>{<span class="pl-en">Getting <span class="pl-c1">\LaTeX</span>{} to not compile something (i.e.~Source Code)</span>}
+Let's say we want to include some code into our <span class="pl-c1">\LaTeX</span>{} document,
+we would then need <span class="pl-c1">\LaTeX</span>{} to not try and interpret that text and
+instead just print it to the document. We do this with a verbatim
+environment.
+
+<span class="pl-c"><span class="pl-c">%</span> There are other packages that exist (i.e. minty, lstlisting, etc.)</span>
+<span class="pl-c"><span class="pl-c">%</span> but verbatim is the bare-bones basic one.</span>
+<span class="pl-c1">\begin</span>{<span class="pl-smi">verbatim</span>}<span class="pl-c1"></span>
+<span class="pl-c1">  print("Hello World!")</span>
+<span class="pl-c1">  a%b; % look! We can use % signs in verbatim.</span>
+<span class="pl-c1">  random = 4; #decided by fair random dice roll, https://www.xkcd.com/221/</span>
+<span class="pl-c1">  See https://www.explainxkcd.com/wiki/index.php/221:_Random_Number</span>
+<span class="pl-c1"></span><span class="pl-c1">\end</span>{<span class="pl-smi">verbatim</span>}
+
+<span class="pl-c1">\section</span>{<span class="pl-en">Compiling</span>}
+
+By now you're probably wondering how to compile this fabulous document
+and look at the glorious glory that is a <span class="pl-c1">\LaTeX</span>{} pdf.
+(Yes, this document actually does compile).
+
+Getting to the final document using <span class="pl-c1">\LaTeX</span>{} consists of the following
+steps:
+  <span class="pl-c1">\begin</span>{<span class="pl-smi">enumerate</span>}
+    <span class="pl-k">\item</span> Write the document in plain text (the <span class="pl-s"><span class="pl-pds">``</span>source code<span class="pl-pds">''</span></span>).
+    <span class="pl-k">\item</span> Compile source code to produce a pdf.
+     The compilation step looks like this (in Linux): <span class="pl-c1">\\</span>
+     <span class="pl-c1">\begin</span>{<span class="pl-smi">verbatim</span>}<span class="pl-c1"></span>
+<span class="pl-c1">        &gt; pdflatex learn-latex.tex</span>
+<span class="pl-c1">     </span><span class="pl-c1">\end</span>{<span class="pl-smi">verbatim</span>}
+  <span class="pl-c1">\end</span>{<span class="pl-smi">enumerate</span>}
+
+A number of <span class="pl-c1">\LaTeX</span>{} editors combine both Step 1 and Step 2 in the
+same piece of software. So, you get to see Step 1, but not Step 2 completely.
+Step 2 is still happening behind the scenes<span class="pl-c1">\footnote</span>{In cases, where you use
+references (like Eqn.~<span class="pl-k">\ref</span>{<span class="pl-c1">eq:pythagoras</span>}), you may need to run Step 2
+multiple times, to generate an intermediary *.aux file.}.
+<span class="pl-c"><span class="pl-c">%</span> Also, this is how you add footnotes to your document!</span>
+<span class="pl-c"><span class="pl-c">%</span> with a simple \footnote{...} command. They are numbered ¹, ², ... by default.</span>
+
+You write all your formatting information in plain text in Step 1.
+The compilation part in Step 2 takes care of producing the document in the
+format you defined in Step 1.
+
+<span class="pl-c1">\section</span>{<span class="pl-en">Hyperlinks</span>}
+We can also insert hyperlinks in our document. To do so we need to include the
+package hyperref into preamble with the command:
+<span class="pl-c1">\begin</span>{<span class="pl-smi">verbatim</span>}<span class="pl-c1"></span>
+<span class="pl-c1">    \usepackage{hyperref}</span>
+<span class="pl-c1"></span><span class="pl-c1">\end</span>{<span class="pl-smi">verbatim</span>}
+
+There exists two main types of links: visible URL <span class="pl-c1">\\</span>
+<span class="pl-c1">\url</span>{https://learnxinyminutes.com/docs/latex/}, or
+<span class="pl-c1">\href</span>{https://learnxinyminutes.com/docs/latex/}{shadowed by text}
+<span class="pl-c"><span class="pl-c">%</span> You can not add extra-spaces or special symbols into shadowing text since it</span>
+<span class="pl-c"><span class="pl-c">%</span> will cause mistakes during the compilation</span>
+
+This package also produces list of thumbnails in the output PDF document and
+active links in the table of contents.
+
+<span class="pl-c1">\section</span>{<span class="pl-en">Writing in ASCII or other encodings</span>}
+
+By default, historically LaTeX accepts inputs which are pure ASCII (128),
+but not extended ASCII, meaning without accents (à, è etc.) and non-Latin symbols.
+
+It is easy to insert accents and basic Latin symbols, with backslash shortcuts
+Like <span class="pl-cce">\,</span>c, <span class="pl-cce">\'</span>e, <span class="pl-cce">\`</span>A, <span class="pl-c1">\ae</span> and <span class="pl-c1">\oe</span> etc.  <span class="pl-c"><span class="pl-c">%</span> for ç, é, À, etc</span>
+<span class="pl-c"><span class="pl-c">%</span> See https://en.wikibooks.org/wiki/LaTeX/Special_Characters#Escaped_codes for more</span>
+
+To write directly in UTF-8, when compiling with pdflatex, use
+<span class="pl-c1">\begin</span>{<span class="pl-smi">verbatim</span>}<span class="pl-c1"></span>
+<span class="pl-c1">    \usepackage[utf8]{inputenc}</span>
+<span class="pl-c1"></span><span class="pl-c1">\end</span>{<span class="pl-smi">verbatim</span>}
+The selected font has to support the glyphs used for your document, you have to add
+<span class="pl-c1">\begin</span>{<span class="pl-smi">verbatim</span>}<span class="pl-c1"></span>
+<span class="pl-c1">    \usepackage[T1]{fontenc}</span>
+<span class="pl-c1"></span><span class="pl-c1">\end</span>{<span class="pl-smi">verbatim</span>}
+
+Since LuaTeX and XeLaTeX were designed with built-in support for UTF-8, making
+life easier for writing in non-Latin alphabets.
+
+<span class="pl-c1">\section</span>{<span class="pl-en">End</span>}
+
+That's all for now!
+
+<span class="pl-c"><span class="pl-c">%</span> Most often, you would want to have a references section in your document.</span>
+<span class="pl-c"><span class="pl-c">%</span> The easiest way to set this up would be by using the bibliography section</span>
+<span class="pl-c1">\begin</span>{<span class="pl-smi">thebibliography</span>}{1}
+  <span class="pl-c"><span class="pl-c">%</span> similar to other lists, the \bibitem command can be used to list items</span>
+  <span class="pl-c"><span class="pl-c">%</span> each entry can then be cited directly in the body of the text</span>
+  <span class="pl-c1">\bibitem</span>{latexwiki} The amazing <span class="pl-c1">\LaTeX</span>{} wikibook: <span class="pl-c1">\emph</span>{<span class="pl-mi">https://en.wikibooks.org/wiki/LaTeX</span>}
+  <span class="pl-c1">\bibitem</span>{latextutorial} An actual tutorial: <span class="pl-c1">\emph</span>{<span class="pl-mi">http://www.latex-tutorial.com</span>}
+<span class="pl-c1">\end</span>{<span class="pl-smi">thebibliography</span>}
+
+<span class="pl-c"><span class="pl-c">%</span> end the document</span>
+<span class="pl-c1">\end</span>{<span class="pl-smi">document</span>}</pre></div>
+<h2>More on LaTeX</h2>
+<ul>
+<li>The amazing LaTeX Wikibook: <a href="https://en.wikibooks.org/wiki/LaTeX" rel="nofollow">https://en.wikibooks.org/wiki/LaTeX</a></li>
+<li>An actual tutorial: <a href="http://www.latex-tutorial.com/" rel="nofollow">http://www.latex-tutorial.com/</a></li>
+<li>A quick guide for learning LaTeX: <a href="https://www.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes" rel="nofollow">Learn LaTeX in 30 minutes</a></li>
+<li>An interactive platform to learn LaTeX (installationfree) <a href="https://www.learnlatex.org/" rel="nofollow">learnlatex.org/</a></li>
+<li>Stack Exchange's question and answer site about TeX, LaTeX, ConTeXt, etc. <a href="https://tex.stackexchange.com/" rel="nofollow">tex.stackexchange.com</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Max Sun", "http://github.com/maxsun"]
+- ["Yan Hui Hang", "http://github.com/yanhh0"]
+</code></pre>

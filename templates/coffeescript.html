@@ -1,0 +1,99 @@
+<h1>CoffeeScript</h1>
+<p>CoffeeScript is a little language that compiles one-to-one into the equivalent<br>
+JavaScript, and there is no interpretation at runtime. As one of the successors<br>
+to JavaScript, CoffeeScript tries its best to output readable, pretty-printed<br>
+and smooth-running JavaScript code, which works well in every JavaScript runtime.<br>
+It also attempts to try and make JavaScript more in line with the trends of many<br>
+modern languages.</p>
+<p>See also <a href="http://coffeescript.org/" rel="nofollow">the CoffeeScript website</a>, which has a complete tutorial on CoffeeScript.</p>
+<div class="highlight highlight-source-coffee"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> Comments are similar to Ruby and Python, using the hash symbol `#`</span>
+
+<span class="pl-c"><span class="pl-c">###</span></span>
+<span class="pl-c">Block comments are like these, and they translate directly to '/ *'s and '* /'s</span>
+<span class="pl-c">for the resulting JavaScript code.</span>
+<span class="pl-c"></span>
+<span class="pl-c">You should understand most of JavaScript semantics</span>
+<span class="pl-c">before continuing.</span>
+<span class="pl-c"><span class="pl-c">###</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> Assignment:</span>
+<span class="pl-v">number</span>   <span class="pl-k">=</span> <span class="pl-c1">42</span> <span class="pl-c"><span class="pl-c">#</span>=&gt; var number = 42;</span>
+<span class="pl-v">opposite</span> <span class="pl-k">=</span> <span class="pl-c1">true</span> <span class="pl-c"><span class="pl-c">#</span>=&gt; var opposite = true;</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Conditions:</span>
+<span class="pl-v">number</span> <span class="pl-k">=</span> <span class="pl-k">-</span><span class="pl-c1">42</span> <span class="pl-k">if</span> opposite <span class="pl-c"><span class="pl-c">#</span>=&gt; if(opposite) { number = -42; }</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Functions:</span>
+<span class="pl-en">square</span> <span class="pl-k">=</span> (<span class="pl-smi">x</span>) <span class="pl-k">-&gt;</span> x <span class="pl-k">*</span> x <span class="pl-c"><span class="pl-c">#</span>=&gt; var square = function(x) { return x * x; }</span>
+
+<span class="pl-en">fill</span> <span class="pl-k">=</span> (<span class="pl-smi">container</span>, <span class="pl-smi">liquid</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>coffee<span class="pl-pds">"</span></span>) <span class="pl-k">-&gt;</span>
+  <span class="pl-s"><span class="pl-pds">"</span>Filling the <span class="pl-s1"><span class="pl-pse">#{</span>container<span class="pl-pse">}</span></span> with <span class="pl-s1"><span class="pl-pse">#{</span>liquid<span class="pl-pse">}</span></span>...<span class="pl-pds">"</span></span>
+<span class="pl-c"><span class="pl-c">#</span>=&gt;var fill;</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+<span class="pl-c"><span class="pl-c">#</span>fill = function(container, liquid) {</span>
+<span class="pl-c"><span class="pl-c">#</span>  if (liquid == null) {</span>
+<span class="pl-c"><span class="pl-c">#</span>    liquid = "coffee";</span>
+<span class="pl-c"><span class="pl-c">#</span>  }</span>
+<span class="pl-c"><span class="pl-c">#</span>  return "Filling the " + container + " with " + liquid + "...";</span>
+<span class="pl-c"><span class="pl-c">#</span>};</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Ranges:</span>
+<span class="pl-v">list</span> <span class="pl-k">=</span> [<span class="pl-c1">1</span><span class="pl-k">..</span><span class="pl-c1">5</span>] <span class="pl-c"><span class="pl-c">#</span>=&gt; var list = [1, 2, 3, 4, 5];</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Objects:</span>
+<span class="pl-v">math</span> <span class="pl-k">=</span>
+  <span class="pl-v">root</span><span class="pl-k">:</span>   <span class="pl-c1">Math</span>.<span class="pl-smi">sqrt</span>
+  <span class="pl-v">square</span><span class="pl-k">:</span> square
+  <span class="pl-en">cube</span><span class="pl-k">:</span>   (<span class="pl-smi">x</span>) <span class="pl-k">-&gt;</span> x <span class="pl-k">*</span> <span class="pl-en">square</span> x
+<span class="pl-c"><span class="pl-c">#</span>=&gt; var math = {</span>
+<span class="pl-c"><span class="pl-c">#</span>    "root": Math.sqrt,</span>
+<span class="pl-c"><span class="pl-c">#</span>    "square": square,</span>
+<span class="pl-c"><span class="pl-c">#</span>    "cube": function(x) { return x * square(x); }</span>
+<span class="pl-c"><span class="pl-c">#</span>   };</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Splats:</span>
+<span class="pl-en">race</span> <span class="pl-k">=</span> (<span class="pl-smi">winner</span>, <span class="pl-smi">runners</span><span class="pl-k">...</span>) <span class="pl-k">-&gt;</span>
+  <span class="pl-en">print</span> winner, runners
+<span class="pl-c"><span class="pl-c">#</span>=&gt;race = function() {</span>
+<span class="pl-c"><span class="pl-c">#</span>    var runners, winner;</span>
+<span class="pl-c"><span class="pl-c">#</span>    winner = arguments[0], runners = 2 &lt;= arguments.length ? __slice.call(arguments, 1) : [];</span>
+<span class="pl-c"><span class="pl-c">#</span>    return print(winner, runners);</span>
+<span class="pl-c"><span class="pl-c">#</span>  };</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Existence:</span>
+<span class="pl-en">alert</span> <span class="pl-s"><span class="pl-pds">"</span>I knew it!<span class="pl-pds">"</span></span> <span class="pl-k">if</span> elvis<span class="pl-k">?</span>
+<span class="pl-c"><span class="pl-c">#</span>=&gt; if(typeof elvis !== "undefined" &amp;&amp; elvis !== null) { alert("I knew it!"); }</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Array comprehensions:</span>
+<span class="pl-v">cubes</span> <span class="pl-k">=</span> (<span class="pl-smi">math</span>.<span class="pl-en">cube</span> num <span class="pl-k">for</span> num <span class="pl-k">in</span> list)
+<span class="pl-c"><span class="pl-c">#</span>=&gt;cubes = (function() {</span>
+<span class="pl-c"><span class="pl-c">#</span>	  var _i, _len, _results;</span>
+<span class="pl-c"><span class="pl-c">#</span>	  _results = [];</span>
+<span class="pl-c"><span class="pl-c">#</span> 	for (_i = 0, _len = list.length; _i &lt; _len; _i++) {</span>
+<span class="pl-c"><span class="pl-c">#</span>		  num = list[_i];</span>
+<span class="pl-c"><span class="pl-c">#</span>		  _results.push(math.cube(num));</span>
+<span class="pl-c"><span class="pl-c">#</span>	  }</span>
+<span class="pl-c"><span class="pl-c">#</span>	  return _results;</span>
+<span class="pl-c"><span class="pl-c">#</span> })();</span>
+
+<span class="pl-v">foods</span> <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">'</span>broccoli<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>spinach<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>chocolate<span class="pl-pds">'</span></span>]
+<span class="pl-en">eat</span> food <span class="pl-k">for</span> food <span class="pl-k">in</span> foods <span class="pl-k">when</span> food <span class="pl-k">isnt</span> <span class="pl-s"><span class="pl-pds">'</span>chocolate<span class="pl-pds">'</span></span>
+<span class="pl-c"><span class="pl-c">#</span>=&gt;foods = ['broccoli', 'spinach', 'chocolate'];</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+<span class="pl-c"><span class="pl-c">#</span>for (_k = 0, _len2 = foods.length; _k &lt; _len2; _k++) {</span>
+<span class="pl-c"><span class="pl-c">#</span>  food = foods[_k];</span>
+<span class="pl-c"><span class="pl-c">#</span>  if (food !== 'chocolate') {</span>
+<span class="pl-c"><span class="pl-c">#</span>    eat(food);</span>
+<span class="pl-c"><span class="pl-c">#</span>  }</span>
+<span class="pl-c"><span class="pl-c">#</span>}</span></pre></div>
+<h2>Additional resources</h2>
+<ul>
+<li><a href="http://autotelicum.github.io/Smooth-CoffeeScript/" rel="nofollow">Smooth CoffeeScript</a></li>
+<li><a href="https://leanpub.com/coffeescript-ristretto/read" rel="nofollow">CoffeeScript Ristretto</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<ul>
+<li>["Tenor Biel", "http://github.com/L8D"]</li>
+<li>["Xavier Yao", "http://github.com/xavieryao"]</li>
+</ul>

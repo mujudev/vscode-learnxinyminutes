@@ -1,0 +1,342 @@
+<h1>Perl</h1>
+<p>Perl is a highly capable, feature-rich programming language with over 25 years of development.</p>
+<p>Perl runs on over 100 platforms from portables to mainframes and is suitable for both rapid prototyping and large scale development projects.</p>
+<div class="highlight highlight-source-perl"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> Single line comments start with a number sign.</span>
+
+<span class="pl-c"><span class="pl-c">#</span>### Strict and warnings</span>
+
+<span class="pl-k">use</span> strict;
+<span class="pl-k">use</span> warnings;
+
+<span class="pl-c"><span class="pl-c">#</span> All perl scripts and modules should include these lines. Strict causes</span>
+<span class="pl-c"><span class="pl-c">#</span> compilation to fail in cases like misspelled variable names, and</span>
+<span class="pl-c"><span class="pl-c">#</span> warnings will print warning messages in case of common pitfalls like</span>
+<span class="pl-c"><span class="pl-c">#</span> concatenating to an undefined value.</span>
+
+<span class="pl-c"><span class="pl-c">#</span>### Perl variable types</span>
+
+<span class="pl-c"><span class="pl-c">#</span>  Variables begin with a sigil, which is a symbol showing the type.</span>
+<span class="pl-c"><span class="pl-c">#</span>  A valid variable name starts with a letter or underscore,</span>
+<span class="pl-c"><span class="pl-c">#</span>  followed by any number of letters, numbers, or underscores.</span>
+
+<span class="pl-c"><span class="pl-c">#</span>## Perl has three main variable types: $scalar, @array, and %hash.</span>
+
+<span class="pl-c"><span class="pl-c">#</span># Scalars</span>
+<span class="pl-c"><span class="pl-c">#</span>  A scalar represents a single value:</span>
+<span class="pl-k">my</span> <span class="pl-smi">$animal</span> = <span class="pl-s"><span class="pl-pds">"</span>camel<span class="pl-pds">"</span></span>;
+<span class="pl-k">my</span> <span class="pl-smi">$answer</span> = 42;
+<span class="pl-k">my</span> <span class="pl-smi">$display</span> = <span class="pl-s"><span class="pl-pds">"</span>You have <span class="pl-smi">$answer</span> <span class="pl-smi">${animal}</span>s.<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>;
+
+<span class="pl-c"><span class="pl-c">#</span> Scalar values can be strings, integers or floating point numbers, and</span>
+<span class="pl-c"><span class="pl-c">#</span> Perl will automatically convert between them as required.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Strings in single quotes are literal strings. Strings in double quotes</span>
+<span class="pl-c"><span class="pl-c">#</span> will interpolate variables and escape codes like "\n" for newline.</span>
+
+<span class="pl-c"><span class="pl-c">#</span># Arrays</span>
+<span class="pl-c"><span class="pl-c">#</span>  An array represents a list of values:</span>
+<span class="pl-k">my</span> <span class="pl-smi">@animals</span> = (<span class="pl-s"><span class="pl-pds">"</span>camel<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>llama<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>owl<span class="pl-pds">"</span></span>);
+<span class="pl-k">my</span> <span class="pl-smi">@numbers</span> = (23, 42, 69);
+<span class="pl-k">my</span> <span class="pl-smi">@mixed</span>   = (<span class="pl-s"><span class="pl-pds">"</span>camel<span class="pl-pds">"</span></span>, 42, 1.23);
+
+<span class="pl-c"><span class="pl-c">#</span> Array elements are accessed using square brackets, with a $ to</span>
+<span class="pl-c"><span class="pl-c">#</span> indicate one value will be returned.</span>
+<span class="pl-k">my</span> <span class="pl-smi">$second</span> = <span class="pl-smi">$animals</span>[1];
+
+<span class="pl-c"><span class="pl-c">#</span> The size of an array is retrieved by accessing the array in a scalar</span>
+<span class="pl-c"><span class="pl-c">#</span> context, such as assigning it to a scalar variable or using the</span>
+<span class="pl-c"><span class="pl-c">#</span> "scalar" operator.</span>
+
+<span class="pl-k">my</span> <span class="pl-smi">$num_animals</span> = <span class="pl-smi">@animals</span>;
+<span class="pl-c1">print</span> <span class="pl-s"><span class="pl-pds">"</span>Number of numbers: <span class="pl-pds">"</span></span>, <span class="pl-c1">scalar</span>(<span class="pl-smi">@numbers</span>), <span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>;
+
+<span class="pl-c"><span class="pl-c">#</span> Arrays can also be interpolated into double-quoted strings, and the</span>
+<span class="pl-c"><span class="pl-c">#</span> elements are separated by a space character by default.</span>
+
+<span class="pl-c1">print</span> <span class="pl-s"><span class="pl-pds">"</span>We have these numbers: <span class="pl-smi">@numbers</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>;
+
+<span class="pl-c"><span class="pl-c">#</span> Be careful when using double quotes for strings containing symbols</span>
+<span class="pl-c"><span class="pl-c">#</span> such as email addresses, as it will be interpreted as a variable.</span>
+
+<span class="pl-k">my</span> <span class="pl-smi">@example</span> = (<span class="pl-s"><span class="pl-pds">'</span>secret<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>array<span class="pl-pds">'</span></span>);
+<span class="pl-k">my</span> <span class="pl-smi">$oops_email</span> = <span class="pl-s"><span class="pl-pds">"</span>foo<span class="pl-smi">@example</span>.com<span class="pl-pds">"</span></span>; <span class="pl-c"><span class="pl-c">#</span> 'foosecret array.com'</span>
+<span class="pl-k">my</span> <span class="pl-smi">$ok_email</span> = <span class="pl-s"><span class="pl-pds">'</span>foo@example.com<span class="pl-pds">'</span></span>;
+
+<span class="pl-c"><span class="pl-c">#</span># Hashes</span>
+<span class="pl-c"><span class="pl-c">#</span>   A hash represents a set of key/value pairs:</span>
+
+<span class="pl-k">my</span> <span class="pl-smi">%fruit_color</span> = (<span class="pl-s"><span class="pl-pds">"</span>apple<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>red<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>banana<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>yellow<span class="pl-pds">"</span></span>);
+
+<span class="pl-c"><span class="pl-c">#</span>  You can use whitespace and the "=&gt;" operator to lay them out more</span>
+<span class="pl-c"><span class="pl-c">#</span>  nicely:</span>
+
+<span class="pl-k">my</span> <span class="pl-smi">%fruit_color</span> = (
+  <span class="pl-c1">apple</span>  <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>red<span class="pl-pds">"</span></span>,
+  <span class="pl-c1">banana</span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>yellow<span class="pl-pds">"</span></span>,
+);
+
+<span class="pl-c"><span class="pl-c">#</span> Hash elements are accessed using curly braces, again with the $ sigil.</span>
+<span class="pl-k">my</span> <span class="pl-smi">$color</span> = <span class="pl-smi">$fruit_color</span>{<span class="pl-c1">apple</span>};
+
+<span class="pl-c"><span class="pl-c">#</span> All of the keys or values that exist in a hash can be accessed using</span>
+<span class="pl-c"><span class="pl-c">#</span> the "keys" and "values" functions.</span>
+<span class="pl-k">my</span> <span class="pl-smi">@fruits</span> = <span class="pl-c1">keys</span> <span class="pl-smi">%fruit_color</span>;
+<span class="pl-k">my</span> <span class="pl-smi">@colors</span> = <span class="pl-c1">values</span> <span class="pl-smi">%fruit_color</span>;
+
+<span class="pl-c"><span class="pl-c">#</span> Scalars, arrays and hashes are documented more fully in perldata.</span>
+<span class="pl-c"><span class="pl-c">#</span> (perldoc perldata).</span>
+
+<span class="pl-c"><span class="pl-c">#</span>### References</span>
+
+<span class="pl-c"><span class="pl-c">#</span> More complex data types can be constructed using references, which</span>
+<span class="pl-c"><span class="pl-c">#</span> allow you to build arrays and hashes within arrays and hashes.</span>
+
+<span class="pl-k">my</span> <span class="pl-smi">$array_ref</span> = \<span class="pl-smi">@array</span>;
+<span class="pl-k">my</span> <span class="pl-smi">$hash_ref</span> = \<span class="pl-smi">%hash</span>;
+<span class="pl-k">my</span> <span class="pl-smi">@array_of_arrays</span> = (\<span class="pl-smi">@array1</span>, \<span class="pl-smi">@array2</span>, \<span class="pl-smi">@array3</span>);
+
+<span class="pl-c"><span class="pl-c">#</span> You can also create anonymous arrays or hashes, returning a reference:</span>
+
+<span class="pl-k">my</span> <span class="pl-smi">$fruits</span> = [<span class="pl-s"><span class="pl-pds">"</span>apple<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>banana<span class="pl-pds">"</span></span>];
+<span class="pl-k">my</span> <span class="pl-smi">$colors</span> = {<span class="pl-c1">apple</span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>red<span class="pl-pds">"</span></span>, <span class="pl-c1">banana</span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>yellow<span class="pl-pds">"</span></span>};
+
+<span class="pl-c"><span class="pl-c">#</span> References can be dereferenced by prefixing the appropriate sigil.</span>
+
+<span class="pl-k">my</span> <span class="pl-smi">@fruits_array</span> = <span class="pl-smi">@$fruits</span>;
+<span class="pl-k">my</span> <span class="pl-smi">%colors_hash</span> = <span class="pl-smi">%$colors</span>;
+
+<span class="pl-c"><span class="pl-c">#</span> As a shortcut, the arrow operator can be used to dereference and</span>
+<span class="pl-c"><span class="pl-c">#</span> access a single value.</span>
+
+<span class="pl-k">my</span> <span class="pl-smi">$first</span> = <span class="pl-smi">$array_ref</span><span class="pl-k">-&gt;</span>[0];
+<span class="pl-k">my</span> <span class="pl-smi">$value</span> = <span class="pl-smi">$hash_ref</span><span class="pl-k">-&gt;</span>{<span class="pl-c1">banana</span>};
+
+<span class="pl-c"><span class="pl-c">#</span> See perlreftut and perlref for more in-depth documentation on</span>
+<span class="pl-c"><span class="pl-c">#</span> references.</span>
+
+<span class="pl-c"><span class="pl-c">#</span>### Conditional and looping constructs</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Perl has most of the usual conditional and looping constructs.</span>
+
+<span class="pl-k">if</span> (<span class="pl-smi">$var</span>) {
+  ...
+} <span class="pl-k">elsif</span> (<span class="pl-smi">$var</span> <span class="pl-c1">eq</span> <span class="pl-s"><span class="pl-pds">'</span>bar<span class="pl-pds">'</span></span>) {
+  ...
+} <span class="pl-k">else</span> {
+  ...
+}
+
+<span class="pl-k">unless</span> (condition) {
+  ...
+}
+<span class="pl-c"><span class="pl-c">#</span> This is provided as a more readable version of "if (!condition)"</span>
+
+<span class="pl-c"><span class="pl-c">#</span> the Perlish post-condition way</span>
+<span class="pl-c1">print</span> <span class="pl-s"><span class="pl-pds">"</span>Yow!<span class="pl-pds">"</span></span> <span class="pl-k">if</span> <span class="pl-smi">$zippy</span>;
+<span class="pl-c1">print</span> <span class="pl-s"><span class="pl-pds">"</span>We have no bananas<span class="pl-pds">"</span></span> <span class="pl-k">unless</span> <span class="pl-smi">$bananas</span>;
+
+<span class="pl-c"><span class="pl-c">#</span>  while</span>
+<span class="pl-k">while</span> (condition) {
+  ...
+}
+
+<span class="pl-k">my</span> <span class="pl-smi">$max</span> = 5;
+<span class="pl-c"><span class="pl-c">#</span> for loops and iteration</span>
+<span class="pl-k">for</span> <span class="pl-k">my</span> <span class="pl-smi">$i</span> (0 .. <span class="pl-smi">$max</span>) {
+  <span class="pl-c1">print</span> <span class="pl-s"><span class="pl-pds">"</span>index is <span class="pl-smi">$i</span><span class="pl-pds">"</span></span>;
+}
+
+<span class="pl-k">for</span> <span class="pl-k">my</span> <span class="pl-smi">$element</span> (<span class="pl-smi">@elements</span>) {
+  <span class="pl-c1">print</span> <span class="pl-smi">$element</span>;
+}
+
+<span class="pl-c1">map</span> {<span class="pl-c1">print</span>} <span class="pl-smi">@elements</span>;
+
+<span class="pl-c"><span class="pl-c">#</span> implicitly</span>
+
+<span class="pl-k">for</span> (<span class="pl-smi">@elements</span>) {
+  <span class="pl-c1">print</span>;
+}
+
+<span class="pl-c"><span class="pl-c">#</span> iterating through a hash (for and foreach are equivalent)</span>
+
+<span class="pl-k">foreach</span> <span class="pl-k">my</span> <span class="pl-smi">$key</span> (<span class="pl-c1">keys</span> <span class="pl-smi">%hash</span>) {
+  <span class="pl-c1">print</span> <span class="pl-smi">$key</span>, <span class="pl-s"><span class="pl-pds">'</span>: <span class="pl-pds">'</span></span>, <span class="pl-smi">$hash</span>{<span class="pl-smi">$key</span>}, <span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>;
+}
+
+<span class="pl-c"><span class="pl-c">#</span> the Perlish post-condition way again</span>
+<span class="pl-c1">print</span> <span class="pl-k">for</span> <span class="pl-smi">@elements</span>;
+
+<span class="pl-c"><span class="pl-c">#</span> iterating through the keys and values of a referenced hash</span>
+<span class="pl-c1">print</span> <span class="pl-smi">$hash_ref</span><span class="pl-k">-&gt;</span>{<span class="pl-smi">$_</span>} <span class="pl-k">for</span> <span class="pl-c1">keys</span> <span class="pl-smi">%$hash_ref</span>;
+
+<span class="pl-c"><span class="pl-c">#</span>### Regular expressions</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Perl's regular expression support is both broad and deep, and is the</span>
+<span class="pl-c"><span class="pl-c">#</span> subject of lengthy documentation in perlrequick, perlretut, and</span>
+<span class="pl-c"><span class="pl-c">#</span> elsewhere. However, in short:</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Simple matching</span>
+<span class="pl-k">if</span> (<span class="pl-sr"><span class="pl-pds">/</span>foo<span class="pl-pds">/</span></span>)       { ... }  <span class="pl-c"><span class="pl-c">#</span> true if $_ contains "foo"</span>
+<span class="pl-k">if</span> (<span class="pl-smi">$x</span> =~ <span class="pl-sr"><span class="pl-pds">/</span>foo<span class="pl-pds">/</span></span>) { ... }  <span class="pl-c"><span class="pl-c">#</span> true if $x contains "foo"</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Simple substitution</span>
+
+<span class="pl-smi">$x</span> =~ <span class="pl-sr"><span class="pl-pds"><span class="pl-c1">s</span>/</span>foo</span><span class="pl-sr"><span class="pl-pds">/</span>bar<span class="pl-pds">/</span></span>;         <span class="pl-c"><span class="pl-c">#</span> replaces foo with bar in $x</span>
+<span class="pl-smi">$x</span> =~ <span class="pl-sr"><span class="pl-pds"><span class="pl-c1">s</span>/</span>foo</span><span class="pl-sr"><span class="pl-pds">/</span>bar<span class="pl-pds">/</span></span><span class="pl-sr"><span class="pl-pds"><span class="pl-k">g</span></span></span>;        <span class="pl-c"><span class="pl-c">#</span> replaces ALL INSTANCES of foo with bar in $x</span>
+
+
+<span class="pl-c"><span class="pl-c">#</span>### Files and I/O</span>
+
+<span class="pl-c"><span class="pl-c">#</span> You can open a file for input or output using the "open()" function.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> For reading:</span>
+<span class="pl-c1">open</span>(<span class="pl-k">my</span> <span class="pl-smi">$in</span>,  <span class="pl-s"><span class="pl-pds">"</span>&lt;<span class="pl-pds">"</span></span>,  <span class="pl-s"><span class="pl-pds">"</span>input.txt<span class="pl-pds">"</span></span>)  <span class="pl-k">or</span> <span class="pl-k">die</span> <span class="pl-s"><span class="pl-pds">"</span>Can't open input.txt: <span class="pl-smi">$!</span><span class="pl-pds">"</span></span>;
+<span class="pl-c"><span class="pl-c">#</span> For writing (clears file if it exists):</span>
+<span class="pl-c1">open</span>(<span class="pl-k">my</span> <span class="pl-smi">$out</span>, <span class="pl-s"><span class="pl-pds">"</span>&gt;<span class="pl-pds">"</span></span>,  <span class="pl-s"><span class="pl-pds">"</span>output.txt<span class="pl-pds">"</span></span>) <span class="pl-k">or</span> <span class="pl-k">die</span> <span class="pl-s"><span class="pl-pds">"</span>Can't open output.txt: <span class="pl-smi">$!</span><span class="pl-pds">"</span></span>;
+<span class="pl-c"><span class="pl-c">#</span> For writing (appends to end of file):</span>
+<span class="pl-c1">open</span>(<span class="pl-k">my</span> <span class="pl-smi">$log</span>, <span class="pl-s"><span class="pl-pds">"</span>&gt;&gt;<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>my.log<span class="pl-pds">"</span></span>)     <span class="pl-k">or</span> <span class="pl-k">die</span> <span class="pl-s"><span class="pl-pds">"</span>Can't open my.log: <span class="pl-smi">$!</span><span class="pl-pds">"</span></span>;
+
+<span class="pl-c"><span class="pl-c">#</span> You can read from an open filehandle using the "&lt;&gt;" operator.  In</span>
+<span class="pl-c"><span class="pl-c">#</span> scalar context it reads a single line from the filehandle, and in list</span>
+<span class="pl-c"><span class="pl-c">#</span> context it reads the whole file in, assigning each line to an element</span>
+<span class="pl-c"><span class="pl-c">#</span> of the list:</span>
+
+<span class="pl-k">my</span> <span class="pl-smi">$line</span>  = &lt;<span class="pl-smi">$in</span>&gt;;
+<span class="pl-k">my</span> <span class="pl-smi">@lines</span> = &lt;<span class="pl-smi">$in</span>&gt;;
+
+<span class="pl-c"><span class="pl-c">#</span> You can iterate through the lines in a file one at a time with a while loop:</span>
+
+<span class="pl-k">while</span> (<span class="pl-k">my</span> <span class="pl-smi">$line</span> = &lt;<span class="pl-smi">$in</span>&gt;) {
+  <span class="pl-c1">print</span> <span class="pl-s"><span class="pl-pds">"</span>Found apples<span class="pl-cce">\n</span><span class="pl-pds">"</span></span> <span class="pl-k">if</span> <span class="pl-smi">$line</span> =~ <span class="pl-sr"><span class="pl-pds"><span class="pl-c1">m</span>/</span>apples<span class="pl-pds">/</span></span>;
+}
+
+<span class="pl-c"><span class="pl-c">#</span> You can write to an open filehandle using the standard "print"</span>
+<span class="pl-c"><span class="pl-c">#</span> function.</span>
+
+<span class="pl-c1">print</span> <span class="pl-smi">$out</span> <span class="pl-smi">@lines</span>;
+<span class="pl-c1">print</span> <span class="pl-smi">$log</span> <span class="pl-smi">$msg</span>, <span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>;
+
+<span class="pl-c"><span class="pl-c">#</span>### Writing subroutines</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Writing subroutines is easy:</span>
+
+<span class="pl-k">sub</span> <span class="pl-en">logger</span> {
+  <span class="pl-k">my</span> <span class="pl-smi">$logmessage</span> = <span class="pl-c1">shift</span>;
+
+  <span class="pl-c1">open</span> <span class="pl-k">my</span> <span class="pl-smi">$logfile</span>, <span class="pl-s"><span class="pl-pds">"</span>&gt;&gt;<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>my.log<span class="pl-pds">"</span></span> <span class="pl-k">or</span> <span class="pl-k">die</span> <span class="pl-s"><span class="pl-pds">"</span>Could not open my.log: <span class="pl-smi">$!</span><span class="pl-pds">"</span></span>;
+
+  <span class="pl-c1">print</span> <span class="pl-smi">$logfile</span> <span class="pl-smi">$logmessage</span>;
+}
+
+<span class="pl-c"><span class="pl-c">#</span> Now we can use the subroutine just as any other built-in function:</span>
+
+logger(<span class="pl-s"><span class="pl-pds">"</span>We have a logger subroutine!<span class="pl-pds">"</span></span>);
+
+<span class="pl-c"><span class="pl-c">#</span>### Modules</span>
+
+<span class="pl-c"><span class="pl-c">#</span> A module is a set of Perl code, usually subroutines, which can be used</span>
+<span class="pl-c"><span class="pl-c">#</span> in other Perl code. It is usually stored in a file with the extension</span>
+<span class="pl-c"><span class="pl-c">#</span> .pm so that Perl can find it.</span>
+
+<span class="pl-k">package</span> <span class="pl-en">MyModule</span>;
+<span class="pl-k">use</span> strict;
+<span class="pl-k">use</span> warnings;
+
+<span class="pl-k">sub</span> <span class="pl-en">trim</span> {
+  <span class="pl-k">my</span> <span class="pl-smi">$string</span> = <span class="pl-c1">shift</span>;
+  <span class="pl-smi">$string</span> =~ <span class="pl-sr"><span class="pl-pds"><span class="pl-c1">s</span>/</span>^<span class="pl-cce">\s</span>+</span><span class="pl-sr"><span class="pl-pds">//</span></span>;
+  <span class="pl-smi">$string</span> =~ <span class="pl-sr"><span class="pl-pds"><span class="pl-c1">s</span>/</span><span class="pl-cce">\s</span>+$</span><span class="pl-sr"><span class="pl-pds">//</span></span>;
+  <span class="pl-k">return</span> <span class="pl-smi">$string</span>;
+}
+
+1;
+
+<span class="pl-c"><span class="pl-c">#</span> From elsewhere:</span>
+
+<span class="pl-k">use</span> MyModule;
+MyModule::trim(<span class="pl-smi">$string</span>);
+
+<span class="pl-c"><span class="pl-c">#</span> The Exporter module can help with making subroutines exportable, so</span>
+<span class="pl-c"><span class="pl-c">#</span> they can be used like this:</span>
+
+<span class="pl-k">use</span> MyModule <span class="pl-s"><span class="pl-pds">'</span>trim<span class="pl-pds">'</span></span>;
+trim(<span class="pl-smi">$string</span>);
+
+<span class="pl-c"><span class="pl-c">#</span> Many Perl modules can be downloaded from CPAN (http://www.cpan.org/)</span>
+<span class="pl-c"><span class="pl-c">#</span> and provide a range of features to help you avoid reinventing the</span>
+<span class="pl-c"><span class="pl-c">#</span> wheel.  A number of popular modules like Exporter are included with</span>
+<span class="pl-c"><span class="pl-c">#</span> the Perl distribution itself. See perlmod for more details on modules</span>
+<span class="pl-c"><span class="pl-c">#</span> in Perl.</span>
+
+<span class="pl-c"><span class="pl-c">#</span>### Objects</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Objects in Perl are just references that know which class (package)</span>
+<span class="pl-c"><span class="pl-c">#</span> they belong to, so that methods (subroutines) called on it can be</span>
+<span class="pl-c"><span class="pl-c">#</span> found there. The bless function is used in constructors (usually new)</span>
+<span class="pl-c"><span class="pl-c">#</span> to set this up. However, you never need to call it yourself if you use</span>
+<span class="pl-c"><span class="pl-c">#</span> a module like Moose or Moo (see below).</span>
+
+<span class="pl-k">package</span> <span class="pl-en">MyCounter</span>;
+<span class="pl-k">use</span> strict;
+<span class="pl-k">use</span> warnings;
+
+<span class="pl-k">sub</span> <span class="pl-en">new</span> {
+  <span class="pl-k">my</span> <span class="pl-smi">$class</span> = <span class="pl-c1">shift</span>;
+  <span class="pl-k">my</span> <span class="pl-smi">$self</span> = {<span class="pl-c1">count</span> <span class="pl-k">=&gt;</span> 0};
+  <span class="pl-k">return</span> <span class="pl-c1">bless</span> <span class="pl-smi">$self</span>, <span class="pl-smi">$class</span>;
+}
+
+<span class="pl-k">sub</span> <span class="pl-en">count</span> {
+  <span class="pl-k">my</span> <span class="pl-smi">$self</span> = <span class="pl-c1">shift</span>;
+  <span class="pl-k">return</span> <span class="pl-smi">$self</span><span class="pl-k">-&gt;</span>{<span class="pl-c1">count</span>};
+}
+
+<span class="pl-k">sub</span> <span class="pl-en">increment</span> {
+  <span class="pl-k">my</span> <span class="pl-smi">$self</span> = <span class="pl-c1">shift</span>;
+  <span class="pl-smi">$self</span><span class="pl-k">-&gt;</span>{<span class="pl-c1">count</span>}++;
+}
+
+1;
+
+<span class="pl-c"><span class="pl-c">#</span> Methods can be called on a class or object instance with the arrow</span>
+<span class="pl-c"><span class="pl-c">#</span> operator.</span>
+
+<span class="pl-k">use</span> MyCounter;
+<span class="pl-k">my</span> <span class="pl-smi">$counter</span> = MyCounter<span class="pl-k">-&gt;</span>new;
+<span class="pl-c1">print</span> <span class="pl-smi">$counter</span><span class="pl-k">-&gt;</span>count, <span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>; <span class="pl-c"><span class="pl-c">#</span> 0</span>
+<span class="pl-smi">$counter</span><span class="pl-k">-&gt;</span>increment;
+<span class="pl-c1">print</span> <span class="pl-smi">$counter</span><span class="pl-k">-&gt;</span>count, <span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>; <span class="pl-c"><span class="pl-c">#</span> 1</span>
+
+<span class="pl-c"><span class="pl-c">#</span> The modules Moose and Moo from CPAN can help you set up your object</span>
+<span class="pl-c"><span class="pl-c">#</span> classes. They provide a constructor and simple syntax for declaring</span>
+<span class="pl-c"><span class="pl-c">#</span> attributes. This class can be used equivalently to the one above.</span>
+
+<span class="pl-k">package</span> <span class="pl-en">MyCounter</span>;
+<span class="pl-k">use</span> Moo; <span class="pl-c"><span class="pl-c">#</span> imports strict and warnings</span>
+
+has <span class="pl-s"><span class="pl-pds">'</span>count<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> (<span class="pl-c1">is</span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>rwp<span class="pl-pds">'</span></span>, <span class="pl-c1">default</span> <span class="pl-k">=&gt;</span> 0, <span class="pl-c1">init_arg</span> <span class="pl-k">=&gt;</span> <span class="pl-c1">undef</span>);
+
+<span class="pl-k">sub</span> <span class="pl-en">increment</span> {
+  <span class="pl-k">my</span> <span class="pl-smi">$self</span> = <span class="pl-c1">shift</span>;
+  <span class="pl-smi">$self</span><span class="pl-k">-&gt;</span>_set_count(<span class="pl-smi">$self</span><span class="pl-k">-&gt;</span>count + 1);
+}
+
+1;
+
+<span class="pl-c"><span class="pl-c">#</span> Object-oriented programming is covered more thoroughly in perlootut,</span>
+<span class="pl-c"><span class="pl-c">#</span> and its low-level implementation in Perl is covered in perlobj.</span></pre></div>
+<h4>FAQ</h4>
+<p>perlfaq contains questions and answers related to many common tasks, and often provides suggestions for good CPAN modules to use.</p>
+<h4>Further Reading</h4>
+<ul>
+<li><a href="http://perl-tutorial.org/" rel="nofollow">perl-tutorial</a></li>
+<li><a href="http://www.perl.org/learn.html" rel="nofollow">Learn at www.perl.com</a></li>
+<li><a href="http://perldoc.perl.org/" rel="nofollow">perldoc</a></li>
+<li>and perl built-in : <code class="notranslate">perldoc perlintro</code></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Korjavin Ivan", "http://github.com/korjavin"]
+- ["Dan Book", "http://github.com/Grinnz"]
+</code></pre>

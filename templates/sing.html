@@ -1,0 +1,433 @@
+<h1>Sing</h1>
+<p>The purpose of sing is to provide a simple, safe, fast language that<br>
+can be a good replacement for c++ for high performance applications.</p>
+<p>Sing is an easy choice because it compiles to human-quality readable c++.</p>
+<p>Because of that, if you work for a while with Sing and, at any time, you discover you don't like Sing anymore, you lose nothing of your work<br>
+because you are left with nice and clean c++ code.</p>
+<p>In some way you can also think Sing as a tool to write c++ in a way that enforces some best practices.</p>
+<div class="highlight highlight-source-go"><pre class="notranslate"><span class="pl-c">/* Multi- line comment. </span>
+<span class="pl-c">    /* It can be nested */</span> 
+    <span class="pl-s1">Use</span> <span class="pl-s1">it</span> <span class="pl-s1">to</span> <span class="pl-s1">remark</span><span class="pl-c1">-</span><span class="pl-s1">out</span> <span class="pl-s1">part</span> <span class="pl-s1">of</span> <span class="pl-s1">the</span> code.
+    <span class="pl-smi">It</span> <span class="pl-s1">leaves</span> <span class="pl-s1">no</span> <span class="pl-s1">trace</span> <span class="pl-s1">in</span> <span class="pl-s1">the</span> <span class="pl-s1">intermediate</span> <span class="pl-s1">c</span><span class="pl-c1">++</span> <span class="pl-s1">code</span>. 
+    (<span class="pl-s1">sing</span> <span class="pl-s1">translates</span> <span class="pl-s1">into</span> <span class="pl-s1">nice</span> <span class="pl-s1">human</span> <span class="pl-s1">readable</span> <span class="pl-smi">c</span><span class="pl-c1">++</span>)
+<span class="pl-c1">*</span><span class="pl-s1"></span><span class="pl-c1">/</span>
+
+<span class="pl-c">// Single line comment, can be placed only before a statement or declaration...</span>
+<span class="pl-c">// ...or at the right of the first line of a statement or declaration.</span>
+<span class="pl-c">// single line comments are kept into c++.</span>
+<span class="pl-c">//</span>
+<span class="pl-c">// here we declare if we need to use public declarations from other files. </span>
+<span class="pl-c">// (in this case from files 'sio', 'sys')</span>
+<span class="pl-s1">requires</span> <span class="pl-s">"sio"</span>;
+<span class="pl-s1">requires</span> <span class="pl-s">"sys"</span>;
+
+<span class="pl-c">//</span>
+<span class="pl-c">// A sing function declaration.</span>
+<span class="pl-c">// All the declarations can be made public with the 'public' keyword.</span>
+<span class="pl-c">// All the declarations start with a keyword specifying the type of declaration</span>
+<span class="pl-c">// (in this case fn for function) then follows the name, the arguments and the</span>
+<span class="pl-c">// return type.</span>
+<span class="pl-c">//</span>
+<span class="pl-c">// Each argument starts with a direction qualifyer (in, out, io) which tells if</span>
+<span class="pl-c">// the argument is an input, an output or both...</span>
+<span class="pl-c">// ...then follows the argument name and the type.</span>
+<span class="pl-s1">public</span> <span class="pl-s1">fn</span> <span class="pl-s1">singmain</span>(<span class="pl-s1">in</span> <span class="pl-s1">argv</span> [<span class="pl-c1">*</span>]<span class="pl-s1">string</span>) <span class="pl-s1">i32</span>
+{
+    <span class="pl-c">// print is from the sio file and sends a string to the console</span>
+    <span class="pl-s1">sio</span>.<span class="pl-en">print</span>(<span class="pl-s">"Hello World<span class="pl-cce">\n</span>"</span>);
+
+    <span class="pl-c">// type conversions are allowed in the form of &lt;newtype&gt;(expression).</span>
+    <span class="pl-s1">sio</span>.<span class="pl-en">print</span>(<span class="pl-en">string</span>(<span class="pl-en">sum</span>(<span class="pl-c1">5</span>, <span class="pl-c1">10</span>)) <span class="pl-c1">+</span> <span class="pl-s">"<span class="pl-cce">\n</span>"</span>);
+
+    <span class="pl-c">// For clarity you can specify after an argument its name separated by ':'.</span>
+    <span class="pl-k">var</span> <span class="pl-s1">result</span> <span class="pl-smi">i32</span>;
+    <span class="pl-en">recursive_power</span>(<span class="pl-c1">10</span>:<span class="pl-s1">base</span>, <span class="pl-c1">3</span>:<span class="pl-s1">exponent</span>, <span class="pl-s1">result</span>);
+
+    <span class="pl-c">// referred here to avoid a 'not used' error.</span>
+    <span class="pl-en">learnTypes</span>();
+
+    <span class="pl-c">// functions can only return a single value of some basic type.</span>
+    <span class="pl-k">return</span>(<span class="pl-c1">0</span>);
+}
+
+<span class="pl-c">// You can have as many arguments as you want, comma separated. </span>
+<span class="pl-c">// You can also omit the 'in' direction qualifyer (it is the default).</span>
+<span class="pl-en">fn</span> <span class="pl-s1">sum</span>(<span class="pl-s1">arg1</span> <span class="pl-s1">i32</span>, <span class="pl-s1">arg2</span> <span class="pl-s1">i32</span>) <span class="pl-s1">i32</span>
+{
+    <span class="pl-c">// as 'fn' declares a function, 'let' declares a constant.</span>
+    <span class="pl-c">// With constants, if you place an initializer, you can omit the type.</span>
+    <span class="pl-s1">let</span> <span class="pl-s1">the_sum</span> <span class="pl-c1">=</span> <span class="pl-s1">arg1</span> <span class="pl-c1">+</span> <span class="pl-s1">arg2</span>;
+
+    <span class="pl-k">return</span>(<span class="pl-s1">the_sum</span>);
+}
+
+<span class="pl-c">// Arguments are passed by reference, which means that in the function body you</span>
+<span class="pl-c">// use the argument names to refer to the passed variables.</span>
+<span class="pl-c">// Example: all the functions in the recursion stack access the same 'result'</span>
+<span class="pl-c">// variable, supplied by the singmain function. </span>
+<span class="pl-s1">fn</span> <span class="pl-en">recursive_power</span>(<span class="pl-s1">base</span> <span class="pl-s1">i32</span>, <span class="pl-s1">exponent</span> <span class="pl-s1">i32</span>, <span class="pl-s1">out</span> <span class="pl-s1">result</span> <span class="pl-s1">i32</span>) <span class="pl-s1">void</span>
+{
+    <span class="pl-k">if</span> (<span class="pl-s1">exponent</span> <span class="pl-c1">==</span> <span class="pl-c1">0</span>) {
+        <span class="pl-s1">result</span> <span class="pl-c1">=</span> <span class="pl-c1">1</span>;
+    } <span class="pl-k">else</span> {
+        <span class="pl-en">recursive_power</span>(<span class="pl-s1">base</span>, <span class="pl-s1">exponent</span> <span class="pl-c1">-</span> <span class="pl-c1">1</span>, <span class="pl-s1">result</span>);
+        <span class="pl-s1">result</span> <span class="pl-c1">*=</span> <span class="pl-s1">base</span>;
+    }
+}
+
+<span class="pl-c">//**********************************************************</span>
+<span class="pl-c">//</span>
+<span class="pl-c">// TYPES</span>
+<span class="pl-c">//</span>
+<span class="pl-c">//**********************************************************</span>
+<span class="pl-en">fn</span> <span class="pl-s1">learnTypes</span>() <span class="pl-s1">void</span>
+{
+    <span class="pl-c">// the var keyword declares mutable variables </span>
+    <span class="pl-c">// in this case an UTF-8 encoded string</span>
+    <span class="pl-k">var</span> <span class="pl-s1">my_name</span> <span class="pl-smi">string</span>;
+
+    <span class="pl-c">// ints of 8..64 bits size</span>
+    <span class="pl-k">var</span> <span class="pl-s1">int0</span> <span class="pl-smi">i8</span>; 
+    <span class="pl-k">var</span> <span class="pl-s1">int1</span> <span class="pl-smi">i16</span>; 
+    <span class="pl-k">var</span> <span class="pl-s1">int2</span> <span class="pl-smi">i32</span>; 
+    <span class="pl-k">var</span> <span class="pl-s1">int3</span> <span class="pl-smi">i64</span>; 
+
+    <span class="pl-c">// uints</span>
+    <span class="pl-k">var</span> <span class="pl-s1">uint0</span> <span class="pl-smi">u8</span>;
+    <span class="pl-k">var</span> <span class="pl-s1">uint1</span> <span class="pl-smi">u16</span>;
+    <span class="pl-k">var</span> <span class="pl-s1">uint2</span> <span class="pl-smi">u32</span>;
+    <span class="pl-k">var</span> <span class="pl-s1">uint3</span> <span class="pl-smi">u64</span>;
+
+    <span class="pl-c">// floats</span>
+    <span class="pl-k">var</span> <span class="pl-s1">float0</span> <span class="pl-smi">f32</span>;
+    <span class="pl-k">var</span> <span class="pl-s1">float1</span> <span class="pl-smi">f64</span>;
+
+    <span class="pl-c">// complex</span>
+    <span class="pl-k">var</span> <span class="pl-s1">cmplx0</span> <span class="pl-smi">c64</span>;
+    <span class="pl-k">var</span> <span class="pl-s1">cmplx1</span> <span class="pl-smi">c128</span>;
+
+    <span class="pl-s1">cmplx0</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span>;
+    <span class="pl-s1">cmplx1</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span>;
+
+    <span class="pl-c">// and of course...</span>
+    <span class="pl-k">var</span> <span class="pl-s1">bool0</span> <span class="pl-smi">bool</span>;
+
+    <span class="pl-c">// type inference: by default constants are i32, f32, c64</span>
+    <span class="pl-s1">let</span> <span class="pl-s1">an_int32</span> <span class="pl-c1">=</span> <span class="pl-c1">15</span>;
+    <span class="pl-s1">let</span> <span class="pl-s1">a_float32</span> <span class="pl-c1">=</span> <span class="pl-c1">15.0</span>;
+    <span class="pl-s1">let</span> <span class="pl-s1">a_complex</span> <span class="pl-c1">=</span> <span class="pl-c1">15.0</span> <span class="pl-c1">+</span> <span class="pl-c1">3i</span>;
+    <span class="pl-s1">let</span> <span class="pl-s1">a_string</span> <span class="pl-c1">=</span> <span class="pl-s">"Hello !"</span>;
+    <span class="pl-s1">let</span> <span class="pl-s1">a_bool</span> <span class="pl-c1">=</span> <span class="pl-c1">false</span>;
+
+    <span class="pl-c">// To create constant of different types use a conversion-like syntax:</span>
+    <span class="pl-c">// NOTE: this is NOT a conversion. Just a type specification</span>
+    <span class="pl-s1">let</span> <span class="pl-s1">a_float64</span> <span class="pl-c1">=</span> <span class="pl-en">f64</span>(<span class="pl-c1">5.6</span>);
+
+    <span class="pl-c">// in a type definition [] reads as "array of"</span>
+    <span class="pl-c">// in the example []i32 =&gt; array of i32.</span>
+    <span class="pl-k">var</span> <span class="pl-s1">intarray</span> []<span class="pl-smi">i32</span> <span class="pl-c1">=</span> {<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>};
+
+    <span class="pl-c">// You can specify a length, else the length is given by the initializer</span>
+    <span class="pl-c">// the last initializer is replicated on the extra items</span>
+    <span class="pl-k">var</span> <span class="pl-s1">sizedarray</span> [<span class="pl-c1">10</span>]<span class="pl-smi">i32</span> <span class="pl-c1">=</span> {<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>};
+
+    <span class="pl-c">// Specify * as the size to get a dynamic array (can change its length)</span>
+    <span class="pl-k">var</span> <span class="pl-s1">dyna_array</span> [<span class="pl-c1">*</span>]<span class="pl-smi">i32</span>;
+
+    <span class="pl-c">// you can append items to a vector invoking a method-like function on it.</span>
+    <span class="pl-s1">dyna_array</span>.<span class="pl-en">push_back</span>(<span class="pl-s1">an_int32</span>);
+
+    <span class="pl-c">// getting the size of the array. sys.validate() is like assert in c</span>
+    <span class="pl-s1">sys</span>.<span class="pl-en">validate</span>(<span class="pl-s1">dyna_array</span>.<span class="pl-en">size</span>() <span class="pl-c1">==</span> <span class="pl-c1">1</span>); 
+
+    <span class="pl-c">// a map that associates a number to a string. </span>
+    <span class="pl-c">// "map(x)..." reads "map with key of type x and value of type..." </span>
+    <span class="pl-k">var</span> <span class="pl-s1">a_map</span> <span class="pl-k">map</span>(<span class="pl-smi">string</span>)<span class="pl-smi">i32</span>;
+
+    <span class="pl-s1">a_map</span>.<span class="pl-en">insert</span>(<span class="pl-s">"one"</span>, <span class="pl-c1">1</span>);
+    <span class="pl-s1">a_map</span>.<span class="pl-en">insert</span>(<span class="pl-s">"two"</span>, <span class="pl-c1">2</span>);
+    <span class="pl-s1">a_map</span>.<span class="pl-en">insert</span>(<span class="pl-s">"three"</span>, <span class="pl-c1">3</span>);
+    <span class="pl-s1">let</span> <span class="pl-s1">key</span> <span class="pl-c1">=</span> <span class="pl-s">"two"</span>;
+
+    <span class="pl-c">// note: the second argument of get_safe is the value to be returned </span>
+    <span class="pl-c">// when the key is not found.</span>
+    <span class="pl-s1">sio</span>.<span class="pl-en">print</span>(<span class="pl-s">"<span class="pl-cce">\n</span>And the value is...: "</span> <span class="pl-c1">+</span> <span class="pl-en">string</span>(<span class="pl-s1">a_map</span>.<span class="pl-en">get_safe</span>(<span class="pl-s1">key</span>, <span class="pl-c1">-</span><span class="pl-c1">1</span>)));
+
+    <span class="pl-c">// string concatenation</span>
+    <span class="pl-s1">my_name</span> <span class="pl-c1">=</span> <span class="pl-s">"a"</span> <span class="pl-c1">+</span> <span class="pl-s">"b"</span>;
+}
+
+<span class="pl-c">// an enum type can only have a value from a discrete set. </span>
+<span class="pl-c">// can't be converted to/from int !</span>
+<span class="pl-smi">enum</span> <span class="pl-s1">Stages</span> {<span class="pl-s1">first</span>, <span class="pl-s1">second</span>, <span class="pl-s1">last</span>}
+
+<span class="pl-c">// you can refer to enum values (to assign/compare them)</span>
+<span class="pl-c">// specifying both the typename and tagname separated with the '.' operator</span>
+<span class="pl-k">var</span> <span class="pl-s1">current_stage</span> <span class="pl-c1">=</span> <span class="pl-s1">Stages</span>.<span class="pl-c1">first</span>;
+
+
+<span class="pl-c">//**********************************************************</span>
+<span class="pl-c">//</span>
+<span class="pl-c">// POINTERS</span>
+<span class="pl-c">//</span>
+<span class="pl-c">//**********************************************************</span>
+
+<span class="pl-c">// This is a factory for a dynamic vector.</span>
+<span class="pl-c">// In a type declaration '*' reads 'pointer to..'</span>
+<span class="pl-c">// so the return type is 'pointer to a vector of i32'</span>
+<span class="pl-s1">fn</span> <span class="pl-en">vectorFactory</span>(<span class="pl-s1">first</span> <span class="pl-s1">i32</span>, <span class="pl-s1">last</span> <span class="pl-s1">i32</span>) <span class="pl-c1">*</span>[<span class="pl-c1">*</span>]<span class="pl-smi">i32</span>
+{
+    <span class="pl-s1">var</span> <span class="pl-s1">buffer</span> [<span class="pl-c1">*</span>]<span class="pl-s1">i32</span>;
+
+    <span class="pl-c">// fill</span>
+    <span class="pl-k">for</span> (<span class="pl-s1">value</span> <span class="pl-s1">in</span> <span class="pl-s1">first</span> : <span class="pl-s1">last</span>) {
+        <span class="pl-s1">buffer</span>.<span class="pl-en">push_back</span>(<span class="pl-s1">value</span>);
+    }
+
+    <span class="pl-c">// The &amp; operator returns the address of the buffer.</span>
+    <span class="pl-c">// You can only use &amp; on local variables</span>
+    <span class="pl-c">// As you use &amp; on a variable, that variable is allocated on the HEAP.</span>
+    <span class="pl-en">return</span>(<span class="pl-c1">&amp;</span><span class="pl-s1">buffer</span>);
+}
+
+<span class="pl-s1">fn</span> <span class="pl-s1">usePointers</span>() <span class="pl-s1">void</span>
+{
+    <span class="pl-k">var</span> <span class="pl-s1">bufferptr</span> <span class="pl-c1">=</span> <span class="pl-s1">vectorFactory</span>(<span class="pl-c1">0</span>, <span class="pl-c1">100</span>);
+
+    <span class="pl-c">// you don't need to use the factory pattern to use pointers.</span>
+    <span class="pl-k">var</span> <span class="pl-s1">another_buffer</span> [<span class="pl-c1">*</span>]<span class="pl-s1">i32</span>;
+    <span class="pl-k">var</span> <span class="pl-smi">another_bufferptr</span> <span class="pl-c1">=</span> <span class="pl-c1">&amp;</span><span class="pl-s1">another_buffer</span>;
+
+    <span class="pl-c">// you can dereference a pointer with the * operator</span>
+    <span class="pl-c">// sys.validate is an assertion (causes a signal if the argument is false)</span>
+    <span class="pl-s1">sys</span>.<span class="pl-en">validate</span>((<span class="pl-c1">*</span><span class="pl-s1">bufferptr</span>)[<span class="pl-c1">0</span>] <span class="pl-c1">==</span> <span class="pl-c1">0</span>);
+
+    <span class="pl-c">/* </span>
+<span class="pl-c">    // as all the pointers to a variable exit their scope the variable is</span>
+<span class="pl-c">    // no more accessible and is deleted (freed)</span>
+<span class="pl-c">    */</span>
+}
+
+<span class="pl-c">//**********************************************************</span>
+<span class="pl-c">//</span>
+<span class="pl-c">// CLASSES</span>
+<span class="pl-c">//</span>
+<span class="pl-c">//**********************************************************</span>
+
+<span class="pl-c">// This is a Class. The member variables can be directly initialized here</span>
+<span class="pl-s1">class</span> <span class="pl-s1">AClass</span> {
+<span class="pl-c1">public</span>:
+    <span class="pl-s1">var</span> <span class="pl-s1">public_var</span> <span class="pl-c1">=</span> <span class="pl-c1">100</span>;       <span class="pl-c">// same as any other variable declaration  </span>
+    <span class="pl-s1">fn</span> <span class="pl-en">is_ready</span>() <span class="pl-s1">bool</span>;         <span class="pl-c">// same as any other function declaration </span>
+    <span class="pl-s1">fn</span> <span class="pl-s1">mut</span> <span class="pl-en">finalize</span>() <span class="pl-s1">void</span>;     <span class="pl-c">// destructor (called on object deletion)</span>
+private:
+    <span class="pl-k">var</span> <span class="pl-s1">private_var</span> <span class="pl-smi">string</span>; 
+
+    <span class="pl-c">// Changes the member variables and must be marked as 'mut' (mutable)</span>
+    <span class="pl-s1">fn</span> <span class="pl-s1">mut</span> <span class="pl-en">private_fun</span>(<span class="pl-s1">errmsg</span> <span class="pl-s1">string</span>) <span class="pl-s1">void</span>;    
+}
+
+<span class="pl-c">// How to declare a member function</span>
+<span class="pl-s1">fn</span> <span class="pl-s1">AClass</span>.<span class="pl-en">is_ready</span>() <span class="pl-s1">bool</span>
+{
+    <span class="pl-c">// inside a member function, members can be accessed thrugh the </span>
+    <span class="pl-c">// this keyword and the field selector '.'</span>
+    <span class="pl-k">return</span>(<span class="pl-s1">this</span>.<span class="pl-c1">public_var</span> <span class="pl-c1">&gt;</span> <span class="pl-c1">10</span>);
+}
+
+fn <span class="pl-s1">AClass</span>.<span class="pl-smi">private_fun</span>(<span class="pl-s1">errmsg</span> <span class="pl-s1">string</span>) <span class="pl-s1">void</span>
+{
+    <span class="pl-s1">this</span>.<span class="pl-c1">private_var</span> <span class="pl-c1">=</span> <span class="pl-s1">errmsg</span>;
+}
+
+<span class="pl-c">// using a class</span>
+<span class="pl-en">fn</span> <span class="pl-s1">useAClass</span>() <span class="pl-s1">void</span>
+{
+    <span class="pl-c">// in this way you create a variable of type AClass.</span>
+    <span class="pl-k">var</span> <span class="pl-s1">instance</span> <span class="pl-smi">AClass</span>;
+
+    <span class="pl-c">// then you can access its members through the '.' operator.</span>
+    <span class="pl-k">if</span> (<span class="pl-s1">instance</span>.<span class="pl-en">is_ready</span>()) {
+        <span class="pl-s1">instance</span>.<span class="pl-c1">public_var</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span>;
+    }
+}
+
+<span class="pl-c">//**********************************************************</span>
+<span class="pl-c">//</span>
+<span class="pl-c">// INTERFACES</span>
+<span class="pl-c">//</span>
+<span class="pl-c">//**********************************************************</span>
+
+<span class="pl-c">// You can use polymorphism in sing defining an interface...</span>
+<span class="pl-k">interface</span> <span class="pl-smi">ExampleInterface</span> {
+    <span class="pl-s1">fn</span> <span class="pl-s1">mut</span> <span class="pl-en">eraseAll</span>() <span class="pl-s1">void</span>;
+    <span class="pl-s1">fn</span> <span class="pl-en">identify_myself</span>() <span class="pl-s1">void</span>;
+} 
+
+<span class="pl-c">// and then creating classes which implement the interface</span>
+<span class="pl-c">// NOTE: you don't need (and cannot) re-declare the interface functions</span>
+<span class="pl-s1">class</span> Implementer1 : <span class="pl-smi">ExampleInterface</span> {
+<span class="pl-c1">private</span>:
+    <span class="pl-s1">var</span> <span class="pl-s1">to_be_erased</span> <span class="pl-s1">i32</span> <span class="pl-c1">=</span> <span class="pl-c1">3</span>;
+<span class="pl-s1">public</span>:    
+    <span class="pl-k">var</span> <span class="pl-s1">only_on_impl1</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span>;
+}
+
+<span class="pl-s1">class</span> Implementer2 : <span class="pl-smi">ExampleInterface</span> {
+<span class="pl-c1">private</span>:
+    <span class="pl-s1">var</span> <span class="pl-s1">to_be_erased</span> <span class="pl-s1">f32</span> <span class="pl-c1">=</span> <span class="pl-c1">3</span>;
+}
+
+<span class="pl-s1">fn</span> <span class="pl-s1">Implementer1</span>.<span class="pl-en">eraseAll</span>() <span class="pl-s1">void</span>
+{
+    <span class="pl-s1">this</span>.<span class="pl-c1">to_be_erased</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span>;
+}
+
+<span class="pl-s1">fn</span> <span class="pl-s1">Implementer1</span>.<span class="pl-en">identify_myself</span>() <span class="pl-s1">void</span>
+{
+    <span class="pl-s1">sio</span>.<span class="pl-en">print</span>(<span class="pl-s">"<span class="pl-cce">\n</span>I'm the terrible int eraser !!<span class="pl-cce">\n</span>"</span>);
+}
+
+<span class="pl-s1">fn</span> <span class="pl-s1">Implementer2</span>.<span class="pl-en">eraseAll</span>() <span class="pl-s1">void</span>
+{
+    <span class="pl-s1">this</span>.<span class="pl-c1">to_be_erased</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span>;
+}
+
+<span class="pl-s1">fn</span> <span class="pl-s1">Implementer2</span>.<span class="pl-en">identify_myself</span>() <span class="pl-s1">void</span>
+{
+    <span class="pl-s1">sio</span>.<span class="pl-en">print</span>(<span class="pl-s">"<span class="pl-cce">\n</span>I'm the terrible float eraser !!<span class="pl-cce">\n</span>"</span>);
+}
+
+<span class="pl-s1">fn</span> <span class="pl-en">interface_casting</span>() <span class="pl-s1">i32</span>
+{
+    <span class="pl-c">// upcasting is automatic (es: *Implementer1 to *ExampleInterface)</span>
+    <span class="pl-k">var</span> <span class="pl-s1">concrete</span> <span class="pl-smi">Implementer1</span>;
+    <span class="pl-k">var</span> <span class="pl-s1">if_ptr</span> <span class="pl-c1">*</span><span class="pl-smi">ExampleInterface</span> <span class="pl-c1">=</span> <span class="pl-c1">&amp;</span><span class="pl-s1">concrete</span>; 
+
+    <span class="pl-c">// you can access interface members with (guess what ?) '.'</span>
+    <span class="pl-s1">if_ptr</span>.<span class="pl-en">identify_myself</span>();
+
+    <span class="pl-c">// downcasting requires a special construct </span>
+    <span class="pl-c">// (see also below the conditional structures)</span>
+    <span class="pl-en">typeswitch</span>(<span class="pl-s1">ref</span> <span class="pl-c1">=</span> <span class="pl-s1">if_ptr</span>) {  
+        <span class="pl-s1">case</span> <span class="pl-c1">*</span><span class="pl-en">Implementer1</span>: <span class="pl-k">return</span>(<span class="pl-s1">ref</span>.<span class="pl-c1">only_on_impl1</span>);
+        <span class="pl-k">case</span> <span class="pl-c1">*</span>Implementer2: {}
+        <span class="pl-k">default</span>: <span class="pl-k">return</span>(<span class="pl-c1">0</span>);
+    }
+
+    <span class="pl-k">return</span>(<span class="pl-c1">1</span>);
+}
+
+<span class="pl-c">// All the loop types</span>
+<span class="pl-en">fn</span> <span class="pl-s1">loops</span>() <span class="pl-s1">void</span>
+{
+    <span class="pl-c">// while: the condition must be strictly of boolean type</span>
+    <span class="pl-k">var</span> <span class="pl-s1">idx</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span>;
+    <span class="pl-en">while</span> (<span class="pl-s1">idx</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">10</span>) {
+        <span class="pl-c1">+</span><span class="pl-c1">+</span><span class="pl-s1">idx</span>;
+    }
+
+    <span class="pl-c">// for in an integer range. The last value is excluded</span>
+    <span class="pl-c">// 'it' is local to the loop and must not be previously declared</span>
+    <span class="pl-k">for</span> (<span class="pl-s1">it</span> <span class="pl-s1">in</span> <span class="pl-c1">0</span> : <span class="pl-c1">10</span>) {
+    }
+
+    <span class="pl-c">// reverse direction</span>
+    <span class="pl-k">for</span> (<span class="pl-s1">it</span> <span class="pl-s1">in</span> <span class="pl-c1">10</span> : <span class="pl-c1">0</span>) {
+    }
+
+    <span class="pl-c">// configurable step. The loop stops when it's &gt;= the final value</span>
+    <span class="pl-k">for</span> (<span class="pl-s1">it</span> <span class="pl-s1">in</span> <span class="pl-c1">0</span> : <span class="pl-c1">100</span> <span class="pl-s1">step</span> <span class="pl-c1">3</span>) {
+    }
+
+    <span class="pl-c">// with an auxiliary counter. </span>
+    <span class="pl-c">// The counter start always at 0 and increments by one at each iteration</span>
+    <span class="pl-k">for</span> (<span class="pl-s1">counter</span>, <span class="pl-s1">it</span> <span class="pl-s1">in</span> <span class="pl-c1">3450</span> : <span class="pl-c1">100</span> <span class="pl-s1">step</span> <span class="pl-c1">-</span><span class="pl-c1">22</span>) {
+    } 
+
+    <span class="pl-c">// value assumes in turn all the values from array</span>
+    <span class="pl-k">var</span> <span class="pl-s1">array</span> [<span class="pl-c1">*</span>]<span class="pl-smi">i32</span> <span class="pl-c1">=</span> {<span class="pl-c1">0</span>, <span class="pl-c1">10</span>, <span class="pl-c1">100</span>, <span class="pl-c1">1000</span>};
+    <span class="pl-k">for</span> (<span class="pl-s1">value</span> <span class="pl-s1">in</span> <span class="pl-s1">array</span>) {
+    }
+
+    <span class="pl-c">// as before with auxiliary counter</span>
+    <span class="pl-k">for</span> (<span class="pl-s1">counter</span>, <span class="pl-smi">value</span> <span class="pl-s1">in</span> <span class="pl-s1">array</span>) {
+    }
+}
+
+<span class="pl-c">// All the conditional structures</span>
+<span class="pl-k">interface</span> <span class="pl-s1">intface</span> {}
+<span class="pl-s1">class</span> <span class="pl-s1">c0_test</span> : <span class="pl-smi">intface</span> {<span class="pl-c1">public</span>: <span class="pl-s1">fn</span> <span class="pl-en">c0stuff</span>() <span class="pl-s1">void</span>;}
+<span class="pl-s1">class</span> <span class="pl-s1">delegating</span> : <span class="pl-smi">intface</span> {}
+
+<span class="pl-s1">fn</span> <span class="pl-en">conditionals</span>(<span class="pl-s1">in</span> <span class="pl-s1">object</span> <span class="pl-s1">intface</span>, <span class="pl-s1">in</span> <span class="pl-s1">objptr</span> <span class="pl-c1">*</span><span class="pl-s1">intface</span>) <span class="pl-s1">void</span>
+{
+    <span class="pl-s1">let</span> <span class="pl-s1">condition1</span> <span class="pl-c1">=</span> <span class="pl-c1">true</span>;
+    <span class="pl-s1">let</span> <span class="pl-s1">condition2</span> <span class="pl-c1">=</span> <span class="pl-c1">true</span>;
+    <span class="pl-s1">let</span> <span class="pl-s1">condition3</span> <span class="pl-c1">=</span> <span class="pl-c1">true</span>;
+    <span class="pl-k">var</span> <span class="pl-s1">value</span> <span class="pl-c1">=</span> <span class="pl-c1">30</span>;
+
+    <span class="pl-c">// condition1 must be a boolean.</span>
+    <span class="pl-k">if</span> (<span class="pl-s1">condition1</span>) {
+        <span class="pl-c1">+</span><span class="pl-c1">+</span><span class="pl-s1">value</span>;    <span class="pl-c">// conditioned statement</span>
+    } 
+
+    <span class="pl-c">// you can chain conditions with else if</span>
+    <span class="pl-k">if</span> (<span class="pl-s1">condition1</span>) {
+        <span class="pl-c1">+</span><span class="pl-c1">+</span><span class="pl-s1">value</span>;
+    } <span class="pl-k">else</span> <span class="pl-k">if</span> (<span class="pl-s1">condition2</span>) {
+        <span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-s1">value</span>;
+    } 
+
+    <span class="pl-c">// a final else runs if any other condition is false</span>
+    <span class="pl-k">if</span> (<span class="pl-s1">condition1</span>) {
+        <span class="pl-c1">+</span><span class="pl-c1">+</span><span class="pl-s1">value</span>;
+    } <span class="pl-k">else</span> <span class="pl-k">if</span> (<span class="pl-s1">condition2</span>) {
+        <span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-s1">value</span>;
+    } <span class="pl-k">else</span> {
+        <span class="pl-s1">value</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span>;
+    }
+
+    <span class="pl-c">// based on the switch value selects a case statement</span>
+    <span class="pl-k">switch</span> (<span class="pl-s1">value</span>) {
+        <span class="pl-k">case</span> <span class="pl-c1">0</span>: <span class="pl-s1">sio</span>.<span class="pl-en">print</span>(<span class="pl-s">"value is zero"</span>); <span class="pl-c">// a single statement !</span>
+        <span class="pl-k">case</span> <span class="pl-c1">1</span>: {}                          <span class="pl-c">// do nothing</span>
+        <span class="pl-k">case</span> <span class="pl-c1">2</span>:                             <span class="pl-c">// falls through</span>
+        <span class="pl-k">case</span> <span class="pl-c1">3</span>: <span class="pl-s1">sio</span>.<span class="pl-en">print</span>(<span class="pl-s">"value is more than one"</span>);
+        <span class="pl-k">case</span> <span class="pl-c1">4</span>: {                           <span class="pl-c">// a block is a single statement !</span>
+            <span class="pl-s1">value</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span>;
+            <span class="pl-s1">sio</span>.<span class="pl-en">print</span>(<span class="pl-s">"how big !!"</span>);
+        }
+        <span class="pl-k">default</span>: <span class="pl-k">return</span>;                    <span class="pl-c">// if no one else matches</span>
+    }
+
+    <span class="pl-c">// similar to a switch but selects a case based on argument type.</span>
+    <span class="pl-c">// - object must be a function argument of type interface.</span>
+    <span class="pl-c">// - the case types must be classes implementing the object interface.</span>
+    <span class="pl-c">// - in each case statement, ref assumes the class type of that case.</span>
+    <span class="pl-en">typeswitch</span>(<span class="pl-s1">ref</span> <span class="pl-c1">=</span> <span class="pl-s1">object</span>) {
+        case <span class="pl-s1">c0_test</span>: <span class="pl-s1">ref</span>.<span class="pl-en">c0stuff</span>();
+        case <span class="pl-s1">delegating</span>: {}
+        default: <span class="pl-k">return</span>;
+    }
+
+    <span class="pl-c">// - object must be an interface pointer.</span>
+    <span class="pl-c">// - the case types must be pointers to classes implementing the objptr interface.</span>
+    <span class="pl-c">// - in each case statement, ref assumes the class pointer type of that case.</span>
+    <span class="pl-en">typeswitch</span>(<span class="pl-s1">ref</span> <span class="pl-c1">=</span> <span class="pl-s1">objptr</span>) {
+        <span class="pl-s1">case</span> <span class="pl-c1">*</span><span class="pl-smi">c0_test</span>: {
+            <span class="pl-s1">ref</span>.<span class="pl-en">c0stuff</span>();
+            <span class="pl-k">return</span>;
+        }
+        <span class="pl-k">case</span> <span class="pl-c1">*</span><span class="pl-smi">delegating</span>: {}
+        default: <span class="pl-s1">sio</span>.<span class="pl-en">print</span>(<span class="pl-s">"unknown pointer type !!"</span>);
+    } 
+}</pre></div>
+<h2>Further Reading</h2>
+<p><a href="https://mdegirolami.wixsite.com/singlang" rel="nofollow">official Sing web site</a>.</p>
+<p>If you want to play with sing you are recommended to download the vscode plugin. Please<br>
+follow the instructions at <a href="https://mdegirolami.wixsite.com/singlang/copy-of-interfacing-sing-and-c-2" rel="nofollow">Getting Started</a></p>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Maurizio De Girolami", "https://github.com/mdegirolami"]
+</code></pre>

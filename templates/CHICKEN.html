@@ -1,0 +1,512 @@
+<h1>CHICKEN</h1>
+<p>CHICKEN is an implementation of Scheme programming language that can<br>
+compile Scheme programs to C code as well as interpret them. CHICKEN<br>
+supports R5RS and R7RS (work in progress) standards and many extensions.</p>
+<div class="highlight highlight-source-scheme"><pre class="notranslate"><span class="pl-c"><span class="pl-c">;</span>; #!/usr/bin/env csi -s</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Run the CHICKEN REPL in the commandline as follows :</span>
+<span class="pl-c"><span class="pl-c">;</span>; $ csi</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c"><span class="pl-c">;</span> 0. Syntax</span>
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Single line comments start with a semicolon</span>
+
+#| Block comments
+   can span multiple lines and...
+   #| can be nested
+   |#
+|#
+
+<span class="pl-c"><span class="pl-c">;</span>; S-expression comments are used to comment out expressions</span>
+#<span class="pl-c"><span class="pl-c">;</span> (display "nothing")    ; discard this expression </span>
+
+<span class="pl-c"><span class="pl-c">;</span>; CHICKEN has two fundamental pieces of syntax: Atoms and S-expressions</span>
+<span class="pl-c"><span class="pl-c">;</span>; an atom is something that evaluates to itself</span>
+<span class="pl-c"><span class="pl-c">;</span>; all builtin data types viz. numbers, chars, booleans, strings etc. are atoms</span>
+<span class="pl-c"><span class="pl-c">;</span>; Furthermore an atom can be a symbol, an identifier, a keyword, a procedure</span>
+<span class="pl-c"><span class="pl-c">;</span>; or the empty list (also called null)</span>
+<span class="pl-c1">'athing</span>              <span class="pl-c"><span class="pl-c">;</span>; =&gt; athing </span>
+<span class="pl-s">'+</span>                   <span class="pl-c"><span class="pl-c">;</span>; =&gt; + </span>
++                    <span class="pl-c"><span class="pl-c">;</span>; =&gt; &lt;procedure C_plus&gt;</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; S-expressions (short for symbolic expressions) consists of one or more atoms</span>
+(<span class="pl-k">quote</span> <span class="pl-s">+</span>)            <span class="pl-c"><span class="pl-c">;</span>; =&gt; + ; another way of writing '+</span>
+(<span class="pl-k">+</span> <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)            <span class="pl-c"><span class="pl-c">;</span>; =&gt; 6 ; this S-expression evaluates to a function call</span>
+<span class="pl-s">'</span>(<span class="pl-k">+</span> <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)           <span class="pl-c"><span class="pl-c">;</span>; =&gt; (+ 1 2 3) ; evaluates to a list </span>
+
+
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c"><span class="pl-c">;</span> 1. Primitive Datatypes and Operators </span>
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Numbers</span>
+99999999999999999999 <span class="pl-c"><span class="pl-c">;</span>; integers</span>
+#b1010               <span class="pl-c"><span class="pl-c">;</span>; binary ; =&gt; 10</span>
+#o10                 <span class="pl-c"><span class="pl-c">;</span>; octal  ; =&gt; 8</span>
+#x8ded               <span class="pl-c"><span class="pl-c">;</span>; hexadecimal ; =&gt; 36333</span>
+3.14                 <span class="pl-c"><span class="pl-c">;</span>; real</span>
+6.02e+23
+3/4                  <span class="pl-c"><span class="pl-c">;</span>; rational</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;Characters and Strings</span>
+#\A                  <span class="pl-c"><span class="pl-c">;</span>; A char</span>
+<span class="pl-s"><span class="pl-pds">"</span>Hello, World!<span class="pl-pds">"</span></span>      <span class="pl-c"><span class="pl-c">;</span>; strings are fixed-length arrays of characters</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Booleans</span>
+#t                  <span class="pl-c"><span class="pl-c">;</span>; true</span>
+#f                  <span class="pl-c"><span class="pl-c">;</span>; false</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Function call is written as (f x y z ...)</span>
+<span class="pl-c"><span class="pl-c">;</span>; where f is a function and x,y,z, ... are arguments</span>
+(print <span class="pl-s"><span class="pl-pds">"</span>Hello, World!<span class="pl-pds">"</span></span>)    <span class="pl-c"><span class="pl-c">;</span>; =&gt; Hello, World!</span>
+<span class="pl-c"><span class="pl-c">;</span>; formatted output</span>
+(printf <span class="pl-s"><span class="pl-pds">"</span>Hello, ~a.<span class="pl-cce">\n</span><span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>World<span class="pl-pds">"</span></span>)  <span class="pl-c"><span class="pl-c">;</span>; =&gt; Hello, World.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; print commandline arguments</span>
+(<span class="pl-c1">map</span> print (command-line-arguments)) 
+
+(<span class="pl-c1">list</span> <span class="pl-c1">'foo</span> <span class="pl-c1">'bar</span> <span class="pl-c1">'baz</span>)          <span class="pl-c"><span class="pl-c">;</span>; =&gt; (foo bar baz)</span>
+(string-append <span class="pl-s"><span class="pl-pds">"</span>pine<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>apple<span class="pl-pds">"</span></span>) <span class="pl-c"><span class="pl-c">;</span>; =&gt; "pineapple"</span>
+(string-ref <span class="pl-s"><span class="pl-pds">"</span>tapioca<span class="pl-pds">"</span></span> <span class="pl-c1">3</span>)       <span class="pl-c"><span class="pl-c">;</span>; =&gt; #\i;; character 'i' is at index 3</span>
+(<span class="pl-c1">string-&gt;list</span> <span class="pl-s"><span class="pl-pds">"</span>CHICKEN<span class="pl-pds">"</span></span>)       <span class="pl-c"><span class="pl-c">;</span>; =&gt; (#\C #\H #\I #\C #\K #\E #\N)</span>
+(string-intersperse <span class="pl-s">'</span>(<span class="pl-s"><span class="pl-pds">"</span>1<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>2<span class="pl-pds">"</span></span>) <span class="pl-s"><span class="pl-pds">"</span>:<span class="pl-pds">"</span></span>) <span class="pl-c"><span class="pl-c">;</span>; =&gt; "1:2"</span>
+(string-split <span class="pl-s"><span class="pl-pds">"</span>1:2:3<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>:<span class="pl-pds">"</span></span>)     <span class="pl-c"><span class="pl-c">;</span>; =&gt; ("1" "2" "3")</span>
+
+
+<span class="pl-c"><span class="pl-c">;</span>; Predicates are special functions that return boolean values</span>
+(<span class="pl-c1">atom?</span> <span class="pl-c1">#t</span>)                <span class="pl-c"><span class="pl-c">;</span>; =&gt; #t</span>
+
+(<span class="pl-c1">symbol?</span> <span class="pl-c1">#t</span>)              <span class="pl-c"><span class="pl-c">;</span>; =&gt; #f</span>
+
+(<span class="pl-c1">symbol?</span> <span class="pl-s">'+</span>)              <span class="pl-c"><span class="pl-c">;</span>; =&gt; #t</span>
+
+(<span class="pl-c1">procedure?</span> +)            <span class="pl-c"><span class="pl-c">;</span>; =&gt; #t</span>
+
+(<span class="pl-c1">pair?</span> <span class="pl-s">'</span>(<span class="pl-c1">1</span> <span class="pl-c1">2</span>))            <span class="pl-c"><span class="pl-c">;</span>; =&gt; #t</span>
+
+(<span class="pl-c1">pair?</span> <span class="pl-s">'</span>(<span class="pl-c1">1</span> <span class="pl-c1">2</span> . <span class="pl-c1">3</span>))        <span class="pl-c"><span class="pl-c">;</span>; =&gt; #t</span>
+
+(<span class="pl-c1">pair?</span> <span class="pl-c1">'()</span>)               <span class="pl-c"><span class="pl-c">;</span>; =&gt; #f</span>
+
+(<span class="pl-c1">list?</span> <span class="pl-c1">'()</span>)               <span class="pl-c"><span class="pl-c">;</span>; =&gt; #t</span>
+
+
+<span class="pl-c"><span class="pl-c">;</span>; Some arithmetic operations</span>
+
+(<span class="pl-k">+</span> <span class="pl-c1">1</span> <span class="pl-c1">1</span>)                   <span class="pl-c"><span class="pl-c">;</span>; =&gt; 2</span>
+(<span class="pl-k">-</span> <span class="pl-c1">8</span> <span class="pl-c1">1</span>)                   <span class="pl-c"><span class="pl-c">;</span>; =&gt; 7</span>
+(<span class="pl-k">*</span> <span class="pl-c1">10</span> <span class="pl-c1">2</span>)                  <span class="pl-c"><span class="pl-c">;</span>; =&gt; 20</span>
+(<span class="pl-c1">expt</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)                <span class="pl-c"><span class="pl-c">;</span>; =&gt; 8</span>
+(<span class="pl-c1">remainder</span> <span class="pl-c1">5</span> <span class="pl-c1">2</span>)           <span class="pl-c"><span class="pl-c">;</span>; =&gt; 1</span>
+(<span class="pl-k">/</span> <span class="pl-c1">35</span> <span class="pl-c1">5</span>)                  <span class="pl-c"><span class="pl-c">;</span>; =&gt; 7</span>
+(<span class="pl-k">/</span> <span class="pl-c1">1</span> <span class="pl-c1">3</span>)                   <span class="pl-c"><span class="pl-c">;</span>; =&gt; 0.333333333333333</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c"><span class="pl-c">;</span> 2. Variables</span>
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; You can create variables with define</span>
+<span class="pl-c"><span class="pl-c">;</span>; A variable name can use any character except: ()[]{}",'`;#\</span>
+(<span class="pl-k">define</span> <span class="pl-smi">myvar</span> 5)
+myvar        <span class="pl-c"><span class="pl-c">;</span>; =&gt; 5</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Alias to a procedure</span>
+(<span class="pl-k">define</span> ** expt)
+(** <span class="pl-c1">2</span> <span class="pl-c1">3</span>)     <span class="pl-c"><span class="pl-c">;</span>; =&gt; 8</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Accessing an undefined variable raises an exception</span>
+s            <span class="pl-c"><span class="pl-c">;</span>; =&gt; Error: unbound variable: s</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Local binding</span>
+(<span class="pl-k">let</span> ((me <span class="pl-s"><span class="pl-pds">"</span>Bob<span class="pl-pds">"</span></span>))
+  (print me))     <span class="pl-c"><span class="pl-c">;</span>; =&gt; Bob</span>
+
+(print me)        <span class="pl-c"><span class="pl-c">;</span>; =&gt; Error: unbound variable: me</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Assign a new value to previously defined variable</span>
+(<span class="pl-k">set!</span> myvar <span class="pl-c1">10</span>) 
+myvar             <span class="pl-c"><span class="pl-c">;</span>; =&gt; 10</span>
+
+
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c"><span class="pl-c">;</span> 3. Collections</span>
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Pairs</span>
+<span class="pl-c"><span class="pl-c">;</span>; 'cons' constructs pairs, </span>
+<span class="pl-c"><span class="pl-c">;</span>; 'car' extracts the first element, 'cdr' extracts the rest of the elements</span>
+(<span class="pl-c1">cons</span> <span class="pl-c1">'subject</span> <span class="pl-c1">'verb</span>)       <span class="pl-c"><span class="pl-c">;</span>; =&gt; '(subject . verb)</span>
+(<span class="pl-c1">car</span> (<span class="pl-c1">cons</span> <span class="pl-c1">'subject</span> <span class="pl-c1">'verb</span>)) <span class="pl-c"><span class="pl-c">;</span>; =&gt; subject</span>
+(<span class="pl-c1">cdr</span> (<span class="pl-c1">cons</span> <span class="pl-c1">'subject</span> <span class="pl-c1">'verb</span>)) <span class="pl-c"><span class="pl-c">;</span>; =&gt; verb</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Lists</span>
+<span class="pl-c"><span class="pl-c">;</span>; cons creates a new list if the second item is a list</span>
+(<span class="pl-c1">cons</span> <span class="pl-c1">0</span> <span class="pl-c1">'()</span>)         <span class="pl-c"><span class="pl-c">;</span>; =&gt; (0)</span>
+(<span class="pl-c1">cons</span> <span class="pl-c1">1</span> (<span class="pl-c1">cons</span> <span class="pl-c1">2</span>  (<span class="pl-c1">cons</span> <span class="pl-c1">3</span> <span class="pl-c1">'()</span>)))    <span class="pl-c"><span class="pl-c">;</span>; =&gt; (1 2 3)</span>
+<span class="pl-c"><span class="pl-c">;</span>; 'list' is a convenience variadic constructor for lists</span>
+(<span class="pl-c1">list</span> <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)    <span class="pl-c"><span class="pl-c">;</span>; =&gt; (1 2 3)</span>
+
+
+<span class="pl-c"><span class="pl-c">;</span>; Use 'append' to append lists together</span>
+(<span class="pl-c1">append</span> <span class="pl-s">'</span>(<span class="pl-c1">1</span> <span class="pl-c1">2</span>) <span class="pl-s">'</span>(<span class="pl-c1">3</span> <span class="pl-c1">4</span>)) <span class="pl-c"><span class="pl-c">;</span>; =&gt; (1 2 3 4)</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Some basic operations on lists</span>
+(<span class="pl-c1">map</span> add1 <span class="pl-s">'</span>(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>))    <span class="pl-c"><span class="pl-c">;</span>; =&gt; (2 3 4)</span>
+(<span class="pl-c1">reverse</span> <span class="pl-s">'</span>(<span class="pl-c1">1</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span> <span class="pl-c1">7</span>))   <span class="pl-c"><span class="pl-c">;</span>; =&gt; (7 4 3 1)</span>
+(sort <span class="pl-s">'</span>(<span class="pl-c1">11</span> <span class="pl-c1">22</span> <span class="pl-c1">33</span> <span class="pl-c1">44</span>) &gt;)   <span class="pl-c"><span class="pl-c">;</span>; =&gt; (44 33 22 11)</span>
+
+(<span class="pl-k">define</span> <span class="pl-smi">days</span> '(SUN MON FRI))
+(<span class="pl-c1">list-ref</span> days <span class="pl-c1">1</span>)      <span class="pl-c"><span class="pl-c">;</span>; =&gt; MON</span>
+(<span class="pl-k">set!</span> (<span class="pl-c1">list-ref</span> days <span class="pl-c1">1</span>) <span class="pl-c1">'TUE</span>)
+days                   <span class="pl-c"><span class="pl-c">;</span>; =&gt; (SUN TUE FRI)</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Vectors</span>
+<span class="pl-c"><span class="pl-c">;</span>; Vectors are heterogeneous structures whose elements are indexed by integers</span>
+<span class="pl-c"><span class="pl-c">;</span>; A Vector typically occupies less space than a list of the same length</span>
+<span class="pl-c"><span class="pl-c">;</span>; Random access of an element in a vector is faster than in a list</span>
+#(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)                     <span class="pl-c"><span class="pl-c">;</span>; =&gt; #(1 2 3) ;; literal syntax</span>
+(vector <span class="pl-c1">'a</span> <span class="pl-c1">'b</span> <span class="pl-c1">'c</span>)            <span class="pl-c"><span class="pl-c">;</span>; =&gt; #(a b c) </span>
+(<span class="pl-c1">vector?</span> #(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>))           <span class="pl-c"><span class="pl-c">;</span>; =&gt; #t</span>
+(<span class="pl-c1">vector-length</span> #(<span class="pl-c1">1</span> (<span class="pl-c1">2</span>) <span class="pl-s"><span class="pl-pds">"</span>a<span class="pl-pds">"</span></span>)) <span class="pl-c"><span class="pl-c">;</span>; =&gt; 3</span>
+(<span class="pl-c1">vector-ref</span> #(<span class="pl-c1">1</span> (<span class="pl-c1">2</span>) (<span class="pl-c1">3</span> <span class="pl-c1">3</span>)) <span class="pl-c1">2</span>)<span class="pl-c"><span class="pl-c">;</span>; =&gt; (3 3)</span>
+
+(<span class="pl-k">define</span> <span class="pl-smi">vec</span> #(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>))
+(<span class="pl-c1">vector-set!</span> vec <span class="pl-c1">2</span> <span class="pl-c1">4</span>)
+vec                         <span class="pl-c"><span class="pl-c">;</span>; =&gt; #(1 2 4)</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Vectors can be created from lists and vice-verca</span>
+(<span class="pl-c1">vector-&gt;list</span> #(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">4</span>))     <span class="pl-c"><span class="pl-c">;</span>; =&gt; '(1 2 4)</span>
+(<span class="pl-c1">list-&gt;vector</span> <span class="pl-s">'</span>(a b c))     <span class="pl-c"><span class="pl-c">;</span>; =&gt; #(a b c)</span>
+
+
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c"><span class="pl-c">;</span> 4. Functions</span>
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Use 'lambda' to create functions.</span>
+<span class="pl-c"><span class="pl-c">;</span>; A function always returns the value of its last expression</span>
+(<span class="pl-k">lambda</span> () "Hello World")   <span class="pl-c"><span class="pl-c">;</span>; =&gt; #&lt;procedure (?)&gt; </span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Use extra parens around function definition to execute </span>
+((<span class="pl-k">lambda</span> () "Hello World")) <span class="pl-c"><span class="pl-c">;</span>; =&gt; Hello World ;; argument list is empty</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; A function with an argument</span>
+((<span class="pl-k">lambda</span> (<span class="pl-v">x</span>) (<span class="pl-k">*</span> x x)) <span class="pl-c1">3</span>)           <span class="pl-c"><span class="pl-c">;</span>; =&gt; 9</span>
+<span class="pl-c"><span class="pl-c">;</span>; A function with two arguments</span>
+((<span class="pl-k">lambda</span> (<span class="pl-v">x y</span>) (<span class="pl-k">*</span> x y)) <span class="pl-c1">2</span> <span class="pl-c1">3</span>)       <span class="pl-c"><span class="pl-c">;</span>; =&gt; 6</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; assign a function to a variable</span>
+(<span class="pl-k">define</span> <span class="pl-smi">sqr</span> (<span class="pl-k">lambda</span> (<span class="pl-v">x</span>) (<span class="pl-k">*</span> x x)))
+sqr                        <span class="pl-c"><span class="pl-c">;</span>; =&gt; #&lt;procedure (sqr x)&gt;</span>
+(sqr <span class="pl-c1">3</span>)                    <span class="pl-c"><span class="pl-c">;</span>; =&gt; 9</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; We can shorten this using the function definition syntactic sugar</span>
+(<span class="pl-k">define</span> (<span class="pl-en">sqr</span><span class="pl-smi"> x</span>) (<span class="pl-k">*</span> x x))
+(sqr <span class="pl-c1">3</span>)                    <span class="pl-c"><span class="pl-c">;</span>; =&gt; 9</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; We can redefine existing procedures</span>
+(foldl <span class="pl-c1">cons</span> <span class="pl-c1">'()</span> <span class="pl-s">'</span>(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span> <span class="pl-c1">5</span>)) <span class="pl-c"><span class="pl-c">;</span>; =&gt; (((((() . 1) . 2) . 3) . 4) . 5)</span>
+(<span class="pl-k">define</span> (<span class="pl-en">foldl</span><span class="pl-smi"> func accu alist</span>)
+  (<span class="pl-k">if</span> (<span class="pl-c1">null?</span> alist)
+    accu
+    (foldl func (func (<span class="pl-c1">car</span> alist) accu) (<span class="pl-c1">cdr</span> alist))))
+
+(foldl <span class="pl-c1">cons</span> <span class="pl-c1">'()</span> <span class="pl-s">'</span>(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span> <span class="pl-c1">5</span>))   <span class="pl-c"><span class="pl-c">;</span>; =&gt; (5 4 3 2 1)</span>
+
+
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c"><span class="pl-c">;</span> 5. Equality</span>
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; For numbers use '='</span>
+(<span class="pl-k">=</span> <span class="pl-c1">3</span> <span class="pl-c1">3.0</span>)                  <span class="pl-c"><span class="pl-c">;</span>; =&gt; #t</span>
+(<span class="pl-k">=</span> <span class="pl-c1">2</span> <span class="pl-c1">1</span>)                    <span class="pl-c"><span class="pl-c">;</span>; =&gt; #f</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; 'eq?' returns #t if two arguments refer to the same object in memory</span>
+<span class="pl-c"><span class="pl-c">;</span>; In other words, it's a simple pointer comparison.</span>
+(<span class="pl-c1">eq?</span> <span class="pl-c1">'()</span> <span class="pl-c1">'()</span>)              <span class="pl-c"><span class="pl-c">;</span>; =&gt; #t ;; there's only one empty list in memory</span>
+(<span class="pl-c1">eq?</span> (<span class="pl-c1">list</span> <span class="pl-c1">3</span>) (<span class="pl-c1">list</span> <span class="pl-c1">3</span>))    <span class="pl-c"><span class="pl-c">;</span>; =&gt; #f ;; not the same object</span>
+(<span class="pl-c1">eq?</span> <span class="pl-c1">'yes</span> <span class="pl-c1">'yes</span>)            <span class="pl-c"><span class="pl-c">;</span>; =&gt; #t</span>
+(<span class="pl-c1">eq?</span> <span class="pl-c1">3</span> <span class="pl-c1">3</span>)                  <span class="pl-c"><span class="pl-c">;</span>; =&gt; #t ;; don't do this even if it works in this case</span>
+(<span class="pl-c1">eq?</span> <span class="pl-c1">3</span> <span class="pl-c1">3.0</span>)                <span class="pl-c"><span class="pl-c">;</span>; =&gt; #f ;; it's better to use '=' for number comparisons</span>
+(<span class="pl-c1">eq?</span> <span class="pl-s"><span class="pl-pds">"</span>Hello<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>Hello<span class="pl-pds">"</span></span>)      <span class="pl-c"><span class="pl-c">;</span>; =&gt; #f</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; 'eqv?' is same as 'eq?' all datatypes except numbers and characters</span>
+(<span class="pl-c1">eqv?</span> <span class="pl-c1">3</span> <span class="pl-c1">3.0</span>)               <span class="pl-c"><span class="pl-c">;</span>; =&gt; #f</span>
+(<span class="pl-c1">eqv?</span> (<span class="pl-c1">expt</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>) (<span class="pl-c1">expt</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)) <span class="pl-c"><span class="pl-c">;</span>; =&gt; #t</span>
+(<span class="pl-c1">eqv?</span> <span class="pl-c1">'yes</span> <span class="pl-c1">'yes</span>)           <span class="pl-c"><span class="pl-c">;</span>; =&gt; #t</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; 'equal?' recursively compares the contents of pairs, vectors, and strings,</span>
+<span class="pl-c"><span class="pl-c">;</span>; applying eqv? on other objects such as numbers and symbols. </span>
+<span class="pl-c"><span class="pl-c">;</span>; A rule of thumb is that objects are generally equal? if they print the same.</span>
+
+(<span class="pl-c1">equal?</span> <span class="pl-s">'</span>(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>) <span class="pl-s">'</span>(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)) <span class="pl-c"><span class="pl-c">;</span>; =&gt; #t</span>
+(<span class="pl-c1">equal?</span> #(a b c) #(a b c)) <span class="pl-c"><span class="pl-c">;</span>; =&gt; #t</span>
+(<span class="pl-c1">equal?</span> <span class="pl-c1">'a</span> <span class="pl-c1">'a</span>)             <span class="pl-c"><span class="pl-c">;</span>; =&gt; #t</span>
+(<span class="pl-c1">equal?</span> <span class="pl-s"><span class="pl-pds">"</span>abc<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>abc<span class="pl-pds">"</span></span>)       <span class="pl-c"><span class="pl-c">;</span>; =&gt; #t</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; In Summary:</span>
+<span class="pl-c"><span class="pl-c">;</span>; eq? tests if objects are identical</span>
+<span class="pl-c"><span class="pl-c">;</span>; eqv? tests if objects are operationally equivalent</span>
+<span class="pl-c"><span class="pl-c">;</span>; equal? tests if objects have same structure and contents</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Comparing strings for equality</span>
+(<span class="pl-c1">string=?</span> <span class="pl-s"><span class="pl-pds">"</span>Hello<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>Hello<span class="pl-pds">"</span></span>) <span class="pl-c"><span class="pl-c">;</span>; =&gt; #t</span>
+
+
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c"><span class="pl-c">;</span> 6. Control Flow</span>
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Conditionals</span>
+(<span class="pl-k">if</span> <span class="pl-c1">#t</span>                     <span class="pl-c"><span class="pl-c">;</span>; test expression</span>
+  <span class="pl-s"><span class="pl-pds">"</span>True<span class="pl-pds">"</span></span>                   <span class="pl-c"><span class="pl-c">;</span>; then expression</span>
+  <span class="pl-s"><span class="pl-pds">"</span>False<span class="pl-pds">"</span></span>)                 <span class="pl-c"><span class="pl-c">;</span>; else expression</span>
+                           <span class="pl-c"><span class="pl-c">;</span>; =&gt; "True"</span>
+
+(<span class="pl-k">if</span> (<span class="pl-k">&gt;</span> <span class="pl-c1">3</span> <span class="pl-c1">2</span>)
+  <span class="pl-s"><span class="pl-pds">"</span>yes<span class="pl-pds">"</span></span>
+  <span class="pl-s"><span class="pl-pds">"</span>no<span class="pl-pds">"</span></span>)                    <span class="pl-c"><span class="pl-c">;</span>; =&gt; "yes"</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; In conditionals, all values that are not '#f' are treated as true.</span>
+<span class="pl-c"><span class="pl-c">;</span>; 0, '(), #() "" , are all true values</span>
+(<span class="pl-k">if</span> <span class="pl-c1">0</span>
+  <span class="pl-s"><span class="pl-pds">"</span>0 is not false<span class="pl-pds">"</span></span>
+  <span class="pl-s"><span class="pl-pds">"</span>0 is false<span class="pl-pds">"</span></span>)            <span class="pl-c"><span class="pl-c">;</span>; =&gt; "0 is not false"</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; 'cond' chains a series of tests and returns as soon as it encounters a true condition</span>
+<span class="pl-c"><span class="pl-c">;</span>; 'cond' can be used to simulate 'if/elseif/else' statements</span>
+(<span class="pl-k">cond</span> ((<span class="pl-k">&gt;</span> <span class="pl-c1">2</span> <span class="pl-c1">2</span>) <span class="pl-s"><span class="pl-pds">"</span>not true so don't return this<span class="pl-pds">"</span></span>)
+      ((<span class="pl-k">&lt;</span> <span class="pl-c1">2</span> <span class="pl-c1">5</span>) <span class="pl-s"><span class="pl-pds">"</span>true, so return this<span class="pl-pds">"</span></span>)
+      (<span class="pl-k">else</span> <span class="pl-s"><span class="pl-pds">"</span>returning default<span class="pl-pds">"</span></span>))    <span class="pl-c"><span class="pl-c">;</span>; =&gt; "true, so return this"</span>
+
+
+<span class="pl-c"><span class="pl-c">;</span>; A case expression is evaluated as follows:</span>
+<span class="pl-c"><span class="pl-c">;</span>; The key is evaluated and compared with each datum in sense of 'eqv?',</span>
+<span class="pl-c"><span class="pl-c">;</span>; The corresponding clause in the matching datum is evaluated and returned as result</span>
+(<span class="pl-k">case</span> (<span class="pl-k">*</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)              <span class="pl-c"><span class="pl-c">;</span>; the key is 6</span>
+  ((<span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">5</span> <span class="pl-c1">7</span>) <span class="pl-c1">'prime</span>)       <span class="pl-c"><span class="pl-c">;</span>; datum 1</span>
+  ((<span class="pl-c1">1</span> <span class="pl-c1">4</span> <span class="pl-c1">6</span> <span class="pl-c1">8</span>) <span class="pl-c1">'composite</span>))  <span class="pl-c"><span class="pl-c">;</span>; datum 2; matched!</span>
+                           <span class="pl-c"><span class="pl-c">;</span>; =&gt; composite</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; case with else clause</span>
+(<span class="pl-k">case</span> (<span class="pl-c1">car</span> <span class="pl-s">'</span>(c d))
+  ((a e i o u) <span class="pl-c1">'vowel</span>)
+  ((w y) <span class="pl-c1">'semivowel</span>)
+  (<span class="pl-k">else</span> <span class="pl-c1">'consonant</span>))       <span class="pl-c"><span class="pl-c">;</span>; =&gt;  consonant</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Boolean expressions</span>
+<span class="pl-c"><span class="pl-c">;</span>; 'and' returns the first expression that evaluates to #f</span>
+<span class="pl-c"><span class="pl-c">;</span>; otherwise, it returns the result of the last expression</span>
+(<span class="pl-k">and</span> <span class="pl-c1">#t</span> <span class="pl-c1">#f</span> (<span class="pl-k">=</span> <span class="pl-c1">2</span> <span class="pl-c1">2.0</span>))                <span class="pl-c"><span class="pl-c">;</span>; =&gt; #f</span>
+(<span class="pl-k">and</span> (<span class="pl-k">&lt;</span> <span class="pl-c1">2</span> <span class="pl-c1">5</span>) (<span class="pl-k">&gt;</span> <span class="pl-c1">2</span> <span class="pl-c1">0</span>) <span class="pl-s"><span class="pl-pds">"</span>0 &lt; 2 &lt; 5<span class="pl-pds">"</span></span>)    <span class="pl-c"><span class="pl-c">;</span>; =&gt; "0 &lt; 2 &lt; 5"</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; 'or' returns the first expression that evaluates to #t </span>
+<span class="pl-c"><span class="pl-c">;</span>; otherwise the result of the last expression is returned</span>
+(<span class="pl-k">or</span> <span class="pl-c1">#f</span> <span class="pl-c1">#t</span> <span class="pl-c1">#f</span>)                        <span class="pl-c"><span class="pl-c">;</span>; =&gt; #t</span>
+(<span class="pl-k">or</span> <span class="pl-c1">#f</span> <span class="pl-c1">#f</span> <span class="pl-c1">#f</span>)                        <span class="pl-c"><span class="pl-c">;</span>; =&gt; #f</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; 'when' is like 'if' without the else expression</span>
+(when (<span class="pl-c1">positive?</span> <span class="pl-c1">5</span>) <span class="pl-s"><span class="pl-pds">"</span>I'm positive<span class="pl-pds">"</span></span>)  <span class="pl-c"><span class="pl-c">;</span>; =&gt; "I'm positive"</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; 'unless' is equivalent to (when (not &lt;test&gt;) &lt;expr&gt;)</span>
+(unless (<span class="pl-c1">null?</span> <span class="pl-s">'</span>(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)) <span class="pl-s"><span class="pl-pds">"</span>not null<span class="pl-pds">"</span></span>) <span class="pl-c"><span class="pl-c">;</span>; =&gt; "not null"</span>
+
+
+<span class="pl-c"><span class="pl-c">;</span>; Loops</span>
+<span class="pl-c"><span class="pl-c">;</span>; loops can be created with the help of tail-recursions</span>
+(<span class="pl-k">define</span> (<span class="pl-en">loop</span><span class="pl-smi"> count</span>)
+  (unless (<span class="pl-k">=</span> count <span class="pl-c1">0</span>)
+    (print <span class="pl-s"><span class="pl-pds">"</span>hello<span class="pl-pds">"</span></span>) 
+    (loop (sub1 count))))
+(loop <span class="pl-c1">4</span>)                             <span class="pl-c"><span class="pl-c">;</span>; =&gt; hello, hello ...</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Or with a named let</span>
+(<span class="pl-k">let</span> loop ((i <span class="pl-c1">0</span>) (limit <span class="pl-c1">5</span>))
+  (when (<span class="pl-k">&lt;</span> i limit)
+    (printf <span class="pl-s"><span class="pl-pds">"</span>i = ~a<span class="pl-cce">\n</span><span class="pl-pds">"</span></span> i)
+    (loop (add1 i) limit)))          <span class="pl-c"><span class="pl-c">;</span>; =&gt; i = 0, i = 1....</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; 'do' is another iteration construct</span>
+<span class="pl-c"><span class="pl-c">;</span>; It initializes a set of variables and updates them in each iteration</span>
+<span class="pl-c"><span class="pl-c">;</span>; A final expression is evaluated after the exit condition is met</span>
+(<span class="pl-k">do</span> ((x <span class="pl-c1">0</span> (add1 x )))            <span class="pl-c"><span class="pl-c">;</span>; initialize x = 0 and add 1 in each iteration</span>
+  ((<span class="pl-k">=</span> x <span class="pl-c1">10</span>) (print <span class="pl-s"><span class="pl-pds">"</span>done<span class="pl-pds">"</span></span>))      <span class="pl-c"><span class="pl-c">;</span>; exit condition and final expression</span>
+  (print x))                     <span class="pl-c"><span class="pl-c">;</span>; command to execute in each step</span>
+                                 <span class="pl-c"><span class="pl-c">;</span>; =&gt; 0,1,2,3....9,done</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Iteration over lists </span>
+(<span class="pl-c1">for-each</span> (<span class="pl-k">lambda</span> (<span class="pl-v">a</span>) (print (<span class="pl-k">*</span> a a)))
+          <span class="pl-s">'</span>(<span class="pl-c1">3</span> <span class="pl-c1">5</span> <span class="pl-c1">7</span>))                  <span class="pl-c"><span class="pl-c">;</span>; =&gt; 9, 25, 49</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; 'map' is like for-each but returns a list</span>
+(<span class="pl-c1">map</span> add1 <span class="pl-s">'</span>(<span class="pl-c1">11</span> <span class="pl-c1">22</span> <span class="pl-c1">33</span>))               <span class="pl-c"><span class="pl-c">;</span>; =&gt; (12 23 34)</span>
+
+
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c"><span class="pl-c">;</span> 7. Extensions</span>
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; The CHICKEN core is very minimal, but additional features are provided by library extensions known as Eggs.</span>
+<span class="pl-c"><span class="pl-c">;</span>; You can install Eggs with 'chicken-install &lt;eggname&gt;' command.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; complex numbers</span>
+3+4i                               <span class="pl-c"><span class="pl-c">;</span>; =&gt; 3+2i</span>
+<span class="pl-c"><span class="pl-c">;</span>; Supports fractions without falling back to inexact flonums</span>
+1/3                                <span class="pl-c"><span class="pl-c">;</span>; =&gt; 1/3</span>
+<span class="pl-c"><span class="pl-c">;</span>; provides support for large integers through bignums</span>
+(<span class="pl-c1">expt</span> <span class="pl-c1">9</span> <span class="pl-c1">20</span>)                        <span class="pl-c"><span class="pl-c">;</span>; =&gt; 12157665459056928801 </span>
+<span class="pl-c"><span class="pl-c">;</span>; And other 'extended' functions</span>
+(<span class="pl-c1">log</span> <span class="pl-c1">10</span> (<span class="pl-c1">exp</span> <span class="pl-c1">1</span>))                   <span class="pl-c"><span class="pl-c">;</span>; =&gt; 2.30258509299405</span>
+(<span class="pl-c1">numerator</span> 2/3)                    <span class="pl-c"><span class="pl-c">;</span>; =&gt; 2</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; 'utf8' provides unicode support</span>
+(import utf8)
+<span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">\u</span>03BBx:(<span class="pl-cce">\u</span>03BC<span class="pl-cce">\u</span>0251.<span class="pl-cce">\u</span>0251<span class="pl-cce">\u</span>2192<span class="pl-cce">\u</span>0251).xx<span class="pl-pds">"</span></span> <span class="pl-c"><span class="pl-c">;</span>; =&gt; "λx:(μɑ.ɑ→ɑ).xx"</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; 'posix' provides file I/O and lots of other services for unix-like operating systems</span>
+<span class="pl-c"><span class="pl-c">;</span>; Some of the functions are not available in Windows system,</span>
+<span class="pl-c"><span class="pl-c">;</span>; See http://wiki.call-cc.org/man/5/Module%20(chicken%20file%20posix) for more details</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Open a file to append, open "write only" and create file if it does not exist</span>
+(<span class="pl-k">define</span> <span class="pl-smi">outfn</span> (file-open <span class="pl-s"><span class="pl-pds">"</span>chicken-hen.txt<span class="pl-pds">"</span></span> (<span class="pl-k">+</span> open/append open/wronly open/creat)))
+<span class="pl-c"><span class="pl-c">;</span>; write some text to the file</span>
+(file-write outfn <span class="pl-s"><span class="pl-pds">"</span>Did chicken came before hen?<span class="pl-pds">"</span></span>) 
+<span class="pl-c"><span class="pl-c">;</span>; close the file</span>
+(file-close outfn)
+<span class="pl-c"><span class="pl-c">;</span>; Open the file "read only"</span>
+(<span class="pl-k">define</span> <span class="pl-smi">infn</span> (file-open <span class="pl-s"><span class="pl-pds">"</span>chicken-hen.txt<span class="pl-pds">"</span></span> open/rdonly))
+<span class="pl-c"><span class="pl-c">;</span>; read some text from the file</span>
+(file-read infn <span class="pl-c1">30</span>)         <span class="pl-c"><span class="pl-c">;</span>; =&gt; ("Did chicken came before hen?  ", 28)</span>
+(file-close infn)
+
+<span class="pl-c"><span class="pl-c">;</span>; CHICKEN also supports SRFI (Scheme Requests For Implementation) extensions</span>
+<span class="pl-c"><span class="pl-c">;</span>; See 'http://srfi.schemers.org/srfi-implementers.html" to see srfi's supported by CHICKEN</span>
+(import srfi-1)                    <span class="pl-c"><span class="pl-c">;</span>; list library</span>
+(filter <span class="pl-c1">odd?</span> <span class="pl-s">'</span>(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span> <span class="pl-c1">5</span> <span class="pl-c1">6</span> <span class="pl-c1">7</span>))     <span class="pl-c"><span class="pl-c">;</span>; =&gt; (1 3 5 7)</span>
+(count <span class="pl-c1">even?</span> <span class="pl-s">'</span>(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span> <span class="pl-c1">5</span>))         <span class="pl-c"><span class="pl-c">;</span>; =&gt; 2</span>
+(take <span class="pl-s">'</span>(<span class="pl-c1">12</span> <span class="pl-c1">24</span> <span class="pl-c1">36</span> <span class="pl-c1">48</span> <span class="pl-c1">60</span>) <span class="pl-c1">3</span>)         <span class="pl-c"><span class="pl-c">;</span>; =&gt; (12 24 36)</span>
+(drop <span class="pl-s">'</span>(<span class="pl-c1">12</span> <span class="pl-c1">24</span> <span class="pl-c1">36</span> <span class="pl-c1">48</span> <span class="pl-c1">60</span>) <span class="pl-c1">2</span>)         <span class="pl-c"><span class="pl-c">;</span>; =&gt; (36 48 60)</span>
+(circular-list <span class="pl-c1">'z</span> <span class="pl-c1">'q</span>)              <span class="pl-c"><span class="pl-c">;</span>; =&gt; z q z q ...</span>
+
+(import srfi-13)                   <span class="pl-c"><span class="pl-c">;</span>; string library</span>
+(string-reverse <span class="pl-s"><span class="pl-pds">"</span>pan<span class="pl-pds">"</span></span>)             <span class="pl-c"><span class="pl-c">;</span>; =&gt; "nap"</span>
+(string-index <span class="pl-s"><span class="pl-pds">"</span>Turkey<span class="pl-pds">"</span></span> <span class="pl-cce">#\k</span>)        <span class="pl-c"><span class="pl-c">;</span>; =&gt; 3</span>
+(string-every <span class="pl-c1">char-upper-case?</span> <span class="pl-s"><span class="pl-pds">"</span>CHICKEN<span class="pl-pds">"</span></span>) <span class="pl-c"><span class="pl-c">;</span>; =&gt; #t</span>
+(string-join <span class="pl-s">'</span>(<span class="pl-s"><span class="pl-pds">"</span>foo<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>bar<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>baz<span class="pl-pds">"</span></span>) <span class="pl-s"><span class="pl-pds">"</span>:<span class="pl-pds">"</span></span>)    <span class="pl-c"><span class="pl-c">;</span>; =&gt; "foo:bar:baz"</span>
+
+
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c"><span class="pl-c">;</span> 8. Macros</span>
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; A 'for .. in ..' iteration like python, for lists</span>
+(<span class="pl-c1">define-syntax</span> for
+  (<span class="pl-c1">syntax-rules</span> (in)
+                ((for elem in alist body ...)
+                 (<span class="pl-c1">for-each</span> (<span class="pl-k">lambda</span> (<span class="pl-v">elem</span>) body ...) alist))))
+
+(for x in <span class="pl-s">'</span>(<span class="pl-c1">2</span> <span class="pl-c1">4</span> <span class="pl-c1">8</span> <span class="pl-c1">16</span>)
+     (print x))          <span class="pl-c"><span class="pl-c">;</span>; =&gt; 2, 4, 8, 16</span>
+
+(for chr in (<span class="pl-c1">string-&gt;list</span> <span class="pl-s"><span class="pl-pds">"</span>PENCHANT<span class="pl-pds">"</span></span>)
+     (print chr))        <span class="pl-c"><span class="pl-c">;</span>; =&gt; P, E, N, C, H, A, N, T</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; While loop</span>
+(<span class="pl-c1">define-syntax</span> while
+  (<span class="pl-c1">syntax-rules</span> ()
+                ((while <span class="pl-k">cond</span> body ...)
+                 (<span class="pl-k">let</span> loop ()
+                   (when <span class="pl-k">cond</span>
+                     body ...
+                     (loop))))))
+
+(<span class="pl-k">let</span> ((str <span class="pl-s"><span class="pl-pds">"</span>PENCHANT<span class="pl-pds">"</span></span>) (i <span class="pl-c1">0</span>))
+  (while (<span class="pl-k">&lt;</span> i (string-length str))     <span class="pl-c"><span class="pl-c">;</span>; while (condition)</span>
+         (print (string-ref str i))    <span class="pl-c"><span class="pl-c">;</span>; body </span>
+         (<span class="pl-k">set!</span> i (add1 i))))           
+                                       <span class="pl-c"><span class="pl-c">;</span>; =&gt; P, E, N, C, H, A, N, T</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Advanced Syntax-Rules Primer -&gt; http://petrofsky.org/src/primer.txt</span>
+<span class="pl-c"><span class="pl-c">;</span>; Macro system in chicken -&gt; http://lists.gnu.org/archive/html/chicken-users/2008-04/msg00013.html</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c"><span class="pl-c">;</span> 9. Modules</span>
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Also See http://wiki.call-cc.org/man/5/Modules</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; The 'test' module exports a value named 'hello' and a macro named 'greet'</span>
+(module test (hello greet)
+  (import scheme)
+
+  (<span class="pl-c1">define-syntax</span> greet
+    (<span class="pl-c1">syntax-rules</span> ()
+      ((_ whom) 
+       (<span class="pl-k">begin</span>
+         (<span class="pl-c1">display</span> <span class="pl-s"><span class="pl-pds">"</span>Hello, <span class="pl-pds">"</span></span>)
+         (<span class="pl-c1">display</span> whom)
+         (<span class="pl-c1">display</span> <span class="pl-s"><span class="pl-pds">"</span> !<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>) ) ) ) )
+
+  (<span class="pl-k">define</span> (<span class="pl-en">hello</span>)
+    (greet <span class="pl-s"><span class="pl-pds">"</span>world<span class="pl-pds">"</span></span>) )  )
+
+<span class="pl-c"><span class="pl-c">;</span>; we can define our modules in a separate file (say test.scm) and load them to the interpreter with</span>
+<span class="pl-c"><span class="pl-c">;</span>;         (load "test.scm")</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; import the module</span>
+(import test)
+(hello)                <span class="pl-c"><span class="pl-c">;</span>; =&gt; Hello, world !</span>
+(greet <span class="pl-s"><span class="pl-pds">"</span>schemers<span class="pl-pds">"</span></span>)     <span class="pl-c"><span class="pl-c">;</span>; =&gt; Hello, schemers !</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; We can compile the module files in to shared libraries by using following command,</span>
+<span class="pl-c"><span class="pl-c">;</span>;         csc -s test.scm</span>
+<span class="pl-c"><span class="pl-c">;</span>;         (load "test.so")</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Functors</span>
+<span class="pl-c"><span class="pl-c">;</span>; Functors are high level modules that can be parameterized by other modules</span>
+<span class="pl-c"><span class="pl-c">;</span>; Following functor requires another module named 'M' that provides a function called 'multiply'</span>
+<span class="pl-c"><span class="pl-c">;</span>; The functor itself exports a generic function 'square'</span>
+(functor (squaring-functor (M (multiply))) (square)
+         (import scheme M) 
+         (<span class="pl-k">define</span> (<span class="pl-en">square</span><span class="pl-smi"> x</span>) (multiply x x)))
+
+<span class="pl-c"><span class="pl-c">;</span>; Module 'nums' can be passed as a parameter to 'squaring-functor'</span>
+(module nums (multiply) 
+        (import scheme)     <span class="pl-c"><span class="pl-c">;</span>; predefined modules</span>
+        (<span class="pl-k">define</span> (<span class="pl-en">multiply</span><span class="pl-smi"> x y</span>) (<span class="pl-k">*</span> x y))) 
+<span class="pl-c"><span class="pl-c">;</span>; the final module can be imported and used in our program</span>
+(module number-squarer <span class="pl-k">=</span> (squaring-functor nums)) 
+
+(import number-squarer)
+(square <span class="pl-c1">3</span>)              <span class="pl-c"><span class="pl-c">;</span>; =&gt; 9</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; We can instantiate the functor for other inputs</span>
+<span class="pl-c"><span class="pl-c">;</span>; Here's another example module that can be passed to squaring-functor</span>
+(module stars (multiply)
+        (import chicken scheme)  <span class="pl-c"><span class="pl-c">;</span>; chicken module for the 'use' keyword</span>
+        (use srfi-1)             <span class="pl-c"><span class="pl-c">;</span>; we can use external libraries in our module</span>
+        (<span class="pl-k">define</span> (<span class="pl-en">multiply</span><span class="pl-smi"> x y</span>)
+          (list-tabulate x (lambda _ (list-tabulate y (lambda _ <span class="pl-s">'*</span>))))))
+(module star-squarer <span class="pl-k">=</span> (squaring-functor stars))
+
+(import star-squarer)
+(square <span class="pl-c1">3</span>)              <span class="pl-c"><span class="pl-c">;</span>; =&gt; ((* * *)(* * *)(* * *))</span>
+</pre></div>
+<h2>Further Reading</h2>
+<ul>
+<li><a href="https://wiki.call-cc.org/manual" rel="nofollow">CHICKEN User's Manual</a>.</li>
+<li><a href="http://www.schemers.org/Documents/Standards/R5RS" rel="nofollow">R5RS standards</a></li>
+</ul>
+<h2>Extra Info</h2>
+<ul>
+<li><a href="https://wiki.call-cc.org/chicken-for-programmers-of-other-languages" rel="nofollow">For programmers of other languages</a></li>
+<li><a href="http://plr.sourceforge.net/cgi-bin/plr/launch.py" rel="nofollow">Compare CHICKEN syntax with other languages</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<ul>
+<li>["Diwakar Wagle", "https://github.com/deewakar"]</li>
+</ul>

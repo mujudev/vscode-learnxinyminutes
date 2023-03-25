@@ -1,0 +1,131 @@
+<h1>Qt</h1>
+<p><strong>Qt</strong> is a widely-known framework for developing cross-platform software that can be run on various software and hardware platforms with little or no change in the code, while having the power and speed of native applications. Though <strong>Qt</strong> was originally written in <em>C++</em>, there are its ports to other languages: <em><a href="https://learnxinyminutes.com/docs/pyqt/" rel="nofollow">PyQt</a></em>, <em>QtRuby</em>, <em>PHP-Qt</em>, etc.</p>
+<p><strong>Qt</strong> is great for creating applications with graphical user interface (GUI). This tutorial is how to do it in <em>C++</em>.</p>
+<div class="highlight highlight-source-c++"><pre class="notranslate"><span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c"> * Let's start classically</span>
+<span class="pl-c"> <span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span> all headers from Qt framework start with capital letter 'Q'</span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>QApplication<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>QLineEdit<span class="pl-pds">&gt;</span></span>
+
+<span class="pl-k">int</span> <span class="pl-en">main</span>(<span class="pl-k">int</span> argc, <span class="pl-k">char</span> *argv[]) {
+	 <span class="pl-c"><span class="pl-c">//</span> create an object to manage application-wide resources</span>
+    QApplication <span class="pl-smi">app</span>(argc, argv);
+
+    <span class="pl-c"><span class="pl-c">//</span> create line edit widget and show it on screen</span>
+    QLineEdit <span class="pl-smi">lineEdit</span>(<span class="pl-s"><span class="pl-pds">"</span>Hello world!<span class="pl-pds">"</span></span>);
+    lineEdit.<span class="pl-c1">show</span>();
+
+    <span class="pl-c"><span class="pl-c">//</span> start the application's event loop</span>
+    <span class="pl-k">return</span> app.<span class="pl-c1">exec</span>();
+}</pre></div>
+<p>GUI-related part of <strong>Qt</strong> is all about <em>widgets</em> and <em>connections</em> between them.</p>
+<p><a href="http://doc.qt.io/qt-5/qtwidgets-index.html" rel="nofollow">READ MORE ABOUT WIDGETS</a></p>
+<div class="highlight highlight-source-c++"><pre class="notranslate"><span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c"> * Let's create a label and a button.</span>
+<span class="pl-c"> * A label should appear when a button is pressed.</span>
+<span class="pl-c"> * </span>
+<span class="pl-c"> * Qt code is speaking for itself.</span>
+<span class="pl-c"> <span class="pl-c">*/</span></span>
+ 
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>QApplication<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>QDialog<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>QVBoxLayout<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>QPushButton<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>QLabel<span class="pl-pds">&gt;</span></span>
+
+<span class="pl-k">int</span> <span class="pl-en">main</span>(<span class="pl-k">int</span> argc, <span class="pl-k">char</span> *argv[]) {
+    QApplication <span class="pl-smi">app</span>(argc, argv);
+
+    QDialog dialogWindow;
+    dialogWindow.<span class="pl-c1">show</span>();
+    
+    <span class="pl-c"><span class="pl-c">//</span> add vertical layout </span>
+    QVBoxLayout layout;
+    dialogWindow.<span class="pl-c1">setLayout</span>(&amp;layout);  
+
+    QLabel <span class="pl-smi">textLabel</span>(<span class="pl-s"><span class="pl-pds">"</span>Thanks for pressing that button<span class="pl-pds">"</span></span>);
+    layout.<span class="pl-c1">addWidget</span>(&amp;textLabel);
+    textLabel.<span class="pl-c1">hide</span>();
+
+    QPushButton <span class="pl-smi">button</span>(<span class="pl-s"><span class="pl-pds">"</span>Press me<span class="pl-pds">"</span></span>);
+    layout.<span class="pl-c1">addWidget</span>(&amp;button);
+    
+    <span class="pl-c"><span class="pl-c">//</span> show hidden label when the button is pressed</span>
+    <span class="pl-c1">QObject::connect</span>(&amp;button, &amp;QPushButton::pressed,
+                     &amp;textLabel, &amp;QLabel::show);
+
+    <span class="pl-k">return</span> app.<span class="pl-c1">exec</span>();
+}</pre></div>
+<p>Notice that <em>QObject::connect</em> part. This method is used to connect <em>SIGNALS</em> of one objects to <em>SLOTS</em> of another.</p>
+<p><strong>Signals</strong> are being emitted when certain things happen with objects, like <em>pressed</em> signal is emitted when user presses on QPushButton object.</p>
+<p><strong>Slots</strong> are <em>actions</em> that might be performed in response to received signals.</p>
+<p><a href="http://doc.qt.io/qt-5/signalsandslots.html" rel="nofollow">READ MORE ABOUT SLOTS AND SIGNALS</a></p>
+<p>Next, let's learn that we can not only use standard widgets but also extend their behaviour using inheritance. Let's create a button and count how many times it was pressed. For this purpose we define our own class <em>CounterLabel</em>.  It must be declared in separate file because of specific Qt architecture.</p>
+<div class="highlight highlight-source-c++"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> counterlabel.hpp</span>
+
+#<span class="pl-k">ifndef</span> COUNTERLABEL
+#<span class="pl-k">define</span> <span class="pl-en">COUNTERLABEL</span>
+
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>QLabel<span class="pl-pds">&gt;</span></span>
+
+<span class="pl-k">class</span> <span class="pl-en">CounterLabel</span> : <span class="pl-k">public</span> <span class="pl-en">QLabel</span> {
+    Q_OBJECT  <span class="pl-c"><span class="pl-c">//</span> Qt-defined macros that must be present in every custom widget</span>
+
+<span class="pl-k">public:</span>
+    <span class="pl-en">CounterLabel</span>() : counter(<span class="pl-c1">0</span>) {
+        <span class="pl-c1">setText</span>(<span class="pl-s"><span class="pl-pds">"</span>Counter has not been increased yet<span class="pl-pds">"</span></span>);  <span class="pl-c"><span class="pl-c">//</span> method of QLabel</span>
+    }
+
+public slots:
+    <span class="pl-c"><span class="pl-c">//</span> action that will be called in response to button press</span>
+    <span class="pl-k">void</span> <span class="pl-en">increaseCounter</span>() {
+        <span class="pl-c1">setText</span>(<span class="pl-c1">QString</span>(<span class="pl-s"><span class="pl-pds">"</span>Counter value: %1<span class="pl-pds">"</span></span>).<span class="pl-c1">arg</span>(<span class="pl-c1">QString::number</span>(++counter)));
+    }
+
+<span class="pl-k">private:</span>
+    <span class="pl-k">int</span> counter;
+};
+
+#<span class="pl-k">endif</span> <span class="pl-c"><span class="pl-c">//</span> COUNTERLABEL</span></pre></div>
+<div class="highlight highlight-source-c++"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> main.cpp</span>
+<span class="pl-c"><span class="pl-c">//</span> Almost the same as in previous example</span>
+
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>QApplication<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>QDialog<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>QVBoxLayout<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>QPushButton<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>QString<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">"</span>counterlabel.hpp<span class="pl-pds">"</span></span>
+
+<span class="pl-k">int</span> <span class="pl-en">main</span>(<span class="pl-k">int</span> argc, <span class="pl-k">char</span> *argv[]) {
+    QApplication <span class="pl-smi">app</span>(argc, argv);
+
+    QDialog dialogWindow;
+    dialogWindow.<span class="pl-c1">show</span>();
+
+    QVBoxLayout layout;
+    dialogWindow.<span class="pl-c1">setLayout</span>(&amp;layout);
+
+    CounterLabel counterLabel;
+    layout.<span class="pl-c1">addWidget</span>(&amp;counterLabel);
+
+    QPushButton <span class="pl-smi">button</span>(<span class="pl-s"><span class="pl-pds">"</span>Push me once more<span class="pl-pds">"</span></span>);
+    layout.<span class="pl-c1">addWidget</span>(&amp;button);
+    <span class="pl-c1">QObject::connect</span>(&amp;button, &amp;QPushButton::pressed,
+                     &amp;counterLabel, &amp;CounterLabel::increaseCounter);
+
+    <span class="pl-k">return</span> app.<span class="pl-c1">exec</span>();
+}</pre></div>
+<p>That's it! Of course, Qt framework is much much larger than the part that was covered in this tutorial, so be ready to read and practice.</p>
+<h2>Further reading</h2>
+<ul>
+<li><a href="http://doc.qt.io/qt-4.8/tutorials.html" rel="nofollow">Qt 4.8 tutorials</a></li>
+<li><a href="http://doc.qt.io/qt-5/qtexamplesandtutorials.html" rel="nofollow">Qt 5 tutorials</a></li>
+</ul>
+<p>Good luck and have fun!</p>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Aleksey Kholovchuk", "https://github.com/vortexxx192"]
+</code></pre>

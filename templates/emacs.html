@@ -1,0 +1,286 @@
+<h1>Emacs</h1>
+<p>Emacs started its life as <a href="https://www.gnu.org/software/emacs/emacs-paper.html" rel="nofollow">"the extensible, customizable display<br>
+editor"</a> and grew<br>
+over the years into a full-blown ecosystem. Many tasks, usually<br>
+relegated to a diverse set of tools can be accomplished from within<br>
+Emacs in a consistent, familiar interface. Examples include directory<br>
+management, viewing PDF documents, editing files over SSH, managing git<br>
+repos,… (the list is quite long). In short, Emacs is yours to make of it<br>
+what you will: the spectrum of users varies from those who use it to<br>
+edit text files to extreme purists who use it to virtually replace their<br>
+operating system.</p>
+<p>Emacs is extensible via a specialized dialect of Lisp known as Emacs<br>
+Lisp (Elisp) which has a lot of macros geared towards editing text and<br>
+managing text buffers. Any key (combination) you use in Emacs is bound<br>
+to an Emacs Lisp function and may be remapped to any other function,<br>
+including ones you write<br>
+yourself.</p>
+<h1>Key Notation</h1>
+<pre lang="text" class="notranslate"><code class="notranslate">The Emacs manual and the community in general uses a convention to refer to different key combinations used within Emacs. Specifically, Emacs has the notion of a "modifier key" that is pressed along with another key to modify its action.
+
+An example of this notation is "C-c". In this key combination "C" is the modifier and stands for the "Ctrl" key and "c" is the key whose action is being modified (the literal character "c").
+
+The modifier shorthand:
+"C-" --&gt; The "CTRL" key
+"M-" --&gt; The "Meta" key (usually, the "Alt" key)
+"s-" --&gt; The "Super" key (the "Cmd" key on Macs and the "Windows" key on PCs)
+
+There are other, less commonly used modifiers that I will not get into here.
+
+The key combination "C-x C-s" means you press "Ctrl+x" followed by "Ctrl+s"
+
+In addition to the above modifiers, the special keys "Esc", "Return (Enter)" and "Shift" are denoted by "ESC", "RET" and "S", respectively.
+</code></pre>
+<h1>Basic Emacs Concepts</h1>
+<p>Here, I discuss some basic Emacs concepts and terminology that may be<br>
+confusing to newcomers (especially to people used to Vim terminology)</p>
+<ul>
+<li>A bunch of text that Emacs is editing is known as a <strong>buffer</strong></li>
+<li>A buffer does not necessarily correspond to an actual file on disk.<br>
+It may be just a bunch of text in memory.</li>
+<li>When a buffer corresponds to a file on disk, we say that the buffer<br>
+is <strong>visiting</strong> that file.</li>
+<li>Emacs typically has many buffers open at once.</li>
+<li>The display of Emacs may be split into different <strong>windows</strong> (not to<br>
+be confused with your operating system's windows: the operating<br>
+system window for Emacs can have multiple Emacs windows inside it).</li>
+<li>An operating system window for Emacs is called an Emacs <strong>frame</strong>.<br>
+Thus, when the Emacs manual talks about opening a new frame, this<br>
+essentially means opening a new OS <em>window</em> containing an(other)<br>
+instance of Emacs.</li>
+<li>The concepts conventionally known as cutting and pasting are<br>
+referred to as <strong>killing</strong> and <strong>yanking</strong>, respectively in Emacs<br>
+parlance.</li>
+<li>The current position of the cursor is called the <strong>point</strong> in Emacs.<br>
+Technically, <strong>point</strong> is defined as the position right before the<br>
+character where the cursor currently is.</li>
+<li>Finally, each buffer may have several <strong>modes</strong> associated with it:<br>
+a <strong>major mode</strong> and possibly several <strong>minor modes</strong>.</li>
+<li>The <strong>major mode</strong> defines the main behavior of Emacs in the<br>
+currently selected buffer. This can be roughly thought of as the<br>
+file type. For example, if you're editing a Python file, the major<br>
+mode is (by default) <code class="notranslate">python-mode</code> which causes Emacs to highlight<br>
+Python syntax and automatically indent and outdent your code blocks<br>
+as syntactically required by your Python code.</li>
+<li><strong>Minor modes</strong> define subtle changes in behavior and several minor<br>
+modes may be active at once in the same buffer. An example minor<br>
+mode is <code class="notranslate">flyspell-mode</code> which automatically highlights spelling<br>
+errors in your<br>
+buffer.</li>
+</ul>
+<h1>Navigation Basics</h1>
+<pre lang="text" class="notranslate"><code class="notranslate">The GUI version of Emacs can be navigated with the mouse like you would expect from a conventional GUI text editor.
+
+The aim here is to focus on navigation solely using the keyboard as this enhances productivity immensely.
+
+
+* Line movement
+
+C-n --&gt; Next line
+C-p --&gt; Previous line
+
+* Character movement
+
+C-f --&gt; Go forward one character
+C-b --&gt; Go backward one character
+
+* Word movement
+
+M-f --&gt; Go forward one word
+M-b --&gt; Go backward one word
+
+* Sentence movement
+
+M-a --&gt; Move to the beginning of the sentence
+M-e --&gt; Move to the end of the sentence
+
+* Beginning and end of line
+
+C-a --&gt; Move to the beginning of the line
+C-e --&gt; Move to the end of the line
+
+* Beginning and end of buffer
+
+M-&lt; ("Meta+Shift+,") --&gt; Go to the beginning of the buffer 
+M-&gt; ("Meta+Shift+.") --&gt; Go to the end of the buffer 
+
+* Screen movement
+
+C-v --&gt; Scroll down by one screen-full (the last two lines of the previous screen are kept as overlap for a smoother transition)
+M-v --&gt; Scroll up by one screen-full (same as above but with the first two lines)
+
+* Centering the screen
+
+C-l --&gt; Move current line to the screen's center
+
+The above key combination actually cycles through different states depending on how many times it's been pressed.
+
+C-l --&gt; Move current line to the screen's center
+C-l C-l --&gt; Move current line to the top of the screen
+C-l C-l C-l --&gt; Restore the position of the current line to where it was before the first C-l was pressed
+
+If you press "C-l" a 4th time, it cycles back to centering the current line.
+
+* Repeating movement commands
+
+Most movement commands take a numerical prefix argument that says "repeat the following command that many times".
+
+Example:
+
+C-u 3 C-p  --&gt; Go up 3 lines
+C-u 5 C-f  --&gt; Go forward 5 characters
+
+One notable exception are the screen scrolling commands:
+
+C-u 3 C-v  --&gt; Scroll downward 3 lines (maintaining the position of the cursor)
+</code></pre>
+<p>Bonus: many of the above navigation commands are the default navigation<br>
+commands in Bash (e.g. pressing "C-b" while entering a Bash command<br>
+takes you back one<br>
+character).</p>
+<h1>File editing basics</h1>
+<pre lang="text" class="notranslate"><code class="notranslate">* Quitting Emacs [ Now you can't say you don't know how to quit Emacs :-) ]
+
+C-x C-c --&gt; Quit Emacs and get prompted to save any unsaved files (buffers not visiting a file will simply be discarded unless you're running in client-server mode)
+
+* Saving a buffer
+
+C-x C-s --&gt; Save the current buffer. If not visiting a file, it will prompt you for a file name to use to save the buffer.
+
+* Searching within a buffer
+
+C-s --&gt; Search forwards within the buffer. Search is incremental and case-insensitive by default.
+        Press C-s to move to the next match.
+        If you press "RET", point is moved to the currently highlighted word and the search ends.
+C-r --&gt; Same as C-s except it searches backward
+
+C-_ or C-/ --&gt; Undo the last action. Keep pressing it to move up the undo tree.
+C-? or M-_ --&gt; Redo the previous change
+
+The "undo" and "redo" commands can take prefix numerical arguments to undo or redo that many actions:
+
+C-u 3 C-_ --&gt; Undo the last 3 changes.
+</code></pre>
+<h1>Executing Elisp Functions</h1>
+<pre lang="text" class="notranslate"><code class="notranslate">You can execute any currently loaded Elisp functions (including ones you have written yourself) via "M-x"
+
+M-x RET  --&gt; Prompts you for name of function to execute (Tab completion is available).
+
+Example:
+
+M-x RET search-forward-regexp RET --&gt; Prompts you for a regular expression and searches forward in the buffer for it
+</code></pre>
+<h1>Emacs Configuration</h1>
+<p>Emacs is configured using Elisp. On startup, it looks for a<br>
+configuration file either in <code class="notranslate">~/.emacs</code> or <code class="notranslate">~/.emacs.d/init.el</code> where<br>
+<code class="notranslate">~</code> refers to your home directory. If you're on Windows, consult <a href="https://www.gnu.org/software/emacs/manual/html_node/efaq-w32/Location-of-init-file.html" rel="nofollow">this<br>
+article</a><br>
+for the appropriate location of your configuration file.</p>
+<h1>Vim inside Emacs</h1>
+<p>If you are considering the transition from Vim to Emacs and you're put<br>
+off by the non-modal nature of Emacs editing, there is an Emacs<br>
+extension known as <code class="notranslate">evil-mode</code> which lets you have many Vim concepts<br>
+inside Emacs. Here are some things added to Emacs by <code class="notranslate">evil-mode</code>:</p>
+<ul>
+<li>Modal editing: you get normal, insert, visual and block visual modes<br>
+like Vim. In addition, you get an "Emacs" mode where movement and<br>
+navigation follow the Emacs bindings.</li>
+<li>Same movement keys as Vim in normal mode</li>
+<li>Leader key combinations</li>
+<li>Pressing ":" in normal mode allows you to execute commands<br>
+(including system commands)</li>
+</ul>
+<p>In my own experience, <code class="notranslate">evil-mode</code> helps make the transition seamless and<br>
+allows you to blend the arguably more intuitive and ergonomic<br>
+keybindings of Vim with the unbridled power of Emacs for a truly<br>
+superior editing experience.</p>
+<h1>Discoverable Help</h1>
+<p>Emacs features a pretty powerful help system that allows you to discover<br>
+new functionality all the<br>
+time.</p>
+<pre lang="text" class="notranslate"><code class="notranslate">Obtaining help on specific topics. Tab completion is available for function and variable names.
+
+C-h f RET --&gt; Prompts you for the name of an elisp function and
+              displays help text on it along with a clickable link
+              to its source code.
+C-h v RET --&gt; Same as above with variables  
+
+C-h k RET --&gt; Allows you to enter a key combination and displays the
+              name of the elisp function bound to it.
+
+Searching for help:
+
+C-h a --&gt; Prompts you for a string to search for a command in the
+          help system. Similar to the 'apropos' or 'man -k'
+          commands in Unix systems.
+
+Starting a tutorial:
+
+C-h C-t --&gt; Starts a tutorial designed to familiarize you with
+            basic Emacs functionality.
+</code></pre>
+<h1>Emacs "Killer Apps"</h1>
+<p>As I hinted above, Emacs functionality goes way beyond being a mere text<br>
+editor. I will list here a couple of Emacs "apps" that are fairly<br>
+powerful and popular and may interest you in and of themselves.</p>
+<h2>Org</h2>
+<p>Technnically, <code class="notranslate">org-mode</code>, a major mode for buffer editing that provides<br>
+organizational tools. It is very difficult to succinctly describe what<br>
+Org can do because it's a behemoth of a tool that has many diverse uses<br>
+to different people. I will attempt to describe the main features I use<br>
+briefly.</p>
+<ul>
+<li>Divide your file into sections and sub-sections for easy outlining<br>
+and organizing of concepts.</li>
+<li>Different headings in the outline are foldable/expandable so that<br>
+you can focus on what you need to focus on and eliminate<br>
+distractions.</li>
+<li>You can maintain a TODO list within Org</li>
+<li>You can compile TODO lists from many files into an agenda</li>
+<li>Track the time you spend on each TODO task</li>
+<li>Manage tables in plain text (including spreadsheet-like<br>
+capabilities)</li>
+<li>Using the extension <code class="notranslate">org-babel</code>, write and execute code blocks in<br>
+your file. The results are captured and are re-usable within the<br>
+file itself. Think Jupyter notebook for any language.</li>
+<li>Display inline images and LaTeX formulas as images within your file<br>
+(makes for a great note-taking system and/or personal wiki)</li>
+<li>Export your file into many different formats (LaTeX, PDF, html,…)</li>
+</ul>
+<p>Org mode is a very powerful tool to add to your productivity arsenal<br>
+and, on a personal note, was the reason that caused me to start using<br>
+Emacs after years of using Vim.</p>
+<h2>Magit</h2>
+<p>This is a frontend to <code class="notranslate">git</code> from within Emacs. It features a very<br>
+intuitive and discoverable interface, yet exposes very powerful<br>
+functionality that allows you to manage commits at the chunk level,<br>
+inspect diffs, rebase, cherry-pick, … all from within the comfort of<br>
+your own editor.</p>
+<h1>A Word of Advice</h1>
+<p>If you are considering using Emacs, a common trap that beginning users<br>
+fall into is to copy someone else's configuration file and use it as is.<br>
+I highly recommend against doing this for several reasons:</p>
+<ul>
+<li>It will discourage you from learning and finding things out for<br>
+yourself</li>
+<li>Someone else's configuration will probably contain many things<br>
+relevant to them that you won't need or ever use.</li>
+<li>It defeats the purpose of having a customizable text editor that can<br>
+fit your own needs.</li>
+</ul>
+<p>What I encourage you to do is to look at other people's configurations<br>
+and seek to understand them and adapt only what makes sense to you. You<br>
+can find out about new features of Emacs through many YouTube videos,<br>
+screencasts or blog posts and then learn for yourself how to add them to<br>
+your configuration and workflow. This way, you grow your configuration<br>
+incrementally while increasing your knowledge of Emacs along the way.</p>
+<h1>Additional Resources</h1>
+<ul>
+<li><a href="https://www.gnu.org/software/emacs/manual/emacs.html" rel="nofollow">The GNU Emacs Manual</a></li>
+<li><a href="https://emacs.stackexchange.com/" rel="nofollow">Emacs Stack Exchange</a></li>
+<li><a href="https://www.emacswiki.org/emacs/EmacsWiki" rel="nofollow">Emacs Wiki</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Joseph Riad", "https://github.com/Joseph-Riad"]
+</code></pre>

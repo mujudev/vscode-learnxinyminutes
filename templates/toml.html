@@ -1,0 +1,286 @@
+<h1>TOML</h1>
+<p>TOML stands for Tom's Obvious, Minimal Language. It is a data serialisation language designed to be a minimal configuration file format that's easy to read due to obvious semantics.</p>
+<p>It is an alternative to YAML and JSON. It aims to be more human friendly than JSON and simpler that YAML. TOML is designed to map unambiguously to a hash table. TOML should be easy to parse into data structures in a wide variety of languages.</p>
+<p>Be warned, TOML's spec is still changing a lot. Until it's marked as 1.0, you<br>
+should assume that it is unstable and act accordingly. This document follows TOML v0.4.0.</p>
+<div class="highlight highlight-source-toml"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> Comments in TOML look like this.</span>
+
+<span class="pl-c"><span class="pl-c">#</span>###############</span>
+<span class="pl-c"><span class="pl-c">#</span> SCALAR TYPES #</span>
+<span class="pl-c"><span class="pl-c">#</span>###############</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Our root object (which continues for the entire document) will be a map,</span>
+<span class="pl-c"><span class="pl-c">#</span> which is equivalent to a dictionary, hash or object in other languages.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> The key, equals sign, and value must be on the same line</span>
+<span class="pl-c"><span class="pl-c">#</span> (though some values can be broken over multiple lines).</span>
+<span class="pl-smi">key</span> = <span class="pl-s"><span class="pl-pds">"</span>value<span class="pl-pds">"</span></span>
+<span class="pl-smi">string</span> = <span class="pl-s"><span class="pl-pds">"</span>hello<span class="pl-pds">"</span></span>
+<span class="pl-smi">number</span> = <span class="pl-c1">42</span>
+<span class="pl-smi">float</span> = <span class="pl-c1">3.14</span>
+<span class="pl-smi">boolean</span> = <span class="pl-c1">true</span>
+<span class="pl-smi">dateTime</span> = <span class="pl-c1">1979-05-27T07:32:00-08:00</span>
+<span class="pl-smi">scientificNotation</span> = <span class="pl-c1">1e+12</span>
+<span class="pl-smi">"key can be quoted"</span> = <span class="pl-c1">true</span> <span class="pl-c"><span class="pl-c">#</span> Both " and ' are fine</span>
+<span class="pl-smi">"key may contain"</span> = <span class="pl-s"><span class="pl-pds">"</span>letters, numbers, underscores, and dashes<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> A bare key must be non-empty, but an empty quoted key is allowed</span>
+<span class="pl-smi">""</span> = <span class="pl-s"><span class="pl-pds">"</span>blank<span class="pl-pds">"</span></span>     <span class="pl-c"><span class="pl-c">#</span> VALID but discouraged</span>
+<span class="pl-smi">''</span> = <span class="pl-s"><span class="pl-pds">'</span>blank<span class="pl-pds">'</span></span>     <span class="pl-c"><span class="pl-c">#</span> VALID but discouraged</span>
+
+<span class="pl-c"><span class="pl-c">#</span>#########</span>
+<span class="pl-c"><span class="pl-c">#</span> String #</span>
+<span class="pl-c"><span class="pl-c">#</span>#########</span>
+
+<span class="pl-c"><span class="pl-c">#</span> All strings must contain only valid UTF-8 characters.</span>
+<span class="pl-c"><span class="pl-c">#</span> We can escape characters and some of them have a compact escape sequence.</span>
+<span class="pl-c"><span class="pl-c">#</span> For example, \t add a tabulation. Refers to the spec to get all of them.</span>
+<span class="pl-smi">basicString</span> = <span class="pl-s"><span class="pl-pds">"</span>are surrounded by quotation marks. <span class="pl-cce">\"</span>I'm quotable<span class="pl-cce">\"</span>. Name<span class="pl-cce">\t</span>Jos<span class="pl-pds">"</span></span>
+
+<span class="pl-smi">multiLineString</span> = <span class="pl-s"><span class="pl-pds">"""</span></span>
+<span class="pl-s">are surrounded by three quotation marks</span>
+<span class="pl-s">on each side and allow newlines.<span class="pl-pds">"""</span></span>
+
+<span class="pl-smi">literalString</span> = <span class="pl-s"><span class="pl-pds">'</span>are surrounded by single quotes. Escaping are not allowed.<span class="pl-pds">'</span></span>
+
+<span class="pl-smi">multiLineLiteralString</span> = <span class="pl-s"><span class="pl-pds">'''</span></span>
+<span class="pl-s">are surrounded by three single quotes on each side</span>
+<span class="pl-s">and allow newlines. Still no escaping.</span>
+<span class="pl-s">The first newline is trimmed in raw strings.</span>
+<span class="pl-s">   All other whitespace</span>
+<span class="pl-s">   is preserved. #! are preserved?</span>
+<span class="pl-s"><span class="pl-pds">'''</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> For binary data it is recommended that you use Base64, another ASCII or UTF8</span>
+<span class="pl-c"><span class="pl-c">#</span> encoding. The handling of that encoding will be application specific.</span>
+
+<span class="pl-c"><span class="pl-c">#</span>##########</span>
+<span class="pl-c"><span class="pl-c">#</span> Integer #</span>
+<span class="pl-c"><span class="pl-c">#</span>##########</span>
+
+<span class="pl-c"><span class="pl-c">#</span># Integers can start with a +, a - or nothing.</span>
+<span class="pl-c"><span class="pl-c">#</span># Leading zeros are not allowed. Hex, octal, and binary forms are not allowed.</span>
+<span class="pl-c"><span class="pl-c">#</span># Values that cannot be expressed as a series of digits are not allowed.</span>
+<span class="pl-smi">int1</span> = <span class="pl-c1">+42</span>
+<span class="pl-smi">int2</span> = <span class="pl-c1">0</span>
+<span class="pl-smi">int3</span> = <span class="pl-c1">-21</span>
+<span class="pl-smi">integerRange</span> = <span class="pl-c1">64</span>
+
+<span class="pl-c"><span class="pl-c">#</span># You can use underscores to enhance readability. Each</span>
+<span class="pl-c"><span class="pl-c">#</span># underscore must be surrounded by at least one digit.</span>
+<span class="pl-smi">int4</span> = <span class="pl-c1">5_349_221</span>
+<span class="pl-smi">int5</span> = <span class="pl-c1">1_2_3_4_5</span>     <span class="pl-c"><span class="pl-c">#</span> VALID but discouraged</span>
+
+<span class="pl-c"><span class="pl-c">#</span>########</span>
+<span class="pl-c"><span class="pl-c">#</span> Float #</span>
+<span class="pl-c"><span class="pl-c">#</span>########</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Floats are an integer followed by a fractional and/or an exponent part.</span>
+<span class="pl-smi">flt1</span> = <span class="pl-c1">3.1415</span>
+<span class="pl-smi">flt2</span> = <span class="pl-c1">-5e6</span>
+<span class="pl-smi">flt3</span> = <span class="pl-c1">6.626E-34</span>
+
+<span class="pl-c"><span class="pl-c">#</span>##########</span>
+<span class="pl-c"><span class="pl-c">#</span> Boolean #</span>
+<span class="pl-c"><span class="pl-c">#</span>##########</span>
+
+<span class="pl-smi">bool1</span> = <span class="pl-c1">true</span>
+<span class="pl-smi">bool2</span> = <span class="pl-c1">false</span>
+<span class="pl-smi">boolMustBeLowercase</span> = <span class="pl-c1">true</span>
+
+<span class="pl-c"><span class="pl-c">#</span>###########</span>
+<span class="pl-c"><span class="pl-c">#</span> Datetime #</span>
+<span class="pl-c"><span class="pl-c">#</span>###########</span>
+
+<span class="pl-smi">date1</span> = <span class="pl-c1">1979-05-27T07:32:00Z</span> <span class="pl-c"><span class="pl-c">#</span> UTC time, following RFC 3339/ISO 8601 spec</span>
+<span class="pl-smi">date2</span> = <span class="pl-c1">1979-05-26T15:32:00+08:00</span> <span class="pl-c"><span class="pl-c">#</span> with RFC 3339/ISO 8601 offset</span>
+<span class="pl-smi">date3</span> = <span class="pl-c1">1979-05-27T07:32:00</span> <span class="pl-c"><span class="pl-c">#</span> without offset</span>
+<span class="pl-smi">date4</span> = <span class="pl-c1">1979-05-27</span> <span class="pl-c"><span class="pl-c">#</span> without offset or time</span>
+
+<span class="pl-c"><span class="pl-c">#</span>###################</span>
+<span class="pl-c"><span class="pl-c">#</span> COLLECTION TYPES #</span>
+<span class="pl-c"><span class="pl-c">#</span>###################</span>
+
+<span class="pl-c"><span class="pl-c">#</span>########</span>
+<span class="pl-c"><span class="pl-c">#</span> Array #</span>
+<span class="pl-c"><span class="pl-c">#</span>########</span>
+
+<span class="pl-smi">array1</span> = [ <span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span> ]
+<span class="pl-smi">array2</span> = [ <span class="pl-s"><span class="pl-pds">"</span>Commas<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>are<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>delimiters<span class="pl-pds">"</span></span> ]
+<span class="pl-smi">array3</span> = [ <span class="pl-s"><span class="pl-pds">"</span>Don't mix<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>different<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>types<span class="pl-pds">"</span></span> ]
+<span class="pl-smi">array4</span> = [ [ <span class="pl-c1">1.2</span>, <span class="pl-c1">2.4</span> ], [<span class="pl-s"><span class="pl-pds">"</span>all<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">'</span>strings<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">"""</span>are the same<span class="pl-pds">"""</span></span>, <span class="pl-s"><span class="pl-pds">'''</span>type<span class="pl-pds">'''</span></span>] ]
+<span class="pl-smi">array5</span> = [
+  <span class="pl-s"><span class="pl-pds">"</span>Whitespace<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>is<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>ignored<span class="pl-pds">"</span></span>
+]
+
+<span class="pl-c"><span class="pl-c">#</span>########</span>
+<span class="pl-c"><span class="pl-c">#</span> Table #</span>
+<span class="pl-c"><span class="pl-c">#</span>########</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Tables (or hash tables or dictionaries) are collections of key/value</span>
+<span class="pl-c"><span class="pl-c">#</span> pairs. They appear in square brackets on a line by themselves.</span>
+<span class="pl-c"><span class="pl-c">#</span> Empty tables are allowed and simply have no key/value pairs within them.</span>
+[<span class="pl-en">table</span>]
+
+<span class="pl-c"><span class="pl-c">#</span> Under that, and until the next table or EOF are the key/values of that table.</span>
+<span class="pl-c"><span class="pl-c">#</span> Key/value pairs within tables are not guaranteed to be in any specific order.</span>
+[<span class="pl-en">table-1</span>]
+<span class="pl-smi">key1</span> = <span class="pl-s"><span class="pl-pds">"</span>some string<span class="pl-pds">"</span></span>
+<span class="pl-smi">key2</span> = <span class="pl-c1">123</span>
+
+[<span class="pl-en">table-2</span>]
+<span class="pl-smi">key1</span> = <span class="pl-s"><span class="pl-pds">"</span>another string<span class="pl-pds">"</span></span>
+<span class="pl-smi">key2</span> = <span class="pl-c1">456</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Dots are prohibited in bare keys because dots are used to signify nested tables.</span>
+<span class="pl-c"><span class="pl-c">#</span> Naming rules for each dot separated part are the same as for keys.</span>
+[<span class="pl-en">dog</span>.<span class="pl-en">"tater</span>.<span class="pl-en">man"</span>]
+<span class="pl-smi">type</span> = <span class="pl-s"><span class="pl-pds">"</span>pug<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> In JSON land, that would give you the following structure:</span>
+<span class="pl-c"><span class="pl-c">#</span> { "dog": { "tater.man": { "type": "pug" } } }</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Whitespace around dot-separated parts is ignored, however, best practice is to</span>
+<span class="pl-c"><span class="pl-c">#</span> not use any extraneous whitespace.</span>
+[<span class="pl-en">a</span>.<span class="pl-en">b</span>.<span class="pl-en">c</span>]            <span class="pl-c"><span class="pl-c">#</span> this is best practice</span>
+[ <span class="pl-en">d</span>.<span class="pl-en">e</span>.<span class="pl-en">f</span> ]          <span class="pl-c"><span class="pl-c">#</span> same as [d.e.f]</span>
+[ <span class="pl-en">j</span> . <span class="pl-en">"ʞ"</span> . <span class="pl-en">'l'</span> ]  <span class="pl-c"><span class="pl-c">#</span> same as [j."ʞ".'l']</span>
+
+<span class="pl-c"><span class="pl-c">#</span> You don't need to specify all the super-tables if you don't want to. TOML knows</span>
+<span class="pl-c"><span class="pl-c">#</span> how to do it for you.</span>
+<span class="pl-c"><span class="pl-c">#</span> [x] you</span>
+<span class="pl-c"><span class="pl-c">#</span> [x.y] don't</span>
+<span class="pl-c"><span class="pl-c">#</span> [x.y.z] need these</span>
+[<span class="pl-en">x</span>.<span class="pl-en">y</span>.<span class="pl-en">z</span>.<span class="pl-en">w</span>] <span class="pl-c"><span class="pl-c">#</span> for this to work</span>
+
+<span class="pl-c"><span class="pl-c">#</span> As long as a super-table hasn't been directly defined and hasn't defined a</span>
+<span class="pl-c"><span class="pl-c">#</span> specific key, you may still write to it.</span>
+[<span class="pl-en">a</span>.<span class="pl-en">b</span>]
+<span class="pl-smi">c</span> = <span class="pl-c1">1</span>
+
+[<span class="pl-en">a</span>]
+<span class="pl-smi">d</span> = <span class="pl-c1">2</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Will generate the following in JSON:</span>
+<span class="pl-c"><span class="pl-c">#</span> { "a": {"b": {"c": 1}, "d": 2 } }</span>
+
+<span class="pl-c"><span class="pl-c">#</span> You cannot define any key or table more than once. Doing so is invalid.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> DO NOT DO THIS</span>
+[<span class="pl-en">a</span>]
+<span class="pl-smi">b</span> = <span class="pl-c1">1</span>
+
+[<span class="pl-en">a</span>]
+<span class="pl-smi">c</span> = <span class="pl-c1">2</span>
+
+<span class="pl-c"><span class="pl-c">#</span> DO NOT DO THIS EITHER</span>
+[<span class="pl-en">a</span>]
+<span class="pl-smi">b</span> = <span class="pl-c1">1</span>
+
+[<span class="pl-en">a</span>.<span class="pl-en">b</span>]
+<span class="pl-smi">c</span> = <span class="pl-c1">2</span>
+
+<span class="pl-c"><span class="pl-c">#</span> All table names must be non-empty.</span>
+[]     <span class="pl-c"><span class="pl-c">#</span> INVALID</span>
+[<span class="pl-en">a</span>.]   <span class="pl-c"><span class="pl-c">#</span> INVALID</span>
+[<span class="pl-en">a</span>..<span class="pl-en">b</span>] <span class="pl-c"><span class="pl-c">#</span> INVALID</span>
+[.<span class="pl-en">b</span>]   <span class="pl-c"><span class="pl-c">#</span> INVALID</span>
+[.]    <span class="pl-c"><span class="pl-c">#</span> INVALID</span>
+
+<span class="pl-c"><span class="pl-c">#</span>###############</span>
+<span class="pl-c"><span class="pl-c">#</span> Inline table #</span>
+<span class="pl-c"><span class="pl-c">#</span>###############</span>
+
+<span class="pl-smi">inlineTables</span> = { <span class="pl-smi">areEnclosedWith</span> = <span class="pl-s"><span class="pl-pds">"</span>{ and }<span class="pl-pds">"</span></span>, <span class="pl-smi">mustBeInline</span> = <span class="pl-c1">true</span> }
+<span class="pl-smi">point</span> = { <span class="pl-smi">x</span> = <span class="pl-c1">1</span>, <span class="pl-smi">y</span> = <span class="pl-c1">2</span> }
+
+<span class="pl-c"><span class="pl-c">#</span>##################</span>
+<span class="pl-c"><span class="pl-c">#</span> Array of Tables #</span>
+<span class="pl-c"><span class="pl-c">#</span>##################</span>
+
+<span class="pl-c"><span class="pl-c">#</span> An array of tables can be expressed by using a table name in double brackets.</span>
+<span class="pl-c"><span class="pl-c">#</span> Each table with the same double bracketed name will be an item in the array.</span>
+<span class="pl-c"><span class="pl-c">#</span> The tables are inserted in the order encountered.</span>
+
+[[<span class="pl-en">products</span>]]
+<span class="pl-smi">name</span> = <span class="pl-s"><span class="pl-pds">"</span>array of table<span class="pl-pds">"</span></span>
+<span class="pl-smi">sku</span> = <span class="pl-c1">738594937</span>
+<span class="pl-smi">emptyTableAreAllowed</span> = <span class="pl-c1">true</span>
+
+[[<span class="pl-en">products</span>]]
+
+[[<span class="pl-en">products</span>]]
+<span class="pl-smi">name</span> = <span class="pl-s"><span class="pl-pds">"</span>Nail<span class="pl-pds">"</span></span>
+<span class="pl-smi">sku</span> = <span class="pl-c1">284758393</span>
+<span class="pl-smi">color</span> = <span class="pl-s"><span class="pl-pds">"</span>gray<span class="pl-pds">"</span></span></pre></div>
+<p>The equivalent in JSON would be:</p>
+<div class="highlight highlight-source-json"><pre class="notranslate">{ 
+  <span class="pl-ent">"products"</span>: [
+    {
+      <span class="pl-ent">"name"</span>: <span class="pl-s"><span class="pl-pds">"</span>array of table<span class="pl-pds">"</span></span>,
+      <span class="pl-ent">"sku"</span>: <span class="pl-c1">7385594937</span>,
+      <span class="pl-ent">"emptyTableAreAllowed"</span>: <span class="pl-c1">true</span>
+    },
+    {},
+    {
+      <span class="pl-ent">"name"</span>: <span class="pl-s"><span class="pl-pds">"</span>Nail<span class="pl-pds">"</span></span>,
+      <span class="pl-ent">"sku"</span>: <span class="pl-c1">284758393</span>,
+      <span class="pl-ent">"color"</span>: <span class="pl-s"><span class="pl-pds">"</span>gray<span class="pl-pds">"</span></span>
+    }
+  ]
+}</pre></div>
+<div class="highlight highlight-source-toml"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> You can create nested arrays of tables as well. Each double-bracketed</span>
+<span class="pl-c"><span class="pl-c">#</span> sub-table will belong to the nearest table element above it.</span>
+
+[[<span class="pl-en">fruit</span>]]
+  <span class="pl-smi">name</span> = <span class="pl-s"><span class="pl-pds">"</span>apple<span class="pl-pds">"</span></span> <span class="pl-c"><span class="pl-c">#</span> I am a property in fruit table/map</span>
+
+  [<span class="pl-en">fruit</span>.<span class="pl-en">geometry</span>]
+    <span class="pl-smi">shape</span> = <span class="pl-s"><span class="pl-pds">"</span>round<span class="pl-pds">"</span></span>
+    <span class="pl-smi">note</span> = <span class="pl-s"><span class="pl-pds">"</span>I am a property in geometry table/map<span class="pl-pds">"</span></span>
+
+  [[<span class="pl-en">fruit</span>.<span class="pl-en">color</span>]]
+    <span class="pl-smi">name</span> = <span class="pl-s"><span class="pl-pds">"</span>red<span class="pl-pds">"</span></span>
+    <span class="pl-smi">note</span> = <span class="pl-s"><span class="pl-pds">"</span>I am an array item in apple fruit's table/map<span class="pl-pds">"</span></span>
+
+  [[<span class="pl-en">fruit</span>.<span class="pl-en">color</span>]]
+    <span class="pl-smi">name</span> = <span class="pl-s"><span class="pl-pds">"</span>green<span class="pl-pds">"</span></span>
+    <span class="pl-smi">note</span> = <span class="pl-s"><span class="pl-pds">"</span>I am in the same array as red<span class="pl-pds">"</span></span>
+
+[[<span class="pl-en">fruit</span>]]
+  <span class="pl-smi">name</span> = <span class="pl-s"><span class="pl-pds">"</span>banana<span class="pl-pds">"</span></span>
+
+  [[<span class="pl-en">fruit</span>.<span class="pl-en">color</span>]]
+    <span class="pl-smi">name</span> = <span class="pl-s"><span class="pl-pds">"</span>yellow<span class="pl-pds">"</span></span>
+    <span class="pl-smi">note</span> = <span class="pl-s"><span class="pl-pds">"</span>I am an array item in banana fruit's table/map<span class="pl-pds">"</span></span>
+</pre></div>
+<p>The equivalent in JSON would be:</p>
+<pre class="notranslate"><code class="notranslate">
+{
+  "fruit": [
+    {
+      "name": "apple",
+      "geometry": { "shape": "round", "note": "..."},
+      "color": [
+        { "name": "red", "note": "..." },
+        { "name": "green", "note": "..." }
+      ]
+    },
+    {
+      "name": "banana",
+      "color": [
+        { "name": "yellow", "note": "..." }
+      ]
+    }
+  ]
+}
+</code></pre>
+<h3>More Resources</h3>
+<ul>
+<li><a href="https://github.com/toml-lang/toml">TOML official repository</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<ul>
+<li>["Alois de Gouvello", "https://github.com/aloisdg"]</li>
+</ul>

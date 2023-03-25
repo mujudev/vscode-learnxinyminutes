@@ -1,0 +1,200 @@
+<h1>Hy</h1>
+<p>Hy is a lisp dialect built on top of python. This is achieved by<br>
+converting hy code to python's abstract syntax tree (ast). This allows<br>
+hy to call native python code or python to call native hy code as well</p>
+<p>This tutorial works for hy ≥ 0.9.12, with some corrections for hy 0.11.</p>
+<div class="highlight highlight-source-clojure"><pre class="notranslate"><span class="pl-c"><span class="pl-c">;</span>; this gives an gentle introduction to hy</span>
+<span class="pl-c"><span class="pl-c">;</span>;</span>
+<span class="pl-c"><span class="pl-c">;</span> Semicolon comments, like other LISPS</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; s-expression basics</span>
+<span class="pl-c"><span class="pl-c">;</span> lisp programs are made of symbolic expressions or sexps which</span>
+<span class="pl-c"><span class="pl-c">;</span> resemble</span>
+(<span class="pl-en">some-function</span> args)
+<span class="pl-c"><span class="pl-c">;</span> now the quintessential hello world</span>
+(<span class="pl-en">print</span> <span class="pl-s"><span class="pl-pds">"</span>hello world<span class="pl-pds">"</span></span>)
+
+<span class="pl-c"><span class="pl-c">;</span>; simple data types</span>
+<span class="pl-c"><span class="pl-c">;</span> All simple data types are exactly similar to their python counterparts</span>
+<span class="pl-c"><span class="pl-c">;</span> which</span>
+<span class="pl-c1">42</span> <span class="pl-c"><span class="pl-c">;</span> =&gt; 42</span>
+<span class="pl-c1">3.14</span> <span class="pl-c"><span class="pl-c">;</span> =&gt; 3.14</span>
+True <span class="pl-c"><span class="pl-c">;</span> =&gt; True</span>
+<span class="pl-c1">4+10</span>j <span class="pl-c"><span class="pl-c">;</span> =&gt; (4+10j) a complex number</span>
+
+<span class="pl-c"><span class="pl-c">;</span> lets start with some really simple arithmetic</span>
+(<span class="pl-en">+</span> <span class="pl-c1">4</span> <span class="pl-c1">1</span>) <span class="pl-c"><span class="pl-c">;</span>=&gt; 5</span>
+<span class="pl-c"><span class="pl-c">;</span> the operator is applied to all arguments, like other lisps</span>
+(<span class="pl-en">+</span> <span class="pl-c1">4</span> <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>) <span class="pl-c"><span class="pl-c">;</span>=&gt; 10</span>
+(<span class="pl-en">-</span> <span class="pl-c1">2</span> <span class="pl-c1">1</span>) <span class="pl-c"><span class="pl-c">;</span>=&gt; 1</span>
+(<span class="pl-en">*</span> <span class="pl-c1">4</span> <span class="pl-c1">2</span>) <span class="pl-c"><span class="pl-c">;</span>=&gt; 8</span>
+(<span class="pl-en">/</span> <span class="pl-c1">4</span> <span class="pl-c1">1</span>) <span class="pl-c"><span class="pl-c">;</span>=&gt; 4</span>
+(<span class="pl-en">%</span> <span class="pl-c1">4</span> <span class="pl-c1">2</span>) <span class="pl-c"><span class="pl-c">;</span>=&gt; 0 the modulo operator</span>
+<span class="pl-c"><span class="pl-c">;</span> power is represented by ** operator like python</span>
+(<span class="pl-en">**</span> <span class="pl-c1">3</span> <span class="pl-c1">2</span>) <span class="pl-c"><span class="pl-c">;</span>=&gt; 9</span>
+<span class="pl-c"><span class="pl-c">;</span> nesting forms will do the expected thing</span>
+(<span class="pl-en">+</span> <span class="pl-c1">2</span> (<span class="pl-en">*</span> <span class="pl-c1">4</span> <span class="pl-c1">2</span>)) <span class="pl-c"><span class="pl-c">;</span>=&gt; 10</span>
+<span class="pl-c"><span class="pl-c">;</span> also logical operators and or not and equal to etc. do as expected</span>
+(<span class="pl-en">=</span> <span class="pl-c1">5</span> <span class="pl-c1">4</span>) <span class="pl-c"><span class="pl-c">;</span>=&gt; False</span>
+(<span class="pl-en">not</span> (<span class="pl-en">=</span> <span class="pl-c1">5</span> <span class="pl-c1">4</span>)) <span class="pl-c"><span class="pl-c">;</span>=&gt; True</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; variables</span>
+<span class="pl-c"><span class="pl-c">;</span> variables are set using setv, variable names can use utf-8 except</span>
+<span class="pl-c"><span class="pl-c">;</span> for ()[]{}",'`;#|</span>
+(<span class="pl-en">setv</span> a <span class="pl-c1">42</span>)
+(<span class="pl-en">setv</span> π <span class="pl-c1">3.14159</span>)
+(<span class="pl-k">def</span> *foo* <span class="pl-c1">42</span>)
+<span class="pl-c"><span class="pl-c">;</span>; other container data types</span>
+<span class="pl-c"><span class="pl-c">;</span> strings, lists, tuples &amp; dicts</span>
+<span class="pl-c"><span class="pl-c">;</span> these are exactly same as python's container types</span>
+<span class="pl-s"><span class="pl-pds">"</span>hello world<span class="pl-pds">"</span></span> <span class="pl-c"><span class="pl-c">;</span>=&gt; "hello world"</span>
+<span class="pl-c"><span class="pl-c">;</span> string operations work similar to python</span>
+(<span class="pl-en">+</span> <span class="pl-s"><span class="pl-pds">"</span>hello <span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>world<span class="pl-pds">"</span></span>) <span class="pl-c"><span class="pl-c">;</span>=&gt; "hello world"</span>
+<span class="pl-c"><span class="pl-c">;</span> lists are created using [], indexing starts at 0</span>
+(<span class="pl-en">setv</span> mylist [<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span>])
+<span class="pl-c"><span class="pl-c">;</span> tuples are immutable data structures</span>
+(<span class="pl-en">setv</span> mytuple (<span class="pl-en">,</span> <span class="pl-c1">1</span> <span class="pl-c1">2</span>))
+<span class="pl-c"><span class="pl-c">;</span> dictionaries are key value pairs</span>
+(<span class="pl-en">setv</span> dict1 {<span class="pl-s"><span class="pl-pds">"</span>key1<span class="pl-pds">"</span></span> <span class="pl-c1">42</span> <span class="pl-s"><span class="pl-pds">"</span>key2<span class="pl-pds">"</span></span> <span class="pl-c1">21</span>})
+<span class="pl-c"><span class="pl-c">;</span> :name can be used to define keywords in hy which can be used for keys</span>
+(<span class="pl-en">setv</span> dict2 {<span class="pl-c1">:key1</span> <span class="pl-c1">41</span> <span class="pl-c1">:key2</span> <span class="pl-c1">20</span>})
+<span class="pl-c"><span class="pl-c">;</span> use `get' to get the element at an index/key</span>
+(<span class="pl-en">get</span> mylist <span class="pl-c1">1</span>) <span class="pl-c"><span class="pl-c">;</span>=&gt; 2</span>
+(<span class="pl-en">get</span> dict1 <span class="pl-s"><span class="pl-pds">"</span>key1<span class="pl-pds">"</span></span>) <span class="pl-c"><span class="pl-c">;</span>=&gt; 42</span>
+<span class="pl-c"><span class="pl-c">;</span> Alternatively if keywords were used they can directly be called</span>
+(<span class="pl-c1">:key1</span> dict2) <span class="pl-c"><span class="pl-c">;</span>=&gt; 41</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; functions and other program constructs</span>
+<span class="pl-c"><span class="pl-c">;</span> functions are defined using defn, the last sexp is returned by default</span>
+(<span class="pl-k">defn</span> <span class="pl-e">greet</span> [name]
+  <span class="pl-s"><span class="pl-pds">"</span>A simple greeting<span class="pl-pds">"</span></span> <span class="pl-c"><span class="pl-c">;</span> an optional docstring</span>
+  (<span class="pl-en">print</span> <span class="pl-s"><span class="pl-pds">"</span>hello <span class="pl-pds">"</span></span> name))
+
+(<span class="pl-en">greet</span> <span class="pl-s"><span class="pl-pds">"</span>bilbo<span class="pl-pds">"</span></span>) <span class="pl-c"><span class="pl-c">;</span>=&gt; "hello bilbo"</span>
+
+<span class="pl-c"><span class="pl-c">;</span> functions can take optional arguments as well as keyword arguments</span>
+(<span class="pl-k">defn</span> <span class="pl-e">foolists</span> [arg1 &amp;optional [arg2 <span class="pl-c1">2</span>]]
+  [arg1 arg2])
+
+(<span class="pl-en">foolists</span> <span class="pl-c1">3</span>) <span class="pl-c"><span class="pl-c">;</span>=&gt; [3 2]</span>
+(<span class="pl-en">foolists</span> <span class="pl-c1">10</span> <span class="pl-c1">3</span>) <span class="pl-c"><span class="pl-c">;</span>=&gt; [10 3]</span>
+
+<span class="pl-c"><span class="pl-c">;</span> you can use rest arguments and kwargs too:</span>
+(<span class="pl-k">defn</span> <span class="pl-e">something-fancy</span> [wow &amp;rest descriptions &amp;kwargs props]
+  (<span class="pl-en">print</span> <span class="pl-s"><span class="pl-pds">"</span>Look at<span class="pl-pds">"</span></span> wow)
+  (<span class="pl-en">print</span> <span class="pl-s"><span class="pl-pds">"</span>It's<span class="pl-pds">"</span></span> descriptions)
+  (<span class="pl-en">print</span> <span class="pl-s"><span class="pl-pds">"</span>And it also has:<span class="pl-pds">"</span></span> props))
+
+(<span class="pl-en">something-fancy</span> <span class="pl-s"><span class="pl-pds">"</span>My horse<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>amazing<span class="pl-pds">"</span></span> <span class="pl-c1">:mane</span> <span class="pl-s"><span class="pl-pds">"</span>spectacular<span class="pl-pds">"</span></span>)
+  
+<span class="pl-c"><span class="pl-c">;</span> you use apply instead of the splat operators:</span>
+(<span class="pl-en">apply</span> something-fancy [<span class="pl-s"><span class="pl-pds">"</span>My horse<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>amazing<span class="pl-pds">"</span></span>] { <span class="pl-s"><span class="pl-pds">"</span>mane<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>spectacular<span class="pl-pds">"</span></span> })
+
+<span class="pl-c"><span class="pl-c">;</span> anonymous functions are created using `fn' or `lambda' constructs</span>
+<span class="pl-c"><span class="pl-c">;</span> which are similar to `defn'</span>
+(<span class="pl-en">map</span> (<span class="pl-k">fn</span> [x] (<span class="pl-en">*</span> x x)) [<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span>]) <span class="pl-c"><span class="pl-c">;</span>=&gt; [1 4 9 16]</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Sequence operations</span>
+<span class="pl-c"><span class="pl-c">;</span> hy has some builtin utils for sequence operations etc.</span>
+<span class="pl-c"><span class="pl-c">;</span> retrieve the first element using `first' or `car'</span>
+(<span class="pl-en">setv</span> mylist [<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span>])
+(<span class="pl-en">setv</span> mydict {<span class="pl-s"><span class="pl-pds">"</span>a<span class="pl-pds">"</span></span> <span class="pl-c1">1</span> <span class="pl-s"><span class="pl-pds">"</span>b<span class="pl-pds">"</span></span> <span class="pl-c1">2</span>})
+(<span class="pl-en">first</span> mylist) <span class="pl-c"><span class="pl-c">;</span>=&gt; 1</span>
+
+<span class="pl-c"><span class="pl-c">;</span> slice lists using slice</span>
+(<span class="pl-en">slice</span> mylist <span class="pl-c1">1</span> <span class="pl-c1">3</span>) <span class="pl-c"><span class="pl-c">;</span>=&gt; [2 3]</span>
+<span class="pl-c"><span class="pl-c">;</span> or, in hy 0.11, use cut instead:</span>
+(<span class="pl-en">cut</span> mylist <span class="pl-c1">1</span> <span class="pl-c1">3</span>) <span class="pl-c"><span class="pl-c">;</span>=&gt; [2 3]</span>
+
+<span class="pl-c"><span class="pl-c">;</span> get elements from a list or dict using `get'</span>
+(<span class="pl-en">get</span> mylist <span class="pl-c1">1</span>) <span class="pl-c"><span class="pl-c">;</span>=&gt; 2</span>
+(<span class="pl-en">get</span> mydict <span class="pl-s"><span class="pl-pds">"</span>b<span class="pl-pds">"</span></span>) <span class="pl-c"><span class="pl-c">;</span>=&gt; 2</span>
+<span class="pl-c"><span class="pl-c">;</span> list indexing starts from 0 same as python</span>
+<span class="pl-c"><span class="pl-c">;</span> assoc can set elements at keys/indexes</span>
+(<span class="pl-en">assoc</span> mylist <span class="pl-c1">2</span> <span class="pl-c1">10</span>) <span class="pl-c"><span class="pl-c">;</span> makes mylist [1 2 10 4]</span>
+(<span class="pl-en">assoc</span> mydict <span class="pl-s"><span class="pl-pds">"</span>c<span class="pl-pds">"</span></span> <span class="pl-c1">3</span>) <span class="pl-c"><span class="pl-c">;</span> makes mydict {"a" 1 "b" 2 "c" 3}</span>
+<span class="pl-c"><span class="pl-c">;</span> there are a whole lot of other core functions which makes working with</span>
+<span class="pl-c"><span class="pl-c">;</span> sequences fun</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Python interop</span>
+<span class="pl-c"><span class="pl-c">;</span>; import works just like in python</span>
+(<span class="pl-k">import</span> datetime)
+(<span class="pl-k">import</span> [functools [partial reduce]]) <span class="pl-c"><span class="pl-c">;</span> imports fun1 and fun2 from module1</span>
+(<span class="pl-k">import</span> [matplotlib.pyplot <span class="pl-c1">:as</span> plt]) <span class="pl-c"><span class="pl-c">;</span> doing an import foo as bar</span>
+<span class="pl-c"><span class="pl-c">;</span> all builtin python methods etc. are accessible from hy</span>
+<span class="pl-c"><span class="pl-c">;</span> a.foo(arg) is called as (.foo a arg)</span>
+(<span class="pl-en">.split</span> (<span class="pl-en">.strip</span> <span class="pl-s"><span class="pl-pds">"</span>hello world  <span class="pl-pds">"</span></span>)) <span class="pl-c"><span class="pl-c">;</span>=&gt; ["hello" "world"]</span>
+
+<span class="pl-c"><span class="pl-c">;</span> there is a shortcut for executing multiple functions on a value called the</span>
+<span class="pl-c"><span class="pl-c">;</span> "threading macro", denoted by an arrow:</span>
+(<span class="pl-en">-&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>hello world  <span class="pl-pds">"</span></span> (<span class="pl-en">.strip</span>) (<span class="pl-en">.split</span>)) <span class="pl-c"><span class="pl-c">;</span>=&gt; ["hello" "world]</span>
+<span class="pl-c"><span class="pl-c">;</span> the arrow passes the value along the calls as the first argument, for instance:</span>
+(<span class="pl-en">-&gt;</span> <span class="pl-c1">4</span> (<span class="pl-en">*</span> <span class="pl-c1">3</span>) (<span class="pl-en">+</span> <span class="pl-c1">2</span>))
+<span class="pl-c"><span class="pl-c">;</span> is the same as:</span>
+(<span class="pl-en">+</span> (<span class="pl-en">*</span> <span class="pl-c1">4</span> <span class="pl-c1">3</span>) <span class="pl-c1">2</span>)
+
+<span class="pl-c"><span class="pl-c">;</span> there is also a "threading tail macro", which instead passes the value as the</span>
+<span class="pl-c"><span class="pl-c">;</span> second argument. compare:</span>
+(<span class="pl-en">-&gt;</span> <span class="pl-c1">4</span> (<span class="pl-en">-</span> <span class="pl-c1">2</span>) (<span class="pl-en">+</span> <span class="pl-c1">1</span>)) <span class="pl-c"><span class="pl-c">;</span>=&gt; 3</span>
+(<span class="pl-en">+</span> (<span class="pl-en">-</span> <span class="pl-c1">4</span> <span class="pl-c1">2</span>) <span class="pl-c1">1</span>) <span class="pl-c"><span class="pl-c">;</span>=&gt; 3</span>
+<span class="pl-c"><span class="pl-c">;</span> to:</span>
+(<span class="pl-en">-&gt;&gt;</span> <span class="pl-c1">4</span> (<span class="pl-en">-</span> <span class="pl-c1">2</span>) (<span class="pl-en">+</span> <span class="pl-c1">1</span>)) <span class="pl-c"><span class="pl-c">;</span>=&gt; -1</span>
+(<span class="pl-en">+</span> <span class="pl-c1">1</span> (<span class="pl-en">-</span> <span class="pl-c1">2</span> <span class="pl-c1">4</span>)) <span class="pl-c"><span class="pl-c">;</span>=&gt; -1</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Conditionals</span>
+<span class="pl-c"><span class="pl-c">;</span> (if condition (body-if-true) (body-if-false)</span>
+(<span class="pl-k">if</span> (<span class="pl-en">=</span> passcode <span class="pl-s"><span class="pl-pds">"</span>moria<span class="pl-pds">"</span></span>)
+  (<span class="pl-en">print</span> <span class="pl-s"><span class="pl-pds">"</span>welcome<span class="pl-pds">"</span></span>)
+  (<span class="pl-en">print</span> <span class="pl-s"><span class="pl-pds">"</span>Speak friend, and Enter!<span class="pl-pds">"</span></span>))
+
+<span class="pl-c"><span class="pl-c">;</span> nest multiple if else if clauses with cond</span>
+(<span class="pl-k">cond</span>
+ [(<span class="pl-en">=</span> someval <span class="pl-c1">42</span>)
+  (<span class="pl-en">print</span> <span class="pl-s"><span class="pl-pds">"</span>Life, universe and everything else!<span class="pl-pds">"</span></span>)]
+ [(<span class="pl-en">&gt;</span> someval <span class="pl-c1">42</span>)
+  (<span class="pl-en">print</span> <span class="pl-s"><span class="pl-pds">"</span>val too large<span class="pl-pds">"</span></span>)]
+ [(<span class="pl-en">&lt;</span> someval <span class="pl-c1">42</span>)
+  (<span class="pl-en">print</span> <span class="pl-s"><span class="pl-pds">"</span>val too small<span class="pl-pds">"</span></span>)])
+
+<span class="pl-c"><span class="pl-c">;</span> group statements with do, these are executed sequentially</span>
+<span class="pl-c"><span class="pl-c">;</span> forms like defn have an implicit do</span>
+(<span class="pl-k">do</span>
+ (<span class="pl-en">setv</span> someval <span class="pl-c1">10</span>)
+ (<span class="pl-en">print</span> <span class="pl-s"><span class="pl-pds">"</span>someval is set to <span class="pl-pds">"</span></span> someval)) <span class="pl-c"><span class="pl-c">;</span>=&gt; 10</span>
+
+<span class="pl-c"><span class="pl-c">;</span> create lexical bindings with `let', all variables defined thusly</span>
+<span class="pl-c"><span class="pl-c">;</span> have local scope</span>
+(<span class="pl-k">let</span> [[nemesis {<span class="pl-s"><span class="pl-pds">"</span>superman<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>lex luther<span class="pl-pds">"</span></span>
+                <span class="pl-s"><span class="pl-pds">"</span>sherlock<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>moriarty<span class="pl-pds">"</span></span>
+                <span class="pl-s"><span class="pl-pds">"</span>seinfeld<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>newman<span class="pl-pds">"</span></span>}]]
+  (<span class="pl-k">for</span> [(<span class="pl-en">,</span> h v) (<span class="pl-en">.items</span> nemesis)]
+	(<span class="pl-en">print</span> (<span class="pl-en">.format</span> <span class="pl-s"><span class="pl-pds">"</span>{0}'s nemesis was {1}<span class="pl-pds">"</span></span> h v))))
+
+<span class="pl-c"><span class="pl-c">;</span>; classes</span>
+<span class="pl-c"><span class="pl-c">;</span> classes are defined in the following way</span>
+(<span class="pl-k">defclass</span> <span class="pl-e">Wizard</span> [object]
+  [[--init-- (<span class="pl-k">fn</span> [self spell]
+             (<span class="pl-en">setv</span> self.spell spell) <span class="pl-c"><span class="pl-c">;</span> init the spell attr</span>
+             None)]
+   [get-spell (<span class="pl-k">fn</span> [self]
+              self.spell)]])
+
+<span class="pl-c"><span class="pl-c">;</span> or, in hy 0.11:</span>
+(<span class="pl-k">defclass</span> <span class="pl-e">Wizard</span> [object]
+  (<span class="pl-k">defn</span> <span class="pl-e">--init--</span> [self spell]
+    (<span class="pl-en">setv</span> self.spell spell))
+
+  (<span class="pl-k">defn</span> <span class="pl-e">get-spell</span> [self]
+    <span class="pl-e">self.spell</span>))
+
+<span class="pl-c"><span class="pl-c">;</span>; do checkout hylang.org</span></pre></div>
+<h3>Further Reading</h3>
+<p>This tutorial is just a very basic introduction to hy/lisp/python.</p>
+<p>Hy docs are here: <a href="http://hy.readthedocs.org" rel="nofollow">http://hy.readthedocs.org</a></p>
+<p>Hy's GitHub repo: <a href="https://github.com/hylang/hy">http://github.com/hylang/hy</a></p>
+<p>On freenode irc #hy, twitter hashtag #hylang</p>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Abhishek L", "http://twitter.com/abhishekl"]
+- ["Zirak", "http://zirak.me"]
+</code></pre>

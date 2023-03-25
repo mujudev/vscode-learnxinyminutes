@@ -1,0 +1,454 @@
+<h1>Elixir</h1>
+<p>Elixir is a modern functional language built on top of the Erlang VM.<br>
+It's fully compatible with Erlang, but features a more standard syntax<br>
+and many more features.</p>
+<div class="highlight highlight-source-elixir"><pre class="notranslate"><span class="pl-c"># Single line comments start with a number symbol.</span>
+
+<span class="pl-c"># There's no multi-line comment,</span>
+<span class="pl-c"># but you can stack multiple comments.</span>
+
+<span class="pl-c"># To use the elixir shell use the `iex` command.</span>
+<span class="pl-c"># Compile your modules with the `elixirc` command.</span>
+
+<span class="pl-c"># Both should be in your path if you installed elixir correctly.</span>
+
+<span class="pl-c">## ---------------------------</span>
+<span class="pl-c">## -- Basic types</span>
+<span class="pl-c">## ---------------------------</span>
+
+<span class="pl-c"># There are numbers</span>
+<span class="pl-c1">3</span>    <span class="pl-c"># integer</span>
+<span class="pl-c1">0x1F</span> <span class="pl-c"># integer</span>
+<span class="pl-c1">3.0</span>  <span class="pl-c"># float</span>
+
+<span class="pl-c"># Atoms are constants whose values are their own name. They start with `:`.</span>
+<span class="pl-pds">:hello</span> <span class="pl-c"># atom</span>
+
+<span class="pl-c"># Tuples that are stored contiguously in memory.</span>
+<span class="pl-kos">{</span><span class="pl-c1">1</span><span class="pl-kos">,</span><span class="pl-c1">2</span><span class="pl-kos">,</span><span class="pl-c1">3</span><span class="pl-kos">}</span> <span class="pl-c"># tuple</span>
+
+<span class="pl-c"># We can access a tuple element with the `elem` function:</span>
+<span class="pl-en">elem</span><span class="pl-kos">(</span><span class="pl-kos">{</span><span class="pl-c1">1</span><span class="pl-kos">,</span> <span class="pl-c1">2</span><span class="pl-kos">,</span> <span class="pl-c1">3</span><span class="pl-kos">}</span><span class="pl-kos">,</span> <span class="pl-c1">0</span><span class="pl-kos">)</span> <span class="pl-c">#=&gt; 1</span>
+
+<span class="pl-c"># Lists that are implemented as linked lists.</span>
+<span class="pl-kos">[</span><span class="pl-c1">1</span><span class="pl-kos">,</span><span class="pl-c1">2</span><span class="pl-kos">,</span><span class="pl-c1">3</span><span class="pl-kos">]</span> <span class="pl-c"># list</span>
+
+<span class="pl-c"># We can access the head and tail of a list as follows:</span>
+<span class="pl-kos">[</span><span class="pl-s1">head</span> <span class="pl-c1">|</span> <span class="pl-s1">tail</span><span class="pl-kos">]</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span><span class="pl-c1">1</span><span class="pl-kos">,</span><span class="pl-c1">2</span><span class="pl-kos">,</span><span class="pl-c1">3</span><span class="pl-kos">]</span>
+<span class="pl-s1">head</span> <span class="pl-c">#=&gt; 1</span>
+<span class="pl-s1">tail</span> <span class="pl-c">#=&gt; [2,3]</span>
+
+<span class="pl-c"># In elixir, just like in Erlang, the `=` denotes pattern matching and</span>
+<span class="pl-c"># not an assignment.</span>
+<span class="pl-c">#</span>
+<span class="pl-c"># This means that the left-hand side (pattern) is matched against a</span>
+<span class="pl-c"># right-hand side.</span>
+<span class="pl-c">#</span>
+<span class="pl-c"># This is how the above example of accessing the head and tail of a list works.</span>
+
+<span class="pl-c"># A pattern match will error when the sides don't match, in this example</span>
+<span class="pl-c"># the tuples have different sizes.</span>
+<span class="pl-c"># {a, b, c} = {1, 2} #=&gt; ** (MatchError) no match of right hand side value: {1,2}</span>
+
+<span class="pl-c"># There are also binaries</span>
+<span class="pl-kos">&lt;&lt;</span><span class="pl-c1">1</span><span class="pl-kos">,</span><span class="pl-c1">2</span><span class="pl-kos">,</span><span class="pl-c1">3</span><span class="pl-kos">&gt;&gt;</span> <span class="pl-c"># binary</span>
+
+<span class="pl-c"># Strings and char lists</span>
+<span class="pl-s">"hello"</span> <span class="pl-c"># string</span>
+<span class="pl-s">'hello'</span> <span class="pl-c"># char list</span>
+
+<span class="pl-c"># Multi-line strings</span>
+<span class="pl-s">"""</span>
+<span class="pl-s">I'm a multi-line</span>
+<span class="pl-s">string.</span>
+<span class="pl-s">"""</span>
+<span class="pl-c">#=&gt; "I'm a multi-line\nstring.\n"</span>
+
+<span class="pl-c"># Strings are all encoded in UTF-8:</span>
+<span class="pl-s">"héllò"</span> <span class="pl-c">#=&gt; "héllò"</span>
+
+<span class="pl-c"># Strings are really just binaries, and char lists are just lists.</span>
+<span class="pl-kos">&lt;&lt;</span><span class="pl-c1">?a</span><span class="pl-kos">,</span> <span class="pl-c1">?b</span><span class="pl-kos">,</span> <span class="pl-c1">?c</span><span class="pl-kos">&gt;&gt;</span> <span class="pl-c">#=&gt; "abc"</span>
+<span class="pl-kos">[</span><span class="pl-c1">?a</span><span class="pl-kos">,</span> <span class="pl-c1">?b</span><span class="pl-kos">,</span> <span class="pl-c1">?c</span><span class="pl-kos">]</span>   <span class="pl-c">#=&gt; 'abc'</span>
+
+<span class="pl-c"># `?a` in elixir returns the ASCII integer for the letter `a`</span>
+<span class="pl-c1">?a</span> <span class="pl-c">#=&gt; 97</span>
+
+<span class="pl-c"># To concatenate lists use `++`, for binaries use `&lt;&gt;`</span>
+<span class="pl-kos">[</span><span class="pl-c1">1</span><span class="pl-kos">,</span><span class="pl-c1">2</span><span class="pl-kos">,</span><span class="pl-c1">3</span><span class="pl-kos">]</span> <span class="pl-c1">++</span> <span class="pl-kos">[</span><span class="pl-c1">4</span><span class="pl-kos">,</span><span class="pl-c1">5</span><span class="pl-kos">]</span>     <span class="pl-c">#=&gt; [1,2,3,4,5]</span>
+<span class="pl-s">'hello '</span> <span class="pl-c1">++</span> <span class="pl-s">'world'</span>  <span class="pl-c">#=&gt; 'hello world'</span>
+
+<span class="pl-kos">&lt;&lt;</span><span class="pl-c1">1</span><span class="pl-kos">,</span><span class="pl-c1">2</span><span class="pl-kos">,</span><span class="pl-c1">3</span><span class="pl-kos">&gt;&gt;</span> <span class="pl-c1">&lt;&gt;</span> <span class="pl-kos">&lt;&lt;</span><span class="pl-c1">4</span><span class="pl-kos">,</span><span class="pl-c1">5</span><span class="pl-kos">&gt;&gt;</span> <span class="pl-c">#=&gt; &lt;&lt;1,2,3,4,5&gt;&gt;</span>
+<span class="pl-s">"hello "</span> <span class="pl-c1">&lt;&gt;</span> <span class="pl-s">"world"</span>  <span class="pl-c">#=&gt; "hello world"</span>
+
+<span class="pl-c"># Ranges are represented as `start..end` (both inclusive)</span>
+<span class="pl-c1">1</span><span class="pl-c1">..</span><span class="pl-c1">10</span> <span class="pl-c">#=&gt; 1..10</span>
+<span class="pl-s1">lower</span><span class="pl-c1">..</span><span class="pl-s1">upper</span> <span class="pl-c1">=</span> <span class="pl-c1">1</span><span class="pl-c1">..</span><span class="pl-c1">10</span> <span class="pl-c"># Can use pattern matching on ranges as well</span>
+<span class="pl-kos">[</span><span class="pl-s1">lower</span><span class="pl-kos">,</span> <span class="pl-s1">upper</span><span class="pl-kos">]</span> <span class="pl-c">#=&gt; [1, 10]</span>
+
+<span class="pl-c"># Maps are key-value pairs</span>
+<span class="pl-s1">genders</span> <span class="pl-c1">=</span> <span class="pl-kos">%</span><span class="pl-kos">{</span><span class="pl-s">"david"</span> <span class="pl-c1">=&gt;</span> <span class="pl-s">"male"</span><span class="pl-kos">,</span> <span class="pl-s">"gillian"</span> <span class="pl-c1">=&gt;</span> <span class="pl-s">"female"</span><span class="pl-kos">}</span>
+<span class="pl-s1">genders</span><span class="pl-kos">[</span><span class="pl-s">"david"</span><span class="pl-kos">]</span> <span class="pl-c">#=&gt; "male"</span>
+
+<span class="pl-c"># Maps with atom keys can be used like this</span>
+<span class="pl-s1">genders</span> <span class="pl-c1">=</span> <span class="pl-kos">%</span><span class="pl-kos">{</span><span class="pl-pds">david: </span><span class="pl-s">"male"</span><span class="pl-kos">,</span> <span class="pl-pds">gillian: </span><span class="pl-s">"female"</span><span class="pl-kos">}</span>
+<span class="pl-s1">genders</span><span class="pl-c1">.</span><span class="pl-en">gillian</span> <span class="pl-c">#=&gt; "female"</span>
+
+<span class="pl-c">## ---------------------------</span>
+<span class="pl-c">## -- Operators</span>
+<span class="pl-c">## ---------------------------</span>
+
+<span class="pl-c"># Some math</span>
+<span class="pl-c1">1</span> <span class="pl-c1">+</span> <span class="pl-c1">1</span>  <span class="pl-c">#=&gt; 2</span>
+<span class="pl-c1">10</span> <span class="pl-c1">-</span> <span class="pl-c1">5</span> <span class="pl-c">#=&gt; 5</span>
+<span class="pl-c1">5</span> <span class="pl-c1">*</span> <span class="pl-c1">2</span>  <span class="pl-c">#=&gt; 10</span>
+<span class="pl-c1">10</span> <span class="pl-c1">/</span> <span class="pl-c1">2</span> <span class="pl-c">#=&gt; 5.0</span>
+
+<span class="pl-c"># In elixir the operator `/` always returns a float.</span>
+
+<span class="pl-c"># To do integer division use `div`</span>
+<span class="pl-en">div</span><span class="pl-kos">(</span><span class="pl-c1">10</span><span class="pl-kos">,</span> <span class="pl-c1">2</span><span class="pl-kos">)</span> <span class="pl-c">#=&gt; 5</span>
+
+<span class="pl-c"># To get the division remainder use `rem`</span>
+<span class="pl-en">rem</span><span class="pl-kos">(</span><span class="pl-c1">10</span><span class="pl-kos">,</span> <span class="pl-c1">3</span><span class="pl-kos">)</span> <span class="pl-c">#=&gt; 1</span>
+
+<span class="pl-c"># There are also boolean operators: `or`, `and` and `not`.</span>
+<span class="pl-c"># These operators expect a boolean as their first argument.</span>
+<span class="pl-c1">true</span> <span class="pl-k">and</span> <span class="pl-c1">true</span> <span class="pl-c">#=&gt; true</span>
+<span class="pl-c1">false</span> <span class="pl-k">or</span> <span class="pl-c1">true</span> <span class="pl-c">#=&gt; true</span>
+<span class="pl-c"># 1 and true</span>
+<span class="pl-c">#=&gt; ** (BadBooleanError) expected a boolean on left-side of "and", got: 1</span>
+
+<span class="pl-c"># Elixir also provides `||`, `&amp;&amp;` and `!` which accept arguments of any type.</span>
+<span class="pl-c"># All values except `false` and `nil` will evaluate to true.</span>
+<span class="pl-c1">1</span> <span class="pl-c1">||</span> <span class="pl-c1">true</span>  <span class="pl-c">#=&gt; 1</span>
+<span class="pl-c1">false</span> <span class="pl-c1">&amp;&amp;</span> <span class="pl-c1">1</span> <span class="pl-c">#=&gt; false</span>
+<span class="pl-c1">nil</span> <span class="pl-c1">&amp;&amp;</span> <span class="pl-c1">20</span>  <span class="pl-c">#=&gt; nil</span>
+<span class="pl-c1">!</span><span class="pl-c1">true</span> <span class="pl-c">#=&gt; false</span>
+
+<span class="pl-c"># For comparisons we have: `==`, `!=`, `===`, `!==`, `&lt;=`, `&gt;=`, `&lt;` and `&gt;`</span>
+<span class="pl-c1">1</span> <span class="pl-c1">==</span> <span class="pl-c1">1</span> <span class="pl-c">#=&gt; true</span>
+<span class="pl-c1">1</span> <span class="pl-c1">!=</span> <span class="pl-c1">1</span> <span class="pl-c">#=&gt; false</span>
+<span class="pl-c1">1</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">2</span>  <span class="pl-c">#=&gt; true</span>
+
+<span class="pl-c"># `===` and `!==` are more strict when comparing integers and floats:</span>
+<span class="pl-c1">1</span> <span class="pl-c1">==</span> <span class="pl-c1">1.0</span>  <span class="pl-c">#=&gt; true</span>
+<span class="pl-c1">1</span> <span class="pl-c1">===</span> <span class="pl-c1">1.0</span> <span class="pl-c">#=&gt; false</span>
+
+<span class="pl-c"># We can also compare two different data types:</span>
+<span class="pl-c1">1</span> <span class="pl-c1">&lt;</span> <span class="pl-pds">:hello</span> <span class="pl-c">#=&gt; true</span>
+
+<span class="pl-c"># The overall sorting order is defined below:</span>
+<span class="pl-c"># number &lt; atom &lt; reference &lt; functions &lt; port &lt; pid &lt; tuple &lt; list &lt; bit string</span>
+
+<span class="pl-c"># To quote Joe Armstrong on this: "The actual order is not important,</span>
+<span class="pl-c"># but that a total ordering is well defined is important."</span>
+
+<span class="pl-c">## ---------------------------</span>
+<span class="pl-c">## -- Control Flow</span>
+<span class="pl-c">## ---------------------------</span>
+
+<span class="pl-c"># `if` expression</span>
+<span class="pl-k">if</span> <span class="pl-c1">false</span> <span class="pl-k">do</span>
+  <span class="pl-s">"This will never be seen"</span>
+<span class="pl-k">else</span>
+  <span class="pl-s">"This will"</span>
+<span class="pl-k">end</span>
+
+<span class="pl-c"># There's also `unless`</span>
+<span class="pl-k">unless</span> <span class="pl-c1">true</span> <span class="pl-k">do</span>
+  <span class="pl-s">"This will never be seen"</span>
+<span class="pl-k">else</span>
+  <span class="pl-s">"This will"</span>
+<span class="pl-k">end</span>
+
+<span class="pl-c"># Remember pattern matching? Many control-flow structures in elixir rely on it.</span>
+
+<span class="pl-c"># `case` allows us to compare a value against many patterns:</span>
+<span class="pl-k">case</span> <span class="pl-kos">{</span><span class="pl-pds">:one</span><span class="pl-kos">,</span> <span class="pl-pds">:two</span><span class="pl-kos">}</span> <span class="pl-k">do</span>
+  <span class="pl-kos">{</span><span class="pl-pds">:four</span><span class="pl-kos">,</span> <span class="pl-pds">:five</span><span class="pl-kos">}</span> <span class="pl-c1">-&gt;</span>
+    <span class="pl-s">"This won't match"</span>
+  <span class="pl-kos">{</span><span class="pl-pds">:one</span><span class="pl-kos">,</span> <span class="pl-s1">x</span><span class="pl-kos">}</span> <span class="pl-c1">-&gt;</span>
+    <span class="pl-s">"This will match and bind `x` to `:two` in this clause"</span>
+  <span class="pl-c">_</span> <span class="pl-c1">-&gt;</span>
+    <span class="pl-s">"This will match any value"</span>
+<span class="pl-k">end</span>
+
+<span class="pl-c"># It's common to bind the value to `_` if we don't need it.</span>
+<span class="pl-c"># For example, if only the head of a list matters to us:</span>
+<span class="pl-kos">[</span><span class="pl-s1">head</span> <span class="pl-c1">|</span> <span class="pl-c">_</span><span class="pl-kos">]</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span><span class="pl-c1">1</span><span class="pl-kos">,</span><span class="pl-c1">2</span><span class="pl-kos">,</span><span class="pl-c1">3</span><span class="pl-kos">]</span>
+<span class="pl-s1">head</span> <span class="pl-c">#=&gt; 1</span>
+
+<span class="pl-c"># For better readability we can do the following:</span>
+<span class="pl-kos">[</span><span class="pl-s1">head</span> <span class="pl-c1">|</span> <span class="pl-c">_tail</span><span class="pl-kos">]</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span><span class="pl-pds">:a</span><span class="pl-kos">,</span> <span class="pl-pds">:b</span><span class="pl-kos">,</span> <span class="pl-pds">:c</span><span class="pl-kos">]</span>
+<span class="pl-s1">head</span> <span class="pl-c">#=&gt; :a</span>
+
+<span class="pl-c"># `cond` lets us check for many conditions at the same time.</span>
+<span class="pl-c"># Use `cond` instead of nesting many `if` expressions.</span>
+<span class="pl-k">cond</span> <span class="pl-k">do</span>
+  <span class="pl-c1">1</span> <span class="pl-c1">+</span> <span class="pl-c1">1</span> <span class="pl-c1">==</span> <span class="pl-c1">3</span> <span class="pl-c1">-&gt;</span>
+    <span class="pl-s">"I will never be seen"</span>
+  <span class="pl-c1">2</span> <span class="pl-c1">*</span> <span class="pl-c1">5</span> <span class="pl-c1">==</span> <span class="pl-c1">12</span> <span class="pl-c1">-&gt;</span>
+    <span class="pl-s">"Me neither"</span>
+  <span class="pl-c1">1</span> <span class="pl-c1">+</span> <span class="pl-c1">2</span> <span class="pl-c1">==</span> <span class="pl-c1">3</span> <span class="pl-c1">-&gt;</span>
+    <span class="pl-s">"But I will"</span>
+<span class="pl-k">end</span>
+
+<span class="pl-c"># It is common to set the last condition equal to `true`, which will always match.</span>
+<span class="pl-k">cond</span> <span class="pl-k">do</span>
+  <span class="pl-c1">1</span> <span class="pl-c1">+</span> <span class="pl-c1">1</span> <span class="pl-c1">==</span> <span class="pl-c1">3</span> <span class="pl-c1">-&gt;</span>
+    <span class="pl-s">"I will never be seen"</span>
+  <span class="pl-c1">2</span> <span class="pl-c1">*</span> <span class="pl-c1">5</span> <span class="pl-c1">==</span> <span class="pl-c1">12</span> <span class="pl-c1">-&gt;</span>
+    <span class="pl-s">"Me neither"</span>
+  <span class="pl-c1">true</span> <span class="pl-c1">-&gt;</span>
+    <span class="pl-s">"But I will (this is essentially an else)"</span>
+<span class="pl-k">end</span>
+
+<span class="pl-c"># `try/catch` is used to catch values that are thrown, it also supports an</span>
+<span class="pl-c"># `after` clause that is invoked whether or not a value is caught.</span>
+<span class="pl-k">try</span> <span class="pl-k">do</span>
+  <span class="pl-k">throw</span><span class="pl-kos">(</span><span class="pl-pds">:hello</span><span class="pl-kos">)</span>
+<span class="pl-k">catch</span>
+  <span class="pl-s1">message</span> <span class="pl-c1">-&gt;</span> <span class="pl-s">"Got <span class="pl-s1"><span class="pl-kos">#{</span><span class="pl-s1">message</span><span class="pl-kos">}</span></span>."</span>
+<span class="pl-k">after</span>
+  <span class="pl-v">IO</span><span class="pl-c1">.</span><span class="pl-en">puts</span><span class="pl-kos">(</span><span class="pl-s">"I'm the after clause."</span><span class="pl-kos">)</span>
+<span class="pl-k">end</span>
+<span class="pl-c">#=&gt; I'm the after clause</span>
+<span class="pl-c"># "Got :hello"</span>
+
+<span class="pl-c">## ---------------------------</span>
+<span class="pl-c">## -- Modules and Functions</span>
+<span class="pl-c">## ---------------------------</span>
+
+<span class="pl-c"># Anonymous functions (notice the dot)</span>
+<span class="pl-s1">square</span> <span class="pl-c1">=</span> <span class="pl-k">fn</span><span class="pl-kos">(</span><span class="pl-s1">x</span><span class="pl-kos">)</span> <span class="pl-c1">-&gt;</span> <span class="pl-s1">x</span> <span class="pl-c1">*</span> <span class="pl-s1">x</span> <span class="pl-k">end</span>
+<span class="pl-s1">square</span><span class="pl-c1">.</span><span class="pl-kos">(</span><span class="pl-c1">5</span><span class="pl-kos">)</span> <span class="pl-c">#=&gt; 25</span>
+
+<span class="pl-c"># They also accept many clauses and guards.</span>
+<span class="pl-c"># Guards let you fine tune pattern matching,</span>
+<span class="pl-c"># they are indicated by the `when` keyword:</span>
+<span class="pl-s1">f</span> <span class="pl-c1">=</span> <span class="pl-k">fn</span>
+  <span class="pl-s1">x</span><span class="pl-kos">,</span> <span class="pl-s1">y</span> <span class="pl-k">when</span> <span class="pl-s1">x</span> <span class="pl-c1">&gt;</span> <span class="pl-c1">0</span> <span class="pl-c1">-&gt;</span> <span class="pl-s1">x</span> <span class="pl-c1">+</span> <span class="pl-s1">y</span>
+  <span class="pl-s1">x</span><span class="pl-kos">,</span> <span class="pl-s1">y</span> <span class="pl-c1">-&gt;</span> <span class="pl-s1">x</span> <span class="pl-c1">*</span> <span class="pl-s1">y</span>
+<span class="pl-k">end</span>
+
+<span class="pl-s1">f</span><span class="pl-c1">.</span><span class="pl-kos">(</span><span class="pl-c1">1</span><span class="pl-kos">,</span> <span class="pl-c1">3</span><span class="pl-kos">)</span>  <span class="pl-c">#=&gt; 4</span>
+<span class="pl-s1">f</span><span class="pl-c1">.</span><span class="pl-kos">(</span><span class="pl-c1">-</span><span class="pl-c1">1</span><span class="pl-kos">,</span> <span class="pl-c1">3</span><span class="pl-kos">)</span> <span class="pl-c">#=&gt; -3</span>
+
+<span class="pl-c"># Elixir also provides many built-in functions.</span>
+<span class="pl-c"># These are available in the current scope.</span>
+<span class="pl-en">is_number</span><span class="pl-kos">(</span><span class="pl-c1">10</span><span class="pl-kos">)</span>    <span class="pl-c">#=&gt; true</span>
+<span class="pl-en">is_list</span><span class="pl-kos">(</span><span class="pl-s">"hello"</span><span class="pl-kos">)</span> <span class="pl-c">#=&gt; false</span>
+<span class="pl-en">elem</span><span class="pl-kos">(</span><span class="pl-kos">{</span><span class="pl-c1">1</span><span class="pl-kos">,</span><span class="pl-c1">2</span><span class="pl-kos">,</span><span class="pl-c1">3</span><span class="pl-kos">}</span><span class="pl-kos">,</span> <span class="pl-c1">0</span><span class="pl-kos">)</span> <span class="pl-c">#=&gt; 1</span>
+
+<span class="pl-c"># You can group several functions into a module. Inside a module use `def`</span>
+<span class="pl-c"># to define your functions.</span>
+<span class="pl-k">defmodule</span> <span class="pl-v">Math</span> <span class="pl-k">do</span>
+  <span class="pl-k">def</span> <span class="pl-en">sum</span><span class="pl-kos">(</span><span class="pl-s1">a</span><span class="pl-kos">,</span> <span class="pl-s1">b</span><span class="pl-kos">)</span> <span class="pl-k">do</span>
+    <span class="pl-s1">a</span> <span class="pl-c1">+</span> <span class="pl-s1">b</span>
+  <span class="pl-k">end</span>
+
+  <span class="pl-k">def</span> <span class="pl-en">square</span><span class="pl-kos">(</span><span class="pl-s1">x</span><span class="pl-kos">)</span> <span class="pl-k">do</span>
+    <span class="pl-s1">x</span> <span class="pl-c1">*</span> <span class="pl-s1">x</span>
+  <span class="pl-k">end</span>
+<span class="pl-k">end</span>
+
+<span class="pl-v">Math</span><span class="pl-c1">.</span><span class="pl-en">sum</span><span class="pl-kos">(</span><span class="pl-c1">1</span><span class="pl-kos">,</span> <span class="pl-c1">2</span><span class="pl-kos">)</span>  <span class="pl-c">#=&gt; 3</span>
+<span class="pl-v">Math</span><span class="pl-c1">.</span><span class="pl-en">square</span><span class="pl-kos">(</span><span class="pl-c1">3</span><span class="pl-kos">)</span> <span class="pl-c">#=&gt; 9</span>
+
+<span class="pl-c"># To compile our simple Math module save it as `math.ex` and use `elixirc`</span>
+<span class="pl-c"># in your terminal: elixirc math.ex</span>
+
+<span class="pl-c"># Inside a module we can define functions with `def` and private functions with `defp`.</span>
+<span class="pl-c"># A function defined with `def` is available to be invoked from other modules,</span>
+<span class="pl-c"># a private function can only be invoked locally.</span>
+<span class="pl-k">defmodule</span> <span class="pl-v">PrivateMath</span> <span class="pl-k">do</span>
+  <span class="pl-k">def</span> <span class="pl-en">sum</span><span class="pl-kos">(</span><span class="pl-s1">a</span><span class="pl-kos">,</span> <span class="pl-s1">b</span><span class="pl-kos">)</span> <span class="pl-k">do</span>
+    <span class="pl-en">do_sum</span><span class="pl-kos">(</span><span class="pl-s1">a</span><span class="pl-kos">,</span> <span class="pl-s1">b</span><span class="pl-kos">)</span>
+  <span class="pl-k">end</span>
+
+  <span class="pl-k">defp</span> <span class="pl-en">do_sum</span><span class="pl-kos">(</span><span class="pl-s1">a</span><span class="pl-kos">,</span> <span class="pl-s1">b</span><span class="pl-kos">)</span> <span class="pl-k">do</span>
+    <span class="pl-s1">a</span> <span class="pl-c1">+</span> <span class="pl-s1">b</span>
+  <span class="pl-k">end</span>
+<span class="pl-k">end</span>
+
+<span class="pl-v">PrivateMath</span><span class="pl-c1">.</span><span class="pl-en">sum</span><span class="pl-kos">(</span><span class="pl-c1">1</span><span class="pl-kos">,</span> <span class="pl-c1">2</span><span class="pl-kos">)</span>    <span class="pl-c">#=&gt; 3</span>
+<span class="pl-c"># PrivateMath.do_sum(1, 2) #=&gt; ** (UndefinedFunctionError)</span>
+
+<span class="pl-c"># Function declarations also support guards and multiple clauses.</span>
+<span class="pl-c"># When a function with multiple clauses is called, the first function</span>
+<span class="pl-c"># that satisfies the clause will be invoked.</span>
+<span class="pl-c"># Example: invoking area({:circle, 3}) will call the second area</span>
+<span class="pl-c"># function defined below, not the first:</span>
+<span class="pl-k">defmodule</span> <span class="pl-v">Geometry</span> <span class="pl-k">do</span>
+  <span class="pl-k">def</span> <span class="pl-en">area</span><span class="pl-kos">(</span><span class="pl-kos">{</span><span class="pl-pds">:rectangle</span><span class="pl-kos">,</span> <span class="pl-s1">w</span><span class="pl-kos">,</span> <span class="pl-s1">h</span><span class="pl-kos">}</span><span class="pl-kos">)</span> <span class="pl-k">do</span>
+    <span class="pl-s1">w</span> <span class="pl-c1">*</span> <span class="pl-s1">h</span>
+  <span class="pl-k">end</span>
+
+  <span class="pl-k">def</span> <span class="pl-en">area</span><span class="pl-kos">(</span><span class="pl-kos">{</span><span class="pl-pds">:circle</span><span class="pl-kos">,</span> <span class="pl-s1">r</span><span class="pl-kos">}</span><span class="pl-kos">)</span> <span class="pl-k">when</span> <span class="pl-en">is_number</span><span class="pl-kos">(</span><span class="pl-s1">r</span><span class="pl-kos">)</span> <span class="pl-k">do</span>
+    <span class="pl-c1">3.14</span> <span class="pl-c1">*</span> <span class="pl-s1">r</span> <span class="pl-c1">*</span> <span class="pl-s1">r</span>
+  <span class="pl-k">end</span>
+<span class="pl-k">end</span>
+
+<span class="pl-v">Geometry</span><span class="pl-c1">.</span><span class="pl-en">area</span><span class="pl-kos">(</span><span class="pl-kos">{</span><span class="pl-pds">:rectangle</span><span class="pl-kos">,</span> <span class="pl-c1">2</span><span class="pl-kos">,</span> <span class="pl-c1">3</span><span class="pl-kos">}</span><span class="pl-kos">)</span> <span class="pl-c">#=&gt; 6</span>
+<span class="pl-v">Geometry</span><span class="pl-c1">.</span><span class="pl-en">area</span><span class="pl-kos">(</span><span class="pl-kos">{</span><span class="pl-pds">:circle</span><span class="pl-kos">,</span> <span class="pl-c1">3</span><span class="pl-kos">}</span><span class="pl-kos">)</span>       <span class="pl-c">#=&gt; 28.25999999999999801048</span>
+<span class="pl-c"># Geometry.area({:circle, "not_a_number"})</span>
+<span class="pl-c">#=&gt; ** (FunctionClauseError) no function clause matching in Geometry.area/1</span>
+
+<span class="pl-c"># Due to immutability, recursion is a big part of elixir</span>
+<span class="pl-k">defmodule</span> <span class="pl-v">Recursion</span> <span class="pl-k">do</span>
+  <span class="pl-k">def</span> <span class="pl-en">sum_list</span><span class="pl-kos">(</span><span class="pl-kos">[</span><span class="pl-s1">head</span> <span class="pl-c1">|</span> <span class="pl-s1">tail</span><span class="pl-kos">]</span><span class="pl-kos">,</span> <span class="pl-s1">acc</span><span class="pl-kos">)</span> <span class="pl-k">do</span>
+    <span class="pl-en">sum_list</span><span class="pl-kos">(</span><span class="pl-s1">tail</span><span class="pl-kos">,</span> <span class="pl-s1">acc</span> <span class="pl-c1">+</span> <span class="pl-s1">head</span><span class="pl-kos">)</span>
+  <span class="pl-k">end</span>
+
+  <span class="pl-k">def</span> <span class="pl-en">sum_list</span><span class="pl-kos">(</span><span class="pl-kos">[</span><span class="pl-kos">]</span><span class="pl-kos">,</span> <span class="pl-s1">acc</span><span class="pl-kos">)</span> <span class="pl-k">do</span>
+    <span class="pl-s1">acc</span>
+  <span class="pl-k">end</span>
+<span class="pl-k">end</span>
+
+<span class="pl-v">Recursion</span><span class="pl-c1">.</span><span class="pl-en">sum_list</span><span class="pl-kos">(</span><span class="pl-kos">[</span><span class="pl-c1">1</span><span class="pl-kos">,</span><span class="pl-c1">2</span><span class="pl-kos">,</span><span class="pl-c1">3</span><span class="pl-kos">]</span><span class="pl-kos">,</span> <span class="pl-c1">0</span><span class="pl-kos">)</span> <span class="pl-c">#=&gt; 6</span>
+
+<span class="pl-c"># Elixir modules support attributes, there are built-in attributes and you</span>
+<span class="pl-c"># may also add custom ones.</span>
+<span class="pl-k">defmodule</span> <span class="pl-v">MyMod</span> <span class="pl-k">do</span>
+  <span class="pl-c">@</span><span class="pl-c">moduledoc</span> <span class="pl-c">"""</span>
+<span class="pl-c">  This is a built-in attribute on a example module.</span>
+<span class="pl-c">  """</span>
+
+  <span class="pl-c1">@</span><span class="pl-c1">my_data</span> <span class="pl-c1">100</span> <span class="pl-c"># This is a custom attribute.</span>
+  <span class="pl-v">IO</span><span class="pl-c1">.</span><span class="pl-en">inspect</span><span class="pl-kos">(</span><span class="pl-c1">@</span><span class="pl-c1">my_data</span><span class="pl-kos">)</span> <span class="pl-c">#=&gt; 100</span>
+<span class="pl-k">end</span>
+
+<span class="pl-c"># The pipe operator |&gt; allows you to pass the output of an expression</span>
+<span class="pl-c"># as the first parameter into a function. </span>
+
+<span class="pl-v">Range</span><span class="pl-c1">.</span><span class="pl-en">new</span><span class="pl-kos">(</span><span class="pl-c1">1</span><span class="pl-kos">,</span><span class="pl-c1">10</span><span class="pl-kos">)</span>
+<span class="pl-c1">|&gt;</span> <span class="pl-v">Enum</span><span class="pl-c1">.</span><span class="pl-en">map</span><span class="pl-kos">(</span><span class="pl-k">fn</span> <span class="pl-s1">x</span> <span class="pl-c1">-&gt;</span> <span class="pl-s1">x</span> <span class="pl-c1">*</span> <span class="pl-s1">x</span> <span class="pl-k">end</span><span class="pl-kos">)</span>
+<span class="pl-c1">|&gt;</span> <span class="pl-v">Enum</span><span class="pl-c1">.</span><span class="pl-en">filter</span><span class="pl-kos">(</span><span class="pl-k">fn</span> <span class="pl-s1">x</span> <span class="pl-c1">-&gt;</span> <span class="pl-en">rem</span><span class="pl-kos">(</span><span class="pl-s1">x</span><span class="pl-kos">,</span> <span class="pl-c1">2</span><span class="pl-kos">)</span> <span class="pl-c1">==</span> <span class="pl-c1">0</span> <span class="pl-k">end</span><span class="pl-kos">)</span>
+<span class="pl-c">#=&gt; [4, 16, 36, 64, 100]</span>
+
+<span class="pl-c">## ---------------------------</span>
+<span class="pl-c">## -- Structs and Exceptions</span>
+<span class="pl-c">## ---------------------------</span>
+
+<span class="pl-c"># Structs are extensions on top of maps that bring default values,</span>
+<span class="pl-c"># compile-time guarantees and polymorphism into Elixir.</span>
+<span class="pl-k">defmodule</span> <span class="pl-v">Person</span> <span class="pl-k">do</span>
+  <span class="pl-k">defstruct</span> <span class="pl-pds">name: </span><span class="pl-c1">nil</span><span class="pl-kos">,</span> <span class="pl-pds">age: </span><span class="pl-c1">0</span><span class="pl-kos">,</span> <span class="pl-pds">height: </span><span class="pl-c1">0</span>
+<span class="pl-k">end</span>
+
+<span class="pl-s1">joe_info</span> <span class="pl-c1">=</span> <span class="pl-kos">%</span><span class="pl-v">Person</span><span class="pl-kos">{</span> <span class="pl-pds">name: </span><span class="pl-s">"Joe"</span><span class="pl-kos">,</span> <span class="pl-pds">age: </span><span class="pl-c1">30</span><span class="pl-kos">,</span> <span class="pl-pds">height: </span><span class="pl-c1">180</span> <span class="pl-kos">}</span>
+<span class="pl-c">#=&gt; %Person{age: 30, height: 180, name: "Joe"}</span>
+
+<span class="pl-c"># Access the value of name</span>
+<span class="pl-s1">joe_info</span><span class="pl-c1">.</span><span class="pl-en">name</span> <span class="pl-c">#=&gt; "Joe"</span>
+
+<span class="pl-c"># Update the value of age</span>
+<span class="pl-s1">older_joe_info</span> <span class="pl-c1">=</span> <span class="pl-kos">%</span><span class="pl-kos">{</span> <span class="pl-s1">joe_info</span> <span class="pl-c1">|</span> <span class="pl-pds">age: </span><span class="pl-c1">31</span> <span class="pl-kos">}</span>
+<span class="pl-c">#=&gt; %Person{age: 31, height: 180, name: "Joe"}</span>
+
+<span class="pl-c"># The `try` block with the `rescue` keyword is used to handle exceptions</span>
+<span class="pl-k">try</span> <span class="pl-k">do</span>
+  <span class="pl-k">raise</span> <span class="pl-s">"some error"</span>
+<span class="pl-k">rescue</span>
+  <span class="pl-v">RuntimeError</span> <span class="pl-c1">-&gt;</span> <span class="pl-s">"rescued a runtime error"</span>
+  <span class="pl-c">_error</span> <span class="pl-c1">-&gt;</span> <span class="pl-s">"this will rescue any error"</span>
+<span class="pl-k">end</span>
+<span class="pl-c">#=&gt; "rescued a runtime error"</span>
+
+<span class="pl-c"># All exceptions have a message</span>
+<span class="pl-k">try</span> <span class="pl-k">do</span>
+  <span class="pl-k">raise</span> <span class="pl-s">"some error"</span>
+<span class="pl-k">rescue</span>
+  <span class="pl-s1">x</span> <span class="pl-k">in</span> <span class="pl-kos">[</span><span class="pl-v">RuntimeError</span><span class="pl-kos">]</span> <span class="pl-c1">-&gt;</span>
+    <span class="pl-s1">x</span><span class="pl-c1">.</span><span class="pl-en">message</span>
+<span class="pl-k">end</span>
+<span class="pl-c">#=&gt; "some error"</span>
+
+<span class="pl-c">## ---------------------------</span>
+<span class="pl-c">## -- Concurrency</span>
+<span class="pl-c">## ---------------------------</span>
+
+<span class="pl-c"># Elixir relies on the actor model for concurrency. All we need to write</span>
+<span class="pl-c"># concurrent programs in elixir are three primitives: spawning processes,</span>
+<span class="pl-c"># sending messages and receiving messages.</span>
+
+<span class="pl-c"># To start a new process we use the `spawn` function, which takes a function</span>
+<span class="pl-c"># as argument.</span>
+<span class="pl-s1">f</span> <span class="pl-c1">=</span> <span class="pl-k">fn</span> <span class="pl-c1">-&gt;</span> <span class="pl-c1">2</span> <span class="pl-c1">*</span> <span class="pl-c1">2</span> <span class="pl-k">end</span> <span class="pl-c">#=&gt; #Function&lt;erl_eval.20.80484245&gt;</span>
+<span class="pl-en">spawn</span><span class="pl-kos">(</span><span class="pl-s1">f</span><span class="pl-kos">)</span> <span class="pl-c">#=&gt; #PID&lt;0.40.0&gt;</span>
+
+<span class="pl-c"># `spawn` returns a pid (process identifier), you can use this pid to send</span>
+<span class="pl-c"># messages to the process. To do message passing we use the `send` operator.</span>
+<span class="pl-c"># For all of this to be useful we need to be able to receive messages. This is</span>
+<span class="pl-c"># achieved with the `receive` mechanism:</span>
+
+<span class="pl-c"># The `receive do` block is used to listen for messages and process</span>
+<span class="pl-c"># them when they are received. A `receive do` block will only</span>
+<span class="pl-c"># process one received message. In order to process multiple</span>
+<span class="pl-c"># messages, a function with a `receive do` block must recursively</span>
+<span class="pl-c"># call itself to get into the `receive do` block again.</span>
+
+<span class="pl-k">defmodule</span> <span class="pl-v">Geometry</span> <span class="pl-k">do</span>
+  <span class="pl-k">def</span> <span class="pl-en">area_loop</span> <span class="pl-k">do</span>
+    <span class="pl-k">receive</span> <span class="pl-k">do</span>
+      <span class="pl-kos">{</span><span class="pl-pds">:rectangle</span><span class="pl-kos">,</span> <span class="pl-s1">w</span><span class="pl-kos">,</span> <span class="pl-s1">h</span><span class="pl-kos">}</span> <span class="pl-c1">-&gt;</span>
+        <span class="pl-v">IO</span><span class="pl-c1">.</span><span class="pl-en">puts</span><span class="pl-kos">(</span><span class="pl-s">"Area = <span class="pl-s1"><span class="pl-kos">#{</span><span class="pl-s1">w</span> <span class="pl-c1">*</span> <span class="pl-s1">h</span><span class="pl-kos">}</span></span>"</span><span class="pl-kos">)</span>
+        <span class="pl-en">area_loop</span><span class="pl-kos">(</span><span class="pl-kos">)</span>
+      <span class="pl-kos">{</span><span class="pl-pds">:circle</span><span class="pl-kos">,</span> <span class="pl-s1">r</span><span class="pl-kos">}</span> <span class="pl-c1">-&gt;</span>
+        <span class="pl-v">IO</span><span class="pl-c1">.</span><span class="pl-en">puts</span><span class="pl-kos">(</span><span class="pl-s">"Area = <span class="pl-s1"><span class="pl-kos">#{</span><span class="pl-c1">3.14</span> <span class="pl-c1">*</span> <span class="pl-s1">r</span> <span class="pl-c1">*</span> <span class="pl-s1">r</span><span class="pl-kos">}</span></span>"</span><span class="pl-kos">)</span>
+        <span class="pl-en">area_loop</span><span class="pl-kos">(</span><span class="pl-kos">)</span>
+    <span class="pl-k">end</span>
+  <span class="pl-k">end</span>
+<span class="pl-k">end</span>
+
+<span class="pl-c"># Compile the module and create a process that evaluates `area_loop` in the shell</span>
+<span class="pl-s1">pid</span> <span class="pl-c1">=</span> <span class="pl-en">spawn</span><span class="pl-kos">(</span><span class="pl-k">fn</span> <span class="pl-c1">-&gt;</span> <span class="pl-v">Geometry</span><span class="pl-c1">.</span><span class="pl-en">area_loop</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-k">end</span><span class="pl-kos">)</span> <span class="pl-c">#=&gt; #PID&lt;0.40.0&gt;</span>
+<span class="pl-c"># Alternatively</span>
+<span class="pl-s1">pid</span> <span class="pl-c1">=</span> <span class="pl-en">spawn</span><span class="pl-kos">(</span><span class="pl-v">Geometry</span><span class="pl-kos">,</span> <span class="pl-pds">:area_loop</span><span class="pl-kos">,</span> <span class="pl-kos">[</span><span class="pl-kos">]</span><span class="pl-kos">)</span>
+
+<span class="pl-c"># Send a message to `pid` that will match a pattern in the receive statement</span>
+<span class="pl-en">send</span> <span class="pl-s1">pid</span><span class="pl-kos">,</span> <span class="pl-kos">{</span><span class="pl-pds">:rectangle</span><span class="pl-kos">,</span> <span class="pl-c1">2</span><span class="pl-kos">,</span> <span class="pl-c1">3</span><span class="pl-kos">}</span>
+<span class="pl-c">#=&gt; Area = 6</span>
+<span class="pl-c">#   {:rectangle,2,3}</span>
+
+<span class="pl-en">send</span> <span class="pl-s1">pid</span><span class="pl-kos">,</span> <span class="pl-kos">{</span><span class="pl-pds">:circle</span><span class="pl-kos">,</span> <span class="pl-c1">2</span><span class="pl-kos">}</span>
+<span class="pl-c">#=&gt; Area = 12.56000000000000049738</span>
+<span class="pl-c">#   {:circle,2}</span>
+
+<span class="pl-c"># The shell is also a process, you can use `self` to get the current pid</span>
+<span class="pl-en">self</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c">#=&gt; #PID&lt;0.27.0&gt;</span>
+
+<span class="pl-c">## ---------------------------</span>
+<span class="pl-c">## -- Agents</span>
+<span class="pl-c">## ---------------------------</span>
+
+<span class="pl-c"># An agent is a process that keeps track of some changing value</span>
+
+<span class="pl-c"># Create an agent with `Agent.start_link`, passing in a function</span>
+<span class="pl-c"># The initial state of the agent will be whatever that function returns</span>
+<span class="pl-kos">{</span><span class="pl-pds">:ok</span><span class="pl-kos">,</span> <span class="pl-s1">my_agent</span><span class="pl-kos">}</span> <span class="pl-c1">=</span> <span class="pl-v">Agent</span><span class="pl-c1">.</span><span class="pl-en">start_link</span><span class="pl-kos">(</span><span class="pl-k">fn</span> <span class="pl-c1">-&gt;</span> <span class="pl-kos">[</span><span class="pl-s">"red"</span><span class="pl-kos">,</span> <span class="pl-s">"green"</span><span class="pl-kos">]</span> <span class="pl-k">end</span><span class="pl-kos">)</span>
+
+<span class="pl-c"># `Agent.get` takes an agent name and a `fn` that gets passed the current state</span>
+<span class="pl-c"># Whatever that `fn` returns is what you'll get back</span>
+<span class="pl-v">Agent</span><span class="pl-c1">.</span><span class="pl-en">get</span><span class="pl-kos">(</span><span class="pl-s1">my_agent</span><span class="pl-kos">,</span> <span class="pl-k">fn</span> <span class="pl-s1">colors</span> <span class="pl-c1">-&gt;</span> <span class="pl-s1">colors</span> <span class="pl-k">end</span><span class="pl-kos">)</span> <span class="pl-c">#=&gt; ["red", "green"]</span>
+
+<span class="pl-c"># Update the agent's state the same way</span>
+<span class="pl-v">Agent</span><span class="pl-c1">.</span><span class="pl-en">update</span><span class="pl-kos">(</span><span class="pl-s1">my_agent</span><span class="pl-kos">,</span> <span class="pl-k">fn</span> <span class="pl-s1">colors</span> <span class="pl-c1">-&gt;</span> <span class="pl-kos">[</span><span class="pl-s">"blue"</span> <span class="pl-c1">|</span> <span class="pl-s1">colors</span><span class="pl-kos">]</span> <span class="pl-k">end</span><span class="pl-kos">)</span></pre></div>
+<h2>References</h2>
+<ul>
+<li><a href="https://elixir-lang.org/getting-started/introduction.html" rel="nofollow">Getting started guide</a> from the <a href="https://elixir-lang.org" rel="nofollow">Elixir website</a></li>
+<li><a href="https://elixir-lang.org/docs.html" rel="nofollow">Elixir Documentation</a></li>
+<li><a href="https://pragprog.com/book/elixir/programming-elixir" rel="nofollow">"Programming Elixir"</a> by Dave Thomas</li>
+<li><a href="https://media.pragprog.com/titles/elixir/ElixirCheat.pdf" rel="nofollow">Elixir Cheat Sheet</a></li>
+<li><a href="https://learnyousomeerlang.com/" rel="nofollow">"Learn You Some Erlang for Great Good!"</a> by Fred Hebert</li>
+<li><a href="https://pragprog.com/book/jaerlang2/programming-erlang" rel="nofollow">"Programming Erlang: Software for a Concurrent World"</a> by Joe Armstrong</li>
+<li><a href="https://learn-elixir.com/" rel="nofollow">Introduction to Elixir</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Joao Marques", "https://github.com/mrshankly"]
+- ["Dzianis Dashkevich", "https://github.com/dskecse"]
+- ["Ryan Plant", "https://github.com/ryanplant-au"]
+- ["Ev Bogdanov", "https://github.com/evbogdanov"]
+</code></pre>

@@ -1,0 +1,189 @@
+<h1>Pascal</h1>
+<blockquote>
+<p>Pascal is an imperative and procedural programming language, which Niklaus Wirth designed in 1968–69 and published in 1970, as a small, efficient language intended to encourage good programming practices using structured programming and data structuring. It is named in honor of the French mathematician, philosopher and physicist Blaise Pascal.<br>
+source : <a href="https://en.wikipedia.org/wiki/Pascal_(programming_language)" rel="nofollow">wikipedia</a></p>
+</blockquote>
+<p>To compile and run a pascal program you could use a free pascal compiler. <a href="https://www.freepascal.org/" rel="nofollow">Download Here</a></p>
+<div class="highlight highlight-source-pascal"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span>Anatomy of a Pascal Program</span>
+<span class="pl-c"><span class="pl-c">//</span>this is a comment</span>
+<span class="pl-c"><span class="pl-c">{</span></span>
+<span class="pl-c">    this is a </span>
+<span class="pl-c">    multiline comment</span>
+<span class="pl-c"><span class="pl-c">}</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span>name of the program</span>
+<span class="pl-k">program</span> learn_pascal; <span class="pl-c"><span class="pl-c">//</span>&lt;-- don't forget a semicolon</span>
+
+<span class="pl-k">const</span>
+    <span class="pl-c"><span class="pl-c">{</span></span>
+<span class="pl-c">        this is where you should declare constant values</span>
+<span class="pl-c">    <span class="pl-c">}</span></span>
+<span class="pl-k">type</span>
+    <span class="pl-c"><span class="pl-c">{</span></span>
+<span class="pl-c">        this is where you should declare custom</span>
+<span class="pl-c">        data-types</span>
+<span class="pl-c">    <span class="pl-c">}</span></span>
+<span class="pl-k">var</span>
+    <span class="pl-c"><span class="pl-c">{</span></span>
+<span class="pl-c">        this is where you should declare a variable</span>
+<span class="pl-c">    <span class="pl-c">}</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span>main program area</span>
+<span class="pl-k">begin</span>
+    <span class="pl-c"><span class="pl-c">{</span></span>
+<span class="pl-c">        area to declare your instruction</span>
+<span class="pl-c">    <span class="pl-c">}</span></span>
+<span class="pl-k">end</span>. <span class="pl-c"><span class="pl-c">//</span> End of a main program area should require a "." symbol</span></pre></div>
+<div class="highlight highlight-source-pascal"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span>When declaring variables</span>
+<span class="pl-c"><span class="pl-c">//</span>you can do this</span>
+<span class="pl-k">var</span> a:integer;
+<span class="pl-k">var</span> b:integer;
+<span class="pl-c"><span class="pl-c">//</span>or this</span>
+<span class="pl-k">var</span> 
+    a : integer;
+    b : integer;
+<span class="pl-c"><span class="pl-c">//</span>or this</span>
+<span class="pl-k">var</span> a,b : integer;</pre></div>
+<div class="highlight highlight-source-pascal"><pre class="notranslate"><span class="pl-k">program</span> Learn_More;
+<span class="pl-c"><span class="pl-c">//</span>Let's learn about data types and their operations</span>
+
+<span class="pl-k">const</span>
+    PI = <span class="pl-c1">3.141592654</span>;
+    GNU = <span class="pl-s"><span class="pl-pds">'</span>GNU<span class="pl-cce">''</span>s Not Unix<span class="pl-pds">'</span></span>;
+        <span class="pl-c"><span class="pl-c">//</span> constants are conventionally named using CAPS</span>
+        <span class="pl-c"><span class="pl-c">//</span> their values are fixed and cannot be changed during runtime</span>
+        <span class="pl-c"><span class="pl-c">//</span> holds any standard data type (integer, real, boolean, char, string)</span>
+
+<span class="pl-k">type</span>
+    ch_array : <span class="pl-k">array</span> [<span class="pl-c1">0</span>..<span class="pl-c1">255</span>] <span class="pl-k">of</span> char;
+        <span class="pl-c"><span class="pl-c">//</span> arrays are new 'types' specifying the length and data type</span>
+        <span class="pl-c"><span class="pl-c">//</span> this defines a new data type that contains 255 characters</span>
+        <span class="pl-c"><span class="pl-c">//</span> (this is functionally equivalent to a string[256] variable)</span>
+    md_array : <span class="pl-k">array</span> <span class="pl-k">of</span> <span class="pl-k">array</span> <span class="pl-k">of</span> integer;
+        <span class="pl-c"><span class="pl-c">//</span> nested arrays are equivalent to multidimensional arrays</span>
+        <span class="pl-c"><span class="pl-c">//</span> can define zero (0) length arrays that are dynamically sized</span>
+        <span class="pl-c"><span class="pl-c">//</span> this is a 2-dimensional array of integers</span>
+
+<span class="pl-c"><span class="pl-c">//</span>Declaring variables</span>
+<span class="pl-k">var</span>
+    int, c, d  : integer;
+           <span class="pl-c"><span class="pl-c">//</span> three variables that contain integer numbers</span>
+           <span class="pl-c"><span class="pl-c">//</span> integers are 16-bits and limited to the range [-32,768..32,767]</span>
+    r    : real;
+           <span class="pl-c"><span class="pl-c">//</span> a variable that contains a real number data types</span>
+           <span class="pl-c"><span class="pl-c">//</span> reals can range between [3.4E-38..3.4E38]</span>
+    bool : boolean;
+           <span class="pl-c"><span class="pl-c">//</span> a variable that contains a Boolean(True/False) value</span>
+    ch   : char;
+           <span class="pl-c"><span class="pl-c">//</span> a variable that contains a character value</span>
+           <span class="pl-c"><span class="pl-c">//</span> char variables are stored as 8-bit data types so no UTF</span>
+    str  : string;
+           <span class="pl-c"><span class="pl-c">//</span> a non-standard variable that contains a string value</span>
+           <span class="pl-c"><span class="pl-c">//</span> strings are an extension included in most Pascal compilers</span>
+           <span class="pl-c"><span class="pl-c">//</span> they are stored as an array of char with default length of 255.</span>
+    s    : string[<span class="pl-c1">50</span>];
+           <span class="pl-c"><span class="pl-c">//</span> a string with maximum length of 50 chars.</span>
+           <span class="pl-c"><span class="pl-c">//</span> you can specify the length of the string to minimize memory usage</span>
+    my_str: ch_array;
+           <span class="pl-c"><span class="pl-c">//</span> you can declare variables of custom types</span>
+    my_2d : md_array;
+           <span class="pl-c"><span class="pl-c">//</span> dynamically sized arrays need to be sized before they can be used.</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> additional integer data types</span>
+    b    : byte;     <span class="pl-c"><span class="pl-c">//</span> range [0..255]</span>
+    shi  : shortint; <span class="pl-c"><span class="pl-c">//</span> range [-128..127]</span>
+    smi  : smallint; <span class="pl-c"><span class="pl-c">//</span> range [-32,768..32,767] (standard Integer)</span>
+    w    : word;     <span class="pl-c"><span class="pl-c">//</span> range [0..65,535]</span>
+    li   : longint;  <span class="pl-c"><span class="pl-c">//</span> range [-2,147,483,648..2,147,483,647]</span>
+    lw   : longword; <span class="pl-c"><span class="pl-c">//</span> range [0..4,294,967,295]</span>
+    c    : cardinal; <span class="pl-c"><span class="pl-c">//</span> longword</span>
+    i64  : int64;    <span class="pl-c"><span class="pl-c">//</span> range [-9223372036854775808..9223372036854775807]</span>
+    qw   : qword;    <span class="pl-c"><span class="pl-c">//</span> range [0..18,446,744,073,709,551,615]</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> additional real types</span>
+    rr   : real;     <span class="pl-c"><span class="pl-c">//</span> range depends on platform (i.e., 8-bit, 16-bit, etc.)</span>
+    rs   : single;   <span class="pl-c"><span class="pl-c">//</span> range [1.5E-45..3.4E38]</span>
+    rd   : double;   <span class="pl-c"><span class="pl-c">//</span> range [5.0E-324 .. 1.7E308]</span>
+    re   : extended; <span class="pl-c"><span class="pl-c">//</span> range [1.9E-4932..1.1E4932]</span>
+    rc   : comp;     <span class="pl-c"><span class="pl-c">//</span> range [-2E64+1 .. 2E63-1]</span>
+
+<span class="pl-k">Begin</span>
+    int := <span class="pl-c1">1</span>;<span class="pl-c"><span class="pl-c">//</span> how to assign a value to a variable</span>
+    r   := <span class="pl-c1">3.14</span>;
+    ch  := <span class="pl-s"><span class="pl-pds">'</span>a<span class="pl-pds">'</span></span>;
+    str := <span class="pl-s"><span class="pl-pds">'</span>apple<span class="pl-pds">'</span></span>;
+    bool := true;
+    <span class="pl-c"><span class="pl-c">//</span>pascal is not a case-sensitive language</span>
+    <span class="pl-c"><span class="pl-c">//</span>arithmetic operation</span>
+    int := <span class="pl-c1">1</span> + <span class="pl-c1">1</span>; <span class="pl-c"><span class="pl-c">//</span> int = 2 overwriting the previous assignment</span>
+    int := int + <span class="pl-c1">1</span>; <span class="pl-c"><span class="pl-c">//</span> int = 2 + 1 = 3;</span>
+    int := <span class="pl-c1">4</span> <span class="pl-k">div</span> <span class="pl-c1">2</span>; <span class="pl-c"><span class="pl-c">//</span>int = 2 division operation where result will be floored</span>
+    int := <span class="pl-c1">3</span> <span class="pl-k">div</span> <span class="pl-c1">2</span>; <span class="pl-c"><span class="pl-c">//</span>int = 1</span>
+    int := <span class="pl-c1">1</span> <span class="pl-k">div</span> <span class="pl-c1">2</span>; <span class="pl-c"><span class="pl-c">//</span>int = 0</span>
+
+    bool := true <span class="pl-k">or</span> false; <span class="pl-c"><span class="pl-c">//</span> bool = true</span>
+    bool := false <span class="pl-k">and</span> true; <span class="pl-c"><span class="pl-c">//</span> bool = false</span>
+    bool := true <span class="pl-k">xor</span> true; <span class="pl-c"><span class="pl-c">//</span> bool = false</span>
+
+    r := <span class="pl-c1">3</span> / <span class="pl-c1">2</span>; <span class="pl-c"><span class="pl-c">//</span> a division operator for real</span>
+    r := int; <span class="pl-c"><span class="pl-c">//</span> can assign an integer to a real variable but not the reverse</span>
+
+    c := str[<span class="pl-c1">1</span>]; <span class="pl-c"><span class="pl-c">//</span> assign the first letter of str to c</span>
+    str := <span class="pl-s"><span class="pl-pds">'</span>hello<span class="pl-pds">'</span></span> + <span class="pl-s"><span class="pl-pds">'</span>world<span class="pl-pds">'</span></span>; <span class="pl-c"><span class="pl-c">//</span>combining strings</span>
+
+    my_str[<span class="pl-c1">0</span>] := <span class="pl-s"><span class="pl-pds">'</span>a<span class="pl-pds">'</span></span>; <span class="pl-c"><span class="pl-c">//</span> array assignment needs an index</span>
+
+    setlength(my_2d,<span class="pl-c1">10</span>,<span class="pl-c1">10</span>); <span class="pl-c"><span class="pl-c">//</span> initialize dynamically sized arrays: 10×10 array</span>
+    <span class="pl-k">for</span> c := <span class="pl-c1">0</span> <span class="pl-k">to</span> <span class="pl-c1">9</span> <span class="pl-k">do</span> <span class="pl-c"><span class="pl-c">//</span> arrays begin at 0 and end at length-1</span>
+        <span class="pl-k">for</span> d := <span class="pl-c1">0</span> <span class="pl-k">to</span> <span class="pl-c1">9</span> <span class="pl-k">do</span> <span class="pl-c"><span class="pl-c">//</span> for loop counters need to be declared variables</span>
+        my_2d[c,d] := c * d;
+          <span class="pl-c"><span class="pl-c">//</span> address multidimensional arrays with a single set of brackets</span>
+
+<span class="pl-k">End</span>.</pre></div>
+<div class="highlight highlight-source-pascal"><pre class="notranslate"><span class="pl-k">program</span> Functional_Programming;
+
+<span class="pl-k">Var</span>
+    i, dummy : integer;
+
+<span class="pl-k">function</span> <span class="pl-en">factorial_recursion</span>(<span class="pl-k">const</span> a: integer) : integer;
+<span class="pl-c"><span class="pl-c">{</span> recursively calculates the factorial of integer parameter a <span class="pl-c">}</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span> Declare local variables within the function</span>
+<span class="pl-c"><span class="pl-c">//</span> e.g.:</span>
+<span class="pl-c"><span class="pl-c">//</span> Var</span>
+<span class="pl-c"><span class="pl-c">//</span>    local_a : integer;</span>
+
+<span class="pl-k">Begin</span>
+    <span class="pl-k">If</span> a &gt;= <span class="pl-c1">1</span> <span class="pl-k">Then</span>
+    <span class="pl-c"><span class="pl-c">//</span> return values from functions by assigning a value to the function name</span>
+        factorial_recursion := a * factorial_recursion(a-<span class="pl-c1">1</span>)
+    <span class="pl-k">Else</span>
+        factorial_recursion := <span class="pl-c1">1</span>;
+<span class="pl-k">End</span>; <span class="pl-c"><span class="pl-c">//</span> terminate a function using a semicolon after the End statement.</span>
+
+<span class="pl-k">procedure</span> <span class="pl-en">get_integer</span>(<span class="pl-k">var</span> i : integer; dummy : integer);
+<span class="pl-c"><span class="pl-c">{</span> get user input and store it in the integer parameter i.</span>
+<span class="pl-c">  parameters prefaced with 'var' are variable, meaning their value can change</span>
+<span class="pl-c">  outside of the parameter. Value parameters (without 'var') like 'dummy' are</span>
+<span class="pl-c">  static and changes made within the scope of the function/procedure do not</span>
+<span class="pl-c">  affect the variable passed as a parameter <span class="pl-c">}</span></span>
+
+<span class="pl-k">Begin</span>
+    write(<span class="pl-s"><span class="pl-pds">'</span>Enter an integer: <span class="pl-pds">'</span></span>);
+    readln(i);
+    dummy := <span class="pl-c1">4</span>; <span class="pl-c"><span class="pl-c">//</span> dummy will not change value outside of the procedure</span>
+<span class="pl-k">End</span>;
+
+<span class="pl-k">Begin</span> <span class="pl-c"><span class="pl-c">//</span> main program block</span>
+    dummy := <span class="pl-c1">3</span>;
+    get_integer(i, dummy);
+    writeln(i, <span class="pl-s"><span class="pl-pds">'</span>! = <span class="pl-pds">'</span></span>, factorial_recursion(i));
+    <span class="pl-c"><span class="pl-c">//</span> outputs i!</span>
+    writeln(<span class="pl-s"><span class="pl-pds">'</span>dummy = <span class="pl-pds">'</span></span>, dummy); <span class="pl-c"><span class="pl-c">//</span> always outputs '3' since dummy is unchanged.</span>
+<span class="pl-k">End</span>.
+</pre></div>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Ganesha Danu", "http://github.com/blinfoldking"]
+- ["Keith Miyake", "https://github.com/kaymmm"]
+</code></pre>

@@ -1,0 +1,238 @@
+<h1>Make</h1>
+<p>A Makefile defines a graph of rules for creating a target (or targets).<br>
+Its purpose is to do the minimum amount of work needed to update a<br>
+target to the most recent version of the source. Famously written over a<br>
+weekend by Stuart Feldman in 1976, it is still widely used (particularly<br>
+on Unix and Linux) despite many competitors and criticisms.</p>
+<p>There are many varieties of make in existence, however this article<br>
+assumes that we are using GNU make which is the standard on Linux.</p>
+<div class="highlight highlight-source-makefile"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> Comments can be written like this.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> File should be named Makefile and then can be run as `make &lt;target&gt;`.</span>
+<span class="pl-c"><span class="pl-c">#</span> Otherwise we use `make -f "filename" &lt;target&gt;`.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Warning - only use TABS to indent in Makefiles, never spaces!</span>
+
+<span class="pl-c"><span class="pl-c">#</span>-----------------------------------------------------------------------</span>
+<span class="pl-c"><span class="pl-c">#</span> Basics</span>
+<span class="pl-c"><span class="pl-c">#</span>-----------------------------------------------------------------------</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Rules are of the format</span>
+<span class="pl-c"><span class="pl-c">#</span> target: &lt;prerequisite&gt;</span>
+<span class="pl-c"><span class="pl-c">#</span> where prerequisites are optional.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> A rule - this rule will only run if file0.txt doesn't exist.</span>
+<span class="pl-en">file0.txt</span>:
+	<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>foo<span class="pl-pds">"</span></span> <span class="pl-k">&gt;</span> file0.txt
+	<span class="pl-c"><span class="pl-c">#</span> Even comments in these 'recipe' sections get passed to the shell.</span>
+	<span class="pl-c"><span class="pl-c">#</span> Try `make file0.txt` or simply `make` - first rule is the default.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> This rule will only run if file0.txt is newer than file1.txt.</span>
+<span class="pl-en">file1.txt</span>: file0.txt
+	cat file0.txt <span class="pl-k">&gt;</span> file1.txt
+	<span class="pl-c"><span class="pl-c">#</span> use the same quoting rules as in the shell.</span>
+	@cat file0.txt <span class="pl-k">&gt;&gt;</span> file1.txt
+	<span class="pl-c"><span class="pl-c">#</span> @ stops the command from being echoed to stdout.</span>
+	-@echo <span class="pl-s"><span class="pl-pds">'</span>hello<span class="pl-pds">'</span></span>
+	<span class="pl-c"><span class="pl-c">#</span> - means that make will keep going in the case of an error.</span>
+	<span class="pl-c"><span class="pl-c">#</span> Try `make file1.txt` on the commandline.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> A rule can have multiple targets and multiple prerequisites</span>
+<span class="pl-en">file2.txt</span> <span class="pl-en">file3.txt</span>: file0.txt file1.txt
+	touch file2.txt
+	touch file3.txt
+
+<span class="pl-c"><span class="pl-c">#</span> Make will complain about multiple recipes for the same rule. Empty</span>
+<span class="pl-c"><span class="pl-c">#</span> recipes don't count though and can be used to add new dependencies.</span>
+
+<span class="pl-c"><span class="pl-c">#</span>-----------------------------------------------------------------------</span>
+<span class="pl-c"><span class="pl-c">#</span> Phony Targets</span>
+<span class="pl-c"><span class="pl-c">#</span>-----------------------------------------------------------------------</span>
+
+<span class="pl-c"><span class="pl-c">#</span> A phony target. Any target that isn't a file.</span>
+<span class="pl-c"><span class="pl-c">#</span> It will never be up to date so make will always try to run it.</span>
+<span class="pl-en">all</span>: maker process
+
+<span class="pl-c"><span class="pl-c">#</span> We can declare things out of order.</span>
+<span class="pl-en">maker</span>:
+	touch ex0.txt ex1.txt
+
+<span class="pl-c"><span class="pl-c">#</span> Can avoid phony rules breaking when a real file has the same name by</span>
+<span class="pl-c1">.PHONY</span>: all maker process
+<span class="pl-c"><span class="pl-c">#</span> This is a special target. There are several others.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> A rule with a dependency on a phony target will always run</span>
+<span class="pl-en">ex0.txt</span> <span class="pl-en">ex1.txt</span>: maker
+
+<span class="pl-c"><span class="pl-c">#</span> Common phony targets are: all make clean install ...</span>
+
+<span class="pl-c"><span class="pl-c">#</span>-----------------------------------------------------------------------</span>
+<span class="pl-c"><span class="pl-c">#</span> Automatic Variables &amp; Wildcards</span>
+<span class="pl-c"><span class="pl-c">#</span>-----------------------------------------------------------------------</span>
+
+<span class="pl-en">process</span>: file<span class="pl-c1">*</span>.txt	<span class="pl-c"><span class="pl-c">#</span>using a wildcard to match filenames</span>
+	@echo <span class="pl-c1">$^</span>	<span class="pl-c"><span class="pl-c">#</span> $^ is a variable containing the list of prerequisites</span>
+	@echo <span class="pl-c1">$@</span>	<span class="pl-c"><span class="pl-c">#</span> prints the target name</span>
+	<span class="pl-c"><span class="pl-c">#</span>(for multiple target rules, $@ is whichever caused the rule to run)</span>
+	@echo <span class="pl-c1">$&lt;</span>	<span class="pl-c"><span class="pl-c">#</span> the first prerequisite listed</span>
+	@echo <span class="pl-c1">$?</span>	<span class="pl-c"><span class="pl-c">#</span> only the dependencies that are out of date</span>
+	@echo <span class="pl-c1">$+</span>	<span class="pl-c"><span class="pl-c">#</span> all dependencies including duplicates (unlike normal)</span>
+	<span class="pl-c"><span class="pl-c">#</span>@echo $|	# all of the 'order only' prerequisites</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Even if we split up the rule dependency definitions, $^ will find them</span>
+<span class="pl-en">process</span>: ex1.txt file0.txt
+<span class="pl-c"><span class="pl-c">#</span> ex1.txt will be found but file0.txt will be deduplicated.</span>
+
+<span class="pl-c"><span class="pl-c">#</span>-----------------------------------------------------------------------</span>
+<span class="pl-c"><span class="pl-c">#</span> Patterns</span>
+<span class="pl-c"><span class="pl-c">#</span>-----------------------------------------------------------------------</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Can teach make how to convert certain files into other files.</span>
+
+<span class="pl-en"><span class="pl-c1">%</span>.png</span>: <span class="pl-c1">%</span>.svg
+	inkscape --export-png <span class="pl-c1">$^</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Pattern rules will only do anything if make decides to create the</span>
+<span class="pl-c"><span class="pl-c">#</span> target.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Directory paths are normally ignored when matching pattern rules. But</span>
+<span class="pl-c"><span class="pl-c">#</span> make will try to use the most appropriate rule available.</span>
+<span class="pl-en">small/<span class="pl-c1">%</span>.png</span>: <span class="pl-c1">%</span>.svg
+	inkscape --export-png --export-dpi 30 <span class="pl-c1">$^</span>
+
+<span class="pl-c"><span class="pl-c">#</span> make will use the last version for a pattern rule that it finds.</span>
+<span class="pl-en"><span class="pl-c1">%</span>.png</span>: <span class="pl-c1">%</span>.svg
+	@echo this rule is chosen
+
+<span class="pl-c"><span class="pl-c">#</span> However make will use the first pattern rule that can make the target</span>
+<span class="pl-en"><span class="pl-c1">%</span>.png</span>: <span class="pl-c1">%</span>.ps
+	@echo this rule is not chosen <span class="pl-k">if</span> <span class="pl-k">*</span>.svg and <span class="pl-k">*</span>.ps are both present
+
+<span class="pl-c"><span class="pl-c">#</span> make already has some pattern rules built-in. For instance, it knows</span>
+<span class="pl-c"><span class="pl-c">#</span> how to turn *.c files into *.o files.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Older makefiles might use suffix rules instead of pattern rules</span>
+<span class="pl-en">.png.ps</span>:
+	@echo this rule is similar to a pattern rule.
+
+<span class="pl-c"><span class="pl-c">#</span> Tell make about the suffix rule</span>
+<span class="pl-c1">.SUFFIXES</span>: .png
+
+<span class="pl-c"><span class="pl-c">#</span>-----------------------------------------------------------------------</span>
+<span class="pl-c"><span class="pl-c">#</span> Variables</span>
+<span class="pl-c"><span class="pl-c">#</span>-----------------------------------------------------------------------</span>
+<span class="pl-c"><span class="pl-c">#</span> aka. macros</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Variables are basically all string types</span>
+
+<span class="pl-smi">name</span> = Ted
+<span class="pl-smi">name2</span>="Sarah"
+
+<span class="pl-en">echo</span>:
+	@echo <span class="pl-s">$(<span class="pl-smi">name</span>)</span>
+	@echo <span class="pl-smi">${name2}</span>
+	@echo <span class="pl-smi">$name</span>    <span class="pl-c"><span class="pl-c">#</span> This won't work, treated as $(n)ame.</span>
+	@echo <span class="pl-s">$(<span class="pl-smi">name3</span>)</span> <span class="pl-c"><span class="pl-c">#</span> Unknown variables are treated as empty strings.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> There are 4 places to set variables.</span>
+<span class="pl-c"><span class="pl-c">#</span> In order of priority from highest to lowest:</span>
+<span class="pl-c"><span class="pl-c">#</span> 1: commandline arguments</span>
+<span class="pl-c"><span class="pl-c">#</span> 2: Makefile</span>
+<span class="pl-c"><span class="pl-c">#</span> 3: shell environment variables - make imports these automatically.</span>
+<span class="pl-c"><span class="pl-c">#</span> 4: make has some predefined variables</span>
+
+<span class="pl-smi">name4</span> ?= Jean
+<span class="pl-c"><span class="pl-c">#</span> Only set the variable if environment variable is not already defined.</span>
+
+<span class="pl-k">override</span> <span class="pl-smi">name5</span> = David
+<span class="pl-c"><span class="pl-c">#</span> Stops commandline arguments from changing this variable.</span>
+
+<span class="pl-smi">name4</span> +=grey
+<span class="pl-c"><span class="pl-c">#</span> Append values to variable (includes a space).</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Pattern-specific variable values (GNU extension).</span>
+<span class="pl-en">echo</span>: name2 = Sara <span class="pl-c"><span class="pl-c">#</span> True within the matching rule</span>
+	<span class="pl-c"><span class="pl-c">#</span> and also within its remade recursive dependencies</span>
+	<span class="pl-c"><span class="pl-c">#</span> (except it can break when your graph gets too complicated!)</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Some variables defined automatically by make.</span>
+<span class="pl-en">echo_inbuilt</span>:
+	<span class="pl-c1">echo</span> <span class="pl-s">$(<span class="pl-smi">CC</span>)</span>
+	<span class="pl-c1">echo</span> <span class="pl-smi">${CXX}</span>
+	<span class="pl-c1">echo</span> <span class="pl-s">$(<span class="pl-smi">FC</span>)</span>
+	<span class="pl-c1">echo</span> <span class="pl-smi">${CFLAGS}</span>
+	<span class="pl-c1">echo</span> <span class="pl-s">$(<span class="pl-smi">CPPFLAGS</span>)</span>
+	<span class="pl-c1">echo</span> <span class="pl-smi">${CXXFLAGS}</span>
+	<span class="pl-c1">echo</span> <span class="pl-s">$(<span class="pl-smi">LDFLAGS</span>)</span>
+	<span class="pl-c1">echo</span> <span class="pl-smi">${LDLIBS}</span>
+
+<span class="pl-c"><span class="pl-c">#</span>-----------------------------------------------------------------------</span>
+<span class="pl-c"><span class="pl-c">#</span> Variables 2</span>
+<span class="pl-c"><span class="pl-c">#</span>-----------------------------------------------------------------------</span>
+
+<span class="pl-c"><span class="pl-c">#</span> The first type of variables are evaluated each time they are used.</span>
+<span class="pl-c"><span class="pl-c">#</span> This can be expensive, so a second type of variable exists which is</span>
+<span class="pl-c"><span class="pl-c">#</span> only evaluated once. (This is a GNU make extension)</span>
+
+<span class="pl-smi">var</span> := hello
+<span class="pl-en">var2</span> ::=  <span class="pl-s">$(<span class="pl-smi">var</span>)</span> hello
+<span class="pl-c"><span class="pl-c">#</span>:= and ::= are equivalent.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> These variables are evaluated procedurally (in the order that they</span>
+<span class="pl-c"><span class="pl-c">#</span> appear), thus breaking with the rest of the language !</span>
+
+<span class="pl-c"><span class="pl-c">#</span> This doesn't work</span>
+<span class="pl-en">var3</span> ::= <span class="pl-s">$(<span class="pl-smi">var4</span>)</span> and good luck
+<span class="pl-en">var4</span> ::= good night
+
+<span class="pl-c"><span class="pl-c">#</span>-----------------------------------------------------------------------</span>
+<span class="pl-c"><span class="pl-c">#</span> Functions</span>
+<span class="pl-c"><span class="pl-c">#</span>-----------------------------------------------------------------------</span>
+
+<span class="pl-c"><span class="pl-c">#</span> make has lots of functions available.</span>
+
+<span class="pl-smi">sourcefiles</span> = <span class="pl-s">$(<span class="pl-c1">wildcard</span> <span class="pl-c1">*</span>.c <span class="pl-c1">*</span>/<span class="pl-c1">*</span>.c)</span>
+<span class="pl-smi">objectfiles</span> = <span class="pl-s">$(<span class="pl-c1">patsubst</span> <span class="pl-c1">%</span>.c,<span class="pl-c1">%</span>.o,<span class="pl-s">$(<span class="pl-smi">sourcefiles</span>)</span>)</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Format is $(func arg0,arg1,arg2...)</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Some examples</span>
+<span class="pl-en">ls</span>:	<span class="pl-c1">*</span> src/<span class="pl-c1">*</span>
+	@echo <span class="pl-s">$(<span class="pl-c1">filter</span> <span class="pl-c1">%</span>.txt, <span class="pl-c1">$^</span>)</span>
+	@echo <span class="pl-s">$(<span class="pl-c1">notdir</span> <span class="pl-c1">$^</span>)</span>
+	@echo <span class="pl-s">$(<span class="pl-c1">join</span> <span class="pl-s">$(<span class="pl-c1">dir</span> <span class="pl-c1">$^</span>)</span>,<span class="pl-s">$(<span class="pl-c1">notdir</span> <span class="pl-c1">$^</span>)</span>)</span>
+
+<span class="pl-c"><span class="pl-c">#</span>-----------------------------------------------------------------------</span>
+<span class="pl-c"><span class="pl-c">#</span> Directives</span>
+<span class="pl-c"><span class="pl-c">#</span>-----------------------------------------------------------------------</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Include other makefiles, useful for platform specific code</span>
+<span class="pl-k">include</span> foo.mk
+
+<span class="pl-smi">sport</span> = tennis
+<span class="pl-c"><span class="pl-c">#</span> Conditional compilation</span>
+<span class="pl-en">report</span>:
+<span class="pl-k">ifeq</span> (<span class="pl-s">$(<span class="pl-smi">sport</span>)</span>,tennis)
+	@echo 'game, set, match'
+<span class="pl-k">else</span>
+	@echo "They think it's all over; it is now"
+<span class="pl-k">endif</span>
+
+<span class="pl-c"><span class="pl-c">#</span> There are also ifneq, ifdef, ifndef</span>
+
+<span class="pl-smi">foo</span> = true
+
+<span class="pl-k">ifdef</span> <span class="pl-smi">$(foo)</span>
+<span class="pl-smi">bar</span> = 'hello'
+<span class="pl-k">endif</span></pre></div>
+<h3>More Resources</h3>
+<ul>
+<li><a href="https://www.gnu.org/software/make/manual/" rel="nofollow">gnu make documentation</a></li>
+<li><a href="http://swcarpentry.github.io/make-novice/" rel="nofollow">software carpentry tutorial</a></li>
+<li>learn C the hard way <a href="http://c.learncodethehardway.org/book/ex2.html" rel="nofollow">ex2</a> <a href="http://c.learncodethehardway.org/book/ex28.html" rel="nofollow">ex28</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Robert Steed", "https://github.com/robochat"]
+- ["Stephan Fuhrmann", "https://github.com/sfuhrm"]
+</code></pre>

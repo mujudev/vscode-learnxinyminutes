@@ -1,0 +1,96 @@
+<h1>AsciiDoc</h1>
+<p>AsciiDoc is a markup language similar to Markdown and it can be used for anything from books to blogs. Created in 2002 by Stuart Rackham the language is simple but it allows for a great amount of customization.</p>
+<p>Document Header</p>
+<p>Headers are optional and can't contain blank lines. It must be offset from content by at least one blank line.</p>
+<p>Title Only</p>
+<pre class="notranslate"><code class="notranslate">= Document Title
+
+First sentence of document.
+</code></pre>
+<p>Title and Author</p>
+<pre class="notranslate"><code class="notranslate">= Document Title
+First Last &lt;first.last@learnxinyminutes.com&gt;
+
+Start of this document.
+</code></pre>
+<p>Multiple Authors</p>
+<pre class="notranslate"><code class="notranslate">= Document Title
+John Doe &lt;john@go.com&gt;; Jane Doe&lt;jane@yo.com&gt;; Black Beard &lt;beardy@pirate.com&gt;
+
+Start of a doc with multiple authors.
+</code></pre>
+<p>Revision Line (requires an author line)</p>
+<pre class="notranslate"><code class="notranslate">= Doc Title V1
+Potato Man &lt;chip@crunchy.com&gt;
+v1.0, 2016-01-13
+
+This article about chips is going to be fun.
+</code></pre>
+<p>Paragraphs</p>
+<pre class="notranslate"><code class="notranslate">You don't need anything special for paragraphs.
+
+Add a blank line between paragraphs to separate them.
+
+To create a line blank add a +
+and you will receive a line break!
+</code></pre>
+<p>Formatting Text</p>
+<pre class="notranslate"><code class="notranslate">_underscore creates italics_
+*asterisks for bold*
+*_combine for extra fun_*
+`use ticks to signify monospace`
+`*bolded monospace*`
+</code></pre>
+<p>Section Titles</p>
+<pre class="notranslate"><code class="notranslate">= Level 0 (may only be used in document's header)
+
+== Level 1 &lt;h2&gt;
+
+=== Level 2 &lt;h3&gt;
+
+==== Level 3 &lt;h4&gt;
+
+===== Level 4 &lt;h5&gt;
+
+</code></pre>
+<p>Lists</p>
+<p>To create a bulleted list use asterisks.</p>
+<pre class="notranslate"><code class="notranslate">* foo
+* bar
+* baz
+</code></pre>
+<p>To create a numbered list use periods.</p>
+<pre class="notranslate"><code class="notranslate">. item 1
+. item 2
+. item 3
+</code></pre>
+<p>You can nest lists by adding extra asterisks or periods up to five times.</p>
+<pre class="notranslate"><code class="notranslate">* foo 1
+** foo 2
+*** foo 3
+**** foo 4
+***** foo 5
+
+. foo 1
+.. foo 2
+... foo 3
+.... foo 4
+..... foo 5
+</code></pre>
+<h2>Further Reading</h2>
+<p>There are two tools to process AsciiDoc documents:</p>
+<ol>
+<li><a href="http://asciidoc.org/" rel="nofollow">AsciiDoc</a>: original Python implementation available in the main Linux distributions. Stable and currently in maintenance mode.</li>
+<li><a href="http://asciidoctor.org/" rel="nofollow">Asciidoctor</a>: alternative Ruby implementation, usable also from Java and JavaScript. Under active development, it aims to extend the AsciiDoc syntax with new features and output formats.</li>
+</ol>
+<p>Following links are related to <code class="notranslate">Asciidoctor</code> implementation:</p>
+<ul>
+<li><a href="http://asciidoctor.org/docs/user-manual/#comparison-by-example" rel="nofollow">Markdown - AsciiDoc syntax comparison</a>: side-by-side comparison of common Markdown and AsciiDoc elements.</li>
+<li><a href="http://asciidoctor.org/docs/#get-started-with-asciidoctor" rel="nofollow">Getting started</a>: installation and quick start guides to render simple documents.</li>
+<li><a href="http://asciidoctor.org/docs/user-manual/" rel="nofollow">Asciidoctor User Manual</a>: complete single-document manual with syntax reference, examples, rendering tools, amongst others.</li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Ryan Mavilia", "http://unoriginality.rocks/"]
+- ["Abel Salgado Romero", "https://twitter.com/abelsromero"]
+</code></pre>

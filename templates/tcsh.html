@@ -1,0 +1,784 @@
+<h1>tcsh</h1>
+<p>tcsh ("tee-see-shell") is a Unix shell based on and compatible with the C shell (csh).<br>
+It is essentially the C shell with programmable command-line completion, command-line editing,<br>
+and a few other features.<br>
+It is the native root shell for BSD-based systems such as FreeBSD.</p>
+<p>Almost all Linux distros and BSD today use tcsh instead of the original csh. In<br>
+most cases csh is a symbolic link that points to tcsh.<br>
+This is because tcsh is backward compatible with csh, and the last<br>
+is not maintained anymore.</p>
+<ul>
+<li><a href="http://www.tcsh.org/" rel="nofollow">TCSH Home</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Tcsh" rel="nofollow">TCSH Wikipedia</a></li>
+<li><a href="http://www.tcsh.org/tcsh.html/top.html" rel="nofollow">TCSH manual page</a></li>
+<li><a href="https://docs.freebsd.org/44doc/usd/04.csh/paper.html" rel="nofollow">“An Introduction to the C shell”, William Joy</a></li>
+<li><a href="https://bugs.gw.com/" rel="nofollow">TCSH Bug reports and/or features requests</a></li>
+</ul>
+<p>Some more files:<br>
+<a href="https://github.com/nereusx/dotfiles/blob/master/csh-help">tcsh help command (for 132x35 terminal size)</a>,<br>
+<a href="https://github.com/nereusx/dotfiles/blob/master/.tcshrc">my ~/.tcshrc</a></p>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#!</span>/bin/tcsh</span>
+<span class="pl-c"><span class="pl-c">#</span> First line of the script is shebang which tells the system how to execute the</span>
+<span class="pl-c"><span class="pl-c">#</span> script: http://en.wikipedia.org/wiki/Shebang_(Unix)</span>
+<span class="pl-c"><span class="pl-c">#</span> TCSH emulates the shebang on systems which don't understand it.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> In most cases you'll use `#!/bin/tcsh -f', because `-f' option does not load</span>
+<span class="pl-c"><span class="pl-c">#</span> any resource or start-up files, or perform any command hashing, and thus</span>
+<span class="pl-c"><span class="pl-c">#</span> starts faster.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> --- the echo command --------------------------------------------------------</span>
+<span class="pl-c"><span class="pl-c">#</span> The `echo' writes each word to the shell's standard output, separated by</span>
+<span class="pl-c"><span class="pl-c">#</span> spaces and terminated with a newline. The echo_style shell variable may be</span>
+<span class="pl-c"><span class="pl-c">#</span> set to emulate (or not) the flags and escape sequences.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Display the value of echo_style</span>
+<span class="pl-c1">echo</span> <span class="pl-smi">$echo_style</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Enable `echo' to support backslashed characters and `-n' option (no new line)</span>
+<span class="pl-c"><span class="pl-c">#</span> This is the default for tcsh, but your distro may change it. Slackware has</span>
+<span class="pl-c"><span class="pl-c">#</span> done so.</span>
+<span class="pl-c1">set</span> echo_style = both
+
+<span class="pl-c"><span class="pl-c">#</span> Prints "Hello world"</span>
+<span class="pl-c1">echo</span> Hello world
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>Hello world<span class="pl-pds">"</span></span>
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>Hello world<span class="pl-pds">'</span></span>
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">`</span>echo Hello world<span class="pl-pds">`</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> This prints "twonlines" in one line</span>
+<span class="pl-c1">echo</span> two<span class="pl-cce">\n</span>lines
+
+<span class="pl-c"><span class="pl-c">#</span> Prints the two lines</span>
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>two\nlines<span class="pl-pds">"</span></span>
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>two\nlines<span class="pl-pds">'</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> --- Basic Syntax ------------------------------------------------------------</span>
+
+<span class="pl-c"><span class="pl-c">#</span> A special character (including a blank or tab) may be prevented from having</span>
+<span class="pl-c"><span class="pl-c">#</span> its special meaning by preceding it with a backslash `\'.</span>
+<span class="pl-c"><span class="pl-c">#</span> this will display the last history commands</span>
+<span class="pl-c1">echo</span> <span class="pl-k">!!</span>
+<span class="pl-c"><span class="pl-c">#</span> this will not</span>
+<span class="pl-c1">echo</span> <span class="pl-cce">\!\!</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Single quotes prevents expanding special characters too, but some</span>
+<span class="pl-c"><span class="pl-c">#</span> characters like `!' and backslash have higher priority</span>
+<span class="pl-c"><span class="pl-c">#</span> `$' (variable value) will not expands</span>
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>$1 tip<span class="pl-pds">'</span></span>
+<span class="pl-c"><span class="pl-c">#</span> `!' (history) will expands</span>
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>!!<span class="pl-pds">'</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> Strings enclosed by back-quotes will be executed and replaced by the result.</span>
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">`</span>ls<span class="pl-pds">`</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> Semi-colon separate commands</span>
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>first line<span class="pl-pds">'</span></span><span class="pl-k">;</span> <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>second line<span class="pl-pds">'</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> There is also conditional execution</span>
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>Always executed<span class="pl-pds">"</span></span> <span class="pl-k">||</span> <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>Only executed if first command fails<span class="pl-pds">"</span></span>
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>Always executed<span class="pl-pds">"</span></span> <span class="pl-k">&amp;&amp;</span> <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>Only executed if first command does NOT fail<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> Parenthesised commands are always executed in a subshell,</span>
+
+<span class="pl-c"><span class="pl-c">#</span> example: create a project and then informs you that it finished while</span>
+<span class="pl-c"><span class="pl-c">#</span> it does the installation.</span>
+make <span class="pl-k">&amp;&amp;</span> ( espeak <span class="pl-s"><span class="pl-pds">"</span>BOSS, compilation finished<span class="pl-pds">"</span></span><span class="pl-k">;</span> make install )
+
+<span class="pl-c"><span class="pl-c">#</span> prints the home directory but leaving you where you were</span>
+(cd<span class="pl-k">;</span> pwd)<span class="pl-k">;</span> <span class="pl-c1">pwd</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Read tcsh man-page documentation</span>
+man tcsh
+
+<span class="pl-c"><span class="pl-c">#</span> --- Variables ---------------------------------------------------------------</span>
+<span class="pl-c"><span class="pl-c">#</span> The shell maintains a list of variables, each of which has as value a list of</span>
+<span class="pl-c"><span class="pl-c">#</span> zero or more words. The values of shell variables can be displayed and</span>
+<span class="pl-c"><span class="pl-c">#</span> changed with the `set' and `unset' commands.</span>
+<span class="pl-c"><span class="pl-c">#</span> The system maintains its own list of ``environment'' variables.</span>
+<span class="pl-c"><span class="pl-c">#</span> These can be displayed and changed with `printenv', `setenv' and `unsetenv'.</span>
+<span class="pl-c"><span class="pl-c">#</span> The syntax of setenv is similar to POSIX sh.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Assign a value or nothing will create a variable</span>
+<span class="pl-c"><span class="pl-c">#</span> Assign nothing</span>
+<span class="pl-c1">set</span> var
+<span class="pl-c"><span class="pl-c">#</span> Assign a numeric value</span>
+<span class="pl-c"><span class="pl-c">#</span> the '@' denotes the expression is arithmetic; it works similar to 'set' but</span>
+<span class="pl-c"><span class="pl-c">#</span> the right value can be a numeric expression.</span>
+@ var = 1 + 2
+<span class="pl-c"><span class="pl-c">#</span> Assign a string value</span>
+<span class="pl-c1">set</span> var = <span class="pl-s"><span class="pl-pds">"</span>Hello, I am the contents of 'var' variable<span class="pl-pds">"</span></span>
+<span class="pl-c"><span class="pl-c">#</span> Assign the output of a program</span>
+<span class="pl-c1">set</span> var = <span class="pl-s"><span class="pl-pds">`</span>ls<span class="pl-pds">`</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> Remove a variable</span>
+<span class="pl-c1">unset</span> var
+<span class="pl-c"><span class="pl-c">#</span> Prints 1 (true) if the variable `var' exists otherwise prints 0 (false)</span>
+<span class="pl-c1">echo</span> <span class="pl-smi">$?</span>var
+<span class="pl-c"><span class="pl-c">#</span> Print all variables and their values</span>
+<span class="pl-c1">set</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Prints the contents of 'var'</span>
+<span class="pl-c1">echo</span> <span class="pl-smi">$var</span><span class="pl-k">;</span>
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">$var</span><span class="pl-pds">"</span></span><span class="pl-k">;</span>
+<span class="pl-c"><span class="pl-c">#</span> Prints the string `$var'</span>
+<span class="pl-c1">echo</span> <span class="pl-cce">\$</span>var
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>$var<span class="pl-pds">'</span></span>
+<span class="pl-c"><span class="pl-c">#</span> braces can be used to separate variable from the rest when its needed</span>
+<span class="pl-c1">set</span> num = 12<span class="pl-k">;</span> <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>There <span class="pl-smi">${num}</span>th element<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> Prints the number of characters of the value: 6</span>
+<span class="pl-c1">set</span> var = <span class="pl-s"><span class="pl-pds">'</span>123456<span class="pl-pds">'</span></span><span class="pl-k">;</span> <span class="pl-c1">echo</span> $%var
+
+<span class="pl-c"><span class="pl-c">#</span>## LISTs</span>
+<span class="pl-c"><span class="pl-c">#</span> Assign a list of values</span>
+<span class="pl-c1">set</span> var = ( one two three four five )
+<span class="pl-c"><span class="pl-c">#</span> Print all the elements: one two three four five</span>
+<span class="pl-c1">echo</span> <span class="pl-smi">$var</span>
+<span class="pl-c1">echo</span> <span class="pl-smi">$var</span>[<span class="pl-k">*</span>]
+<span class="pl-c"><span class="pl-c">#</span> Print the count of elements: 5</span>
+<span class="pl-c1">echo</span> <span class="pl-smi">$#</span>var
+<span class="pl-c"><span class="pl-c">#</span> Print indexed element; prints the second element: two</span>
+<span class="pl-c1">echo</span> <span class="pl-smi">$var</span>[2]
+<span class="pl-c"><span class="pl-c">#</span> Print range of elements; prints 2nd up to 3rd: two, three</span>
+<span class="pl-c1">echo</span> <span class="pl-smi">$var</span>[2-3]
+<span class="pl-c"><span class="pl-c">#</span> Prints all elements starting from the 3rd: three four five</span>
+<span class="pl-c1">echo</span> <span class="pl-smi">$var</span>[3-]
+<span class="pl-c"><span class="pl-c">#</span> Prints print all up to 3rd element: one two three</span>
+<span class="pl-c1">echo</span> <span class="pl-smi">$var</span>[-3]
+
+<span class="pl-c"><span class="pl-c">#</span>## Special Variables</span>
+<span class="pl-c"><span class="pl-c">#</span> $argv         list of command-line arguments</span>
+<span class="pl-c"><span class="pl-c">#</span> $argv[0]      this file-name (the file of the script file)</span>
+<span class="pl-c"><span class="pl-c">#</span> $# $0, $n, $* are the same as $#argv, $argv[0], $argv[n], $argv[*]</span>
+<span class="pl-c"><span class="pl-c">#</span> $status, $?   the exit code of the last command that executed</span>
+<span class="pl-c"><span class="pl-c">#</span> $_            the previous command line</span>
+<span class="pl-c"><span class="pl-c">#</span> $!            the PID of the last background process started by this shell</span>
+<span class="pl-c"><span class="pl-c">#</span> $$            script's PID</span>
+
+<span class="pl-c"><span class="pl-c">#</span> $path, $PATH  the list of directories that will search for executable to run</span>
+<span class="pl-c"><span class="pl-c">#</span> $home, $HOME  user's home directory, also the `~' can be used instead</span>
+<span class="pl-c"><span class="pl-c">#</span> $uid          user's login ID</span>
+<span class="pl-c"><span class="pl-c">#</span> $user         user's login name</span>
+<span class="pl-c"><span class="pl-c">#</span> $gid          the user's group ID</span>
+<span class="pl-c"><span class="pl-c">#</span> $group        the user's group-name</span>
+<span class="pl-c"><span class="pl-c">#</span> $cwd, $PWD    the Current/Print Working Directory</span>
+<span class="pl-c"><span class="pl-c">#</span> $owd          the previous working directory</span>
+<span class="pl-c"><span class="pl-c">#</span> $tcsh         tcsh version</span>
+<span class="pl-c"><span class="pl-c">#</span> $tty          the current tty; ttyN for linux console, pts/N for terminal</span>
+<span class="pl-c"><span class="pl-c">#</span>               emulators under X</span>
+<span class="pl-c"><span class="pl-c">#</span> $term         the terminal type</span>
+<span class="pl-c"><span class="pl-c">#</span> $verbose      if set, causes the words of each command to be printed.</span>
+<span class="pl-c"><span class="pl-c">#</span>               can be set by the `-v' command line option too.</span>
+<span class="pl-c"><span class="pl-c">#</span> $loginsh      if set, it is a login shell</span>
+
+<span class="pl-c"><span class="pl-c">#</span> TIP: $?0 is always false in interactive shells</span>
+<span class="pl-c"><span class="pl-c">#</span> TIP: $?prompt is always false in non-interactive shells</span>
+<span class="pl-c"><span class="pl-c">#</span> TIP: if `$?tcsh' is unset; you run the original `csh' or something else;</span>
+<span class="pl-c"><span class="pl-c">#</span>      try `echo $shell'</span>
+<span class="pl-c"><span class="pl-c">#</span> TIP: $verbose this is useful to debugging scripts</span>
+<span class="pl-c"><span class="pl-c">#</span> NOTE: $PWD and $PATH are synchronised with $cwd and $pwd automatically.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> --- Variable modifiers ------------------------------------------------------</span>
+<span class="pl-c"><span class="pl-c">#</span> Syntax: ${var}:m[:mN]</span>
+<span class="pl-c"><span class="pl-c">#</span> Where &lt;m&gt; is:</span>
+<span class="pl-c"><span class="pl-c">#</span> h : the directory  t : the filenane  r : remove extension   e : the extension</span>
+<span class="pl-c"><span class="pl-c">#</span> u : uppercase the first lowercase letter</span>
+<span class="pl-c"><span class="pl-c">#</span> l : lowercase the first uppercase letter</span>
+<span class="pl-c"><span class="pl-c">#</span> p : print but do not execute it (hist)</span>
+<span class="pl-c"><span class="pl-c">#</span> q : quote the substituted words, preventing further substitutions</span>
+<span class="pl-c"><span class="pl-c">#</span> x : like q, but break into words at white spaces</span>
+<span class="pl-c"><span class="pl-c">#</span> g : apply the following modifier once to each word</span>
+<span class="pl-c"><span class="pl-c">#</span> a  : apply the following modifier as many times as possible to single word</span>
+<span class="pl-c"><span class="pl-c">#</span> s/l/r/ : search for `l' and replace with `r', not regex; the `&amp;' in the r is</span>
+<span class="pl-c"><span class="pl-c">#</span> replaced by l</span>
+<span class="pl-c"><span class="pl-c">#</span> &amp; : Repeat the previous substitution</span>
+
+<span class="pl-c"><span class="pl-c">#</span> start with this file</span>
+<span class="pl-c1">set</span> f = <span class="pl-k">~</span>/Documents/Alpha/beta.txt
+<span class="pl-c"><span class="pl-c">#</span> prints ~/Documents/Alpha/beta</span>
+<span class="pl-c1">echo</span> <span class="pl-smi">$f</span>:r
+<span class="pl-c"><span class="pl-c">#</span> prints ~/Documents/Alpha</span>
+<span class="pl-c1">echo</span> <span class="pl-smi">$f</span>:h
+<span class="pl-c"><span class="pl-c">#</span> prints beta.txt</span>
+<span class="pl-c1">echo</span> <span class="pl-smi">$f</span>:t
+<span class="pl-c"><span class="pl-c">#</span> prints txt</span>
+<span class="pl-c1">echo</span> <span class="pl-smi">$f</span>:e
+<span class="pl-c"><span class="pl-c">#</span> prints beta</span>
+<span class="pl-c1">echo</span> <span class="pl-smi">$f</span>:t:r
+<span class="pl-c"><span class="pl-c">#</span> prints Beta</span>
+<span class="pl-c1">echo</span> <span class="pl-smi">$f</span>:t:r:u
+<span class="pl-c"><span class="pl-c">#</span> prints Biota</span>
+<span class="pl-c1">echo</span> <span class="pl-smi">$f</span>:t:r:u:s/eta/iota/
+
+<span class="pl-c"><span class="pl-c">#</span> --- Redirection -------------------------------------------------------------</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Create file.txt and write the standard output to it</span>
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>this string<span class="pl-pds">'</span></span> <span class="pl-k">&gt;</span> file.txt
+<span class="pl-c"><span class="pl-c">#</span> Create file.txt and write the standard output and standard error to it</span>
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>this string<span class="pl-pds">'</span></span> <span class="pl-k">&gt;&amp;</span> file.txt
+<span class="pl-c"><span class="pl-c">#</span> Append the standard output to file.txt</span>
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>this string<span class="pl-pds">'</span></span> <span class="pl-k">&gt;&gt;</span> file.txt
+<span class="pl-c"><span class="pl-c">#</span> Append the standard output and standard error to file.txt</span>
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>this string<span class="pl-pds">'</span></span> <span class="pl-k">&gt;&gt;</span><span class="pl-k">&amp;</span> file.txt
+<span class="pl-c"><span class="pl-c">#</span> Redirect the standard input from file.txt</span>
+cat <span class="pl-k">&lt;</span> file.txt
+<span class="pl-c"><span class="pl-c">#</span> Input from keyboard; this stores the input line to variable `x'</span>
+<span class="pl-c1">set</span> x = $<span class="pl-k">&lt;</span>
+<span class="pl-c"><span class="pl-c">#</span> Document here;</span>
+cat <span class="pl-s"><span class="pl-k">&lt;&lt;</span> <span class="pl-k">LABEL</span></span>
+<span class="pl-s">...text here...</span>
+<span class="pl-s"><span class="pl-k">LABEL</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> TIP: this is how to get standard error separated:</span>
+(grep <span class="pl-s"><span class="pl-pds">'</span>AGP<span class="pl-pds">'</span></span> /usr/src/linux/Documentation/<span class="pl-k">*</span> <span class="pl-k">&gt;</span> output-file.txt) <span class="pl-k">&gt;&amp;</span> error-file.txt
+
+<span class="pl-c"><span class="pl-c">#</span> example: read a name from standard input and display a greetings message</span>
+<span class="pl-c1">echo</span> -n <span class="pl-s"><span class="pl-pds">"</span>Enter your name? <span class="pl-pds">"</span></span>
+<span class="pl-c1">set</span> name = $<span class="pl-k">&lt;</span>
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>Greetings <span class="pl-smi">$name</span><span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> --- Expressions ------------------------------------------------------------</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Operators:</span>
+<span class="pl-c"><span class="pl-c">#</span> ==  equal         !=  not equal    !  not</span>
+<span class="pl-c"><span class="pl-c">#</span>  &gt;  greater than   &lt;  less than   &gt;=  greater or equal  &lt;= less or equal</span>
+<span class="pl-c"><span class="pl-c">#</span> &amp;&amp;  logical AND   ||  logical OR</span>
+
+<span class="pl-k">if</span> ( <span class="pl-smi">$name</span> <span class="pl-k">!</span>= <span class="pl-smi">$user</span> ) <span class="pl-k">then</span>
+    <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>Your name isn't your username<span class="pl-pds">"</span></span>
+<span class="pl-k">else</span>
+    <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>Your name is your username<span class="pl-pds">"</span></span>
+endif
+
+<span class="pl-c"><span class="pl-c">#</span> single-line form</span>
+<span class="pl-k">if</span> ( <span class="pl-smi">$name</span> <span class="pl-k">!</span>= <span class="pl-smi">$user</span> ) <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>Your name isn't your username<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> NOTE: if $name is empty, tcsh sees the above condition as:</span>
+<span class="pl-c"><span class="pl-c">#</span> if ( != $user ) ...</span>
+<span class="pl-c"><span class="pl-c">#</span> which is invalid syntax</span>
+<span class="pl-c"><span class="pl-c">#</span> so the "safe" way to use potentially empty variables in tcsh is:</span>
+<span class="pl-c"><span class="pl-c">#</span> if ( "$name" != $user ) ...</span>
+<span class="pl-c"><span class="pl-c">#</span> which, when $name is empty, is seen by tcsh as:</span>
+<span class="pl-c"><span class="pl-c">#</span> if ( "" != $user ) ...</span>
+<span class="pl-c"><span class="pl-c">#</span> which works as expected</span>
+
+<span class="pl-c"><span class="pl-c">#</span> There is also conditional execution</span>
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>Always executed<span class="pl-pds">"</span></span> <span class="pl-k">||</span> <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>Only executed if first command fails<span class="pl-pds">"</span></span>
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>Always executed<span class="pl-pds">"</span></span> <span class="pl-k">&amp;&amp;</span> <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>Only executed if first command does NOT fail<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> To use &amp;&amp; and || with if statements, you don't need multiple pairs of</span>
+<span class="pl-c"><span class="pl-c">#</span> square brackets:</span>
+<span class="pl-k">if</span> ( <span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">$name</span><span class="pl-pds">"</span></span> == <span class="pl-s"><span class="pl-pds">"</span>Steve<span class="pl-pds">"</span></span> <span class="pl-k">&amp;&amp;</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">$age</span><span class="pl-pds">"</span></span> == 15 ) <span class="pl-k">then</span>
+    <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>This will run if <span class="pl-smi">$name</span> is Steve AND <span class="pl-smi">$age</span> is 15.<span class="pl-pds">"</span></span>
+endif
+
+<span class="pl-k">if</span> ( <span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">$name</span><span class="pl-pds">"</span></span> == <span class="pl-s"><span class="pl-pds">"</span>Daniya<span class="pl-pds">"</span></span> <span class="pl-k">||</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">$name</span><span class="pl-pds">"</span></span> == <span class="pl-s"><span class="pl-pds">"</span>Zach<span class="pl-pds">"</span></span> ) <span class="pl-k">then</span>
+    <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>This will run if <span class="pl-smi">$name</span> is Daniya OR Zach.<span class="pl-pds">"</span></span>
+endif
+
+<span class="pl-c"><span class="pl-c">#</span> String matching operators ( `=~' and `!~' )</span>
+<span class="pl-c"><span class="pl-c">#</span> The ‘==’ ‘!=’ ‘=~’ and ‘!~’ operators compare their arguments as strings;</span>
+<span class="pl-c"><span class="pl-c">#</span> all others operate on numbers. The operators ‘=~’ and ‘!~’ are like ‘!=’</span>
+<span class="pl-c"><span class="pl-c">#</span> and ‘==’ except that the right hand side is a glob-pattern against which</span>
+<span class="pl-c"><span class="pl-c">#</span> the left hand operand is matched.</span>
+
+<span class="pl-k">if</span> ( <span class="pl-smi">$user</span> =<span class="pl-k">~</span> ni[ck]<span class="pl-k">*</span> ) <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>Greetings Mr. Nicholas.<span class="pl-pds">"</span></span>
+<span class="pl-k">if</span> ( <span class="pl-smi">$user</span> <span class="pl-k">!</span>~ ni[ck]<span class="pl-k">*</span> ) <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>Hey, get out of Nicholas PC.<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> Arithmetic expressions are denoted with the following format:</span>
+@ result = 10 + 5
+<span class="pl-c1">echo</span> <span class="pl-smi">$result</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Arithmetic Operators</span>
+<span class="pl-c"><span class="pl-c">#</span> +, -, *, /, %</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+<span class="pl-c"><span class="pl-c">#</span> Arithmetic Operators which must be parenthesised</span>
+<span class="pl-c"><span class="pl-c">#</span> !, ~, |, &amp;, ^, ~, &lt;&lt;, &gt;&gt;,</span>
+<span class="pl-c"><span class="pl-c">#</span> Compare and logical operators</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+<span class="pl-c"><span class="pl-c">#</span> All operators are same as in C.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> It is non so well documented that numeric expressions require spaces</span>
+<span class="pl-c"><span class="pl-c">#</span> in-between; Also, `@' has its own parser, it seems that work well when the</span>
+<span class="pl-c"><span class="pl-c">#</span> expression is parenthesised otherwise the primary parser seems it is active.</span>
+<span class="pl-c"><span class="pl-c">#</span> Parenthesis require spaces around, this is documented.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> wrong</span>
+@ x = <span class="pl-smi">$y</span>+1
+@ x = 0644 <span class="pl-k">&amp;</span> 022<span class="pl-k">;</span>      <span class="pl-c1">echo</span> <span class="pl-smi">$x</span>
+@ x = (0644 <span class="pl-k">&amp;</span> 022) +1<span class="pl-k">;</span> <span class="pl-c1">echo</span> <span class="pl-smi">$x</span>
+@ x = (0644 <span class="pl-k">&amp;</span> 022)+ 1<span class="pl-k">;</span> <span class="pl-c1">echo</span> <span class="pl-smi">$x</span>
+@ x = ( <span class="pl-k">~</span>077 )<span class="pl-k">;</span>        <span class="pl-c1">echo</span> <span class="pl-smi">$x</span>
+
+<span class="pl-c"><span class="pl-c">#</span> correct</span>
+@ x = <span class="pl-smi">$y</span> + 1
+@ x = ( 0644 <span class="pl-k">&amp;</span> 022 ) + 1<span class="pl-k">;</span> <span class="pl-c1">echo</span> <span class="pl-smi">$x</span>
+@ x = ( <span class="pl-k">~</span> 077 )<span class="pl-k">;</span>          <span class="pl-c1">echo</span> <span class="pl-smi">$x</span>
+@ x = ( <span class="pl-k">~</span> 077 <span class="pl-k">|</span> 022 )<span class="pl-k">;</span>    <span class="pl-c1">echo</span> <span class="pl-smi">$x</span>
+@ x = ( <span class="pl-k">!</span> 0 )<span class="pl-k">;</span>            <span class="pl-c1">echo</span> <span class="pl-smi">$x</span>
+
+<span class="pl-c"><span class="pl-c">#</span> C's operators ++ and -- are supported if there is not assignment</span>
+@ result ++
+
+<span class="pl-c"><span class="pl-c">#</span> None shell created to do mathematics;</span>
+<span class="pl-c"><span class="pl-c">#</span> Except for the basic operations, use an external command with backslashes.</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+<span class="pl-c"><span class="pl-c">#</span> I suggest the calc as the best option.</span>
+<span class="pl-c"><span class="pl-c">#</span> (http://www.isthe.com/chongo/tech/comp/calc/)</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+<span class="pl-c"><span class="pl-c">#</span> The standard Unix's bc as second option</span>
+<span class="pl-c"><span class="pl-c">#</span> (https://www.gnu.org/software/bc/manual/html_mono/bc.html)</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+<span class="pl-c"><span class="pl-c">#</span> The standard Unix's AWK as third option</span>
+<span class="pl-c"><span class="pl-c">#</span> (https://www.gnu.org/software/gawk/manual/gawk.html)</span>
+
+<span class="pl-c"><span class="pl-c">#</span> You can also use `perl', `php' or even several BASICs, but prefer the</span>
+<span class="pl-c"><span class="pl-c">#</span> above utilities for faster load-and-run results.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> real example: (that I answer in StackExchange)</span>
+<span class="pl-c"><span class="pl-c">#</span> REQ: x := 1001b OR 0110b</span>
+
+<span class="pl-c"><span class="pl-c">#</span> in `tcsh' expression (by using octal)</span>
+@ x = ( 011 <span class="pl-k">|</span> 06 )<span class="pl-k">;</span> <span class="pl-c1">echo</span> <span class="pl-smi">$x</span>
+
+<span class="pl-c"><span class="pl-c">#</span> the same by using `calc' (and using binary as the original req)</span>
+<span class="pl-c1">set</span> x = <span class="pl-s"><span class="pl-pds">`</span>calc <span class="pl-s"><span class="pl-pds">'</span>0b1001 | 0b110<span class="pl-pds">'</span></span><span class="pl-pds">`</span></span><span class="pl-k">;</span> <span class="pl-c1">echo</span> <span class="pl-smi">$x</span>
+
+<span class="pl-c"><span class="pl-c">#</span> --- File Inquiry Operators --------------------------------------------------</span>
+<span class="pl-c"><span class="pl-c">#</span> NOTE: The builtin `filetest' command do the same thing.</span>
+
+<span class="pl-c"><span class="pl-c">#</span>### Boolean operators</span>
+<span class="pl-c"><span class="pl-c">#</span> -r  read access    -w  write access    -x  execute access    -e  existence</span>
+<span class="pl-c"><span class="pl-c">#</span> -f  plain file     -d  directory       -l  symbolic link     -p  named pipe</span>
+<span class="pl-c"><span class="pl-c">#</span> -S  socket file</span>
+<span class="pl-c"><span class="pl-c">#</span> -o  ownership      -z  zero size       -s  non-zero size</span>
+<span class="pl-c"><span class="pl-c">#</span> -u  SUID is set    -g  SGID is set     -k  sticky is set</span>
+<span class="pl-c"><span class="pl-c">#</span> -b  block device   -c  char device</span>
+<span class="pl-c"><span class="pl-c">#</span> -t  file (digit) is an open file descriptor for a terminal device</span>
+
+<span class="pl-c"><span class="pl-c">#</span> if the file `README' exists, displays a message</span>
+<span class="pl-k">if</span> ( -e README ) <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>I have already README file<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> if the `less' program is installed, use this instead of `more'</span>
+<span class="pl-k">if</span> ( -e <span class="pl-s"><span class="pl-pds">`</span>where less<span class="pl-pds">`</span></span> ) <span class="pl-k">then</span>
+	<span class="pl-c1">alias</span> more <span class="pl-s"><span class="pl-pds">'</span>less<span class="pl-pds">'</span></span>
+endif
+
+<span class="pl-c"><span class="pl-c">#</span>### Non-boolean operators</span>
+<span class="pl-c"><span class="pl-c">#</span> -Z  returns the file size in bytes</span>
+<span class="pl-c"><span class="pl-c">#</span> -M  returns the modification time (mtime)    -M: returns mtime string</span>
+<span class="pl-c"><span class="pl-c">#</span> -A  returns the lass access time (atime)     -A: returns atime string</span>
+<span class="pl-c"><span class="pl-c">#</span> -U  returns the owners user ID               -U: returns the owners user-name</span>
+<span class="pl-c"><span class="pl-c">#</span> -G  returns the group ID                     -G: returns the group-name</span>
+<span class="pl-c"><span class="pl-c">#</span> -P  returns the permissions as octal number  -Pmode returns perm. AND mode</span>
+
+<span class="pl-c"><span class="pl-c">#</span> this will display the date as Unix-time integer: 1498511486</span>
+filetest -M README.md
+
+<span class="pl-c"><span class="pl-c">#</span> This will display "Tue Jun 27 00:11:26 2017"</span>
+filetest -M: README.md
+
+<span class="pl-c"><span class="pl-c">#</span> --- Basic Commands ----------------------------------------------------------</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Navigate though file system with `chdir' (cd)</span>
+<span class="pl-c1">cd</span> path <span class="pl-c"><span class="pl-c">#</span> change working directory</span>
+<span class="pl-c1">cd</span>      <span class="pl-c"><span class="pl-c">#</span> change to home directory</span>
+<span class="pl-c1">cd</span> -    <span class="pl-c"><span class="pl-c">#</span> change to previous directory</span>
+<span class="pl-c1">cd</span> ..   <span class="pl-c"><span class="pl-c">#</span> go up one directory</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Examples:</span>
+<span class="pl-c1">cd</span> <span class="pl-k">~</span>/Downloads <span class="pl-c"><span class="pl-c">#</span> go to my `Downloads' directory</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Use `mkdir` to create new directories.</span>
+mkdir newdir
+<span class="pl-c"><span class="pl-c">#</span> The `-p` flag causes new intermediate directories to be created as necessary.</span>
+mkdir -p <span class="pl-k">~</span>/.backup/saves
+
+<span class="pl-c"><span class="pl-c">#</span> which &amp; where</span>
+<span class="pl-c"><span class="pl-c">#</span> find if csh points to tcsh</span>
+ls -lha <span class="pl-s"><span class="pl-pds">`</span>which csh<span class="pl-pds">`</span></span>
+<span class="pl-c"><span class="pl-c">#</span> find if csh is installed on more than one directory</span>
+where csh
+
+<span class="pl-c"><span class="pl-c">#</span> --- Pipe-lines --------------------------------------------------------------</span>
+<span class="pl-c"><span class="pl-c">#</span> A pipeline is a sequence of processes chained together by their standard</span>
+<span class="pl-c"><span class="pl-c">#</span> streams, so that the output of each process (stdout) feeds directly as input</span>
+<span class="pl-c"><span class="pl-c">#</span> (stdin) to the next one. This `pipes' are created with the `|' special</span>
+<span class="pl-c"><span class="pl-c">#</span> character and it is one of the most powerful characteristics of Unix.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> example:</span>
+ls -l <span class="pl-k">|</span> grep key <span class="pl-k">|</span> less
+<span class="pl-c"><span class="pl-c">#</span> "ls -l" produces a process, the output (stdout) of which is piped to the</span>
+<span class="pl-c"><span class="pl-c">#</span> input (stdin) of the process for "grep key"; and likewise for the process</span>
+<span class="pl-c"><span class="pl-c">#</span> for "less".</span>
+
+<span class="pl-c"><span class="pl-c">#</span> the `ls', the `grep' and the `less' are programs of Unix and they have their</span>
+<span class="pl-c"><span class="pl-c">#</span> own man-page. The `pipe' mechanism is part of the kernel but the syntax</span>
+<span class="pl-c"><span class="pl-c">#</span> and the control is job of the shell, the tcsh in our case.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> NOTE: `pipe' mechanism has Windows too, but it is buggy and I sign it for all</span>
+<span class="pl-c"><span class="pl-c">#</span> versions until Windows XP SP3 API32 which was the last one that I worked on.</span>
+<span class="pl-c"><span class="pl-c">#</span> Microsoft still denied it but is well known bug since it is a common method</span>
+<span class="pl-c"><span class="pl-c">#</span> for inter-process communication. For small I/O it will work well.</span>
+<span class="pl-c"><span class="pl-c">#</span> tcsh, along with grep, gcc and perl is one of the first Unix programs that</span>
+<span class="pl-c"><span class="pl-c">#</span> ported to DOS (with EMX DOS extender) and later to Windows (1998).</span>
+
+<span class="pl-c"><span class="pl-c">#</span> example: this will convert tcsh to PostScript and will show it with okular</span>
+zcat /usr/man/man1/tcsh.1.gz <span class="pl-k">|</span> groff -Tps -man <span class="pl-k">|</span> okular -
+
+<span class="pl-c"><span class="pl-c">#</span> a better version</span>
+zcat <span class="pl-s"><span class="pl-pds">`</span>locate -b -n 1 <span class="pl-s"><span class="pl-pds">'</span>\tcsh.1.gz<span class="pl-pds">'</span></span><span class="pl-pds">`</span></span> <span class="pl-k">|</span> groff -Tps -man <span class="pl-k">|</span> okular -
+
+<span class="pl-c"><span class="pl-c">#</span> even better</span>
+<span class="pl-c1">set</span> page = tcsh<span class="pl-k">;</span> <span class="pl-c1">set</span> loc = (locate -b -n 1 <span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">\\\\</span><span class="pl-pds">"</span></span><span class="pl-smi">${page}</span><span class="pl-s"><span class="pl-pds">"</span>.1.gz<span class="pl-pds">"</span></span>)<span class="pl-k">;</span>
+ zcat <span class="pl-s"><span class="pl-pds">`</span>eval <span class="pl-smi">$loc</span><span class="pl-pds">`</span></span> <span class="pl-k">|</span> groff -Tps -man <span class="pl-k">|</span> okular -
+
+<span class="pl-c"><span class="pl-c">#</span> the same, modified to create man page pdf</span>
+<span class="pl-c1">set</span> page = tcsh<span class="pl-k">;</span> <span class="pl-c1">set</span> loc = (locate -b -n 1 <span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">\\\\</span><span class="pl-pds">"</span></span><span class="pl-smi">${page}</span><span class="pl-s"><span class="pl-pds">"</span>.1.gz<span class="pl-pds">"</span></span>)<span class="pl-k">;</span>
+ zcat <span class="pl-s"><span class="pl-pds">`</span>eval <span class="pl-smi">$loc</span><span class="pl-pds">`</span></span> <span class="pl-k">|</span> groff -Tps -man <span class="pl-k">|</span> ps2pdf - <span class="pl-smi">${page}</span>.pdf
+
+<span class="pl-c"><span class="pl-c">#</span> the same, but now shows the ${page}.pdf too</span>
+<span class="pl-c1">set</span> page = tcsh<span class="pl-k">;</span> <span class="pl-c1">set</span> loc = (locate -b -n 1 <span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">\\\\</span><span class="pl-pds">"</span></span><span class="pl-smi">${page}</span><span class="pl-s"><span class="pl-pds">"</span>.1.gz<span class="pl-pds">"</span></span>)<span class="pl-k">;</span>
+ zcat <span class="pl-s"><span class="pl-pds">`</span>eval <span class="pl-smi">$loc</span><span class="pl-pds">`</span></span> <span class="pl-k">|</span> groff -Tps -man <span class="pl-k">|</span> ps2pdf - <span class="pl-smi">${page}</span>.pdf <span class="pl-k">&amp;&amp;</span> okular tcsh.pdf
+
+<span class="pl-c"><span class="pl-c">#</span> NOTE: `okular' is the default application of KDE environment and it shows</span>
+<span class="pl-c"><span class="pl-c">#</span> postcript and pdf files. You can replace it with your lovely pdf viewer.</span>
+<span class="pl-c"><span class="pl-c">#</span> zcat, locate, groff, are common programs in all Unices. `ps2pdf' program</span>
+<span class="pl-c"><span class="pl-c">#</span> is part of `ghostscript' package that is widely used.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> --- Control Flow ------------------------------------------------------------</span>
+
+<span class="pl-c"><span class="pl-c">#</span>### IF-THEN-ELSE-ENDIF</span>
+<span class="pl-c"><span class="pl-c">#</span> Syntax:</span>
+<span class="pl-c"><span class="pl-c">#</span> if ( expr ) then</span>
+<span class="pl-c"><span class="pl-c">#</span>    ...</span>
+<span class="pl-c"><span class="pl-c">#</span> [else if ( expr2 ) then</span>
+<span class="pl-c"><span class="pl-c">#</span>    ...]</span>
+<span class="pl-c"><span class="pl-c">#</span> [else</span>
+<span class="pl-c"><span class="pl-c">#</span>    ...]</span>
+<span class="pl-c"><span class="pl-c">#</span> endif</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+<span class="pl-c"><span class="pl-c">#</span> If the specified expr is true then the commands to the first else are</span>
+<span class="pl-c"><span class="pl-c">#</span> executed; otherwise if expr2 is true then the commands to the second else</span>
+<span class="pl-c"><span class="pl-c">#</span> are executed, etc.</span>
+<span class="pl-c"><span class="pl-c">#</span> Any number of else-if pairs are possible; only one endif is needed.</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+<span class="pl-c"><span class="pl-c">#</span> Single-line form:</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+<span class="pl-c"><span class="pl-c">#</span> if ( expr ) command</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+<span class="pl-c"><span class="pl-c">#</span> If `expr' evaluates true, then command is executed.</span>
+<span class="pl-c"><span class="pl-c">#</span> `command' must be a simple command, not an alias, a pipeline, a command list</span>
+<span class="pl-c"><span class="pl-c">#</span> or a parenthesized command list. With few words, avoid to use it.</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+<span class="pl-c"><span class="pl-c">#</span> BUG: Input/output redirection occurs even if expr is false and command is</span>
+<span class="pl-c"><span class="pl-c">#</span> thus not executed.</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> check if we are in non-interactive shell and quit if true</span>
+<span class="pl-k">if</span> ( <span class="pl-smi">$?</span>USER == 0 <span class="pl-k">||</span> <span class="pl-smi">$?</span>prompt == 0 ) <span class="pl-c1">exit</span>
+
+<span class="pl-c"><span class="pl-c">#</span> check if we are a login shell</span>
+<span class="pl-k">if</span> ( <span class="pl-smi">$?</span>loginsh ) <span class="pl-k">then</span>
+	<span class="pl-c"><span class="pl-c">#</span> check if you are on linux console (not X's terminal)</span>
+	<span class="pl-k">if</span> ( <span class="pl-smi">$tty</span> =<span class="pl-k">~</span> tty<span class="pl-k">*</span> ) <span class="pl-k">then</span>
+		<span class="pl-c"><span class="pl-c">#</span> enable keypad application keys (man console_codes)</span>
+		<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>\033=<span class="pl-pds">'</span></span>
+	endif
+endif
+
+<span class="pl-c"><span class="pl-c">#</span>### SWITCH-ENDSW</span>
+<span class="pl-c"><span class="pl-c">#</span> Syntax:</span>
+<span class="pl-c"><span class="pl-c">#</span> switch ( expr )</span>
+<span class="pl-c"><span class="pl-c">#</span> case pattern:</span>
+<span class="pl-c"><span class="pl-c">#</span>     ...</span>
+<span class="pl-c"><span class="pl-c">#</span>     [breaksw]</span>
+<span class="pl-c"><span class="pl-c">#</span> [default:</span>
+<span class="pl-c"><span class="pl-c">#</span>     ...]</span>
+<span class="pl-c"><span class="pl-c">#</span> endsw</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+<span class="pl-c"><span class="pl-c">#</span> tcsh uses a case statement that works similarly to switch in C.</span>
+<span class="pl-c"><span class="pl-c">#</span> Each case label is successively matched, against the specified string which</span>
+<span class="pl-c"><span class="pl-c">#</span> is first command and filename  expanded. The file  metacharacters `*', `?'</span>
+<span class="pl-c"><span class="pl-c">#</span> and `[...]' may be used in the case labels. If none of the labels match the</span>
+<span class="pl-c"><span class="pl-c">#</span> execution begins after the default label if its defined.</span>
+<span class="pl-c"><span class="pl-c">#</span> The command `breaksw' causes execution to continue after the endsw. Otherwise</span>
+<span class="pl-c"><span class="pl-c">#</span> control may fall through case labels and default labels as in C.</span>
+
+switch ( <span class="pl-smi">$var</span> )
+<span class="pl-k">case</span> <span class="pl-k">*</span>.[1-9]:
+<span class="pl-k">case</span> <span class="pl-k">*</span>.[1-9].gz:
+	<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">$var</span> is a man-page.<span class="pl-pds">"</span></span>
+	breaksw
+<span class="pl-k">case</span> <span class="pl-k">*</span>gz:
+	<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">$var</span> is gzipped<span class="pl-pds">"</span></span>
+	breaksw
+default:
+	file <span class="pl-smi">$var</span>
+endsw
+
+<span class="pl-c"><span class="pl-c">#</span>### FOREACH-END</span>
+<span class="pl-c"><span class="pl-c">#</span> Syntax:</span>
+<span class="pl-c"><span class="pl-c">#</span> foreach name ( wordlist )</span>
+<span class="pl-c"><span class="pl-c">#</span>	...</span>
+<span class="pl-c"><span class="pl-c">#</span>   [break | continue]</span>
+<span class="pl-c"><span class="pl-c">#</span> end</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+<span class="pl-c"><span class="pl-c">#</span> Successively sets the variable `name' to each member of `wordlist' and</span>
+<span class="pl-c"><span class="pl-c">#</span> executes the sequence of commands between this command and the matching</span>
+<span class="pl-c"><span class="pl-c">#</span> `end' keyword. The `continue' keyword jump to the next element back to</span>
+<span class="pl-c"><span class="pl-c">#</span> top; and the `break' keyword terminates the loop.</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+<span class="pl-c"><span class="pl-c">#</span> BUG: `foreach' doesn't ignore here documents when looking for its end.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> example: counting 1 to 10</span>
+foreach i ( <span class="pl-s"><span class="pl-pds">`</span>seq 1 10<span class="pl-pds">`</span></span> )
+    <span class="pl-c1">echo</span> <span class="pl-smi">$i</span>
+end
+
+<span class="pl-c"><span class="pl-c">#</span> example: type all files in the list</span>
+foreach f ( a.txt b.txt c.txt )
+	cat <span class="pl-smi">$f</span>
+end
+
+<span class="pl-c"><span class="pl-c">#</span> example: convert wma to ogg</span>
+foreach f ( <span class="pl-k">*</span>.wma )
+	ffmpeg -i <span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">$f</span><span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">$f</span>:r<span class="pl-pds">"</span></span>.ogg
+end
+
+<span class="pl-c"><span class="pl-c">#</span>### WHILE-END</span>
+<span class="pl-c"><span class="pl-c">#</span> while ( expr )</span>
+<span class="pl-c"><span class="pl-c">#</span>     ...</span>
+<span class="pl-c"><span class="pl-c">#</span>     [break | continue]</span>
+<span class="pl-c"><span class="pl-c">#</span> end</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+<span class="pl-c"><span class="pl-c">#</span> Executes the commands between the `while' and the matching `end' while `expr'</span>
+<span class="pl-c"><span class="pl-c">#</span> evaluates non-zero. `break' and `continue' may be used to terminate or</span>
+<span class="pl-c"><span class="pl-c">#</span> continue the loop prematurely.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> count from 1 to 10</span>
+<span class="pl-c1">set</span> num = 1
+<span class="pl-k">while</span> ( <span class="pl-smi">$num</span> <span class="pl-k">&lt;</span>= 10 )
+	<span class="pl-c1">echo</span> <span class="pl-smi">$num</span>
+	@ num ++
+end
+
+<span class="pl-c"><span class="pl-c">#</span> print all directories of CWD</span>
+<span class="pl-c1">set</span> lst = ( <span class="pl-k">*</span> )
+<span class="pl-k">while</span> ( <span class="pl-smi">$#</span>lst )
+	<span class="pl-k">if</span> ( -d <span class="pl-smi">$lst</span>[1] ) <span class="pl-c1">echo</span> <span class="pl-smi">$lst</span>[1] is directory
+	<span class="pl-c1">shift</span> lst
+end
+
+<span class="pl-c"><span class="pl-c">#</span> separate command-line arguments to options or parameters</span>
+<span class="pl-c1">set</span> options
+<span class="pl-c1">set</span> params
+<span class="pl-c1">set</span> lst = ( <span class="pl-smi">$*</span> )
+<span class="pl-k">while</span> ( <span class="pl-smi">$#</span>lst )
+	<span class="pl-k">if</span> ( <span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">$lst</span>[1]<span class="pl-pds">"</span></span> =<span class="pl-k">~</span> <span class="pl-s"><span class="pl-pds">'</span>-*<span class="pl-pds">'</span></span> ) <span class="pl-k">then</span>
+		<span class="pl-c1">set</span> options = ( <span class="pl-smi">$options</span> <span class="pl-smi">$lst</span>[1] )
+	<span class="pl-k">else</span>
+		<span class="pl-c1">set</span> params = ( <span class="pl-smi">$params</span> <span class="pl-smi">$lst</span>[1] )
+	endif
+	<span class="pl-c1">shift</span> lst
+end
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>options =<span class="pl-pds">'</span></span> <span class="pl-smi">$options</span>
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>parameters =<span class="pl-pds">'</span></span> <span class="pl-smi">$params</span>
+
+<span class="pl-c"><span class="pl-c">#</span>### REPEAT</span>
+<span class="pl-c"><span class="pl-c">#</span> Syntax: repeat count command</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+<span class="pl-c"><span class="pl-c">#</span> The specified command, which is subject to the same restrictions as the</span>
+<span class="pl-c"><span class="pl-c">#</span> command in the one line if statement above, is executed count times.</span>
+<span class="pl-c"><span class="pl-c">#</span> I/O redirections occur exactly once, even if count is 0.</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+<span class="pl-c"><span class="pl-c">#</span> TIP: in most cases prefer `while'</span>
+
+repeat 3 <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>ding dong<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> --- Functions ---------------------------------------------------------------</span>
+<span class="pl-c"><span class="pl-c">#</span> tcsh has no functions but its expression syntax is advanced enough to use</span>
+<span class="pl-c"><span class="pl-c">#</span> `alias' as functions. Another method is recursion</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Alias argument selectors; the ability to define an alias to take arguments</span>
+<span class="pl-c"><span class="pl-c">#</span> supplied to it and apply them to the commands that it refers to.</span>
+<span class="pl-c"><span class="pl-c">#</span> Tcsh is the only shell that provides this feature.</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+<span class="pl-c"><span class="pl-c">#</span> \!#   argument selector for all arguments, including the alias/command</span>
+<span class="pl-c"><span class="pl-c">#</span>       itself; arguments need not be supplied.</span>
+<span class="pl-c"><span class="pl-c">#</span> \!*   argument selector for all arguments, excluding the alias/command;</span>
+<span class="pl-c"><span class="pl-c">#</span>       arguments need not be supplied.</span>
+<span class="pl-c"><span class="pl-c">#</span> \!$   argument selector for the last argument; argument need not be supplied,</span>
+<span class="pl-c"><span class="pl-c">#</span>       but if none is supplied, the alias name is considered to be the</span>
+<span class="pl-c"><span class="pl-c">#</span>       last argument.</span>
+<span class="pl-c"><span class="pl-c">#</span> \!^   argument selector for first argument; argument MUST be supplied.</span>
+<span class="pl-c"><span class="pl-c">#</span> \!:n  argument selector for the nth argument; argument MUST be supplied;</span>
+<span class="pl-c"><span class="pl-c">#</span>       n=0 refers to the alias/command name.</span>
+<span class="pl-c"><span class="pl-c">#</span> \!:m-n   argument selector for the arguments from the mth to the nth;</span>
+<span class="pl-c"><span class="pl-c">#</span>       arguments MUST be supplied.</span>
+<span class="pl-c"><span class="pl-c">#</span> \!:n-$   argument selector for the arguments from the nth to the last;</span>
+<span class="pl-c"><span class="pl-c">#</span>       at least argument n MUST be supplied.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Alias the cd command so that when you change directories, the contents</span>
+<span class="pl-c"><span class="pl-c">#</span> are immediately displayed.</span>
+<span class="pl-c1">alias</span> <span class="pl-c1">cd</span> <span class="pl-s"><span class="pl-pds">'</span>cd \!* &amp;&amp; ls<span class="pl-pds">'</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> --- Recursion method --- begin ---</span>
+<span class="pl-c"><span class="pl-c">#!</span>/bin/tcsh -f</span>
+<span class="pl-c1">set</span> todo = option1
+<span class="pl-k">if</span> ( <span class="pl-smi">$#</span>argv <span class="pl-k">&gt;</span> 0 ) <span class="pl-k">then</span>
+	<span class="pl-c1">set</span> todo = <span class="pl-smi">$argv</span>[1]
+endif
+
+switch ( <span class="pl-smi">$todo</span> )
+<span class="pl-k">case</span> option1:
+<span class="pl-c"><span class="pl-c">#</span>	...</span>
+	<span class="pl-smi">$0</span> results
+	breaksw
+<span class="pl-k">case</span> option2:
+<span class="pl-c"><span class="pl-c">#</span>	...</span>
+	<span class="pl-smi">$0</span> results
+	breaksw
+<span class="pl-k">case</span> results:
+	<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>print the results here<span class="pl-pds">"</span></span>
+<span class="pl-c"><span class="pl-c">#</span>	...</span>
+	breaksw
+default:
+	<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>Unknown option: <span class="pl-smi">$todo</span><span class="pl-pds">"</span></span>
+<span class="pl-c"><span class="pl-c">#</span>	exit 0</span>
+endsw
+<span class="pl-c"><span class="pl-c">#</span> --- Recursion method --- end ---</span>
+
+<span class="pl-c"><span class="pl-c">#</span> --- examples ----------------------------------------------------------------</span>
+
+<span class="pl-c"><span class="pl-c">#</span> this script prints available power-states if no argument is set;</span>
+<span class="pl-c"><span class="pl-c">#</span> otherwise it set the state of the $argv[1]</span>
+<span class="pl-c"><span class="pl-c">#</span> --- power-state script --- begin --------------------------------------------</span>
+<span class="pl-c"><span class="pl-c">#!</span>/bin/tcsh -f</span>
+<span class="pl-c"><span class="pl-c">#</span> get parameter ("help" for none)</span>
+<span class="pl-c1">set</span> todo = <span class="pl-c1">help</span>
+<span class="pl-k">if</span> ( <span class="pl-smi">$#</span>argv <span class="pl-k">&gt;</span> 0 ) <span class="pl-k">then</span>
+	<span class="pl-c1">set</span> todo = <span class="pl-smi">$argv</span>[1]
+endif
+<span class="pl-c"><span class="pl-c">#</span> available options</span>
+<span class="pl-c1">set</span> opts = <span class="pl-s"><span class="pl-pds">`</span>cat /sys/power/state<span class="pl-pds">`</span></span>
+<span class="pl-c"><span class="pl-c">#</span> is known?</span>
+foreach o ( <span class="pl-smi">$opts</span> )
+	<span class="pl-k">if</span> ( <span class="pl-smi">$todo</span> == <span class="pl-smi">$o</span> ) <span class="pl-k">then</span>
+		<span class="pl-c"><span class="pl-c">#</span> found; execute it</span>
+		<span class="pl-c1">echo</span> -n <span class="pl-smi">$todo</span> <span class="pl-k">&gt;</span> /sys/power/state
+		<span class="pl-c1">break</span>
+	endif
+end
+<span class="pl-c"><span class="pl-c">#</span> print help and exit</span>
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>usage: <span class="pl-smi">$0</span> [option]<span class="pl-pds">"</span></span>
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>available options on kernel: <span class="pl-smi">$opts</span><span class="pl-pds">"</span></span>
+<span class="pl-c"><span class="pl-c">#</span> --- power-state script --- end ----------------------------------------------</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Guess the secret number game</span>
+<span class="pl-c"><span class="pl-c">#</span> --- secretnum.csh --- begin -------------------------------------------------</span>
+<span class="pl-c"><span class="pl-c">#!</span>/bin/tcsh -f</span>
+<span class="pl-c1">set</span> secret=<span class="pl-s"><span class="pl-pds">`</span>shuf -i1-100 -n1<span class="pl-pds">`</span></span>
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>I have a secret number from 1 up to 100<span class="pl-pds">"</span></span>
+<span class="pl-k">while</span> ( 1 )
+	<span class="pl-c1">echo</span> -n <span class="pl-s"><span class="pl-pds">"</span>Guess: <span class="pl-pds">"</span></span>
+	<span class="pl-c1">set</span> guess = $<span class="pl-k">&lt;</span>
+	<span class="pl-k">if</span> ( <span class="pl-smi">$secret</span> == <span class="pl-smi">$guess</span> ) <span class="pl-k">then</span>
+		<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>You found it<span class="pl-pds">"</span></span>
+		<span class="pl-c1">exit</span> 1
+	<span class="pl-k">else</span>
+		<span class="pl-k">if</span> ( <span class="pl-smi">$secret</span> <span class="pl-k">&gt;</span> <span class="pl-smi">$guess</span> ) <span class="pl-k">then</span>
+			<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>its greater<span class="pl-pds">"</span></span>
+		<span class="pl-k">else</span> <span class="pl-k">if</span> ( <span class="pl-smi">$secret</span> <span class="pl-k">&lt;</span> <span class="pl-smi">$guess</span> ) <span class="pl-k">then</span>
+				<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>its lesser<span class="pl-pds">"</span></span>
+			endif
+		endif
+	endif
+end
+<span class="pl-c"><span class="pl-c">#</span> --- secretnum.csh --- end ---------------------------------------------------</span>
+
+<span class="pl-c"><span class="pl-c">#</span> -----------------------------------------------------------------------------</span>
+<span class="pl-c"><span class="pl-c">#</span> Appendices</span>
+
+<span class="pl-c"><span class="pl-c">#</span>### About [T]CSH:</span>
+<span class="pl-c"><span class="pl-c">#</span> * CSH is notorious about its bugs;</span>
+<span class="pl-c"><span class="pl-c">#</span> * It was also famous about its advanced interactive mode.</span>
+<span class="pl-c"><span class="pl-c">#</span> * TCSH is famous that have the most advanced completion subsystem.</span>
+<span class="pl-c"><span class="pl-c">#</span> * TCSH is famous that have the most advanced aliases subsystem; aliases</span>
+<span class="pl-c"><span class="pl-c">#</span>   can take parameters and often used as functions!</span>
+<span class="pl-c"><span class="pl-c">#</span> * TCSH is well known that preferred by people  (me too) because of better</span>
+<span class="pl-c"><span class="pl-c">#</span>   syntax. All shells are using Thomson's syntax with exception of [t]csh,</span>
+<span class="pl-c"><span class="pl-c">#</span>   fish and plan9's shells (rc, ex).</span>
+<span class="pl-c"><span class="pl-c">#</span> * It is smaller and consume far less memory than bash, zsh even mksh!</span>
+<span class="pl-c"><span class="pl-c">#</span>   (memusage reports)</span>
+<span class="pl-c"><span class="pl-c">#</span> * TCSH still has bugs; less but have; if you write readable clean code you'll</span>
+<span class="pl-c"><span class="pl-c">#</span>   find none; well almost none... This has to do with the implementation of</span>
+<span class="pl-c"><span class="pl-c">#</span>   csh; that no means the other shells has good implementation.</span>
+<span class="pl-c"><span class="pl-c">#</span> * no one well known shell is capable for regular programming; if your script</span>
+<span class="pl-c"><span class="pl-c">#</span>   getting big, use a programming language, or at least PHP or Perl (good</span>
+<span class="pl-c"><span class="pl-c">#</span>   script languages).</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+<span class="pl-c"><span class="pl-c">#</span> Advises:</span>
+<span class="pl-c"><span class="pl-c">#</span> 1. Do not use redirection in single-line if (it is well documented bug)</span>
+<span class="pl-c"><span class="pl-c">#</span>    In most cases avoid to use single-line IFs.</span>
+<span class="pl-c"><span class="pl-c">#</span> 2. Do not mess up with other shells code, c-shell is not compatible with</span>
+<span class="pl-c"><span class="pl-c">#</span>    other shells and has different abilities and priorities.</span>
+<span class="pl-c"><span class="pl-c">#</span> 3. Use spaces as you'll use them to write readable code in any language.</span>
+<span class="pl-c"><span class="pl-c">#</span>    A bug of csh was `set x=1' worked, `set x = 1' worked, `set x =1' did not!</span>
+<span class="pl-c"><span class="pl-c">#</span> 4. It is well documented that numeric expressions require spaces in-between;</span>
+<span class="pl-c"><span class="pl-c">#</span>    also parenthesise all bit-wise and unary operators.</span>
+<span class="pl-c"><span class="pl-c">#</span> 5. Do not write a huge weird expression with several quotes, backslashes etc</span>
+<span class="pl-c"><span class="pl-c">#</span>    It is bad practice for generic programming, it is dangerous in any shell.</span>
+<span class="pl-c"><span class="pl-c">#</span> 6. Help tcsh, report the bug here &lt;https://bugs.gw.com/&gt;</span>
+<span class="pl-c"><span class="pl-c">#</span> 7. Read the man page, `tcsh' has huge number of options, and variables.</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+<span class="pl-c"><span class="pl-c">#</span>    I suggest the following options enabled by default</span>
+<span class="pl-c"><span class="pl-c">#</span>    --------------------------------------------------</span>
+<span class="pl-c"><span class="pl-c">#</span> Even in non-interactive shells</span>
+<span class="pl-c"><span class="pl-c">#</span>    set echo_style=both</span>
+<span class="pl-c"><span class="pl-c">#</span>    set backslash_quote</span>
+<span class="pl-c"><span class="pl-c">#</span>    set parseoctal</span>
+<span class="pl-c"><span class="pl-c">#</span>    unset noclobber</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+<span class="pl-c"><span class="pl-c">#</span> Whatever...</span>
+<span class="pl-c"><span class="pl-c">#</span>    set inputmode=insert</span>
+<span class="pl-c"><span class="pl-c">#</span>    set autolist</span>
+<span class="pl-c"><span class="pl-c">#</span>    set listjobs</span>
+<span class="pl-c"><span class="pl-c">#</span>    set padhour</span>
+<span class="pl-c"><span class="pl-c">#</span>    set color</span>
+<span class="pl-c"><span class="pl-c">#</span>    set colorcat</span>
+<span class="pl-c"><span class="pl-c">#</span>    set nobeep</span>
+<span class="pl-c"><span class="pl-c">#</span>    set cdtohome</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+<span class="pl-c"><span class="pl-c">#</span>    set histdup</span>
+<span class="pl-c"><span class="pl-c">#</span>    set histlit</span>
+<span class="pl-c"><span class="pl-c">#</span>    set nohistclop</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+<span class="pl-c"><span class="pl-c">#</span>    unset compat_expr</span>
+<span class="pl-c"><span class="pl-c">#</span>    unset noglob</span>
+<span class="pl-c"><span class="pl-c">#</span>    unset autologout</span>
+<span class="pl-c"><span class="pl-c">#</span>    unset time</span>
+<span class="pl-c"><span class="pl-c">#</span>    unset tperiod</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+<span class="pl-c"><span class="pl-c">#</span> NOTE: If the `backslash_quote' is set, it may create compatibility issues</span>
+<span class="pl-c"><span class="pl-c">#</span> with other tcsh scripts which was written without it.</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+<span class="pl-c"><span class="pl-c">#</span> NOTE: The same for `parseoctal', but it is better to fix the problematic</span>
+<span class="pl-c"><span class="pl-c">#</span> scripts.</span>
+<span class="pl-c"><span class="pl-c">#</span></span>
+<span class="pl-c"><span class="pl-c">#</span> NOTE: **for beginners only**</span>
+<span class="pl-c"><span class="pl-c">#</span> This enable automatically rescan `path' directories if need to. (like bash)</span>
+<span class="pl-c"><span class="pl-c">#</span>    set autorehash</span>
+
+<span class="pl-c"><span class="pl-c">#</span>### common aliases</span>
+<span class="pl-c"><span class="pl-c">#</span>    alias hist  'history 20'</span>
+<span class="pl-c"><span class="pl-c">#</span>    alias ll    'ls --color -lha'</span>
+<span class="pl-c"><span class="pl-c">#</span>    alias today "date '+%d%h%y'</span>
+<span class="pl-c"><span class="pl-c">#</span>    alias ff    'find . -name '</span>
+
+<span class="pl-c"><span class="pl-c">#</span>### a nice prompt</span>
+<span class="pl-c"><span class="pl-c">#</span>    set prompt = "%B%{\033[35m%}%t %{\033[32m%}%n@%m%b %C4 %# "</span></pre></div>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">   - ["Nicholas Christopoulos", "https://github.com/nereusx"]
+</code></pre>

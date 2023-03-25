@@ -1,0 +1,78 @@
+<h1>JSON</h1>
+<p>JSON is an extremely simple data-interchange format. As <a href="https://json.org" rel="nofollow">json.org</a> says, it is easy for humans to read and write and for machines to parse and generate.</p>
+<p>A piece of JSON must represent either:</p>
+<ul>
+<li>A collection of name/value pairs (<code class="notranslate">{ }</code>). In various languages, this is realized as an object, record, struct, dictionary, hash table, keyed list, or associative array.</li>
+<li>An ordered list of values (<code class="notranslate">[ ]</code>). In various languages, this is realized as an array, vector, list, or sequence.</li>
+</ul>
+<p>JSON in its purest form has no actual comments, but most parsers will accept C-style (<code class="notranslate">//</code>, <code class="notranslate">/* */</code>) comments. Some parsers also tolerate a trailing comma (i.e. a comma after the last element of an array or the after the last property of an object), but they should be avoided for better compatibility.</p>
+<p>For the purposes of this tutorial, everything is going to be 100% valid JSON. Luckily, it kind of speaks for itself.</p>
+<p>Supported data types:</p>
+<ul>
+<li>Strings: <code class="notranslate">"hello"</code>, <code class="notranslate">"\"A quote.\""</code>, <code class="notranslate">"\u0abe"</code>, <code class="notranslate">"Newline.\n"</code></li>
+<li>Numbers: <code class="notranslate">23</code>, <code class="notranslate">0.11</code>, <code class="notranslate">12e10</code>, <code class="notranslate">3.141e-10</code>, <code class="notranslate">1.23e+4</code></li>
+<li>Objects: <code class="notranslate">{ "key": "value" }</code></li>
+<li>Arrays: <code class="notranslate">["Values"]</code></li>
+<li>Miscellaneous: <code class="notranslate">true</code>, <code class="notranslate">false</code>, <code class="notranslate">null</code></li>
+</ul>
+<div class="highlight highlight-source-json"><pre class="notranslate">{
+  <span class="pl-ent">"key"</span>: <span class="pl-s"><span class="pl-pds">"</span>value<span class="pl-pds">"</span></span>,
+
+  <span class="pl-ent">"keys"</span>: <span class="pl-s"><span class="pl-pds">"</span>must always be enclosed in double quotes<span class="pl-pds">"</span></span>,
+  <span class="pl-ent">"numbers"</span>: <span class="pl-c1">0</span>,
+  <span class="pl-ent">"strings"</span>: <span class="pl-s"><span class="pl-pds">"</span>Hellø, wørld. All unicode is allowed, along with <span class="pl-cce">\"</span>escaping<span class="pl-cce">\"</span>.<span class="pl-pds">"</span></span>,
+  <span class="pl-ent">"has bools?"</span>: <span class="pl-c1">true</span>,
+  <span class="pl-ent">"nothingness"</span>: <span class="pl-c1">null</span>,
+
+  <span class="pl-ent">"big number"</span>: <span class="pl-c1">1.2e+100</span>,
+
+  <span class="pl-ent">"objects"</span>: {
+    <span class="pl-ent">"comment"</span>: <span class="pl-s"><span class="pl-pds">"</span>Most of your structure will come from objects.<span class="pl-pds">"</span></span>,
+
+    <span class="pl-ent">"array"</span>: [<span class="pl-c1">0</span>, <span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-s"><span class="pl-pds">"</span>Arrays can have anything in them.<span class="pl-pds">"</span></span>, <span class="pl-c1">5</span>],
+
+    <span class="pl-ent">"another object"</span>: {
+      <span class="pl-ent">"comment"</span>: <span class="pl-s"><span class="pl-pds">"</span>These things can be nested, very useful.<span class="pl-pds">"</span></span>
+    }
+  },
+
+  <span class="pl-ent">"silliness"</span>: [
+    {
+      <span class="pl-ent">"sources of potassium"</span>: [<span class="pl-s"><span class="pl-pds">"</span>bananas<span class="pl-pds">"</span></span>]
+    },
+    [
+      [<span class="pl-c1">1</span>, <span class="pl-c1">0</span>, <span class="pl-c1">0</span>, <span class="pl-c1">0</span>],
+      [<span class="pl-c1">0</span>, <span class="pl-c1">1</span>, <span class="pl-c1">0</span>, <span class="pl-c1">0</span>],
+      [<span class="pl-c1">0</span>, <span class="pl-c1">0</span>, <span class="pl-c1">1</span>, <span class="pl-s"><span class="pl-pds">"</span>neo<span class="pl-pds">"</span></span>],
+      [<span class="pl-c1">0</span>, <span class="pl-c1">0</span>, <span class="pl-c1">0</span>, <span class="pl-c1">1</span>]
+    ]
+  ],
+
+  <span class="pl-ent">"alternative style"</span>: {
+    <span class="pl-ent">"comment"</span>: <span class="pl-s"><span class="pl-pds">"</span>check this out!<span class="pl-pds">"</span></span>
+  , <span class="pl-ent">"comma position"</span>: <span class="pl-s"><span class="pl-pds">"</span>doesn't matter, if it's before the next key, it's valid<span class="pl-pds">"</span></span>
+  , <span class="pl-ent">"another comment"</span>: <span class="pl-s"><span class="pl-pds">"</span>how nice<span class="pl-pds">"</span></span>
+  },
+
+
+
+  <span class="pl-ent">"whitespace"</span>: <span class="pl-s"><span class="pl-pds">"</span>Does not matter.<span class="pl-pds">"</span></span>,
+
+
+
+  <span class="pl-ent">"that was short"</span>: <span class="pl-s"><span class="pl-pds">"</span>And done. You now know everything JSON has to offer.<span class="pl-pds">"</span></span>
+}</pre></div>
+<h2>Further Reading</h2>
+<ul>
+<li><a href="https://json.org" rel="nofollow">JSON.org</a> All of JSON beautifully explained using flowchart-like graphics.</li>
+<li><a href="https://www.youtube.com/watch?v=wI1CWzNtE-M" rel="nofollow">JSON Tutorial</a> A concise introduction to JSON.</li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<ul>
+<li>["Anna Harren", "https://github.com/iirelu"]</li>
+<li>["Marco Scannadinari", "https://github.com/marcoms"]</li>
+<li>["himanshu", "https://github.com/himanshu81494"]</li>
+<li>["Michael Neth", "https://github.com/infernocloud"]</li>
+<li>["Athanasios Emmanouilidis", "https://github.com/athanasiosem"]</li>
+</ul>

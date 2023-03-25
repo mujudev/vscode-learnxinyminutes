@@ -1,0 +1,98 @@
+<h1>PCRE</h1>
+<p>A regular expression (regex or regexp for short) is a special text string for describing a search pattern. e.g. to extract domain name from a string we can say <code class="notranslate">/^[a-z]+:/</code> and it will match <code class="notranslate">http:</code> from <code class="notranslate">http://github.com/</code>.</p>
+<p>PCRE (Perl Compatible Regular Expressions) is a C library implementing regex. It was written in 1997 when Perl was the de-facto choice for complex text processing tasks. The syntax for patterns used in PCRE closely resembles Perl. PCRE syntax is being used in many big projects including PHP, Apache, R to name a few.</p>
+<p>There are two different sets of metacharacters:</p>
+<ul>
+<li>Those that are recognized anywhere in the pattern except within square brackets</li>
+</ul>
+<pre class="notranslate"><code class="notranslate">  \      general escape character with several uses
+  ^      assert start of string (or line, in multiline mode)
+  $      assert end of string (or line, in multiline mode)
+  .      match any character except newline (by default)
+  [      start character class definition
+  |      start of alternative branch
+  (      start subpattern
+  )      end subpattern
+  ?      extends the meaning of (
+         also 0 or 1 quantifier
+         also quantifier minimizer
+  *      0 or more quantifier
+  +      1 or more quantifier
+         also "possessive quantifier"
+  {      start min/max quantifier
+</code></pre>
+<ul>
+<li>Those that are recognized within square brackets. Outside square brackets. They are also called as character classes.</li>
+</ul>
+<pre class="notranslate"><code class="notranslate">
+  \      general escape character
+  ^      negate the class, but only if the first character
+  -      indicates character range
+  [      POSIX character class (only if followed by POSIX syntax)
+  ]      terminates the character class
+
+</code></pre>
+<p>PCRE provides some generic character types, also called as character classes.</p>
+<pre class="notranslate"><code class="notranslate">  \d     any decimal digit
+  \D     any character that is not a decimal digit
+  \h     any horizontal white space character
+  \H     any character that is not a horizontal white space character
+  \s     any white space character
+  \S     any character that is not a white space character
+  \v     any vertical white space character
+  \V     any character that is not a vertical white space character
+  \w     any "word" character
+  \W     any "non-word" character
+</code></pre>
+<h2>Examples</h2>
+<p>We will test our examples on the following string:</p>
+<pre class="notranslate"><code class="notranslate">66.249.64.13 - - [18/Sep/2004:11:07:48 +1000] "GET /robots.txt HTTP/1.0" 200 468 "-" "Googlebot/2.1"
+</code></pre>
+<p>It is a standard Apache access log.</p>
+<table role="table">
+<thead>
+<tr>
+<th align="left">Regex</th>
+<th align="left">Result</th>
+<th align="left">Comment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code class="notranslate">GET</code></td>
+<td align="left">GET</td>
+<td align="left">GET matches the characters GET literally (case sensitive)</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">\d+.\d+.\d+.\d+</code></td>
+<td align="left">66.249.64.13</td>
+<td align="left"><code class="notranslate">\d+</code> match a digit [0-9] one or more times defined by <code class="notranslate">+</code> quantifier, <code class="notranslate">\.</code> matches <code class="notranslate">.</code> literally</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">(\d+\.){3}\d+</code></td>
+<td align="left">66.249.64.13</td>
+<td align="left"><code class="notranslate">(\d+\.){3}</code> is trying to match group (<code class="notranslate">\d+\.</code>) exactly three times.</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">\[.+\]</code></td>
+<td align="left">[18/Sep/2004:11:07:48 +1000]</td>
+<td align="left"><code class="notranslate">.+</code> matches any character (except newline), <code class="notranslate">.</code> is any character</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">^\S+</code></td>
+<td align="left">66.249.64.13</td>
+<td align="left"><code class="notranslate">^</code> means start of the line, <code class="notranslate">\S+</code> matches any number of non-space characters</td>
+</tr>
+<tr>
+<td align="left"><code class="notranslate">\+[0-9]+</code></td>
+<td align="left">+1000</td>
+<td align="left"><code class="notranslate">\+</code> matches the character <code class="notranslate">+</code> literally. <code class="notranslate">[0-9]</code> character class means single number. Same can be achieved using <code class="notranslate">\+\d+</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Further Reading</h2>
+<p><a href="https://regex101.com/" rel="nofollow">Regex101</a> - Regular Expression tester and debugger</p>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Sachin Divekar", "http://github.com/ssd532"]
+</code></pre>

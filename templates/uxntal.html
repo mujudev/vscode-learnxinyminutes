@@ -1,0 +1,167 @@
+<h1>Uxntal</h1>
+<p>Uxntal is a stack-machine assembly language targeting the <a href="https://wiki.xxiivv.com/site/uxn.html" rel="nofollow">Uxn virtual machine</a>.</p>
+<p>Stack machine programming might look at bit odd, as it uses a postfix notation,<br>
+which means that operators are always found at the end of an operation. For<br>
+instance, one would write 3 4 + instead of 3 + 4.</p>
+<p>The expression written (5 + 10) * 3 in conventional notation would be<br>
+written 10 5 + 3 * in reverse Polish notation.</p>
+<div class="highlight highlight-source-forth"><pre class="notranslate"><span class="pl-c">( This is a comment )</span>
+
+<span class="pl-c">( All programming in Unxtal is done by manipulating the stack )</span>
+
+<span class="pl-c1">#12</span> <span class="pl-c">( push a byte )</span>
+<span class="pl-c1">#3456</span> <span class="pl-c">( push a short )</span>
+
+<span class="pl-c">( Uxn has 32 opcodes, each opcode has 3 possible modes )</span>
+
+POP <span class="pl-c">( pop a byte )</span>
+POP2 <span class="pl-c">( pop a short )</span>
+
+( The modes are:
+	[2] The short mode consumes two bytes from the stack.
+	[k] The keep mode does not consume items from the stack.
+	[r] The return mode makes the operator operate on the return-stack. <span class="pl-k">)</span>
+
+<span class="pl-c1">#12</span> <span class="pl-c1">#34</span> ADD <span class="pl-c">( 46 )</span>
+<span class="pl-c1">#12</span> <span class="pl-c1">#34</span> ADDk <span class="pl-c">( 12  34  46 )</span>
+
+<span class="pl-c">( The modes can be combined )</span>
+
+<span class="pl-c1">#1234</span> <span class="pl-c1">#5678</span> ADD2k <span class="pl-c">( 12  34  56  78  68  ac )</span>
+
+( The arithmetic/bitwise opcodes are:
+	ADD SUB MUL DIV
+	AND ORA EOR SFT <span class="pl-k">)</span>
+
+<span class="pl-c">( New opcodes can be created using macros )</span>
+
+%MOD2 { DIV2k MUL2 SUB2 }
+
+<span class="pl-c1">#1234</span> <span class="pl-c1">#0421</span> MOD2 <span class="pl-c">( 01  b0 )</span>
+
+<span class="pl-c">( ---------------------------------------------------------------------------- )</span>
+
+<span class="pl-c">( A short is simply two bytes, each byte can be manipulated )</span>
+
+<span class="pl-c1">#1234</span> SWP <span class="pl-c">( 34  12 )</span>
+<span class="pl-c1">#1234</span> <span class="pl-c1">#5678</span> SWP2 <span class="pl-c">( 56  78  12  34 )</span>
+<span class="pl-c1">#1234</span> <span class="pl-c1">#5678</span> SWP <span class="pl-c">( 12  34  78  56 )</span>
+
+<span class="pl-c">( Individual bytes of a short can be removed from the stack )</span>
+
+<span class="pl-c1">#1234</span> POP <span class="pl-c">( 12 )</span>
+<span class="pl-c1">#1234</span> NIP <span class="pl-c">( 34 )</span>
+
+( The stack opcodes are:
+	POP DUP NIP SWP OVR ROT <span class="pl-k">)</span>
+
+<span class="pl-c">( ---------------------------------------------------------------------------- )</span>
+
+<span class="pl-c">( To compare values on the stack with each other )</span>
+
+<span class="pl-c1">#12</span> <span class="pl-c1">#34</span> EQU <span class="pl-c">( 00 )</span>
+<span class="pl-c1">#12</span> <span class="pl-c1">#12</span> EQU <span class="pl-c">( 01 )</span>
+
+<span class="pl-c">( Logic opcodes will put a flag with a value of either 00 or 01 )</span>
+
+<span class="pl-c1">#12</span> <span class="pl-c1">#34</span> LTH 
+<span class="pl-c1">#78</span> <span class="pl-c1">#56</span> GTH 
+	<span class="pl-c1">#0101</span> EQU2 <span class="pl-c">( 01 )</span>
+
+( The logic opcodes are:
+	EQU NEQ GTH LTH <span class="pl-k">)</span>
+
+<span class="pl-c">( ---------------------------------------------------------------------------- )</span>
+
+( Uxn's accessible memory <span class="pl-k">is</span> as follows: 
+	<span class="pl-c1">256</span> bytes <span class="pl-k">of</span> working stack 
+	<span class="pl-c1">256</span> bytes <span class="pl-k">of</span> return stack
+	<span class="pl-c1">65536</span> bytes <span class="pl-k">of</span> memory
+	<span class="pl-c1">256</span> bytes <span class="pl-k">of</span> IO memory <span class="pl-k">)</span>
+
+<span class="pl-c">( The addressable memory is between 0000-ffff )</span>
+
+<span class="pl-c1">#12</span> <span class="pl-c1">#0200</span> STA <span class="pl-c">( stored 12 at 0200 in memory )</span>
+<span class="pl-c1">#3456</span> <span class="pl-c1">#0201</span> STA2 <span class="pl-c">( stored 3456 at 0201 in memory )</span>
+<span class="pl-c1">#0200</span> LDA2 <span class="pl-c">( 12  34 )</span>
+
+<span class="pl-c">( The zero-page can be addressed with a single byte )</span>
+
+<span class="pl-c1">#1234</span> <span class="pl-c1">#80</span> STZ2 <span class="pl-c">( stored 12 at 0080, and 34 at 0081 )</span>
+<span class="pl-c1">#80</span> LDZ2 <span class="pl-c">( 12  34 )</span>
+
+( Devices are ways <span class="pl-k">for</span> Uxn <span class="pl-k">to</span> communicate with the outside world
+	There <span class="pl-k">is</span> a maximum <span class="pl-k">of</span> <span class="pl-c1">16</span> devices connected <span class="pl-k">to</span> Uxn at once
+	Device bytes are called ports, the Console device uses the 10-1f ports
+	The console's port <span class="pl-c1">18</span> <span class="pl-k">is</span> called /write <span class="pl-k">)</span>
+
+%EMIT { <span class="pl-c1">#18</span> DEO }
+
+<span class="pl-c1">#31</span> EMIT <span class="pl-c">( print "1" to console )</span>
+
+<span class="pl-c">( A label is equal to a position in the program )</span>
+@parent <span class="pl-c">( defines a label "parent" )</span>
+	&amp;child <span class="pl-c">( defines a sublabel "parent/child" )</span>
+
+<span class="pl-c">( Label positions can be pushed on stack )</span>
+;parent <span class="pl-c">( push the absolute position, 2 bytes )</span>
+,parent <span class="pl-c">( push the relative position, 1 byte )</span>
+.parent <span class="pl-c">( push the zero-page position, 1 byte )</span>
+
+( The memory opcodes are:
+	LDZ STZ LDR STR
+	LDA STA DEI DEO <span class="pl-k">)</span>
+
+<span class="pl-c">( ---------------------------------------------------------------------------- )</span>
+
+<span class="pl-c">( Logic allows to create conditionals )</span>
+
+<span class="pl-c1">#12</span> <span class="pl-c1">#34</span> NEQ ,skip JCN
+	<span class="pl-c1">#31</span> EMIT
+	@skip
+
+<span class="pl-c">( Logic also allows to create for-loops )</span>
+
+<span class="pl-c1">#3a</span> <span class="pl-c1">#30</span>
+@loop
+	DUP EMIT <span class="pl-c">( print "123456789" to console )</span>
+	INC GTHk ,loop JCN
+POP2
+
+<span class="pl-c">( Logic also allows to create while-loops )</span>
+
+;word
+@while
+	LDAk EMIT
+	INC2 LDAk ,while JCN
+POP2
+BRK
+
+@word "vermillion <span class="pl-c1">$1</span>
+
+<span class="pl-c">( Subroutines can be jumped to with JSR, and returned from with JMP2r )</span>
+
+;word ,print-word JSR
+BRK
+
+@print-word <span class="pl-c">( word* -- )</span>
+	@while
+		LDAk EMIT
+		INC2 LDAk ,while JCN
+	POP2
+JMP2r
+
+@word "cerulean
+
+( The jump opcodes are: 
+	JMP JCN JSR <span class="pl-k">)</span></pre></div>
+<h2>Ready For More?</h2>
+<ul>
+<li><a href="https://compudanzas.net/uxn_tutorial.html" rel="nofollow">Uxntal Lessons</a></li>
+<li><a href="https://wiki.xxiivv.com/site/uxntal.html" rel="nofollow">Uxntal Assembly</a></li>
+<li><a href="https://github.com/hundredrabbits/awesome-uxn">Uxntal Resources</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Devine Lu Linvega", "https://wiki.xxiivv.com"]
+</code></pre>

@@ -1,0 +1,202 @@
+<h1>Pug</h1>
+<h2>Getting Started with Pug</h2>
+<p>Pug is a little language that compiles into the HTML. It has cleaner syntax<br>
+with additional features like if statements and loops. It can also be used<br>
+as a server side templating language for server languages like NodeJS.</p>
+<h3>The Language</h3>
+<div class="highlight highlight-text-jade"><pre class="notranslate"><span class="pl-c">//- Single Line Comment</span>
+<span class="pl-c"></span>
+<span class="pl-c">//- Multi Line</span>
+<span class="pl-c">    Comment</span>
+<span class="pl-c"></span>
+<span class="pl-c">//- ---TAGS---</span>
+<span class="pl-c">//- Basic</span>
+<span class="pl-c"></span>div
+<span class="pl-c">//- &lt;div&gt;&lt;/div&gt;</span>
+<span class="pl-c"></span>h1
+<span class="pl-c">//- &lt;h1&gt;&lt;/h1&gt;</span>
+<span class="pl-c"></span>my-customTag
+<span class="pl-c">//- &lt;my-customTag&gt;&lt;/my-customTag&gt;</span>
+<span class="pl-c"></span>
+<span class="pl-c">//- Sibling</span>
+<span class="pl-c"></span>div
+div
+<span class="pl-c">//- &lt;div&gt;&lt;/div&gt;</span>
+<span class="pl-c">    &lt;div&gt;&lt;/div&gt;</span>
+<span class="pl-c"></span>
+<span class="pl-c">//- Child</span>
+<span class="pl-c"></span>div
+  div
+<span class="pl-c">//- &lt;div&gt;</span>
+<span class="pl-c">      &lt;div&gt;&lt;/div&gt;</span>
+<span class="pl-c">    &lt;/div&gt;</span>
+<span class="pl-c"></span>
+<span class="pl-c">//- Text</span>
+<span class="pl-c"></span>h1 Hello there
+<span class="pl-c">//- &lt;h1&gt;Hello there&lt;/h1&gt;</span>
+<span class="pl-c"></span>
+<span class="pl-c">//- Multi Line Text</span>
+<span class="pl-c"></span>div.
+  Hello
+  There
+<span class="pl-c">//- &lt;div&gt;</span>
+<span class="pl-c">      Hello</span>
+<span class="pl-c">      There</span>
+<span class="pl-c">    &lt;/div&gt;</span>
+<span class="pl-c"></span>
+<span class="pl-c">//- ---ATTRIBUTES---</span>
+<span class="pl-c"></span>div<span class="pl-c1">(</span><span class="pl-e">class</span>=<span class="pl-s">"my-class"</span> <span class="pl-e">id</span>=<span class="pl-s">"my-id"</span> <span class="pl-e">my-custom-attrs</span>=<span class="pl-s">"data"</span> <span class="pl-e">enabled</span><span class="pl-c1">)</span>
+<span class="pl-c">//- &lt;div class="my-class" id="my-id" my-custom-attrs="data" enabled&gt;&lt;/div&gt;</span>
+<span class="pl-c"></span>
+<span class="pl-c">//- Short Hand</span>
+<span class="pl-c"></span>span<span class="pl-e">.my-class</span>
+<span class="pl-c">//- &lt;span class="my-class"&gt;&lt;/span&gt;</span>
+<span class="pl-c"></span><span class="pl-e">.my-class</span>
+<span class="pl-c">//- &lt;div class="my-class"&gt;&lt;/div&gt;</span>
+<span class="pl-c"></span>div<span class="pl-e">#my-id</span>
+<span class="pl-c">//- &lt;div id="my-id"&gt;&lt;/div&gt;</span>
+<span class="pl-c"></span>div<span class="pl-e">#my-id</span><span class="pl-e">.my-class</span>
+<span class="pl-c">//- &lt;div class="my-class" id="my-id"&gt;&lt;/div&gt;</span>
+<span class="pl-c"></span>
+<span class="pl-c"></span>
+<span class="pl-c">//- ---JS---</span>
+<span class="pl-c"></span><span class="pl-s1">- <span class="pl-k">const</span> <span class="pl-c1">lang</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>pug<span class="pl-pds">"</span></span>;</span>
+
+<span class="pl-c">//- Multi Line JS</span>
+<span class="pl-c"></span><span class="pl-s1">-</span>
+<span class="pl-s1">  <span class="pl-k">const</span> <span class="pl-c1">lang</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>pug<span class="pl-pds">"</span></span>;</span>
+<span class="pl-s1">  <span class="pl-k">const</span> <span class="pl-c1">awesome</span> <span class="pl-k">=</span> <span class="pl-c1">true</span>;</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"></span><span class="pl-c">//- JS Classes</span>
+<span class="pl-c"></span><span class="pl-s1">- <span class="pl-k">const</span> <span class="pl-c1">myClass</span> <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">'</span>class1<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>class2<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>class3<span class="pl-pds">'</span></span>]</span>
+div<span class="pl-c1">(</span><span class="pl-e">class</span>=myClass<span class="pl-c1">)</span>
+<span class="pl-c">//- &lt;div class="class1 class2 class3"&gt;&lt;/div&gt;</span>
+<span class="pl-c"></span>
+<span class="pl-c">//- JS Styles</span>
+<span class="pl-c"></span><span class="pl-s1">- <span class="pl-k">const</span> <span class="pl-c1">myStyles</span> <span class="pl-k">=</span> {<span class="pl-s"><span class="pl-pds">'</span>color<span class="pl-pds">'</span></span><span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">'</span>white<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>background-color<span class="pl-pds">'</span></span><span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">'</span>blue<span class="pl-pds">'</span></span>}</span>
+div<span class="pl-c1">(</span><span class="pl-e">styles</span>=myStyles<span class="pl-c1">)</span>
+<span class="pl-c">//- &lt;div styles="{&amp;quot;color&amp;quot;:&amp;quot;white&amp;quot;,&amp;quot;background-color&amp;quot;:&amp;quot;blue&amp;quot;}"&gt;&lt;/div&gt;</span>
+<span class="pl-c"></span>
+<span class="pl-c">//- JS Attributes</span>
+<span class="pl-c"></span><span class="pl-s1">- <span class="pl-k">const</span> <span class="pl-c1">myAttributes</span> <span class="pl-k">=</span> {<span class="pl-s"><span class="pl-pds">"</span>src<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>photo.png<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>alt<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>My Photo<span class="pl-pds">"</span></span>}</span>
+img<span class="pl-en">&amp;attributes(</span>myAttributes<span class="pl-en">)</span>
+<span class="pl-c">//- &lt;img src="photo.png" alt="My Photo"&gt;</span>
+<span class="pl-c"></span><span class="pl-s1">- <span class="pl-k">let</span> disabled <span class="pl-k">=</span> <span class="pl-c1">false</span></span>
+input<span class="pl-c1">(</span><span class="pl-e">type</span>=<span class="pl-s">"text"</span> <span class="pl-e">disabled</span>=disabled<span class="pl-c1">)</span>
+<span class="pl-c">//- &lt;input type="text"&gt;</span>
+<span class="pl-c"></span><span class="pl-s1">- disabled <span class="pl-k">=</span> <span class="pl-c1">true</span></span>
+input<span class="pl-c1">(</span><span class="pl-e">type</span>=<span class="pl-s">"text"</span> <span class="pl-e">disabled</span>=disabled<span class="pl-c1">)</span>
+<span class="pl-c">//- &lt;input type="text" disabled&gt;</span>
+<span class="pl-c"></span>
+<span class="pl-c">//- JS Templating</span>
+<span class="pl-c"></span><span class="pl-s1">- <span class="pl-k">const</span> <span class="pl-c1">name</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Bob<span class="pl-pds">"</span></span>;</span>
+h1 Hi <span class="pl-s">#{name}</span>
+h1<span class="pl-s1"><span class="pl-c1">=</span> name</span>
+<span class="pl-c">//- &lt;h1&gt;Hi Bob&lt;/h1&gt;</span>
+<span class="pl-c">//- &lt;h1&gt;Bob&lt;/h1&gt;</span>
+<span class="pl-c"></span>
+<span class="pl-c">//- ---LOOPS---</span>
+<span class="pl-c"></span>
+<span class="pl-c">//- 'each' and 'for' do the same thing we will use 'each' only.</span>
+<span class="pl-c"></span>
+<span class="pl-c"></span><span class="pl-k">each</span> value, i <span class="pl-k">in</span> [<span class="pl-c1">1</span>,<span class="pl-c1">2</span>,<span class="pl-c1">3</span>]
+  p<span class="pl-s1"><span class="pl-c1">=</span>value</span>
+<span class="pl-c">//-</span>
+<span class="pl-c">  &lt;p&gt;1&lt;/p&gt;</span>
+<span class="pl-c">  &lt;p&gt;2&lt;/p&gt;</span>
+<span class="pl-c">  &lt;p&gt;3&lt;/p&gt;</span>
+<span class="pl-c"></span>
+<span class="pl-c"></span><span class="pl-k">each</span> value, index <span class="pl-k">in</span> [<span class="pl-c1">1</span>,<span class="pl-c1">2</span>,<span class="pl-c1">3</span>]
+  p<span class="pl-s1"><span class="pl-c1">=</span>value <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">'</span>-<span class="pl-pds">'</span></span> <span class="pl-k">+</span> index</span>
+<span class="pl-c">//-</span>
+<span class="pl-c">  &lt;p&gt;1-0&lt;/p&gt;</span>
+<span class="pl-c">  &lt;p&gt;2-1&lt;/p&gt;</span>
+<span class="pl-c">  &lt;p&gt;3-2&lt;/p&gt;</span>
+<span class="pl-c"></span>
+<span class="pl-c"></span><span class="pl-k">each</span> value <span class="pl-k">in</span> []
+  p<span class="pl-s1"><span class="pl-c1">=</span>value</span>
+<span class="pl-c">//- </span>
+<span class="pl-c"></span>
+<span class="pl-c"></span><span class="pl-k">each</span> value <span class="pl-k">in</span> []
+  p<span class="pl-s1"><span class="pl-c1">=</span>value</span>
+<span class="pl-k">else</span>
+  p No Values are here
+
+<span class="pl-c">//- &lt;p&gt;No Values are here&lt;/p&gt;</span>
+<span class="pl-c"></span>
+<span class="pl-c">//- ---CONDITIONALS---</span>
+<span class="pl-c"></span>
+<span class="pl-c"></span><span class="pl-s1">- <span class="pl-k">const</span> <span class="pl-c1">number</span> <span class="pl-k">=</span> <span class="pl-c1">5</span></span>
+<span class="pl-k">if</span> number <span class="pl-k">&lt;</span> <span class="pl-c1">5</span>
+  p number is less then 5
+<span class="pl-k">else if</span> number <span class="pl-k">&gt;</span> <span class="pl-c1">5</span>
+  p number is greater then 5
+<span class="pl-k">else</span>
+  p number is 5
+<span class="pl-c">//- &lt;p&gt;number is 5&lt;/p&gt;</span>
+<span class="pl-c"></span>
+<span class="pl-c"></span><span class="pl-s1">- <span class="pl-k">const</span> <span class="pl-c1">orderStatus</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Pending<span class="pl-pds">"</span></span>;</span>
+<span class="pl-k">case</span> orderStatus
+  <span class="pl-k">when</span> <span class="pl-s"><span class="pl-pds">"</span>Pending<span class="pl-pds">"</span></span>
+    p<span class="pl-e">.warn</span> Your order is pending
+  <span class="pl-k">when</span> <span class="pl-s"><span class="pl-pds">"</span>Completed<span class="pl-pds">"</span></span>
+    p<span class="pl-e">.success</span> Order is Completed.
+  <span class="pl-k">when</span> <span class="pl-k">-</span><span class="pl-c1">1</span>
+    p<span class="pl-e">.error</span> Error Occurred
+  <span class="pl-k">default</span>
+    p No Order Record Found
+<span class="pl-c">//- &lt;p class="warn"&gt;Your order is pending&lt;/p&gt;</span>
+<span class="pl-c"></span>
+<span class="pl-c">//- --INCLUDE--</span>
+<span class="pl-c">//- File path -&gt; "includes/nav.png"</span>
+<span class="pl-c"></span>h1 Company Name
+nav
+  a<span class="pl-c1">(</span><span class="pl-e">href</span>=<span class="pl-s">"index.html"</span><span class="pl-c1">)</span> Home
+  a<span class="pl-c1">(</span><span class="pl-e">href</span>=<span class="pl-s">"about.html"</span><span class="pl-c1">)</span> About Us
+
+<span class="pl-c">//- File path -&gt; "index.png"</span>
+<span class="pl-c"></span>html
+  body
+    <span class="pl-k">include</span> <span class="pl-v">includes/nav.pug</span>
+<span class="pl-c">//-</span>
+<span class="pl-c">  &lt;html&gt;</span>
+<span class="pl-c">    &lt;body&gt;</span>
+<span class="pl-c">      &lt;h1&gt;Company Name&lt;/h1&gt;</span>
+<span class="pl-c">      &lt;nav&gt;&lt;a href="index.html"&gt;Home&lt;/a&gt;&lt;a href="about.html"&gt;About Us&lt;/a&gt;&lt;/nav&gt;</span>
+<span class="pl-c">    &lt;/body&gt;</span>
+<span class="pl-c">  &lt;/html&gt;</span>
+<span class="pl-c"></span>
+<span class="pl-c">//- Importing JS and CSS</span>
+<span class="pl-c"></span>script
+  <span class="pl-k">include</span> <span class="pl-v">scripts/index.js</span>
+style
+  <span class="pl-k">include</span> <span class="pl-v">styles/theme.css</span>
+
+<span class="pl-c">//- ---MIXIN---</span>
+<span class="pl-c"></span><span class="pl-k">mixin </span>basic
+  div Hello
+<span class="pl-k">+</span>basic
+<span class="pl-c">//- &lt;div&gt;Hello&lt;/div&gt;</span>
+<span class="pl-c"></span>
+<span class="pl-c"></span><span class="pl-k">mixin </span>comment(<span class="pl-smi">name, comment</span>)
+  div
+    span<span class="pl-e">.comment-name</span><span class="pl-s1"><span class="pl-c1">=</span> name</span>
+    div<span class="pl-e">.comment-text</span><span class="pl-s1"><span class="pl-c1">=</span> comment</span>
+<span class="pl-k">+</span>comment(<span class="pl-s">"Bob"</span>, <span class="pl-s">"This is Awesome"</span>)
+<span class="pl-c">//- </span>
+<span class="pl-c">  &lt;div&gt;</span>
+<span class="pl-c">    &lt;span class="comment-name"&gt;Bob&lt;/span&gt;</span>
+<span class="pl-c">    &lt;div class="comment-text"&gt;This is Awesome&lt;/div&gt;</span>
+<span class="pl-c">  &lt;/div&gt;</span>
+<span class="pl-c"></span></pre></div>
+<h3>Additional Resources</h3>
+<ul>
+<li><a href="https://pugjs.org/" rel="nofollow">The Site</a></li>
+<li><a href="https://pugjs.org/api/getting-started.html" rel="nofollow">The Docs</a></li>
+<li><a href="https://github.com/pugjs/pug">Github Repo</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<ul>
+<li>["Michael Warner", "https://github.com/MichaelJGW"]</li>
+</ul>

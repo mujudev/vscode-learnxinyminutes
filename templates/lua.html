@@ -1,0 +1,408 @@
+<h1>Lua</h1>
+<div class="highlight highlight-source-lua"><pre class="notranslate"><span class="pl-c"><span class="pl-c">--</span> Two dashes start a one-line comment.</span>
+
+<span class="pl-c"><span class="pl-c">--[[</span></span>
+<span class="pl-c">     Adding two ['s and ]'s makes it a</span>
+<span class="pl-c">     multi-line comment.</span>
+<span class="pl-c">--<span class="pl-c">]]</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span>--------------------------------------------------</span>
+<span class="pl-c"><span class="pl-c">--</span> 1. Variables and flow control.</span>
+<span class="pl-c"><span class="pl-c">--</span>--------------------------------------------------</span>
+
+num <span class="pl-k">=</span> <span class="pl-c1">42</span>  <span class="pl-c"><span class="pl-c">--</span> All numbers are doubles.</span>
+<span class="pl-c"><span class="pl-c">--</span> Don't freak out, 64-bit doubles have 52 bits for</span>
+<span class="pl-c"><span class="pl-c">--</span> storing exact int values; machine precision is</span>
+<span class="pl-c"><span class="pl-c">--</span> not a problem for ints that need &lt; 52 bits.</span>
+
+s <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>walternate<span class="pl-pds">'</span></span>  <span class="pl-c"><span class="pl-c">--</span> Immutable strings like Python.</span>
+t <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>double-quotes are also fine<span class="pl-pds">"</span></span>
+u <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">[[</span> Double brackets</span>
+<span class="pl-s">       start and end</span>
+<span class="pl-s">       multi-line strings.<span class="pl-pds">]]</span></span>
+t <span class="pl-k">=</span> <span class="pl-c1">nil</span>  <span class="pl-c"><span class="pl-c">--</span> Undefines t; Lua has garbage collection.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Blocks are denoted with keywords like do/end:</span>
+<span class="pl-k">while</span> num <span class="pl-k">&lt;</span> <span class="pl-c1">50</span> <span class="pl-k">do</span>
+  num <span class="pl-k">=</span> num <span class="pl-k">+</span> <span class="pl-c1">1</span>  <span class="pl-c"><span class="pl-c">--</span> No ++ or += type operators.</span>
+<span class="pl-k">end</span>
+
+<span class="pl-c"><span class="pl-c">--</span> If clauses:</span>
+<span class="pl-k">if</span> num <span class="pl-k">&gt;</span> <span class="pl-c1">40</span> <span class="pl-k">then</span>
+  <span class="pl-c1">print</span>(<span class="pl-s"><span class="pl-pds">'</span>over 40<span class="pl-pds">'</span></span>)
+<span class="pl-k">elseif</span> s <span class="pl-k">~=</span> <span class="pl-s"><span class="pl-pds">'</span>walternate<span class="pl-pds">'</span></span> <span class="pl-k">then</span>  <span class="pl-c"><span class="pl-c">--</span> ~= is not equals.</span>
+  <span class="pl-c"><span class="pl-c">--</span> Equality check is == like Python; ok for strs.</span>
+  <span class="pl-c1">io.write</span>(<span class="pl-s"><span class="pl-pds">'</span>not over 40<span class="pl-cce">\n</span><span class="pl-pds">'</span></span>)  <span class="pl-c"><span class="pl-c">--</span> Defaults to stdout.</span>
+<span class="pl-k">else</span>
+  <span class="pl-c"><span class="pl-c">--</span> Variables are global by default.</span>
+  thisIsGlobal <span class="pl-k">=</span> <span class="pl-c1">5</span>  <span class="pl-c"><span class="pl-c">--</span> Camel case is common.</span>
+
+  <span class="pl-c"><span class="pl-c">--</span> How to make a variable local:</span>
+  <span class="pl-k">local</span> line <span class="pl-k">=</span> <span class="pl-c1">io.read</span>()  <span class="pl-c"><span class="pl-c">--</span> Reads next stdin line.</span>
+
+  <span class="pl-c"><span class="pl-c">--</span> String concatenation uses the .. operator:</span>
+  <span class="pl-c1">print</span>(<span class="pl-s"><span class="pl-pds">'</span>Winter is coming, <span class="pl-pds">'</span></span> <span class="pl-k">..</span> line)
+<span class="pl-k">end</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Undefined variables return nil.</span>
+<span class="pl-c"><span class="pl-c">--</span> This is not an error:</span>
+foo <span class="pl-k">=</span> anUnknownVariable  <span class="pl-c"><span class="pl-c">--</span> Now foo = nil.</span>
+
+aBoolValue <span class="pl-k">=</span> <span class="pl-c1">false</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Only nil and false are falsy; 0 and '' are true!</span>
+<span class="pl-k">if</span> <span class="pl-k">not</span> aBoolValue <span class="pl-k">then</span> <span class="pl-c1">print</span>(<span class="pl-s"><span class="pl-pds">'</span>it was false<span class="pl-pds">'</span></span>) <span class="pl-k">end</span>
+
+<span class="pl-c"><span class="pl-c">--</span> 'or' and 'and' are short-circuited.</span>
+<span class="pl-c"><span class="pl-c">--</span> This is similar to the a?b:c operator in C/js:</span>
+ans <span class="pl-k">=</span> aBoolValue <span class="pl-k">and</span> <span class="pl-s"><span class="pl-pds">'</span>yes<span class="pl-pds">'</span></span> <span class="pl-k">or</span> <span class="pl-s"><span class="pl-pds">'</span>no<span class="pl-pds">'</span></span>  <span class="pl-c"><span class="pl-c">--</span>&gt; 'no'</span>
+
+karlSum <span class="pl-k">=</span> <span class="pl-c1">0</span>
+<span class="pl-k">for</span> i <span class="pl-k">=</span> <span class="pl-c1">1</span>, <span class="pl-c1">100</span> <span class="pl-k">do</span>  <span class="pl-c"><span class="pl-c">--</span> The range includes both ends.</span>
+  karlSum <span class="pl-k">=</span> karlSum <span class="pl-k">+</span> i
+<span class="pl-k">end</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Use "100, 1, -1" as the range to count down:</span>
+fredSum <span class="pl-k">=</span> <span class="pl-c1">0</span>
+<span class="pl-k">for</span> j <span class="pl-k">=</span> <span class="pl-c1">100</span>, <span class="pl-c1">1</span>, <span class="pl-k">-</span><span class="pl-c1">1</span> <span class="pl-k">do</span> fredSum <span class="pl-k">=</span> fredSum <span class="pl-k">+</span> j <span class="pl-k">end</span>
+
+<span class="pl-c"><span class="pl-c">--</span> In general, the range is begin, end[, step].</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Another loop construct:</span>
+<span class="pl-k">repeat</span>
+  <span class="pl-c1">print</span>(<span class="pl-s"><span class="pl-pds">'</span>the way of the future<span class="pl-pds">'</span></span>)
+  num <span class="pl-k">=</span> num <span class="pl-k">-</span> <span class="pl-c1">1</span>
+<span class="pl-k">until</span> num <span class="pl-k">==</span> <span class="pl-c1">0</span>
+
+
+<span class="pl-c"><span class="pl-c">--</span>--------------------------------------------------</span>
+<span class="pl-c"><span class="pl-c">--</span> 2. Functions.</span>
+<span class="pl-c"><span class="pl-c">--</span>--------------------------------------------------</span>
+
+<span class="pl-k">function</span> <span class="pl-en">fib</span>(<span class="pl-smi">n</span>)
+  <span class="pl-k">if</span> n <span class="pl-k">&lt;</span> <span class="pl-c1">2</span> <span class="pl-k">then</span> <span class="pl-k">return</span> <span class="pl-c1">1</span> <span class="pl-k">end</span>
+  <span class="pl-k">return</span> <span class="pl-c1">fib</span>(n <span class="pl-k">-</span> <span class="pl-c1">2</span>) <span class="pl-k">+</span> <span class="pl-c1">fib</span>(n <span class="pl-k">-</span> <span class="pl-c1">1</span>)
+<span class="pl-k">end</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Closures and anonymous functions are ok:</span>
+<span class="pl-k">function</span> <span class="pl-en">adder</span>(<span class="pl-smi">x</span>)
+  <span class="pl-c"><span class="pl-c">--</span> The returned function is created when adder is</span>
+  <span class="pl-c"><span class="pl-c">--</span> called, and remembers the value of x:</span>
+  <span class="pl-k">return</span> <span class="pl-k">function</span> (<span class="pl-smi">y</span>) <span class="pl-k">return</span> x <span class="pl-k">+</span> y <span class="pl-k">end</span>
+<span class="pl-k">end</span>
+a1 <span class="pl-k">=</span> <span class="pl-c1">adder</span>(<span class="pl-c1">9</span>)
+a2 <span class="pl-k">=</span> <span class="pl-c1">adder</span>(<span class="pl-c1">36</span>)
+<span class="pl-c1">print</span>(<span class="pl-c1">a1</span>(<span class="pl-c1">16</span>))  <span class="pl-c"><span class="pl-c">--</span>&gt; 25</span>
+<span class="pl-c1">print</span>(<span class="pl-c1">a2</span>(<span class="pl-c1">64</span>))  <span class="pl-c"><span class="pl-c">--</span>&gt; 100</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Returns, func calls, and assignments all work</span>
+<span class="pl-c"><span class="pl-c">--</span> with lists that may be mismatched in length.</span>
+<span class="pl-c"><span class="pl-c">--</span> Unmatched receivers are nil;</span>
+<span class="pl-c"><span class="pl-c">--</span> unmatched senders are discarded.</span>
+
+x, y, z <span class="pl-k">=</span> <span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span>
+<span class="pl-c"><span class="pl-c">--</span> Now x = 1, y = 2, z = 3, and 4 is thrown away.</span>
+
+<span class="pl-k">function</span> <span class="pl-en">bar</span>(<span class="pl-smi">a</span>, <span class="pl-smi">b</span>, <span class="pl-smi">c</span>)
+  <span class="pl-c1">print</span>(a, b, c)
+  <span class="pl-k">return</span> <span class="pl-c1">4</span>, <span class="pl-c1">8</span>, <span class="pl-c1">15</span>, <span class="pl-c1">16</span>, <span class="pl-c1">23</span>, <span class="pl-c1">42</span>
+<span class="pl-k">end</span>
+
+x, y <span class="pl-k">=</span> <span class="pl-c1">bar</span>(<span class="pl-s"><span class="pl-pds">'</span>zaphod<span class="pl-pds">'</span></span>)  <span class="pl-c"><span class="pl-c">--</span>&gt; prints "zaphod  nil nil"</span>
+<span class="pl-c"><span class="pl-c">--</span> Now x = 4, y = 8, values 15...42 are discarded.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Functions are first-class, may be local/global.</span>
+<span class="pl-c"><span class="pl-c">--</span> These are the same:</span>
+<span class="pl-k">function</span> <span class="pl-en">f</span>(<span class="pl-smi">x</span>) <span class="pl-k">return</span> x <span class="pl-k">*</span> x <span class="pl-k">end</span>
+f <span class="pl-k">=</span> <span class="pl-k">function</span> (<span class="pl-smi">x</span>) <span class="pl-k">return</span> x <span class="pl-k">*</span> x <span class="pl-k">end</span>
+
+<span class="pl-c"><span class="pl-c">--</span> And so are these:</span>
+<span class="pl-k">local</span> <span class="pl-k">function</span> <span class="pl-en">g</span>(<span class="pl-smi">x</span>) <span class="pl-k">return</span> <span class="pl-c1">math.sin</span>(x) <span class="pl-k">end</span>
+<span class="pl-k">local</span> g; g  <span class="pl-k">=</span> <span class="pl-k">function</span> (<span class="pl-smi">x</span>) <span class="pl-k">return</span> <span class="pl-c1">math.sin</span>(x) <span class="pl-k">end</span>
+<span class="pl-c"><span class="pl-c">--</span> the 'local g' decl makes g-self-references ok.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Trig funcs work in radians, by the way.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Calls with one string param don't need parens:</span>
+<span class="pl-c1">print</span> <span class="pl-s"><span class="pl-pds">'</span>hello<span class="pl-pds">'</span></span>  <span class="pl-c"><span class="pl-c">--</span> Works fine.</span>
+
+
+<span class="pl-c"><span class="pl-c">--</span>--------------------------------------------------</span>
+<span class="pl-c"><span class="pl-c">--</span> 3. Tables.</span>
+<span class="pl-c"><span class="pl-c">--</span>--------------------------------------------------</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Tables = Lua's only compound data structure;</span>
+<span class="pl-c"><span class="pl-c">--</span>          they are associative arrays.</span>
+<span class="pl-c"><span class="pl-c">--</span> Similar to php arrays or js objects, they are</span>
+<span class="pl-c"><span class="pl-c">--</span> hash-lookup dicts that can also be used as lists.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Using tables as dictionaries / maps:</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Dict literals have string keys by default:</span>
+t <span class="pl-k">=</span> {key1 <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>value1<span class="pl-pds">'</span></span>, key2 <span class="pl-k">=</span> <span class="pl-c1">false</span>}
+
+<span class="pl-c"><span class="pl-c">--</span> String keys can use js-like dot notation:</span>
+<span class="pl-c1">print</span>(t.<span class="pl-smi">key1</span>)  <span class="pl-c"><span class="pl-c">--</span> Prints 'value1'.</span>
+t.<span class="pl-smi">newKey</span> <span class="pl-k">=</span> {}  <span class="pl-c"><span class="pl-c">--</span> Adds a new key/value pair.</span>
+t.<span class="pl-smi">key2</span> <span class="pl-k">=</span> <span class="pl-c1">nil</span>   <span class="pl-c"><span class="pl-c">--</span> Removes key2 from the table.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Literal notation for any (non-nil) value as key:</span>
+u <span class="pl-k">=</span> {[<span class="pl-s"><span class="pl-pds">'</span>@!#<span class="pl-pds">'</span></span>] <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>qbert<span class="pl-pds">'</span></span>, [{}] <span class="pl-k">=</span> <span class="pl-c1">1729</span>, [<span class="pl-c1">6.28</span>] <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>tau<span class="pl-pds">'</span></span>}
+<span class="pl-c1">print</span>(u[<span class="pl-c1">6.28</span>])  <span class="pl-c"><span class="pl-c">--</span> prints "tau"</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Key matching is basically by value for numbers</span>
+<span class="pl-c"><span class="pl-c">--</span> and strings, but by identity for tables.</span>
+a <span class="pl-k">=</span> u[<span class="pl-s"><span class="pl-pds">'</span>@!#<span class="pl-pds">'</span></span>]  <span class="pl-c"><span class="pl-c">--</span> Now a = 'qbert'.</span>
+b <span class="pl-k">=</span> u[{}]     <span class="pl-c"><span class="pl-c">--</span> We might expect 1729, but it's nil:</span>
+<span class="pl-c"><span class="pl-c">--</span> b = nil since the lookup fails. It fails</span>
+<span class="pl-c"><span class="pl-c">--</span> because the key we used is not the same object</span>
+<span class="pl-c"><span class="pl-c">--</span> as the one used to store the original value. So</span>
+<span class="pl-c"><span class="pl-c">--</span> strings &amp; numbers are more portable keys.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> A one-table-param function call needs no parens:</span>
+<span class="pl-k">function</span> <span class="pl-en">h</span>(<span class="pl-smi">x</span>) <span class="pl-c1">print</span>(x.<span class="pl-smi">key1</span>) <span class="pl-k">end</span>
+<span class="pl-c1">h</span>{key1 <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>Sonmi~451<span class="pl-pds">'</span></span>}  <span class="pl-c"><span class="pl-c">--</span> Prints 'Sonmi~451'.</span>
+
+<span class="pl-k">for</span> key, val <span class="pl-k">in</span> <span class="pl-c1">pairs</span>(u) <span class="pl-k">do</span>  <span class="pl-c"><span class="pl-c">--</span> Table iteration.</span>
+  <span class="pl-c1">print</span>(key, val)
+<span class="pl-k">end</span>
+
+<span class="pl-c"><span class="pl-c">--</span> _G is a special table of all globals.</span>
+<span class="pl-c1">print</span>(<span class="pl-c1">_G</span>[<span class="pl-s"><span class="pl-pds">'</span>_G<span class="pl-pds">'</span></span>] <span class="pl-k">==</span> <span class="pl-c1">_G</span>)  <span class="pl-c"><span class="pl-c">--</span> Prints 'true'.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Using tables as lists / arrays:</span>
+
+<span class="pl-c"><span class="pl-c">--</span> List literals implicitly set up int keys:</span>
+v <span class="pl-k">=</span> {<span class="pl-s"><span class="pl-pds">'</span>value1<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>value2<span class="pl-pds">'</span></span>, <span class="pl-c1">1.21</span>, <span class="pl-s"><span class="pl-pds">'</span>gigawatts<span class="pl-pds">'</span></span>}
+<span class="pl-k">for</span> i <span class="pl-k">=</span> <span class="pl-c1">1</span>, <span class="pl-k">#</span>v <span class="pl-k">do</span>  <span class="pl-c"><span class="pl-c">--</span> #v is the size of v for lists.</span>
+  <span class="pl-c1">print</span>(v[i])  <span class="pl-c"><span class="pl-c">--</span> Indices start at 1 !! SO CRAZY!</span>
+<span class="pl-k">end</span>
+<span class="pl-c"><span class="pl-c">--</span> A 'list' is not a real type. v is just a table</span>
+<span class="pl-c"><span class="pl-c">--</span> with consecutive integer keys, treated as a list.</span>
+
+<span class="pl-c"><span class="pl-c">--</span>--------------------------------------------------</span>
+<span class="pl-c"><span class="pl-c">--</span> 3.1 Metatables and metamethods.</span>
+<span class="pl-c"><span class="pl-c">--</span>--------------------------------------------------</span>
+
+<span class="pl-c"><span class="pl-c">--</span> A table can have a metatable that gives the table</span>
+<span class="pl-c"><span class="pl-c">--</span> operator-overloadish behavior. Later we'll see</span>
+<span class="pl-c"><span class="pl-c">--</span> how metatables support js-prototype behavior.</span>
+
+f1 <span class="pl-k">=</span> {a <span class="pl-k">=</span> <span class="pl-c1">1</span>, b <span class="pl-k">=</span> <span class="pl-c1">2</span>}  <span class="pl-c"><span class="pl-c">--</span> Represents the fraction a/b.</span>
+f2 <span class="pl-k">=</span> {a <span class="pl-k">=</span> <span class="pl-c1">2</span>, b <span class="pl-k">=</span> <span class="pl-c1">3</span>}
+
+<span class="pl-c"><span class="pl-c">--</span> This would fail:</span>
+<span class="pl-c"><span class="pl-c">--</span> s = f1 + f2</span>
+
+metafraction <span class="pl-k">=</span> {}
+<span class="pl-k">function</span> <span class="pl-en">metafraction.__add</span>(<span class="pl-smi">f1</span>, <span class="pl-smi">f2</span>)
+  sum <span class="pl-k">=</span> {}
+  sum.<span class="pl-smi">b</span> <span class="pl-k">=</span> f1.<span class="pl-smi">b</span> <span class="pl-k">*</span> f2.<span class="pl-smi">b</span>
+  sum.<span class="pl-smi">a</span> <span class="pl-k">=</span> f1.<span class="pl-smi">a</span> <span class="pl-k">*</span> f2.<span class="pl-smi">b</span> <span class="pl-k">+</span> f2.<span class="pl-smi">a</span> <span class="pl-k">*</span> f1.<span class="pl-smi">b</span>
+  <span class="pl-k">return</span> sum
+<span class="pl-k">end</span>
+
+<span class="pl-c1">setmetatable</span>(f1, metafraction)
+<span class="pl-c1">setmetatable</span>(f2, metafraction)
+
+s <span class="pl-k">=</span> f1 <span class="pl-k">+</span> f2  <span class="pl-c"><span class="pl-c">--</span> call __add(f1, f2) on f1's metatable</span>
+
+<span class="pl-c"><span class="pl-c">--</span> f1, f2 have no key for their metatable, unlike</span>
+<span class="pl-c"><span class="pl-c">--</span> prototypes in js, so you must retrieve it as in</span>
+<span class="pl-c"><span class="pl-c">--</span> getmetatable(f1). The metatable is a normal table</span>
+<span class="pl-c"><span class="pl-c">--</span> with keys that Lua knows about, like __add.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> But the next line fails since s has no metatable:</span>
+<span class="pl-c"><span class="pl-c">--</span> t = s + s</span>
+<span class="pl-c"><span class="pl-c">--</span> Class-like patterns given below would fix this.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> An __index on a metatable overloads dot lookups:</span>
+defaultFavs <span class="pl-k">=</span> {animal <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>gru<span class="pl-pds">'</span></span>, food <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>donuts<span class="pl-pds">'</span></span>}
+myFavs <span class="pl-k">=</span> {food <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>pizza<span class="pl-pds">'</span></span>}
+<span class="pl-c1">setmetatable</span>(myFavs, {__index <span class="pl-k">=</span> defaultFavs})
+eatenBy <span class="pl-k">=</span> myFavs.<span class="pl-smi">animal</span>  <span class="pl-c"><span class="pl-c">--</span> works! thanks, metatable</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Direct table lookups that fail will retry using</span>
+<span class="pl-c"><span class="pl-c">--</span> the metatable's __index value, and this recurses.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> An __index value can also be a function(tbl, key)</span>
+<span class="pl-c"><span class="pl-c">--</span> for more customized lookups.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Values of __index,add, .. are called metamethods.</span>
+<span class="pl-c"><span class="pl-c">--</span> Full list. Here a is a table with the metamethod.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> __add(a, b)                     for a + b</span>
+<span class="pl-c"><span class="pl-c">--</span> __sub(a, b)                     for a - b</span>
+<span class="pl-c"><span class="pl-c">--</span> __mul(a, b)                     for a * b</span>
+<span class="pl-c"><span class="pl-c">--</span> __div(a, b)                     for a / b</span>
+<span class="pl-c"><span class="pl-c">--</span> __mod(a, b)                     for a % b</span>
+<span class="pl-c"><span class="pl-c">--</span> __pow(a, b)                     for a ^ b</span>
+<span class="pl-c"><span class="pl-c">--</span> __unm(a)                        for -a</span>
+<span class="pl-c"><span class="pl-c">--</span> __concat(a, b)                  for a .. b</span>
+<span class="pl-c"><span class="pl-c">--</span> __len(a)                        for #a</span>
+<span class="pl-c"><span class="pl-c">--</span> __eq(a, b)                      for a == b</span>
+<span class="pl-c"><span class="pl-c">--</span> __lt(a, b)                      for a &lt; b</span>
+<span class="pl-c"><span class="pl-c">--</span> __le(a, b)                      for a &lt;= b</span>
+<span class="pl-c"><span class="pl-c">--</span> __index(a, b)  &lt;fn or a table&gt;  for a.b</span>
+<span class="pl-c"><span class="pl-c">--</span> __newindex(a, b, c)             for a.b = c</span>
+<span class="pl-c"><span class="pl-c">--</span> __call(a, ...)                  for a(...)</span>
+
+<span class="pl-c"><span class="pl-c">--</span>--------------------------------------------------</span>
+<span class="pl-c"><span class="pl-c">--</span> 3.2 Class-like tables and inheritance.</span>
+<span class="pl-c"><span class="pl-c">--</span>--------------------------------------------------</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Classes aren't built in; there are different ways</span>
+<span class="pl-c"><span class="pl-c">--</span> to make them using tables and metatables.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Explanation for this example is below it.</span>
+
+Dog <span class="pl-k">=</span> {}                                   <span class="pl-c"><span class="pl-c">--</span> 1.</span>
+
+<span class="pl-k">function</span> <span class="pl-en">Dog:new</span>()                         <span class="pl-c"><span class="pl-c">--</span> 2.</span>
+  newObj <span class="pl-k">=</span> {sound <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>woof<span class="pl-pds">'</span></span>}                <span class="pl-c"><span class="pl-c">--</span> 3.</span>
+  <span class="pl-c1">self</span>.<span class="pl-smi">__index</span> <span class="pl-k">=</span> <span class="pl-c1">self</span>                      <span class="pl-c"><span class="pl-c">--</span> 4.</span>
+  <span class="pl-k">return</span> <span class="pl-c1">setmetatable</span>(newObj, <span class="pl-c1">self</span>)        <span class="pl-c"><span class="pl-c">--</span> 5.</span>
+<span class="pl-k">end</span>
+
+<span class="pl-k">function</span> <span class="pl-en">Dog:makeSound</span>()                   <span class="pl-c"><span class="pl-c">--</span> 6.</span>
+  <span class="pl-c1">print</span>(<span class="pl-s"><span class="pl-pds">'</span>I say <span class="pl-pds">'</span></span> <span class="pl-k">..</span> <span class="pl-c1">self</span>.<span class="pl-smi">sound</span>)
+<span class="pl-k">end</span>
+
+mrDog <span class="pl-k">=</span> Dog:<span class="pl-c1">new</span>()                          <span class="pl-c"><span class="pl-c">--</span> 7.</span>
+mrDog:<span class="pl-c1">makeSound</span>()  <span class="pl-c"><span class="pl-c">--</span> 'I say woof'         -- 8.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> 1. Dog acts like a class; it's really a table.</span>
+<span class="pl-c"><span class="pl-c">--</span> 2. function tablename:fn(...) is the same as</span>
+<span class="pl-c"><span class="pl-c">--</span>    function tablename.fn(self, ...)</span>
+<span class="pl-c"><span class="pl-c">--</span>    The : just adds a first arg called self.</span>
+<span class="pl-c"><span class="pl-c">--</span>    Read 7 &amp; 8 below for how self gets its value.</span>
+<span class="pl-c"><span class="pl-c">--</span> 3. newObj will be an instance of class Dog.</span>
+<span class="pl-c"><span class="pl-c">--</span> 4. self = the class being instantiated. Often</span>
+<span class="pl-c"><span class="pl-c">--</span>    self = Dog, but inheritance can change it.</span>
+<span class="pl-c"><span class="pl-c">--</span>    newObj gets self's functions when we set both</span>
+<span class="pl-c"><span class="pl-c">--</span>    newObj's metatable and self's __index to self.</span>
+<span class="pl-c"><span class="pl-c">--</span> 5. Reminder: setmetatable returns its first arg.</span>
+<span class="pl-c"><span class="pl-c">--</span> 6. The : works as in 2, but this time we expect</span>
+<span class="pl-c"><span class="pl-c">--</span>    self to be an instance instead of a class.</span>
+<span class="pl-c"><span class="pl-c">--</span> 7. Same as Dog.new(Dog), so self = Dog in new().</span>
+<span class="pl-c"><span class="pl-c">--</span> 8. Same as mrDog.makeSound(mrDog); self = mrDog.</span>
+
+<span class="pl-c"><span class="pl-c">--</span>--------------------------------------------------</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Inheritance example:</span>
+
+LoudDog <span class="pl-k">=</span> Dog:<span class="pl-c1">new</span>()                           <span class="pl-c"><span class="pl-c">--</span> 1.</span>
+
+<span class="pl-k">function</span> <span class="pl-en">LoudDog:makeSound</span>()
+  s <span class="pl-k">=</span> <span class="pl-c1">self</span>.<span class="pl-smi">sound</span> <span class="pl-k">..</span> <span class="pl-s"><span class="pl-pds">'</span> <span class="pl-pds">'</span></span>                       <span class="pl-c"><span class="pl-c">--</span> 2.</span>
+  <span class="pl-c1">print</span>(s <span class="pl-k">..</span> s <span class="pl-k">..</span> s)
+<span class="pl-k">end</span>
+
+seymour <span class="pl-k">=</span> LoudDog:<span class="pl-c1">new</span>()                       <span class="pl-c"><span class="pl-c">--</span> 3.</span>
+seymour:<span class="pl-c1">makeSound</span>()  <span class="pl-c"><span class="pl-c">--</span> 'woof woof woof'      -- 4.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> 1. LoudDog gets Dog's methods and variables.</span>
+<span class="pl-c"><span class="pl-c">--</span> 2. self has a 'sound' key from new(), see 3.</span>
+<span class="pl-c"><span class="pl-c">--</span> 3. Same as LoudDog.new(LoudDog), and converted to</span>
+<span class="pl-c"><span class="pl-c">--</span>    Dog.new(LoudDog) as LoudDog has no 'new' key,</span>
+<span class="pl-c"><span class="pl-c">--</span>    but does have __index = Dog on its metatable.</span>
+<span class="pl-c"><span class="pl-c">--</span>    Result: seymour's metatable is LoudDog, and</span>
+<span class="pl-c"><span class="pl-c">--</span>    LoudDog.__index = LoudDog. So seymour.key will</span>
+<span class="pl-c"><span class="pl-c">--</span>    = seymour.key, LoudDog.key, Dog.key, whichever</span>
+<span class="pl-c"><span class="pl-c">--</span>    table is the first with the given key.</span>
+<span class="pl-c"><span class="pl-c">--</span> 4. The 'makeSound' key is found in LoudDog; this</span>
+<span class="pl-c"><span class="pl-c">--</span>    is the same as LoudDog.makeSound(seymour).</span>
+
+<span class="pl-c"><span class="pl-c">--</span> If needed, a subclass's new() is like the base's:</span>
+<span class="pl-k">function</span> <span class="pl-en">LoudDog:new</span>()
+  newObj <span class="pl-k">=</span> {}
+  <span class="pl-c"><span class="pl-c">--</span> set up newObj</span>
+  <span class="pl-c1">self</span>.<span class="pl-smi">__index</span> <span class="pl-k">=</span> <span class="pl-c1">self</span>
+  <span class="pl-k">return</span> <span class="pl-c1">setmetatable</span>(newObj, <span class="pl-c1">self</span>)
+<span class="pl-k">end</span>
+
+<span class="pl-c"><span class="pl-c">--</span>--------------------------------------------------</span>
+<span class="pl-c"><span class="pl-c">--</span> 4. Modules.</span>
+<span class="pl-c"><span class="pl-c">--</span>--------------------------------------------------</span>
+
+
+<span class="pl-c"><span class="pl-c">--[[</span> I'm commenting out this section so the rest of</span>
+<span class="pl-c">--   this script remains runnable.</span></pre></div>
+<div class="highlight highlight-source-lua"><pre class="notranslate"><span class="pl-c"><span class="pl-c">--</span> Suppose the file mod.lua looks like this:</span>
+<span class="pl-k">local</span> M <span class="pl-k">=</span> {}
+
+<span class="pl-k">local</span> <span class="pl-k">function</span> <span class="pl-en">sayMyName</span>()
+  <span class="pl-c1">print</span>(<span class="pl-s"><span class="pl-pds">'</span>Hrunkner<span class="pl-pds">'</span></span>)
+<span class="pl-k">end</span>
+
+<span class="pl-k">function</span> <span class="pl-en">M.sayHello</span>()
+  <span class="pl-c1">print</span>(<span class="pl-s"><span class="pl-pds">'</span>Why hello there<span class="pl-pds">'</span></span>)
+  <span class="pl-c1">sayMyName</span>()
+<span class="pl-k">end</span>
+
+<span class="pl-k">return</span> M
+
+<span class="pl-c"><span class="pl-c">--</span> Another file can use mod.lua's functionality:</span>
+<span class="pl-k">local</span> mod <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>mod<span class="pl-pds">'</span></span>)  <span class="pl-c"><span class="pl-c">--</span> Run the file mod.lua.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> require is the standard way to include modules.</span>
+<span class="pl-c"><span class="pl-c">--</span> require acts like:     (if not cached; see below)</span>
+<span class="pl-k">local</span> mod <span class="pl-k">=</span> (<span class="pl-k">function</span> ()
+  <span class="pl-k">&lt;</span>contents of mod.<span class="pl-smi">lua</span><span class="pl-k">&gt;</span>
+<span class="pl-k">end</span>)()
+<span class="pl-c"><span class="pl-c">--</span> It's like mod.lua is a function body, so that</span>
+<span class="pl-c"><span class="pl-c">--</span> locals inside mod.lua are invisible outside it.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> This works because mod here = M in mod.lua:</span>
+mod.<span class="pl-c1">sayHello</span>() <span class="pl-c"><span class="pl-c">--</span> Prints: Why hello there Hrunkner</span>
+
+<span class="pl-c"><span class="pl-c">--</span> This is wrong; sayMyName only exists in mod.lua:</span>
+mod.<span class="pl-c1">sayMyName</span>()  <span class="pl-c"><span class="pl-c">--</span> error</span>
+
+<span class="pl-c"><span class="pl-c">--</span> require's return values are cached so a file is</span>
+<span class="pl-c"><span class="pl-c">--</span> run at most once, even when require'd many times.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Suppose mod2.lua contains "print('Hi!')".</span>
+<span class="pl-k">local</span> a <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>mod2<span class="pl-pds">'</span></span>)  <span class="pl-c"><span class="pl-c">--</span> Prints Hi!</span>
+<span class="pl-k">local</span> b <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>mod2<span class="pl-pds">'</span></span>)  <span class="pl-c"><span class="pl-c">--</span> Doesn't print; a=b.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> dofile is like require without caching:</span>
+<span class="pl-c1">dofile</span>(<span class="pl-s"><span class="pl-pds">'</span>mod2.lua<span class="pl-pds">'</span></span>)  <span class="pl-c"><span class="pl-c">--</span>&gt; Hi!</span>
+<span class="pl-c1">dofile</span>(<span class="pl-s"><span class="pl-pds">'</span>mod2.lua<span class="pl-pds">'</span></span>)  <span class="pl-c"><span class="pl-c">--</span>&gt; Hi! (runs it again)</span>
+
+<span class="pl-c"><span class="pl-c">--</span> loadfile loads a lua file but doesn't run it yet.</span>
+f <span class="pl-k">=</span> <span class="pl-c1">loadfile</span>(<span class="pl-s"><span class="pl-pds">'</span>mod2.lua<span class="pl-pds">'</span></span>)  <span class="pl-c"><span class="pl-c">--</span> Call f() to run it.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> load is loadfile for strings.</span>
+<span class="pl-c"><span class="pl-c">--</span> (loadstring is deprecated, use load instead)</span>
+g <span class="pl-k">=</span> <span class="pl-c1">load</span>(<span class="pl-s"><span class="pl-pds">'</span>print(343)<span class="pl-pds">'</span></span>)  <span class="pl-c"><span class="pl-c">--</span> Returns a function.</span>
+<span class="pl-c1">g</span>()  <span class="pl-c"><span class="pl-c">--</span> Prints out 343; nothing printed before now.</span>
+
+<span class="pl-c"><span class="pl-c">--</span>]]</span>
+</pre></div>
+<h2>Community</h2>
+<p>If you need support join the official Lua <a href="https://www.lua.org/lua-l.html" rel="nofollow">mailing list</a>, <a href="http://lua-users.org/wiki/IrcChannel" rel="nofollow">irc channel</a>, or <a href="https://luaforum.com" rel="nofollow">forum</a>.</p>
+<h2>References</h2>
+<p>I was excited to learn Lua so I could make games<br>
+with the <a href="http://love2d.org/" rel="nofollow">Love 2D game engine</a>. That's the why.</p>
+<p>I started with <a href="https://ebens.me/post/lua-for-programmers-part-1/" rel="nofollow">BlackBulletIV's Lua for programmers</a>.<br>
+Next I read the official <a href="http://www.lua.org/pil/contents.html" rel="nofollow">Programming in Lua</a> book.<br>
+That's the how.</p>
+<p>It might be helpful to check out the <a href="http://lua-users.org/wiki/LuaShortReference" rel="nofollow">Lua short<br>
+reference</a> on lua-users.org.</p>
+<p>The main topics not covered are standard libraries:</p>
+<ul>
+<li><a href="http://lua-users.org/wiki/StringLibraryTutorial" rel="nofollow">string library</a></li>
+<li><a href="http://lua-users.org/wiki/TableLibraryTutorial" rel="nofollow">table library</a></li>
+<li><a href="http://lua-users.org/wiki/MathLibraryTutorial" rel="nofollow">math library</a></li>
+<li><a href="http://lua-users.org/wiki/IoLibraryTutorial" rel="nofollow">io library</a></li>
+<li><a href="http://lua-users.org/wiki/OsLibraryTutorial" rel="nofollow">os library</a></li>
+</ul>
+<p>By the way, the entire file is valid Lua; save it<br>
+as learn.lua and run it with "lua learn.lua" !</p>
+<p>This was first written for tylerneylon.com, and is<br>
+also available as a <a href="https://gist.github.com/tylerneylon/5853042">github gist</a>. Have fun with Lua!</p>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Tyler Neylon", "http://tylerneylon.com/"]
+</code></pre>

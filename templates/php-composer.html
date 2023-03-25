@@ -1,0 +1,118 @@
+<h1>Composer</h1>
+<p><a href="https://getcomposer.org/" rel="nofollow">Composer</a> is a tool for dependency management in PHP. It allows you to declare the libraries your project depends on and it will manage (install/update) them for you.</p>
+<h1>Installing</h1>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> Installs the composer.phar binary into the current directory</span>
+curl -sS https://getcomposer.org/installer <span class="pl-k">|</span> php
+<span class="pl-c"><span class="pl-c">#</span> If you use this approach, you will need to invoke composer like this:</span>
+php composer.phar about
+
+<span class="pl-c"><span class="pl-c">#</span> Installs the binary into ~/bin/composer</span>
+<span class="pl-c"><span class="pl-c">#</span> Note: make sure ~/bin is in your shell's PATH environment variable</span>
+curl -sS https://getcomposer.org/installer <span class="pl-k">|</span> php -- --install-dir=<span class="pl-k">~</span>/bin --filename=composer</pre></div>
+<p>Windows users should follow the <a href="https://getcomposer.org/doc/00-intro.md#installation-windows" rel="nofollow">Windows installation instructions</a></p>
+<h2>Confirming installation</h2>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> Check version and list options</span>
+composer
+
+<span class="pl-c"><span class="pl-c">#</span> Get more help for options</span>
+composer <span class="pl-c1">help</span> require
+
+<span class="pl-c"><span class="pl-c">#</span> Check if Composer is able to do the things it needs, and if it's up to date</span>
+composer diagnose
+composer diag <span class="pl-c"><span class="pl-c">#</span> shorthand</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Updates the Composer binary to the latest version</span>
+composer self-update
+composer self <span class="pl-c"><span class="pl-c">#</span> shorthand</span></pre></div>
+<h1>Usage</h1>
+<p>Composer stores your project dependencies in <code class="notranslate">composer.json</code>. You can edit this file, but it is best to let Composer manage it for you.</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> Create a new project in the current folder</span>
+composer init
+<span class="pl-c"><span class="pl-c">#</span> runs an interactive questionnaire asking you for details about your project.  Leaving them blank is fine unless you are making other projects dependent on this one.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> If a composer.json file already exists, download the dependencies</span>
+composer install
+
+<span class="pl-c"><span class="pl-c">#</span> To download the just the production dependencies, i.e. excluding development dependencies</span>
+composer install --no-dev
+
+<span class="pl-c"><span class="pl-c">#</span> Add a production dependency to this project</span>
+composer require guzzlehttp/guzzle
+<span class="pl-c"><span class="pl-c">#</span> will figure out what the latest version of guzzlehttp/guzzle is, download it, and add the new dependency to composer.json's require field.</span>
+
+composer require guzzlehttp/guzzle:6.0.<span class="pl-k">*</span>
+<span class="pl-c"><span class="pl-c">#</span> will download the latest version matching the pattern (eg. 6.0.2) and add the dependency to composer.json's require field</span>
+
+composer require --dev phpunit/phpunit:<span class="pl-k">~</span>4.5.0
+<span class="pl-c"><span class="pl-c">#</span> will require as a development dependency. Will use the latest version &gt;=4.5.0 and &lt; 4.6.0</span>
+
+composer require-dev phpunit/phpunit:^4.5.0
+<span class="pl-c"><span class="pl-c">#</span> will require as a development dependency. Will use the latest version &gt;=4.5.0 and &lt; 5.0</span>
+
+<span class="pl-c"><span class="pl-c">#</span> For more information on Composer version matching, see [Composer's documentation on Versions](https://getcomposer.org/doc/articles/versions.md) for more details</span>
+
+<span class="pl-c"><span class="pl-c">#</span> To see what packages are available to install and currently installed</span>
+composer show
+
+<span class="pl-c"><span class="pl-c">#</span> To see what packages are currently installed</span>
+composer show --installed
+
+<span class="pl-c"><span class="pl-c">#</span> To find a package with 'mailgun' in its name or description</span>
+composer search mailgun</pre></div>
+<p><a href="https://packagist.org/" rel="nofollow">Packagist.org</a> is the main repository for Composer packages. Search there for existing third-party packages.</p>
+<h2><code class="notranslate">composer.json</code> vs <code class="notranslate">composer.lock</code></h2>
+<p>The <code class="notranslate">composer.json</code> file stores your project's floating version preferences for each dependency, along with other information.</p>
+<p>The <code class="notranslate">composer.lock</code> file stores exactly which version it has downloaded for each dependency. Never edit this file.</p>
+<p>If you include the <code class="notranslate">composer.lock</code> file in your git repository, every developer will install the currently used version of the dependency. Even when a new version of a dependency is released, Composer will continue to download the version recorded in the lock file.</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> If you want to update all the dependencies to their newest version still matching your version preferences</span>
+composer update
+
+<span class="pl-c"><span class="pl-c">#</span> If you want the new version of a particular dependency:</span>
+composer update phpunit/phpunit
+
+<span class="pl-c"><span class="pl-c">#</span> If you wish to migrate a package to a newer version preference, you may need to remove the older package and its dependencies first.</span>
+composer remove --dev phpunit/phpunit
+composer require --dev phpunit/phpunit:^5.0
+</pre></div>
+<h2>Autoloader</h2>
+<p>Composer creates an autoloader class you can require from your application. You can make instances of classes via their namespace.</p>
+<div class="highlight highlight-text-html-php"><pre class="notranslate"><span class="pl-k">require</span> __DIR__ . <span class="pl-s">'/vendor/autoload.php'</span>;
+
+<span class="pl-s1"><span class="pl-c1">$</span>mailgun</span> = <span class="pl-k">new</span> <span class="pl-v">Mailgun</span>\<span class="pl-v">Mailgun</span>("<span class="pl-s">key</span>");</pre></div>
+<h3>PSR-4 Autoloader</h3>
+<p>You can add your own namespaces to the autoloader.</p>
+<p>In <code class="notranslate">composer.json</code>, add a 'autoload' field:</p>
+<div class="highlight highlight-source-json"><pre class="notranslate">{
+  <span class="pl-ent">"autoload"</span>: {
+    <span class="pl-ent">"psr-4"</span>: {<span class="pl-ent">"Acme<span class="pl-cce">\\</span>"</span>: <span class="pl-s"><span class="pl-pds">"</span>src/<span class="pl-pds">"</span></span>}
+  }
+}</pre></div>
+<p>This will tell the autoloader to look for anything in the <code class="notranslate">\Acme\</code> namespace within the <code class="notranslate">src</code> folder.</p>
+<p>You can also <a href="https://getcomposer.org/doc/04-schema.md#autoload" rel="nofollow">use PSR-0, a Classmap or just a list of files to include</a>. There is also the <code class="notranslate">autoload-dev</code> field for development-only namespaces.</p>
+<p>When adding or modifying the autoload key, you will need to rebuild the autoloader:</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">composer dump-autoload
+composer dump <span class="pl-c"><span class="pl-c">#</span> shorthand</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Optimizes PSR0 and PSR4 packages to be loaded with classmaps too. Slow to run, but improves performance on production.</span>
+composer dump-autoload --optimize --no-dev</pre></div>
+<h1>Composer's Cache</h1>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> Composer will retain downloaded packages to use in the future. Clear it with:</span>
+composer clear-cache</pre></div>
+<h1>Troubleshooting</h1>
+<div class="highlight highlight-source-shell"><pre class="notranslate">composer diagnose
+composer self-update
+composer clear-cache</pre></div>
+<h2>Topics not (yet) covered in this tutorial</h2>
+<ul>
+<li>Creating and distributing your own packages on Packagist.org or elsewhere</li>
+<li>Pre- and post- script hooks: run tasks when certain composer events take place</li>
+</ul>
+<h3>References</h3>
+<ul>
+<li><a href="https://getcomposer.org/" rel="nofollow">Composer - Dependency Manager for PHP</a></li>
+<li><a href="https://packagist.org/" rel="nofollow">Packagist.org</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Brett Taylor", "https://github.com/glutnix"]
+</code></pre>

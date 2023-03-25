@@ -1,0 +1,208 @@
+<h1>Citron</h1>
+<div class="highlight highlight-source-ruby"><pre class="notranslate"><span class="pl-c"># Comments start with a '#'</span>
+<span class="pl-c"># All comments encompass a single line</span>
+
+<span class="pl-c">###########################################</span>
+<span class="pl-c">## 1. Primitive Data types and Operators</span>
+<span class="pl-c">###########################################</span>
+
+<span class="pl-c"># You have numbers</span>
+<span class="pl-c1">3</span><span class="pl-kos">.</span> <span class="pl-c"># 3</span>
+
+<span class="pl-c"># Numbers are all doubles in interpreted mode</span>
+
+<span class="pl-c"># Mathematical operator precedence is not respected.</span>
+<span class="pl-c"># binary 'operators' are evaluated in ltr order</span>
+<span class="pl-c1">1</span> + <span class="pl-c1">1</span><span class="pl-kos">.</span> <span class="pl-c"># 2</span><span class="pl-en"></span>
+<span class="pl-c1">8</span> - <span class="pl-c1">4</span><span class="pl-kos">.</span> <span class="pl-c"># 4</span>
+<span class="pl-c1">10</span> + <span class="pl-c1">2</span> * <span class="pl-c1">3</span><span class="pl-kos">.</span> <span class="pl-c"># 36</span>
+
+<span class="pl-c"># Division is always floating division</span>
+<span class="pl-c1">35</span> / <span class="pl-c1">2</span> <span class="pl-c"># 17.5.</span>
+
+<span class="pl-c"># Integer division is non-trivial, you may use floor</span>
+<span class="pl-kos">(</span><span class="pl-c1">35</span> / <span class="pl-c1">2</span><span class="pl-kos">)</span><span class="pl-kos"></span> <span class="pl-en">floor</span> <span class="pl-c"># 17.</span>
+
+<span class="pl-c"># Booleans are primitives</span>
+<span class="pl-v">True</span><span class="pl-kos">.</span>
+<span class="pl-en">False</span><span class="pl-kos">.</span>
+
+<span class="pl-c"># Boolean messages</span>
+<span class="pl-en">True</span> not<span class="pl-kos">.</span> <span class="pl-c"># False</span>
+<span class="pl-v">False</span> not<span class="pl-kos">.</span> <span class="pl-c"># True</span>
+<span class="pl-c1">1</span> <span class="pl-c1">=</span> <span class="pl-c1">1</span><span class="pl-kos">.</span> <span class="pl-c"># True</span><span class="pl-en"></span>
+<span class="pl-c1">1</span> !=: <span class="pl-c1">1</span><span class="pl-kos">.</span> <span class="pl-c"># False</span>
+<span class="pl-c1">1</span> &lt; <span class="pl-c1">10</span><span class="pl-kos">.</span> <span class="pl-c"># True</span>
+
+<span class="pl-c"># Here, `not` is a unary message to the object `Boolean`</span>
+<span class="pl-c"># Messages are comparable to instance method calls</span>
+<span class="pl-c"># And they have three different forms:</span>
+<span class="pl-c">#   1. Unary messages: Length &gt; 1, and they take no arguments:</span>
+        <span class="pl-en">False</span> <span class="pl-en">not</span><span class="pl-kos">.</span>
+<span class="pl-c">#   2. Binary Messages: Length = 1, and they take a single argument:</span>
+        <span class="pl-en">False</span> &amp; <span class="pl-v">True</span><span class="pl-kos">.</span>
+<span class="pl-c">#   3. Keyword messages: must have at least one ':', they take as many arguments</span>
+<span class="pl-c">#      as they have `:` s</span>
+        <span class="pl-en">False</span> <span class="pl-en">either</span>: <span class="pl-c1">1</span> <span class="pl-pds">or</span>: <span class="pl-c1">2</span><span class="pl-kos">.</span> <span class="pl-c"># 2</span>
+
+<span class="pl-c"># Strings</span>
+'<span class="pl-v">This</span> <span class="pl-en">is</span> <span class="pl-en">a</span> <span class="pl-en">string</span>'<span class="pl-kos">.</span>
+'<span class="pl-v">There</span> <span class="pl-en">are</span> <span class="pl-en">no</span> <span class="pl-en">character</span> <span class="pl-en">types</span> <span class="pl-en">exposed</span> <span class="pl-en">to</span> <span class="pl-en">the</span> <span class="pl-en">user</span>'<span class="pl-kos">.</span>
+<span class="pl-c"># "You cannot use double quotes for strings" &lt;- Error</span>
+
+<span class="pl-c"># Strins can be summed</span>
+'<span class="pl-en">Hello</span><span class="pl-kos">,</span> <span class="pl-s">' + '</span><span class="pl-pds">World!</span><span class="pl-s">'. # '</span><span class="pl-v">Hello</span><span class="pl-kos">,</span> <span class="pl-pds">World!</span><span class="pl-s">'</span>
+<span class="pl-s"></span>
+<span class="pl-s"># Strings allow access to their characters</span>
+<span class="pl-s">'</span><span class="pl-v">This</span> <span class="pl-en">is</span> <span class="pl-en">a</span> <span class="pl-en">beautiful</span> <span class="pl-en">string</span><span class="pl-s">' at: 0. # '</span><span class="pl-c1">T</span><span class="pl-s">'</span>
+<span class="pl-s"></span>
+<span class="pl-s">###########################################</span>
+<span class="pl-s">## intermission: Basic Assignment</span>
+<span class="pl-s">###########################################</span>
+<span class="pl-s"></span>
+<span class="pl-s"># You may assign values to the current scope:</span>
+<span class="pl-s">var name is value. # assigns `value` into `name`</span>
+<span class="pl-s"></span>
+<span class="pl-s"># You may also assign values into the current object'</span><span class="pl-en">s</span> <span class="pl-en">namespace</span>
+<span class="pl-en">my</span> <span class="pl-en">name</span> <span class="pl-en">is</span> <span class="pl-en">value</span><span class="pl-kos">.</span> <span class="pl-c"># assigns `value` into the current object's `name` property</span>
+
+<span class="pl-c"># Please note that these names are checked at compile (read parse if in interpreted mode) time</span>
+<span class="pl-c"># but you may treat them as dynamic assignments anyway</span>
+
+<span class="pl-c">###########################################</span>
+<span class="pl-c">## 2. Lists(Arrays?) and Tuples</span>
+<span class="pl-c">###########################################</span>
+
+<span class="pl-c"># Arrays are allowed to have multiple types</span>
+<span class="pl-en">Array</span> <span class="pl-en">new</span> &lt; <span class="pl-c1">1</span> <span class="pl-kos">;</span> <span class="pl-c1">2</span> <span class="pl-kos">;</span> '<span class="pl-en">string</span>' <span class="pl-kos">;</span> <span class="pl-v">Nil</span><span class="pl-kos">.</span> <span class="pl-c"># Array new &lt; 1 ; 2 ; 'string' ; Nil</span>
+
+<span class="pl-c"># Tuples act like arrays, but are immutable.</span>
+<span class="pl-c"># Any shenanigans degrade them to arrays, however</span>
+<span class="pl-kos">[</span><span class="pl-c1">1</span><span class="pl-kos">,</span> <span class="pl-c1">2</span><span class="pl-kos">,</span> <span class="pl-s">'string'</span><span class="pl-kos">]</span><span class="pl-kos">.</span> <span class="pl-c"># [1, 2, 'string']</span>
+
+<span class="pl-c"># They can interoperate with arrays</span>
+<span class="pl-kos">[</span><span class="pl-c1">1</span><span class="pl-kos">,</span> <span class="pl-s">'string'</span><span class="pl-kos">]</span> + <span class="pl-kos">(</span><span class="pl-en">Array</span> <span class="pl-en">new</span> &lt; <span class="pl-s">'wat'</span><span class="pl-kos">)</span><span class="pl-kos">.</span> <span class="pl-c"># Array new &lt; 1 ; 'string' ; 'wat'</span>
+
+<span class="pl-c"># Indexing into them</span>
+<span class="pl-kos">[</span><span class="pl-c1">1</span><span class="pl-kos">,</span> <span class="pl-c1">2</span><span class="pl-kos">,</span> <span class="pl-c1">3</span><span class="pl-kos">]</span> <span class="pl-en">at</span>: <span class="pl-c1">1</span><span class="pl-kos">.</span> <span class="pl-c"># 2</span>
+
+<span class="pl-c"># Some array operations</span>
+<span class="pl-en">var</span> <span class="pl-en">arr</span> <span class="pl-en">is</span> <span class="pl-v">Array</span> <span class="pl-en">new</span> &lt; <span class="pl-c1">1</span> <span class="pl-kos">;</span> <span class="pl-c1">2</span> <span class="pl-kos">;</span> <span class="pl-c1">3</span><span class="pl-kos">.</span>
+
+<span class="pl-en">arr</span> <span class="pl-en">head</span><span class="pl-kos">.</span> <span class="pl-c"># 1</span>
+<span class="pl-en">arr</span> <span class="pl-en">tail</span><span class="pl-kos">.</span> <span class="pl-c"># Array new &lt; 2 ; 3.</span>
+<span class="pl-en">arr</span> <span class="pl-en">init</span><span class="pl-kos">.</span> <span class="pl-c"># Array new &lt; 1 ; 2.</span>
+<span class="pl-en">arr</span> <span class="pl-en">last</span><span class="pl-kos">.</span> <span class="pl-c"># 3</span>
+<span class="pl-en">arr</span> <span class="pl-en">push</span>: <span class="pl-c1">4</span><span class="pl-kos">.</span> <span class="pl-c"># Array new &lt; 1 ; 2 ; 3 ; 4.</span>
+<span class="pl-en">arr</span> <span class="pl-en">pop</span><span class="pl-kos">.</span> <span class="pl-c"># 4</span>
+<span class="pl-en">arr</span> <span class="pl-en">pop</span>: <span class="pl-c1">1</span><span class="pl-kos">.</span> <span class="pl-c"># 2, `arr` is rebound to Array new &lt; 1 ; 3.</span>
+
+<span class="pl-c"># List comprehensions</span>
+<span class="pl-kos">[</span><span class="pl-en">x</span> * <span class="pl-c1">2</span> + <span class="pl-en">y</span><span class="pl-kos">,</span><span class="pl-kos">,</span> <span class="pl-s1">arr</span><span class="pl-kos">,</span> <span class="pl-s1">arr</span> + <span class="pl-kos">[</span><span class="pl-c1">4</span><span class="pl-kos">,</span> <span class="pl-c1">5</span><span class="pl-kos">]</span><span class="pl-kos">,</span><span class="pl-kos">,</span> <span class="pl-en">x</span> &gt; <span class="pl-c1">1</span><span class="pl-kos">]</span><span class="pl-kos">.</span> <span class="pl-c"># Array ← 7 ; 9 ; 10 ; 11</span>
+<span class="pl-c"># fresh variable names are bound as they are encountered,</span>
+<span class="pl-c"># so `x` is bound to the values in `arr`</span>
+<span class="pl-c"># and `y` is bound to the values in `arr + [4, 5]`</span>
+<span class="pl-c">#</span>
+<span class="pl-c"># The general format is: [expr,, bindings*,, predicates*]</span>
+
+
+<span class="pl-c">####################################</span>
+<span class="pl-c">## 3. Functions</span>
+<span class="pl-c">####################################</span>
+
+<span class="pl-c"># A simple function that takes two variables</span>
+<span class="pl-en">var</span> <span class="pl-en">add</span> <span class="pl-en">is</span> <span class="pl-kos">{</span><span class="pl-pds">:a</span>:<span class="pl-en">b</span> ^<span class="pl-en">a</span> + <span class="pl-en">b</span><span class="pl-kos">.</span><span class="pl-kos">}</span><span class="pl-kos">.</span>
+
+<span class="pl-c"># this function will resolve all its names except the formal arguments</span>
+<span class="pl-c"># in the context it is called in.</span>
+
+<span class="pl-c"># Using the function</span>
+<span class="pl-en">add</span> <span class="pl-en">applyTo</span>: <span class="pl-c1">3</span> <span class="pl-pds">and</span>: <span class="pl-c1">5</span><span class="pl-kos">.</span> <span class="pl-c"># 8</span>
+<span class="pl-en">add</span> <span class="pl-en">applyAll</span>: <span class="pl-kos">[</span><span class="pl-c1">3</span><span class="pl-kos">,</span> <span class="pl-c1">5</span><span class="pl-kos">]</span><span class="pl-kos">.</span> <span class="pl-c"># 8</span>
+
+<span class="pl-c"># Also a (customizable -- more on this later) pseudo-operator allows for a shorthand</span>
+<span class="pl-c"># of function calls</span>
+<span class="pl-c"># By default it is REF[args]</span>
+
+<span class="pl-en">add</span><span class="pl-kos">[</span><span class="pl-c1">3</span><span class="pl-kos">,</span> <span class="pl-c1">5</span><span class="pl-kos">]</span><span class="pl-kos">.</span> <span class="pl-c"># 8</span>
+
+<span class="pl-c"># To customize this behaviour, you may simply use a compiler pragma:</span>
+<span class="pl-c">#:callShorthand ()</span>
+
+<span class="pl-c"># And then you may use the specified operator.</span>
+<span class="pl-c"># Note that the allowed 'operator' can only be made of any of these: []{}()</span>
+<span class="pl-c"># And you may mix-and-match (why would anyone do that?)</span>
+
+<span class="pl-en">add</span><span class="pl-kos">(</span><span class="pl-c1">3</span><span class="pl-kos">,</span> <span class="pl-c1">5</span><span class="pl-kos">)</span><span class="pl-kos">.</span> <span class="pl-c"># 8</span>
+
+<span class="pl-c"># You may also use functions as operators in the following way:</span>
+
+<span class="pl-c1">3</span> `<span class="pl-en">add</span>` <span class="pl-c1">5</span><span class="pl-kos">.</span> <span class="pl-c"># 8</span>
+<span class="pl-c"># This call binds as such: add[(3), 5]</span>
+<span class="pl-c"># because the default fixity is left, and the default precedence is 1</span>
+
+<span class="pl-c"># You may change the precedence/fixity of this operator with a pragma</span>
+<span class="pl-c">#:declare infixr 1 add</span>
+
+<span class="pl-c1">3</span> `<span class="pl-en">add</span><span class="pl-s">` 5. # 8</span>
+<span class="pl-s"># now this binds as such: add[3, (5)].</span>
+<span class="pl-s"></span>
+<span class="pl-s"># There is another form of functions too</span>
+<span class="pl-s"># So far, the functions were resolved in a dynamic fashion</span>
+<span class="pl-s"># But a lexically scoped block is also possible</span>
+<span class="pl-s">var sillyAdd is {<span class="pl-cce">\:</span>x:y add[x,y].}.</span>
+<span class="pl-s"></span>
+<span class="pl-s"># In these blocks, you are not allowed to declare new variables</span>
+<span class="pl-s"># Except with the use of Object::'letEqual:in:`</span>
+<span class="pl-c"># And the last expression is implicitly returned.</span>
+
+<span class="pl-c"># You may also use a shorthand for lambda expressions</span>
+<span class="pl-en">var</span> <span class="pl-en">mul</span> <span class="pl-en">is</span> \:<span class="pl-pds">x</span><span class="pl-pds">:y</span> <span class="pl-en">x</span> * <span class="pl-en">y</span><span class="pl-kos">.</span>
+
+<span class="pl-c"># These capture the named bindings that are not present in their</span>
+<span class="pl-c"># formal parameters, and retain them. (by ref)</span>
+
+<span class="pl-c">###########################################</span>
+<span class="pl-c">## 5. Control Flow</span>
+<span class="pl-c">###########################################</span>
+
+<span class="pl-c"># inline conditional-expressions</span>
+<span class="pl-en">var</span> <span class="pl-en">citron</span> <span class="pl-en">is</span> <span class="pl-c1">1</span> <span class="pl-c1">=</span> <span class="pl-c1">1</span> <span class="pl-en">either</span>: <span class="pl-s">'awesome'</span> <span class="pl-k">or</span>: <span class="pl-s">'awful'</span><span class="pl-kos">.</span> <span class="pl-c"># citron is 'awesome'</span>
+
+<span class="pl-c"># multiple lines is fine too</span>
+<span class="pl-en">var</span> <span class="pl-en">citron</span> <span class="pl-s1">is</span> <span class="pl-c1">1</span> <span class="pl-c1">=</span> <span class="pl-c1">1</span>
+    <span class="pl-en">either</span>: <span class="pl-s">'awesome'</span>
+    <span class="pl-en">or</span>:     <span class="pl-s">'awful'</span><span class="pl-kos">.</span>
+
+<span class="pl-c"># looping</span>
+<span class="pl-c1">10</span> <span class="pl-pds">times</span>: <span class="pl-kos">{</span><span class="pl-pds">:x</span>
+    <span class="pl-v">Pen</span> <span class="pl-pds">writeln</span>: <span class="pl-en">x</span><span class="pl-kos">.</span>
+<span class="pl-kos">}</span><span class="pl-kos">.</span> <span class="pl-c"># 10. -- side effect: 10 lines in stdout, with numbers 0 through 9 in them</span>
+
+<span class="pl-c"># Citron properly supports tail-call recursion in lexically scoped blocks</span>
+<span class="pl-c"># So use those to your heart's desire</span>
+
+<span class="pl-c"># mapping most data structures is as simple as `fmap:`</span>
+<span class="pl-kos">[</span><span class="pl-c1">1</span><span class="pl-kos">,</span> <span class="pl-c1">2</span><span class="pl-kos">,</span> <span class="pl-c1">3</span><span class="pl-kos">,</span> <span class="pl-c1">4</span><span class="pl-kos">]</span> <span class="pl-en">fmap</span>: \:<span class="pl-en">x</span> <span class="pl-en">x</span> + <span class="pl-c1">1</span><span class="pl-kos">.</span> <span class="pl-c"># [2, 3, 4, 5]</span>
+
+<span class="pl-c"># You can use `foldl:accumulator:` to fold a list/tuple</span>
+<span class="pl-kos">[</span><span class="pl-c1">1</span><span class="pl-kos">,</span> <span class="pl-c1">2</span><span class="pl-kos">,</span> <span class="pl-c1">3</span><span class="pl-kos">,</span> <span class="pl-c1">4</span><span class="pl-kos">]</span> <span class="pl-en">foldl</span>: <span class="pl-kos">(</span>\:<span class="pl-pds">acc</span>:<span class="pl-en">x</span> <span class="pl-en">acc</span> * <span class="pl-c1">2</span> + <span class="pl-en">x</span><span class="pl-kos">)</span> <span class="pl-pds">accumulator</span>: <span class="pl-c1">4</span><span class="pl-kos">.</span> <span class="pl-c"># 90</span>
+
+<span class="pl-c"># That expression is the same as</span>
+<span class="pl-kos">(</span><span class="pl-c1">2</span> * <span class="pl-kos">(</span><span class="pl-c1">2</span> * <span class="pl-kos">(</span><span class="pl-c1">2</span> * <span class="pl-kos">(</span><span class="pl-c1">2</span> * <span class="pl-c1">4</span> + <span class="pl-c1">1</span><span class="pl-kos">)</span> + <span class="pl-c1">2</span><span class="pl-kos">)</span> + <span class="pl-c1">3</span><span class="pl-kos">)</span> + <span class="pl-c1">4</span><span class="pl-kos">)</span>
+
+<span class="pl-c">###################################</span>
+<span class="pl-c">## 6. IO</span>
+<span class="pl-c">###################################</span>
+
+<span class="pl-c"># IO is quite simple</span>
+<span class="pl-c"># With `Pen` being used for console output</span>
+<span class="pl-c"># and Program::'input' and Program::'waitForInput' being used for console input</span>
+
+<span class="pl-en">Pen</span> <span class="pl-pds">writeln</span>: <span class="pl-s">'Hello, ocean!'</span> <span class="pl-c"># prints 'Hello, ocean!\n' to the terminal</span>
+
+<span class="pl-en">Pen</span> <span class="pl-pds">writeln</span>: <span class="pl-v">Program</span> <span class="pl-en">waitForInput</span><span class="pl-kos">.</span> <span class="pl-c"># reads a line and prints it back</span><span class="pl-en"></span></pre></div>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["AnotherTest", ""]
+</code></pre>

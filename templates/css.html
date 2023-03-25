@@ -1,0 +1,291 @@
+<h1>CSS</h1>
+<p>Web pages are built with HTML, which specifies the content of a page.<br>
+CSS (Cascading Style Sheets) is a separate language which specifies<br>
+a page's <strong>appearance</strong>.</p>
+<p>CSS code is made of static <em>rules</em>. Each rule takes one or more <em>selectors</em> and<br>
+gives specific <em>values</em> to a number of visual <em>properties</em>. Those properties are<br>
+then applied to the page elements indicated by the selectors.</p>
+<p>This guide has been written with CSS 2 in mind, which is extended by the new<br>
+features of CSS 3.</p>
+<p><strong>NOTE:</strong> Because CSS produces visual results, in order to learn it, you need to<br>
+try everything in a CSS playground like <a href="http://dabblet.com/" rel="nofollow">dabblet</a>.<br>
+The main focus of this article is on the syntax and some general tips.</p>
+<h2>Syntax</h2>
+<div class="highlight highlight-source-css"><pre class="notranslate"><span class="pl-c">/* comments appear inside slash-asterisk, just like this line!</span>
+<span class="pl-c">   there are no "one-line comments"; this is the only comment style */</span>
+
+<span class="pl-c">/* ####################</span>
+<span class="pl-c">   ## SELECTORS</span>
+<span class="pl-c">   #################### */</span>
+
+<span class="pl-c">/* the selector is used to target an element on a page. */</span>
+<span class="pl-ent">selector</span> { <span class="pl-c1">property</span><span class="pl-kos">:</span> value; <span class="pl-c">/* more properties...*/</span> }
+
+<span class="pl-c">/*</span>
+<span class="pl-c">Here is an example element:</span>
+<span class="pl-c"></span>
+<span class="pl-c">&lt;div class='class1 class2' id='anID' attr='value' otherAttr='en-us foo bar' /&gt;</span>
+<span class="pl-c">*/</span>
+
+<span class="pl-c">/* You can target it using one of its CSS classes */</span>
+.<span class="pl-c1">class1</span> { }
+
+<span class="pl-c">/* or both classes! */</span>
+.<span class="pl-c1">class1</span>.<span class="pl-c1">class2</span> { }
+
+<span class="pl-c">/* or its name */</span>
+<span class="pl-ent">div</span> { }
+
+<span class="pl-c">/* or its id */</span>
+<span class="pl-kos">#</span><span class="pl-c1">anID</span> { }
+
+<span class="pl-c">/* or using the fact that it has an attribute! */</span>
+[<span class="pl-c1">attr</span>] { <span class="pl-c1">font-size</span><span class="pl-kos">:</span>smaller; }
+
+<span class="pl-c">/* or that the attribute has a specific value */</span>
+[<span class="pl-c1">attr</span><span class="pl-c1">=</span><span class="pl-s">'value'</span>] { <span class="pl-c1">font-size</span><span class="pl-kos">:</span>smaller; }
+
+<span class="pl-c">/* starts with a value (CSS 3) */</span>
+[<span class="pl-c1">attr</span><span class="pl-c1">^=</span><span class="pl-s">'val'</span>] { <span class="pl-c1">font-size</span><span class="pl-kos">:</span>smaller; }
+
+<span class="pl-c">/* or ends with a value (CSS 3) */</span>
+[<span class="pl-c1">attr</span><span class="pl-c1">$=</span><span class="pl-s">'ue'</span>] { <span class="pl-c1">font-size</span><span class="pl-kos">:</span>smaller; }
+
+<span class="pl-c">/* or contains a value in a space-separated list */</span>
+[<span class="pl-c1">otherAttr</span><span class="pl-c1">~=</span><span class="pl-s">'foo'</span>] { }
+[<span class="pl-c1">otherAttr</span><span class="pl-c1">~=</span><span class="pl-s">'bar'</span>] { }
+
+<span class="pl-c">/* or contains a value in a dash-separated list, e.g., "-" (U+002D) */</span>
+[<span class="pl-c1">otherAttr</span><span class="pl-c1">|=</span><span class="pl-s">'en'</span>] { <span class="pl-c1">font-size</span><span class="pl-kos">:</span>smaller; }
+
+
+<span class="pl-c">/* You can combine different selectors to create a more focused selector. Don't</span>
+<span class="pl-c">   put spaces between them. */</span>
+<span class="pl-ent">div</span>.<span class="pl-c1">some-class</span>[<span class="pl-c1">attr</span><span class="pl-c1">$=</span><span class="pl-s">'ue'</span>] { }
+
+<span class="pl-c">/* You can select an element which is a child of another element */</span>
+<span class="pl-ent">div</span>.<span class="pl-c1">some-parent</span> <span class="pl-c1">&gt;</span> .<span class="pl-c1">class-name</span> { }
+
+<span class="pl-c">/* or a descendant of another element. Children are the direct descendants of</span>
+<span class="pl-c">   their parent element, only one level down the tree. Descendants can be any</span>
+<span class="pl-c">   level down the tree. */</span>
+<span class="pl-ent">div</span>.<span class="pl-c1">some-parent</span> .<span class="pl-c1">class-name</span> { }
+
+<span class="pl-c">/* Warning: the same selector without a space has another meaning.</span>
+<span class="pl-c">   Can you guess what? */</span>
+<span class="pl-ent">div</span>.<span class="pl-c1">some-parent</span>.<span class="pl-c1">class-name</span> { }
+
+<span class="pl-c">/* You may also select an element based on its adjacent sibling */</span>
+.<span class="pl-c1">i-am-just-before</span> <span class="pl-c1">+</span> .<span class="pl-c1">this-element</span> { }
+
+<span class="pl-c">/* or any sibling preceding it */</span>
+.<span class="pl-c1">i-am-any-element-before</span> <span class="pl-c1">~</span> .<span class="pl-c1">this-element</span> { }
+
+<span class="pl-c">/* There are some selectors called pseudo classes that can be used to select an</span>
+<span class="pl-c">   element only when it is in a particular state */</span>
+
+<span class="pl-c">/* for example, when the cursor hovers over an element */</span>
+<span class="pl-ent">selector</span><span class="pl-kos">:</span><span class="pl-c1">hover</span> { }
+
+<span class="pl-c">/* or a link has been visited */</span>
+<span class="pl-ent">selector</span><span class="pl-kos">:</span><span class="pl-c1">visited</span> { }
+
+<span class="pl-c">/* or hasn't been visited */</span>
+<span class="pl-ent">selected</span><span class="pl-kos">:</span><span class="pl-c1">link</span> { }
+
+<span class="pl-c">/* or an element is in focus */</span>
+<span class="pl-ent">selected</span><span class="pl-kos">:</span><span class="pl-c1">focus</span> { }
+
+<span class="pl-c">/* any element that is the first child of its parent */</span>
+<span class="pl-ent">selector</span><span class="pl-kos">:</span><span class="pl-c1">first-child</span> {}
+
+<span class="pl-c">/* any element that is the last child of its parent */</span>
+<span class="pl-ent">selector</span><span class="pl-kos">:</span><span class="pl-c1">last-child</span> {}
+
+<span class="pl-c">/* Just like pseudo classes, pseudo elements allow you to style certain parts of</span>
+<span class="pl-c">    a document  */</span>
+
+<span class="pl-c">/* matches a virtual first child of the selected element */</span>
+<span class="pl-ent">selector</span>::<span class="pl-ent">before</span> {}
+
+<span class="pl-c">/* matches a virtual last child of the selected element */</span>
+<span class="pl-ent">selector</span>::<span class="pl-ent">after</span> {}
+
+<span class="pl-c">/* At appropriate places, an asterisk may be used as a wildcard to select every</span>
+<span class="pl-c">   element */</span>
+<span class="pl-ent"><span class="pl-c1">*</span></span> { } <span class="pl-c">/* all elements */</span>
+.<span class="pl-c1">parent</span> <span class="pl-c1">*</span> { } <span class="pl-c">/* all descendants */</span>
+.<span class="pl-c1">parent</span> <span class="pl-c1">&gt;</span> <span class="pl-ent"><span class="pl-c1">*</span></span> { } <span class="pl-c">/* all children */</span>
+
+<span class="pl-c">/* Group any number of selectors to define styles that affect all selectors</span>
+<span class="pl-c">   in the group */</span>
+<span class="pl-ent">selector1</span><span class="pl-kos">,</span> <span class="pl-ent">selector2</span> { }
+
+<span class="pl-c">/* ####################</span>
+<span class="pl-c">   ## PROPERTIES</span>
+<span class="pl-c">   #################### */</span>
+
+<span class="pl-ent">selector</span> {
+
+    <span class="pl-c">/* Units of length can be absolute or relative. */</span>
+
+    <span class="pl-c">/* Relative units */</span>
+    <span class="pl-c1">width</span><span class="pl-kos">:</span> <span class="pl-c1">50<span class="pl-smi">%</span></span>;       <span class="pl-c">/* percentage of parent element width */</span>
+    <span class="pl-c1">font-size</span><span class="pl-kos">:</span> <span class="pl-c1">2<span class="pl-smi">em</span></span>;   <span class="pl-c">/* multiples of element's original font-size */</span>
+    <span class="pl-c1">font-size</span><span class="pl-kos">:</span> <span class="pl-c1">2<span class="pl-smi">rem</span></span>;  <span class="pl-c">/* or the root element's font-size */</span>
+    <span class="pl-c1">font-size</span><span class="pl-kos">:</span> <span class="pl-c1">2<span class="pl-smi">vw</span></span>;   <span class="pl-c">/* multiples of 1% of the viewport's width (CSS 3) */</span>
+    <span class="pl-c1">font-size</span><span class="pl-kos">:</span> <span class="pl-c1">2<span class="pl-smi">vh</span></span>;   <span class="pl-c">/* or its height */</span>
+    <span class="pl-c1">font-size</span><span class="pl-kos">:</span> <span class="pl-c1">2<span class="pl-smi">vmin</span></span>; <span class="pl-c">/* whichever of a vh or a vw is smaller */</span>
+    <span class="pl-c1">font-size</span><span class="pl-kos">:</span> <span class="pl-c1">2<span class="pl-smi">vmax</span></span>; <span class="pl-c">/* or greater */</span>
+
+    <span class="pl-c">/* Absolute units */</span>
+    <span class="pl-c1">width</span><span class="pl-kos">:</span> <span class="pl-c1">200<span class="pl-smi">px</span></span>;     <span class="pl-c">/* pixels */</span>
+    <span class="pl-c1">font-size</span><span class="pl-kos">:</span> <span class="pl-c1">20<span class="pl-smi">pt</span></span>;  <span class="pl-c">/* points */</span>
+    <span class="pl-c1">width</span><span class="pl-kos">:</span> <span class="pl-c1">5<span class="pl-smi">cm</span></span>;       <span class="pl-c">/* centimeters */</span>
+    <span class="pl-c1">min-width</span><span class="pl-kos">:</span> <span class="pl-c1">50<span class="pl-smi">mm</span></span>;  <span class="pl-c">/* millimeters */</span>
+    <span class="pl-c1">max-width</span><span class="pl-kos">:</span> <span class="pl-c1">5<span class="pl-smi">in</span></span>;   <span class="pl-c">/* inches */</span>
+
+    <span class="pl-c">/* Colors */</span>
+    <span class="pl-c1">color</span><span class="pl-kos">:</span> <span class="pl-pds"><span class="pl-kos">#</span>F6E</span>;                    <span class="pl-c">/* short hex format */</span>
+    <span class="pl-c1">color</span><span class="pl-kos">:</span> <span class="pl-pds"><span class="pl-kos">#</span>FF66EE</span>;                 <span class="pl-c">/* long hex format */</span>
+    <span class="pl-c1">color</span><span class="pl-kos">:</span> tomato;                  <span class="pl-c">/* a named color */</span>
+    <span class="pl-c1">color</span><span class="pl-kos">:</span> <span class="pl-en">rgb</span>(<span class="pl-c1">255</span><span class="pl-kos">,</span> <span class="pl-c1">255</span><span class="pl-kos">,</span> <span class="pl-c1">255</span>);      <span class="pl-c">/* as rgb values */</span>
+    <span class="pl-c1">color</span><span class="pl-kos">:</span> <span class="pl-en">rgb</span>(<span class="pl-c1">10<span class="pl-smi">%</span></span><span class="pl-kos">,</span> <span class="pl-c1">20<span class="pl-smi">%</span></span><span class="pl-kos">,</span> <span class="pl-c1">50<span class="pl-smi">%</span></span>);      <span class="pl-c">/* as rgb percentages */</span>
+    <span class="pl-c1">color</span><span class="pl-kos">:</span> <span class="pl-en">rgba</span>(<span class="pl-c1">255</span><span class="pl-kos">,</span> <span class="pl-c1">0</span><span class="pl-kos">,</span> <span class="pl-c1">0</span><span class="pl-kos">,</span> <span class="pl-c1">0.3</span>);    <span class="pl-c">/* as rgba values (CSS 3) Note: 0 &lt;= a &lt;= 1 */</span>
+    <span class="pl-c1">color</span><span class="pl-kos">:</span> transparent;             <span class="pl-c">/* equivalent to setting the alpha to 0 */</span>
+    <span class="pl-c1">color</span><span class="pl-kos">:</span> <span class="pl-en">hsl</span>(<span class="pl-c1">0</span><span class="pl-kos">,</span> <span class="pl-c1">100<span class="pl-smi">%</span></span><span class="pl-kos">,</span> <span class="pl-c1">50<span class="pl-smi">%</span></span>);       <span class="pl-c">/* as hsl percentages (CSS 3) */</span>
+    <span class="pl-c1">color</span><span class="pl-kos">:</span> <span class="pl-en">hsla</span>(<span class="pl-c1">0</span><span class="pl-kos">,</span> <span class="pl-c1">100<span class="pl-smi">%</span></span><span class="pl-kos">,</span> <span class="pl-c1">50<span class="pl-smi">%</span></span><span class="pl-kos">,</span> <span class="pl-c1">0.3</span>); <span class="pl-c">/* as hsl percentages with alpha */</span>
+
+    <span class="pl-c">/* Borders */</span>
+    <span class="pl-c1">border-width</span><span class="pl-kos">:</span><span class="pl-c1">5<span class="pl-smi">px</span></span>;
+    <span class="pl-c1">border-style</span><span class="pl-kos">:</span>solid;
+    <span class="pl-c1">border-color</span><span class="pl-kos">:</span>red;      <span class="pl-c">/* similar to how background-color is set */</span>
+    <span class="pl-c1">border</span><span class="pl-kos">:</span> <span class="pl-c1">5<span class="pl-smi">px</span></span> solid red; <span class="pl-c">/* this is a short hand approach for the same */</span>
+    <span class="pl-c1">border-radius</span><span class="pl-kos">:</span><span class="pl-c1">20<span class="pl-smi">px</span></span>;    <span class="pl-c">/* this is a CSS3 property */</span>
+
+    <span class="pl-c">/* Images as backgrounds of elements */</span>
+    <span class="pl-c1">background-image</span><span class="pl-kos">:</span> <span class="pl-en">url</span>(/img-path/img.jpg); <span class="pl-c">/* quotes inside url() optional */</span>
+
+    <span class="pl-c">/* Fonts */</span>
+    <span class="pl-c1">font-family</span><span class="pl-kos">:</span> Arial;
+    <span class="pl-c">/* if the font family name has a space, it must be quoted */</span>
+    <span class="pl-c1">font-family</span><span class="pl-kos">:</span> <span class="pl-s">"Courier New"</span>;
+    <span class="pl-c">/* if the first one is not found, the browser uses the next, and so on */</span>
+    <span class="pl-c1">font-family</span><span class="pl-kos">:</span> <span class="pl-s">"Courier New"</span><span class="pl-kos">,</span> Trebuchet<span class="pl-kos">,</span> Arial<span class="pl-kos">,</span> sans-serif;
+}</pre></div>
+<h2>Usage</h2>
+<p>Save a CSS stylesheet with the extension <code class="notranslate">.css</code>.</p>
+<div class="highlight highlight-text-html-basic"><pre class="notranslate"><span class="pl-c">&lt;!-- You need to include the css file in your page's &lt;head&gt;. This is the</span>
+<span class="pl-c">     recommended method. Refer to http://stackoverflow.com/questions/8284365 --&gt;</span>
+<span class="pl-kos">&lt;</span><span class="pl-ent">link</span> <span class="pl-c1">rel</span>='<span class="pl-s">stylesheet</span>' <span class="pl-c1">type</span>='<span class="pl-s">text/css</span>' <span class="pl-c1">href</span>='<span class="pl-s">path/to/style.css</span>'<span class="pl-kos">&gt;</span>
+
+<span class="pl-c">&lt;!-- You can also include some CSS inline in your markup. --&gt;</span>
+<span class="pl-kos">&lt;</span><span class="pl-ent">style</span><span class="pl-kos">&gt;</span>
+   <span class="pl-ent">a</span> { <span class="pl-c1">color</span><span class="pl-kos">:</span> purple; }
+<span class="pl-kos">&lt;/</span><span class="pl-ent">style</span><span class="pl-kos">&gt;</span>
+
+<span class="pl-c">&lt;!-- Or directly set CSS properties on the element. --&gt;</span>
+<span class="pl-kos">&lt;</span><span class="pl-ent">div</span> <span class="pl-c1">style</span>="<span class="pl-s">border: 1px solid red;</span>"<span class="pl-kos">&gt;</span>
+<span class="pl-kos">&lt;/</span><span class="pl-ent">div</span><span class="pl-kos">&gt;</span></pre></div>
+<h2>Precedence or Cascade</h2>
+<p>An element may be targeted by multiple selectors and may have a property set on<br>
+it in more than once. In these cases, one of the rules takes precedence over<br>
+others. Rules with a more specific selector take precedence over a less specific<br>
+one, and a rule occurring later in the stylesheet overwrites a previous one<br>
+(which also means that if two different linked stylesheets contain rules for an<br>
+element and if the rules are of the same specificity, then order of linking<br>
+would take precedence and the sheet linked latest would govern styling) .</p>
+<p>This process is called cascading, hence the name Cascading Style Sheets.</p>
+<p>Given the following CSS:</p>
+<div class="highlight highlight-source-css"><pre class="notranslate"><span class="pl-c">/* A */</span>
+<span class="pl-ent">p</span>.<span class="pl-c1">class1</span>[<span class="pl-c1">attr</span><span class="pl-c1">=</span><span class="pl-s">'value'</span>]
+
+<span class="pl-c">/* B */</span>
+<span class="pl-ent">p</span>.<span class="pl-c1">class1</span> { }
+
+<span class="pl-c">/* C */</span>
+<span class="pl-ent">p</span>.<span class="pl-c1">class2</span> { }
+
+<span class="pl-c">/* D */</span>
+<span class="pl-ent">p</span> { }
+
+<span class="pl-c">/* E */</span>
+<span class="pl-ent">p</span> { <span class="pl-c1">property</span><span class="pl-kos">:</span> value <span class="pl-k">!important</span>; }</pre></div>
+<p>and the following markup:</p>
+<div class="highlight highlight-text-html-basic"><pre class="notranslate"><span class="pl-kos">&lt;</span><span class="pl-ent">p</span> <span class="pl-c1">style</span>='<span class="pl-s">/*F*/ property:value;</span>' <span class="pl-c1">class</span>='<span class="pl-s">class1 class2</span>' <span class="pl-c1">attr</span>='<span class="pl-s">value</span>'<span class="pl-kos">&gt;</span></pre></div>
+<p>The precedence of style is as follows. Remember, the precedence is for each<br>
+<strong>property</strong>, not for the entire block.</p>
+<ul>
+<li><code class="notranslate">E</code> has the highest precedence because of the keyword <code class="notranslate">!important</code>. It is<br>
+recommended that you avoid its usage.</li>
+<li><code class="notranslate">F</code> is next, because it is an inline style.</li>
+<li><code class="notranslate">A</code> is next, because it is more "specific" than anything else. It has 3<br>
+specifiers: The name of the element <code class="notranslate">p</code>, its class <code class="notranslate">class1</code>, an attribute<br>
+<code class="notranslate">attr='value'</code>.</li>
+<li><code class="notranslate">C</code> is next, even though it has the same specificity as <code class="notranslate">B</code>.<br>
+This is because it appears after <code class="notranslate">B</code>.</li>
+<li><code class="notranslate">B</code> is next.</li>
+<li><code class="notranslate">D</code> is the last one.</li>
+</ul>
+<h2>Media Queries</h2>
+<p>CSS Media Queries are a feature in CSS 3 which allows you to specify when certain CSS rules should be applied, such as when printed, or when on a screen with certain dimensions or pixel density. They do not add to the selector's specificity.</p>
+<div class="highlight highlight-source-css"><pre class="notranslate"><span class="pl-c">/* A rule that will be used on all devices */</span>
+<span class="pl-ent">h1</span> {
+  <span class="pl-c1">font-size</span><span class="pl-kos">:</span> <span class="pl-c1">2<span class="pl-smi">em</span></span>;
+  <span class="pl-c1">color</span><span class="pl-kos">:</span> white;
+  <span class="pl-c1">background-color</span><span class="pl-kos">:</span> black;
+}
+
+<span class="pl-c">/* change the h1 to use less ink on a printer */</span>
+<span class="pl-k">@media</span> print {
+  <span class="pl-ent">h1</span> {
+    <span class="pl-c1">color</span><span class="pl-kos">:</span> black;
+    <span class="pl-c1">background-color</span><span class="pl-kos">:</span> white;
+  }
+}
+
+<span class="pl-c">/* make the font bigger when shown on a screen at least 480px wide */</span>
+<span class="pl-k">@media</span> screen <span class="pl-c1">and</span> (<span class="pl-c1">min-width</span><span class="pl-kos">:</span> <span class="pl-c1">480<span class="pl-smi">px</span></span>) {
+  <span class="pl-ent">h1</span> {
+    <span class="pl-c1">font-size</span><span class="pl-kos">:</span> <span class="pl-c1">3<span class="pl-smi">em</span></span>;
+    <span class="pl-c1">font-weight</span><span class="pl-kos">:</span> normal;
+  }
+}</pre></div>
+<p>Media queries can include these features:<br>
+<code class="notranslate">width</code>, <code class="notranslate">height</code>, <code class="notranslate">device-width</code>, <code class="notranslate">device-height</code>, <code class="notranslate">orientation</code>, <code class="notranslate">aspect-ratio</code>, <code class="notranslate">device-aspect-ratio</code>, <code class="notranslate">color</code>, <code class="notranslate">color-index</code>, <code class="notranslate">monochrome</code>, <code class="notranslate">resolution</code>, <code class="notranslate">scan</code>, <code class="notranslate">grid</code>. Most of these features can be prefixed with <code class="notranslate">min-</code> or <code class="notranslate">max-</code>.</p>
+<p>The <code class="notranslate">resolution</code> feature is not supported by older devices, instead use <code class="notranslate">device-pixel-ratio</code>.</p>
+<p>Many smartphones and tablets will attempt to render the page as if it were on a desktop unless you provide a <code class="notranslate">viewport</code> meta-tag.</p>
+<div class="highlight highlight-text-html-basic"><pre class="notranslate"><span class="pl-kos">&lt;</span><span class="pl-ent">head</span><span class="pl-kos">&gt;</span>
+  <span class="pl-kos">&lt;</span><span class="pl-ent">meta</span> <span class="pl-c1">name</span>="<span class="pl-s">viewport</span>" <span class="pl-c1">content</span>="<span class="pl-s">width=device-width; initial-scale=1.0</span>"<span class="pl-kos">&gt;</span>
+<span class="pl-kos">&lt;/</span><span class="pl-ent">head</span><span class="pl-kos">&gt;</span></pre></div>
+<h2>Compatibility</h2>
+<p>Most of the features in CSS 2 (and many in CSS 3) are available across all<br>
+browsers and devices. But it's always good practice to check before using<br>
+a new feature.</p>
+<h2>Resources</h2>
+<ul>
+<li><a href="http://caniuse.com" rel="nofollow">CanIUse</a> (Detailed compatibility info)</li>
+<li><a href="http://dabblet.com/" rel="nofollow">Dabblet</a> (CSS playground)</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS" rel="nofollow">Mozilla Developer Network's CSS documentation</a> (Tutorials and reference)</li>
+<li><a href="http://tympanus.net/codrops/css_reference/" rel="nofollow">Codrops' CSS Reference</a> (Reference)</li>
+<li><a href="https://www.youtube.com/playlist?list=PLqGj3iMvMa4IOmy04kDxh_hqODMqoeeCy" rel="nofollow">DevTips' CSS Basics</a> (Tutorials)</li>
+</ul>
+<h2>Further Reading</h2>
+<ul>
+<li><a href="http://www.vanseodesign.com/css/css-specificity-inheritance-cascaade/" rel="nofollow">Understanding Style Precedence in CSS: Specificity, Inheritance, and the Cascade</a></li>
+<li><a href="https://css-tricks.com/almanac/selectors/a/attribute/" rel="nofollow">Selecting elements using attributes</a></li>
+<li><a href="http://www.quirksmode.org/css/" rel="nofollow">QuirksMode CSS</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Understanding_z_index/The_stacking_context" rel="nofollow">Z-Index - The stacking context</a></li>
+<li><a href="http://sass-lang.com/" rel="nofollow">SASS</a> and <a href="http://lesscss.org/" rel="nofollow">LESS</a> for CSS pre-processing</li>
+<li><a href="https://css-tricks.com" rel="nofollow">CSS-Tricks</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Mohammad Valipour", "https://github.com/mvalipour"]
+- ["Marco Scannadinari", "https://github.com/marcoms"]
+- ["Geoffrey Liu", "https://github.com/g-liu"]
+- ["Connor Shea", "https://github.com/connorshea"]
+- ["Deepanshu Utkarsh", "https://github.com/duci9y"]
+- ["Brett Taylor", "https://github.com/glutnix"]
+- ["Tyler Mumford", "https://tylermumford.com"]
+</code></pre>

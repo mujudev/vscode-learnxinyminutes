@@ -1,0 +1,557 @@
+<h1>MATLAB</h1>
+<p>MATLAB stands for MATrix LABoratory. It is a powerful numerical computing language commonly used in engineering and mathematics.</p>
+<p>If you have any feedback please feel free to reach me at<br>
+<a href="https://twitter.com/the_ozzinator" rel="nofollow">@the_ozzinator</a>, or<br>
+<a href="mailto:osvaldo.t.mendoza@gmail.com">osvaldo.t.mendoza@gmail.com</a>.</p>
+<div class="highlight highlight-source-matlab"><pre class="notranslate"><span class="pl-c"><span class="pl-c">%%</span> <span class="pl-en">Code sections start with two percent signs. Section titles go on the same line.</span></span>
+<span class="pl-c"><span class="pl-c">%</span> Comments start with a percent sign.</span>
+
+<span class="pl-c"><span class="pl-c">%{</span></span>
+<span class="pl-c">Multi line comments look</span>
+<span class="pl-c">something</span>
+<span class="pl-c">like</span>
+<span class="pl-c">this</span>
+<span class="pl-c"><span class="pl-c">%}</span></span>
+
+<span class="pl-c"><span class="pl-c">%</span> Two percent signs denote the start of a new code section</span>
+<span class="pl-c"><span class="pl-c">%</span> Individual code sections can be run by moving the cursor to the section followed by</span>
+<span class="pl-c"><span class="pl-c">%</span> either clicking the "Run Section" button</span>
+<span class="pl-c"><span class="pl-c">%</span> or     using Ctrl+Shift+Enter (Windows) or Cmd+Shift+Return (macOS)</span>
+
+<span class="pl-c"><span class="pl-c">%%</span> <span class="pl-en">This is the start of a code section</span></span>
+<span class="pl-c"><span class="pl-c">%</span>  One way of using sections is to separate expensive but unchanging start-up code like loading data</span>
+<span class="pl-en">load</span> <span class="pl-s">myFile.mat y</span>
+
+<span class="pl-c"><span class="pl-c">%%</span> <span class="pl-en">This is another code section</span></span>
+<span class="pl-c"><span class="pl-c">%</span>  This section can be edited and run repeatedly on its own, and is helpful for exploratory programming and demos</span>
+A <span class="pl-k">=</span> <span class="pl-smi">A</span> <span class="pl-k">*</span> <span class="pl-c1">2</span>;
+<span class="pl-en">plot</span>(<span class="pl-smi">A</span>);
+
+<span class="pl-c"><span class="pl-c">%%</span> <span class="pl-en">Code sections are also known as code cells or cell mode (not to be confused with cell arrays)</span></span>
+
+
+<span class="pl-c"><span class="pl-c">%</span> commands can span multiple lines, using '...':</span>
+ a <span class="pl-k">=</span> <span class="pl-c1">1</span> <span class="pl-k">+</span> <span class="pl-c1">2</span> <span class="pl-k">+</span> ...
+ <span class="pl-k">+</span> <span class="pl-c1">4</span>
+
+<span class="pl-c"><span class="pl-c">%</span> commands can be passed to the operating system</span>
+!<span class="pl-s1">ping google.com</span>
+
+<span class="pl-smi">who</span> <span class="pl-c"><span class="pl-c">%</span> Displays all variables in memory</span>
+<span class="pl-smi">whos</span> <span class="pl-c"><span class="pl-c">%</span> Displays all variables in memory, with their types</span>
+<span class="pl-smi">clear</span> <span class="pl-c"><span class="pl-c">%</span> Erases all your variables from memory</span>
+<span class="pl-en">clear</span>(<span class="pl-s"><span class="pl-pds">'</span>A<span class="pl-pds">'</span></span>) <span class="pl-c"><span class="pl-c">%</span> Erases a particular variable</span>
+<span class="pl-en">openvar</span>(<span class="pl-s"><span class="pl-pds">'</span>A<span class="pl-pds">'</span></span>) <span class="pl-c"><span class="pl-c">%</span> Open variable in variable editor</span>
+
+<span class="pl-smi">clc</span> <span class="pl-c"><span class="pl-c">%</span> Erases the writing on your Command Window</span>
+<span class="pl-smi">diary</span> <span class="pl-c"><span class="pl-c">%</span> Toggle writing Command Window text to file</span>
+<span class="pl-smi">ctrl</span><span class="pl-k">-</span><span class="pl-smi">c</span> <span class="pl-c"><span class="pl-c">%</span> Abort current computation</span>
+
+<span class="pl-en">edit</span>(<span class="pl-s"><span class="pl-pds">'</span>myfunction.m<span class="pl-pds">'</span></span>) <span class="pl-c"><span class="pl-c">%</span> Open function/script in editor</span>
+<span class="pl-en">type</span>(<span class="pl-s"><span class="pl-pds">'</span>myfunction.m<span class="pl-pds">'</span></span>) <span class="pl-c"><span class="pl-c">%</span> Print the source of function/script to Command Window</span>
+
+<span class="pl-en">profile</span> <span class="pl-s">on 	</span><span class="pl-c"><span class="pl-c">%</span> turns on the code profiler</span>
+<span class="pl-en">profile</span> <span class="pl-s">off 	</span><span class="pl-c"><span class="pl-c">%</span> turns off the code profiler</span>
+<span class="pl-en">profile</span> <span class="pl-s">viewer 	</span><span class="pl-c"><span class="pl-c">%</span> Open profiler</span>
+
+<span class="pl-en">help</span> <span class="pl-s">command 	</span><span class="pl-c"><span class="pl-c">%</span> Displays documentation for command in Command Window</span>
+<span class="pl-en">doc</span> <span class="pl-s">command 	</span><span class="pl-c"><span class="pl-c">%</span> Displays documentation for command in Help Window</span>
+<span class="pl-en">lookfor</span> <span class="pl-s">command </span><span class="pl-c"><span class="pl-c">%</span> Searches for command in the first commented line of all functions</span>
+<span class="pl-en">lookfor</span> <span class="pl-s">command -all </span><span class="pl-c"><span class="pl-c">%</span> searches for command in all functions</span>
+
+
+<span class="pl-c"><span class="pl-c">%</span> Output formatting</span>
+<span class="pl-en">format</span> <span class="pl-s">short 	</span><span class="pl-c"><span class="pl-c">%</span> 4 decimals in a floating number</span>
+<span class="pl-en">format</span> <span class="pl-s">long 	</span><span class="pl-c"><span class="pl-c">%</span> 15 decimals</span>
+<span class="pl-en">format</span> <span class="pl-s">bank 	</span><span class="pl-c"><span class="pl-c">%</span> only two digits after decimal point - for financial calculations</span>
+<span class="pl-en">fprintf</span>(<span class="pl-s"><span class="pl-pds">'</span>text<span class="pl-pds">'</span></span>) <span class="pl-c"><span class="pl-c">%</span> print "text" to the screen</span>
+<span class="pl-en">disp</span>(<span class="pl-s"><span class="pl-pds">'</span>text<span class="pl-pds">'</span></span>) 	<span class="pl-c"><span class="pl-c">%</span> print "text" to the screen</span>
+
+<span class="pl-c"><span class="pl-c">%</span> Variables &amp; Expressions</span>
+myVariable <span class="pl-k">=</span> <span class="pl-c1">4</span> 	<span class="pl-c"><span class="pl-c">%</span> Notice Workspace pane shows newly created variable</span>
+myVariable <span class="pl-k">=</span> <span class="pl-c1">4</span>; <span class="pl-c"><span class="pl-c">%</span> Semi colon suppresses output to the Command Window</span>
+<span class="pl-c1">4</span> <span class="pl-k">+</span> <span class="pl-c1">6</span>  		<span class="pl-c"><span class="pl-c">%</span> ans = 10</span>
+<span class="pl-c1">8</span> <span class="pl-k">*</span> <span class="pl-smi">myVariable</span> 	<span class="pl-c"><span class="pl-c">%</span> ans = 32</span>
+<span class="pl-c1">2</span> <span class="pl-k">^</span> <span class="pl-c1">3</span> 		<span class="pl-c"><span class="pl-c">%</span> ans = 8</span>
+a <span class="pl-k">=</span> <span class="pl-c1">2</span>; b <span class="pl-k">=</span> <span class="pl-c1">3</span>;
+c <span class="pl-k">=</span> <span class="pl-en">exp</span>(<span class="pl-smi">a</span>)*<span class="pl-en">sin</span>(<span class="pl-c1">pi</span><span class="pl-k">/</span><span class="pl-c1">2</span>) <span class="pl-c"><span class="pl-c">%</span> c = 7.3891</span>
+
+<span class="pl-c"><span class="pl-c">%</span> Calling functions can be done in either of two ways:</span>
+<span class="pl-c"><span class="pl-c">%</span> Standard function syntax:</span>
+<span class="pl-en">load</span>(<span class="pl-s"><span class="pl-pds">'</span>myFile.mat<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>y<span class="pl-pds">'</span></span>) <span class="pl-c"><span class="pl-c">%</span> arguments within parentheses, separated by commas</span>
+<span class="pl-c"><span class="pl-c">%</span> Command syntax:</span>
+<span class="pl-en">load</span> <span class="pl-s">myFile.mat y 	</span><span class="pl-c"><span class="pl-c">%</span> no parentheses, and spaces instead of commas</span>
+<span class="pl-c"><span class="pl-c">%</span> Note the lack of quote marks in command form: inputs are always passed as</span>
+<span class="pl-c"><span class="pl-c">%</span> literal text - cannot pass variable values. Also, can't receive output:</span>
+[<span class="pl-smi">V</span>,<span class="pl-smi">D</span>] <span class="pl-k">=</span> <span class="pl-en">eig</span>(<span class="pl-smi">A</span>);  <span class="pl-c"><span class="pl-c">%</span> this has no equivalent in command form</span>
+[<span class="pl-c1">~</span>,<span class="pl-smi">D</span>] <span class="pl-k">=</span> <span class="pl-en">eig</span>(<span class="pl-smi">A</span>);  <span class="pl-c"><span class="pl-c">%</span> if you only want D and not V</span>
+
+
+
+<span class="pl-c"><span class="pl-c">%</span> Logicals</span>
+<span class="pl-c1">1</span> <span class="pl-k">&gt;</span> <span class="pl-c1">5</span> <span class="pl-c"><span class="pl-c">%</span> ans = 0</span>
+<span class="pl-c1">10</span> <span class="pl-k">&gt;=</span> <span class="pl-c1">10</span> <span class="pl-c"><span class="pl-c">%</span> ans = 1</span>
+<span class="pl-c1">3</span> <span class="pl-k">~=</span> <span class="pl-c1">4</span> <span class="pl-c"><span class="pl-c">%</span> Not equal to -&gt; ans = 1</span>
+<span class="pl-c1">3</span> <span class="pl-k">==</span> <span class="pl-c1">3</span> <span class="pl-c"><span class="pl-c">%</span> equal to -&gt; ans = 1</span>
+<span class="pl-c1">3</span> <span class="pl-k">&gt;</span> <span class="pl-c1">1</span> <span class="pl-k">&amp;&amp;</span> <span class="pl-c1">4</span> <span class="pl-k">&gt;</span> <span class="pl-c1">1</span> <span class="pl-c"><span class="pl-c">%</span> AND -&gt; ans = 1</span>
+<span class="pl-c1">3</span> <span class="pl-k">&gt;</span> <span class="pl-c1">1</span> <span class="pl-k">||</span> <span class="pl-c1">4</span> <span class="pl-k">&gt;</span> <span class="pl-c1">1</span> <span class="pl-c"><span class="pl-c">%</span> OR -&gt; ans = 1</span>
+~1 <span class="pl-c"><span class="pl-c">%</span> NOT -&gt; ans = 0</span>
+
+<span class="pl-c"><span class="pl-c">%</span> Logicals can be applied to matrices:</span>
+<span class="pl-smi">A</span> <span class="pl-k">&gt;</span> <span class="pl-c1">5</span>
+<span class="pl-c"><span class="pl-c">%</span> for each element, if condition is true, that element is 1 in returned matrix</span>
+<span class="pl-en">A</span>( <span class="pl-smi">A</span> <span class="pl-k">&gt;</span> <span class="pl-c1">5</span> )
+<span class="pl-c"><span class="pl-c">%</span> returns a vector containing the elements in A for which condition is true</span>
+
+<span class="pl-c"><span class="pl-c">%</span> Strings</span>
+a <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>MyString<span class="pl-pds">'</span></span>
+<span class="pl-en">length</span>(<span class="pl-smi">a</span>) <span class="pl-c"><span class="pl-c">%</span> ans = 8</span>
+<span class="pl-en">a</span>(<span class="pl-c1">2</span>) <span class="pl-c"><span class="pl-c">%</span> ans = y</span>
+[<span class="pl-smi">a</span>,<span class="pl-smi">a</span>] <span class="pl-c"><span class="pl-c">%</span> ans = MyStringMyString</span>
+
+
+<span class="pl-c"><span class="pl-c">%</span> Cells</span>
+a <span class="pl-k">=</span> {<span class="pl-s"><span class="pl-pds">'</span>one<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>two<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>three<span class="pl-pds">'</span></span>}
+<span class="pl-en">a</span>(<span class="pl-c1">1</span>) <span class="pl-c"><span class="pl-c">%</span> ans = 'one' - returns a cell</span>
+<span class="pl-en">char</span>(<span class="pl-en">a</span>(<span class="pl-c1">1</span>)) <span class="pl-c"><span class="pl-c">%</span> ans = one - returns a string</span>
+
+<span class="pl-c"><span class="pl-c">%</span> Structures</span>
+A.b <span class="pl-k">=</span> {<span class="pl-s"><span class="pl-pds">'</span>one<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>two<span class="pl-pds">'</span></span>};
+A.c <span class="pl-k">=</span> [<span class="pl-c1">1</span> <span class="pl-c1">2</span>];
+A.d.e <span class="pl-k">=</span> <span class="pl-c1">false</span>;
+
+<span class="pl-c"><span class="pl-c">%</span> Vectors</span>
+x <span class="pl-k">=</span> [<span class="pl-c1">4</span> <span class="pl-c1">32</span> <span class="pl-c1">53</span> <span class="pl-c1">7</span> <span class="pl-c1">1</span>]
+<span class="pl-en">x</span>(<span class="pl-c1">2</span>) <span class="pl-c"><span class="pl-c">%</span> ans = 32, indices in Matlab start 1, not 0</span>
+<span class="pl-en">x</span>(<span class="pl-c1">2</span><span class="pl-k">:</span><span class="pl-c1">3</span>) <span class="pl-c"><span class="pl-c">%</span> ans = 32 53</span>
+<span class="pl-en">x</span>(<span class="pl-c1">2</span><span class="pl-k">:</span><span class="pl-k">end</span>) <span class="pl-c"><span class="pl-c">%</span> ans = 32 53 7 1</span>
+
+x <span class="pl-k">=</span> [<span class="pl-c1">4</span>; <span class="pl-c1">32</span>; <span class="pl-c1">53</span>; <span class="pl-c1">7</span>; <span class="pl-c1">1</span>] <span class="pl-c"><span class="pl-c">%</span> Column vector</span>
+
+x <span class="pl-k">=</span> [<span class="pl-c1">1</span><span class="pl-k">:</span><span class="pl-c1">10</span>] <span class="pl-c"><span class="pl-c">%</span> x = 1 2 3 4 5 6 7 8 9 10</span>
+x <span class="pl-k">=</span> [<span class="pl-c1">1</span><span class="pl-k">:</span><span class="pl-c1">2</span><span class="pl-k">:</span><span class="pl-c1">10</span>] <span class="pl-c"><span class="pl-c">%</span> Increment by 2, i.e. x = 1 3 5 7 9</span>
+
+<span class="pl-c"><span class="pl-c">%</span> Matrices</span>
+A <span class="pl-k">=</span> [<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>; <span class="pl-c1">4</span> <span class="pl-c1">5</span> <span class="pl-c1">6</span>; <span class="pl-c1">7</span> <span class="pl-c1">8</span> <span class="pl-c1">9</span>]
+<span class="pl-c"><span class="pl-c">%</span> Rows are separated by a semicolon; elements are separated with space or comma</span>
+<span class="pl-c"><span class="pl-c">%</span> A =</span>
+
+<span class="pl-c"><span class="pl-c">%</span>     1     2     3</span>
+<span class="pl-c"><span class="pl-c">%</span>     4     5     6</span>
+<span class="pl-c"><span class="pl-c">%</span>     7     8     9</span>
+
+<span class="pl-en">A</span>(<span class="pl-c1">2</span>,<span class="pl-c1">3</span>) <span class="pl-c"><span class="pl-c">%</span> ans = 6, A(row, column)</span>
+<span class="pl-en">A</span>(<span class="pl-c1">6</span>) <span class="pl-c"><span class="pl-c">%</span> ans = 8</span>
+<span class="pl-c"><span class="pl-c">%</span> (implicitly concatenates columns into vector, then indexes into that)</span>
+
+
+<span class="pl-en">A</span>(<span class="pl-c1">2</span>,<span class="pl-c1">3</span>) <span class="pl-k">=</span> <span class="pl-c1">42</span> <span class="pl-c"><span class="pl-c">%</span> Update row 2 col 3 with 42</span>
+<span class="pl-c"><span class="pl-c">%</span> A =</span>
+
+<span class="pl-c"><span class="pl-c">%</span>     1     2     3</span>
+<span class="pl-c"><span class="pl-c">%</span>     4     5     42</span>
+<span class="pl-c"><span class="pl-c">%</span>     7     8     9</span>
+
+<span class="pl-en">A</span>(<span class="pl-c1">2</span><span class="pl-k">:</span><span class="pl-c1">3</span>,<span class="pl-c1">2</span><span class="pl-k">:</span><span class="pl-c1">3</span>) <span class="pl-c"><span class="pl-c">%</span> Creates a new matrix from the old one</span>
+<span class="pl-c"><span class="pl-c">%</span>ans =</span>
+
+<span class="pl-c"><span class="pl-c">%</span>     5     42</span>
+<span class="pl-c"><span class="pl-c">%</span>     8     9</span>
+
+<span class="pl-en">A</span>(<span class="pl-k">:</span>,<span class="pl-c1">1</span>) <span class="pl-c"><span class="pl-c">%</span> All rows in column 1</span>
+<span class="pl-c"><span class="pl-c">%</span>ans =</span>
+
+<span class="pl-c"><span class="pl-c">%</span>     1</span>
+<span class="pl-c"><span class="pl-c">%</span>     4</span>
+<span class="pl-c"><span class="pl-c">%</span>     7</span>
+
+<span class="pl-en">A</span>(<span class="pl-c1">1</span>,<span class="pl-k">:</span>) <span class="pl-c"><span class="pl-c">%</span> All columns in row 1</span>
+<span class="pl-c"><span class="pl-c">%</span>ans =</span>
+
+<span class="pl-c"><span class="pl-c">%</span>     1     2     3</span>
+
+[<span class="pl-smi">A</span> ; <span class="pl-smi">A</span>] <span class="pl-c"><span class="pl-c">%</span> Concatenation of matrices (vertically)</span>
+<span class="pl-c"><span class="pl-c">%</span>ans =</span>
+
+<span class="pl-c"><span class="pl-c">%</span>     1     2     3</span>
+<span class="pl-c"><span class="pl-c">%</span>     4     5    42</span>
+<span class="pl-c"><span class="pl-c">%</span>     7     8     9</span>
+<span class="pl-c"><span class="pl-c">%</span>     1     2     3</span>
+<span class="pl-c"><span class="pl-c">%</span>     4     5    42</span>
+<span class="pl-c"><span class="pl-c">%</span>     7     8     9</span>
+
+<span class="pl-c"><span class="pl-c">%</span> this is the same as</span>
+<span class="pl-en">vertcat</span>(<span class="pl-smi">A</span>,<span class="pl-smi">A</span>);
+
+
+[<span class="pl-smi">A</span> , <span class="pl-smi">A</span>] <span class="pl-c"><span class="pl-c">%</span> Concatenation of matrices (horizontally)</span>
+
+<span class="pl-c"><span class="pl-c">%</span>ans =</span>
+
+<span class="pl-c"><span class="pl-c">%</span>     1     2     3     1     2     3</span>
+<span class="pl-c"><span class="pl-c">%</span>     4     5    42     4     5    42</span>
+<span class="pl-c"><span class="pl-c">%</span>     7     8     9     7     8     9</span>
+
+<span class="pl-c"><span class="pl-c">%</span> this is the same as</span>
+<span class="pl-en">horzcat</span>(<span class="pl-smi">A</span>,<span class="pl-smi">A</span>);
+
+
+<span class="pl-en">A</span>(<span class="pl-k">:</span>, [<span class="pl-c1">3</span> <span class="pl-c1">1</span> <span class="pl-c1">2</span>]) <span class="pl-c"><span class="pl-c">%</span> Rearrange the columns of original matrix</span>
+<span class="pl-c"><span class="pl-c">%</span>ans =</span>
+
+<span class="pl-c"><span class="pl-c">%</span>     3     1     2</span>
+<span class="pl-c"><span class="pl-c">%</span>    42     4     5</span>
+<span class="pl-c"><span class="pl-c">%</span>     9     7     8</span>
+
+<span class="pl-en">size</span>(<span class="pl-smi">A</span>) <span class="pl-c"><span class="pl-c">%</span> ans = 3 3</span>
+
+<span class="pl-en">A</span>(<span class="pl-c1">1</span>, <span class="pl-k">:</span>) <span class="pl-k">=</span>[] <span class="pl-c"><span class="pl-c">%</span> Delete the first row of the matrix</span>
+<span class="pl-en">A</span>(<span class="pl-k">:</span>, <span class="pl-c1">1</span>) <span class="pl-k">=</span>[] <span class="pl-c"><span class="pl-c">%</span> Delete the first column of the matrix</span>
+
+<span class="pl-en">transpose</span>(<span class="pl-smi">A</span>) <span class="pl-c"><span class="pl-c">%</span> Transpose the matrix, which is the same as:</span>
+<span class="pl-smi">A</span><span class="pl-k">.'</span> <span class="pl-c"><span class="pl-c">%</span> Concise version of transpose (without taking complex conjugate)</span>
+<span class="pl-en">ctranspose</span>(<span class="pl-smi">A</span>) <span class="pl-c"><span class="pl-c">%</span> Hermitian transpose the matrix, which is the same as:</span>
+<span class="pl-smi">A</span><span class="pl-k">'</span>  <span class="pl-c"><span class="pl-c">%</span> Concise version of complex transpose</span>
+    <span class="pl-c"><span class="pl-c">%</span> (the transpose, followed by taking complex conjugate of each element)</span>
+
+
+
+
+
+<span class="pl-c"><span class="pl-c">%</span> Element by Element Arithmetic vs. Matrix Arithmetic</span>
+<span class="pl-c"><span class="pl-c">%</span> On their own, the arithmetic operators act on whole matrices. When preceded</span>
+<span class="pl-c"><span class="pl-c">%</span> by a period, they act on each element instead. For example:</span>
+<span class="pl-smi">A</span> <span class="pl-k">*</span> <span class="pl-smi">B</span> <span class="pl-c"><span class="pl-c">%</span> Matrix multiplication</span>
+<span class="pl-smi">A</span> <span class="pl-k">.*</span> <span class="pl-smi">B</span> <span class="pl-c"><span class="pl-c">%</span> Multiply each element in A by its corresponding element in B</span>
+
+<span class="pl-c"><span class="pl-c">%</span> There are several pairs of functions, where one acts on each element, and</span>
+<span class="pl-c"><span class="pl-c">%</span> the other (whose name ends in m) acts on the whole matrix.</span>
+<span class="pl-en">exp</span>(<span class="pl-smi">A</span>) <span class="pl-c"><span class="pl-c">%</span> exponentiate each element</span>
+<span class="pl-en">expm</span>(<span class="pl-smi">A</span>) <span class="pl-c"><span class="pl-c">%</span> calculate the matrix exponential</span>
+<span class="pl-en">sqrt</span>(<span class="pl-smi">A</span>) <span class="pl-c"><span class="pl-c">%</span> take the square root of each element</span>
+<span class="pl-en">sqrtm</span>(<span class="pl-smi">A</span>) <span class="pl-c"><span class="pl-c">%</span>  find the matrix whose square is A</span>
+
+
+<span class="pl-c"><span class="pl-c">%</span> Plotting</span>
+x <span class="pl-k">=</span> <span class="pl-c1">0</span>:<span class="pl-c1">.10</span><span class="pl-k">:</span><span class="pl-c1">2</span><span class="pl-k">*</span><span class="pl-c1">pi</span>; <span class="pl-c"><span class="pl-c">%</span> Creates a vector that starts at 0 and ends at 2*pi with increments of .1</span>
+y <span class="pl-k">=</span> <span class="pl-en">sin</span>(<span class="pl-smi">x</span>);
+<span class="pl-en">plot</span>(<span class="pl-smi">x</span>,<span class="pl-smi">y</span>)
+<span class="pl-en">xlabel</span>(<span class="pl-s"><span class="pl-pds">'</span>x axis<span class="pl-pds">'</span></span>)
+<span class="pl-en">ylabel</span>(<span class="pl-s"><span class="pl-pds">'</span>y axis<span class="pl-pds">'</span></span>)
+<span class="pl-en">title</span>(<span class="pl-s"><span class="pl-pds">'</span>Plot of y = sin(x)<span class="pl-pds">'</span></span>)
+<span class="pl-en">axis</span>([<span class="pl-c1">0</span> <span class="pl-c1">2</span><span class="pl-k">*</span><span class="pl-c1">pi</span> <span class="pl-k">-</span><span class="pl-c1">1</span> <span class="pl-c1">1</span>]) <span class="pl-c"><span class="pl-c">%</span> x range from 0 to 2*pi, y range from -1 to 1</span>
+
+<span class="pl-en">plot</span>(<span class="pl-smi">x</span>,<span class="pl-smi">y1</span>,<span class="pl-s"><span class="pl-pds">'</span>-<span class="pl-pds">'</span></span>,<span class="pl-smi">x</span>,<span class="pl-smi">y2</span>,<span class="pl-s"><span class="pl-pds">'</span>--<span class="pl-pds">'</span></span>,<span class="pl-smi">x</span>,<span class="pl-smi">y3</span>,<span class="pl-s"><span class="pl-pds">'</span>:<span class="pl-pds">'</span></span>) <span class="pl-c"><span class="pl-c">%</span> For multiple functions on one plot</span>
+<span class="pl-en">legend</span>(<span class="pl-s"><span class="pl-pds">'</span>Line 1 label<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>Line 2 label<span class="pl-pds">'</span></span>) <span class="pl-c"><span class="pl-c">%</span> Label curves with a legend</span>
+
+<span class="pl-c"><span class="pl-c">%</span> Alternative method to plot multiple functions in one plot.</span>
+<span class="pl-c"><span class="pl-c">%</span> while 'hold' is on, commands add to existing graph rather than replacing it</span>
+<span class="pl-en">plot</span>(<span class="pl-smi">x</span>, <span class="pl-smi">y</span>)
+<span class="pl-en">hold</span> <span class="pl-s">on</span>
+<span class="pl-en">plot</span>(<span class="pl-smi">x</span>, <span class="pl-smi">z</span>)
+<span class="pl-en">hold</span> <span class="pl-s">off</span>
+
+<span class="pl-en">loglog</span>(<span class="pl-smi">x</span>, <span class="pl-smi">y</span>) <span class="pl-c"><span class="pl-c">%</span> A log-log plot</span>
+<span class="pl-en">semilogx</span>(<span class="pl-smi">x</span>, <span class="pl-smi">y</span>) <span class="pl-c"><span class="pl-c">%</span> A plot with logarithmic x-axis</span>
+<span class="pl-en">semilogy</span>(<span class="pl-smi">x</span>, <span class="pl-smi">y</span>) <span class="pl-c"><span class="pl-c">%</span> A plot with logarithmic y-axis</span>
+
+<span class="pl-en">fplot</span> (@(<span class="pl-v">x</span>) <span class="pl-smi">x</span><span class="pl-k">^</span><span class="pl-c1">2</span>, [<span class="pl-c1">2</span>,<span class="pl-c1">5</span>]) <span class="pl-c"><span class="pl-c">%</span> plot the function x^2 from x=2 to x=5</span>
+
+<span class="pl-en">grid</span> <span class="pl-s">on </span><span class="pl-c"><span class="pl-c">%</span> Show grid; turn off with 'grid off'</span>
+<span class="pl-en">axis</span> <span class="pl-s">square </span><span class="pl-c"><span class="pl-c">%</span> Makes the current axes region square</span>
+<span class="pl-en">axis</span> <span class="pl-s">equal </span><span class="pl-c"><span class="pl-c">%</span> Set aspect ratio so data units are the same in every direction</span>
+
+<span class="pl-en">scatter</span>(<span class="pl-smi">x</span>, <span class="pl-smi">y</span>); <span class="pl-c"><span class="pl-c">%</span> Scatter-plot</span>
+<span class="pl-en">hist</span>(<span class="pl-smi">x</span>); <span class="pl-c"><span class="pl-c">%</span> Histogram</span>
+<span class="pl-en">stem</span>(<span class="pl-smi">x</span>); <span class="pl-c"><span class="pl-c">%</span> Plot values as stems, useful for displaying discrete data</span>
+<span class="pl-en">bar</span>(<span class="pl-smi">x</span>); <span class="pl-c"><span class="pl-c">%</span> Plot bar graph</span>
+
+z <span class="pl-k">=</span> <span class="pl-en">sin</span>(<span class="pl-smi">x</span>);
+<span class="pl-en">plot3</span>(<span class="pl-smi">x</span>,<span class="pl-smi">y</span>,<span class="pl-smi">z</span>); <span class="pl-c"><span class="pl-c">%</span> 3D line plot</span>
+
+<span class="pl-en">pcolor</span>(<span class="pl-smi">A</span>) <span class="pl-c"><span class="pl-c">%</span> Heat-map of matrix: plot as grid of rectangles, coloured by value</span>
+<span class="pl-en">contour</span>(<span class="pl-smi">A</span>) <span class="pl-c"><span class="pl-c">%</span> Contour plot of matrix</span>
+<span class="pl-en">mesh</span>(<span class="pl-smi">A</span>) <span class="pl-c"><span class="pl-c">%</span> Plot as a mesh surface</span>
+
+h <span class="pl-k">=</span> <span class="pl-smi">figure</span> <span class="pl-c"><span class="pl-c">%</span> Create new figure object, with handle h</span>
+<span class="pl-en">figure</span>(<span class="pl-smi">h</span>) <span class="pl-c"><span class="pl-c">%</span> Makes the figure corresponding to handle h the current figure</span>
+<span class="pl-en">close</span>(<span class="pl-smi">h</span>) <span class="pl-c"><span class="pl-c">%</span> close figure with handle h</span>
+<span class="pl-en">close</span> <span class="pl-s">all </span><span class="pl-c"><span class="pl-c">%</span> close all open figure windows</span>
+<span class="pl-smi">close</span> <span class="pl-c"><span class="pl-c">%</span> close current figure window</span>
+
+<span class="pl-smi">shg</span> <span class="pl-c"><span class="pl-c">%</span> bring an existing graphics window forward, or create new one if needed</span>
+<span class="pl-en">clf</span> <span class="pl-s">clear </span><span class="pl-c"><span class="pl-c">%</span> clear current figure window, and reset most figure properties</span>
+
+<span class="pl-c"><span class="pl-c">%</span> Properties can be set and changed through a figure handle.</span>
+<span class="pl-c"><span class="pl-c">%</span> You can save a handle to a figure when you create it.</span>
+<span class="pl-c"><span class="pl-c">%</span> The function get returns a handle to the current figure</span>
+h <span class="pl-k">=</span> <span class="pl-en">plot</span>(<span class="pl-smi">x</span>, <span class="pl-smi">y</span>); <span class="pl-c"><span class="pl-c">%</span> you can save a handle to a figure when you create it</span>
+<span class="pl-en">set</span>(<span class="pl-smi">h</span>, <span class="pl-s"><span class="pl-pds">'</span>Color<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>r<span class="pl-pds">'</span></span>)
+<span class="pl-c"><span class="pl-c">%</span> 'y' yellow; 'm' magenta, 'c' cyan, 'r' red, 'g' green, 'b' blue, 'w' white, 'k' black</span>
+<span class="pl-en">set</span>(<span class="pl-smi">h</span>, <span class="pl-s"><span class="pl-pds">'</span>LineStyle<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>--<span class="pl-pds">'</span></span>)
+ <span class="pl-c"><span class="pl-c">%</span> '--' is solid line, '---' dashed, ':' dotted, '-.' dash-dot, 'none' is no line</span>
+<span class="pl-en">get</span>(<span class="pl-smi">h</span>, <span class="pl-s"><span class="pl-pds">'</span>LineStyle<span class="pl-pds">'</span></span>)
+
+
+<span class="pl-c"><span class="pl-c">%</span> The function gca returns a handle to the axes for the current figure</span>
+<span class="pl-en">set</span>(<span class="pl-smi">gca</span>, <span class="pl-s"><span class="pl-pds">'</span>XDir<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>reverse<span class="pl-pds">'</span></span>); <span class="pl-c"><span class="pl-c">%</span> reverse the direction of the x-axis</span>
+
+<span class="pl-c"><span class="pl-c">%</span> To create a figure that contains several axes in tiled positions, use subplot</span>
+<span class="pl-en">subplot</span>(<span class="pl-c1">2</span>,<span class="pl-c1">3</span>,<span class="pl-c1">1</span>); <span class="pl-c"><span class="pl-c">%</span> select the first position in a 2-by-3 grid of subplots</span>
+<span class="pl-en">plot</span>(<span class="pl-smi">x1</span>); <span class="pl-en">title</span>(<span class="pl-s"><span class="pl-pds">'</span>First Plot<span class="pl-pds">'</span></span>) <span class="pl-c"><span class="pl-c">%</span> plot something in this position</span>
+<span class="pl-en">subplot</span>(<span class="pl-c1">2</span>,<span class="pl-c1">3</span>,<span class="pl-c1">2</span>); <span class="pl-c"><span class="pl-c">%</span> select second position in the grid</span>
+<span class="pl-en">plot</span>(<span class="pl-smi">x2</span>); <span class="pl-en">title</span>(<span class="pl-s"><span class="pl-pds">'</span>Second Plot<span class="pl-pds">'</span></span>) <span class="pl-c"><span class="pl-c">%</span> plot something there</span>
+
+
+<span class="pl-c"><span class="pl-c">%</span> To use functions or scripts, they must be on your path or current directory</span>
+<span class="pl-smi">path</span> <span class="pl-c"><span class="pl-c">%</span> display current path</span>
+<span class="pl-en">addpath</span> <span class="pl-s">/path/to/dir </span><span class="pl-c"><span class="pl-c">%</span> add to path</span>
+<span class="pl-en">rmpath</span> <span class="pl-s">/path/to/dir </span><span class="pl-c"><span class="pl-c">%</span> remove from path</span>
+<span class="pl-en">cd</span> <span class="pl-s">/path/to/move/into </span><span class="pl-c"><span class="pl-c">%</span> change directory</span>
+
+
+<span class="pl-c"><span class="pl-c">%</span> Variables can be saved to .mat files</span>
+<span class="pl-en">save</span>(<span class="pl-s"><span class="pl-pds">'</span>myFileName.mat<span class="pl-pds">'</span></span>) <span class="pl-c"><span class="pl-c">%</span> Save the variables in your Workspace</span>
+<span class="pl-en">load</span>(<span class="pl-s"><span class="pl-pds">'</span>myFileName.mat<span class="pl-pds">'</span></span>) <span class="pl-c"><span class="pl-c">%</span> Load saved variables into Workspace</span>
+
+<span class="pl-c"><span class="pl-c">%</span> M-file Scripts</span>
+<span class="pl-c"><span class="pl-c">%</span> A script file is an external file that contains a sequence of statements.</span>
+<span class="pl-c"><span class="pl-c">%</span> They let you avoid repeatedly typing the same code in the Command Window</span>
+<span class="pl-c"><span class="pl-c">%</span> Have .m extensions</span>
+
+<span class="pl-c"><span class="pl-c">%</span> M-file Functions</span>
+<span class="pl-c"><span class="pl-c">%</span> Like scripts, and have the same .m extension</span>
+<span class="pl-c"><span class="pl-c">%</span> But can accept input arguments and return an output</span>
+<span class="pl-c"><span class="pl-c">%</span> Also, they have their own workspace (ie. different variable scope).</span>
+<span class="pl-c"><span class="pl-c">%</span> Function name should match file name (so save this example as double_input.m).</span>
+<span class="pl-c"><span class="pl-c">%</span> 'help double_input.m' returns the comments under line beginning function</span>
+<span class="pl-k">function</span> <span class="pl-v">output</span> <span class="pl-k">=</span> <span class="pl-en">double_input</span>(<span class="pl-v">x</span>)
+	<span class="pl-c"><span class="pl-c">%</span>double_input(x) returns twice the value of x</span>
+	output <span class="pl-k">=</span> <span class="pl-c1">2</span><span class="pl-k">*</span><span class="pl-smi">x</span>;
+<span class="pl-k">end</span>
+<span class="pl-en">double_input</span>(<span class="pl-c1">6</span>) <span class="pl-c"><span class="pl-c">%</span> ans = 12</span>
+
+
+<span class="pl-c"><span class="pl-c">%</span> You can also have subfunctions and nested functions.</span>
+<span class="pl-c"><span class="pl-c">%</span> Subfunctions are in the same file as the primary function, and can only be</span>
+<span class="pl-c"><span class="pl-c">%</span> called by functions in the file. Nested functions are defined within another</span>
+<span class="pl-c"><span class="pl-c">%</span> functions, and have access to both its workspace and their own workspace.</span>
+
+<span class="pl-c"><span class="pl-c">%</span> If you want to create a function without creating a new file you can use an</span>
+<span class="pl-c"><span class="pl-c">%</span> anonymous function. Useful when quickly defining a function to pass to</span>
+<span class="pl-c"><span class="pl-c">%</span> another function (eg. plot with fplot, evaluate an indefinite integral</span>
+<span class="pl-c"><span class="pl-c">%</span> with quad, find roots with fzero, or find minimum with fminsearch).</span>
+<span class="pl-c"><span class="pl-c">%</span> Example that returns the square of its input, assigned to the handle sqr:</span>
+sqr <span class="pl-k">=</span> @(<span class="pl-v">x</span>) <span class="pl-smi">x</span><span class="pl-k">.^</span><span class="pl-c1">2</span>;
+<span class="pl-en">sqr</span>(<span class="pl-c1">10</span>) <span class="pl-c"><span class="pl-c">%</span> ans = 100</span>
+<span class="pl-en">doc</span> <span class="pl-s">function_handle </span><span class="pl-c"><span class="pl-c">%</span> find out more</span>
+
+<span class="pl-c"><span class="pl-c">%</span> User input</span>
+a <span class="pl-k">=</span> <span class="pl-en">input</span>(<span class="pl-s"><span class="pl-pds">'</span>Enter the value: <span class="pl-pds">'</span></span>)
+
+<span class="pl-c"><span class="pl-c">%</span> Stops execution of file and gives control to the keyboard: user can examine</span>
+<span class="pl-c"><span class="pl-c">%</span> or change variables. Type 'return' to continue execution, or 'dbquit' to exit</span>
+<span class="pl-smi">keyboard</span>
+
+<span class="pl-c"><span class="pl-c">%</span> Reading in data (also xlsread/importdata/imread for excel/CSV/image files)</span>
+<span class="pl-en">fopen</span>(<span class="pl-smi">filename</span>)
+
+<span class="pl-c"><span class="pl-c">%</span> Output</span>
+<span class="pl-en">disp</span>(<span class="pl-smi">a</span>) <span class="pl-c"><span class="pl-c">%</span> Print out the value of variable a</span>
+<span class="pl-en">disp</span>(<span class="pl-s"><span class="pl-pds">'</span>Hello World<span class="pl-pds">'</span></span>) <span class="pl-c"><span class="pl-c">%</span> Print out a string</span>
+<span class="pl-smi">fprintf</span> <span class="pl-c"><span class="pl-c">%</span> Print to Command Window with more control</span>
+
+<span class="pl-c"><span class="pl-c">%</span> Conditional statements (the parentheses are optional, but good style)</span>
+<span class="pl-k">if</span> (<span class="pl-smi">a</span> <span class="pl-k">&gt;</span> <span class="pl-c1">23</span>)
+	<span class="pl-en">disp</span>(<span class="pl-s"><span class="pl-pds">'</span>Greater than 23<span class="pl-pds">'</span></span>)
+<span class="pl-k">elseif</span> (<span class="pl-smi">a</span> <span class="pl-k">==</span> <span class="pl-c1">23</span>)
+	<span class="pl-en">disp</span>(<span class="pl-s"><span class="pl-pds">'</span>a is 23<span class="pl-pds">'</span></span>)
+<span class="pl-k">else</span>
+	<span class="pl-en">disp</span>(<span class="pl-s"><span class="pl-pds">'</span>neither condition met<span class="pl-pds">'</span></span>)
+<span class="pl-k">end</span>
+
+<span class="pl-c"><span class="pl-c">%</span> Looping</span>
+<span class="pl-c"><span class="pl-c">%</span> NB. looping over elements of a vector/matrix is slow!</span>
+<span class="pl-c"><span class="pl-c">%</span> Where possible, use functions that act on whole vector/matrix at once</span>
+<span class="pl-k">for</span> k <span class="pl-k">=</span> <span class="pl-c1">1</span><span class="pl-k">:</span><span class="pl-c1">5</span>
+	<span class="pl-en">disp</span>(<span class="pl-smi">k</span>)
+<span class="pl-k">end</span>
+
+k <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+<span class="pl-k">while</span> (<span class="pl-smi">k</span> &lt; 5)
+	k <span class="pl-k">=</span> <span class="pl-smi">k</span> <span class="pl-k">+</span> <span class="pl-c1">1</span>;
+<span class="pl-k">end</span>
+
+<span class="pl-c"><span class="pl-c">%</span> Timing code execution: 'toc' prints the time since 'tic' was called</span>
+<span class="pl-smi">tic</span>
+A <span class="pl-k">=</span> <span class="pl-en">rand</span>(<span class="pl-c1">1000</span>);
+<span class="pl-smi">A</span><span class="pl-k">*</span><span class="pl-smi">A</span><span class="pl-k">*</span><span class="pl-smi">A</span><span class="pl-k">*</span><span class="pl-smi">A</span><span class="pl-k">*</span><span class="pl-smi">A</span><span class="pl-k">*</span><span class="pl-smi">A</span><span class="pl-k">*</span><span class="pl-smi">A</span>;
+<span class="pl-smi">toc</span>
+
+<span class="pl-c"><span class="pl-c">%</span> Connecting to a MySQL Database</span>
+dbname <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>database_name<span class="pl-pds">'</span></span>;
+username <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>root<span class="pl-pds">'</span></span>;
+password <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>root<span class="pl-pds">'</span></span>;
+driver <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>com.mysql.jdbc.Driver<span class="pl-pds">'</span></span>;
+dburl <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">'</span>jdbc:mysql://localhost:8889/<span class="pl-pds">'</span></span> <span class="pl-smi">dbname</span>];
+<span class="pl-en">javaclasspath</span>(<span class="pl-s"><span class="pl-pds">'</span>mysql-connector-java-5.1.xx-bin.jar<span class="pl-pds">'</span></span>); <span class="pl-c"><span class="pl-c">%</span>xx depends on version, download available at http://dev.mysql.com/downloads/connector/j/</span>
+conn <span class="pl-k">=</span> <span class="pl-en">database</span>(<span class="pl-smi">dbname</span>, <span class="pl-smi">username</span>, <span class="pl-smi">password</span>, <span class="pl-smi">driver</span>, <span class="pl-smi">dburl</span>);
+sql <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">'</span>SELECT * from table_name where id = 22<span class="pl-pds">'</span></span>] <span class="pl-c"><span class="pl-c">%</span> Example sql statement</span>
+a <span class="pl-k">=</span> <span class="pl-en">fetch</span>(<span class="pl-smi">conn</span>, <span class="pl-smi">sql</span>) <span class="pl-c"><span class="pl-c">%</span>a will contain your data</span>
+
+
+<span class="pl-c"><span class="pl-c">%</span> Common math functions</span>
+<span class="pl-en">sin</span>(<span class="pl-smi">x</span>)
+<span class="pl-en">cos</span>(<span class="pl-smi">x</span>)
+<span class="pl-en">tan</span>(<span class="pl-smi">x</span>)
+<span class="pl-en">asin</span>(<span class="pl-smi">x</span>)
+<span class="pl-en">acos</span>(<span class="pl-smi">x</span>)
+<span class="pl-en">atan</span>(<span class="pl-smi">x</span>)
+<span class="pl-en">exp</span>(<span class="pl-smi">x</span>)
+<span class="pl-en">sqrt</span>(<span class="pl-smi">x</span>)
+<span class="pl-en">log</span>(<span class="pl-smi">x</span>)
+<span class="pl-en">log10</span>(<span class="pl-smi">x</span>)
+<span class="pl-en">abs</span>(<span class="pl-smi">x</span>) <span class="pl-c"><span class="pl-c">%</span>If x is complex, returns magnitude</span>
+<span class="pl-en">min</span>(<span class="pl-smi">x</span>)
+<span class="pl-en">max</span>(<span class="pl-smi">x</span>)
+<span class="pl-en">ceil</span>(<span class="pl-smi">x</span>)
+<span class="pl-en">floor</span>(<span class="pl-smi">x</span>)
+<span class="pl-en">round</span>(<span class="pl-smi">x</span>)
+<span class="pl-en">rem</span>(<span class="pl-smi">x</span>)
+<span class="pl-smi">rand</span> <span class="pl-c"><span class="pl-c">%</span> Uniformly distributed pseudorandom numbers</span>
+<span class="pl-smi">randi</span> <span class="pl-c"><span class="pl-c">%</span> Uniformly distributed pseudorandom integers</span>
+<span class="pl-smi">randn</span> <span class="pl-c"><span class="pl-c">%</span> Normally distributed pseudorandom numbers</span>
+
+<span class="pl-c"><span class="pl-c">%</span>Complex math operations</span>
+<span class="pl-en">abs</span>(<span class="pl-smi">x</span>) 	 <span class="pl-c"><span class="pl-c">%</span> Magnitude of complex variable x</span>
+<span class="pl-en">phase</span>(<span class="pl-smi">x</span>) <span class="pl-c"><span class="pl-c">%</span> Phase (or angle) of complex variable x</span>
+<span class="pl-en">real</span>(<span class="pl-smi">x</span>)  <span class="pl-c"><span class="pl-c">%</span> Returns the real part of x (i.e returns a if x = a +jb)</span>
+<span class="pl-en">imag</span>(<span class="pl-smi">x</span>)  <span class="pl-c"><span class="pl-c">%</span> Returns the imaginary part of x (i.e returns b if x = a+jb)</span>
+<span class="pl-en">conj</span>(<span class="pl-smi">x</span>)  <span class="pl-c"><span class="pl-c">%</span> Returns the complex conjugate </span>
+
+
+<span class="pl-c"><span class="pl-c">%</span> Common constants</span>
+<span class="pl-c1">pi</span>
+<span class="pl-c1">NaN</span>
+<span class="pl-c1">inf</span>
+
+<span class="pl-c"><span class="pl-c">%</span> Solving matrix equations (if no solution, returns a least squares solution)</span>
+<span class="pl-c"><span class="pl-c">%</span> The \ and / operators are equivalent to the functions mldivide and mrdivide</span>
+x<span class="pl-k">=</span><span class="pl-smi">A</span><span class="pl-k">\</span><span class="pl-smi">b</span> <span class="pl-c"><span class="pl-c">%</span> Solves Ax=b. Faster and more numerically accurate than using inv(A)*b.</span>
+x<span class="pl-k">=</span><span class="pl-smi">b</span><span class="pl-k">/</span><span class="pl-smi">A</span> <span class="pl-c"><span class="pl-c">%</span> Solves xA=b</span>
+
+<span class="pl-en">inv</span>(<span class="pl-smi">A</span>) <span class="pl-c"><span class="pl-c">%</span> calculate the inverse matrix</span>
+<span class="pl-en">pinv</span>(<span class="pl-smi">A</span>) <span class="pl-c"><span class="pl-c">%</span> calculate the pseudo-inverse</span>
+
+<span class="pl-c"><span class="pl-c">%</span> Common matrix functions</span>
+<span class="pl-en">zeros</span>(<span class="pl-smi">m</span>,<span class="pl-smi">n</span>) <span class="pl-c"><span class="pl-c">%</span> m x n matrix of 0's</span>
+<span class="pl-en">ones</span>(<span class="pl-smi">m</span>,<span class="pl-smi">n</span>) <span class="pl-c"><span class="pl-c">%</span> m x n matrix of 1's</span>
+<span class="pl-en">diag</span>(<span class="pl-smi">A</span>) <span class="pl-c"><span class="pl-c">%</span> Extracts the diagonal elements of a matrix A</span>
+<span class="pl-en">diag</span>(<span class="pl-smi">x</span>) <span class="pl-c"><span class="pl-c">%</span> Construct a matrix with diagonal elements listed in x, and zeroes elsewhere</span>
+<span class="pl-en">eye</span>(<span class="pl-smi">m</span>,<span class="pl-smi">n</span>) <span class="pl-c"><span class="pl-c">%</span> Identity matrix</span>
+<span class="pl-en">linspace</span>(<span class="pl-smi">x1</span>, <span class="pl-smi">x2</span>, <span class="pl-smi">n</span>) <span class="pl-c"><span class="pl-c">%</span> Return n equally spaced points, with min x1 and max x2</span>
+<span class="pl-en">inv</span>(<span class="pl-smi">A</span>) <span class="pl-c"><span class="pl-c">%</span> Inverse of matrix A</span>
+<span class="pl-en">det</span>(<span class="pl-smi">A</span>) <span class="pl-c"><span class="pl-c">%</span> Determinant of A</span>
+<span class="pl-en">eig</span>(<span class="pl-smi">A</span>) <span class="pl-c"><span class="pl-c">%</span> Eigenvalues and eigenvectors of A</span>
+<span class="pl-en">trace</span>(<span class="pl-smi">A</span>) <span class="pl-c"><span class="pl-c">%</span> Trace of matrix - equivalent to sum(diag(A))</span>
+<span class="pl-en">isempty</span>(<span class="pl-smi">A</span>) <span class="pl-c"><span class="pl-c">%</span> Tests if array is empty</span>
+<span class="pl-en">all</span>(<span class="pl-smi">A</span>) <span class="pl-c"><span class="pl-c">%</span> Tests if all elements are nonzero or true</span>
+<span class="pl-en">any</span>(<span class="pl-smi">A</span>) <span class="pl-c"><span class="pl-c">%</span> Tests if any elements are nonzero or true</span>
+<span class="pl-en">isequal</span>(<span class="pl-smi">A</span>, <span class="pl-smi">B</span>) <span class="pl-c"><span class="pl-c">%</span> Tests equality of two arrays</span>
+<span class="pl-en">numel</span>(<span class="pl-smi">A</span>) <span class="pl-c"><span class="pl-c">%</span> Number of elements in matrix</span>
+<span class="pl-en">triu</span>(<span class="pl-smi">x</span>) <span class="pl-c"><span class="pl-c">%</span> Returns the upper triangular part of x</span>
+<span class="pl-en">tril</span>(<span class="pl-smi">x</span>) <span class="pl-c"><span class="pl-c">%</span> Returns the lower triangular part of x</span>
+<span class="pl-en">cross</span>(<span class="pl-smi">A</span>,<span class="pl-smi">B</span>) <span class="pl-c"><span class="pl-c">%</span>  Returns the cross product of the vectors A and B</span>
+<span class="pl-en">dot</span>(<span class="pl-smi">A</span>,<span class="pl-smi">B</span>) <span class="pl-c"><span class="pl-c">%</span> Returns scalar product of two vectors (must have the same length)</span>
+<span class="pl-en">transpose</span>(<span class="pl-smi">A</span>) <span class="pl-c"><span class="pl-c">%</span> Returns the transpose of A</span>
+<span class="pl-en">fliplr</span>(<span class="pl-smi">A</span>) <span class="pl-c"><span class="pl-c">%</span> Flip matrix left to right</span>
+<span class="pl-en">flipud</span>(<span class="pl-smi">A</span>) <span class="pl-c"><span class="pl-c">%</span> Flip matrix up to down</span>
+
+<span class="pl-c"><span class="pl-c">%</span> Matrix Factorisations</span>
+[<span class="pl-smi">L</span>, <span class="pl-smi">U</span>, <span class="pl-smi">P</span>] <span class="pl-k">=</span> <span class="pl-en">lu</span>(<span class="pl-smi">A</span>) <span class="pl-c"><span class="pl-c">%</span> LU decomposition: PA = LU,L is lower triangular, U is upper triangular, P is permutation matrix</span>
+[<span class="pl-smi">P</span>, <span class="pl-smi">D</span>] <span class="pl-k">=</span> <span class="pl-en">eig</span>(<span class="pl-smi">A</span>) <span class="pl-c"><span class="pl-c">%</span> eigen-decomposition: AP = PD, P's columns are eigenvectors and D's diagonals are eigenvalues</span>
+[<span class="pl-smi">U</span>,<span class="pl-smi">S</span>,<span class="pl-smi">V</span>] <span class="pl-k">=</span> <span class="pl-en">svd</span>(<span class="pl-smi">X</span>) <span class="pl-c"><span class="pl-c">%</span> SVD: XV = US, U and V are unitary matrices, S has non-negative diagonal elements in decreasing order</span>
+
+<span class="pl-c"><span class="pl-c">%</span> Common vector functions</span>
+<span class="pl-smi">max</span>     <span class="pl-c"><span class="pl-c">%</span> largest component</span>
+<span class="pl-smi">min</span>     <span class="pl-c"><span class="pl-c">%</span> smallest component</span>
+<span class="pl-smi">length</span>  <span class="pl-c"><span class="pl-c">%</span> length of a vector</span>
+<span class="pl-smi">sort</span>    <span class="pl-c"><span class="pl-c">%</span> sort in ascending order</span>
+<span class="pl-smi">sum</span>     <span class="pl-c"><span class="pl-c">%</span> sum of elements</span>
+<span class="pl-smi">prod</span>    <span class="pl-c"><span class="pl-c">%</span> product of elements</span>
+<span class="pl-smi">mode</span>    <span class="pl-c"><span class="pl-c">%</span> modal value</span>
+<span class="pl-smi">median</span>  <span class="pl-c"><span class="pl-c">%</span> median value</span>
+<span class="pl-smi">mean</span>    <span class="pl-c"><span class="pl-c">%</span> mean value</span>
+<span class="pl-smi">std</span>     <span class="pl-c"><span class="pl-c">%</span> standard deviation</span>
+<span class="pl-en">perms</span>(<span class="pl-smi">x</span>) <span class="pl-c"><span class="pl-c">%</span> list all permutations of elements of x</span>
+<span class="pl-en">find</span>(<span class="pl-smi">x</span>) <span class="pl-c"><span class="pl-c">%</span> Finds all non-zero elements of x and returns their indexes, can use comparison operators, </span>
+        <span class="pl-c"><span class="pl-c">%</span> i.e. find( x == 3 ) returns indexes of elements that are equal to 3</span>
+        <span class="pl-c"><span class="pl-c">%</span> i.e. find( x &gt;= 3 ) returns indexes of elements greater than or equal to 3</span>
+
+
+<span class="pl-c"><span class="pl-c">%</span> Classes</span>
+<span class="pl-c"><span class="pl-c">%</span> Matlab can support object-oriented programming. </span>
+<span class="pl-c"><span class="pl-c">%</span> Classes must be put in a file of the class name with a .m extension. </span>
+<span class="pl-c"><span class="pl-c">%</span> To begin, we create a simple class to store GPS waypoints.</span>
+<span class="pl-c"><span class="pl-c">%</span> Begin WaypointClass.m</span>
+<span class="pl-k">classdef</span> <span class="pl-en">WaypointClass</span> <span class="pl-c"><span class="pl-c">%</span> The class name.</span>
+  <span class="pl-k">properties</span> <span class="pl-c"><span class="pl-c">%</span> The properties of the class behave like Structures</span>
+    <span class="pl-v">latitude</span> 
+    <span class="pl-v">longitude</span> 
+  <span class="pl-k">end</span>
+  <span class="pl-k">methods</span> 
+    <span class="pl-c"><span class="pl-c">%</span> This method that has the same name of the class is the constructor. </span>
+    <span class="pl-k">function</span> <span class="pl-v">obj</span> <span class="pl-k">=</span> <span class="pl-en">WaypointClass</span>(<span class="pl-v">lat</span>, <span class="pl-v">lon</span>)
+      obj.latitude <span class="pl-k">=</span> <span class="pl-smi">lat</span>;
+      obj.longitude <span class="pl-k">=</span> <span class="pl-smi">lon</span>;
+    <span class="pl-k">end</span>
+
+    <span class="pl-c"><span class="pl-c">%</span> Other functions that use the Waypoint object</span>
+    <span class="pl-k">function</span> <span class="pl-v">r</span> <span class="pl-k">=</span> <span class="pl-en">multiplyLatBy</span>(<span class="pl-v">obj</span>, <span class="pl-v">n</span>)
+      r <span class="pl-k">=</span> <span class="pl-smi">n</span>*[<span class="pl-smi">obj</span>.<span class="pl-smi">latitude</span>];
+    <span class="pl-k">end</span>
+
+    <span class="pl-c"><span class="pl-c">%</span> If we want to add two Waypoint objects together without calling</span>
+    <span class="pl-c"><span class="pl-c">%</span> a special function we can overload Matlab's arithmetic like so:</span>
+    <span class="pl-k">function</span> <span class="pl-v">r</span> <span class="pl-k">=</span> <span class="pl-en">plus</span>(<span class="pl-v">o1</span>,<span class="pl-v">o2</span>)
+      r <span class="pl-k">=</span> <span class="pl-en">WaypointClass</span>([<span class="pl-smi">o1</span>.<span class="pl-smi">latitude</span>] +[<span class="pl-smi">o2</span>.<span class="pl-smi">latitude</span>], ...
+                        [<span class="pl-smi">o1</span>.<span class="pl-smi">longitude</span>]+[<span class="pl-smi">o2</span>.<span class="pl-smi">longitude</span>]);
+    <span class="pl-k">end</span>
+  <span class="pl-k">end</span>
+<span class="pl-k">end</span>
+<span class="pl-c"><span class="pl-c">%</span> End WaypointClass.m</span>
+
+<span class="pl-c"><span class="pl-c">%</span> We can create an object of the class using the constructor</span>
+a <span class="pl-k">=</span> <span class="pl-en">WaypointClass</span>(<span class="pl-c1">45.0</span>, <span class="pl-c1">45.0</span>)
+
+<span class="pl-c"><span class="pl-c">%</span> Class properties behave exactly like Matlab Structures.</span>
+a.latitude <span class="pl-k">=</span> <span class="pl-c1">70.0</span>
+a.longitude <span class="pl-k">=</span> <span class="pl-c1">25.0</span>
+
+<span class="pl-c"><span class="pl-c">%</span> Methods can be called in the same way as functions</span>
+ans <span class="pl-k">=</span> <span class="pl-en">multiplyLatBy</span>(<span class="pl-smi">a</span>,<span class="pl-c1">3</span>)
+
+<span class="pl-c"><span class="pl-c">%</span> The method can also be called using dot notation. In this case, the object </span>
+<span class="pl-c"><span class="pl-c">%</span> does not need to be passed to the method.</span>
+ans <span class="pl-k">=</span> <span class="pl-smi">a</span>.<span class="pl-en">multiplyLatBy</span>(<span class="pl-c1">1</span><span class="pl-k">/</span><span class="pl-c1">3</span>)
+
+<span class="pl-c"><span class="pl-c">%</span> Matlab functions can be overloaded to handle objects. </span>
+<span class="pl-c"><span class="pl-c">%</span> In the method above, we have overloaded how Matlab handles </span>
+<span class="pl-c"><span class="pl-c">%</span> the addition of two Waypoint objects.</span>
+b <span class="pl-k">=</span> <span class="pl-en">WaypointClass</span>(<span class="pl-c1">15.0</span>, <span class="pl-c1">32.0</span>)
+c <span class="pl-k">=</span> <span class="pl-smi">a</span> <span class="pl-k">+</span> <span class="pl-smi">b</span>
+</pre></div>
+<h2>More on Matlab</h2>
+<ul>
+<li><a href="http://www.mathworks.com/products/matlab/" rel="nofollow">The official website</a></li>
+<li><a href="http://www.mathworks.com/matlabcentral/answers/" rel="nofollow">The official MATLAB Answers forum</a></li>
+<li><a href="http://blogs.mathworks.com/loren/" rel="nofollow">Loren on the Art of MATLAB</a></li>
+<li><a href="http://blogs.mathworks.com/cleve/" rel="nofollow">Cleve's Corner</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["mendozao", "http://github.com/mendozao"]
+- ["jamesscottbrown", "http://jamesscottbrown.com"]
+- ["Colton Kohnke", "http://github.com/voltnor"]
+- ["Claudson Martins", "http://github.com/claudsonm"]
+</code></pre>

@@ -1,0 +1,372 @@
+<h1>MIPS</h1>
+<p>The MIPS (Microprocessor without Interlocked Pipeline Stages) Assembly language<br>
+is designed to work with the MIPS microprocessor paradigm designed by J. L.<br>
+Hennessy in 1981. These RISC processors are used in embedded systems such as<br>
+gateways and routers.</p>
+<p><a href="https://en.wikipedia.org/wiki/MIPS_architecture" rel="nofollow">Read More</a></p>
+<div class="highlight highlight-source-assembly"><pre class="notranslate"><span class="pl-en"># Comments are denoted with a </span><span class="pl-s">'#'</span>
+
+<span class="pl-en"># Everything th</span><span class="pl-c1">at</span> <span class="pl-en">occurs after a </span><span class="pl-s">'#'</span><span class="pl-en"> will be ignored by the assembler's lexer.</span>
+
+<span class="pl-en"># Programs typically contain a .data </span><span class="pl-k">and</span><span class="pl-en"> .text sections</span>
+
+<span class="pl-en">.data # Section where data is stored </span><span class="pl-k">in</span><span class="pl-en"> memory (allocated </span><span class="pl-k">in</span><span class="pl-en"> RAM)</span><span class="pl-s1">,</span><span class="pl-en"> similar to</span>
+<span class="pl-en">      # variables </span><span class="pl-k">in</span><span class="pl-en"> higher</span><span class="pl-s1">-</span><span class="pl-en">level languages</span>
+
+<span class="pl-en">  # Declarations follow a ( label: .type value(s) ) form of declaration</span>
+<span class="pl-en">  hello_world: .asciiz </span><span class="pl-s">"Hello World\n"</span><span class="pl-en">      # Declare a null terminated string</span>
+<span class="pl-en">  num1: .word </span><span class="pl-c1">42</span><span class="pl-en">                            # Integers are referred to as words</span>
+<span class="pl-en">                                            # (</span><span class="pl-c1">32</span><span class="pl-s1">-</span><span class="pl-en">bit value)</span>
+
+<span class="pl-en">  arr1: .word </span><span class="pl-c1">1</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">2</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">3</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">4</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">5</span><span class="pl-en">                 # Array of words</span>
+<span class="pl-en">  arr2: .byte </span><span class="pl-s">'a'</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-s">'b'</span><span class="pl-en">                      # Array of chars (</span><span class="pl-c1">1</span><span class="pl-en"> byte </span><span class="pl-c1">each</span><span class="pl-en">)</span>
+<span class="pl-en">  buffer: .space </span><span class="pl-c1">60</span><span class="pl-en">                         # Allocates space </span><span class="pl-k">in</span><span class="pl-en"> the RAM </span>
+<span class="pl-en">                                            # (</span><span class="pl-k">not</span><span class="pl-en"> cleared to </span><span class="pl-c1">0</span><span class="pl-en">)</span>
+
+<span class="pl-en">  # Datatype sizes</span>
+<span class="pl-en">  _byte: .byte </span><span class="pl-s">'a'</span><span class="pl-en">                          # </span><span class="pl-c1">1</span><span class="pl-en"> byte</span>
+<span class="pl-en">  _halfword: .half </span><span class="pl-c1">53</span><span class="pl-en">                       # </span><span class="pl-c1">2</span><span class="pl-en"> bytes</span>
+<span class="pl-en">  _word: .word </span><span class="pl-c1">3</span><span class="pl-en">                            # </span><span class="pl-c1">4</span><span class="pl-en"> bytes</span>
+<span class="pl-en">  _</span><span class="pl-c1">float</span><span class="pl-en">: .</span><span class="pl-c1">float</span> <span class="pl-c1">3</span><span class="pl-en">.</span><span class="pl-c1">14</span><span class="pl-en">                       # </span><span class="pl-c1">4</span><span class="pl-en"> bytes</span>
+<span class="pl-en">  _double: .double </span><span class="pl-c1">7</span><span class="pl-en">.</span><span class="pl-c1">0</span><span class="pl-en">                      # </span><span class="pl-c1">8</span><span class="pl-en"> bytes</span>
+
+<span class="pl-en">  .</span><span class="pl-c1">align</span><span class="pl-en"> </span><span class="pl-c1">2</span><span class="pl-en">                                  # Memory alignment of data</span><span class="pl-s1">,</span><span class="pl-en"> where</span>
+<span class="pl-en">                                            # number indicates byte alignment</span>
+<span class="pl-en">                                            # </span><span class="pl-k">in</span><span class="pl-en"> powers of </span><span class="pl-c1">2</span><span class="pl-en">. (.align </span><span class="pl-c1">2</span>
+<span class="pl-en">                                            # represents word alignment since</span>
+<span class="pl-en">                                            # </span><span class="pl-c1">2</span><span class="pl-en">^</span><span class="pl-c1">2</span><span class="pl-en"> = </span><span class="pl-c1">4</span><span class="pl-en"> bytes)</span>
+
+<span class="pl-en">.text                                       # Section th</span><span class="pl-c1">at</span> <span class="pl-en">contains </span>
+<span class="pl-en">                                            # instructions </span><span class="pl-k">and</span><span class="pl-en"> program logic</span>
+<span class="pl-en">.globl _main                                # Declares an instruction label as</span>
+<span class="pl-en">                                            #</span> <span class="pl-c1">global</span><span class="pl-s1">,</span><span class="pl-en"> making it accessible to</span>
+<span class="pl-en">                                            # other files</span>
+
+<span class="pl-en">  _main:                                    # MIPS programs execute </span>
+<span class="pl-en">                                            # instructions sequentially</span><span class="pl-s1">,</span><span class="pl-en"> where </span>
+<span class="pl-en">                                            # the code under this label will be</span>
+<span class="pl-en">                                            # executed first</span>
+
+<span class="pl-en">    # Let</span><span class="pl-s">'s print "</span><span class="pl-en">hello world"</span>
+<span class="pl-en">    la</span> <span class="pl-c1">$</span><span class="pl-en">a0</span><span class="pl-s1">,</span><span class="pl-en"> hello_world                     # Load address of string stored</span>
+<span class="pl-en">                                            # </span><span class="pl-k">in</span><span class="pl-en"> memory</span>
+<span class="pl-en">    li</span> <span class="pl-c1">$</span><span class="pl-en">v0</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">4</span><span class="pl-en">                               # Load the </span><span class="pl-k">syscall</span><span class="pl-en"> value (number</span>
+<span class="pl-en">                                            # indicating which </span><span class="pl-k">syscall</span><span class="pl-en"> to make)</span>
+<span class="pl-en">    </span><span class="pl-k">syscall</span><span class="pl-en">                                 # Perform the specified </span><span class="pl-k">syscall</span>
+<span class="pl-en">                                            # with the given argument (</span><span class="pl-c1">$</span><span class="pl-en">a0)</span>
+
+<span class="pl-en">    # Registers (used to hold data during program execution)</span>
+<span class="pl-en">    #</span> <span class="pl-c1">$</span><span class="pl-en">t0 </span><span class="pl-s1">-</span> <span class="pl-c1">$</span><span class="pl-en">t9                             # Temporary registers used for </span>
+<span class="pl-en">                                            # intermediate calculations inside </span>
+<span class="pl-en">                                            # subroutines (</span><span class="pl-k">not</span><span class="pl-en"> saved across </span>
+<span class="pl-en">                                            # function calls)</span>
+
+<span class="pl-en">    #</span> <span class="pl-c1">$</span><span class="pl-en">s0 </span><span class="pl-s1">-</span> <span class="pl-c1">$</span><span class="pl-en">s7                             # Saved registers where values are </span>
+<span class="pl-en">                                            # saved across subroutine calls. </span>
+<span class="pl-en">                                            # Typically saved </span><span class="pl-k">in</span><span class="pl-en"> stack</span>
+
+<span class="pl-en">    #</span> <span class="pl-c1">$</span><span class="pl-en">a0 </span><span class="pl-s1">-</span> <span class="pl-c1">$</span><span class="pl-en">a3                             # Argument registers for passing </span><span class="pl-k">in</span><span class="pl-en"> </span>
+<span class="pl-en">                                            # arguments for subroutines</span>
+<span class="pl-en">    #</span> <span class="pl-c1">$</span><span class="pl-en">v0 </span><span class="pl-s1">-</span> <span class="pl-c1">$</span><span class="pl-en">v1                             # Return registers for returning </span>
+<span class="pl-en">                                            # values to caller function</span>
+
+<span class="pl-en">    # Types of load/store instructions</span>
+<span class="pl-en">    la</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span><span class="pl-en"> label                           # Copy the address of a value </span><span class="pl-k">in</span>
+<span class="pl-en">                                            # memory specified by the label</span>
+<span class="pl-en">                                            # </span><span class="pl-k">into</span><span class="pl-en"> register</span> <span class="pl-c1">$</span><span class="pl-en">t0</span>
+<span class="pl-en">    lw</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span><span class="pl-en"> label                           # Copy a word value from memory</span>
+<span class="pl-en">    lw</span> <span class="pl-c1">$</span><span class="pl-en">t1</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">4</span><span class="pl-en">(</span><span class="pl-c1">$</span><span class="pl-en">s0)                          # Copy a word value from an address</span>
+<span class="pl-en">                                            # stored </span><span class="pl-k">in</span><span class="pl-en"> a register with an</span>
+<span class="pl-en">                                            # offset of </span><span class="pl-c1">4</span><span class="pl-en"> bytes (addr </span><span class="pl-s1">+</span><span class="pl-en"> </span><span class="pl-c1">4</span><span class="pl-en">)</span>
+<span class="pl-en">    lb</span> <span class="pl-c1">$</span><span class="pl-en">t2</span><span class="pl-s1">,</span><span class="pl-en"> label                           # Copy a byte value to the </span>
+<span class="pl-en">                                            # lower order portion of </span>
+<span class="pl-en">                                            # the register</span> <span class="pl-c1">$</span><span class="pl-en">t2</span>
+<span class="pl-en">    lb</span> <span class="pl-c1">$</span><span class="pl-en">t2</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">0</span><span class="pl-en">(</span><span class="pl-c1">$</span><span class="pl-en">s0)                          # Copy a byte value from the source</span>
+<span class="pl-en">                                            # address </span><span class="pl-k">in</span> <span class="pl-c1">$</span><span class="pl-en">s0 with offset </span><span class="pl-c1">0</span>
+<span class="pl-en">    # Same idea with </span><span class="pl-s">'lh'</span><span class="pl-en"> for halfwords</span>
+
+<span class="pl-en">    sw</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span><span class="pl-en"> label                           # Store word value </span><span class="pl-k">into</span>
+<span class="pl-en">                                            # memory address mapped by label</span>
+<span class="pl-en">    sw</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">8</span><span class="pl-en">(</span><span class="pl-c1">$</span><span class="pl-en">s0)                          # Store word value </span><span class="pl-k">into</span><span class="pl-en"> address </span>
+<span class="pl-en">                                            # specified </span><span class="pl-k">in</span> <span class="pl-c1">$</span><span class="pl-en">s0 </span><span class="pl-k">and</span><span class="pl-en"> offset of</span>
+<span class="pl-en">                                            # </span><span class="pl-c1">8</span><span class="pl-en"> bytes</span>
+<span class="pl-en">    # Same idea using </span><span class="pl-s">'sb'</span><span class="pl-en"> </span><span class="pl-k">and</span><span class="pl-en"> </span><span class="pl-s">'sh'</span><span class="pl-en"> for bytes </span><span class="pl-k">and</span><span class="pl-en"> halfwords. </span><span class="pl-s">'sa'</span><span class="pl-en"> does </span><span class="pl-k">not</span><span class="pl-en"> exist</span>
+
+<span class="pl-en">### Math ###</span>
+<span class="pl-en">  _math:</span>
+<span class="pl-en">    # Remember to load your values </span><span class="pl-k">into</span><span class="pl-en"> a register</span>
+<span class="pl-en">    lw</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span><span class="pl-en"> num                             # From the data section</span>
+<span class="pl-en">    li</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">5</span><span class="pl-en">                               # </span><span class="pl-k">Or</span><span class="pl-en"> from an immediate (constant)</span>
+<span class="pl-en">    li</span> <span class="pl-c1">$</span><span class="pl-en">t1</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">6</span>
+<span class="pl-en">    </span><span class="pl-k">add</span> <span class="pl-c1">$</span><span class="pl-en">t2</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t1                       #</span> <span class="pl-c1">$</span><span class="pl-en">t2 =</span> <span class="pl-c1">$</span><span class="pl-en">t0 </span><span class="pl-s1">+</span> <span class="pl-c1">$</span><span class="pl-en">t1</span>
+<span class="pl-en">    </span><span class="pl-k">sub</span> <span class="pl-c1">$</span><span class="pl-en">t2</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t1                       #</span> <span class="pl-c1">$</span><span class="pl-en">t2 =</span> <span class="pl-c1">$</span><span class="pl-en">t0 </span><span class="pl-s1">-</span> <span class="pl-c1">$</span><span class="pl-en">t1</span>
+<span class="pl-en">    </span><span class="pl-k">mul</span> <span class="pl-c1">$</span><span class="pl-en">t2</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t1                       #</span> <span class="pl-c1">$</span><span class="pl-en">t2 =</span> <span class="pl-c1">$</span><span class="pl-en">t0 </span><span class="pl-s1">*</span> <span class="pl-c1">$</span><span class="pl-en">t1</span>
+<span class="pl-en">    </span><span class="pl-k">div</span> <span class="pl-c1">$</span><span class="pl-en">t2</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t1                       #</span> <span class="pl-c1">$</span><span class="pl-en">t2 =</span> <span class="pl-c1">$</span><span class="pl-en">t0 /</span> <span class="pl-c1">$</span><span class="pl-en">t1 (Might </span><span class="pl-k">not</span><span class="pl-en"> be </span>
+<span class="pl-en">                                            # supported </span><span class="pl-k">in</span><span class="pl-en"> some versions of MARS)</span>
+<span class="pl-en">    </span><span class="pl-k">div</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t1                            # Performs</span> <span class="pl-c1">$</span><span class="pl-en">t0 /</span> <span class="pl-c1">$</span><span class="pl-en">t1. Get the </span>
+<span class="pl-en">                                            # quotient using </span><span class="pl-s">'mflo'</span><span class="pl-en"> </span><span class="pl-k">and</span><span class="pl-en"> </span>
+<span class="pl-en">                                            # remainder using </span><span class="pl-s">'mfhi'</span>
+
+<span class="pl-en">    # Bitwise Shifting</span>
+<span class="pl-en">    sll</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">2</span><span class="pl-en">                         # Bitwise shift to the left with </span>
+<span class="pl-en">                                            # immediate (constant value) of </span><span class="pl-c1">2</span>
+<span class="pl-en">    sllv</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t1</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t2                      # Shift left by a variable amount</span>
+<span class="pl-en">                                            # </span><span class="pl-k">in</span><span class="pl-en"> register</span>
+<span class="pl-en">    srl</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">5</span><span class="pl-en">                         # Bitwise shift to the right (does </span>
+<span class="pl-en">                                            # </span><span class="pl-k">not</span><span class="pl-en"> sign preserve</span><span class="pl-s1">,</span><span class="pl-en"> sign</span><span class="pl-s1">-</span><span class="pl-en">extends </span>
+<span class="pl-en">                                            # with </span><span class="pl-c1">0</span><span class="pl-en">)</span>
+<span class="pl-en">    srlv</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t1</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t2                      # Shift right by a variable amount </span>
+<span class="pl-en">                                            # </span><span class="pl-k">in</span><span class="pl-en"> a register</span>
+<span class="pl-en">    sra</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">7</span><span class="pl-en">                         # Bitwise arithmetic shift to  </span>
+<span class="pl-en">                                            # the right (preserves sign)</span>
+<span class="pl-en">    srav</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t1</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t2                      # Shift right by a variable amount </span>
+<span class="pl-en">                                            # </span><span class="pl-k">in</span><span class="pl-en"> a register</span>
+
+<span class="pl-en">    # Bitwise operators</span>
+<span class="pl-en">    </span><span class="pl-k">and</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t1</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t2                       # Bitwise </span><span class="pl-k">AND</span>
+<span class="pl-en">    andi</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t1</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">0xFFF</span><span class="pl-en">                    # Bitwise </span><span class="pl-k">AND</span><span class="pl-en"> with immediate</span>
+<span class="pl-en">    </span><span class="pl-k">or</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t1</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t2                        # Bitwise </span><span class="pl-k">OR</span>
+<span class="pl-en">    ori</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t1</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">0xFFF</span><span class="pl-en">                     # Bitwise </span><span class="pl-k">OR</span><span class="pl-en"> with immediate</span>
+<span class="pl-en">    </span><span class="pl-k">xor</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t1</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t2                       # Bitwise </span><span class="pl-k">XOR</span>
+<span class="pl-en">    xori</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t1</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">0xFFF</span><span class="pl-en">                    # Bitwise </span><span class="pl-k">XOR</span><span class="pl-en"> with immediate</span>
+<span class="pl-en">    nor</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t1</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t2                       # Bitwise NOR</span>
+
+<span class="pl-en">## BRANCHING ##</span>
+<span class="pl-en">  _branching:</span>
+<span class="pl-en">    # The basic form</span><span class="pl-c1">at</span> <span class="pl-en">of these branching instructions typically follow &lt;instr&gt;</span>
+<span class="pl-en">    # &lt;reg1&gt; &lt;reg2&gt; &lt;label&gt; where label is the label we want to jump to if the</span>
+<span class="pl-en">    # given conditional evaluates to true</span>
+<span class="pl-en">    # Sometimes it is easier to write the conditional logic backward</span><span class="pl-s1">,</span><span class="pl-en"> as seen</span>
+<span class="pl-en">    # </span><span class="pl-k">in</span><span class="pl-en"> the simple if statement example below</span>
+
+<span class="pl-en">    beq</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t1</span><span class="pl-s1">,</span><span class="pl-en"> reg_eq                    # Will branch to reg_eq if</span>
+<span class="pl-en">                                            #</span> <span class="pl-c1">$</span><span class="pl-en">t0 ==</span> <span class="pl-c1">$</span><span class="pl-en">t1</span><span class="pl-s1">,</span><span class="pl-en"> otherwise</span>
+<span class="pl-en">                                            # execute the next line</span>
+<span class="pl-en">    bne</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t1</span><span class="pl-s1">,</span><span class="pl-en"> reg_neq                   # Branches when</span> <span class="pl-c1">$</span><span class="pl-en">t0 !=</span> <span class="pl-c1">$</span><span class="pl-en">t1</span>
+<span class="pl-en">    b branch_target                         # Unconditional branch</span><span class="pl-s1">,</span><span class="pl-en"> will </span>
+<span class="pl-en">                                            # always execute</span>
+<span class="pl-en">    beqz</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span><span class="pl-en"> req_eq_zero                   # Branches when</span> <span class="pl-c1">$</span><span class="pl-en">t0 == </span><span class="pl-c1">0</span>
+<span class="pl-en">    bnez</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span><span class="pl-en"> req_neq_zero                  # Branches when</span> <span class="pl-c1">$</span><span class="pl-en">t0 != </span><span class="pl-c1">0</span>
+<span class="pl-en">    bgt</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t1</span><span class="pl-s1">,</span><span class="pl-en"> t0_gt_t1                  # Branches when</span> <span class="pl-c1">$</span><span class="pl-en">t0 &gt;</span> <span class="pl-c1">$</span><span class="pl-en">t1</span>
+<span class="pl-en">    bge</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t1</span><span class="pl-s1">,</span><span class="pl-en"> t0_gte_t1                 # Branches when</span> <span class="pl-c1">$</span><span class="pl-en">t0 &gt;=</span> <span class="pl-c1">$</span><span class="pl-en">t1</span>
+<span class="pl-en">    bgtz</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span><span class="pl-en"> t0_gt0                        # Branches when</span> <span class="pl-c1">$</span><span class="pl-en">t0 &gt; </span><span class="pl-c1">0</span>
+<span class="pl-en">    blt</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t1</span><span class="pl-s1">,</span><span class="pl-en"> t0_gt_t1                  # Branches when</span> <span class="pl-c1">$</span><span class="pl-en">t0 &lt;</span> <span class="pl-c1">$</span><span class="pl-en">t1</span>
+<span class="pl-en">    ble</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t1</span><span class="pl-s1">,</span><span class="pl-en"> t0_gte_t1                 # Branches when</span> <span class="pl-c1">$</span><span class="pl-en">t0 &lt;=</span> <span class="pl-c1">$</span><span class="pl-en">t1</span>
+<span class="pl-en">    bltz</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span><span class="pl-en"> t0_lt0                        # Branches when</span> <span class="pl-c1">$</span><span class="pl-en">t0 &lt; </span><span class="pl-c1">0</span>
+<span class="pl-en">    slt</span> <span class="pl-c1">$</span><span class="pl-en">s0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t1                       # Instruction th</span><span class="pl-c1">at</span> <span class="pl-en">sends a signal </span>
+<span class="pl-en">                                            # when</span> <span class="pl-c1">$</span><span class="pl-en">t0 &lt;</span> <span class="pl-c1">$</span><span class="pl-en">t1 with result </span><span class="pl-k">in</span> <span class="pl-c1">$</span><span class="pl-en">s0 </span>
+<span class="pl-en">                                            # (</span><span class="pl-c1">1</span><span class="pl-en"> for true)</span>
+
+<span class="pl-en">    # Simple if statement</span>
+<span class="pl-en">    # if (i == j)</span>
+<span class="pl-en">    #     f = g </span><span class="pl-s1">+</span><span class="pl-en"> h</span><span class="pl-c">;</span>
+<span class="pl-en">    #  f = f </span><span class="pl-s1">-</span><span class="pl-en"> i</span><span class="pl-c">;</span>
+
+<span class="pl-en">    # Let</span> <span class="pl-c1">$</span><span class="pl-en">s0 = f</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">s1 = g</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">s2 = h</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">s3 = i</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">s4 = j</span>
+<span class="pl-en">    bne</span> <span class="pl-c1">$</span><span class="pl-en">s3</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">s4</span><span class="pl-s1">,</span><span class="pl-en"> L1 # if (i !=j)</span>
+<span class="pl-en">    </span><span class="pl-k">add</span> <span class="pl-c1">$</span><span class="pl-en">s0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">s1</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">s2 # f = g </span><span class="pl-s1">+</span><span class="pl-en"> h</span>
+
+<span class="pl-en">    L1:</span>
+<span class="pl-en">      </span><span class="pl-k">sub</span> <span class="pl-c1">$</span><span class="pl-en">s0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">s0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">s3 # f = f </span><span class="pl-s1">-</span><span class="pl-en"> i</span>
+<span class="pl-en">    </span>
+<span class="pl-en">    # Below is an example of finding the max of </span><span class="pl-c1">3</span><span class="pl-en"> numbers</span>
+<span class="pl-en">    # A direct translation </span><span class="pl-k">in</span><span class="pl-en"> Java from MIPS logic:</span>
+<span class="pl-en">    # if (a &gt; b)</span>
+<span class="pl-en">    #   if (a &gt; c)</span>
+<span class="pl-en">    #     max = a</span><span class="pl-c">;</span>
+<span class="pl-en">    #   else</span>
+<span class="pl-en">    #     max = c</span><span class="pl-c">;</span>
+<span class="pl-en">    # else</span>
+<span class="pl-en">    #     max = b</span><span class="pl-c">;</span>
+<span class="pl-en">    #   else</span>
+<span class="pl-en">    #     max = c</span><span class="pl-c">;</span>
+
+<span class="pl-en">    # Let</span> <span class="pl-c1">$</span><span class="pl-en">s0 = a</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">s1 = b</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">s2 = c</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">v0 = return register</span>
+<span class="pl-en">    ble</span> <span class="pl-c1">$</span><span class="pl-en">s0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">s1</span><span class="pl-s1">,</span><span class="pl-en"> a_LTE_b                   # if(a &lt;= b) branch(a_LTE_b)</span>
+<span class="pl-en">    ble</span> <span class="pl-c1">$</span><span class="pl-en">s0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">s2</span><span class="pl-s1">,</span><span class="pl-en"> max_C                     # if(a &gt; b &amp;&amp; a &lt;=c) branch(max_C)</span>
+<span class="pl-en">    move</span> <span class="pl-c1">$</span><span class="pl-en">v0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">s0                           # else </span><span class="pl-s1">[</span><span class="pl-en">a &gt; b &amp;&amp; a &gt; c</span><span class="pl-s1">]</span><span class="pl-en"> max = a</span>
+<span class="pl-en">    j done                                  # Jump to the end of the program</span>
+
+<span class="pl-en">    a_LTE_b:                                # Label for when a &lt;= b</span>
+<span class="pl-en">      ble</span> <span class="pl-c1">$</span><span class="pl-en">s1</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">s2</span><span class="pl-s1">,</span><span class="pl-en"> max_C                   # if(a &lt;= b &amp;&amp; b &lt;= c) branch(max_C)</span>
+<span class="pl-en">      move</span> <span class="pl-c1">$</span><span class="pl-en">v0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">s1                         # if(a &lt;= b &amp;&amp; b &gt; c) max = b</span>
+<span class="pl-en">      j done                                # Jump to done</span>
+
+<span class="pl-en">    max_C:</span>
+<span class="pl-en">      move</span> <span class="pl-c1">$</span><span class="pl-en">v0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">s2                         # max = c</span>
+
+<span class="pl-en">    done:                                   # End of program</span>
+
+<span class="pl-en">## LOOPS ##</span>
+<span class="pl-en">  _loops:</span>
+<span class="pl-en">    # The basic structure of loops is having an exit condition </span><span class="pl-k">and</span><span class="pl-en"> a jump </span>
+<span class="pl-en">    # instruction to continue its execution</span>
+<span class="pl-en">    li</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">0</span>
+<span class="pl-en">    while:</span>
+<span class="pl-en">      bgt</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">10</span><span class="pl-s1">,</span><span class="pl-en"> end_while                # While</span> <span class="pl-c1">$</span><span class="pl-en">t0 is less than </span><span class="pl-c1">10</span><span class="pl-s1">,</span><span class="pl-en"> </span>
+<span class="pl-en">                                            # keep iterating</span>
+<span class="pl-en">      addi</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">1</span><span class="pl-en">                      # Increment the value</span>
+<span class="pl-en">      j while                               # Jump back to the beginning of </span>
+<span class="pl-en">                                            # the </span><span class="pl-k">loop</span>
+<span class="pl-en">    end_while:</span>
+
+<span class="pl-en">    # 2D Matrix Traversal</span>
+<span class="pl-en">    # Assume th</span><span class="pl-c1">at</span> <span class="pl-c1">$</span><span class="pl-en">a0 stores the address of an integer matrix which is </span><span class="pl-c1">3</span><span class="pl-en"> x </span><span class="pl-c1">3</span>
+<span class="pl-en">    li</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">0</span><span class="pl-en">                               # Counter for i</span>
+<span class="pl-en">    li</span> <span class="pl-c1">$</span><span class="pl-en">t1</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">0</span><span class="pl-en">                               # Counter for j</span>
+<span class="pl-en">    matrix_row:</span>
+<span class="pl-en">      bgt</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">3</span><span class="pl-s1">,</span><span class="pl-en"> matrix_row_end</span>
+
+<span class="pl-en">      matrix_col:</span>
+<span class="pl-en">        bgt</span> <span class="pl-c1">$</span><span class="pl-en">t1</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">3</span><span class="pl-s1">,</span><span class="pl-en"> matrix_col_end</span>
+
+<span class="pl-en">        # </span><span class="pl-c1">Do</span><span class="pl-en"> stuff</span>
+
+<span class="pl-en">        addi</span> <span class="pl-c1">$</span><span class="pl-en">t1</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t1</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">1</span><span class="pl-en">                  # Increment the col counter</span>
+<span class="pl-en">      matrix_col_end:</span>
+
+<span class="pl-en">      # </span><span class="pl-c1">Do</span><span class="pl-en"> stuff</span>
+
+<span class="pl-en">      addi</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">1</span>
+<span class="pl-en">    matrix_row_end:</span>
+
+<span class="pl-en">## FUNCTIONS ##</span>
+<span class="pl-en">  _functions:</span>
+<span class="pl-en">    # Functions are callable procedures th</span><span class="pl-c1">at</span> <span class="pl-en">can accept arguments </span><span class="pl-k">and</span><span class="pl-en"> return </span>
+<span class="pl-en">    # values all denoted with labels</span><span class="pl-s1">,</span><span class="pl-en"> like above</span>
+
+<span class="pl-en">    main:                                 # Programs begin with main func</span>
+<span class="pl-en">      jal return_1                        # jal will store the current PC </span><span class="pl-k">in</span> <span class="pl-c1">$</span><span class="pl-en">ra</span>
+<span class="pl-en">                                          # </span><span class="pl-k">and</span><span class="pl-en"> then jump to return_1</span>
+
+<span class="pl-en">      # Wh</span><span class="pl-c1">at</span> <span class="pl-en">if we want to pass </span><span class="pl-k">in</span><span class="pl-en"> args?</span>
+<span class="pl-en">      # First we must pass </span><span class="pl-k">in</span><span class="pl-en"> our parameters to the argument registers</span>
+<span class="pl-en">      li</span> <span class="pl-c1">$</span><span class="pl-en">a0</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">1</span>
+<span class="pl-en">      li</span> <span class="pl-c1">$</span><span class="pl-en">a1</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">2</span>
+<span class="pl-en">      jal sum                             # Now we can </span><span class="pl-k">call</span><span class="pl-en"> the function</span>
+
+<span class="pl-en">      # How about recursion?</span>
+<span class="pl-en">      # This is a bit more work since we need to make sure we save </span><span class="pl-k">and</span><span class="pl-en"> restore</span>
+<span class="pl-en">      # the previous PC </span><span class="pl-k">in</span> <span class="pl-c1">$</span><span class="pl-en">ra since jal will automatically overwrite </span>
+<span class="pl-en">      # on </span><span class="pl-c1">each</span><span class="pl-en"> </span><span class="pl-k">call</span>
+<span class="pl-en">      li</span> <span class="pl-c1">$</span><span class="pl-en">a0</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">3</span>
+<span class="pl-en">      jal fact</span>
+
+<span class="pl-en">      li</span> <span class="pl-c1">$</span><span class="pl-en">v0</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">10</span>
+<span class="pl-en">      </span><span class="pl-k">syscall</span>
+<span class="pl-en">    </span>
+<span class="pl-en">    # This function returns </span><span class="pl-c1">1</span>
+<span class="pl-en">    return_1:</span>
+<span class="pl-en">      li</span> <span class="pl-c1">$</span><span class="pl-en">v0</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">1</span><span class="pl-en">                           # Load val </span><span class="pl-k">in</span><span class="pl-en"> return register</span> <span class="pl-c1">$</span><span class="pl-en">v0</span>
+<span class="pl-en">      jr</span> <span class="pl-c1">$</span><span class="pl-en">ra                              # Jump back to old PC to continue exec</span>
+
+
+<span class="pl-en">    # Function with </span><span class="pl-c1">2</span><span class="pl-en"> args</span>
+<span class="pl-en">    sum:</span>
+<span class="pl-en">      </span><span class="pl-k">add</span> <span class="pl-c1">$</span><span class="pl-en">v0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">a0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">a1</span>
+<span class="pl-en">      jr</span> <span class="pl-c1">$</span><span class="pl-en">ra                              # Return</span>
+
+<span class="pl-en">    # Recursive function to find factorial</span>
+<span class="pl-en">    fact:</span>
+<span class="pl-en">      addi</span> <span class="pl-c1">$</span><span class="pl-en">sp</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">sp</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-s1">-</span><span class="pl-c1">8</span><span class="pl-en">                   # Allocate space </span><span class="pl-k">in</span><span class="pl-en"> stack</span>
+<span class="pl-en">      sw</span> <span class="pl-c1">$</span><span class="pl-en">s0</span><span class="pl-s1">,</span><span class="pl-en"> (</span><span class="pl-c1">$</span><span class="pl-en">sp)                       # Store reg th</span><span class="pl-c1">at</span> <span class="pl-en">holds current num</span>
+<span class="pl-en">      sw</span> <span class="pl-c1">$</span><span class="pl-en">ra</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">4</span><span class="pl-en">(</span><span class="pl-c1">$</span><span class="pl-en">sp)                      # Store previous PC</span>
+
+<span class="pl-en">      li</span> <span class="pl-c1">$</span><span class="pl-en">v0</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">1</span><span class="pl-en">                           # Init return value</span>
+<span class="pl-en">      beq</span> <span class="pl-c1">$</span><span class="pl-en">a0</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">0</span><span class="pl-s1">,</span><span class="pl-en"> fact_done               # Finish if param is </span><span class="pl-c1">0</span>
+
+<span class="pl-en">      # Otherwise</span><span class="pl-s1">,</span><span class="pl-en"> continue recursion</span>
+<span class="pl-en">      move</span> <span class="pl-c1">$</span><span class="pl-en">s0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">a0                       # Copy</span> <span class="pl-c1">$</span><span class="pl-en">a0 to</span> <span class="pl-c1">$</span><span class="pl-en">s0</span>
+<span class="pl-en">      </span><span class="pl-k">sub</span> <span class="pl-c1">$</span><span class="pl-en">a0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">a0</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">1</span>
+<span class="pl-en">      jal fact</span>
+
+<span class="pl-en">      </span><span class="pl-k">mul</span> <span class="pl-c1">$</span><span class="pl-en">v0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">s0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">v0                   # Multiplication is done</span>
+
+<span class="pl-en">      fact_done:</span>
+<span class="pl-en">        lw</span> <span class="pl-c1">$</span><span class="pl-en">s0</span><span class="pl-s1">,</span><span class="pl-en"> (</span><span class="pl-c1">$</span><span class="pl-en">sp)</span>
+<span class="pl-en">        lw</span> <span class="pl-c1">$</span><span class="pl-en">ra</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">4</span><span class="pl-en">(</span><span class="pl-c1">$</span><span class="pl-en">sp)                     # Restore the PC</span>
+<span class="pl-en">        addi</span> <span class="pl-c1">$</span><span class="pl-en">sp</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">sp</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">8</span>
+
+<span class="pl-en">        jr</span> <span class="pl-c1">$</span><span class="pl-en">ra</span>
+
+<span class="pl-en">## MACROS ##</span>
+<span class="pl-en">  _macros:</span>
+<span class="pl-en">    # Macros are extremely useful for substituting repeated code blocks with a</span>
+<span class="pl-en">    # single label for better readability</span>
+<span class="pl-en">    # These are </span><span class="pl-k">in</span><span class="pl-en"> no means substitutes for functions</span>
+<span class="pl-en">    # These must be declared before it is used</span>
+
+<span class="pl-en">    # Macro for printing newlines (since these can be very repetitive)</span>
+<span class="pl-en">    .macro println()</span>
+<span class="pl-en">      la</span> <span class="pl-c1">$</span><span class="pl-en">a0</span><span class="pl-s1">,</span><span class="pl-en"> newline                     # New line string stored here</span>
+<span class="pl-en">      li</span> <span class="pl-c1">$</span><span class="pl-en">v0</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">4</span>
+<span class="pl-en">      </span><span class="pl-k">syscall</span>
+<span class="pl-en">    .end_macro</span>
+
+<span class="pl-en">    println()                             # Assembler will copy th</span><span class="pl-c1">at</span> <span class="pl-en">block of</span>
+<span class="pl-en">                                          # code here before running</span>
+
+<span class="pl-en">    # Parameters can be passed </span><span class="pl-k">in</span><span class="pl-en"> through macros.</span>
+<span class="pl-en">    # These are denoted by a </span><span class="pl-s">'%'</span><span class="pl-en"> sign with any name you choose</span>
+<span class="pl-en">    .macro print_int(%num)</span>
+<span class="pl-en">      li</span> <span class="pl-c1">$</span><span class="pl-en">v0</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">1</span>
+<span class="pl-en">      lw</span> <span class="pl-c1">$</span><span class="pl-en">a0</span><span class="pl-s1">,</span><span class="pl-en"> %num</span>
+<span class="pl-en">      </span><span class="pl-k">syscall</span>
+<span class="pl-en">    .end_macro</span>
+<span class="pl-en">    </span>
+<span class="pl-en">    li</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">1</span>
+<span class="pl-en">    print_int(</span><span class="pl-c1">$</span><span class="pl-en">t0)</span>
+<span class="pl-en">    </span>
+<span class="pl-en">    # We can also pass </span><span class="pl-k">in</span><span class="pl-en"> immediates for macros</span>
+<span class="pl-en">    .macro immediates(%a</span><span class="pl-s1">,</span><span class="pl-en"> %b)</span>
+<span class="pl-en">      </span><span class="pl-k">add</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span><span class="pl-en"> %a</span><span class="pl-s1">,</span><span class="pl-en"> %b</span>
+<span class="pl-en">    .end_macro</span>
+
+<span class="pl-en">    immediates(</span><span class="pl-c1">3</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">5</span><span class="pl-en">)</span>
+
+<span class="pl-en">    # Along with passing </span><span class="pl-k">in</span><span class="pl-en"> labels</span>
+<span class="pl-en">    .macro print(%string)</span>
+<span class="pl-en">      la</span> <span class="pl-c1">$</span><span class="pl-en">a0</span><span class="pl-s1">,</span><span class="pl-en"> %string</span>
+<span class="pl-en">      li</span> <span class="pl-c1">$</span><span class="pl-en">v0</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">4</span>
+<span class="pl-en">      </span><span class="pl-k">syscall</span>
+<span class="pl-en">    .end_macro</span>
+
+<span class="pl-en">    print(hello_world)</span>
+
+<span class="pl-en">## ARRAYS ##</span>
+<span class="pl-en">.data</span>
+<span class="pl-en">  list: .word </span><span class="pl-c1">3</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">0</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">1</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">2</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">6</span><span class="pl-en">                 # This is an array of words</span>
+<span class="pl-en">  char_arr: .asciiz </span><span class="pl-s">"hello"</span><span class="pl-en">                 # This is a char array</span>
+<span class="pl-en">  buffer: .space </span><span class="pl-c1">128</span><span class="pl-en">                        # Allocates a block </span><span class="pl-k">in</span><span class="pl-en"> memory</span><span class="pl-s1">,</span><span class="pl-en"> does</span>
+<span class="pl-en">                                            # </span><span class="pl-k">not</span><span class="pl-en"> automatically clear</span>
+<span class="pl-en">                                            # These blocks of memory are aligned</span>
+<span class="pl-en">                                            # next to </span><span class="pl-c1">each</span><span class="pl-en"> other</span>
+
+<span class="pl-en">.text</span>
+<span class="pl-en">  la</span> <span class="pl-c1">$</span><span class="pl-en">s0</span><span class="pl-s1">,</span><span class="pl-en"> list                              # Load address of list</span>
+<span class="pl-en">  li</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">0</span><span class="pl-en">                                 # Counter</span>
+<span class="pl-en">  li</span> <span class="pl-c1">$</span><span class="pl-en">t1</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">5</span><span class="pl-en">                                 # Length of the list</span>
+
+<span class="pl-en">  </span><span class="pl-k">loop</span><span class="pl-en">:</span>
+<span class="pl-en">    bge</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t1</span><span class="pl-s1">,</span><span class="pl-en"> end_loop</span>
+
+<span class="pl-en">    lw</span> <span class="pl-c1">$</span><span class="pl-en">a0</span><span class="pl-s1">,</span><span class="pl-en"> (</span><span class="pl-c1">$</span><span class="pl-en">s0)</span>
+<span class="pl-en">    li</span> <span class="pl-c1">$</span><span class="pl-en">v0</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">1</span>
+<span class="pl-en">    </span><span class="pl-k">syscall</span><span class="pl-en">                                 # Print the number</span>
+
+<span class="pl-en">    addi</span> <span class="pl-c1">$</span><span class="pl-en">s0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">s0</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">4</span><span class="pl-en">                        # Size of a word is </span><span class="pl-c1">4</span><span class="pl-en"> bytes</span>
+<span class="pl-en">    addi</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span> <span class="pl-c1">$</span><span class="pl-en">t0</span><span class="pl-s1">,</span><span class="pl-en"> </span><span class="pl-c1">1</span><span class="pl-en">                        # Increment</span>
+<span class="pl-en">    j </span><span class="pl-k">loop</span>
+<span class="pl-en">  end_loop:</span>
+
+<span class="pl-en">## INCLUDE ##</span>
+<span class="pl-en"># You do this to import external files </span><span class="pl-k">into</span><span class="pl-en"> your program (behind the scenes</span><span class="pl-s1">,</span><span class="pl-en"> </span>
+<span class="pl-en"># it really just takes whatever code th</span><span class="pl-c1">at</span> <span class="pl-en">is </span><span class="pl-k">in</span><span class="pl-en"> th</span><span class="pl-c1">at</span> <span class="pl-en">file </span><span class="pl-k">and</span><span class="pl-en"> places it where</span>
+<span class="pl-en"># the include statement is)</span>
+<span class="pl-en">.include </span><span class="pl-s">"somefile.asm"</span>
+</pre></div>
+<hr>
+<h2>Contributors</h2>
+<ul>
+<li>["Stanley Lim", "https://github.com/Spiderpig86"]</li>
+</ul>

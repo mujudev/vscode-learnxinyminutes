@@ -1,0 +1,646 @@
+<h1>JavaScript</h1>
+<p>JavaScript was created by Netscape's Brendan Eich in 1995. It was originally<br>
+intended as a simpler scripting language for websites, complementing the use of<br>
+Java for more complex web applications, but its tight integration with Web pages<br>
+and built-in support in browsers has caused it to become far more common than<br>
+Java in web frontends.</p>
+<p>JavaScript isn't just limited to web browsers, though: Node.js, a project that<br>
+provides a standalone runtime for Google Chrome's V8 JavaScript engine, is<br>
+becoming more and more popular.</p>
+<p>JavaScript has a C-like syntax, so if you've used languages like C or Java,<br>
+a lot of the basic syntax will already be familiar. Despite this, and despite<br>
+the similarity in name, JavaScript's object model is significantly different to<br>
+Java's.</p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-c">// Single-line comments start with two slashes.</span>
+<span class="pl-c">/* Multiline comments start with slash-star,</span>
+<span class="pl-c">   and end with star-slash */</span>
+
+<span class="pl-c">// Statements can be terminated by ;</span>
+<span class="pl-en">doStuff</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// ... but they don't have to be, as semicolons are automatically inserted</span>
+<span class="pl-c">// wherever there's a newline, except in certain cases.</span>
+<span class="pl-en">doStuff</span><span class="pl-kos">(</span><span class="pl-kos">)</span>
+
+<span class="pl-c">// Because those cases can cause unexpected results, we'll keep on using</span>
+<span class="pl-c">// semicolons in this guide.</span>
+
+<span class="pl-c">///////////////////////////////////</span>
+<span class="pl-c">// 1. Numbers, Strings and Operators</span>
+
+<span class="pl-c">// JavaScript has one number type (which is a 64-bit IEEE 754 double).</span>
+<span class="pl-c">// Doubles have a 52-bit mantissa, which is enough to store integers</span>
+<span class="pl-c">// up to about 9✕10¹⁵ precisely.</span>
+<span class="pl-c1">3</span><span class="pl-kos">;</span> <span class="pl-c">// = 3</span>
+<span class="pl-c1">1.5</span><span class="pl-kos">;</span> <span class="pl-c">// = 1.5</span>
+
+<span class="pl-c">// Some basic arithmetic works as you'd expect.</span>
+<span class="pl-c1">1</span> <span class="pl-c1">+</span> <span class="pl-c1">1</span><span class="pl-kos">;</span> <span class="pl-c">// = 2</span>
+<span class="pl-c1">0.1</span> <span class="pl-c1">+</span> <span class="pl-c1">0.2</span><span class="pl-kos">;</span> <span class="pl-c">// = 0.30000000000000004</span>
+<span class="pl-c1">8</span> <span class="pl-c1">-</span> <span class="pl-c1">1</span><span class="pl-kos">;</span> <span class="pl-c">// = 7</span>
+<span class="pl-c1">10</span> <span class="pl-c1">*</span> <span class="pl-c1">2</span><span class="pl-kos">;</span> <span class="pl-c">// = 20</span>
+<span class="pl-c1">35</span> <span class="pl-c1">/</span> <span class="pl-c1">5</span><span class="pl-kos">;</span> <span class="pl-c">// = 7</span>
+
+<span class="pl-c">// Including uneven division.</span>
+<span class="pl-c1">5</span> <span class="pl-c1">/</span> <span class="pl-c1">2</span><span class="pl-kos">;</span> <span class="pl-c">// = 2.5</span>
+
+<span class="pl-c">// And modulo division.</span>
+<span class="pl-c1">10</span> <span class="pl-c1">%</span> <span class="pl-c1">2</span><span class="pl-kos">;</span> <span class="pl-c">// = 0</span>
+<span class="pl-c1">30</span> <span class="pl-c1">%</span> <span class="pl-c1">4</span><span class="pl-kos">;</span> <span class="pl-c">// = 2</span>
+<span class="pl-c1">18.5</span> <span class="pl-c1">%</span> <span class="pl-c1">7</span><span class="pl-kos">;</span> <span class="pl-c">// = 4.5</span>
+
+<span class="pl-c">// Bitwise operations also work; when you perform a bitwise operation your float</span>
+<span class="pl-c">// is converted to a signed int *up to* 32 bits.</span>
+<span class="pl-c1">1</span> <span class="pl-c1">&lt;&lt;</span> <span class="pl-c1">2</span><span class="pl-kos">;</span> <span class="pl-c">// = 4</span>
+
+<span class="pl-c">// Precedence is enforced with parentheses.</span>
+<span class="pl-kos">(</span><span class="pl-c1">1</span> <span class="pl-c1">+</span> <span class="pl-c1">3</span><span class="pl-kos">)</span> <span class="pl-c1">*</span> <span class="pl-c1">2</span><span class="pl-kos">;</span> <span class="pl-c">// = 8</span>
+
+<span class="pl-c">// There are three special not-a-real-number values:</span>
+<span class="pl-v">Infinity</span><span class="pl-kos">;</span> <span class="pl-c">// result of e.g. 1/0</span>
+<span class="pl-c1">-</span><span class="pl-v">Infinity</span><span class="pl-kos">;</span> <span class="pl-c">// result of e.g. -1/0</span>
+<span class="pl-v">NaN</span><span class="pl-kos">;</span> <span class="pl-c">// result of e.g. 0/0, stands for 'Not a Number'</span>
+
+<span class="pl-c">// There's also a boolean type.</span>
+<span class="pl-c1">true</span><span class="pl-kos">;</span>
+<span class="pl-c1">false</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// Strings are created with ' or ".</span>
+<span class="pl-s">'abc'</span><span class="pl-kos">;</span>
+<span class="pl-s">"Hello, world"</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// Negation uses the ! symbol</span>
+<span class="pl-c1">!</span><span class="pl-c1">true</span><span class="pl-kos">;</span> <span class="pl-c">// = false</span>
+<span class="pl-c1">!</span><span class="pl-c1">false</span><span class="pl-kos">;</span> <span class="pl-c">// = true</span>
+
+<span class="pl-c">// Equality is ===</span>
+<span class="pl-c1">1</span> <span class="pl-c1">===</span> <span class="pl-c1">1</span><span class="pl-kos">;</span> <span class="pl-c">// = true</span>
+<span class="pl-c1">2</span> <span class="pl-c1">===</span> <span class="pl-c1">1</span><span class="pl-kos">;</span> <span class="pl-c">// = false</span>
+
+<span class="pl-c">// Inequality is !==</span>
+<span class="pl-c1">1</span> <span class="pl-c1">!==</span> <span class="pl-c1">1</span><span class="pl-kos">;</span> <span class="pl-c">// = false</span>
+<span class="pl-c1">2</span> <span class="pl-c1">!==</span> <span class="pl-c1">1</span><span class="pl-kos">;</span> <span class="pl-c">// = true</span>
+
+<span class="pl-c">// More comparisons</span>
+<span class="pl-c1">1</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">10</span><span class="pl-kos">;</span> <span class="pl-c">// = true</span>
+<span class="pl-c1">1</span> <span class="pl-c1">&gt;</span> <span class="pl-c1">10</span><span class="pl-kos">;</span> <span class="pl-c">// = false</span>
+<span class="pl-c1">2</span> <span class="pl-c1">&lt;=</span> <span class="pl-c1">2</span><span class="pl-kos">;</span> <span class="pl-c">// = true</span>
+<span class="pl-c1">2</span> <span class="pl-c1">&gt;=</span> <span class="pl-c1">2</span><span class="pl-kos">;</span> <span class="pl-c">// = true</span>
+
+<span class="pl-c">// Strings are concatenated with +</span>
+<span class="pl-s">"Hello "</span> <span class="pl-c1">+</span> <span class="pl-s">"world!"</span><span class="pl-kos">;</span> <span class="pl-c">// = "Hello world!"</span>
+
+<span class="pl-c">// ... which works with more than just strings</span>
+<span class="pl-s">"1, 2, "</span> <span class="pl-c1">+</span> <span class="pl-c1">3</span><span class="pl-kos">;</span> <span class="pl-c">// = "1, 2, 3"</span>
+<span class="pl-s">"Hello "</span> <span class="pl-c1">+</span> <span class="pl-kos">[</span><span class="pl-s">"world"</span><span class="pl-kos">,</span> <span class="pl-s">"!"</span><span class="pl-kos">]</span><span class="pl-kos">;</span> <span class="pl-c">// = "Hello world,!"</span>
+
+<span class="pl-c">// and are compared with &lt; and &gt;</span>
+<span class="pl-s">"a"</span> <span class="pl-c1">&lt;</span> <span class="pl-s">"b"</span><span class="pl-kos">;</span> <span class="pl-c">// = true</span>
+
+<span class="pl-c">// Type coercion is performed for comparisons with double equals...</span>
+<span class="pl-s">"5"</span> <span class="pl-c1">==</span> <span class="pl-c1">5</span><span class="pl-kos">;</span> <span class="pl-c">// = true</span>
+<span class="pl-c1">null</span> <span class="pl-c1">==</span> <span class="pl-c1">undefined</span><span class="pl-kos">;</span> <span class="pl-c">// = true</span>
+
+<span class="pl-c">// ...unless you use ===</span>
+<span class="pl-s">"5"</span> <span class="pl-c1">===</span> <span class="pl-c1">5</span><span class="pl-kos">;</span> <span class="pl-c">// = false</span>
+<span class="pl-c1">null</span> <span class="pl-c1">===</span> <span class="pl-c1">undefined</span><span class="pl-kos">;</span> <span class="pl-c">// = false</span>
+
+<span class="pl-c">// ...which can result in some weird behaviour...</span>
+<span class="pl-c1">13</span> <span class="pl-c1">+</span> <span class="pl-c1">!</span><span class="pl-c1">0</span><span class="pl-kos">;</span> <span class="pl-c">// 14</span>
+<span class="pl-s">"13"</span> <span class="pl-c1">+</span> <span class="pl-c1">!</span><span class="pl-c1">0</span><span class="pl-kos">;</span> <span class="pl-c">// '13true'</span>
+
+<span class="pl-c">// You can access characters in a string with `charAt`</span>
+<span class="pl-s">"This is a string"</span><span class="pl-kos">.</span><span class="pl-en">charAt</span><span class="pl-kos">(</span><span class="pl-c1">0</span><span class="pl-kos">)</span><span class="pl-kos">;</span>  <span class="pl-c">// = 'T'</span>
+
+<span class="pl-c">// ...or use `substring` to get larger pieces.</span>
+<span class="pl-s">"Hello world"</span><span class="pl-kos">.</span><span class="pl-en">substring</span><span class="pl-kos">(</span><span class="pl-c1">0</span><span class="pl-kos">,</span> <span class="pl-c1">5</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// = "Hello"</span>
+
+<span class="pl-c">// `length` is a property, so don't use ().</span>
+<span class="pl-s">"Hello"</span><span class="pl-kos">.</span><span class="pl-c1">length</span><span class="pl-kos">;</span> <span class="pl-c">// = 5</span>
+
+<span class="pl-c">// There's also `null` and `undefined`.</span>
+<span class="pl-c1">null</span><span class="pl-kos">;</span>      <span class="pl-c">// used to indicate a deliberate non-value</span>
+<span class="pl-c1">undefined</span><span class="pl-kos">;</span> <span class="pl-c">// used to indicate a value is not currently present (although</span>
+           <span class="pl-c">// `undefined` is actually a value itself)</span>
+
+<span class="pl-c">// false, null, undefined, NaN, 0 and "" are falsy; everything else is truthy.</span>
+<span class="pl-c">// Note that 0 is falsy and "0" is truthy, even though 0 == "0".</span>
+
+<span class="pl-c">///////////////////////////////////</span>
+<span class="pl-c">// 2. Variables, Arrays and Objects</span>
+
+<span class="pl-c">// Variables are declared with the `var` keyword. JavaScript is dynamically</span>
+<span class="pl-c">// typed, so you don't need to specify type. Assignment uses a single `=`</span>
+<span class="pl-c">// character.</span>
+<span class="pl-k">var</span> <span class="pl-s1">someVar</span> <span class="pl-c1">=</span> <span class="pl-c1">5</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// If you leave the var keyword off, you won't get an error...</span>
+<span class="pl-s1">someOtherVar</span> <span class="pl-c1">=</span> <span class="pl-c1">10</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// ...but your variable will be created in the global scope, not in the scope</span>
+<span class="pl-c">// you defined it in.</span>
+
+<span class="pl-c">// Variables declared without being assigned to are set to undefined.</span>
+<span class="pl-k">var</span> <span class="pl-s1">someThirdVar</span><span class="pl-kos">;</span> <span class="pl-c">// = undefined</span>
+
+<span class="pl-c">// If you want to declare a couple of variables, then you could use a comma</span>
+<span class="pl-c">// separator</span>
+<span class="pl-k">var</span> <span class="pl-s1">someFourthVar</span> <span class="pl-c1">=</span> <span class="pl-c1">2</span><span class="pl-kos">,</span> <span class="pl-s1">someFifthVar</span> <span class="pl-c1">=</span> <span class="pl-c1">4</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// There's shorthand for performing math operations on variables:</span>
+<span class="pl-s1">someVar</span> <span class="pl-c1">+=</span> <span class="pl-c1">5</span><span class="pl-kos">;</span> <span class="pl-c">// equivalent to someVar = someVar + 5; someVar is 10 now</span>
+<span class="pl-s1">someVar</span> <span class="pl-c1">*=</span> <span class="pl-c1">10</span><span class="pl-kos">;</span> <span class="pl-c">// now someVar is 100</span>
+
+<span class="pl-c">// and an even-shorter-hand for adding or subtracting 1</span>
+<span class="pl-s1">someVar</span><span class="pl-c1">++</span><span class="pl-kos">;</span> <span class="pl-c">// now someVar is 101</span>
+<span class="pl-s1">someVar</span><span class="pl-c1">--</span><span class="pl-kos">;</span> <span class="pl-c">// back to 100</span>
+
+<span class="pl-c">// Arrays are ordered lists of values, of any type.</span>
+<span class="pl-k">var</span> <span class="pl-s1">myArray</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span><span class="pl-s">"Hello"</span><span class="pl-kos">,</span> <span class="pl-c1">45</span><span class="pl-kos">,</span> <span class="pl-c1">true</span><span class="pl-kos">]</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// Their members can be accessed using the square-brackets subscript syntax.</span>
+<span class="pl-c">// Array indices start at zero.</span>
+<span class="pl-s1">myArray</span><span class="pl-kos">[</span><span class="pl-c1">1</span><span class="pl-kos">]</span><span class="pl-kos">;</span> <span class="pl-c">// = 45</span>
+
+<span class="pl-c">// Arrays are mutable and of variable length.</span>
+<span class="pl-s1">myArray</span><span class="pl-kos">.</span><span class="pl-en">push</span><span class="pl-kos">(</span><span class="pl-s">"World"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-s1">myArray</span><span class="pl-kos">.</span><span class="pl-c1">length</span><span class="pl-kos">;</span> <span class="pl-c">// = 4</span>
+
+<span class="pl-c">// Add/Modify at specific index</span>
+<span class="pl-s1">myArray</span><span class="pl-kos">[</span><span class="pl-c1">3</span><span class="pl-kos">]</span> <span class="pl-c1">=</span> <span class="pl-s">"Hello"</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// Add and remove element from front or back end of an array</span>
+<span class="pl-s1">myArray</span><span class="pl-kos">.</span><span class="pl-en">unshift</span><span class="pl-kos">(</span><span class="pl-c1">3</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Add as the first element</span>
+<span class="pl-s1">someVar</span> <span class="pl-c1">=</span> <span class="pl-s1">myArray</span><span class="pl-kos">.</span><span class="pl-en">shift</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Remove first element and return it</span>
+<span class="pl-s1">myArray</span><span class="pl-kos">.</span><span class="pl-en">push</span><span class="pl-kos">(</span><span class="pl-c1">3</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Add as the last element</span>
+<span class="pl-s1">someVar</span> <span class="pl-c1">=</span> <span class="pl-s1">myArray</span><span class="pl-kos">.</span><span class="pl-en">pop</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Remove last element and return it</span>
+
+<span class="pl-c">// Join all elements of an array with semicolon</span>
+<span class="pl-k">var</span> <span class="pl-s1">myArray0</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span><span class="pl-c1">32</span><span class="pl-kos">,</span><span class="pl-c1">false</span><span class="pl-kos">,</span><span class="pl-s">"js"</span><span class="pl-kos">,</span><span class="pl-c1">12</span><span class="pl-kos">,</span><span class="pl-c1">56</span><span class="pl-kos">,</span><span class="pl-c1">90</span><span class="pl-kos">]</span><span class="pl-kos">;</span>
+<span class="pl-s1">myArray0</span><span class="pl-kos">.</span><span class="pl-en">join</span><span class="pl-kos">(</span><span class="pl-s">";"</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// = "32;false;js;12;56;90"</span>
+
+<span class="pl-c">// Get subarray of elements from index 1 (include) to 4 (exclude)</span>
+<span class="pl-s1">myArray0</span><span class="pl-kos">.</span><span class="pl-en">slice</span><span class="pl-kos">(</span><span class="pl-c1">1</span><span class="pl-kos">,</span><span class="pl-c1">4</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// = [false,"js",12]</span>
+
+<span class="pl-c">// Remove 4 elements starting from index 2, and insert there strings</span>
+<span class="pl-c">// "hi","wr" and "ld"; return removed subarray</span>
+<span class="pl-s1">myArray0</span><span class="pl-kos">.</span><span class="pl-en">splice</span><span class="pl-kos">(</span><span class="pl-c1">2</span><span class="pl-kos">,</span><span class="pl-c1">4</span><span class="pl-kos">,</span><span class="pl-s">"hi"</span><span class="pl-kos">,</span><span class="pl-s">"wr"</span><span class="pl-kos">,</span><span class="pl-s">"ld"</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// = ["js",12,56,90]</span>
+<span class="pl-c">// myArray0 === [32,false,"hi","wr","ld"]</span>
+
+<span class="pl-c">// JavaScript's objects are equivalent to "dictionaries" or "maps" in other</span>
+<span class="pl-c">// languages: an unordered collection of key-value pairs.</span>
+<span class="pl-k">var</span> <span class="pl-s1">myObj</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span><span class="pl-c1">key1</span>: <span class="pl-s">"Hello"</span><span class="pl-kos">,</span> <span class="pl-c1">key2</span>: <span class="pl-s">"World"</span><span class="pl-kos">}</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// Keys are strings, but quotes aren't required if they're a valid</span>
+<span class="pl-c">// JavaScript identifier. Values can be any type.</span>
+<span class="pl-k">var</span> <span class="pl-s1">myObj</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span><span class="pl-c1">myKey</span>: <span class="pl-s">"myValue"</span><span class="pl-kos">,</span> <span class="pl-s">"my other key"</span>: <span class="pl-c1">4</span><span class="pl-kos">}</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// Object attributes can also be accessed using the subscript syntax,</span>
+<span class="pl-s1">myObj</span><span class="pl-kos">[</span><span class="pl-s">"my other key"</span><span class="pl-kos">]</span><span class="pl-kos">;</span> <span class="pl-c">// = 4</span>
+
+<span class="pl-c">// ... or using the dot syntax, provided the key is a valid identifier.</span>
+<span class="pl-s1">myObj</span><span class="pl-kos">.</span><span class="pl-c1">myKey</span><span class="pl-kos">;</span> <span class="pl-c">// = "myValue"</span>
+
+<span class="pl-c">// Objects are mutable; values can be changed and new keys added.</span>
+<span class="pl-s1">myObj</span><span class="pl-kos">.</span><span class="pl-c1">myThirdKey</span> <span class="pl-c1">=</span> <span class="pl-c1">true</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// If you try to access a value that's not yet set, you'll get undefined.</span>
+<span class="pl-s1">myObj</span><span class="pl-kos">.</span><span class="pl-c1">myFourthKey</span><span class="pl-kos">;</span> <span class="pl-c">// = undefined</span>
+
+<span class="pl-c">///////////////////////////////////</span>
+<span class="pl-c">// 3. Logic and Control Structures</span>
+
+<span class="pl-c">// The `if` structure works as you'd expect.</span>
+<span class="pl-k">var</span> <span class="pl-s1">count</span> <span class="pl-c1">=</span> <span class="pl-c1">1</span><span class="pl-kos">;</span>
+<span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">count</span> <span class="pl-c1">==</span> <span class="pl-c1">3</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+    <span class="pl-c">// evaluated if count is 3</span>
+<span class="pl-kos">}</span> <span class="pl-k">else</span> <span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">count</span> <span class="pl-c1">==</span> <span class="pl-c1">4</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+    <span class="pl-c">// evaluated if count is 4</span>
+<span class="pl-kos">}</span> <span class="pl-k">else</span> <span class="pl-kos">{</span>
+    <span class="pl-c">// evaluated if it's not either 3 or 4</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-c">// As does `while`.</span>
+<span class="pl-k">while</span> <span class="pl-kos">(</span><span class="pl-c1">true</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+    <span class="pl-c">// An infinite loop!</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-c">// Do-while loops are like while loops, except they always run at least once.</span>
+<span class="pl-k">var</span> <span class="pl-s1">input</span><span class="pl-kos">;</span>
+<span class="pl-k">do</span> <span class="pl-kos">{</span>
+    <span class="pl-s1">input</span> <span class="pl-c1">=</span> <span class="pl-en">getInput</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span> <span class="pl-k">while</span> <span class="pl-kos">(</span><span class="pl-c1">!</span><span class="pl-en">isValid</span><span class="pl-kos">(</span><span class="pl-s1">input</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// The `for` loop is the same as C and Java:</span>
+<span class="pl-c">// initialization; continue condition; iteration.</span>
+<span class="pl-k">for</span> <span class="pl-kos">(</span><span class="pl-k">var</span> <span class="pl-s1">i</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span><span class="pl-kos">;</span> <span class="pl-s1">i</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">5</span><span class="pl-kos">;</span> <span class="pl-s1">i</span><span class="pl-c1">++</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+    <span class="pl-c">// will run 5 times</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-c">// Breaking out of labeled loops is similar to Java</span>
+outer:
+<span class="pl-k">for</span> <span class="pl-kos">(</span><span class="pl-k">var</span> <span class="pl-s1">i</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span><span class="pl-kos">;</span> <span class="pl-s1">i</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">10</span><span class="pl-kos">;</span> <span class="pl-s1">i</span><span class="pl-c1">++</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-k">for</span> <span class="pl-kos">(</span><span class="pl-k">var</span> <span class="pl-s1">j</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span><span class="pl-kos">;</span> <span class="pl-s1">j</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">10</span><span class="pl-kos">;</span> <span class="pl-s1">j</span><span class="pl-c1">++</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+        <span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">i</span> <span class="pl-c1">==</span> <span class="pl-c1">5</span> <span class="pl-c1">&amp;&amp;</span> <span class="pl-s1">j</span> <span class="pl-c1">==</span><span class="pl-c1">5</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+            <span class="pl-k">break</span> outer<span class="pl-kos">;</span>
+            <span class="pl-c">// breaks out of outer loop instead of only the inner one</span>
+        <span class="pl-kos">}</span>
+    <span class="pl-kos">}</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-c">// The for/in statement allows iteration over properties of an object.</span>
+<span class="pl-k">var</span> <span class="pl-s1">description</span> <span class="pl-c1">=</span> <span class="pl-s">""</span><span class="pl-kos">;</span>
+<span class="pl-k">var</span> <span class="pl-s1">person</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span><span class="pl-c1">fname</span>:<span class="pl-s">"Paul"</span><span class="pl-kos">,</span> <span class="pl-c1">lname</span>:<span class="pl-s">"Ken"</span><span class="pl-kos">,</span> <span class="pl-c1">age</span>:<span class="pl-c1">18</span><span class="pl-kos">}</span><span class="pl-kos">;</span>
+<span class="pl-k">for</span> <span class="pl-kos">(</span><span class="pl-k">var</span> <span class="pl-s1">x</span> <span class="pl-k">in</span> <span class="pl-s1">person</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+    <span class="pl-s1">description</span> <span class="pl-c1">+=</span> <span class="pl-s1">person</span><span class="pl-kos">[</span><span class="pl-s1">x</span><span class="pl-kos">]</span> <span class="pl-c1">+</span> <span class="pl-s">" "</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span> <span class="pl-c">// description = 'Paul Ken 18 '</span>
+
+<span class="pl-c">// The for/of statement allows iteration over iterable objects (including the built-in String, </span>
+<span class="pl-c">// Array, e.g. the Array-like arguments or NodeList objects, TypedArray, Map and Set, </span>
+<span class="pl-c">// and user-defined iterables).</span>
+<span class="pl-k">var</span> <span class="pl-s1">myPets</span> <span class="pl-c1">=</span> <span class="pl-s">""</span><span class="pl-kos">;</span>
+<span class="pl-k">var</span> <span class="pl-s1">pets</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span><span class="pl-s">"cat"</span><span class="pl-kos">,</span> <span class="pl-s">"dog"</span><span class="pl-kos">,</span> <span class="pl-s">"hamster"</span><span class="pl-kos">,</span> <span class="pl-s">"hedgehog"</span><span class="pl-kos">]</span><span class="pl-kos">;</span>
+<span class="pl-k">for</span> <span class="pl-kos">(</span><span class="pl-k">var</span> <span class="pl-s1">pet</span> <span class="pl-k">of</span> <span class="pl-s1">pets</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+    <span class="pl-s1">myPets</span> <span class="pl-c1">+=</span> <span class="pl-s1">pet</span> <span class="pl-c1">+</span> <span class="pl-s">" "</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span> <span class="pl-c">// myPets = 'cat dog hamster hedgehog '</span>
+
+<span class="pl-c">// &amp;&amp; is logical and, || is logical or</span>
+<span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">house</span><span class="pl-kos">.</span><span class="pl-c1">size</span> <span class="pl-c1">==</span> <span class="pl-s">"big"</span> <span class="pl-c1">&amp;&amp;</span> <span class="pl-s1">house</span><span class="pl-kos">.</span><span class="pl-c1">colour</span> <span class="pl-c1">==</span> <span class="pl-s">"blue"</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+    <span class="pl-s1">house</span><span class="pl-kos">.</span><span class="pl-c1">contains</span> <span class="pl-c1">=</span> <span class="pl-s">"bear"</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span>
+<span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">colour</span> <span class="pl-c1">==</span> <span class="pl-s">"red"</span> <span class="pl-c1">||</span> <span class="pl-s1">colour</span> <span class="pl-c1">==</span> <span class="pl-s">"blue"</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+    <span class="pl-c">// colour is either red or blue</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-c">// &amp;&amp; and || "short circuit", which is useful for setting default values.</span>
+<span class="pl-k">var</span> <span class="pl-s1">name</span> <span class="pl-c1">=</span> <span class="pl-s1">otherName</span> <span class="pl-c1">||</span> <span class="pl-s">"default"</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// The `switch` statement checks for equality with `===`.</span>
+<span class="pl-c">// Use 'break' after each case</span>
+<span class="pl-c">// or the cases after the correct one will be executed too.</span>
+<span class="pl-s1">grade</span> <span class="pl-c1">=</span> <span class="pl-s">'B'</span><span class="pl-kos">;</span>
+<span class="pl-k">switch</span> <span class="pl-kos">(</span><span class="pl-s1">grade</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+  <span class="pl-k">case</span> <span class="pl-s">'A'</span>:
+    <span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-en">log</span><span class="pl-kos">(</span><span class="pl-s">"Great job"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-k">break</span><span class="pl-kos">;</span>
+  <span class="pl-k">case</span> <span class="pl-s">'B'</span>:
+    <span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-en">log</span><span class="pl-kos">(</span><span class="pl-s">"OK job"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-k">break</span><span class="pl-kos">;</span>
+  <span class="pl-k">case</span> <span class="pl-s">'C'</span>:
+    <span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-en">log</span><span class="pl-kos">(</span><span class="pl-s">"You can do better"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-k">break</span><span class="pl-kos">;</span>
+  <span class="pl-k">default</span>:
+    <span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-en">log</span><span class="pl-kos">(</span><span class="pl-s">"Oy vey"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-k">break</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span>
+
+
+<span class="pl-c">///////////////////////////////////</span>
+<span class="pl-c">// 4. Functions, Scope and Closures</span>
+
+<span class="pl-c">// JavaScript functions are declared with the `function` keyword.</span>
+<span class="pl-k">function</span> <span class="pl-en">myFunction</span><span class="pl-kos">(</span><span class="pl-s1">thing</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+    <span class="pl-k">return</span> <span class="pl-s1">thing</span><span class="pl-kos">.</span><span class="pl-en">toUpperCase</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span>
+<span class="pl-en">myFunction</span><span class="pl-kos">(</span><span class="pl-s">"foo"</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// = "FOO"</span>
+
+<span class="pl-c">// Note that the value to be returned must start on the same line as the</span>
+<span class="pl-c">// `return` keyword, otherwise you'll always return `undefined` due to</span>
+<span class="pl-c">// automatic semicolon insertion. Watch out for this when using Allman style.</span>
+<span class="pl-k">function</span> <span class="pl-en">myFunction</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+    <span class="pl-k">return</span> <span class="pl-c">// &lt;- semicolon automatically inserted here</span>
+    <span class="pl-kos">{</span><span class="pl-c1">thisIsAn</span>: <span class="pl-s">'object literal'</span><span class="pl-kos">}</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span>
+<span class="pl-en">myFunction</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// = undefined</span>
+
+<span class="pl-c">// JavaScript functions are first class objects, so they can be reassigned to</span>
+<span class="pl-c">// different variable names and passed to other functions as arguments - for</span>
+<span class="pl-c">// example, when supplying an event handler:</span>
+<span class="pl-k">function</span> <span class="pl-en">myFunction</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+    <span class="pl-c">// this code will be called in 5 seconds' time</span>
+<span class="pl-kos">}</span>
+<span class="pl-en">setTimeout</span><span class="pl-kos">(</span><span class="pl-s1">myFunction</span><span class="pl-kos">,</span> <span class="pl-c1">5000</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-c">// Note: setTimeout isn't part of the JS language, but is provided by browsers</span>
+<span class="pl-c">// and Node.js.</span>
+
+<span class="pl-c">// Another function provided by browsers is setInterval</span>
+<span class="pl-k">function</span> <span class="pl-en">myFunction</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+    <span class="pl-c">// this code will be called every 5 seconds</span>
+<span class="pl-kos">}</span>
+<span class="pl-en">setInterval</span><span class="pl-kos">(</span><span class="pl-s1">myFunction</span><span class="pl-kos">,</span> <span class="pl-c1">5000</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// Function objects don't even have to be declared with a name - you can write</span>
+<span class="pl-c">// an anonymous function definition directly into the arguments of another.</span>
+<span class="pl-en">setTimeout</span><span class="pl-kos">(</span><span class="pl-k">function</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+    <span class="pl-c">// this code will be called in 5 seconds' time</span>
+<span class="pl-kos">}</span><span class="pl-kos">,</span> <span class="pl-c1">5000</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// JavaScript has function scope; functions get their own scope but other blocks</span>
+<span class="pl-c">// do not.</span>
+<span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-c1">true</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+    <span class="pl-k">var</span> <span class="pl-s1">i</span> <span class="pl-c1">=</span> <span class="pl-c1">5</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span>
+<span class="pl-s1">i</span><span class="pl-kos">;</span> <span class="pl-c">// = 5 - not undefined as you'd expect in a block-scoped language</span>
+
+<span class="pl-c">// This has led to a common pattern of "immediately-executing anonymous</span>
+<span class="pl-c">// functions", which prevent temporary variables from leaking into the global</span>
+<span class="pl-c">// scope.</span>
+<span class="pl-kos">(</span><span class="pl-k">function</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+    <span class="pl-k">var</span> <span class="pl-s1">temporary</span> <span class="pl-c1">=</span> <span class="pl-c1">5</span><span class="pl-kos">;</span>
+    <span class="pl-c">// We can access the global scope by assigning to the "global object", which</span>
+    <span class="pl-c">// in a web browser is always `window`. The global object may have a</span>
+    <span class="pl-c">// different name in non-browser environments such as Node.js.</span>
+    <span class="pl-smi">window</span><span class="pl-kos">.</span><span class="pl-c1">permanent</span> <span class="pl-c1">=</span> <span class="pl-c1">10</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-s1">temporary</span><span class="pl-kos">;</span> <span class="pl-c">// raises ReferenceError</span>
+<span class="pl-s1">permanent</span><span class="pl-kos">;</span> <span class="pl-c">// = 10</span>
+
+<span class="pl-c">// One of JavaScript's most powerful features is closures. If a function is</span>
+<span class="pl-c">// defined inside another function, the inner function has access to all the</span>
+<span class="pl-c">// outer function's variables, even after the outer function exits.</span>
+<span class="pl-k">function</span> <span class="pl-en">sayHelloInFiveSeconds</span><span class="pl-kos">(</span><span class="pl-s1">name</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+    <span class="pl-k">var</span> <span class="pl-s1">prompt</span> <span class="pl-c1">=</span> <span class="pl-s">"Hello, "</span> <span class="pl-c1">+</span> <span class="pl-s1">name</span> <span class="pl-c1">+</span> <span class="pl-s">"!"</span><span class="pl-kos">;</span>
+    <span class="pl-c">// Inner functions are put in the local scope by default, as if they were</span>
+    <span class="pl-c">// declared with `var`.</span>
+    <span class="pl-k">function</span> <span class="pl-en">inner</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+        <span class="pl-en">alert</span><span class="pl-kos">(</span><span class="pl-s1">prompt</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+    <span class="pl-en">setTimeout</span><span class="pl-kos">(</span><span class="pl-s1">inner</span><span class="pl-kos">,</span> <span class="pl-c1">5000</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-c">// setTimeout is asynchronous, so the sayHelloInFiveSeconds function will</span>
+    <span class="pl-c">// exit immediately, and setTimeout will call inner afterwards. However,</span>
+    <span class="pl-c">// because inner is "closed over" sayHelloInFiveSeconds, inner still has</span>
+    <span class="pl-c">// access to the `prompt` variable when it is finally called.</span>
+<span class="pl-kos">}</span>
+<span class="pl-en">sayHelloInFiveSeconds</span><span class="pl-kos">(</span><span class="pl-s">"Adam"</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// will open a popup with "Hello, Adam!" in 5s</span>
+
+<span class="pl-c">///////////////////////////////////</span>
+<span class="pl-c">// 5. More about Objects; Constructors and Prototypes</span>
+
+<span class="pl-c">// Objects can contain functions.</span>
+<span class="pl-k">var</span> <span class="pl-s1">myObj</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span>
+    <span class="pl-en">myFunc</span>: <span class="pl-k">function</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+        <span class="pl-k">return</span> <span class="pl-s">"Hello world!"</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+<span class="pl-kos">}</span><span class="pl-kos">;</span>
+<span class="pl-s1">myObj</span><span class="pl-kos">.</span><span class="pl-en">myFunc</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// = "Hello world!"</span>
+
+<span class="pl-c">// When functions attached to an object are called, they can access the object</span>
+<span class="pl-c">// they're attached to using the `this` keyword.</span>
+<span class="pl-s1">myObj</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span>
+    <span class="pl-c1">myString</span>: <span class="pl-s">"Hello world!"</span><span class="pl-kos">,</span>
+    <span class="pl-en">myFunc</span>: <span class="pl-k">function</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+        <span class="pl-k">return</span> <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">myString</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+<span class="pl-kos">}</span><span class="pl-kos">;</span>
+<span class="pl-s1">myObj</span><span class="pl-kos">.</span><span class="pl-en">myFunc</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// = "Hello world!"</span>
+
+<span class="pl-c">// What this is set to has to do with how the function is called, not where</span>
+<span class="pl-c">// it's defined. So, our function doesn't work if it isn't called in the</span>
+<span class="pl-c">// context of the object.</span>
+<span class="pl-k">var</span> <span class="pl-s1">myFunc</span> <span class="pl-c1">=</span> <span class="pl-s1">myObj</span><span class="pl-kos">.</span><span class="pl-c1">myFunc</span><span class="pl-kos">;</span>
+<span class="pl-s1">myFunc</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// = undefined</span>
+
+<span class="pl-c">// Inversely, a function can be assigned to the object and gain access to it</span>
+<span class="pl-c">// through `this`, even if it wasn't attached when it was defined.</span>
+<span class="pl-k">var</span> <span class="pl-en">myOtherFunc</span> <span class="pl-c1">=</span> <span class="pl-k">function</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+    <span class="pl-k">return</span> <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">myString</span><span class="pl-kos">.</span><span class="pl-en">toUpperCase</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span><span class="pl-kos">;</span>
+<span class="pl-s1">myObj</span><span class="pl-kos">.</span><span class="pl-c1">myOtherFunc</span> <span class="pl-c1">=</span> <span class="pl-en">myOtherFunc</span><span class="pl-kos">;</span>
+<span class="pl-s1">myObj</span><span class="pl-kos">.</span><span class="pl-en">myOtherFunc</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// = "HELLO WORLD!"</span>
+
+<span class="pl-c">// We can also specify a context for a function to execute in when we invoke it</span>
+<span class="pl-c">// using `call` or `apply`.</span>
+
+<span class="pl-k">var</span> <span class="pl-en">anotherFunc</span> <span class="pl-c1">=</span> <span class="pl-k">function</span><span class="pl-kos">(</span><span class="pl-s1">s</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+    <span class="pl-k">return</span> <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">myString</span> <span class="pl-c1">+</span> <span class="pl-s1">s</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span><span class="pl-kos">;</span>
+<span class="pl-en">anotherFunc</span><span class="pl-kos">.</span><span class="pl-en">call</span><span class="pl-kos">(</span><span class="pl-s1">myObj</span><span class="pl-kos">,</span> <span class="pl-s">" And Hello Moon!"</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// = "Hello World! And Hello Moon!"</span>
+
+<span class="pl-c">// The `apply` function is nearly identical, but takes an array for an argument</span>
+<span class="pl-c">// list.</span>
+
+<span class="pl-en">anotherFunc</span><span class="pl-kos">.</span><span class="pl-en">apply</span><span class="pl-kos">(</span><span class="pl-s1">myObj</span><span class="pl-kos">,</span> <span class="pl-kos">[</span><span class="pl-s">" And Hello Sun!"</span><span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// = "Hello World! And Hello Sun!"</span>
+
+<span class="pl-c">// This is useful when working with a function that accepts a sequence of</span>
+<span class="pl-c">// arguments and you want to pass an array.</span>
+
+<span class="pl-v">Math</span><span class="pl-kos">.</span><span class="pl-en">min</span><span class="pl-kos">(</span><span class="pl-c1">42</span><span class="pl-kos">,</span> <span class="pl-c1">6</span><span class="pl-kos">,</span> <span class="pl-c1">27</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// = 6</span>
+<span class="pl-v">Math</span><span class="pl-kos">.</span><span class="pl-en">min</span><span class="pl-kos">(</span><span class="pl-kos">[</span><span class="pl-c1">42</span><span class="pl-kos">,</span> <span class="pl-c1">6</span><span class="pl-kos">,</span> <span class="pl-c1">27</span><span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// = NaN (uh-oh!)</span>
+<span class="pl-v">Math</span><span class="pl-kos">.</span><span class="pl-c1">min</span><span class="pl-kos">.</span><span class="pl-en">apply</span><span class="pl-kos">(</span><span class="pl-v">Math</span><span class="pl-kos">,</span> <span class="pl-kos">[</span><span class="pl-c1">42</span><span class="pl-kos">,</span> <span class="pl-c1">6</span><span class="pl-kos">,</span> <span class="pl-c1">27</span><span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// = 6</span>
+
+<span class="pl-c">// But, `call` and `apply` are only temporary. When we want it to stick, we can</span>
+<span class="pl-c">// use `bind`.</span>
+
+<span class="pl-k">var</span> <span class="pl-s1">boundFunc</span> <span class="pl-c1">=</span> <span class="pl-en">anotherFunc</span><span class="pl-kos">.</span><span class="pl-en">bind</span><span class="pl-kos">(</span><span class="pl-s1">myObj</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-s1">boundFunc</span><span class="pl-kos">(</span><span class="pl-s">" And Hello Saturn!"</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// = "Hello World! And Hello Saturn!"</span>
+
+<span class="pl-c">// `bind` can also be used to partially apply (curry) a function.</span>
+
+<span class="pl-k">var</span> <span class="pl-en">product</span> <span class="pl-c1">=</span> <span class="pl-k">function</span><span class="pl-kos">(</span><span class="pl-s1">a</span><span class="pl-kos">,</span> <span class="pl-s1">b</span><span class="pl-kos">)</span><span class="pl-kos">{</span> <span class="pl-k">return</span> <span class="pl-s1">a</span> <span class="pl-c1">*</span> <span class="pl-s1">b</span><span class="pl-kos">;</span> <span class="pl-kos">}</span><span class="pl-kos">;</span>
+<span class="pl-k">var</span> <span class="pl-s1">doubler</span> <span class="pl-c1">=</span> <span class="pl-en">product</span><span class="pl-kos">.</span><span class="pl-en">bind</span><span class="pl-kos">(</span><span class="pl-smi">this</span><span class="pl-kos">,</span> <span class="pl-c1">2</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-s1">doubler</span><span class="pl-kos">(</span><span class="pl-c1">8</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// = 16</span>
+
+<span class="pl-c">// When you call a function with the `new` keyword, a new object is created, and</span>
+<span class="pl-c">// made available to the function via the `this` keyword. Functions designed to be</span>
+<span class="pl-c">// called like that are called constructors.</span>
+
+<span class="pl-k">var</span> <span class="pl-v">MyConstructor</span> <span class="pl-c1">=</span> <span class="pl-k">function</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">myNumber</span> <span class="pl-c1">=</span> <span class="pl-c1">5</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span><span class="pl-kos">;</span>
+<span class="pl-s1">myNewObj</span> <span class="pl-c1">=</span> <span class="pl-k">new</span> <span class="pl-v">MyConstructor</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// = {myNumber: 5}</span>
+<span class="pl-s1">myNewObj</span><span class="pl-kos">.</span><span class="pl-c1">myNumber</span><span class="pl-kos">;</span> <span class="pl-c">// = 5</span>
+
+<span class="pl-c">// Unlike most other popular object-oriented languages, JavaScript has no</span>
+<span class="pl-c">// concept of 'instances' created from 'class' blueprints; instead, JavaScript</span>
+<span class="pl-c">// combines instantiation and inheritance into a single concept: a 'prototype'.</span>
+
+<span class="pl-c">// Every JavaScript object has a 'prototype'. When you go to access a property</span>
+<span class="pl-c">// on an object that doesn't exist on the actual object, the interpreter will</span>
+<span class="pl-c">// look at its prototype.</span>
+
+<span class="pl-c">// Some JS implementations let you access an object's prototype on the magic</span>
+<span class="pl-c">// property `__proto__`. While this is useful for explaining prototypes it's not</span>
+<span class="pl-c">// part of the standard; we'll get to standard ways of using prototypes later.</span>
+<span class="pl-k">var</span> <span class="pl-s1">myObj</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span>
+    <span class="pl-c1">myString</span>: <span class="pl-s">"Hello world!"</span>
+<span class="pl-kos">}</span><span class="pl-kos">;</span>
+<span class="pl-k">var</span> <span class="pl-s1">myPrototype</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span>
+    <span class="pl-c1">meaningOfLife</span>: <span class="pl-c1">42</span><span class="pl-kos">,</span>
+    <span class="pl-en">myFunc</span>: <span class="pl-k">function</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+        <span class="pl-k">return</span> <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">myString</span><span class="pl-kos">.</span><span class="pl-en">toLowerCase</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+<span class="pl-kos">}</span><span class="pl-kos">;</span>
+
+<span class="pl-s1">myObj</span><span class="pl-kos">.</span><span class="pl-c1">__proto__</span> <span class="pl-c1">=</span> <span class="pl-s1">myPrototype</span><span class="pl-kos">;</span>
+<span class="pl-s1">myObj</span><span class="pl-kos">.</span><span class="pl-c1">meaningOfLife</span><span class="pl-kos">;</span> <span class="pl-c">// = 42</span>
+
+<span class="pl-c">// This works for functions, too.</span>
+<span class="pl-s1">myObj</span><span class="pl-kos">.</span><span class="pl-en">myFunc</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// = "hello world!"</span>
+
+<span class="pl-c">// Of course, if your property isn't on your prototype, the prototype's</span>
+<span class="pl-c">// prototype is searched, and so on.</span>
+<span class="pl-s1">myPrototype</span><span class="pl-kos">.</span><span class="pl-c1">__proto__</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span>
+    <span class="pl-c1">myBoolean</span>: <span class="pl-c1">true</span>
+<span class="pl-kos">}</span><span class="pl-kos">;</span>
+<span class="pl-s1">myObj</span><span class="pl-kos">.</span><span class="pl-c1">myBoolean</span><span class="pl-kos">;</span> <span class="pl-c">// = true</span>
+
+<span class="pl-c">// There's no copying involved here; each object stores a reference to its</span>
+<span class="pl-c">// prototype. This means we can alter the prototype and our changes will be</span>
+<span class="pl-c">// reflected everywhere.</span>
+<span class="pl-s1">myPrototype</span><span class="pl-kos">.</span><span class="pl-c1">meaningOfLife</span> <span class="pl-c1">=</span> <span class="pl-c1">43</span><span class="pl-kos">;</span>
+<span class="pl-s1">myObj</span><span class="pl-kos">.</span><span class="pl-c1">meaningOfLife</span><span class="pl-kos">;</span> <span class="pl-c">// = 43</span>
+
+<span class="pl-c">// The for/in statement allows iteration over properties of an object,</span>
+<span class="pl-c">// walking up the prototype chain until it sees a null prototype.</span>
+<span class="pl-k">for</span> <span class="pl-kos">(</span><span class="pl-k">var</span> <span class="pl-s1">x</span> <span class="pl-k">in</span> <span class="pl-s1">myObj</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+    <span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-en">log</span><span class="pl-kos">(</span><span class="pl-s1">myObj</span><span class="pl-kos">[</span><span class="pl-s1">x</span><span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span>
+<span class="pl-c">///prints:</span>
+<span class="pl-c">// Hello world!</span>
+<span class="pl-c">// 43</span>
+<span class="pl-c">// [Function: myFunc]</span>
+<span class="pl-c">// true</span>
+
+<span class="pl-c">// To only consider properties attached to the object itself</span>
+<span class="pl-c">// and not its prototypes, use the `hasOwnProperty()` check.</span>
+<span class="pl-k">for</span> <span class="pl-kos">(</span><span class="pl-k">var</span> <span class="pl-s1">x</span> <span class="pl-k">in</span> <span class="pl-s1">myObj</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+    <span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">myObj</span><span class="pl-kos">.</span><span class="pl-en">hasOwnProperty</span><span class="pl-kos">(</span><span class="pl-s1">x</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+        <span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-en">log</span><span class="pl-kos">(</span><span class="pl-s1">myObj</span><span class="pl-kos">[</span><span class="pl-s1">x</span><span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+<span class="pl-kos">}</span>
+<span class="pl-c">///prints:</span>
+<span class="pl-c">// Hello world!</span>
+
+<span class="pl-c">// We mentioned that `__proto__` was non-standard, and there's no standard way to</span>
+<span class="pl-c">// change the prototype of an existing object. However, there are two ways to</span>
+<span class="pl-c">// create a new object with a given prototype.</span>
+
+<span class="pl-c">// The first is Object.create, which is a recent addition to JS, and therefore</span>
+<span class="pl-c">// not available in all implementations yet.</span>
+<span class="pl-k">var</span> <span class="pl-s1">myObj</span> <span class="pl-c1">=</span> <span class="pl-v">Object</span><span class="pl-kos">.</span><span class="pl-en">create</span><span class="pl-kos">(</span><span class="pl-s1">myPrototype</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-s1">myObj</span><span class="pl-kos">.</span><span class="pl-c1">meaningOfLife</span><span class="pl-kos">;</span> <span class="pl-c">// = 43</span>
+
+<span class="pl-c">// The second way, which works anywhere, has to do with constructors.</span>
+<span class="pl-c">// Constructors have a property called prototype. This is *not* the prototype of</span>
+<span class="pl-c">// the constructor function itself; instead, it's the prototype that new objects</span>
+<span class="pl-c">// are given when they're created with that constructor and the new keyword.</span>
+<span class="pl-v">MyConstructor</span><span class="pl-kos">.</span><span class="pl-c1">prototype</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span>
+    <span class="pl-c1">myNumber</span>: <span class="pl-c1">5</span><span class="pl-kos">,</span>
+    <span class="pl-en">getMyNumber</span>: <span class="pl-k">function</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+        <span class="pl-k">return</span> <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">myNumber</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+<span class="pl-kos">}</span><span class="pl-kos">;</span>
+<span class="pl-k">var</span> <span class="pl-s1">myNewObj2</span> <span class="pl-c1">=</span> <span class="pl-k">new</span> <span class="pl-v">MyConstructor</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-s1">myNewObj2</span><span class="pl-kos">.</span><span class="pl-en">getMyNumber</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// = 5</span>
+<span class="pl-s1">myNewObj2</span><span class="pl-kos">.</span><span class="pl-c1">myNumber</span> <span class="pl-c1">=</span> <span class="pl-c1">6</span><span class="pl-kos">;</span>
+<span class="pl-s1">myNewObj2</span><span class="pl-kos">.</span><span class="pl-en">getMyNumber</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// = 6</span>
+
+<span class="pl-c">// Built-in types like strings and numbers also have constructors that create</span>
+<span class="pl-c">// equivalent wrapper objects.</span>
+<span class="pl-k">var</span> <span class="pl-s1">myNumber</span> <span class="pl-c1">=</span> <span class="pl-c1">12</span><span class="pl-kos">;</span>
+<span class="pl-k">var</span> <span class="pl-s1">myNumberObj</span> <span class="pl-c1">=</span> <span class="pl-k">new</span> <span class="pl-v">Number</span><span class="pl-kos">(</span><span class="pl-c1">12</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-s1">myNumber</span> <span class="pl-c1">==</span> <span class="pl-s1">myNumberObj</span><span class="pl-kos">;</span> <span class="pl-c">// = true</span>
+
+<span class="pl-c">// Except, they aren't exactly equivalent.</span>
+<span class="pl-k">typeof</span> <span class="pl-s1">myNumber</span><span class="pl-kos">;</span> <span class="pl-c">// = 'number'</span>
+<span class="pl-k">typeof</span> <span class="pl-s1">myNumberObj</span><span class="pl-kos">;</span> <span class="pl-c">// = 'object'</span>
+<span class="pl-s1">myNumber</span> <span class="pl-c1">===</span> <span class="pl-s1">myNumberObj</span><span class="pl-kos">;</span> <span class="pl-c">// = false</span>
+<span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-c1">0</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+    <span class="pl-c">// This code won't execute, because 0 is falsy.</span>
+<span class="pl-kos">}</span>
+<span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-k">new</span> <span class="pl-v">Number</span><span class="pl-kos">(</span><span class="pl-c1">0</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+   <span class="pl-c">// This code will execute, because wrapped numbers are objects, and objects</span>
+   <span class="pl-c">// are always truthy.</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-c">// However, the wrapper objects and the regular builtins share a prototype, so</span>
+<span class="pl-c">// you can actually add functionality to a string, for instance.</span>
+<span class="pl-v">String</span><span class="pl-kos">.</span><span class="pl-c1">prototype</span><span class="pl-kos">.</span><span class="pl-en">firstCharacter</span> <span class="pl-c1">=</span> <span class="pl-k">function</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+    <span class="pl-k">return</span> <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-en">charAt</span><span class="pl-kos">(</span><span class="pl-c1">0</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span><span class="pl-kos">;</span>
+<span class="pl-s">"abc"</span><span class="pl-kos">.</span><span class="pl-en">firstCharacter</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// = "a"</span>
+
+<span class="pl-c">// This fact is often used in "polyfilling", which is implementing newer</span>
+<span class="pl-c">// features of JavaScript in an older subset of JavaScript, so that they can be</span>
+<span class="pl-c">// used in older environments such as outdated browsers.</span>
+
+<span class="pl-c">// For instance, we mentioned that Object.create isn't yet available in all</span>
+<span class="pl-c">// implementations, but we can still use it with this polyfill:</span>
+<span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-v">Object</span><span class="pl-kos">.</span><span class="pl-c1">create</span> <span class="pl-c1">===</span> <span class="pl-c1">undefined</span><span class="pl-kos">)</span><span class="pl-kos">{</span> <span class="pl-c">// don't overwrite it if it exists</span>
+    <span class="pl-v">Object</span><span class="pl-kos">.</span><span class="pl-en">create</span> <span class="pl-c1">=</span> <span class="pl-k">function</span><span class="pl-kos">(</span><span class="pl-s1">proto</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+        <span class="pl-c">// make a temporary constructor with the right prototype</span>
+        <span class="pl-k">var</span> <span class="pl-v">Constructor</span> <span class="pl-c1">=</span> <span class="pl-k">function</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">{</span><span class="pl-kos">}</span><span class="pl-kos">;</span>
+        <span class="pl-v">Constructor</span><span class="pl-kos">.</span><span class="pl-c1">prototype</span> <span class="pl-c1">=</span> <span class="pl-s1">proto</span><span class="pl-kos">;</span>
+        <span class="pl-c">// then use it to create a new, appropriately-prototyped object</span>
+        <span class="pl-k">return</span> <span class="pl-k">new</span> <span class="pl-v">Constructor</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-c">// ES6 Additions</span>
+
+<span class="pl-c">// The "let" keyword allows you to define variables in a lexical scope, </span>
+<span class="pl-c">// as opposed to a function scope like the var keyword does.</span>
+<span class="pl-k">let</span> <span class="pl-s1">name</span> <span class="pl-c1">=</span> <span class="pl-s">"Billy"</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// Variables defined with let can be reassigned new values.</span>
+<span class="pl-s1">name</span> <span class="pl-c1">=</span> <span class="pl-s">"William"</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// The "const" keyword allows you to define a variable in a lexical scope</span>
+<span class="pl-c">// like with let, but you cannot reassign the value once one has been assigned.</span>
+
+<span class="pl-k">const</span> <span class="pl-s1">pi</span> <span class="pl-c1">=</span> <span class="pl-c1">3.14</span><span class="pl-kos">;</span>
+
+<span class="pl-s1">pi</span> <span class="pl-c1">=</span> <span class="pl-c1">4.13</span><span class="pl-kos">;</span> <span class="pl-c">// You cannot do this.</span>
+
+<span class="pl-c">// There is a new syntax for functions in ES6 known as "lambda syntax".</span>
+<span class="pl-c">// This allows functions to be defined in a lexical scope like with variables</span>
+<span class="pl-c">// defined by const and let. </span>
+
+<span class="pl-k">const</span> <span class="pl-en">isEven</span> <span class="pl-c1">=</span> <span class="pl-kos">(</span><span class="pl-s1">number</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span>
+    <span class="pl-k">return</span> <span class="pl-s1">number</span> <span class="pl-c1">%</span> <span class="pl-c1">2</span> <span class="pl-c1">===</span> <span class="pl-c1">0</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span><span class="pl-kos">;</span>
+
+<span class="pl-en">isEven</span><span class="pl-kos">(</span><span class="pl-c1">7</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// false</span>
+
+<span class="pl-c">// The "equivalent" of this function in the traditional syntax would look like this:</span>
+
+<span class="pl-k">function</span> <span class="pl-en">isEven</span><span class="pl-kos">(</span><span class="pl-s1">number</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-k">return</span> <span class="pl-s1">number</span> <span class="pl-c1">%</span> <span class="pl-c1">2</span> <span class="pl-c1">===</span> <span class="pl-c1">0</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// I put the word "equivalent" in double quotes because a function defined</span>
+<span class="pl-c">// using the lambda syntax cannot be called before the definition.</span>
+<span class="pl-c">// The following is an example of invalid usage:</span>
+
+<span class="pl-en">add</span><span class="pl-kos">(</span><span class="pl-c1">1</span><span class="pl-kos">,</span> <span class="pl-c1">8</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-k">const</span> <span class="pl-en">add</span> <span class="pl-c1">=</span> <span class="pl-kos">(</span><span class="pl-s1">firstNumber</span><span class="pl-kos">,</span> <span class="pl-s1">secondNumber</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span>
+    <span class="pl-k">return</span> <span class="pl-s1">firstNumber</span> <span class="pl-c1">+</span> <span class="pl-s1">secondNumber</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span><span class="pl-kos">;</span></pre></div>
+<h2>Further Reading</h2>
+<p>The <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" rel="nofollow">Mozilla Developer Network</a> provides excellent documentation for<br>
+JavaScript as it's used in browsers. Plus, it's a wiki, so as you learn more you<br>
+can help others out by sharing your own knowledge.</p>
+<p>MDN's <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/A_re-introduction_to_JavaScript" rel="nofollow">A re-introduction to JavaScript</a> covers much of the concepts covered<br>
+here in more detail. This guide has quite deliberately only covered the<br>
+JavaScript language itself; if you want to learn more about how to use<br>
+JavaScript in web pages, start by learning about the <a href="https://developer.mozilla.org/en-US/docs/Using_the_W3C_DOM_Level_1_Core" rel="nofollow">Document Object Model</a>.</p>
+<p><a href="http://www.learneroo.com/modules/64/nodes/350" rel="nofollow">Learn Javascript by Example and with Challenges</a> is a variant of this<br>
+reference with built-in challenges.</p>
+<p><a href="http://bonsaiden.github.io/JavaScript-Garden/" rel="nofollow">JavaScript Garden</a> is an in-depth guide of all the counter-intuitive parts<br>
+of the language.</p>
+<p><a href="http://www.amazon.com/gp/product/0596805527/" rel="nofollow">JavaScript: The Definitive Guide</a> is a classic guide and reference book.</p>
+<p><a href="http://eloquentjavascript.net/" rel="nofollow">Eloquent Javascript</a> by Marijn Haverbeke is an excellent JS book/ebook with<br>
+attached terminal</p>
+<p><a href="http://jstherightway.org/" rel="nofollow">Javascript: The Right Way</a> is a guide intended to introduce new developers<br>
+to JavaScript and help experienced developers learn more about its best practices.</p>
+<p><a href="https://javascript.info/" rel="nofollow">Javascript:Info</a> is a modern javascript tutorial covering the basics (core language and working with a browser)<br>
+as well as advanced topics with concise explanations.</p>
+<p>In addition to direct contributors to this article, some content is adapted from<br>
+Louie Dinh's Python tutorial on this site, and the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/A_re-introduction_to_JavaScript" rel="nofollow">JS Tutorial</a> on the<br>
+Mozilla Developer Network.</p>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Leigh Brenecki", "https://leigh.net.au"]
+- ["Ariel Krakowski", "http://www.learneroo.com"]
+</code></pre>

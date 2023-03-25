@@ -1,0 +1,441 @@
+<h1>Groovy</h1>
+<p>Groovy - A dynamic language for the Java platform <a href="http://www.groovy-lang.org/" rel="nofollow">Read more here.</a></p>
+<div class="highlight highlight-source-groovy"><pre class="notranslate"><span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">  Set yourself up:</span>
+<span class="pl-c"></span>
+<span class="pl-c">  1) Install SDKMAN - http://sdkman.io/</span>
+<span class="pl-c">  2) Install Groovy: sdk install groovy</span>
+<span class="pl-c">  3) Start the groovy console by typing: groovyConsole</span>
+<span class="pl-c"></span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span>  Single line comments start with two forward slashes</span>
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">Multi line comments look like this.</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span> Hello World</span>
+<span class="pl-c1">println</span> <span class="pl-s"><span class="pl-pds">"</span>Hello world!<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">  Variables:</span>
+<span class="pl-c"></span>
+<span class="pl-c">  You can assign values to variables for later use</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+
+<span class="pl-k">def</span> x <span class="pl-k">=</span> <span class="pl-c1">1</span>
+<span class="pl-c1">println</span> x
+
+x <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-k">java.util.Date</span>()
+<span class="pl-c1">println</span> x
+
+x <span class="pl-k">=</span> <span class="pl-c1">-3.1499392</span>
+<span class="pl-c1">println</span> x
+
+x <span class="pl-k">=</span> <span class="pl-c1">false</span>
+<span class="pl-c1">println</span> x
+
+x <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Groovy!<span class="pl-pds">"</span></span>
+<span class="pl-c1">println</span> x
+
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">  Collections and maps</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span>Creating an empty list</span>
+<span class="pl-k">def</span> technologies <span class="pl-k">=</span> []
+
+<span class="pl-c"><span class="pl-c">/*</span>** Adding a elements to the list **<span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span> As with Java</span>
+technologies<span class="pl-k">.</span>add(<span class="pl-s"><span class="pl-pds">"</span>Grails<span class="pl-pds">"</span></span>)
+
+<span class="pl-c"><span class="pl-c">//</span> Left shift adds, and returns the list</span>
+technologies <span class="pl-k">&lt;&lt;</span> <span class="pl-s"><span class="pl-pds">"</span>Groovy<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span> Add multiple elements</span>
+technologies<span class="pl-k">.</span>addAll([<span class="pl-s"><span class="pl-pds">"</span>Gradle<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>Griffon<span class="pl-pds">"</span></span>])
+
+<span class="pl-c"><span class="pl-c">/*</span>** Removing elements from the list **<span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span> As with Java</span>
+technologies<span class="pl-k">.</span>remove(<span class="pl-s"><span class="pl-pds">"</span>Griffon<span class="pl-pds">"</span></span>)
+
+<span class="pl-c"><span class="pl-c">//</span> Subtraction works also</span>
+technologies <span class="pl-k">=</span> technologies <span class="pl-k">-</span> <span class="pl-s"><span class="pl-pds">'</span>Grails<span class="pl-pds">'</span></span>
+
+<span class="pl-c"><span class="pl-c">/*</span>** Iterating Lists **<span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span> Iterate over elements of a list</span>
+technologies<span class="pl-k">.</span>each { <span class="pl-c1">println</span> <span class="pl-s"><span class="pl-pds">"</span>Technology: <span class="pl-smi">$i<span class="pl-smi">t</span></span><span class="pl-pds">"</span></span>}
+technologies<span class="pl-k">.</span>eachWithIndex { <span class="pl-v">it</span>, <span class="pl-v">i</span> <span class="pl-k">-&gt;</span> <span class="pl-c1">println</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">$i</span>: <span class="pl-smi">$i<span class="pl-smi">t</span></span><span class="pl-pds">"</span></span>}
+
+<span class="pl-c"><span class="pl-c">/*</span>** Checking List contents **<span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span>Evaluate if a list contains element(s) (boolean)</span>
+contained <span class="pl-k">=</span> technologies<span class="pl-k">.</span>contains( <span class="pl-s"><span class="pl-pds">'</span>Groovy<span class="pl-pds">'</span></span> )
+
+<span class="pl-c"><span class="pl-c">//</span> Or</span>
+contained <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>Groovy<span class="pl-pds">'</span></span> <span class="pl-k">in</span> technologies
+
+<span class="pl-c"><span class="pl-c">//</span> Check for multiple contents</span>
+technologies<span class="pl-k">.</span>containsAll([<span class="pl-s"><span class="pl-pds">'</span>Groovy<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>Grails<span class="pl-pds">'</span></span>])
+
+<span class="pl-c"><span class="pl-c">/*</span>** Sorting Lists **<span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span> Sort a list (mutates original list)</span>
+technologies<span class="pl-k">.</span>sort()
+
+<span class="pl-c"><span class="pl-c">//</span> To sort without mutating original, you can do:</span>
+sortedTechnologies <span class="pl-k">=</span> technologies<span class="pl-k">.</span>sort( <span class="pl-c1">false</span> )
+
+<span class="pl-c"><span class="pl-c">/*</span>** Manipulating Lists **<span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span>Replace all elements in the list</span>
+<span class="pl-k">Collections</span><span class="pl-k">.</span>replaceAll(technologies, <span class="pl-s"><span class="pl-pds">'</span>Gradle<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>gradle<span class="pl-pds">'</span></span>)
+
+<span class="pl-c"><span class="pl-c">//</span>Shuffle a list</span>
+<span class="pl-k">Collections</span><span class="pl-k">.</span>shuffle(technologies, <span class="pl-k">new</span> <span class="pl-k">Random</span>())
+
+<span class="pl-c"><span class="pl-c">//</span>Clear a list</span>
+technologies<span class="pl-k">.</span>clear()
+
+<span class="pl-c"><span class="pl-c">//</span>Creating an empty map</span>
+<span class="pl-k">def</span> devMap <span class="pl-k">=</span> [:]
+
+<span class="pl-c"><span class="pl-c">//</span>Add values</span>
+devMap <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span>:<span class="pl-s"><span class="pl-pds">'</span>Roberto<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>framework<span class="pl-pds">'</span></span>:<span class="pl-s"><span class="pl-pds">'</span>Grails<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>language<span class="pl-pds">'</span></span>:<span class="pl-s"><span class="pl-pds">'</span>Groovy<span class="pl-pds">'</span></span>]
+devMap<span class="pl-k">.</span>put(<span class="pl-s"><span class="pl-pds">'</span>lastName<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>Perez<span class="pl-pds">'</span></span>)
+
+<span class="pl-c"><span class="pl-c">//</span>Iterate over elements of a map</span>
+devMap<span class="pl-k">.</span>each { <span class="pl-c1">println</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">$i<span class="pl-smi">t</span><span class="pl-k">.</span><span class="pl-smi">key</span></span>: <span class="pl-smi">$i<span class="pl-smi">t</span><span class="pl-k">.</span><span class="pl-smi">value</span></span><span class="pl-pds">"</span></span> }
+devMap<span class="pl-k">.</span>eachWithIndex { <span class="pl-v">it</span>, <span class="pl-v">i</span> <span class="pl-k">-&gt;</span> <span class="pl-c1">println</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">$i</span>: <span class="pl-smi">$i<span class="pl-smi">t</span></span><span class="pl-pds">"</span></span>}
+
+<span class="pl-c"><span class="pl-c">//</span>Evaluate if a map contains a key</span>
+<span class="pl-k">assert</span> devMap<span class="pl-k">.</span>containsKey(<span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span>)
+
+<span class="pl-c"><span class="pl-c">//</span>Evaluate if a map contains a value</span>
+<span class="pl-k">assert</span> devMap<span class="pl-k">.</span>containsValue(<span class="pl-s"><span class="pl-pds">'</span>Roberto<span class="pl-pds">'</span></span>)
+
+<span class="pl-c"><span class="pl-c">//</span>Get the keys of a map</span>
+<span class="pl-c1">println</span> devMap<span class="pl-k">.</span>keySet()
+
+<span class="pl-c"><span class="pl-c">//</span>Get the values of a map</span>
+<span class="pl-c1">println</span> devMap<span class="pl-k">.</span>values()
+
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">  Groovy Beans</span>
+<span class="pl-c"></span>
+<span class="pl-c">  GroovyBeans are JavaBeans but using a much simpler syntax</span>
+<span class="pl-c"></span>
+<span class="pl-c">  When Groovy is compiled to bytecode, the following rules are used.</span>
+<span class="pl-c"></span>
+<span class="pl-c">    * If the name is declared with an access modifier (public, private or</span>
+<span class="pl-c">      protected) then a field is generated.</span>
+<span class="pl-c"></span>
+<span class="pl-c">    * A name declared with no access modifier generates a private field with</span>
+<span class="pl-c">      public getter and setter (i.e. a property).</span>
+<span class="pl-c"></span>
+<span class="pl-c">    * If a property is declared final the private field is created final and no</span>
+<span class="pl-c">      setter is generated.</span>
+<span class="pl-c"></span>
+<span class="pl-c">    * You can declare a property and also declare your own getter or setter.</span>
+<span class="pl-c"></span>
+<span class="pl-c">    * You can declare a property and a field of the same name, the property will</span>
+<span class="pl-c">      use that field then.</span>
+<span class="pl-c"></span>
+<span class="pl-c">    * If you want a private or protected property you have to provide your own</span>
+<span class="pl-c">      getter and setter which must be declared private or protected.</span>
+<span class="pl-c"></span>
+<span class="pl-c">    * If you access a property from within the class the property is defined in</span>
+<span class="pl-c">      at compile time with implicit or explicit this (for example this.foo, or</span>
+<span class="pl-c">      simply foo), Groovy will access the field directly instead of going though</span>
+<span class="pl-c">      the getter and setter.</span>
+<span class="pl-c"></span>
+<span class="pl-c">    * If you access a property that does not exist using the explicit or</span>
+<span class="pl-c">      implicit foo, then Groovy will access the property through the meta class,</span>
+<span class="pl-c">      which may fail at runtime.</span>
+<span class="pl-c"></span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+
+<span class="pl-k">class</span> <span class="pl-en">Foo</span> {
+    <span class="pl-c"><span class="pl-c">//</span> read only property</span>
+    <span class="pl-k">final</span> <span class="pl-k">String</span> name <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Roberto<span class="pl-pds">"</span></span>
+
+    <span class="pl-c"><span class="pl-c">//</span> read only property with public getter and protected setter</span>
+    <span class="pl-k">String</span> language
+    <span class="pl-k">protected</span> <span class="pl-k">void</span> <span class="pl-en">setLanguage</span>(<span class="pl-k">String</span> <span class="pl-v">language</span>) { <span class="pl-c1">this</span><span class="pl-k">.</span>language <span class="pl-k">=</span> language }
+
+    <span class="pl-c"><span class="pl-c">//</span> dynamically typed property</span>
+    <span class="pl-k">def</span> lastName
+}
+
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">  Methods with optional parameters</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span> A method can have default values for parameters</span>
+<span class="pl-k">def</span> <span class="pl-en">say</span>(<span class="pl-v">msg</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>Hello<span class="pl-pds">'</span></span>, <span class="pl-v">name</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>world<span class="pl-pds">'</span></span>) {
+    <span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">$m<span class="pl-smi">sg</span></span> <span class="pl-smi">$n<span class="pl-smi">ame</span></span>!<span class="pl-pds">"</span></span>
+}
+
+<span class="pl-c"><span class="pl-c">//</span> It can be called in 3 different ways</span>
+<span class="pl-k">assert</span> <span class="pl-s"><span class="pl-pds">'</span>Hello world!<span class="pl-pds">'</span></span> <span class="pl-k">==</span> say()
+<span class="pl-c"><span class="pl-c">//</span> Right most parameter with default value is eliminated first.</span>
+<span class="pl-k">assert</span> <span class="pl-s"><span class="pl-pds">'</span>Hi world!<span class="pl-pds">'</span></span> <span class="pl-k">==</span> say(<span class="pl-s"><span class="pl-pds">'</span>Hi<span class="pl-pds">'</span></span>)
+<span class="pl-k">assert</span> <span class="pl-s"><span class="pl-pds">'</span>learn groovy<span class="pl-pds">'</span></span> <span class="pl-k">==</span> say(<span class="pl-s"><span class="pl-pds">'</span>learn<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>groovy<span class="pl-pds">'</span></span>)
+
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">  Logical Branching and Looping</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span>Groovy supports the usual if - else syntax</span>
+<span class="pl-k">def</span> x <span class="pl-k">=</span> <span class="pl-c1">3</span>
+
+<span class="pl-k">if</span>(x<span class="pl-k">==</span><span class="pl-c1">1</span>) {
+    <span class="pl-c1">println</span> <span class="pl-s"><span class="pl-pds">"</span>One<span class="pl-pds">"</span></span>
+} <span class="pl-k">else</span> <span class="pl-k">if</span>(x<span class="pl-k">==</span><span class="pl-c1">2</span>) {
+    <span class="pl-c1">println</span> <span class="pl-s"><span class="pl-pds">"</span>Two<span class="pl-pds">"</span></span>
+} <span class="pl-k">else</span> {
+    <span class="pl-c1">println</span> <span class="pl-s"><span class="pl-pds">"</span>X greater than Two<span class="pl-pds">"</span></span>
+}
+
+<span class="pl-c"><span class="pl-c">//</span>Groovy also supports the ternary operator:</span>
+<span class="pl-k">def</span> y <span class="pl-k">=</span> <span class="pl-c1">10</span>
+<span class="pl-k">def</span> x <span class="pl-k">=</span> (y <span class="pl-k">&gt;</span> <span class="pl-c1">1</span>) <span class="pl-k">?</span> <span class="pl-s"><span class="pl-pds">"</span>worked<span class="pl-pds">"</span></span> <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>failed<span class="pl-pds">"</span></span>
+<span class="pl-k">assert</span> x <span class="pl-k">==</span> <span class="pl-s"><span class="pl-pds">"</span>worked<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span>Groovy supports 'The Elvis Operator' too!</span>
+<span class="pl-c"><span class="pl-c">//</span>Instead of using the ternary operator:</span>
+
+displayName <span class="pl-k">=</span> user<span class="pl-k">.</span>name <span class="pl-k">?</span> user<span class="pl-k">.</span>name <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Anonymous<span class="pl-pds">'</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span>We can write it:</span>
+displayName <span class="pl-k">=</span> user<span class="pl-k">.</span>name <span class="pl-k">?:</span> <span class="pl-s"><span class="pl-pds">'</span>Anonymous<span class="pl-pds">'</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span>For loop</span>
+<span class="pl-c"><span class="pl-c">//</span>Iterate over a range</span>
+<span class="pl-k">def</span> x <span class="pl-k">=</span> <span class="pl-c1">0</span>
+<span class="pl-k">for</span> (i <span class="pl-k">in</span> <span class="pl-c1">0</span> <span class="pl-k">..</span> <span class="pl-c1">30</span>) {
+    x <span class="pl-k">+</span><span class="pl-k">=</span> i
+}
+
+<span class="pl-c"><span class="pl-c">//</span>Iterate over a list</span>
+x <span class="pl-k">=</span> <span class="pl-c1">0</span>
+<span class="pl-k">for</span>( i <span class="pl-k">in</span> [<span class="pl-c1">5</span>,<span class="pl-c1">3</span>,<span class="pl-c1">2</span>,<span class="pl-c1">1</span>] ) {
+    x <span class="pl-k">+</span><span class="pl-k">=</span> i
+}
+
+<span class="pl-c"><span class="pl-c">//</span>Iterate over an array</span>
+array <span class="pl-k">=</span> (<span class="pl-c1">0</span><span class="pl-k">..</span><span class="pl-c1">20</span>)<span class="pl-k">.</span>toArray()
+x <span class="pl-k">=</span> <span class="pl-c1">0</span>
+<span class="pl-k">for</span> (i <span class="pl-k">in</span> array) {
+    x <span class="pl-k">+</span><span class="pl-k">=</span> i
+}
+
+<span class="pl-c"><span class="pl-c">//</span>Iterate over a map</span>
+<span class="pl-k">def</span> map <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span>:<span class="pl-s"><span class="pl-pds">'</span>Roberto<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>framework<span class="pl-pds">'</span></span>:<span class="pl-s"><span class="pl-pds">'</span>Grails<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>language<span class="pl-pds">'</span></span>:<span class="pl-s"><span class="pl-pds">'</span>Groovy<span class="pl-pds">'</span></span>]
+x <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>
+<span class="pl-k">for</span> ( e <span class="pl-k">in</span> map ) {
+    x <span class="pl-k">+</span><span class="pl-k">=</span> e<span class="pl-k">.</span>value
+    x <span class="pl-k">+</span><span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span> <span class="pl-pds">"</span></span>
+}
+<span class="pl-k">assert</span> x<span class="pl-k">.</span>equals(<span class="pl-s"><span class="pl-pds">"</span>Roberto Grails Groovy <span class="pl-pds">"</span></span>)
+
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">  Operators</span>
+<span class="pl-c"></span>
+<span class="pl-c">  Operator Overloading for a list of the common operators that Groovy supports:</span>
+<span class="pl-c">  http://www.groovy-lang.org/operators.html#Operator-Overloading</span>
+<span class="pl-c"></span>
+<span class="pl-c">  Helpful groovy operators</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+<span class="pl-c"><span class="pl-c">//</span>Spread operator:  invoke an action on all items of an aggregate object.</span>
+<span class="pl-k">def</span> technologies <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">'</span>Groovy<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>Grails<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>Gradle<span class="pl-pds">'</span></span>]
+technologies<span class="pl-k">*</span><span class="pl-k">.</span>toUpperCase() <span class="pl-c"><span class="pl-c">//</span> = to technologies.collect { it?.toUpperCase() }</span>
+
+<span class="pl-c"><span class="pl-c">//</span>Safe navigation operator: used to avoid a NullPointerException.</span>
+<span class="pl-k">def</span> user <span class="pl-k">=</span> <span class="pl-k">User</span><span class="pl-k">.</span>get(<span class="pl-c1">1</span>)
+<span class="pl-k">def</span> username <span class="pl-k">=</span> user<span class="pl-k">?.</span>username
+
+
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">  Closures</span>
+<span class="pl-c">  A Groovy Closure is like a "code block" or a method pointer. It is a piece of</span>
+<span class="pl-c">  code that is defined and then executed at a later point.</span>
+<span class="pl-c"></span>
+<span class="pl-c">  More info at: http://www.groovy-lang.org/closures.html</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+<span class="pl-c"><span class="pl-c">//</span>Example:</span>
+<span class="pl-k">def</span> clos <span class="pl-k">=</span> { <span class="pl-c1">println</span> <span class="pl-s"><span class="pl-pds">"</span>Hello World!<span class="pl-pds">"</span></span> }
+
+<span class="pl-c1">println</span> <span class="pl-s"><span class="pl-pds">"</span>Executing the Closure:<span class="pl-pds">"</span></span>
+clos()
+
+<span class="pl-c"><span class="pl-c">//</span>Passing parameters to a closure</span>
+<span class="pl-k">def</span> sum <span class="pl-k">=</span> { <span class="pl-v">a</span>, <span class="pl-v">b</span> <span class="pl-k">-&gt;</span> <span class="pl-c1">println</span> a<span class="pl-k">+</span>b }
+sum(<span class="pl-c1">2</span>,<span class="pl-c1">4</span>)
+
+<span class="pl-c"><span class="pl-c">//</span>Closures may refer to variables not listed in their parameter list.</span>
+<span class="pl-k">def</span> x <span class="pl-k">=</span> <span class="pl-c1">5</span>
+<span class="pl-k">def</span> multiplyBy <span class="pl-k">=</span> { <span class="pl-v">num</span> <span class="pl-k">-&gt;</span> num <span class="pl-k">*</span> x }
+<span class="pl-c1">println</span> multiplyBy(<span class="pl-c1">10</span>)
+
+<span class="pl-c"><span class="pl-c">//</span> If you have a Closure that takes a single argument, you may omit the</span>
+<span class="pl-c"><span class="pl-c">//</span> parameter definition of the Closure</span>
+<span class="pl-k">def</span> clos <span class="pl-k">=</span> { <span class="pl-c1">print</span> it }
+clos( <span class="pl-s"><span class="pl-pds">"</span>hi<span class="pl-pds">"</span></span> )
+
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">  Groovy can memoize closure results [1][2][3]</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+<span class="pl-k">def</span> cl <span class="pl-k">=</span> {<span class="pl-v">a</span>, <span class="pl-v">b</span> <span class="pl-k">-&gt;</span>
+    sleep(<span class="pl-c1">3000</span>) <span class="pl-c"><span class="pl-c">//</span> simulate some time consuming processing</span>
+    a <span class="pl-k">+</span> b
+}
+
+mem <span class="pl-k">=</span> cl<span class="pl-k">.</span>memoize()
+
+<span class="pl-k">def</span> <span class="pl-en">callClosure</span>(<span class="pl-v">a</span>, <span class="pl-v">b</span>) {
+    <span class="pl-k">def</span> start <span class="pl-k">=</span> <span class="pl-k">System</span><span class="pl-k">.</span>currentTimeMillis()
+    mem(a, b)
+    <span class="pl-c1">println</span> <span class="pl-s"><span class="pl-pds">"</span>Inputs(a = <span class="pl-smi">$a</span>, b = <span class="pl-smi">$b</span>) - took <span class="pl-s1"><span class="pl-pse">${</span>System.currentTimeMillis() - start<span class="pl-pse">}</span></span> msecs.<span class="pl-pds">"</span></span>
+}
+
+callClosure(<span class="pl-c1">1</span>, <span class="pl-c1">2</span>)
+callClosure(<span class="pl-c1">1</span>, <span class="pl-c1">2</span>)
+callClosure(<span class="pl-c1">2</span>, <span class="pl-c1">3</span>)
+callClosure(<span class="pl-c1">2</span>, <span class="pl-c1">3</span>)
+callClosure(<span class="pl-c1">3</span>, <span class="pl-c1">4</span>)
+callClosure(<span class="pl-c1">3</span>, <span class="pl-c1">4</span>)
+callClosure(<span class="pl-c1">1</span>, <span class="pl-c1">2</span>)
+callClosure(<span class="pl-c1">2</span>, <span class="pl-c1">3</span>)
+callClosure(<span class="pl-c1">3</span>, <span class="pl-c1">4</span>)
+
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">  Expando</span>
+<span class="pl-c"></span>
+<span class="pl-c">  The Expando class is a dynamic bean so we can add properties and we can add</span>
+<span class="pl-c">  closures as methods to an instance of this class</span>
+<span class="pl-c"></span>
+<span class="pl-c">  http://mrhaki.blogspot.mx/2009/10/groovy-goodness-expando-as-dynamic-bean.html</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+  <span class="pl-k">def</span> user <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-k">Expando</span>(<span class="pl-c1">name</span>:<span class="pl-s"><span class="pl-pds">"</span>Roberto<span class="pl-pds">"</span></span>)
+  <span class="pl-k">assert</span> <span class="pl-s"><span class="pl-pds">'</span>Roberto<span class="pl-pds">'</span></span> <span class="pl-k">==</span> user<span class="pl-k">.</span>name
+
+  user<span class="pl-k">.</span>lastName <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>Pérez<span class="pl-pds">'</span></span>
+  <span class="pl-k">assert</span> <span class="pl-s"><span class="pl-pds">'</span>Pérez<span class="pl-pds">'</span></span> <span class="pl-k">==</span> user<span class="pl-k">.</span>lastName
+
+  user<span class="pl-k">.</span>showInfo <span class="pl-k">=</span> { <span class="pl-v">out</span> <span class="pl-k">-&gt;</span>
+      out <span class="pl-k">&lt;&lt;</span> <span class="pl-s"><span class="pl-pds">"</span>Name: <span class="pl-smi">$n<span class="pl-smi">ame</span></span><span class="pl-pds">"</span></span>
+      out <span class="pl-k">&lt;&lt;</span> <span class="pl-s"><span class="pl-pds">"</span>, Last name: <span class="pl-smi">$l<span class="pl-smi">astName</span></span><span class="pl-pds">"</span></span>
+  }
+
+  <span class="pl-k">def</span> sw <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-k">StringWriter</span>()
+  <span class="pl-c1">println</span> user<span class="pl-k">.</span>showInfo(sw)
+
+
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">  Metaprogramming (MOP)</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span>Using ExpandoMetaClass to add behaviour</span>
+<span class="pl-k">String</span><span class="pl-k">.</span>metaClass<span class="pl-k">.</span>testAdd <span class="pl-k">=</span> {
+    <span class="pl-c1">println</span> <span class="pl-s"><span class="pl-pds">"</span>we added this<span class="pl-pds">"</span></span>
+}
+
+<span class="pl-k">String</span> x <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>test<span class="pl-pds">"</span></span>
+x<span class="pl-k">?.</span>testAdd()
+
+<span class="pl-c"><span class="pl-c">//</span>Intercepting method calls</span>
+<span class="pl-k">class</span> <span class="pl-en">Test</span> <span class="pl-k">implements</span> <span class="pl-e">GroovyInterceptable</span> {
+    <span class="pl-k">def</span> <span class="pl-en">sum</span>(<span class="pl-k">Integer</span> <span class="pl-v">x</span>, <span class="pl-k">Integer</span> <span class="pl-v">y</span>) { x <span class="pl-k">+</span> y }
+
+    <span class="pl-k">def</span> <span class="pl-en">invokeMethod</span>(<span class="pl-k">String</span> <span class="pl-v">name</span>, <span class="pl-v">args</span>) {
+        <span class="pl-k">System</span><span class="pl-k">.</span>out<span class="pl-k">.</span><span class="pl-c1">println</span> <span class="pl-s"><span class="pl-pds">"</span>Invoke method <span class="pl-smi">$n<span class="pl-smi">ame</span></span> with args: <span class="pl-smi">$a<span class="pl-smi">rgs</span></span><span class="pl-pds">"</span></span>
+    }
+}
+
+<span class="pl-k">def</span> test <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-k">Test</span>()
+test<span class="pl-k">?.</span>sum(<span class="pl-c1">2</span>,<span class="pl-c1">3</span>)
+test<span class="pl-k">?.</span>multiply(<span class="pl-c1">2</span>,<span class="pl-c1">3</span>)
+
+<span class="pl-c"><span class="pl-c">//</span>Groovy supports propertyMissing for dealing with property resolution attempts.</span>
+<span class="pl-k">class</span> <span class="pl-en">Foo</span> {
+   <span class="pl-k">def</span> <span class="pl-en">propertyMissing</span>(<span class="pl-k">String</span> <span class="pl-v">name</span>) { name }
+}
+<span class="pl-k">def</span> f <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-k">Foo</span>()
+
+<span class="pl-c1">assertEquals</span> <span class="pl-s"><span class="pl-pds">"</span>boo<span class="pl-pds">"</span></span>, f<span class="pl-k">.</span>boo
+
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">  TypeChecked and CompileStatic</span>
+<span class="pl-c">  Groovy, by nature, is and will always be a dynamic language but it supports</span>
+<span class="pl-c">  typechecked and compilestatic</span>
+<span class="pl-c"></span>
+<span class="pl-c">  More info: http://www.infoq.com/articles/new-groovy-20</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+<span class="pl-c"><span class="pl-c">//</span>TypeChecked</span>
+<span class="pl-k">import</span> <span class="pl-smi">groovy.transform.TypeChecked</span>
+
+<span class="pl-k">void</span> <span class="pl-en">testMethod</span>() {}
+
+<span class="pl-k">@TypeChecked</span>
+<span class="pl-k">void</span> <span class="pl-en">test</span>() {
+    testMeethod()
+
+    <span class="pl-k">def</span> name <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Roberto<span class="pl-pds">"</span></span>
+
+    <span class="pl-c1">println</span> naameee
+
+}
+
+<span class="pl-c"><span class="pl-c">//</span>Another example:</span>
+<span class="pl-k">import</span> <span class="pl-smi">groovy.transform.TypeChecked</span>
+
+<span class="pl-k">@TypeChecked</span>
+<span class="pl-k">Integer</span> <span class="pl-en">test</span>() {
+    <span class="pl-k">Integer</span> num <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>1<span class="pl-pds">"</span></span>
+
+    <span class="pl-k">Integer</span>[] numbers <span class="pl-k">=</span> [<span class="pl-c1">1</span>,<span class="pl-c1">2</span>,<span class="pl-c1">3</span>,<span class="pl-c1">4</span>]
+
+    <span class="pl-k">Date</span> date <span class="pl-k">=</span> numbers[<span class="pl-c1">1</span>]
+
+    <span class="pl-k">return</span> <span class="pl-s"><span class="pl-pds">"</span>Test<span class="pl-pds">"</span></span>
+
+}
+
+<span class="pl-c"><span class="pl-c">//</span>CompileStatic example:</span>
+<span class="pl-k">import</span> <span class="pl-smi">groovy.transform.CompileStatic</span>
+
+<span class="pl-k">@CompileStatic</span>
+<span class="pl-k">int</span> <span class="pl-en">sum</span>(<span class="pl-k">int</span> <span class="pl-v">x</span>, <span class="pl-k">int</span> <span class="pl-v">y</span>) {
+    x <span class="pl-k">+</span> y
+}
+
+<span class="pl-k">assert</span> sum(<span class="pl-c1">2</span>,<span class="pl-c1">5</span>) <span class="pl-k">==</span> <span class="pl-c1">7</span>
+
+</pre></div>
+<h2>Further resources</h2>
+<p><a href="http://www.groovy-lang.org/documentation.html" rel="nofollow">Groovy documentation</a></p>
+<p><a href="http://groovyconsole.appspot.com/" rel="nofollow">Groovy web console</a></p>
+<p>Join a <a href="http://www.groovy-lang.org/usergroups.html" rel="nofollow">Groovy user group</a></p>
+<h2>Books</h2>
+<ul>
+<li>
+<p>[Groovy Goodness] (<a href="https://leanpub.com/groovy-goodness-notebook" rel="nofollow">https://leanpub.com/groovy-goodness-notebook</a>)</p>
+</li>
+<li>
+<p>[Groovy in Action] (<a href="http://manning.com/koenig2/" rel="nofollow">http://manning.com/koenig2/</a>)</p>
+</li>
+<li>
+<p>[Programming Groovy 2: Dynamic Productivity for the Java Developer] (<a href="http://shop.oreilly.com/product/9781937785307.do" rel="nofollow">http://shop.oreilly.com/product/9781937785307.do</a>)</p>
+</li>
+</ul>
+<p>[1] <a href="http://roshandawrani.wordpress.com/2010/10/18/groovy-new-feature-closures-can-now-memorize-their-results/" rel="nofollow">http://roshandawrani.wordpress.com/2010/10/18/groovy-new-feature-closures-can-now-memorize-their-results/</a><br>
+[2] <a href="http://www.solutionsiq.com/resources/agileiq-blog/bid/72880/Programming-with-Groovy-Trampoline-and-Memoize" rel="nofollow">http://www.solutionsiq.com/resources/agileiq-blog/bid/72880/Programming-with-Groovy-Trampoline-and-Memoize</a><br>
+[3] <a href="http://mrhaki.blogspot.mx/2011/05/groovy-goodness-cache-closure-results.html" rel="nofollow">http://mrhaki.blogspot.mx/2011/05/groovy-goodness-cache-closure-results.html</a></p>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Roberto Pérez Alcolea", "http://github.com/rpalcolea"]
+</code></pre>

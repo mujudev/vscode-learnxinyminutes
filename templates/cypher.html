@@ -1,0 +1,163 @@
+<h1>Cypher</h1>
+<p>Cypher is the Neo4j’s query language to manipulate graphs easily. It reuses syntax from SQL and mixes it with kind of ascii-art to represent graphs.<br>
+This tutorial assumes that you already know graph concepts like nodes and relationships.</p>
+<p><a href="https://neo4j.com/developer/cypher-query-language/" rel="nofollow">Read more here.</a></p>
+<h2>Nodes</h2>
+<p><strong>Represents a record in a graph.</strong></p>
+<p><code class="notranslate">()</code><br>
+It's an empty <em>node</em>, to indicate that there is a <em>node</em>, but it's not relevant for the query.</p>
+<p><code class="notranslate">(n)</code><br>
+It's a <em>node</em> referred by the variable <strong>n</strong>, reusable in the query. It begins with lowercase and uses camelCase.</p>
+<p><code class="notranslate">(p:Person)</code><br>
+You can add a <em>label</em> to your node, here <strong>Person</strong>. It's like a type / a class / a category. It begins with uppercase and uses camelCase.</p>
+<p><code class="notranslate">(p:Person:Manager)</code><br>
+A node can have many <em>labels</em>.</p>
+<p><code class="notranslate">(p:Person {name : 'Théo Gauchoux', age : 22})</code><br>
+A node can have some <em>properties</em>, here <strong>name</strong> and <strong>age</strong>. It begins with lowercase and uses camelCase.</p>
+<p>The types allowed in properties :</p>
+<ul>
+<li>Numeric</li>
+<li>Boolean</li>
+<li>String</li>
+<li>List of previous primitive types</li>
+</ul>
+<p><em>Warning : there isn't datetime property in Cypher ! You can use String with a specific pattern or a Numeric from a specific date.</em></p>
+<p><code class="notranslate">p.name</code><br>
+You can access to a property with the dot style.</p>
+<h2>Relationships (or Edges)</h2>
+<p><strong>Connects two nodes</strong></p>
+<p><code class="notranslate">[:KNOWS]</code><br>
+It's a <em>relationship</em> with the <em>label</em> <strong>KNOWS</strong>. It's a <em>label</em> as the node's label. It begins with uppercase and use UPPER_SNAKE_CASE.</p>
+<p><code class="notranslate">[k:KNOWS]</code><br>
+The same <em>relationship</em>, referred by the variable <strong>k</strong>, reusable in the query, but it's not necessary.</p>
+<p><code class="notranslate">[k:KNOWS {since:2017}]</code><br>
+The same <em>relationship</em>, with <em>properties</em> (like <em>node</em>), here <strong>since</strong>.</p>
+<p><code class="notranslate">[k:KNOWS*..4]</code><br>
+It's a structural information to use in a <em>path</em> (seen later). Here, <strong>*..4</strong> says "Match the pattern, with the relationship <strong>k</strong> which be repeated between 1 and 4 times.</p>
+<h2>Paths</h2>
+<p><strong>The way to mix nodes and relationships.</strong></p>
+<p><code class="notranslate">(a:Person)-[:KNOWS]-(b:Person)</code><br>
+A path describing that <strong>a</strong> and <strong>b</strong> know each other.</p>
+<p><code class="notranslate">(a:Person)-[:MANAGES]-&gt;(b:Person)</code><br>
+A path can be directed. This path describes that <strong>a</strong> is the manager of <strong>b</strong>.</p>
+<p><code class="notranslate">(a:Person)-[:KNOWS]-(b:Person)-[:KNOWS]-(c:Person)</code><br>
+You can chain multiple relationships. This path describes the friend of a friend.</p>
+<p><code class="notranslate">(a:Person)-[:MANAGES]-&gt;(b:Person)-[:MANAGES]-&gt;(c:Person)</code><br>
+A chain can also be directed. This path describes that <strong>a</strong> is the boss of <strong>b</strong> and the big boss of <strong>c</strong>.</p>
+<p>Patterns often used (from Neo4j doc) :</p>
+<pre class="notranslate"><code class="notranslate">// Friend-of-a-friend 
+(user)-[:KNOWS]-(friend)-[:KNOWS]-(foaf)
+
+// Shortest path
+path = shortestPath( (user)-[:KNOWS*..5]-(other) )
+
+// Collaborative filtering
+(user)-[:PURCHASED]-&gt;(product)&lt;-[:PURCHASED]-()-[:PURCHASED]-&gt;(otherProduct)
+
+// Tree navigation 
+(root)&lt;-[:PARENT*]-(leaf:Category)-[:ITEM]-&gt;(data:Product)
+
+</code></pre>
+<h2>Create queries</h2>
+<p>Create a new node</p>
+<pre class="notranslate"><code class="notranslate">CREATE (a:Person {name:"Théo Gauchoux"})
+RETURN a
+</code></pre>
+<p><em><code class="notranslate">RETURN</code> allows to have a result after the query. It can be multiple, as <code class="notranslate">RETURN a, b</code>.</em></p>
+<p>Create a new relationship (with 2 new nodes)</p>
+<pre class="notranslate"><code class="notranslate">CREATE (a:Person)-[k:KNOWS]-(b:Person)
+RETURN a,k,b
+</code></pre>
+<h2>Match queries</h2>
+<p>Match all nodes</p>
+<pre class="notranslate"><code class="notranslate">MATCH (n)
+RETURN n
+</code></pre>
+<p>Match nodes by label</p>
+<pre class="notranslate"><code class="notranslate">MATCH (a:Person)
+RETURN a
+</code></pre>
+<p>Match nodes by label and property</p>
+<pre class="notranslate"><code class="notranslate">MATCH (a:Person {name:"Théo Gauchoux"})
+RETURN a
+</code></pre>
+<p>Match nodes according to relationships (undirected)</p>
+<pre class="notranslate"><code class="notranslate">MATCH (a)-[:KNOWS]-(b)
+RETURN a,b
+</code></pre>
+<p>Match nodes according to relationships (directed)</p>
+<pre class="notranslate"><code class="notranslate">MATCH (a)-[:MANAGES]-&gt;(b)
+RETURN a,b
+</code></pre>
+<p>Match nodes with a <code class="notranslate">WHERE</code> clause</p>
+<pre class="notranslate"><code class="notranslate">MATCH (p:Person {name:"Théo Gauchoux"})-[s:LIVES_IN]-&gt;(city:City)
+WHERE s.since = 2015
+RETURN p,state
+</code></pre>
+<p>You can use <code class="notranslate">MATCH WHERE</code> clause with <code class="notranslate">CREATE</code> clause</p>
+<pre class="notranslate"><code class="notranslate">MATCH (a), (b)
+WHERE a.name = "Jacquie" AND b.name = "Michel"
+CREATE (a)-[:KNOWS]-(b)
+</code></pre>
+<h2>Update queries</h2>
+<p>Update a specific property of a node</p>
+<pre class="notranslate"><code class="notranslate">MATCH (p:Person)
+WHERE p.name = "Théo Gauchoux"
+SET p.age = 23
+</code></pre>
+<p>Replace all properties of a node</p>
+<pre class="notranslate"><code class="notranslate">MATCH (p:Person)
+WHERE p.name = "Théo Gauchoux"
+SET p = {name: "Michel", age: 23}
+</code></pre>
+<p>Add new property to a node</p>
+<pre class="notranslate"><code class="notranslate">MATCH (p:Person)
+WHERE p.name = "Théo Gauchoux"
+SET p + = {studies: "IT Engineering"}
+</code></pre>
+<p>Add a label to a node</p>
+<pre class="notranslate"><code class="notranslate">MATCH (p:Person)
+WHERE p.name = "Théo Gauchoux"
+SET p:Internship
+</code></pre>
+<h2>Delete queries</h2>
+<p>Delete a specific node (linked relationships must be deleted before)</p>
+<pre class="notranslate"><code class="notranslate">MATCH (p:Person)-[relationship]-()
+WHERE p.name = "Théo Gauchoux"
+DELETE relationship, p
+</code></pre>
+<p>Remove a property in a specific node</p>
+<pre class="notranslate"><code class="notranslate">MATCH (p:Person)
+WHERE p.name = "Théo Gauchoux"
+REMOVE p.age
+</code></pre>
+<p><em>Pay attention to the <code class="notranslate">REMOVE</code>keyword, it's not <code class="notranslate">DELETE</code> !</em></p>
+<p>Remove a label from a specific node</p>
+<pre class="notranslate"><code class="notranslate">MATCH (p:Person)
+WHERE p.name = "Théo Gauchoux"
+DELETE p:Person
+</code></pre>
+<p>Delete entire database</p>
+<pre class="notranslate"><code class="notranslate">MATCH (n)
+OPTIONAL MATCH (n)-[r]-()
+DELETE n, r
+</code></pre>
+<p><em>Seriously, it's the <code class="notranslate">rm -rf /</code> of Cypher !</em></p>
+<h2>Other useful clauses</h2>
+<p><code class="notranslate">PROFILE</code><br>
+Before a query, show the execution plan of it.</p>
+<p><code class="notranslate">COUNT(e)</code><br>
+Count entities (nodes or relationships) matching <strong>e</strong>.</p>
+<p><code class="notranslate">LIMIT x</code><br>
+Limit the result to the x first results.</p>
+<h2>Special hints</h2>
+<ul>
+<li>There is just single-line comments in Cypher, with double-slash : // Comments</li>
+<li>You can execute a Cypher script stored in a <strong>.cql</strong> file directly in Neo4j (it's an import). However, you can't have multiple statements in this file (separated by <strong>;</strong>).</li>
+<li>Use the Neo4j shell to write Cypher, it's really awesome.</li>
+<li>The Cypher will be the standard query language for all graph databases (known as <strong>OpenCypher</strong>).</li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Théo Gauchoux", "https://github.com/TheoGauchoux"]
+</code></pre>

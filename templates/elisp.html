@@ -1,0 +1,341 @@
+<h1>Elisp</h1>
+<div class="highlight highlight-source-scheme"><pre class="notranslate"><span class="pl-c"><span class="pl-c">;</span>; This gives an introduction to Emacs Lisp in 15 minutes (v0.2d)</span>
+<span class="pl-c"><span class="pl-c">;</span>;</span>
+<span class="pl-c"><span class="pl-c">;</span>; First make sure you read this text by Peter Norvig:</span>
+<span class="pl-c"><span class="pl-c">;</span>; http://norvig.com/21-days.html</span>
+<span class="pl-c"><span class="pl-c">;</span>;</span>
+<span class="pl-c"><span class="pl-c">;</span>; Then install GNU Emacs 24.3:</span>
+<span class="pl-c"><span class="pl-c">;</span>;</span>
+<span class="pl-c"><span class="pl-c">;</span>; Debian: apt-get install emacs (or see your distro instructions)</span>
+<span class="pl-c"><span class="pl-c">;</span>; OSX: http://emacsformacosx.com/emacs-builds/Emacs-24.3-universal-10.6.8.dmg</span>
+<span class="pl-c"><span class="pl-c">;</span>; Windows: http://ftp.gnu.org/gnu/windows/emacs/emacs-24.3-bin-i386.zip</span>
+<span class="pl-c"><span class="pl-c">;</span>;</span>
+<span class="pl-c"><span class="pl-c">;</span>; More general information can be found at:</span>
+<span class="pl-c"><span class="pl-c">;</span>; http://www.gnu.org/software/emacs/#Obtaining</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Important warning:</span>
+<span class="pl-c"><span class="pl-c">;</span>;</span>
+<span class="pl-c"><span class="pl-c">;</span>; Going through this tutorial won't damage your computer unless</span>
+<span class="pl-c"><span class="pl-c">;</span>; you get so angry that you throw it on the floor.  In that case,</span>
+<span class="pl-c"><span class="pl-c">;</span>; I hereby decline any responsibility.  Have fun!</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c"><span class="pl-c">;</span>;</span>
+<span class="pl-c"><span class="pl-c">;</span>; Fire up Emacs.</span>
+<span class="pl-c"><span class="pl-c">;</span>;</span>
+<span class="pl-c"><span class="pl-c">;</span>; Hit the `q' key to dismiss the welcome message.</span>
+<span class="pl-c"><span class="pl-c">;</span>;</span>
+<span class="pl-c"><span class="pl-c">;</span>; Now look at the gray line at the bottom of the window:</span>
+<span class="pl-c"><span class="pl-c">;</span>;</span>
+<span class="pl-c"><span class="pl-c">;</span>; "*scratch*" is the name of the editing space you are now in.</span>
+<span class="pl-c"><span class="pl-c">;</span>; This editing space is called a "buffer".</span>
+<span class="pl-c"><span class="pl-c">;</span>;</span>
+<span class="pl-c"><span class="pl-c">;</span>; The scratch buffer is the default buffer when opening Emacs.</span>
+<span class="pl-c"><span class="pl-c">;</span>; You are never editing files: you are editing buffers that you</span>
+<span class="pl-c"><span class="pl-c">;</span>; can save to a file.</span>
+<span class="pl-c"><span class="pl-c">;</span>;</span>
+<span class="pl-c"><span class="pl-c">;</span>; "Lisp interaction" refers to a set of commands available here.</span>
+<span class="pl-c"><span class="pl-c">;</span>;</span>
+<span class="pl-c"><span class="pl-c">;</span>; Emacs has a built-in set of commands available in every buffer,</span>
+<span class="pl-c"><span class="pl-c">;</span>; and several subsets of commands available when you activate a</span>
+<span class="pl-c"><span class="pl-c">;</span>; specific mode.  Here we use the `lisp-interaction-mode', which</span>
+<span class="pl-c"><span class="pl-c">;</span>; comes with commands to evaluate and navigate within Elisp code.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c"><span class="pl-c">;</span>;</span>
+<span class="pl-c"><span class="pl-c">;</span>; Semi-colons start comments anywhere on a line.</span>
+<span class="pl-c"><span class="pl-c">;</span>;</span>
+<span class="pl-c"><span class="pl-c">;</span>; Elisp programs are made of symbolic expressions ("sexps"):</span>
+(<span class="pl-k">+</span> <span class="pl-c1">2</span> <span class="pl-c1">2</span>)
+
+<span class="pl-c"><span class="pl-c">;</span>; This symbolic expression reads as "Add 2 to 2".</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Sexps are enclosed into parentheses, possibly nested:</span>
+(<span class="pl-k">+</span> <span class="pl-c1">2</span> (<span class="pl-k">+</span> <span class="pl-c1">1</span> <span class="pl-c1">1</span>))
+
+<span class="pl-c"><span class="pl-c">;</span>; A symbolic expression contains atoms or other symbolic</span>
+<span class="pl-c"><span class="pl-c">;</span>; expressions.  In the above examples, 1 and 2 are atoms,</span>
+<span class="pl-c"><span class="pl-c">;</span>; (+ 2 (+ 1 1)) and (+ 1 1) are symbolic expressions.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; From `lisp-interaction-mode' you can evaluate sexps.</span>
+<span class="pl-c"><span class="pl-c">;</span>; Put the cursor right after the closing parenthesis then</span>
+<span class="pl-c"><span class="pl-c">;</span>; hold down the control and hit the j keys ("C-j" for short).</span>
+
+(<span class="pl-k">+</span> <span class="pl-c1">3</span> (<span class="pl-k">+</span> <span class="pl-c1">1</span> <span class="pl-c1">2</span>))
+<span class="pl-c"><span class="pl-c">;</span>;           ^ cursor here</span>
+<span class="pl-c"><span class="pl-c">;</span>; `C-j' =&gt; 6</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; `C-j' inserts the result of the evaluation in the buffer.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; `C-xC-e' displays the same result in Emacs bottom line,</span>
+<span class="pl-c"><span class="pl-c">;</span>; called the "minibuffer".  We will generally use `C-xC-e',</span>
+<span class="pl-c"><span class="pl-c">;</span>; as we don't want to clutter the buffer with useless text.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; `setq' stores a value into a variable:</span>
+(setq my-name <span class="pl-s"><span class="pl-pds">"</span>Bastien<span class="pl-pds">"</span></span>)
+<span class="pl-c"><span class="pl-c">;</span>; `C-xC-e' =&gt; "Bastien" (displayed in the mini-buffer)</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; `insert' will insert "Hello!" where the cursor is:</span>
+(insert <span class="pl-s"><span class="pl-pds">"</span>Hello!<span class="pl-pds">"</span></span>)
+<span class="pl-c"><span class="pl-c">;</span>; `C-xC-e' =&gt; "Hello!"</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; We used `insert' with only one argument "Hello!", but</span>
+<span class="pl-c"><span class="pl-c">;</span>; we can pass more arguments -- here we use two:</span>
+
+(insert <span class="pl-s"><span class="pl-pds">"</span>Hello<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span> world!<span class="pl-pds">"</span></span>)
+<span class="pl-c"><span class="pl-c">;</span>; `C-xC-e' =&gt; "Hello world!"</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; You can use variables instead of strings:</span>
+(insert <span class="pl-s"><span class="pl-pds">"</span>Hello, I am <span class="pl-pds">"</span></span> my-name)
+<span class="pl-c"><span class="pl-c">;</span>; `C-xC-e' =&gt; "Hello, I am Bastien"</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; You can combine sexps into functions:</span>
+(defun hello () (insert <span class="pl-s"><span class="pl-pds">"</span>Hello, I am <span class="pl-pds">"</span></span> my-name))
+<span class="pl-c"><span class="pl-c">;</span>; `C-xC-e' =&gt; hello</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; You can evaluate functions:</span>
+(hello)
+<span class="pl-c"><span class="pl-c">;</span>; `C-xC-e' =&gt; Hello, I am Bastien</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; The empty parentheses in the function's definition means that</span>
+<span class="pl-c"><span class="pl-c">;</span>; it does not accept arguments.  But always using `my-name' is</span>
+<span class="pl-c"><span class="pl-c">;</span>; boring, let's tell the function to accept one argument (here</span>
+<span class="pl-c"><span class="pl-c">;</span>; the argument is called "name"):</span>
+
+(defun hello (name) (insert <span class="pl-s"><span class="pl-pds">"</span>Hello <span class="pl-pds">"</span></span> name))
+<span class="pl-c"><span class="pl-c">;</span>; `C-xC-e' =&gt; hello</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Now let's call the function with the string "you" as the value</span>
+<span class="pl-c"><span class="pl-c">;</span>; for its unique argument:</span>
+(hello <span class="pl-s"><span class="pl-pds">"</span>you<span class="pl-pds">"</span></span>)
+<span class="pl-c"><span class="pl-c">;</span>; `C-xC-e' =&gt; "Hello you"</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Yeah!</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Take a breath.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c"><span class="pl-c">;</span>;</span>
+<span class="pl-c"><span class="pl-c">;</span>; Now switch to a new buffer named "*test*" in another window:</span>
+
+(switch-to-buffer-other-window <span class="pl-s"><span class="pl-pds">"</span>*test*<span class="pl-pds">"</span></span>)
+<span class="pl-c"><span class="pl-c">;</span>; `C-xC-e'</span>
+<span class="pl-c"><span class="pl-c">;</span>; =&gt; [screen has two windows and cursor is in the *test* buffer]</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Mouse over the top window and left-click to go back.  Or you can</span>
+<span class="pl-c"><span class="pl-c">;</span>; use `C-xo' (i.e. hold down control-x and hit o) to go to the other</span>
+<span class="pl-c"><span class="pl-c">;</span>; window interactively.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; You can combine several sexps with `progn':</span>
+(progn
+  (switch-to-buffer-other-window <span class="pl-s"><span class="pl-pds">"</span>*test*<span class="pl-pds">"</span></span>)
+  (hello <span class="pl-s"><span class="pl-pds">"</span>you<span class="pl-pds">"</span></span>))
+<span class="pl-c"><span class="pl-c">;</span>; `C-xC-e'</span>
+<span class="pl-c"><span class="pl-c">;</span>; =&gt; [The screen has two windows and cursor is in the *test* buffer]</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Now if you don't mind, I'll stop asking you to hit `C-xC-e': do it</span>
+<span class="pl-c"><span class="pl-c">;</span>; for every sexp that follows.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Always go back to the *scratch* buffer with the mouse or `C-xo'.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; It's often useful to erase the buffer:</span>
+(progn
+  (switch-to-buffer-other-window <span class="pl-s"><span class="pl-pds">"</span>*test*<span class="pl-pds">"</span></span>)
+  (erase-buffer)
+  (hello <span class="pl-s"><span class="pl-pds">"</span>there<span class="pl-pds">"</span></span>))
+
+<span class="pl-c"><span class="pl-c">;</span>; Or to go back to the other window:</span>
+(progn
+  (switch-to-buffer-other-window <span class="pl-s"><span class="pl-pds">"</span>*test*<span class="pl-pds">"</span></span>)
+  (erase-buffer)
+  (hello <span class="pl-s"><span class="pl-pds">"</span>you<span class="pl-pds">"</span></span>)
+  (other-window <span class="pl-c1">1</span>))
+
+<span class="pl-c"><span class="pl-c">;</span>; You can bind a value to a local variable with `let':</span>
+(<span class="pl-k">let</span> ((local-name <span class="pl-s"><span class="pl-pds">"</span>you<span class="pl-pds">"</span></span>))
+  (switch-to-buffer-other-window <span class="pl-s"><span class="pl-pds">"</span>*test*<span class="pl-pds">"</span></span>)
+  (erase-buffer)
+  (hello local-name)
+  (other-window <span class="pl-c1">1</span>))
+
+<span class="pl-c"><span class="pl-c">;</span>; No need to use `progn' in that case, since `let' also combines</span>
+<span class="pl-c"><span class="pl-c">;</span>; several sexps.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Let's format a string:</span>
+(format <span class="pl-s"><span class="pl-pds">"</span>Hello %s!<span class="pl-cce">\n</span><span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>visitor<span class="pl-pds">"</span></span>)
+
+<span class="pl-c"><span class="pl-c">;</span>; %s is a place-holder for a string, replaced by "visitor".</span>
+<span class="pl-c"><span class="pl-c">;</span>; \n is the newline character.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Let's refine our function by using format:</span>
+(defun hello (name)
+  (insert (format <span class="pl-s"><span class="pl-pds">"</span>Hello %s!<span class="pl-cce">\n</span><span class="pl-pds">"</span></span> name)))
+
+(hello <span class="pl-s"><span class="pl-pds">"</span>you<span class="pl-pds">"</span></span>)
+
+<span class="pl-c"><span class="pl-c">;</span>; Let's create another function which uses `let':</span>
+(defun greeting (name)
+  (<span class="pl-k">let</span> ((your-name <span class="pl-s"><span class="pl-pds">"</span>Bastien<span class="pl-pds">"</span></span>))
+    (insert (format <span class="pl-s"><span class="pl-pds">"</span>Hello %s!<span class="pl-cce">\n\n</span>I am %s.<span class="pl-pds">"</span></span>
+                    name       <span class="pl-c"><span class="pl-c">;</span> the argument of the function</span>
+                    your-name  <span class="pl-c"><span class="pl-c">;</span> the let-bound variable "Bastien"</span>
+                    ))))
+
+<span class="pl-c"><span class="pl-c">;</span>; And evaluate it:</span>
+(greeting <span class="pl-s"><span class="pl-pds">"</span>you<span class="pl-pds">"</span></span>)
+
+<span class="pl-c"><span class="pl-c">;</span>; Some functions are interactive:</span>
+(read-from-minibuffer <span class="pl-s"><span class="pl-pds">"</span>Enter your name: <span class="pl-pds">"</span></span>)
+
+<span class="pl-c"><span class="pl-c">;</span>; Evaluating this function returns what you entered at the prompt.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Let's make our `greeting' function prompt for your name:</span>
+(defun greeting (from-name)
+  (<span class="pl-k">let</span> ((your-name (read-from-minibuffer <span class="pl-s"><span class="pl-pds">"</span>Enter your name: <span class="pl-pds">"</span></span>)))
+    (insert (format <span class="pl-s"><span class="pl-pds">"</span>Hello!<span class="pl-cce">\n\n</span>I am %s and you are %s.<span class="pl-pds">"</span></span>
+                    from-name <span class="pl-c"><span class="pl-c">;</span> the argument of the function</span>
+                    your-name <span class="pl-c"><span class="pl-c">;</span> the let-bound var, entered at prompt</span>
+                    ))))
+
+(greeting <span class="pl-s"><span class="pl-pds">"</span>Bastien<span class="pl-pds">"</span></span>)
+
+<span class="pl-c"><span class="pl-c">;</span>; Let's complete it by displaying the results in the other window:</span>
+(defun greeting (from-name)
+  (<span class="pl-k">let</span> ((your-name (read-from-minibuffer <span class="pl-s"><span class="pl-pds">"</span>Enter your name: <span class="pl-pds">"</span></span>)))
+    (switch-to-buffer-other-window <span class="pl-s"><span class="pl-pds">"</span>*test*<span class="pl-pds">"</span></span>)
+    (erase-buffer)
+    (insert (format <span class="pl-s"><span class="pl-pds">"</span>Hello %s!<span class="pl-cce">\n\n</span>I am %s.<span class="pl-pds">"</span></span> your-name from-name))
+    (other-window <span class="pl-c1">1</span>)))
+
+<span class="pl-c"><span class="pl-c">;</span>; Now test it:</span>
+(greeting <span class="pl-s"><span class="pl-pds">"</span>Bastien<span class="pl-pds">"</span></span>)
+
+<span class="pl-c"><span class="pl-c">;</span>; Take a breath.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c"><span class="pl-c">;</span>;</span>
+<span class="pl-c"><span class="pl-c">;</span>; Let's store a list of names:</span>
+<span class="pl-c"><span class="pl-c">;</span>; If you want to create a literal list of data, use ' to stop it from</span>
+<span class="pl-c"><span class="pl-c">;</span>; being evaluated - literally, "quote" the data.</span>
+(setq list-of-names <span class="pl-s">'</span>(<span class="pl-s"><span class="pl-pds">"</span>Sarah<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>Chloe<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>Mathilde<span class="pl-pds">"</span></span>))
+
+<span class="pl-c"><span class="pl-c">;</span>; Get the first element of this list with `car':</span>
+(<span class="pl-c1">car</span> list-of-names)
+
+<span class="pl-c"><span class="pl-c">;</span>; Get a list of all but the first element with `cdr':</span>
+(<span class="pl-c1">cdr</span> list-of-names)
+
+<span class="pl-c"><span class="pl-c">;</span>; Add an element to the beginning of a list with `push':</span>
+(push <span class="pl-s"><span class="pl-pds">"</span>Stephanie<span class="pl-pds">"</span></span> list-of-names)
+
+<span class="pl-c"><span class="pl-c">;</span>; NOTE: `car' and `cdr' don't modify the list, but `push' does.</span>
+<span class="pl-c"><span class="pl-c">;</span>; This is an important difference: some functions don't have any</span>
+<span class="pl-c"><span class="pl-c">;</span>; side-effects (like `car') while others have (like `push').</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Let's call `hello' for each element in `list-of-names':</span>
+(mapcar <span class="pl-c1">'hello</span> list-of-names)
+
+<span class="pl-c"><span class="pl-c">;</span>; Refine `greeting' to say hello to everyone in `list-of-names':</span>
+(defun greeting ()
+    (switch-to-buffer-other-window <span class="pl-s"><span class="pl-pds">"</span>*test*<span class="pl-pds">"</span></span>)
+    (erase-buffer)
+    (mapcar <span class="pl-c1">'hello</span> list-of-names)
+    (other-window <span class="pl-c1">1</span>))
+
+(greeting)
+
+<span class="pl-c"><span class="pl-c">;</span>; Remember the `hello' function we defined above?  It takes one</span>
+<span class="pl-c"><span class="pl-c">;</span>; argument, a name.  `mapcar' calls `hello', successively using each</span>
+<span class="pl-c"><span class="pl-c">;</span>; element of `list-of-names' as the argument for `hello'.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Now let's arrange a bit what we have in the displayed buffer:</span>
+
+(defun replace-hello-by-bonjour ()
+    (switch-to-buffer-other-window <span class="pl-s"><span class="pl-pds">"</span>*test*<span class="pl-pds">"</span></span>)
+    (goto-char (point-min))
+    (while (search-forward <span class="pl-s"><span class="pl-pds">"</span>Hello<span class="pl-pds">"</span></span>)
+      (replace-match <span class="pl-s"><span class="pl-pds">"</span>Bonjour<span class="pl-pds">"</span></span>))
+    (other-window <span class="pl-c1">1</span>))
+
+<span class="pl-c"><span class="pl-c">;</span>; (goto-char (point-min)) goes to the beginning of the buffer.</span>
+<span class="pl-c"><span class="pl-c">;</span>; (search-forward "Hello") searches for the string "Hello".</span>
+<span class="pl-c"><span class="pl-c">;</span>; (while x y) evaluates the y sexp(s) while x returns something.</span>
+<span class="pl-c"><span class="pl-c">;</span>; If x returns `nil' (nothing), we exit the while loop.</span>
+
+(replace-hello-by-bonjour)
+
+<span class="pl-c"><span class="pl-c">;</span>; You should see all occurrences of "Hello" in the *test* buffer</span>
+<span class="pl-c"><span class="pl-c">;</span>; replaced by "Bonjour".</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; You should also get an error: "Search failed: Hello".</span>
+<span class="pl-c"><span class="pl-c">;</span>;</span>
+<span class="pl-c"><span class="pl-c">;</span>; To avoid this error, you need to tell `search-forward' whether it</span>
+<span class="pl-c"><span class="pl-c">;</span>; should stop searching at some point in the buffer, and whether it</span>
+<span class="pl-c"><span class="pl-c">;</span>; should silently fail when nothing is found:</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; (search-forward "Hello" nil t) does the trick:</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; The `nil' argument says: the search is not bound to a position.</span>
+<span class="pl-c"><span class="pl-c">;</span>; The `'t' argument says: silently fail when nothing is found.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; We use this sexp in the function below, which doesn't throw an error:</span>
+
+(defun hello-to-bonjour ()
+    (switch-to-buffer-other-window <span class="pl-s"><span class="pl-pds">"</span>*test*<span class="pl-pds">"</span></span>)
+    (erase-buffer)
+    <span class="pl-c"><span class="pl-c">;</span>; Say hello to names in `list-of-names'</span>
+    (mapcar <span class="pl-c1">'hello</span> list-of-names)
+    (goto-char (point-min))
+    <span class="pl-c"><span class="pl-c">;</span>; Replace "Hello" by "Bonjour"</span>
+    (while (search-forward <span class="pl-s"><span class="pl-pds">"</span>Hello<span class="pl-pds">"</span></span> <span class="pl-c1">nil</span> t)
+      (replace-match <span class="pl-s"><span class="pl-pds">"</span>Bonjour<span class="pl-pds">"</span></span>))
+    (other-window <span class="pl-c1">1</span>))
+
+(hello-to-bonjour)
+
+<span class="pl-c"><span class="pl-c">;</span>; Let's boldify the names:</span>
+
+(defun boldify-names ()
+    (switch-to-buffer-other-window <span class="pl-s"><span class="pl-pds">"</span>*test*<span class="pl-pds">"</span></span>)
+    (goto-char (point-min))
+    (while (re-search-forward <span class="pl-s"><span class="pl-pds">"</span>Bonjour <span class="pl-cce">\\</span>(.+<span class="pl-cce">\\</span>)!<span class="pl-pds">"</span></span> <span class="pl-c1">nil</span> t)
+      (add-text-properties (match-beginning <span class="pl-c1">1</span>)
+                           (match-end <span class="pl-c1">1</span>)
+                           (<span class="pl-c1">list</span> <span class="pl-c1">'face</span> <span class="pl-c1">'bold</span>)))
+    (other-window <span class="pl-c1">1</span>))
+
+<span class="pl-c"><span class="pl-c">;</span>; This functions introduces `re-search-forward': instead of</span>
+<span class="pl-c"><span class="pl-c">;</span>; searching for the string "Bonjour", you search for a pattern,</span>
+<span class="pl-c"><span class="pl-c">;</span>; using a "regular expression" (abbreviated in the prefix "re-").</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; The regular expression is "Bonjour \\(.+\\)!" and it reads:</span>
+<span class="pl-c"><span class="pl-c">;</span>; the string "Bonjour ", and</span>
+<span class="pl-c"><span class="pl-c">;</span>; a group of            | this is the \\( ... \\) construct</span>
+<span class="pl-c"><span class="pl-c">;</span>;   any character       | this is the .</span>
+<span class="pl-c"><span class="pl-c">;</span>;   possibly repeated   | this is the +</span>
+<span class="pl-c"><span class="pl-c">;</span>; and the "!" string.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Ready?  Test it!</span>
+
+(boldify-names)
+
+<span class="pl-c"><span class="pl-c">;</span>; `add-text-properties' adds... text properties, like a face.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; OK, we are done.  Happy hacking!</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; If you want to know more about a variable or a function:</span>
+<span class="pl-c"><span class="pl-c">;</span>;</span>
+<span class="pl-c"><span class="pl-c">;</span>; C-h v a-variable RET</span>
+<span class="pl-c"><span class="pl-c">;</span>; C-h f a-function RET</span>
+<span class="pl-c"><span class="pl-c">;</span>;</span>
+<span class="pl-c"><span class="pl-c">;</span>; To read the Emacs Lisp manual with Emacs:</span>
+<span class="pl-c"><span class="pl-c">;</span>;</span>
+<span class="pl-c"><span class="pl-c">;</span>; C-h i m elisp RET</span>
+<span class="pl-c"><span class="pl-c">;</span>;</span>
+<span class="pl-c"><span class="pl-c">;</span>; To read an online introduction to Emacs Lisp:</span>
+<span class="pl-c"><span class="pl-c">;</span>; https://www.gnu.org/software/emacs/manual/html_node/eintr/index.html</span></pre></div>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Bastien Guerry", "https://bzg.fr"]
+- ["Saurabh Sandav", "http://github.com/SaurabhSandav"]
+</code></pre>

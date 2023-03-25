@@ -1,0 +1,371 @@
+<h1>Elm</h1>
+<p>Elm is a functional reactive programming language that compiles to (client-side)<br>
+JavaScript. Elm is statically typed, meaning that the compiler catches most<br>
+errors immediately and provides a clear and understandable error message. Elm is<br>
+great for designing user interfaces and games for the web.</p>
+<div class="highlight highlight-source-haskell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">--</span> Single line comments start with two dashes.</span>
+<span class="pl-c"><span class="pl-c">{-</span> Multiline comments can be enclosed in a block like this.</span>
+<span class="pl-c"><span class="pl-c"><span class="pl-c">{-</span> They can be nested. <span class="pl-c">-}</span></span></span>
+<span class="pl-c"><span class="pl-c">-}</span></span>
+
+<span class="pl-c"><span class="pl-c">{-</span>- The Basics -<span class="pl-c">-}</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> Arithmetic</span>
+<span class="pl-c1">1</span> <span class="pl-k">+</span> <span class="pl-c1">1</span> <span class="pl-c"><span class="pl-c">--</span> 2</span>
+<span class="pl-c1">8</span> <span class="pl-k">-</span> <span class="pl-c1">1</span> <span class="pl-c"><span class="pl-c">--</span> 7</span>
+<span class="pl-c1">10</span> <span class="pl-k">*</span> <span class="pl-c1">2</span> <span class="pl-c"><span class="pl-c">--</span> 20</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Every number literal without a decimal point can be either an Int or a Float.</span>
+<span class="pl-c1">33</span> <span class="pl-k">/</span> <span class="pl-c1">2</span> <span class="pl-c"><span class="pl-c">--</span> 16.5 with floating point division</span>
+<span class="pl-c1">33</span> <span class="pl-k">//</span> <span class="pl-c1">2</span> <span class="pl-c"><span class="pl-c">--</span> 16 with integer division</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Exponents</span>
+<span class="pl-c1">5</span> <span class="pl-k">^</span> <span class="pl-c1">2</span> <span class="pl-c"><span class="pl-c">--</span> 25</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Booleans</span>
+<span class="pl-c1">not</span> <span class="pl-ent"><span class="pl-c1">True</span></span> <span class="pl-c"><span class="pl-c">--</span> False</span>
+<span class="pl-c1">not</span> <span class="pl-ent"><span class="pl-c1">False</span></span> <span class="pl-c"><span class="pl-c">--</span> True</span>
+<span class="pl-c1">1</span> <span class="pl-k">==</span> <span class="pl-c1">1</span> <span class="pl-c"><span class="pl-c">--</span> True</span>
+<span class="pl-c1">1</span> <span class="pl-k">/=</span> <span class="pl-c1">1</span> <span class="pl-c"><span class="pl-c">--</span> False</span>
+<span class="pl-c1">1</span> <span class="pl-k">&lt;</span> <span class="pl-c1">10</span> <span class="pl-c"><span class="pl-c">--</span> True</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Strings and characters</span>
+<span class="pl-s"><span class="pl-pds">"</span>This is a string because it uses double quotes.<span class="pl-pds">"</span></span>
+<span class="pl-s"><span class="pl-pds">'</span>a<span class="pl-pds">'</span></span> <span class="pl-c"><span class="pl-c">--</span> characters in single quotes</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Strings can be appended.</span>
+<span class="pl-s"><span class="pl-pds">"</span>Hello <span class="pl-pds">"</span></span> <span class="pl-k">++</span> <span class="pl-s"><span class="pl-pds">"</span>world!<span class="pl-pds">"</span></span> <span class="pl-c"><span class="pl-c">--</span> "Hello world!"</span>
+
+<span class="pl-c"><span class="pl-c">{-</span>- Lists, Tuples, and Records -<span class="pl-c">-}</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> Every element in a list must have the same type.</span>
+[<span class="pl-s"><span class="pl-pds">"</span>the<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>quick<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>brown<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>fox<span class="pl-pds">"</span></span>]
+[<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span>, <span class="pl-c1">5</span>]
+<span class="pl-c"><span class="pl-c">--</span> The second example can also be written with two dots.</span>
+<span class="pl-c1">List.</span>range <span class="pl-c1">1</span> <span class="pl-c1">5</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Append lists just like strings.</span>
+<span class="pl-c1">List.</span>range <span class="pl-c1">1</span> <span class="pl-c1">5</span> <span class="pl-k">++</span> <span class="pl-c1">List.</span>range <span class="pl-c1">6</span> <span class="pl-c1">10</span> <span class="pl-k">==</span> <span class="pl-c1">List.</span>range <span class="pl-c1">1</span> <span class="pl-c1">10</span> <span class="pl-c"><span class="pl-c">--</span> True</span>
+
+<span class="pl-c"><span class="pl-c">--</span> To add one item, use "cons".</span>
+<span class="pl-c1">0</span> <span class="pl-k">::</span> <span class="pl-smi">List.range</span> <span class="pl-c1">1</span> <span class="pl-c1">5</span> <span class="pl-c"><span class="pl-c">--</span> [0, 1, 2, 3, 4, 5]</span>
+
+<span class="pl-c"><span class="pl-c">--</span> The head and tail of a list are returned as a Maybe. Instead of checking</span>
+<span class="pl-c"><span class="pl-c">--</span> every value to see if it's null, you deal with missing values explicitly.</span>
+<span class="pl-c1">List.</span><span class="pl-c1">head</span> (<span class="pl-c1">List.</span>range <span class="pl-c1">1</span> <span class="pl-c1">5</span>) <span class="pl-c"><span class="pl-c">--</span> Just 1</span>
+<span class="pl-c1">List.</span><span class="pl-c1">tail</span> (<span class="pl-c1">List.</span>range <span class="pl-c1">1</span> <span class="pl-c1">5</span>) <span class="pl-c"><span class="pl-c">--</span> Just [2, 3, 4, 5]</span>
+<span class="pl-c1">List.</span><span class="pl-c1">head</span> <span class="pl-c1">[]</span> <span class="pl-c"><span class="pl-c">--</span> Nothing</span>
+<span class="pl-c"><span class="pl-c">--</span> List.functionName means the function lives in the List module.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Every element in a tuple can be a different type, but a tuple has a</span>
+<span class="pl-c"><span class="pl-c">--</span> fixed length.</span>
+(<span class="pl-s"><span class="pl-pds">"</span>elm<span class="pl-pds">"</span></span>, <span class="pl-c1">42</span>)
+
+<span class="pl-c"><span class="pl-c">--</span> Access the elements of a pair with the first and second functions.</span>
+<span class="pl-c"><span class="pl-c">--</span> (This is a shortcut; we'll come to the "real way" in a bit.)</span>
+<span class="pl-c1">Tuple.</span>first (<span class="pl-s"><span class="pl-pds">"</span>elm<span class="pl-pds">"</span></span>, <span class="pl-c1">42</span>) <span class="pl-c"><span class="pl-c">--</span> "elm"</span>
+<span class="pl-c1">Tuple.</span>second (<span class="pl-s"><span class="pl-pds">"</span>elm<span class="pl-pds">"</span></span>, <span class="pl-c1">42</span>) <span class="pl-c"><span class="pl-c">--</span> 42</span>
+
+<span class="pl-c"><span class="pl-c">--</span> The empty tuple, or "unit", is sometimes used as a placeholder.</span>
+<span class="pl-c"><span class="pl-c">--</span> It is the only value of its type, also called "Unit".</span>
+<span class="pl-c1">()</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Records are like tuples but the fields have names. The order of fields</span>
+<span class="pl-c"><span class="pl-c">--</span> doesn't matter. Notice that record values use equals signs, not colons.</span>
+{ x <span class="pl-k">=</span> <span class="pl-c1">3</span>, y <span class="pl-k">=</span> <span class="pl-c1">7</span> }
+
+<span class="pl-c"><span class="pl-c">--</span> Access a field with a dot and the field name.</span>
+{ x <span class="pl-k">=</span> <span class="pl-c1">3</span>, y <span class="pl-k">=</span> <span class="pl-c1">7</span> }<span class="pl-k">.</span>x <span class="pl-c"><span class="pl-c">--</span> 3</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Or with an accessor function, which is a dot and the field name on its own.</span>
+<span class="pl-k"><span class="pl-c1">.</span></span>y { x <span class="pl-k">=</span> <span class="pl-c1">3</span>, y <span class="pl-k">=</span> <span class="pl-c1">7</span> } <span class="pl-c"><span class="pl-c">--</span> 7</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Update the fields of a record. (It must have the fields already.)</span>
+{ person <span class="pl-k">|</span>
+  name <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>George<span class="pl-pds">"</span></span> }
+
+<span class="pl-c"><span class="pl-c">--</span> Update multiple fields at once, using the current values.</span>
+{ particle <span class="pl-k">|</span>
+  position <span class="pl-k">=</span> particle<span class="pl-k">.</span>position <span class="pl-k">+</span> particle<span class="pl-k">.</span>velocity,
+  velocity <span class="pl-k">=</span> particle<span class="pl-k">.</span>velocity <span class="pl-k">+</span> particle<span class="pl-k">.</span>acceleration }
+
+<span class="pl-c"><span class="pl-c">{-</span>- Control Flow -<span class="pl-c">-}</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> If statements always have an else, and the branches must be the same type.</span>
+<span class="pl-k">if</span> powerLevel <span class="pl-k">&gt;</span> <span class="pl-c1">9000</span> <span class="pl-k">then</span>
+  <span class="pl-s"><span class="pl-pds">"</span>WHOA!<span class="pl-pds">"</span></span>
+<span class="pl-k">else</span>
+  <span class="pl-s"><span class="pl-pds">"</span>meh<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> If statements can be chained.</span>
+<span class="pl-k">if</span> n <span class="pl-k">&lt;</span> <span class="pl-c1">0</span> <span class="pl-k">then</span>
+  <span class="pl-s"><span class="pl-pds">"</span>n is negative<span class="pl-pds">"</span></span>
+<span class="pl-k">else</span> <span class="pl-k">if</span> n <span class="pl-k">&gt;</span> <span class="pl-c1">0</span> <span class="pl-k">then</span>
+  <span class="pl-s"><span class="pl-pds">"</span>n is positive<span class="pl-pds">"</span></span>
+<span class="pl-k">else</span>
+  <span class="pl-s"><span class="pl-pds">"</span>n is zero<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> Use case statements to pattern match on different possibilities.</span>
+<span class="pl-k">case</span> aList <span class="pl-k">of</span>
+  <span class="pl-c1">[]</span> <span class="pl-k">-&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>matches the empty list<span class="pl-pds">"</span></span>
+  [x]<span class="pl-k">-&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>matches a list of exactly one item, <span class="pl-pds">"</span></span> <span class="pl-k">++</span> toString x
+  <span class="pl-en">x</span><span class="pl-k">::</span><span class="pl-smi">xs</span> <span class="pl-k">-&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>matches a list of at least one item whose head is <span class="pl-pds">"</span></span> <span class="pl-k">++</span> <span class="pl-smi">toString</span> <span class="pl-smi">x</span>
+<span class="pl-c"><span class="pl-c">--</span> Pattern matches go in order. If we put [x] last, it would never match because</span>
+<span class="pl-c"><span class="pl-c">--</span> x::xs also matches (xs would be the empty list). Matches do not "fall through".</span>
+<span class="pl-c"><span class="pl-c">--</span> The compiler will alert you to missing or extra cases.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Pattern match on a Maybe.</span>
+<span class="pl-k">case</span> <span class="pl-c1">List.</span><span class="pl-c1">head</span> aList <span class="pl-k">of</span>
+  <span class="pl-ent">Just</span> x <span class="pl-k">-&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>The head is <span class="pl-pds">"</span></span> <span class="pl-k">++</span> toString x
+  <span class="pl-ent">Nothing</span> <span class="pl-k">-&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>The list was empty.<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">{-</span>- Functions -<span class="pl-c">-}</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> Elm's syntax for functions is very minimal, relying mostly on whitespace</span>
+<span class="pl-c"><span class="pl-c">--</span> rather than parentheses and curly brackets. There is no "return" keyword.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Define a function with its name, arguments, an equals sign, and the body.</span>
+multiply a b <span class="pl-k">=</span>
+  a <span class="pl-k">*</span> b
+
+<span class="pl-c"><span class="pl-c">--</span> Apply (call) a function by passing it arguments (no commas necessary).</span>
+multiply <span class="pl-c1">7</span> <span class="pl-c1">6</span> <span class="pl-c"><span class="pl-c">--</span> 42</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Partially apply a function by passing only some of its arguments.</span>
+<span class="pl-c"><span class="pl-c">--</span> Then give that function a new name.</span>
+double <span class="pl-k">=</span>
+  multiply <span class="pl-c1">2</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Constants are similar, except there are no arguments.</span>
+answer <span class="pl-k">=</span>
+  <span class="pl-c1">42</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Pass functions as arguments to other functions.</span>
+<span class="pl-c1">List.</span><span class="pl-c1">map</span> double (<span class="pl-c1">List.</span>range <span class="pl-c1">1</span> <span class="pl-c1">4</span>) <span class="pl-c"><span class="pl-c">--</span> [2, 4, 6, 8]</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Or write an anonymous function.</span>
+<span class="pl-c1">List.</span><span class="pl-c1">map</span> (<span class="pl-k">\</span>a <span class="pl-k">-&gt;</span> a <span class="pl-k">*</span> <span class="pl-c1">2</span>) (<span class="pl-c1">List.</span>range <span class="pl-c1">1</span> <span class="pl-c1">4</span>) <span class="pl-c"><span class="pl-c">--</span> [2, 4, 6, 8]</span>
+
+<span class="pl-c"><span class="pl-c">--</span> You can pattern match in function definitions when there's only one case.</span>
+<span class="pl-c"><span class="pl-c">--</span> This function takes one tuple rather than two arguments.</span>
+<span class="pl-c"><span class="pl-c">--</span> This is the way you'll usually unpack/extract values from tuples.</span>
+area (width, height) <span class="pl-k">=</span>
+  width <span class="pl-k">*</span> height
+
+area (<span class="pl-c1">6</span>, <span class="pl-c1">7</span>) <span class="pl-c"><span class="pl-c">--</span> 42</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Use curly brackets to pattern match record field names.</span>
+<span class="pl-c"><span class="pl-c">--</span> Use let to define intermediate values.</span>
+volume {width, height, depth} <span class="pl-k">=</span>
+  <span class="pl-k">let</span>
+    area <span class="pl-k">=</span> width <span class="pl-k">*</span> height
+  <span class="pl-k">in</span>
+    area <span class="pl-k">*</span> depth
+
+volume { width <span class="pl-k">=</span> <span class="pl-c1">3</span>, height <span class="pl-k">=</span> <span class="pl-c1">2</span>, depth <span class="pl-k">=</span> <span class="pl-c1">7</span> } <span class="pl-c"><span class="pl-c">--</span> 42</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Functions can be recursive.</span>
+fib n <span class="pl-k">=</span>
+  <span class="pl-k">if</span> n <span class="pl-k">&lt;</span> <span class="pl-c1">2</span> <span class="pl-k">then</span>
+    <span class="pl-c1">1</span>
+  <span class="pl-k">else</span>
+    fib (n <span class="pl-k">-</span> <span class="pl-c1">1</span>) <span class="pl-k">+</span> fib (n <span class="pl-k">-</span> <span class="pl-c1">2</span>)
+
+<span class="pl-c1">List.</span><span class="pl-c1">map</span> fib (<span class="pl-c1">List.</span>range <span class="pl-c1">0</span> <span class="pl-c1">8</span>) <span class="pl-c"><span class="pl-c">--</span> [1, 1, 2, 3, 5, 8, 13, 21, 34]</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Another recursive function (use List.length in real code).</span>
+listLength aList <span class="pl-k">=</span>
+  <span class="pl-k">case</span> aList <span class="pl-k">of</span>
+    <span class="pl-c1">[]</span> <span class="pl-k">-&gt;</span> <span class="pl-c1">0</span>
+    <span class="pl-en">x</span><span class="pl-k">::</span><span class="pl-smi">xs</span> <span class="pl-k">-&gt;</span> <span class="pl-c1">1</span> <span class="pl-k">+</span> <span class="pl-smi">listLength</span> <span class="pl-smi">xs</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Function calls happen before any infix operator. Parens indicate precedence.</span>
+<span class="pl-c1">cos</span> (degrees <span class="pl-c1">30</span>) <span class="pl-k">^</span> <span class="pl-c1">2</span> <span class="pl-k">+</span> <span class="pl-c1">sin</span> (degrees <span class="pl-c1">30</span>) <span class="pl-k">^</span> <span class="pl-c1">2</span> <span class="pl-c"><span class="pl-c">--</span> 1</span>
+<span class="pl-c"><span class="pl-c">--</span> First degrees is applied to 30, then the result is passed to the trig</span>
+<span class="pl-c"><span class="pl-c">--</span> functions, which is then squared, and the addition happens last.</span>
+
+<span class="pl-c"><span class="pl-c">{-</span>- Types and Type Annotations -<span class="pl-c">-}</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> The compiler will infer the type of every value in your program.</span>
+<span class="pl-c"><span class="pl-c">--</span> Types are always uppercase. Read x : T as "x has type T".</span>
+<span class="pl-c"><span class="pl-c">--</span> Some common types, which you might see in Elm's REPL.</span>
+<span class="pl-c1">5</span> <span class="pl-k">:</span> <span class="pl-ent">Int</span>
+<span class="pl-c1">6.7</span> <span class="pl-k">:</span> <span class="pl-ent">Float</span>
+<span class="pl-s"><span class="pl-pds">"</span>hello<span class="pl-pds">"</span></span> <span class="pl-k">:</span> <span class="pl-ent">String</span>
+<span class="pl-ent"><span class="pl-c1">True</span></span> <span class="pl-k">:</span> <span class="pl-ent">Bool</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Functions have types too. Read -&gt; as "goes to". Think of the rightmost type</span>
+<span class="pl-c"><span class="pl-c">--</span> as the type of the return value, and the others as arguments.</span>
+<span class="pl-c1">not</span> <span class="pl-k">:</span> <span class="pl-ent">Bool</span> <span class="pl-k">-&gt;</span> <span class="pl-ent">Bool</span>
+<span class="pl-c1">round</span> <span class="pl-k">:</span> <span class="pl-ent">Float</span> <span class="pl-k">-&gt;</span> <span class="pl-ent">Int</span>
+
+<span class="pl-c"><span class="pl-c">--</span> When you define a value, it's good practice to write its type above it.</span>
+<span class="pl-c"><span class="pl-c">--</span> The annotation is a form of documentation, which is verified by the compiler.</span>
+double <span class="pl-k">:</span> <span class="pl-ent">Int</span> <span class="pl-k">-&gt;</span> <span class="pl-ent">Int</span>
+double x <span class="pl-k">=</span> x <span class="pl-k">*</span> <span class="pl-c1">2</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Function arguments are passed in parentheses.</span>
+<span class="pl-c"><span class="pl-c">--</span> Lowercase types are type variables: they can be any type, as long as each</span>
+<span class="pl-c"><span class="pl-c">--</span> call is consistent.</span>
+<span class="pl-c1">List.</span><span class="pl-c1">map</span> <span class="pl-k">:</span> (a <span class="pl-k">-&gt;</span> b) <span class="pl-k">-&gt;</span> <span class="pl-ent">List</span> a <span class="pl-k">-&gt;</span> <span class="pl-ent">List</span> b
+<span class="pl-c"><span class="pl-c">--</span> "List dot map has type a-goes-to-b, goes to list of a, goes to list of b."</span>
+
+<span class="pl-c"><span class="pl-c">--</span> There are three special lowercase types: number, comparable, and appendable.</span>
+<span class="pl-c"><span class="pl-c">--</span> Numbers allow you to use arithmetic on Ints and Floats.</span>
+<span class="pl-c"><span class="pl-c">--</span> Comparable allows you to order numbers and strings, like a &lt; b.</span>
+<span class="pl-c"><span class="pl-c">--</span> Appendable things can be combined with a ++ b.</span>
+
+<span class="pl-c"><span class="pl-c">{-</span>- Type Aliases and Union Types -<span class="pl-c">-}</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> When you write a record or tuple, its type already exists.</span>
+<span class="pl-c"><span class="pl-c">--</span> (Notice that record types use colon and record values use equals.)</span>
+origin <span class="pl-k">:</span> { x <span class="pl-k">:</span> <span class="pl-ent">Float</span>, y <span class="pl-k">:</span> <span class="pl-ent">Float</span>, z <span class="pl-k">:</span> <span class="pl-ent">Float</span> }
+origin <span class="pl-k">=</span>
+  { x <span class="pl-k">=</span> <span class="pl-c1">0</span>, y <span class="pl-k">=</span> <span class="pl-c1">0</span>, z <span class="pl-k">=</span> <span class="pl-c1">0</span> }
+
+<span class="pl-c"><span class="pl-c">--</span> You can give existing types a nice name with a type alias.</span>
+<span class="pl-k">type</span> <span class="pl-smi">alias</span> <span class="pl-en">Point3D</span> <span class="pl-k">=</span>
+  { <span class="pl-smi">x</span> <span class="pl-k">:</span> <span class="pl-en"><span class="pl-c1">Float</span></span>, <span class="pl-smi">y</span> <span class="pl-k">:</span> <span class="pl-en"><span class="pl-c1">Float</span></span>, <span class="pl-smi">z</span> <span class="pl-k">:</span> <span class="pl-en"><span class="pl-c1">Float</span></span> }
+
+<span class="pl-c"><span class="pl-c">--</span> If you alias a record, you can use the name as a constructor function.</span>
+otherOrigin <span class="pl-k">:</span> <span class="pl-ent">Point3D</span>
+otherOrigin <span class="pl-k">=</span>
+  <span class="pl-ent">Point3D</span> <span class="pl-c1">0</span> <span class="pl-c1">0</span> <span class="pl-c1">0</span>
+
+<span class="pl-c"><span class="pl-c">--</span> But it's still the same type, so you can equate them.</span>
+origin <span class="pl-k">==</span> otherOrigin <span class="pl-c"><span class="pl-c">--</span> True</span>
+
+<span class="pl-c"><span class="pl-c">--</span> By contrast, defining a union type creates a type that didn't exist before.</span>
+<span class="pl-c"><span class="pl-c">--</span> A union type is so called because it can be one of many possibilities.</span>
+<span class="pl-c"><span class="pl-c">--</span> Each of the possibilities is represented as a "tag".</span>
+<span class="pl-k">type</span> <span class="pl-en">Direction</span> <span class="pl-k">=</span>
+  <span class="pl-en">North</span> <span class="pl-k">|</span> <span class="pl-en">South</span> <span class="pl-k">|</span> <span class="pl-en">East</span> <span class="pl-k">|</span> <span class="pl-en">West</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Tags can carry other values of known type. This can work recursively.</span>
+<span class="pl-k">type</span> <span class="pl-en">IntTree</span> <span class="pl-k">=</span>
+  <span class="pl-en">Leaf</span> <span class="pl-k">|</span> <span class="pl-en">Node</span> <span class="pl-en"><span class="pl-c1">Int</span></span> <span class="pl-en">IntTree</span> <span class="pl-en">IntTree</span>
+<span class="pl-c"><span class="pl-c">--</span> "Leaf" and "Node" are the tags. Everything following a tag is a type.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Tags can be used as values or functions.</span>
+root <span class="pl-k">:</span> <span class="pl-ent">IntTree</span>
+root <span class="pl-k">=</span>
+  <span class="pl-ent">Node</span> <span class="pl-c1">7</span> <span class="pl-ent">Leaf</span> <span class="pl-ent">Leaf</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Union types (and type aliases) can use type variables.</span>
+<span class="pl-k">type</span> <span class="pl-en">Tree</span> <span class="pl-smi">a</span> <span class="pl-k">=</span>
+  <span class="pl-en">Leaf</span> <span class="pl-k">|</span> <span class="pl-en">Node</span> <span class="pl-smi">a</span> (<span class="pl-en">Tree</span> <span class="pl-smi">a</span>) (<span class="pl-en">Tree</span> <span class="pl-smi">a</span>)
+<span class="pl-c"><span class="pl-c">--</span> "The type tree-of-a is a leaf, or a node of a, tree-of-a, and tree-of-a."</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Pattern match union tags. The uppercase tags will be matched exactly. The</span>
+<span class="pl-c"><span class="pl-c">--</span> lowercase variables will match anything. Underscore also matches anything,</span>
+<span class="pl-c"><span class="pl-c">--</span> but signifies that you aren't using it.</span>
+leftmostElement <span class="pl-k">:</span> <span class="pl-ent">Tree</span> a <span class="pl-k">-&gt;</span> <span class="pl-ent">Maybe</span> a
+leftmostElement tree <span class="pl-k">=</span>
+  <span class="pl-k">case</span> tree <span class="pl-k">of</span>
+    <span class="pl-ent">Leaf</span> <span class="pl-k">-&gt;</span> <span class="pl-ent">Nothing</span>
+    <span class="pl-ent">Node</span> x <span class="pl-ent">Leaf</span> _ <span class="pl-k">-&gt;</span> <span class="pl-ent">Just</span> x
+    <span class="pl-ent">Node</span> _ subtree _ <span class="pl-k">-&gt;</span> leftmostElement subtree
+
+<span class="pl-c"><span class="pl-c">--</span> That's pretty much it for the language itself. Now let's see how to organize</span>
+<span class="pl-c"><span class="pl-c">--</span> and run your code.</span>
+
+<span class="pl-c"><span class="pl-c">{-</span>- Modules and Imports -<span class="pl-c">-}</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> The core libraries are organized into modules, as are any third-party</span>
+<span class="pl-c"><span class="pl-c">--</span> libraries you may use. For large projects, you can define your own modules.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Put this at the top of the file. If omitted, you're in Main.</span>
+<span class="pl-k">module</span> <span class="pl-c1">Name</span> <span class="pl-k">where</span>
+
+<span class="pl-c"><span class="pl-c">--</span> By default, everything is exported. You can specify exports explicitly.</span>
+<span class="pl-k">module</span> <span class="pl-c1">Name</span> (<span class="pl-en">MyType</span>, <span class="pl-en">myValue</span>) <span class="pl-k">where</span>
+
+<span class="pl-c"><span class="pl-c">--</span> One common pattern is to export a union type but not its tags. This is known</span>
+<span class="pl-c"><span class="pl-c">--</span> as an "opaque type", and is frequently used in libraries.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Import code from other modules to use it in this one.</span>
+<span class="pl-c"><span class="pl-c">--</span> Places Dict in scope, so you can call Dict.insert.</span>
+<span class="pl-k">import</span> <span class="pl-c1">Dict</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Imports the Dict module and the Dict type, so your annotations don't have to</span>
+<span class="pl-c"><span class="pl-c">--</span> say Dict.Dict. You can still use Dict.insert.</span>
+<span class="pl-k">import</span> <span class="pl-c1">Dict</span> exposing (<span class="pl-en">Dict</span>)
+
+<span class="pl-c"><span class="pl-c">--</span> Rename an import.</span>
+<span class="pl-k">import</span> <span class="pl-c1">Graphics.Collage</span> <span class="pl-k">as</span> <span class="pl-c1">C</span>
+
+<span class="pl-c"><span class="pl-c">{-</span>- Ports -<span class="pl-c">-}</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> A port indicates that you will be communicating with the outside world.</span>
+<span class="pl-c"><span class="pl-c">--</span> Ports are only allowed in the Main module.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> An incoming port is just a type signature.</span>
+port clientID <span class="pl-k">:</span> <span class="pl-ent">Int</span>
+
+<span class="pl-c"><span class="pl-c">--</span> An outgoing port has a definition.</span>
+port clientOrders <span class="pl-k">:</span> <span class="pl-ent">List</span> <span class="pl-ent">String</span>
+port clientOrders <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">"</span>Books<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Groceries<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Furniture<span class="pl-pds">"</span></span>]
+
+<span class="pl-c"><span class="pl-c">--</span> We won't go into the details, but you set up callbacks in JavaScript to send</span>
+<span class="pl-c"><span class="pl-c">--</span> on incoming ports and receive on outgoing ports.</span>
+
+<span class="pl-c"><span class="pl-c">{-</span>- Command Line Tools -<span class="pl-c">-}</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> Compile a file.</span>
+<span class="pl-k"><span class="pl-c1">$</span></span> elm make <span class="pl-c1">MyFile.</span>elm
+
+<span class="pl-c"><span class="pl-c">--</span> The first time you do this, Elm will install the core libraries and create</span>
+<span class="pl-c"><span class="pl-c">--</span> elm-package.json, where information about your project is kept.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> The reactor is a server that compiles and runs your files.</span>
+<span class="pl-c"><span class="pl-c">--</span> Click the wrench next to file names to enter the time-travelling debugger!</span>
+<span class="pl-k"><span class="pl-c1">$</span></span> elm reactor
+
+<span class="pl-c"><span class="pl-c">--</span> Experiment with simple expressions in a Read-Eval-Print Loop.</span>
+<span class="pl-k"><span class="pl-c1">$</span></span> elm repl
+
+<span class="pl-c"><span class="pl-c">--</span> Packages are identified by GitHub username and repo name.</span>
+<span class="pl-c"><span class="pl-c">--</span> Install a new package, and record it in elm-package.json.</span>
+<span class="pl-k"><span class="pl-c1">$</span></span> elm package install elm<span class="pl-k">-</span>lang<span class="pl-k">/</span>html
+
+<span class="pl-c"><span class="pl-c">--</span> See what changed between versions of a package.</span>
+<span class="pl-k"><span class="pl-c1">$</span></span> elm package diff elm<span class="pl-k">-</span>lang<span class="pl-k">/</span>html <span class="pl-c1">1.1</span><span class="pl-k">.</span><span class="pl-c1">0</span> <span class="pl-c1">2.0</span><span class="pl-k">.</span><span class="pl-c1">0</span>
+<span class="pl-c"><span class="pl-c">--</span> Elm's package manager enforces semantic versioning, so minor version bumps</span>
+<span class="pl-c"><span class="pl-c">--</span> will never break your build!</span></pre></div>
+<p>The Elm language is surprisingly small. You can now look through almost any Elm<br>
+source code and have a rough idea of what is going on. However, the possibilities<br>
+for error-resistant and easy-to-refactor code are endless!</p>
+<p>Here are some useful resources.</p>
+<ul>
+<li>
+<p>The <a href="http://elm-lang.org/" rel="nofollow">Elm website</a>. Includes:</p>
+<ul>
+<li>Links to the <a href="http://elm-lang.org/install" rel="nofollow">installers</a></li>
+<li><a href="http://elm-lang.org/docs" rel="nofollow">Documentation guides</a>, including the <a href="http://elm-lang.org/docs/syntax" rel="nofollow">syntax reference</a></li>
+<li>Lots of helpful <a href="http://elm-lang.org/examples" rel="nofollow">examples</a></li>
+</ul>
+</li>
+<li>
+<p>Documentation for <a href="http://package.elm-lang.org/packages/elm-lang/core/latest/" rel="nofollow">Elm's core libraries</a>. Take note of:</p>
+<ul>
+<li><a href="http://package.elm-lang.org/packages/elm-lang/core/latest/Basics" rel="nofollow">Basics</a>, which is imported by default</li>
+<li><a href="http://package.elm-lang.org/packages/elm-lang/core/latest/Maybe" rel="nofollow">Maybe</a> and its cousin <a href="http://package.elm-lang.org/packages/elm-lang/core/latest/Result" rel="nofollow">Result</a>, commonly used for missing values or error handling</li>
+<li>Data structures like <a href="http://package.elm-lang.org/packages/elm-lang/core/latest/List" rel="nofollow">List</a>, <a href="http://package.elm-lang.org/packages/elm-lang/core/latest/Array" rel="nofollow">Array</a>, <a href="http://package.elm-lang.org/packages/elm-lang/core/latest/Dict" rel="nofollow">Dict</a>, and <a href="http://package.elm-lang.org/packages/elm-lang/core/latest/Set" rel="nofollow">Set</a></li>
+<li>JSON <a href="http://package.elm-lang.org/packages/elm-lang/core/latest/Json-Encode" rel="nofollow">encoding</a> and <a href="http://package.elm-lang.org/packages/elm-lang/core/latest/Json-Decode" rel="nofollow">decoding</a></li>
+</ul>
+</li>
+<li>
+<p><a href="https://github.com/evancz/elm-architecture-tutorial#the-elm-architecture">The Elm Architecture</a>. An essay by Elm's creator with examples on how to organize code into components.</p>
+</li>
+<li>
+<p>The <a href="https://groups.google.com/forum/#!forum/elm-discuss" rel="nofollow">Elm mailing list</a>. Everyone is friendly and helpful.</p>
+</li>
+<li>
+<p><a href="https://github.com/elm-guides/elm-for-js/blob/master/Scope.md#scope-in-elm">Scope in Elm</a> and <a href="https://github.com/elm-guides/elm-for-js/blob/master/How%20to%20Read%20a%20Type%20Annotation.md#how-to-read-a-type-annotation">How to Read a Type Annotation</a>. More community guides on the basics of Elm, written for JavaScript developers.</p>
+</li>
+</ul>
+<p>Go out and write some Elm!</p>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Max Goldstein", "http://maxgoldste.in/"]
+</code></pre>

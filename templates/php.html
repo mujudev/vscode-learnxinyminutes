@@ -1,0 +1,882 @@
+<h1>PHP</h1>
+<p>This document describes PHP 5+.</p>
+<div class="highlight highlight-text-html-php"><pre class="notranslate"><span class="pl-ent">&lt;?php</span> <span class="pl-c">// PHP code must be enclosed with &lt;?php tags</span>
+
+<span class="pl-c">// If your php file only contains PHP code, it is best practice</span>
+<span class="pl-c">// to omit the php closing tag to prevent accidental output.</span>
+
+<span class="pl-c">// Two forward slashes start a one-line comment.</span>
+
+<span class="pl-c"># So will a hash (aka pound symbol) but // is more common</span>
+
+<span class="pl-c">/*</span>
+<span class="pl-c">     Surrounding text in slash-asterisk and asterisk-slash</span>
+<span class="pl-c">     makes it a multi-line comment.</span>
+<span class="pl-c">*/</span>
+
+<span class="pl-c">// Use "echo" or "print" to print output</span>
+print(<span class="pl-s">'Hello '</span>); <span class="pl-c">// Prints "Hello " with no line break</span>
+
+<span class="pl-c">// () are optional for print and echo</span>
+<span class="pl-k">echo</span> "<span class="pl-s">World</span>\n"; <span class="pl-c">// Prints "World" with a line break</span>
+<span class="pl-c">// (all statements must end with a semicolon)</span>
+
+<span class="pl-c">// Anything outside &lt;?php tags is echoed automatically</span>
+<span class="pl-ent">?&gt;</span>
+Hello World Again!
+<span class="pl-ent">&lt;?php</span>
+<span class="pl-c">// That is because historically PHP started as a Template engine</span>
+
+
+<span class="pl-c">/************************************</span>
+<span class="pl-c"> * Types &amp; Variables</span>
+<span class="pl-c"> */</span>
+
+<span class="pl-c">// Variables begin with the $ symbol.</span>
+<span class="pl-c">// A valid variable name starts with a letter or an underscore,</span>
+<span class="pl-c">// followed by any number of letters, numbers, or underscores.</span>
+
+<span class="pl-c">// You don't have to (and cannot) declare variables.</span>
+<span class="pl-c">// Once you assign a value, PHP will create the variable with the right type.</span>
+
+<span class="pl-c">// Boolean values are case-insensitive</span>
+<span class="pl-s1"><span class="pl-c1">$</span>boolean</span> = <span class="pl-c1">true</span>;  <span class="pl-c">// or TRUE or True</span>
+<span class="pl-s1"><span class="pl-c1">$</span>boolean</span> = <span class="pl-c1">FALSE</span>; <span class="pl-c">// or false or False</span>
+
+<span class="pl-c">// Integers</span>
+<span class="pl-s1"><span class="pl-c1">$</span>int1</span> = <span class="pl-c1">12</span>;   <span class="pl-c">// =&gt; 12</span>
+<span class="pl-s1"><span class="pl-c1">$</span>int2</span> = -<span class="pl-c1">12</span>;  <span class="pl-c">// =&gt; -12</span>
+<span class="pl-s1"><span class="pl-c1">$</span>int3</span> = <span class="pl-c1">012</span>;  <span class="pl-c">// =&gt; 10 (a leading 0 denotes an octal number)</span>
+<span class="pl-s1"><span class="pl-c1">$</span>int4</span> = <span class="pl-c1">0x0F</span>; <span class="pl-c">// =&gt; 15 (a leading 0x denotes a hex literal)</span>
+<span class="pl-c">// Binary integer literals are available since PHP 5.4.0.</span>
+<span class="pl-s1"><span class="pl-c1">$</span>int5</span> = <span class="pl-c1">0b11111111</span>; <span class="pl-c">// 255 (a leading 0b denotes a binary number)</span>
+
+<span class="pl-c">// Floats (aka doubles)</span>
+<span class="pl-s1"><span class="pl-c1">$</span>float</span> = <span class="pl-c1">1.234</span>;
+<span class="pl-s1"><span class="pl-c1">$</span>float</span> = <span class="pl-c1">1.2e3</span>;
+<span class="pl-s1"><span class="pl-c1">$</span>float</span> = <span class="pl-c1">7E-10</span>;
+
+<span class="pl-c">// Delete variable</span>
+unset(<span class="pl-s1"><span class="pl-c1">$</span>int1</span>);
+
+<span class="pl-c">// Arithmetic</span>
+<span class="pl-s1"><span class="pl-c1">$</span>sum</span>        = <span class="pl-c1">1</span> + <span class="pl-c1">1</span>; <span class="pl-c">// 2</span>
+<span class="pl-s1"><span class="pl-c1">$</span>difference</span> = <span class="pl-c1">2</span> - <span class="pl-c1">1</span>; <span class="pl-c">// 1</span>
+<span class="pl-s1"><span class="pl-c1">$</span>product</span>    = <span class="pl-c1">2</span> * <span class="pl-c1">2</span>; <span class="pl-c">// 4</span>
+<span class="pl-s1"><span class="pl-c1">$</span>quotient</span>   = <span class="pl-c1">2</span> / <span class="pl-c1">1</span>; <span class="pl-c">// 2</span>
+
+<span class="pl-c">// Shorthand arithmetic</span>
+<span class="pl-s1"><span class="pl-c1">$</span>number</span> = <span class="pl-c1">0</span>;
+<span class="pl-s1"><span class="pl-c1">$</span>number</span> += <span class="pl-c1">1</span>;      <span class="pl-c">// Increment $number by 1</span>
+<span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span>number</span>++;    <span class="pl-c">// Prints 1 (increments after evaluation)</span>
+<span class="pl-k">echo</span> ++<span class="pl-s1"><span class="pl-c1">$</span>number</span>;    <span class="pl-c">// Prints 3 (increments before evaluation)</span>
+<span class="pl-s1"><span class="pl-c1">$</span>number</span> /= <span class="pl-s1"><span class="pl-c1">$</span>float</span>; <span class="pl-c">// Divide and assign the quotient to $number</span>
+
+<span class="pl-c">// Strings should be enclosed in single quotes;</span>
+<span class="pl-s1"><span class="pl-c1">$</span>sgl_quotes</span> = <span class="pl-s">'$String'</span>; <span class="pl-c">// =&gt; '$String'</span>
+
+<span class="pl-c">// Avoid using double quotes except to embed other variables</span>
+<span class="pl-s1"><span class="pl-c1">$</span>dbl_quotes</span> = "<span class="pl-s">This is a </span><span class="pl-s1"><span class="pl-c1">$</span>sgl_quotes</span><span class="pl-s">.</span>"; <span class="pl-c">// =&gt; 'This is a $String.'</span>
+
+<span class="pl-c">// Special characters are only escaped in double quotes</span>
+<span class="pl-s1"><span class="pl-c1">$</span>escaped</span>   = "<span class="pl-s">This contains a </span>\t<span class="pl-s"> tab character.</span>";
+<span class="pl-s1"><span class="pl-c1">$</span>unescaped</span> = <span class="pl-s">'This just contains a slash and a t: \t'</span>;
+
+<span class="pl-c">// Enclose a variable in curly braces if needed</span>
+<span class="pl-s1"><span class="pl-c1">$</span>apples</span> = "<span class="pl-s">I have </span>{<span class="pl-s1"><span class="pl-c1">$</span>number</span>}<span class="pl-s"> apples to eat.</span>";
+<span class="pl-s1"><span class="pl-c1">$</span>oranges</span> = "<span class="pl-s">I have </span><span class="pl-c1">$</span>{number}<span class="pl-s"> oranges to eat.</span>";
+<span class="pl-s1"><span class="pl-c1">$</span>money</span> = "<span class="pl-s">I have $</span><span class="pl-c1">$</span>{number}<span class="pl-s"> in the bank.</span>";
+
+<span class="pl-c">// Since PHP 5.3, nowdocs can be used for uninterpolated multi-liners</span>
+<span class="pl-s1"><span class="pl-c1">$</span>nowdoc</span> =<span class="pl-s"> &lt;&lt;&lt;'END'</span>
+<span class="pl-s">Multi line</span>
+<span class="pl-s">string</span>
+<span class="pl-s">END</span>;
+
+<span class="pl-c">// Heredocs will do string interpolation</span>
+<span class="pl-s1"><span class="pl-c1">$</span>heredoc</span> =<span class="pl-s"> &lt;&lt;&lt;END</span>
+<span class="pl-s">Multi line</span>
+<span class="pl-s">$sgl_quotes</span>
+<span class="pl-s">END</span>;
+
+<span class="pl-c">// String concatenation is done with .</span>
+<span class="pl-k">echo</span> <span class="pl-s">'This string '</span> . <span class="pl-s">'is concatenated'</span>;
+
+<span class="pl-c">// Strings can be passed in as parameters to echo</span>
+<span class="pl-k">echo</span> <span class="pl-s">'Multiple'</span>, <span class="pl-s">'Parameters'</span>, <span class="pl-s">'Valid'</span>;  <span class="pl-c">// Returns 'MultipleParametersValid'</span>
+
+
+<span class="pl-c">/********************************</span>
+<span class="pl-c"> * Constants</span>
+<span class="pl-c"> */</span>
+
+<span class="pl-c">// A constant is defined by using define()</span>
+<span class="pl-c">// and can never be changed during runtime!</span>
+
+<span class="pl-c">// a valid constant name starts with a letter or underscore,</span>
+<span class="pl-c">// followed by any number of letters, numbers, or underscores.</span>
+define("<span class="pl-s">FOO</span>", "<span class="pl-s">something</span>");
+
+<span class="pl-c">// access to a constant is possible by calling the chosen name without a $</span>
+<span class="pl-k">echo</span> <span class="pl-c1">FOO</span>; <span class="pl-c">// Returns 'something'</span>
+<span class="pl-k">echo</span> <span class="pl-s">'This outputs '</span> . <span class="pl-c1">FOO</span>;  <span class="pl-c">// Returns 'This outputs something'</span>
+
+
+
+<span class="pl-c">/********************************</span>
+<span class="pl-c"> * Arrays</span>
+<span class="pl-c"> */</span>
+
+<span class="pl-c">// All arrays in PHP are associative arrays (hashmaps in some languages)</span>
+
+<span class="pl-c">// Works with all PHP versions</span>
+<span class="pl-s1"><span class="pl-c1">$</span>associative</span> = <span class="pl-en">array</span>(<span class="pl-s">'One'</span> =&gt; <span class="pl-c1">1</span>, <span class="pl-s">'Two'</span> =&gt; <span class="pl-c1">2</span>, <span class="pl-s">'Three'</span> =&gt; <span class="pl-c1">3</span>);
+
+<span class="pl-c">// PHP 5.4 introduced a new syntax</span>
+<span class="pl-s1"><span class="pl-c1">$</span>associative</span> = [<span class="pl-s">'One'</span> =&gt; <span class="pl-c1">1</span>, <span class="pl-s">'Two'</span> =&gt; <span class="pl-c1">2</span>, <span class="pl-s">'Three'</span> =&gt; <span class="pl-c1">3</span>];
+
+<span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span>associative</span>[<span class="pl-s">'One'</span>]; <span class="pl-c">// prints 1</span>
+
+<span class="pl-c">// Add an element to an associative array</span>
+<span class="pl-s1"><span class="pl-c1">$</span>associative</span>[<span class="pl-s">'Four'</span>] = <span class="pl-c1">4</span>;
+
+<span class="pl-c">// List literals implicitly assign integer keys</span>
+<span class="pl-s1"><span class="pl-c1">$</span>array</span> = [<span class="pl-s">'One'</span>, <span class="pl-s">'Two'</span>, <span class="pl-s">'Three'</span>];
+<span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span>array</span>[<span class="pl-c1">0</span>]; <span class="pl-c">// =&gt; "One"</span>
+
+<span class="pl-c">// Add an element to the end of an array</span>
+<span class="pl-s1"><span class="pl-c1">$</span>array</span>[] = <span class="pl-s">'Four'</span>;
+<span class="pl-c">// or</span>
+array_push(<span class="pl-s1"><span class="pl-c1">$</span>array</span>, <span class="pl-s">'Five'</span>);
+
+<span class="pl-c">// Remove element from array</span>
+unset(<span class="pl-s1"><span class="pl-c1">$</span>array</span>[<span class="pl-c1">3</span>]);
+
+<span class="pl-c">/********************************</span>
+<span class="pl-c"> * Output</span>
+<span class="pl-c"> */</span>
+
+<span class="pl-k">echo</span>(<span class="pl-s">'Hello World!'</span>);
+<span class="pl-c">// Prints Hello World! to stdout.</span>
+<span class="pl-c">// Stdout is the web page if running in a browser.</span>
+
+print(<span class="pl-s">'Hello World!'</span>); <span class="pl-c">// The same as echo</span>
+
+<span class="pl-c">// echo and print are language constructs too, so you can drop the parentheses</span>
+<span class="pl-k">echo</span> <span class="pl-s">'Hello World!'</span>;
+print <span class="pl-s">'Hello World!'</span>;
+
+<span class="pl-s1"><span class="pl-c1">$</span>paragraph</span> = <span class="pl-s">'paragraph'</span>;
+
+<span class="pl-k">echo</span> <span class="pl-c1">100</span>;        <span class="pl-c">// Echo scalar variables directly</span>
+<span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span>paragraph</span>; <span class="pl-c">// or variables</span>
+
+<span class="pl-c">// If short open tags are configured, or your PHP version is</span>
+<span class="pl-c">// 5.4.0 or greater, you can use the short echo syntax</span>
+<span class="pl-ent">?&gt;</span>
+<span class="pl-kos">&lt;</span><span class="pl-ent">p</span><span class="pl-kos">&gt;</span><span class="pl-ent">&lt;?=</span> <span class="pl-s1"><span class="pl-c1">$</span>paragraph</span> <span class="pl-ent">?&gt;</span><span class="pl-kos">&lt;/</span><span class="pl-ent">p</span><span class="pl-kos">&gt;</span>
+<span class="pl-ent">&lt;?php</span>
+
+<span class="pl-s1"><span class="pl-c1">$</span>x</span> = <span class="pl-c1">1</span>;
+<span class="pl-s1"><span class="pl-c1">$</span>y</span> = <span class="pl-c1">2</span>;
+<span class="pl-s1"><span class="pl-c1">$</span>x</span> = <span class="pl-s1"><span class="pl-c1">$</span>y</span>; <span class="pl-c">// $x now contains the same value as $y</span>
+<span class="pl-s1"><span class="pl-c1">$</span>z</span> = &amp;<span class="pl-s1"><span class="pl-c1">$</span>y</span>;
+<span class="pl-c">// $z now contains a reference to $y. Changing the value of</span>
+<span class="pl-c">// $z will change the value of $y also, and vice-versa.</span>
+<span class="pl-c">// $x will remain unchanged as the original value of $y</span>
+
+<span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span>x</span>; <span class="pl-c">// =&gt; 2</span>
+<span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span>z</span>; <span class="pl-c">// =&gt; 2</span>
+<span class="pl-s1"><span class="pl-c1">$</span>y</span> = <span class="pl-c1">0</span>;
+<span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span>x</span>; <span class="pl-c">// =&gt; 2</span>
+<span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span>z</span>; <span class="pl-c">// =&gt; 0</span>
+
+<span class="pl-c">// Dumps type and value of variable to stdout</span>
+var_dump(<span class="pl-s1"><span class="pl-c1">$</span>z</span>); <span class="pl-c">// prints int(0)</span>
+
+<span class="pl-c">// Prints variable to stdout in human-readable format</span>
+print_r(<span class="pl-s1"><span class="pl-c1">$</span>array</span>); <span class="pl-c">// prints: Array ( [0] =&gt; One [1] =&gt; Two [2] =&gt; Three )</span>
+
+<span class="pl-c">/********************************</span>
+<span class="pl-c"> * Logic</span>
+<span class="pl-c"> */</span>
+<span class="pl-s1"><span class="pl-c1">$</span>a</span> = <span class="pl-c1">0</span>;
+<span class="pl-s1"><span class="pl-c1">$</span>b</span> = <span class="pl-s">'0'</span>;
+<span class="pl-s1"><span class="pl-c1">$</span>c</span> = <span class="pl-s">'1'</span>;
+<span class="pl-s1"><span class="pl-c1">$</span>d</span> = <span class="pl-s">'1'</span>;
+
+<span class="pl-c">// assert throws a warning if its argument is not true</span>
+
+<span class="pl-c">// These comparisons will always be true, even if the types aren't the same.</span>
+assert(<span class="pl-s1"><span class="pl-c1">$</span>a</span> == <span class="pl-s1"><span class="pl-c1">$</span>b</span>); <span class="pl-c">// equality</span>
+assert(<span class="pl-s1"><span class="pl-c1">$</span>c</span> != <span class="pl-s1"><span class="pl-c1">$</span>a</span>); <span class="pl-c">// inequality</span>
+assert(<span class="pl-s1"><span class="pl-c1">$</span>c</span> &lt;&gt; <span class="pl-s1"><span class="pl-c1">$</span>a</span>); <span class="pl-c">// alternative inequality</span>
+assert(<span class="pl-s1"><span class="pl-c1">$</span>a</span> &lt; <span class="pl-s1"><span class="pl-c1">$</span>c</span>);
+assert(<span class="pl-s1"><span class="pl-c1">$</span>c</span> &gt; <span class="pl-s1"><span class="pl-c1">$</span>b</span>);
+assert(<span class="pl-s1"><span class="pl-c1">$</span>a</span> &lt;= <span class="pl-s1"><span class="pl-c1">$</span>b</span>);
+assert(<span class="pl-s1"><span class="pl-c1">$</span>c</span> &gt;= <span class="pl-s1"><span class="pl-c1">$</span>d</span>);
+
+<span class="pl-c">// The following will only be true if the values match and are the same type.</span>
+assert(<span class="pl-s1"><span class="pl-c1">$</span>c</span> === <span class="pl-s1"><span class="pl-c1">$</span>d</span>);
+assert(<span class="pl-s1"><span class="pl-c1">$</span>a</span> !== <span class="pl-s1"><span class="pl-c1">$</span>d</span>);
+assert(<span class="pl-c1">1</span> === <span class="pl-s">'1'</span>);
+assert(<span class="pl-c1">1</span> !== <span class="pl-s">'1'</span>);
+
+<span class="pl-c">// 'Spaceship' operator (since PHP 7)</span>
+<span class="pl-c">// Returns 0 if values on either side are equal</span>
+<span class="pl-c">// Returns 1 if value on the left is greater</span>
+<span class="pl-c">// Returns -1 if the value on the right is greater</span>
+
+<span class="pl-s1"><span class="pl-c1">$</span>a</span> = <span class="pl-c1">100</span>;
+<span class="pl-s1"><span class="pl-c1">$</span>b</span> = <span class="pl-c1">1000</span>;
+
+<span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span>a</span> &lt;=&gt; <span class="pl-s1"><span class="pl-c1">$</span>a</span>; <span class="pl-c">// 0 since they are equal</span>
+<span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span>a</span> &lt;=&gt; <span class="pl-s1"><span class="pl-c1">$</span>b</span>; <span class="pl-c">// -1 since $a &lt; $b</span>
+<span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span>b</span> &lt;=&gt; <span class="pl-s1"><span class="pl-c1">$</span>a</span>; <span class="pl-c">// 1 since $b &gt; $a</span>
+
+<span class="pl-c">// Variables can be converted between types, depending on their usage.</span>
+
+<span class="pl-s1"><span class="pl-c1">$</span>integer</span> = <span class="pl-c1">1</span>;
+<span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span>integer</span> + <span class="pl-s1"><span class="pl-c1">$</span>integer</span>; <span class="pl-c">// =&gt; 2</span>
+
+<span class="pl-s1"><span class="pl-c1">$</span>string</span> = <span class="pl-s">'1'</span>;
+<span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span>string</span> + <span class="pl-s1"><span class="pl-c1">$</span>string</span>; <span class="pl-c">// =&gt; 2 (strings are coerced to integers)</span>
+
+<span class="pl-s1"><span class="pl-c1">$</span>string</span> = <span class="pl-s">'one'</span>;
+<span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span>string</span> + <span class="pl-s1"><span class="pl-c1">$</span>string</span>; <span class="pl-c">// =&gt; 0</span>
+<span class="pl-c">// Outputs 0 because the + operator cannot cast the string 'one' to a number</span>
+
+<span class="pl-c">// Type casting can be used to treat a variable as another type</span>
+
+<span class="pl-s1"><span class="pl-c1">$</span>boolean</span> = (<span class="pl-smi">boolean</span>) <span class="pl-c1">1</span>; <span class="pl-c">// =&gt; true</span>
+
+<span class="pl-s1"><span class="pl-c1">$</span>zero</span> = <span class="pl-c1">0</span>;
+<span class="pl-s1"><span class="pl-c1">$</span>boolean</span> = (<span class="pl-smi">boolean</span>) <span class="pl-s1"><span class="pl-c1">$</span>zero</span>; <span class="pl-c">// =&gt; false</span>
+
+<span class="pl-c">// There are also dedicated functions for casting most types</span>
+<span class="pl-s1"><span class="pl-c1">$</span>integer</span> = <span class="pl-c1">5</span>;
+<span class="pl-s1"><span class="pl-c1">$</span>string</span> = strval(<span class="pl-s1"><span class="pl-c1">$</span>integer</span>);
+
+<span class="pl-s1"><span class="pl-c1">$</span>var</span> = <span class="pl-c1">null</span>; <span class="pl-c">// Null value</span>
+
+
+<span class="pl-c">/********************************</span>
+<span class="pl-c"> * Control Structures</span>
+<span class="pl-c"> */</span>
+
+<span class="pl-k">if</span> (<span class="pl-c1">true</span>) {
+    print <span class="pl-s">'I get printed'</span>;
+}
+
+<span class="pl-k">if</span> (<span class="pl-c1">false</span>) {
+    print <span class="pl-s">'I don\'t'</span>;
+} <span class="pl-k">else</span> {
+    print <span class="pl-s">'I get printed'</span>;
+}
+
+<span class="pl-k">if</span> (<span class="pl-c1">false</span>) {
+    print <span class="pl-s">'Does not get printed'</span>;
+} <span class="pl-k">elseif</span> (<span class="pl-c1">true</span>) {
+    print <span class="pl-s">'Does'</span>;
+}
+
+<span class="pl-c">// ternary operator</span>
+print (<span class="pl-c1">false</span> ? <span class="pl-s">'Does not get printed'</span> : <span class="pl-s">'Does'</span>);
+
+<span class="pl-c">// ternary shortcut operator since PHP 5.3</span>
+<span class="pl-c">// equivalent of "$x ? $x : 'Does'"</span>
+<span class="pl-s1"><span class="pl-c1">$</span>x</span> = <span class="pl-c1">false</span>;
+print(<span class="pl-s1"><span class="pl-c1">$</span>x</span> ?: <span class="pl-s">'Does'</span>);
+
+<span class="pl-c">// null coalesce operator since php 7</span>
+<span class="pl-s1"><span class="pl-c1">$</span>a</span> = <span class="pl-c1">null</span>;
+<span class="pl-s1"><span class="pl-c1">$</span>b</span> = <span class="pl-s">'Does print'</span>;
+<span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span>a</span> ?? <span class="pl-s">'a is not set'</span>; <span class="pl-c">// prints 'a is not set'</span>
+<span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span>b</span> ?? <span class="pl-s">'b is not set'</span>; <span class="pl-c">// prints 'Does print'</span>
+
+
+<span class="pl-s1"><span class="pl-c1">$</span>x</span> = <span class="pl-c1">0</span>;
+<span class="pl-k">if</span> (<span class="pl-s1"><span class="pl-c1">$</span>x</span> === <span class="pl-s">'0'</span>) {
+    print <span class="pl-s">'Does not print'</span>;
+} <span class="pl-k">elseif</span> (<span class="pl-s1"><span class="pl-c1">$</span>x</span> == <span class="pl-s">'1'</span>) {
+    print <span class="pl-s">'Does not print'</span>;
+} <span class="pl-k">else</span> {
+    print <span class="pl-s">'Does print'</span>;
+}
+
+
+
+<span class="pl-c">// This alternative syntax is useful for templates:</span>
+<span class="pl-ent">?&gt;</span>
+
+<span class="pl-ent">&lt;?php</span> <span class="pl-k">if</span> (<span class="pl-s1"><span class="pl-c1">$</span>x</span>): <span class="pl-ent">?&gt;</span>
+This is displayed if the test is truthy.
+<span class="pl-ent">&lt;?php</span> <span class="pl-k">else</span>: <span class="pl-ent">?&gt;</span>
+This is displayed otherwise.
+<span class="pl-ent">&lt;?php</span> <span class="pl-k">endif</span>; <span class="pl-ent">?&gt;</span>
+
+<span class="pl-ent">&lt;?php</span>
+
+<span class="pl-c">// Use switch to save some logic.</span>
+<span class="pl-k">switch</span> (<span class="pl-s1"><span class="pl-c1">$</span>x</span>) {
+    <span class="pl-k">case</span> <span class="pl-s">'0'</span>:
+        print <span class="pl-s">'Switch does type coercion'</span>;
+        <span class="pl-k">break</span>; <span class="pl-c">// You must include a break, or you will fall through</span>
+               <span class="pl-c">// to cases 'two' and 'three'</span>
+    <span class="pl-k">case</span> <span class="pl-s">'two'</span>:
+    <span class="pl-k">case</span> <span class="pl-s">'three'</span>:
+        <span class="pl-c">// Do something if $variable is either 'two' or 'three'</span>
+        <span class="pl-k">break</span>;
+    <span class="pl-k">default</span>:
+        <span class="pl-c">// Do something by default</span>
+}
+
+<span class="pl-c">// While, do...while and for loops are probably familiar</span>
+<span class="pl-s1"><span class="pl-c1">$</span>i</span> = <span class="pl-c1">0</span>;
+<span class="pl-k">while</span> (<span class="pl-s1"><span class="pl-c1">$</span>i</span> &lt; <span class="pl-c1">5</span>) {
+    <span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span>i</span>++;
+} <span class="pl-c">// Prints "01234"</span>
+
+<span class="pl-k">echo</span> "\n";
+
+<span class="pl-s1"><span class="pl-c1">$</span>i</span> = <span class="pl-c1">0</span>;
+<span class="pl-k">do</span> {
+    <span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span>i</span>++;
+} <span class="pl-k">while</span> (<span class="pl-s1"><span class="pl-c1">$</span>i</span> &lt; <span class="pl-c1">5</span>); <span class="pl-c">// Prints "01234"</span>
+
+<span class="pl-k">echo</span> "\n";
+
+for (<span class="pl-s1"><span class="pl-c1">$</span>x</span> = <span class="pl-c1">0</span>; <span class="pl-s1"><span class="pl-c1">$</span>x</span> &lt; <span class="pl-c1">10</span>; <span class="pl-s1"><span class="pl-c1">$</span>x</span>++) {
+    <span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span>x</span>;
+} <span class="pl-c">// Prints "0123456789"</span>
+
+<span class="pl-k">echo</span> "\n";
+
+<span class="pl-s1"><span class="pl-c1">$</span>wheels</span> = [<span class="pl-s">'bicycle'</span> =&gt; <span class="pl-c1">2</span>, <span class="pl-s">'car'</span> =&gt; <span class="pl-c1">4</span>];
+
+<span class="pl-c">// Foreach loops can iterate over arrays</span>
+<span class="pl-k">foreach</span> (<span class="pl-s1"><span class="pl-c1">$</span>wheels</span> <span class="pl-k">as</span> <span class="pl-s1"><span class="pl-c1">$</span>wheel_count</span>) {
+    <span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span>wheel_count</span>;
+} <span class="pl-c">// Prints "24"</span>
+
+<span class="pl-k">echo</span> "\n";
+
+<span class="pl-c">// You can iterate over the keys as well as the values</span>
+<span class="pl-k">foreach</span> (<span class="pl-s1"><span class="pl-c1">$</span>wheels</span> <span class="pl-k">as</span> <span class="pl-s1"><span class="pl-c1">$</span>vehicle</span> =&gt; <span class="pl-s1"><span class="pl-c1">$</span>wheel_count</span>) {
+    <span class="pl-k">echo</span> "<span class="pl-s">A </span><span class="pl-s1"><span class="pl-c1">$</span>vehicle</span><span class="pl-s"> has </span><span class="pl-s1"><span class="pl-c1">$</span>wheel_count</span><span class="pl-s"> wheels</span>";
+}
+
+<span class="pl-k">echo</span> "\n";
+
+<span class="pl-s1"><span class="pl-c1">$</span>i</span> = <span class="pl-c1">0</span>;
+<span class="pl-k">while</span> (<span class="pl-s1"><span class="pl-c1">$</span>i</span> &lt; <span class="pl-c1">5</span>) {
+    <span class="pl-k">if</span> (<span class="pl-s1"><span class="pl-c1">$</span>i</span> === <span class="pl-c1">3</span>) {
+        <span class="pl-k">break</span>; <span class="pl-c">// Exit out of the while loop</span>
+    }
+    <span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span>i</span>++;
+} <span class="pl-c">// Prints "012"</span>
+
+for (<span class="pl-s1"><span class="pl-c1">$</span>i</span> = <span class="pl-c1">0</span>; <span class="pl-s1"><span class="pl-c1">$</span>i</span> &lt; <span class="pl-c1">5</span>; <span class="pl-s1"><span class="pl-c1">$</span>i</span>++) {
+    <span class="pl-k">if</span> (<span class="pl-s1"><span class="pl-c1">$</span>i</span> === <span class="pl-c1">3</span>) {
+        <span class="pl-k">continue</span>; <span class="pl-c">// Skip this iteration of the loop</span>
+    }
+    <span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span>i</span>;
+} <span class="pl-c">// Prints "0124"</span>
+
+
+<span class="pl-c">/********************************</span>
+<span class="pl-c"> * Functions</span>
+<span class="pl-c"> */</span>
+
+<span class="pl-c">// Define a function with "function":</span>
+<span class="pl-k">function</span> <span class="pl-en">my_function</span> () {
+    <span class="pl-k">return</span> <span class="pl-s">'Hello'</span>;
+}
+
+<span class="pl-k">echo</span> my_function(); <span class="pl-c">// =&gt; "Hello"</span>
+
+<span class="pl-c">// A valid function name starts with a letter or underscore, followed by any</span>
+<span class="pl-c">// number of letters, numbers, or underscores.</span>
+
+<span class="pl-k">function</span> <span class="pl-en">add</span> (<span class="pl-s1"><span class="pl-c1">$</span>x</span>, <span class="pl-s1"><span class="pl-c1">$</span>y</span> = <span class="pl-c1">1</span>) { <span class="pl-c">// $y is optional and defaults to 1</span>
+    <span class="pl-s1"><span class="pl-c1">$</span>result</span> = <span class="pl-s1"><span class="pl-c1">$</span>x</span> + <span class="pl-s1"><span class="pl-c1">$</span>y</span>;
+    <span class="pl-k">return</span> <span class="pl-s1"><span class="pl-c1">$</span>result</span>;
+}
+
+<span class="pl-k">echo</span> add(<span class="pl-c1">4</span>); <span class="pl-c">// =&gt; 5</span>
+<span class="pl-k">echo</span> add(<span class="pl-c1">4</span>, <span class="pl-c1">2</span>); <span class="pl-c">// =&gt; 6</span>
+
+<span class="pl-c">// $result is not accessible outside the function</span>
+<span class="pl-c">// print $result; // Gives a warning.</span>
+
+<span class="pl-c">// Since PHP 5.3 you can declare anonymous functions;</span>
+<span class="pl-s1"><span class="pl-c1">$</span>inc</span> = <span class="pl-k">function</span> (<span class="pl-s1"><span class="pl-c1">$</span>x</span>) {
+    <span class="pl-k">return</span> <span class="pl-s1"><span class="pl-c1">$</span>x</span> + <span class="pl-c1">1</span>;
+};
+
+<span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span>inc</span>(<span class="pl-c1">2</span>); <span class="pl-c">// =&gt; 3</span>
+
+<span class="pl-k">function</span> <span class="pl-en">foo</span> (<span class="pl-s1"><span class="pl-c1">$</span>x</span>, <span class="pl-s1"><span class="pl-c1">$</span>y</span>, <span class="pl-s1"><span class="pl-c1">$</span>z</span>) {
+    <span class="pl-k">echo</span> "<span class="pl-s1"><span class="pl-c1">$</span>x</span><span class="pl-s"> - </span><span class="pl-s1"><span class="pl-c1">$</span>y</span><span class="pl-s"> - </span><span class="pl-s1"><span class="pl-c1">$</span>z</span>";
+}
+
+<span class="pl-c">// Functions can return functions</span>
+<span class="pl-k">function</span> <span class="pl-en">bar</span> (<span class="pl-s1"><span class="pl-c1">$</span>x</span>, <span class="pl-s1"><span class="pl-c1">$</span>y</span>) {
+    <span class="pl-c">// Use 'use' to bring in outside variables</span>
+    <span class="pl-k">return</span> <span class="pl-k">function</span> (<span class="pl-s1"><span class="pl-c1">$</span>z</span>) <span class="pl-k">use</span> (<span class="pl-s1"><span class="pl-c1">$</span>x</span>, <span class="pl-s1"><span class="pl-c1">$</span>y</span>) {
+        foo(<span class="pl-s1"><span class="pl-c1">$</span>x</span>, <span class="pl-s1"><span class="pl-c1">$</span>y</span>, <span class="pl-s1"><span class="pl-c1">$</span>z</span>);
+    };
+}
+
+<span class="pl-s1"><span class="pl-c1">$</span>bar</span> = bar(<span class="pl-s">'A'</span>, <span class="pl-s">'B'</span>);
+<span class="pl-s1"><span class="pl-c1">$</span>bar</span>(<span class="pl-s">'C'</span>); <span class="pl-c">// Prints "A - B - C"</span>
+
+<span class="pl-c">// You can call named functions using strings</span>
+<span class="pl-s1"><span class="pl-c1">$</span>function_name</span> = <span class="pl-s">'add'</span>;
+<span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span>function_name</span>(<span class="pl-c1">1</span>, <span class="pl-c1">2</span>); <span class="pl-c">// =&gt; 3</span>
+<span class="pl-c">// Useful for programmatically determining which function to run.</span>
+<span class="pl-c">// Or, use call_user_func(callable $callback [, $parameter [, ... ]]);</span>
+
+
+<span class="pl-c">// You can get all the parameters passed to a function</span>
+<span class="pl-k">function</span> <span class="pl-en">parameters</span>() {
+    <span class="pl-s1"><span class="pl-c1">$</span>numargs</span> = func_num_args();
+    <span class="pl-k">if</span> (<span class="pl-s1"><span class="pl-c1">$</span>numargs</span> &gt; <span class="pl-c1">0</span>) {
+        <span class="pl-k">echo</span> func_get_arg(<span class="pl-c1">0</span>) . <span class="pl-s">' | '</span>;
+    }
+    <span class="pl-s1"><span class="pl-c1">$</span>args_array</span> = func_get_args();
+    <span class="pl-k">foreach</span> (<span class="pl-s1"><span class="pl-c1">$</span>args_array</span> <span class="pl-k">as</span> <span class="pl-s1"><span class="pl-c1">$</span>key</span> =&gt; <span class="pl-s1"><span class="pl-c1">$</span>arg</span>) {
+        <span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span>key</span> . <span class="pl-s">' - '</span> . <span class="pl-s1"><span class="pl-c1">$</span>arg</span> . <span class="pl-s">' | '</span>;
+    }
+}
+
+parameters(<span class="pl-s">'Hello'</span>, <span class="pl-s">'World'</span>); <span class="pl-c">// Hello | 0 - Hello | 1 - World |</span>
+
+<span class="pl-c">// Since PHP 5.6 you can get a variable number of arguments</span>
+<span class="pl-k">function</span> <span class="pl-en">variable</span>(<span class="pl-s1"><span class="pl-c1">$</span>word</span>, ...<span class="pl-s1"><span class="pl-c1">$</span>list</span>) {
+	<span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span>word</span> . "<span class="pl-s"> || </span>";
+	<span class="pl-k">foreach</span> (<span class="pl-s1"><span class="pl-c1">$</span>list</span> <span class="pl-k">as</span> <span class="pl-s1"><span class="pl-c1">$</span>item</span>) {
+		<span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span>item</span> . <span class="pl-s">' | '</span>;
+	}
+}
+
+variable("<span class="pl-s">Separate</span>", "<span class="pl-s">Hello</span>", "<span class="pl-s">World</span>"); <span class="pl-c">// Separate || Hello | World |</span>
+
+<span class="pl-c">/********************************</span>
+<span class="pl-c"> * Includes</span>
+<span class="pl-c"> */</span>
+
+<span class="pl-ent">&lt;?php</span>
+<span class="pl-c">// PHP within included files must also begin with a PHP open tag.</span>
+
+<span class="pl-k">include</span> <span class="pl-s">'my-file.php'</span>;
+<span class="pl-c">// The code in my-file.php is now available in the current scope.</span>
+<span class="pl-c">// If the file cannot be included (e.g. file not found), a warning is emitted.</span>
+
+<span class="pl-k">include_once</span> <span class="pl-s">'my-file.php'</span>;
+<span class="pl-c">// If the code in my-file.php has been included elsewhere, it will</span>
+<span class="pl-c">// not be included again. This prevents multiple class declaration errors</span>
+
+<span class="pl-k">require</span> <span class="pl-s">'my-file.php'</span>;
+<span class="pl-k">require_once</span> <span class="pl-s">'my-file.php'</span>;
+<span class="pl-c">// Same as include(), except require() will cause a fatal error if the</span>
+<span class="pl-c">// file cannot be included.</span>
+
+<span class="pl-c">// Contents of my-include.php:</span>
+<span class="pl-ent">&lt;?php</span>
+
+<span class="pl-k">return</span> <span class="pl-s">'Anything you like.'</span>;
+<span class="pl-c">// End file</span>
+
+<span class="pl-c">// Includes and requires may also return a value.</span>
+<span class="pl-s1"><span class="pl-c1">$</span>value</span> = <span class="pl-k">include</span> <span class="pl-s">'my-include.php'</span>;
+
+<span class="pl-c">// Files are included based on the file path given or, if none is given,</span>
+<span class="pl-c">// the include_path configuration directive. If the file isn't found in</span>
+<span class="pl-c">// the include_path, include will finally check in the calling script's</span>
+<span class="pl-c">// own directory and the current working directory before failing.</span>
+<span class="pl-c">/* */</span>
+
+<span class="pl-c">/********************************</span>
+<span class="pl-c"> * Classes</span>
+<span class="pl-c"> */</span>
+
+<span class="pl-c">// Classes are defined with the class keyword</span>
+
+<span class="pl-k">class</span> <span class="pl-v">MyClass</span>
+{
+    <span class="pl-k">const</span> <span class="pl-c1">MY_CONST</span>      = <span class="pl-s">'value'</span>; <span class="pl-c">// A constant</span>
+
+    <span class="pl-k">static</span> <span class="pl-c1"><span class="pl-c1">$</span>staticVar</span>   = <span class="pl-s">'static'</span>;
+
+    <span class="pl-c">// Static variables and their visibility</span>
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-c1"><span class="pl-c1">$</span>publicStaticVar</span> = <span class="pl-s">'publicStatic'</span>;
+    <span class="pl-c">// Accessible within the class only</span>
+    <span class="pl-k">private</span> <span class="pl-k">static</span> <span class="pl-c1"><span class="pl-c1">$</span>privateStaticVar</span> = <span class="pl-s">'privateStatic'</span>;
+    <span class="pl-c">// Accessible from the class and subclasses</span>
+    <span class="pl-k">protected</span> <span class="pl-k">static</span> <span class="pl-c1"><span class="pl-c1">$</span>protectedStaticVar</span> = <span class="pl-s">'protectedStatic'</span>;
+
+    <span class="pl-c">// Properties must declare their visibility</span>
+    <span class="pl-k">public</span> <span class="pl-c1"><span class="pl-c1">$</span>property</span>    = <span class="pl-s">'public'</span>;
+    <span class="pl-k">public</span> <span class="pl-c1"><span class="pl-c1">$</span>instanceProp</span>;
+    <span class="pl-k">protected</span> <span class="pl-c1"><span class="pl-c1">$</span>prot</span> = <span class="pl-s">'protected'</span>; <span class="pl-c">// Accessible from the class and subclasses</span>
+    <span class="pl-k">private</span> <span class="pl-c1"><span class="pl-c1">$</span>priv</span>   = <span class="pl-s">'private'</span>;   <span class="pl-c">// Accessible within the class only</span>
+
+    <span class="pl-c">// Create a constructor with __construct</span>
+    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">__construct</span>(<span class="pl-s1"><span class="pl-c1">$</span>instanceProp</span>)
+    {
+        <span class="pl-c">// Access instance variables with $this</span>
+        <span class="pl-s1"><span class="pl-c1">$</span><span class="pl-smi">this</span></span>-&gt;<span class="pl-c1">instanceProp</span> = <span class="pl-s1"><span class="pl-c1">$</span>instanceProp</span>;
+    }
+
+    <span class="pl-c">// Methods are declared as functions inside a class</span>
+    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">myMethod</span>()
+    {
+        print <span class="pl-s">'MyClass'</span>;
+    }
+
+    <span class="pl-c">// final keyword would make a function unoverridable</span>
+    <span class="pl-k">final</span> <span class="pl-k">function</span> <span class="pl-en">youCannotOverrideMe</span>()
+    {
+    }
+
+    <span class="pl-c">// Magic Methods</span>
+
+    <span class="pl-c">// what to do if Object is treated as a String</span>
+    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">__toString</span>()
+    {
+        <span class="pl-k">return</span> <span class="pl-s1"><span class="pl-c1">$</span>property</span>;
+    }
+
+    <span class="pl-c">// opposite to __construct()</span>
+    <span class="pl-c">// called when object is no longer referenced</span>
+    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">__destruct</span>()
+    {
+        print "<span class="pl-s">Destroying</span>";
+    }
+
+<span class="pl-c">/*</span>
+<span class="pl-c"> * Declaring class properties or methods as static makes them accessible without</span>
+<span class="pl-c"> * needing an instantiation of the class. A property declared as static can not</span>
+<span class="pl-c"> * be accessed with an instantiated class object (though a static method can).</span>
+<span class="pl-c"> */</span>
+
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">function</span> <span class="pl-en">myStaticMethod</span>()
+    {
+        print <span class="pl-s">'I am static'</span>;
+    }
+}
+
+<span class="pl-c">// Class constants can always be accessed statically</span>
+<span class="pl-k">echo</span> <span class="pl-v">MyClass</span>::<span class="pl-c1">MY_CONST</span>;    <span class="pl-c">// Outputs 'value';</span>
+
+<span class="pl-k">echo</span> <span class="pl-v">MyClass</span>::<span class="pl-s1"><span class="pl-c1">$</span>staticVar</span>;  <span class="pl-c">// Outputs 'static';</span>
+<span class="pl-v">MyClass</span>::<span class="pl-en">myStaticMethod</span>(); <span class="pl-c">// Outputs 'I am static';</span>
+
+<span class="pl-c">// Instantiate classes using new</span>
+<span class="pl-s1"><span class="pl-c1">$</span>my_class</span> = <span class="pl-k">new</span> <span class="pl-v">MyClass</span>(<span class="pl-s">'An instance property'</span>);
+<span class="pl-c">// The parentheses are optional if not passing in an argument.</span>
+
+<span class="pl-c">// Access class members using -&gt;</span>
+<span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span>my_class</span>-&gt;<span class="pl-c1">property</span>;     <span class="pl-c">// =&gt; "public"</span>
+<span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span>my_class</span>-&gt;<span class="pl-c1">instanceProp</span>; <span class="pl-c">// =&gt; "An instance property"</span>
+<span class="pl-s1"><span class="pl-c1">$</span>my_class</span>-&gt;<span class="pl-en">myMethod</span>();        <span class="pl-c">// =&gt; "MyClass"</span>
+
+<span class="pl-c">// Nullsafe operators since PHP 8</span>
+<span class="pl-c">// You can use this when you're unsure if the abstraction of $my_class contains has a property/method</span>
+<span class="pl-c">// it can be used in conjunction with the nullish coalesce operator to ensure proper value</span>
+<span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span>my_class</span>-&gt;<span class="pl-c1">invalid_property</span> <span class="pl-c">// An error is thrown</span>
+<span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span>my_class</span>?-&gt;invalid_property <span class="pl-c">// =&gt; NULL</span>
+<span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span>my_class</span>?-&gt;invalid_property ?? "<span class="pl-s">public</span>" <span class="pl-c">// =&gt; "public"</span>
+
+<span class="pl-c">// Extend classes using "extends"</span>
+class <span class="pl-v">MyOtherClass</span> <span class="pl-k">extends</span> <span class="pl-v">MyClass</span>
+{
+    <span class="pl-k">function</span> printProtectedProperty()
+    {
+        <span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span><span class="pl-smi">this</span></span>-&gt;<span class="pl-c1">prot</span>;
+    }
+
+    <span class="pl-c">// Override a method</span>
+    <span class="pl-k">function</span> <span class="pl-en">myMethod</span>()
+    {
+        <span class="pl-smi">parent</span>::<span class="pl-en">myMethod</span>();
+        print <span class="pl-s">' &gt; MyOtherClass'</span>;
+    }
+}
+
+<span class="pl-s1"><span class="pl-c1">$</span>my_other_class</span> = <span class="pl-k">new</span> <span class="pl-v">MyOtherClass</span>(<span class="pl-s">'Instance prop'</span>);
+<span class="pl-s1"><span class="pl-c1">$</span>my_other_class</span>-&gt;<span class="pl-en">printProtectedProperty</span>(); <span class="pl-c">// =&gt; Prints "protected"</span>
+<span class="pl-s1"><span class="pl-c1">$</span>my_other_class</span>-&gt;<span class="pl-en">myMethod</span>();               <span class="pl-c">// Prints "MyClass &gt; MyOtherClass"</span>
+
+<span class="pl-k">final</span> <span class="pl-k">class</span> <span class="pl-v">YouCannotExtendMe</span>
+{
+}
+
+<span class="pl-c">// You can use "magic methods" to create getters and setters</span>
+<span class="pl-k">class</span> <span class="pl-v">MyMapClass</span>
+{
+    <span class="pl-k">private</span> <span class="pl-c1"><span class="pl-c1">$</span>property</span>;
+
+    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">__get</span>(<span class="pl-s1"><span class="pl-c1">$</span>key</span>)
+    {
+        <span class="pl-k">return</span> <span class="pl-s1"><span class="pl-c1">$</span><span class="pl-smi">this</span></span>-&gt;<span class="pl-c1"><span class="pl-c1">$</span>key</span>;
+    }
+
+    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">__set</span>(<span class="pl-s1"><span class="pl-c1">$</span>key</span>, <span class="pl-s1"><span class="pl-c1">$</span>value</span>)
+    {
+        <span class="pl-s1"><span class="pl-c1">$</span><span class="pl-smi">this</span></span>-&gt;<span class="pl-c1"><span class="pl-c1">$</span>key</span> = <span class="pl-s1"><span class="pl-c1">$</span>value</span>;
+    }
+}
+
+<span class="pl-s1"><span class="pl-c1">$</span>x</span> = <span class="pl-k">new</span> <span class="pl-v">MyMapClass</span>();
+<span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span>x</span>-&gt;<span class="pl-c1">property</span>; <span class="pl-c">// Will use the __get() method</span>
+<span class="pl-s1"><span class="pl-c1">$</span>x</span>-&gt;<span class="pl-c1">property</span> = <span class="pl-s">'Something'</span>; <span class="pl-c">// Will use the __set() method</span>
+
+<span class="pl-c">// Classes can be abstract (using the abstract keyword) or</span>
+<span class="pl-c">// implement interfaces (using the implements keyword).</span>
+<span class="pl-c">// An interface is declared with the interface keyword.</span>
+
+<span class="pl-k">interface</span> <span class="pl-v">InterfaceOne</span>
+{
+    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">doSomething</span>();
+}
+
+<span class="pl-k">interface</span> <span class="pl-v">InterfaceTwo</span>
+{
+    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">doSomethingElse</span>();
+}
+
+<span class="pl-c">// interfaces can be extended</span>
+<span class="pl-k">interface</span> <span class="pl-v">InterfaceThree</span> <span class="pl-k">extends</span> <span class="pl-v">InterfaceTwo</span>
+{
+    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">doAnotherContract</span>();
+}
+
+<span class="pl-k">abstract</span> <span class="pl-k">class</span> <span class="pl-v">MyAbstractClass</span> <span class="pl-k">implements</span> <span class="pl-v">InterfaceOne</span>
+{
+    <span class="pl-k">public</span> <span class="pl-c1"><span class="pl-c1">$</span>x</span> = <span class="pl-s">'doSomething'</span>;
+}
+
+<span class="pl-k">class</span> <span class="pl-v">MyConcreteClass</span> <span class="pl-k">extends</span> <span class="pl-v">MyAbstractClass</span> <span class="pl-k">implements</span> <span class="pl-v">InterfaceTwo</span>
+{
+    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">doSomething</span>()
+    {
+        <span class="pl-k">echo</span> <span class="pl-s1"><span class="pl-c1">$</span>x</span>;
+    }
+
+    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">doSomethingElse</span>()
+    {
+        <span class="pl-k">echo</span> <span class="pl-s">'doSomethingElse'</span>;
+    }
+}
+
+
+<span class="pl-c">// Classes can implement more than one interface</span>
+<span class="pl-k">class</span> <span class="pl-v">SomeOtherClass</span> <span class="pl-k">implements</span> <span class="pl-v">InterfaceOne</span>, <span class="pl-v">InterfaceTwo</span>
+{
+    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">doSomething</span>()
+    {
+        <span class="pl-k">echo</span> <span class="pl-s">'doSomething'</span>;
+    }
+
+    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">doSomethingElse</span>()
+    {
+        <span class="pl-k">echo</span> <span class="pl-s">'doSomethingElse'</span>;
+    }
+}
+
+
+<span class="pl-c">/********************************</span>
+<span class="pl-c"> * Traits</span>
+<span class="pl-c"> */</span>
+
+<span class="pl-c">// Traits are available from PHP 5.4.0 and are declared using "trait"</span>
+
+<span class="pl-k">trait</span> <span class="pl-v">MyTrait</span>
+{
+    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">myTraitMethod</span>()
+    {
+        print <span class="pl-s">'I have MyTrait'</span>;
+    }
+}
+
+<span class="pl-k">class</span> <span class="pl-v">MyTraitfulClass</span>
+{
+    <span class="pl-k">use</span> <span class="pl-v">MyTrait</span>;
+}
+
+<span class="pl-s1"><span class="pl-c1">$</span>cls</span> = <span class="pl-k">new</span> <span class="pl-v">MyTraitfulClass</span>();
+<span class="pl-s1"><span class="pl-c1">$</span>cls</span>-&gt;<span class="pl-en">myTraitMethod</span>(); <span class="pl-c">// Prints "I have MyTrait"</span>
+
+
+<span class="pl-c">/********************************</span>
+<span class="pl-c"> * Namespaces</span>
+<span class="pl-c"> */</span>
+
+<span class="pl-c">// This section is separate, because a namespace declaration</span>
+<span class="pl-c">// must be the first statement in a file. Let's pretend that is not the case</span>
+
+<span class="pl-ent">&lt;?php</span>
+
+<span class="pl-c">// By default, classes exist in the global namespace, and can</span>
+<span class="pl-c">// be explicitly called with a backslash.</span>
+
+<span class="pl-s1"><span class="pl-c1">$</span>cls</span> = <span class="pl-k">new</span> \<span class="pl-v">MyClass</span>();
+
+
+
+<span class="pl-c">// Set the namespace for a file</span>
+<span class="pl-k">namespace</span> <span class="pl-v">My</span>\<span class="pl-v">Namespace</span>;
+
+<span class="pl-k">class</span> <span class="pl-v">MyClass</span>
+{
+}
+
+<span class="pl-c">// (from another file)</span>
+<span class="pl-s1"><span class="pl-c1">$</span>cls</span> = <span class="pl-k">new</span> <span class="pl-v">My</span>\<span class="pl-v">Namespace</span>\<span class="pl-v">MyClass</span>;
+
+<span class="pl-c">//Or from within another namespace.</span>
+<span class="pl-k">namespace</span> <span class="pl-v">My</span>\<span class="pl-v">Other</span>\<span class="pl-v">Namespace</span>;
+
+<span class="pl-k">use</span> <span class="pl-v">My</span>\<span class="pl-v">Namespace</span>\<span class="pl-v">MyClass</span>;
+
+<span class="pl-s1"><span class="pl-c1">$</span>cls</span> = <span class="pl-k">new</span> <span class="pl-v">MyClass</span>();
+
+<span class="pl-c">// Or you can alias the namespace;</span>
+
+<span class="pl-k">namespace</span> <span class="pl-v">My</span>\<span class="pl-v">Other</span>\<span class="pl-v">Namespace</span>;
+
+<span class="pl-k">use</span> <span class="pl-v">My</span>\<span class="pl-v">Namespace</span> <span class="pl-k">as</span> <span class="pl-v">SomeOtherNamespace</span>;
+
+<span class="pl-s1"><span class="pl-c1">$</span>cls</span> = <span class="pl-k">new</span> <span class="pl-v">SomeOtherNamespace</span>\<span class="pl-v">MyClass</span>();
+
+
+<span class="pl-c">/**********************</span>
+<span class="pl-c">* Late Static Binding</span>
+<span class="pl-c">*</span>
+<span class="pl-c">*/</span>
+
+<span class="pl-k">class</span> <span class="pl-v">ParentClass</span>
+{
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">function</span> <span class="pl-en">who</span>()
+    {
+        <span class="pl-k">echo</span> "<span class="pl-s">I'm a </span>" . __CLASS__ . "\n";
+    }
+
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">function</span> <span class="pl-en">test</span>()
+    {
+        <span class="pl-c">// self references the class the method is defined within</span>
+        <span class="pl-smi">self</span>::<span class="pl-en">who</span>();
+        <span class="pl-c">// static references the class the method was invoked on</span>
+        <span class="pl-smi"><span class="pl-k">static</span></span>::<span class="pl-en">who</span>();
+    }
+}
+
+<span class="pl-v">ParentClass</span>::<span class="pl-en">test</span>();
+<span class="pl-c">/*</span>
+<span class="pl-c">I'm a ParentClass</span>
+<span class="pl-c">I'm a ParentClass</span>
+<span class="pl-c">*/</span>
+
+<span class="pl-k">class</span> <span class="pl-v">ChildClass</span> <span class="pl-k">extends</span> <span class="pl-v">ParentClass</span>
+{
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">function</span> <span class="pl-en">who</span>()
+    {
+        <span class="pl-k">echo</span> "<span class="pl-s">But I'm </span>" . __CLASS__ . "\n";
+    }
+}
+
+<span class="pl-v">ChildClass</span>::<span class="pl-en">test</span>();
+<span class="pl-c">/*</span>
+<span class="pl-c">I'm a ParentClass</span>
+<span class="pl-c">But I'm ChildClass</span>
+<span class="pl-c">*/</span>
+
+<span class="pl-c">/**********************</span>
+<span class="pl-c">*  Magic constants</span>
+<span class="pl-c">*</span>
+<span class="pl-c">*/</span>
+
+<span class="pl-c">// Get current class name. Must be used inside a class declaration.</span>
+<span class="pl-k">echo</span> "<span class="pl-s">Current class name is </span>" . __CLASS__;
+
+<span class="pl-c">// Get full path directory of a file</span>
+<span class="pl-k">echo</span> "<span class="pl-s">Current directory is </span>" . __DIR__;
+
+    <span class="pl-c">// Typical usage</span>
+    <span class="pl-k">require</span> __DIR__ . <span class="pl-s">'/vendor/autoload.php'</span>;
+
+<span class="pl-c">// Get full path of a file</span>
+<span class="pl-k">echo</span> "<span class="pl-s">Current file path is </span>" . __FILE__;
+
+<span class="pl-c">// Get current function name</span>
+<span class="pl-k">echo</span> "<span class="pl-s">Current function name is </span>" . __FUNCTION__;
+
+<span class="pl-c">// Get current line number</span>
+<span class="pl-k">echo</span> "<span class="pl-s">Current line number is </span>" . __LINE__;
+
+<span class="pl-c">// Get the name of the current method. Only returns a value when used inside a trait or object declaration.</span>
+<span class="pl-k">echo</span> "<span class="pl-s">Current method is </span>" . __METHOD__;
+
+<span class="pl-c">// Get the name of the current namespace</span>
+<span class="pl-k">echo</span> "<span class="pl-s">Current namespace is </span>" . __NAMESPACE__;
+
+<span class="pl-c">// Get the name of the current trait. Only returns a value when used inside a trait or object declaration.</span>
+<span class="pl-k">echo</span> "<span class="pl-s">Current trait is </span>" . __TRAIT__;
+
+<span class="pl-c">/**********************</span>
+<span class="pl-c">*  Error Handling</span>
+<span class="pl-c">*</span>
+<span class="pl-c">*/</span>
+
+<span class="pl-c">// Simple error handling can be done with try catch block</span>
+
+<span class="pl-k">try</span> {
+    <span class="pl-c">// Do something</span>
+} <span class="pl-k">catch</span> (<span class="pl-smi"><span class="pl-smi">Exception</span></span> <span class="pl-s1"><span class="pl-c1">$</span>e</span>) {
+    <span class="pl-c">// Handle exception</span>
+}
+
+<span class="pl-c">// When using try catch blocks in a namespaced environment it is important to</span>
+<span class="pl-c">// escape to the global namespace, because Exceptions are classes, and the</span>
+<span class="pl-c">// Exception class exists in the global namespace. This can be done using a</span>
+<span class="pl-c">// leading backslash to catch the Exception.</span>
+
+<span class="pl-k">try</span> {
+    <span class="pl-c">// Do something</span>
+} <span class="pl-k">catch</span> (<span class="pl-smi"><span class="pl-smi">\<span class="pl-v">Exception</span></span></span> <span class="pl-s1"><span class="pl-c1">$</span>e</span>) {
+    <span class="pl-c">// Handle exception</span>
+}
+
+<span class="pl-c">// Custom exceptions</span>
+
+<span class="pl-k">class</span> <span class="pl-v">MyException</span> <span class="pl-k">extends</span> <span class="pl-v">Exception</span> {}
+
+<span class="pl-k">try</span> {
+
+    <span class="pl-s1"><span class="pl-c1">$</span>condition</span> = <span class="pl-c1">true</span>;
+
+    <span class="pl-k">if</span> (<span class="pl-s1"><span class="pl-c1">$</span>condition</span>) {
+        <span class="pl-k">throw</span> <span class="pl-k">new</span> <span class="pl-v">MyException</span>(<span class="pl-s">'Something just happened'</span>);
+    }
+
+} <span class="pl-k">catch</span> (<span class="pl-smi"><span class="pl-smi">MyException</span></span> <span class="pl-s1"><span class="pl-c1">$</span>e</span>) {
+    <span class="pl-c">// Handle my exception</span>
+}</pre></div>
+<h2>More Information</h2>
+<p>Visit the <a href="http://www.php.net/manual/" rel="nofollow">official PHP documentation</a> for reference<br>
+and community input.</p>
+<p>If you're interested in up-to-date best practices, visit<br>
+<a href="http://www.phptherightway.com/" rel="nofollow">PHP The Right Way</a>.</p>
+<p>A tutorial covering basics of language, setting up coding environment and making<br>
+few practical projects at <a href="https://www.youtube.com/playlist?list=PLfdtiltiRHWHjTPiFDRdTOPtSyYfz3iLW" rel="nofollow">Codecourse - PHP Basics</a>.</p>
+<p>If you're coming from a language with good package management, check out<br>
+<a href="http://getcomposer.org/" rel="nofollow">Composer</a>.</p>
+<p>For common standards, visit the PHP Framework Interoperability Group's<br>
+<a href="https://github.com/php-fig/fig-standards">PSR standards</a>.</p>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Malcolm Fell", "http://emarref.net/"]
+- ["Trismegiste", "https://github.com/Trismegiste"]
+</code></pre>

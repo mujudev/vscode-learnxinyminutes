@@ -1,0 +1,670 @@
+<h1>Ruby</h1>
+<div class="highlight highlight-source-ruby"><pre class="notranslate"><span class="pl-c"># This is a comment</span>
+
+<span class="pl-c">=begin</span>
+<span class="pl-c">This is a multi-line comment.</span>
+<span class="pl-c">The beginning line must start with "=begin"</span>
+<span class="pl-c">and the ending line must start with "=end".</span>
+
+<span class="pl-en">You</span> <span class="pl-en">can</span> <span class="pl-k">do</span> <span class="pl-s1">this</span><span class="pl-kos">,</span> <span class="pl-en">or</span> <span class="pl-en">start</span> <span class="pl-en">each</span> <span class="pl-s1">line</span> <span class="pl-k">in</span>
+<span class="pl-en">a</span> <span class="pl-en">multi</span>-<span class="pl-s1">line</span> <span class="pl-en">comment</span> <span class="pl-en">with</span> <span class="pl-en">the</span> <span class="pl-c"># character.</span>
+<span class="pl-c1">=</span><span class="pl-k">end</span>
+
+<span class="pl-c"># In Ruby, (almost) everything is an object.</span>
+<span class="pl-c"># This includes numbers...</span>
+<span class="pl-c1">3</span><span class="pl-kos">.</span><span class="pl-en">class</span> <span class="pl-c">#=&gt; Integer</span>
+
+<span class="pl-c"># ...and strings...</span>
+<span class="pl-s">"Hello"</span><span class="pl-kos">.</span><span class="pl-en">class</span> <span class="pl-c">#=&gt; String</span>
+
+<span class="pl-c"># ...and even methods!</span>
+<span class="pl-s">"Hello"</span><span class="pl-kos">.</span><span class="pl-en">method</span><span class="pl-kos">(</span><span class="pl-pds">:class</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">class</span> <span class="pl-c">#=&gt; Method</span>
+
+<span class="pl-c"># Some basic arithmetic</span>
+<span class="pl-c1">1</span> + <span class="pl-c1">1</span> <span class="pl-c">#=&gt; 2</span>
+<span class="pl-c1">8</span> - <span class="pl-c1">1</span> <span class="pl-c">#=&gt; 7</span>
+<span class="pl-c1">10</span> * <span class="pl-c1">2</span> <span class="pl-c">#=&gt; 20</span>
+<span class="pl-c1">35</span> / <span class="pl-c1">5</span> <span class="pl-c">#=&gt; 7</span>
+<span class="pl-c1">2</span> ** <span class="pl-c1">5</span> <span class="pl-c">#=&gt; 32</span>
+<span class="pl-c1">5</span> % <span class="pl-c1">3</span> <span class="pl-c">#=&gt; 2</span>
+
+<span class="pl-c"># Bitwise operators</span>
+<span class="pl-c1">3</span> &amp; <span class="pl-c1">5</span> <span class="pl-c">#=&gt; 1</span>
+<span class="pl-c1">3</span> | <span class="pl-c1">5</span> <span class="pl-c">#=&gt; 7</span>
+<span class="pl-c1">3</span> ^ <span class="pl-c1">5</span> <span class="pl-c">#=&gt; 6</span>
+
+<span class="pl-c"># Arithmetic is just syntactic sugar</span>
+<span class="pl-c"># for calling a method on an object</span>
+<span class="pl-c1">1</span><span class="pl-kos">.</span>+<span class="pl-kos">(</span><span class="pl-c1">3</span><span class="pl-kos">)</span> <span class="pl-c">#=&gt; 4</span>
+<span class="pl-c1">10</span><span class="pl-kos">.</span>* <span class="pl-c1">5</span> <span class="pl-c">#=&gt; 50</span>
+<span class="pl-c1">100</span><span class="pl-kos">.</span><span class="pl-en">methods</span><span class="pl-kos">.</span><span class="pl-en">include?</span><span class="pl-kos">(</span><span class="pl-pds">:/</span><span class="pl-kos">)</span> <span class="pl-c">#=&gt; true</span>
+
+<span class="pl-c"># Special values are objects</span>
+<span class="pl-c1">nil</span> <span class="pl-c"># equivalent to null in other languages</span>
+<span class="pl-c1">true</span> <span class="pl-c"># truth</span>
+<span class="pl-c1">false</span> <span class="pl-c"># falsehood</span>
+
+<span class="pl-c1">nil</span><span class="pl-kos">.</span><span class="pl-en">class</span> <span class="pl-c">#=&gt; NilClass</span>
+<span class="pl-c1">true</span><span class="pl-kos">.</span><span class="pl-en">class</span> <span class="pl-c">#=&gt; TrueClass</span>
+<span class="pl-c1">false</span><span class="pl-kos">.</span><span class="pl-en">class</span> <span class="pl-c">#=&gt; FalseClass</span>
+
+<span class="pl-c"># Equality</span>
+<span class="pl-c1">1</span> == <span class="pl-c1">1</span> <span class="pl-c">#=&gt; true</span>
+<span class="pl-c1">2</span> == <span class="pl-c1">1</span> <span class="pl-c">#=&gt; false</span>
+
+<span class="pl-c"># Inequality</span>
+<span class="pl-c1">1</span> != <span class="pl-c1">1</span> <span class="pl-c">#=&gt; false</span>
+<span class="pl-c1">2</span> != <span class="pl-c1">1</span> <span class="pl-c">#=&gt; true</span>
+
+<span class="pl-c"># Apart from false itself, nil is the only other 'falsey' value</span>
+
+!!<span class="pl-c1">nil</span>   <span class="pl-c">#=&gt; false</span>
+!!<span class="pl-c1">false</span> <span class="pl-c">#=&gt; false</span>
+!!<span class="pl-c1">0</span>     <span class="pl-c">#=&gt; true</span>
+!!<span class="pl-s">""</span>    <span class="pl-c">#=&gt; true</span>
+
+<span class="pl-c"># More comparisons</span>
+<span class="pl-c1">1</span> &lt; <span class="pl-c1">10</span> <span class="pl-c">#=&gt; true</span>
+<span class="pl-c1">1</span> &gt; <span class="pl-c1">10</span> <span class="pl-c">#=&gt; false</span>
+<span class="pl-c1">2</span> &lt;= <span class="pl-c1">2</span> <span class="pl-c">#=&gt; true</span>
+<span class="pl-c1">2</span> &gt;= <span class="pl-c1">2</span> <span class="pl-c">#=&gt; true</span>
+
+<span class="pl-c"># Combined comparison operator (returns `1` when the first argument is greater, </span>
+<span class="pl-c"># `-1` when the second argument is greater, and `0` otherwise)</span>
+<span class="pl-c1">1</span> &lt;=&gt; <span class="pl-c1">10</span> <span class="pl-c">#=&gt; -1 (1 &lt; 10)</span>
+<span class="pl-c1">10</span> &lt;=&gt; <span class="pl-c1">1</span> <span class="pl-c">#=&gt; 1 (10 &gt; 1)</span>
+<span class="pl-c1">1</span> &lt;=&gt; <span class="pl-c1">1</span> <span class="pl-c">#=&gt; 0 (1 == 1)</span>
+
+<span class="pl-c"># Logical operators</span>
+<span class="pl-c1">true</span> &amp;&amp; <span class="pl-c1">false</span> <span class="pl-c">#=&gt; false</span>
+<span class="pl-c1">true</span> || <span class="pl-c1">false</span> <span class="pl-c">#=&gt; true</span>
+
+<span class="pl-c"># There are alternate versions of the logical operators with much lower</span>
+<span class="pl-c"># precedence. These are meant to be used as flow-control constructs to chain</span>
+<span class="pl-c"># statements together until one of them returns true or false.</span>
+
+<span class="pl-c"># `do_something_else` only called if `do_something` succeeds.</span>
+<span class="pl-en">do_something</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-k">and</span> <span class="pl-en">do_something_else</span><span class="pl-kos">(</span><span class="pl-kos">)</span>
+<span class="pl-c"># `log_error` only called if `do_something` fails.</span>
+<span class="pl-en">do_something</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-k">or</span> <span class="pl-en">log_error</span><span class="pl-kos">(</span><span class="pl-kos">)</span>
+
+<span class="pl-c"># String interpolation</span>
+
+<span class="pl-s1">placeholder</span> <span class="pl-c1">=</span> <span class="pl-s">'use string interpolation'</span>
+<span class="pl-s">"I can <span class="pl-s1"><span class="pl-kos">#{</span><span class="pl-s1">placeholder</span><span class="pl-kos">}</span></span> when using double quoted strings"</span>
+<span class="pl-c">#=&gt; "I can use string interpolation when using double quoted strings"</span>
+
+<span class="pl-c"># You can combine strings using `+`, but not with other types</span>
+<span class="pl-s">'hello '</span> + <span class="pl-s">'world'</span>  <span class="pl-c">#=&gt; "hello world"</span>
+<span class="pl-s">'hello '</span> + <span class="pl-c1">3</span> <span class="pl-c">#=&gt; TypeError: can't convert Fixnum into String</span>
+<span class="pl-s">'hello '</span> + <span class="pl-c1">3</span><span class="pl-kos">.</span><span class="pl-en">to_s</span> <span class="pl-c">#=&gt; "hello 3"</span>
+<span class="pl-s">"hello <span class="pl-s1"><span class="pl-kos">#{</span><span class="pl-c1">3</span><span class="pl-kos">}</span></span>"</span> <span class="pl-c">#=&gt; "hello 3"</span>
+
+<span class="pl-c"># ...or combine strings and operators</span>
+<span class="pl-s">'hello '</span> * <span class="pl-c1">3</span> <span class="pl-c">#=&gt; "hello hello hello "</span>
+
+<span class="pl-c"># ...or append to string</span>
+<span class="pl-s">'hello'</span> &lt;&lt; <span class="pl-s">' world'</span> <span class="pl-c">#=&gt; "hello world"</span>
+
+<span class="pl-c"># You can print to the output with a newline at the end</span>
+<span class="pl-en">puts</span> <span class="pl-s">"I'm printing!"</span>
+<span class="pl-c">#=&gt; I'm printing!</span>
+<span class="pl-c">#=&gt; nil</span>
+
+<span class="pl-c"># ...or print to the output without a newline</span>
+<span class="pl-en">print</span> <span class="pl-s">"I'm printing!"</span>
+<span class="pl-c">#=&gt; "I'm printing!" =&gt; nil</span>
+
+<span class="pl-c"># Variables</span>
+<span class="pl-s1">x</span> <span class="pl-c1">=</span> <span class="pl-c1">25</span> <span class="pl-c">#=&gt; 25</span>
+<span class="pl-s1">x</span> <span class="pl-c">#=&gt; 25</span>
+
+<span class="pl-c"># Note that assignment returns the value assigned.</span>
+<span class="pl-c"># This means you can do multiple assignment.</span>
+
+<span class="pl-s1">x</span> <span class="pl-c1">=</span> <span class="pl-s1">y</span> <span class="pl-c1">=</span> <span class="pl-c1">10</span> <span class="pl-c">#=&gt; 10</span>
+<span class="pl-s1">x</span> <span class="pl-c">#=&gt; 10</span>
+<span class="pl-s1">y</span> <span class="pl-c">#=&gt; 10</span>
+
+<span class="pl-c"># By convention, use snake_case for variable names.</span>
+<span class="pl-s1">snake_case</span> <span class="pl-c1">=</span> <span class="pl-c1">true</span>
+
+<span class="pl-c"># Use descriptive variable names</span>
+<span class="pl-s1">path_to_project_root</span> <span class="pl-c1">=</span> <span class="pl-s">'/good/name/'</span>
+<span class="pl-s1">m</span> <span class="pl-c1">=</span> <span class="pl-s">'/bad/name/'</span>
+
+<span class="pl-c"># Symbols are immutable, reusable constants represented internally by an</span>
+<span class="pl-c"># integer value. They're often used instead of strings to efficiently convey</span>
+<span class="pl-c"># specific, meaningful values.</span>
+
+<span class="pl-pds">:pending</span><span class="pl-kos">.</span><span class="pl-en">class</span> <span class="pl-c">#=&gt; Symbol</span>
+
+<span class="pl-s1">status</span> <span class="pl-c1">=</span> <span class="pl-pds">:pending</span>
+
+<span class="pl-s1">status</span> == <span class="pl-pds">:pending</span> <span class="pl-c">#=&gt; true</span>
+
+<span class="pl-s1">status</span> == <span class="pl-s">'pending'</span> <span class="pl-c">#=&gt; false</span>
+
+<span class="pl-s1">status</span> == <span class="pl-pds">:approved</span> <span class="pl-c">#=&gt; false</span>
+
+<span class="pl-c"># Strings can be converted into symbols and vice versa.</span>
+<span class="pl-s1">status</span><span class="pl-kos">.</span><span class="pl-en">to_s</span> <span class="pl-c">#=&gt; "pending"</span>
+<span class="pl-s">"argon"</span><span class="pl-kos">.</span><span class="pl-en">to_sym</span> <span class="pl-c">#=&gt; :argon</span>
+
+<span class="pl-c"># Arrays</span>
+
+<span class="pl-c"># This is an array.</span>
+<span class="pl-s1">array</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span><span class="pl-c1">1</span><span class="pl-kos">,</span> <span class="pl-c1">2</span><span class="pl-kos">,</span> <span class="pl-c1">3</span><span class="pl-kos">,</span> <span class="pl-c1">4</span><span class="pl-kos">,</span> <span class="pl-c1">5</span><span class="pl-kos">]</span> <span class="pl-c">#=&gt; [1, 2, 3, 4, 5]</span>
+
+<span class="pl-c"># Arrays can contain different types of items.</span>
+<span class="pl-kos">[</span><span class="pl-c1">1</span><span class="pl-kos">,</span> <span class="pl-s">'hello'</span><span class="pl-kos">,</span> <span class="pl-c1">false</span><span class="pl-kos">]</span> <span class="pl-c">#=&gt; [1, "hello", false]</span>
+
+<span class="pl-c"># You might prefer %w instead of quotes</span>
+<span class="pl-kos">%w[</span><span class="pl-s">foo</span> <span class="pl-s">bar</span> <span class="pl-s">baz</span><span class="pl-kos">]</span> <span class="pl-c">#=&gt; ["foo", "bar", "baz"]</span>
+
+<span class="pl-c"># Arrays can be indexed.</span>
+<span class="pl-c"># From the front...</span>
+<span class="pl-s1">array</span><span class="pl-kos">[</span><span class="pl-c1">0</span><span class="pl-kos">]</span> <span class="pl-c">#=&gt; 1</span>
+<span class="pl-s1">array</span><span class="pl-kos">.</span><span class="pl-en">first</span> <span class="pl-c">#=&gt; 1</span>
+<span class="pl-s1">array</span><span class="pl-kos">[</span><span class="pl-c1">12</span><span class="pl-kos">]</span> <span class="pl-c">#=&gt; nil</span>
+
+<span class="pl-c"># ...or from the back...</span>
+<span class="pl-s1">array</span><span class="pl-kos">[</span>-<span class="pl-c1">1</span><span class="pl-kos">]</span> <span class="pl-c">#=&gt; 5</span>
+<span class="pl-s1">array</span><span class="pl-kos">.</span><span class="pl-en">last</span> <span class="pl-c">#=&gt; 5</span>
+
+<span class="pl-c"># ...or with a start index and length...</span>
+<span class="pl-s1">array</span><span class="pl-kos">[</span><span class="pl-c1">2</span><span class="pl-kos">,</span> <span class="pl-c1">3</span><span class="pl-kos">]</span> <span class="pl-c">#=&gt; [3, 4, 5]</span>
+
+<span class="pl-c"># ...or with a range...</span>
+<span class="pl-s1">array</span><span class="pl-kos">[</span><span class="pl-c1">1</span>..<span class="pl-c1">3</span><span class="pl-kos">]</span> <span class="pl-c">#=&gt; [2, 3, 4]</span>
+
+<span class="pl-c"># You can reverse an Array.</span>
+<span class="pl-c"># Return a new array with reversed values</span>
+<span class="pl-kos">[</span><span class="pl-c1">1</span><span class="pl-kos">,</span><span class="pl-c1">2</span><span class="pl-kos">,</span><span class="pl-c1">3</span><span class="pl-kos">]</span><span class="pl-kos">.</span><span class="pl-en">reverse</span> <span class="pl-c">#=&gt; [3,2,1]</span>
+<span class="pl-c"># Reverse an array in place to update variable with reversed values</span>
+<span class="pl-s1">a</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span><span class="pl-c1">1</span><span class="pl-kos">,</span><span class="pl-c1">2</span><span class="pl-kos">,</span><span class="pl-c1">3</span><span class="pl-kos">]</span>
+<span class="pl-s1">a</span><span class="pl-kos">.</span><span class="pl-en">reverse!</span> <span class="pl-c">#=&gt; a==[3,2,1] because of the bang ('!') call to reverse</span>
+
+<span class="pl-c"># Like arithmetic, [var] access is just syntactic sugar</span>
+<span class="pl-c"># for calling a method '[]' on an object.</span>
+<span class="pl-s1">array</span><span class="pl-kos">.</span>[] <span class="pl-c1">0</span> <span class="pl-c">#=&gt; 1</span>
+<span class="pl-s1">array</span><span class="pl-kos">.</span>[] <span class="pl-c1">12</span> <span class="pl-c">#=&gt; nil</span>
+
+<span class="pl-c"># You can add to an array...</span>
+<span class="pl-s1">array</span> &lt;&lt; <span class="pl-c1">6</span> <span class="pl-c">#=&gt; [1, 2, 3, 4, 5, 6]</span>
+<span class="pl-c"># Or like this</span>
+<span class="pl-s1">array</span><span class="pl-kos">.</span><span class="pl-en">push</span><span class="pl-kos">(</span><span class="pl-c1">6</span><span class="pl-kos">)</span> <span class="pl-c">#=&gt; [1, 2, 3, 4, 5, 6]</span>
+
+<span class="pl-c"># ...and check if an item exists in an array</span>
+<span class="pl-s1">array</span><span class="pl-kos">.</span><span class="pl-en">include?</span><span class="pl-kos">(</span><span class="pl-c1">1</span><span class="pl-kos">)</span> <span class="pl-c">#=&gt; true</span>
+
+<span class="pl-c"># Hashes are Ruby's primary dictionary with key/value pairs.</span>
+<span class="pl-c"># Hashes are denoted with curly braces.</span>
+<span class="pl-s1">hash</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span> <span class="pl-s">'color'</span> <span class="pl-c1">=&gt;</span> <span class="pl-s">'green'</span><span class="pl-kos">,</span> <span class="pl-s">'number'</span> <span class="pl-c1">=&gt;</span> <span class="pl-c1">5</span> <span class="pl-kos">}</span>
+
+<span class="pl-s1">hash</span><span class="pl-kos">.</span><span class="pl-en">keys</span> <span class="pl-c">#=&gt; ['color', 'number']</span>
+
+<span class="pl-c"># Hashes can be quickly looked up by key.</span>
+<span class="pl-s1">hash</span><span class="pl-kos">[</span><span class="pl-s">'color'</span><span class="pl-kos">]</span> <span class="pl-c">#=&gt; "green"</span>
+<span class="pl-s1">hash</span><span class="pl-kos">[</span><span class="pl-s">'number'</span><span class="pl-kos">]</span> <span class="pl-c">#=&gt; 5</span>
+
+<span class="pl-c"># Asking a hash for a key that doesn't exist returns nil.</span>
+<span class="pl-s1">hash</span><span class="pl-kos">[</span><span class="pl-s">'nothing here'</span><span class="pl-kos">]</span> <span class="pl-c">#=&gt; nil</span>
+
+<span class="pl-c"># When using symbols for keys in a hash, you can use an alternate syntax.</span>
+
+<span class="pl-s1">hash</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span> <span class="pl-pds">:defcon</span> <span class="pl-c1">=&gt;</span> <span class="pl-c1">3</span><span class="pl-kos">,</span> <span class="pl-pds">:action</span> <span class="pl-c1">=&gt;</span> <span class="pl-c1">true</span> <span class="pl-kos">}</span>
+<span class="pl-s1">hash</span><span class="pl-kos">.</span><span class="pl-en">keys</span> <span class="pl-c">#=&gt; [:defcon, :action]</span>
+
+<span class="pl-s1">hash</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span> <span class="pl-pds">defcon</span>: <span class="pl-c1">3</span><span class="pl-kos">,</span> <span class="pl-pds">action</span>: <span class="pl-c1">true</span> <span class="pl-kos">}</span>
+<span class="pl-s1">hash</span><span class="pl-kos">.</span><span class="pl-en">keys</span> <span class="pl-c">#=&gt; [:defcon, :action]</span>
+
+<span class="pl-c"># Check existence of keys and values in hash</span>
+<span class="pl-s1">hash</span><span class="pl-kos">.</span><span class="pl-en">key?</span><span class="pl-kos">(</span><span class="pl-pds">:defcon</span><span class="pl-kos">)</span> <span class="pl-c">#=&gt; true</span>
+<span class="pl-s1">hash</span><span class="pl-kos">.</span><span class="pl-en">value?</span><span class="pl-kos">(</span><span class="pl-c1">3</span><span class="pl-kos">)</span> <span class="pl-c">#=&gt; true</span>
+
+<span class="pl-c"># Tip: Both Arrays and Hashes are Enumerable!</span>
+<span class="pl-c"># They share a lot of useful methods such as each, map, count, and more.</span>
+
+<span class="pl-c"># Control structures</span>
+
+<span class="pl-c"># Conditionals</span>
+<span class="pl-k">if</span> <span class="pl-c1">true</span>
+  <span class="pl-s">'if statement'</span>
+<span class="pl-k">elsif</span> <span class="pl-c1">false</span>
+  <span class="pl-s">'else if, optional'</span>
+<span class="pl-k">else</span>
+  <span class="pl-s">'else, also optional'</span>
+<span class="pl-k">end</span>
+
+<span class="pl-c"># If a condition controls invocation of a single statement rather than a block of code</span>
+<span class="pl-c"># you can use postfix-if notation</span>
+<span class="pl-s1">warnings</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span><span class="pl-s">'Patronimic is missing'</span><span class="pl-kos">,</span> <span class="pl-s">'Address too short'</span><span class="pl-kos">]</span>
+<span class="pl-en">puts</span><span class="pl-kos">(</span><span class="pl-s">"Some warnings occurred:<span class="pl-cce">\n</span>"</span> + <span class="pl-s1">warnings</span><span class="pl-kos">.</span><span class="pl-en">join</span><span class="pl-kos">(</span><span class="pl-s">"<span class="pl-cce">\n</span>"</span><span class="pl-kos">)</span><span class="pl-kos">)</span>  <span class="pl-k">if</span> !<span class="pl-s1">warnings</span><span class="pl-kos">.</span><span class="pl-en">empty?</span>
+
+<span class="pl-c"># Rephrase condition if `unless` sounds better than `if`</span>
+<span class="pl-en">puts</span><span class="pl-kos">(</span><span class="pl-s">"Some warnings occurred:<span class="pl-cce">\n</span>"</span> + <span class="pl-s1">warnings</span><span class="pl-kos">.</span><span class="pl-en">join</span><span class="pl-kos">(</span><span class="pl-s">"<span class="pl-cce">\n</span>"</span><span class="pl-kos">)</span><span class="pl-kos">)</span>  <span class="pl-k">unless</span> <span class="pl-s1">warnings</span><span class="pl-kos">.</span><span class="pl-en">empty?</span>
+
+<span class="pl-c"># Loops</span>
+<span class="pl-c"># In Ruby, traditional `for` loops aren't very common. Instead, these </span>
+<span class="pl-c"># basic loops are implemented using enumerable, which hinges on `each`.</span>
+<span class="pl-kos">(</span><span class="pl-c1">1</span>..<span class="pl-c1">5</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">each</span> <span class="pl-k">do</span> |<span class="pl-s1">counter</span>|
+  <span class="pl-en">puts</span> <span class="pl-s">"iteration <span class="pl-s1"><span class="pl-kos">#{</span><span class="pl-s1">counter</span><span class="pl-kos">}</span></span>"</span>
+<span class="pl-k">end</span>
+
+<span class="pl-c"># Which is roughly equivalent to the following, which is unusual to see in Ruby.</span>
+<span class="pl-k">for</span> <span class="pl-en">counter</span> <span class="pl-k">in</span> <span class="pl-c1">1</span>..<span class="pl-c1">5</span>
+  <span class="pl-en">puts</span> <span class="pl-s">"iteration <span class="pl-s1"><span class="pl-kos">#{</span><span class="pl-en">counter</span><span class="pl-kos">}</span></span>"</span>
+<span class="pl-k">end</span>
+
+<span class="pl-c"># The `do |variable| ... end` construct above is called a 'block'. Blocks are similar</span>
+<span class="pl-c"># to lambdas, anonymous functions or closures in other programming languages. They can</span>
+<span class="pl-c"># be passed around as objects, called, or attached as methods.</span>
+<span class="pl-c">#</span>
+<span class="pl-c"># The 'each' method of a range runs the block once for each element of the range.</span>
+<span class="pl-c"># The block is passed a counter as a parameter.</span>
+
+<span class="pl-c"># You can also surround blocks in curly brackets.</span>
+<span class="pl-kos">(</span><span class="pl-c1">1</span>..<span class="pl-c1">5</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">each</span> <span class="pl-kos">{</span> |<span class="pl-s1">counter</span>| <span class="pl-en">puts</span> <span class="pl-s">"iteration <span class="pl-s1"><span class="pl-kos">#{</span><span class="pl-s1">counter</span><span class="pl-kos">}</span></span>"</span> <span class="pl-kos">}</span>
+
+<span class="pl-c"># The contents of data structures can also be iterated using each.</span>
+<span class="pl-s1">array</span><span class="pl-kos">.</span><span class="pl-en">each</span> <span class="pl-k">do</span> |<span class="pl-s1">element</span>|
+  <span class="pl-en">puts</span> <span class="pl-s">"<span class="pl-s1"><span class="pl-kos">#{</span><span class="pl-s1">element</span><span class="pl-kos">}</span></span> is part of the array"</span>
+<span class="pl-k">end</span>
+<span class="pl-s1">hash</span><span class="pl-kos">.</span><span class="pl-en">each</span> <span class="pl-k">do</span> |<span class="pl-s1">key</span><span class="pl-kos">,</span> <span class="pl-s1">value</span>|
+  <span class="pl-en">puts</span> <span class="pl-s">"<span class="pl-s1"><span class="pl-kos">#{</span><span class="pl-s1">key</span><span class="pl-kos">}</span></span> is <span class="pl-s1"><span class="pl-kos">#{</span><span class="pl-s1">value</span><span class="pl-kos">}</span></span>"</span>
+<span class="pl-k">end</span>
+
+<span class="pl-c"># If you still need an index you can use 'each_with_index' and define an index</span>
+<span class="pl-c"># variable.</span>
+<span class="pl-s1">array</span><span class="pl-kos">.</span><span class="pl-en">each_with_index</span> <span class="pl-k">do</span> |<span class="pl-s1">element</span><span class="pl-kos">,</span> <span class="pl-s1">index</span>|
+  <span class="pl-en">puts</span> <span class="pl-s">"<span class="pl-s1"><span class="pl-kos">#{</span><span class="pl-s1">element</span><span class="pl-kos">}</span></span> is number <span class="pl-s1"><span class="pl-kos">#{</span><span class="pl-s1">index</span><span class="pl-kos">}</span></span> in the array"</span>
+<span class="pl-k">end</span>
+
+<span class="pl-s1">counter</span> <span class="pl-c1">=</span> <span class="pl-c1">1</span>
+<span class="pl-k">while</span> <span class="pl-s1">counter</span> &lt;= <span class="pl-c1">5</span> <span class="pl-k">do</span>
+  <span class="pl-en">puts</span> <span class="pl-s">"iteration <span class="pl-s1"><span class="pl-kos">#{</span><span class="pl-s1">counter</span><span class="pl-kos">}</span></span>"</span>
+  <span class="pl-s1">counter</span> += <span class="pl-c1">1</span>
+<span class="pl-k">end</span>
+<span class="pl-c">#=&gt; iteration 1</span>
+<span class="pl-c">#=&gt; iteration 2</span>
+<span class="pl-c">#=&gt; iteration 3</span>
+<span class="pl-c">#=&gt; iteration 4</span>
+<span class="pl-c">#=&gt; iteration 5</span>
+
+<span class="pl-c"># There are a bunch of other helpful looping functions in Ruby.</span>
+<span class="pl-c"># For example: 'map', 'reduce', 'inject', the list goes on.</span>
+<span class="pl-c"># Map, for instance, takes the array it's looping over, does something</span>
+<span class="pl-c"># to it as defined in your block, and returns an entirely new array.</span>
+<span class="pl-s1">array</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span><span class="pl-c1">1</span><span class="pl-kos">,</span><span class="pl-c1">2</span><span class="pl-kos">,</span><span class="pl-c1">3</span><span class="pl-kos">,</span><span class="pl-c1">4</span><span class="pl-kos">,</span><span class="pl-c1">5</span><span class="pl-kos">]</span>
+<span class="pl-s1">doubled</span> <span class="pl-c1">=</span> <span class="pl-s1">array</span><span class="pl-kos">.</span><span class="pl-en">map</span> <span class="pl-k">do</span> |<span class="pl-s1">element</span>|
+  <span class="pl-s1">element</span> * <span class="pl-c1">2</span>
+<span class="pl-k">end</span>
+<span class="pl-en">puts</span> <span class="pl-s1">doubled</span>
+<span class="pl-c">#=&gt; [2,4,6,8,10]</span>
+<span class="pl-en">puts</span> <span class="pl-s1">array</span>
+<span class="pl-c">#=&gt; [1,2,3,4,5]</span>
+
+<span class="pl-c"># another useful syntax is .map(&amp;:method)</span>
+<span class="pl-s1">a</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span><span class="pl-s">"FOO"</span><span class="pl-kos">,</span> <span class="pl-s">"BAR"</span><span class="pl-kos">,</span> <span class="pl-s">"BAZ"</span><span class="pl-kos">]</span>
+<span class="pl-s1">a</span><span class="pl-kos">.</span><span class="pl-en">map</span> <span class="pl-kos">{</span> |<span class="pl-s1">s</span>| <span class="pl-s1">s</span><span class="pl-kos">.</span><span class="pl-en">downcase</span> <span class="pl-kos">}</span> <span class="pl-c">#=&gt; ["foo", "bar", "baz"]</span>
+<span class="pl-s1">a</span><span class="pl-kos">.</span><span class="pl-en">map</span><span class="pl-kos">(</span>&amp;<span class="pl-pds">:downcase</span><span class="pl-kos">)</span> <span class="pl-c">#=&gt; ["foo", "bar", "baz"]</span>
+
+<span class="pl-c"># Case construct</span>
+<span class="pl-s1">grade</span> <span class="pl-c1">=</span> <span class="pl-s">'B'</span>
+
+<span class="pl-k">case</span> <span class="pl-s1">grade</span>
+<span class="pl-k">when</span> <span class="pl-s">'A'</span>
+  <span class="pl-en">puts</span> <span class="pl-s">'Way to go kiddo'</span>
+<span class="pl-k">when</span> <span class="pl-s">'B'</span>
+  <span class="pl-en">puts</span> <span class="pl-s">'Better luck next time'</span>
+<span class="pl-k">when</span> <span class="pl-s">'C'</span>
+  <span class="pl-en">puts</span> <span class="pl-s">'You can do better'</span>
+<span class="pl-k">when</span> <span class="pl-s">'D'</span>
+  <span class="pl-en">puts</span> <span class="pl-s">'Scraping through'</span>
+<span class="pl-k">when</span> <span class="pl-s">'F'</span>
+  <span class="pl-en">puts</span> <span class="pl-s">'You failed!'</span>
+<span class="pl-k">else</span>
+  <span class="pl-en">puts</span> <span class="pl-s">'Alternative grading system, eh?'</span>
+<span class="pl-k">end</span>
+<span class="pl-c">#=&gt; "Better luck next time"</span>
+
+<span class="pl-c"># Cases can also use ranges</span>
+<span class="pl-s1">grade</span> <span class="pl-c1">=</span> <span class="pl-c1">82</span>
+<span class="pl-k">case</span> <span class="pl-s1">grade</span>
+<span class="pl-k">when</span> <span class="pl-c1">90</span>..<span class="pl-c1">100</span>
+  <span class="pl-en">puts</span> <span class="pl-s">'Hooray!'</span>
+<span class="pl-k">when</span> <span class="pl-c1">80</span>...<span class="pl-c1">90</span>
+  <span class="pl-en">puts</span> <span class="pl-s">'OK job'</span>
+<span class="pl-k">else</span>
+  <span class="pl-en">puts</span> <span class="pl-s">'You failed!'</span>
+<span class="pl-k">end</span>
+<span class="pl-c">#=&gt; "OK job"</span>
+
+<span class="pl-c"># Exception handling</span>
+<span class="pl-k">begin</span>
+  <span class="pl-c"># Code here that might raise an exception</span>
+  <span class="pl-en">raise</span> <span class="pl-v">NoMemoryError</span><span class="pl-kos">,</span> <span class="pl-s">'You ran out of memory.'</span>
+<span class="pl-k">rescue</span> <span class="pl-v">NoMemoryError</span> <span class="pl-c1">=&gt;</span> <span class="pl-en">exception_variable</span>
+  <span class="pl-en">puts</span> <span class="pl-s">'NoMemoryError was raised'</span><span class="pl-kos">,</span> <span class="pl-en">exception_variable</span>
+<span class="pl-k">rescue</span> <span class="pl-v">RuntimeError</span> <span class="pl-c1">=&gt;</span> <span class="pl-en">other_exception_variable</span>
+  <span class="pl-en">puts</span> <span class="pl-s">'RuntimeError was raised now'</span>
+<span class="pl-k">else</span>
+  <span class="pl-en">puts</span> <span class="pl-s">'This runs if no exceptions were thrown at all'</span>
+<span class="pl-k">ensure</span>
+  <span class="pl-en">puts</span> <span class="pl-s">'This code always runs no matter what'</span>
+<span class="pl-k">end</span>
+
+<span class="pl-c"># Methods</span>
+
+<span class="pl-k">def</span> <span class="pl-en">double</span><span class="pl-kos">(</span><span class="pl-s1">x</span><span class="pl-kos">)</span>
+  <span class="pl-s1">x</span> * <span class="pl-c1">2</span>
+<span class="pl-k">end</span>
+
+<span class="pl-c"># Methods (and blocks) implicitly return the value of the last statement.</span>
+<span class="pl-en">double</span><span class="pl-kos">(</span><span class="pl-c1">2</span><span class="pl-kos">)</span> <span class="pl-c">#=&gt; 4</span>
+
+<span class="pl-c"># Parentheses are optional where the interpretation is unambiguous.</span>
+<span class="pl-en">double</span> <span class="pl-c1">3</span> <span class="pl-c">#=&gt; 6</span>
+
+<span class="pl-en">double</span> <span class="pl-en">double</span> <span class="pl-c1">3</span> <span class="pl-c">#=&gt; 12</span>
+
+<span class="pl-k">def</span> <span class="pl-en">sum</span><span class="pl-kos">(</span><span class="pl-s1">x</span><span class="pl-kos">,</span> <span class="pl-s1">y</span><span class="pl-kos">)</span>
+  <span class="pl-s1">x</span> + <span class="pl-s1">y</span>
+<span class="pl-k">end</span>
+
+<span class="pl-c"># Method arguments are separated by a comma.</span>
+<span class="pl-en">sum</span> <span class="pl-c1">3</span><span class="pl-kos">,</span> <span class="pl-c1">4</span> <span class="pl-c">#=&gt; 7</span>
+
+<span class="pl-en">sum</span> <span class="pl-en">sum</span><span class="pl-kos">(</span><span class="pl-c1">3</span><span class="pl-kos">,</span> <span class="pl-c1">4</span><span class="pl-kos">)</span><span class="pl-kos">,</span> <span class="pl-c1">5</span> <span class="pl-c">#=&gt; 12</span>
+
+<span class="pl-c"># yield</span>
+<span class="pl-c"># All methods have an implicit, optional block parameter.</span>
+<span class="pl-c"># It can be called with the 'yield' keyword.</span>
+<span class="pl-k">def</span> <span class="pl-en">surround</span>
+  <span class="pl-en">puts</span> <span class="pl-s">'{'</span>
+  <span class="pl-k">yield</span>
+  <span class="pl-en">puts</span> <span class="pl-s">'}'</span>
+<span class="pl-k">end</span>
+
+<span class="pl-en">surround</span> <span class="pl-kos">{</span> <span class="pl-en">puts</span> <span class="pl-s">'hello world'</span> <span class="pl-kos">}</span>
+
+<span class="pl-c">#=&gt; {</span>
+<span class="pl-c">#=&gt; hello world</span>
+<span class="pl-c">#=&gt; }</span>
+
+<span class="pl-c"># Blocks can be converted into a 'proc' object, which wraps the block </span>
+<span class="pl-c"># and allows it to be passed to another method, bound to a different scope,</span>
+<span class="pl-c"># or manipulated otherwise. This is most common in method parameter lists,</span>
+<span class="pl-c"># where you frequently see a trailing '&amp;block' parameter that will accept </span>
+<span class="pl-c"># the block, if one is given, and convert it to a 'Proc'. The naming here is</span>
+<span class="pl-c"># convention; it would work just as well with '&amp;pineapple'.</span>
+<span class="pl-k">def</span> <span class="pl-en">guests</span><span class="pl-kos">(</span>&amp;<span class="pl-s1">block</span><span class="pl-kos">)</span>
+  <span class="pl-s1">block</span><span class="pl-kos">.</span><span class="pl-en">class</span> <span class="pl-c">#=&gt; Proc</span>
+  <span class="pl-s1">block</span><span class="pl-kos">.</span><span class="pl-en">call</span><span class="pl-kos">(</span><span class="pl-c1">4</span><span class="pl-kos">)</span>
+<span class="pl-k">end</span>
+
+<span class="pl-c"># The 'call' method on the Proc is similar to calling 'yield' when a block is </span>
+<span class="pl-c"># present. The arguments passed to 'call' will be forwarded to the block as arguments.</span>
+
+<span class="pl-en">guests</span> <span class="pl-kos">{</span> |<span class="pl-s1">n</span>| <span class="pl-s">"You have <span class="pl-s1"><span class="pl-kos">#{</span><span class="pl-s1">n</span><span class="pl-kos">}</span></span> guests."</span> <span class="pl-kos">}</span>
+<span class="pl-c"># =&gt; "You have 4 guests."</span>
+
+<span class="pl-c"># You can pass a list of arguments, which will be converted into an array.</span>
+<span class="pl-c"># That's what splat operator ("*") is for.</span>
+<span class="pl-k">def</span> <span class="pl-en">guests</span><span class="pl-kos">(</span>*<span class="pl-s1">array</span><span class="pl-kos">)</span>
+  <span class="pl-s1">array</span><span class="pl-kos">.</span><span class="pl-en">each</span> <span class="pl-kos">{</span> |<span class="pl-s1">guest</span>| <span class="pl-en">puts</span> <span class="pl-s1">guest</span> <span class="pl-kos">}</span>
+<span class="pl-k">end</span>
+
+<span class="pl-c"># There is also the shorthand block syntax. It's most useful when you need</span>
+<span class="pl-c"># to call a simple method on all array items.</span>
+<span class="pl-s1">upcased</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span><span class="pl-s">'Watch'</span><span class="pl-kos">,</span> <span class="pl-s">'these'</span><span class="pl-kos">,</span> <span class="pl-s">'words'</span><span class="pl-kos">,</span> <span class="pl-s">'get'</span><span class="pl-kos">,</span> <span class="pl-s">'upcased'</span><span class="pl-kos">]</span><span class="pl-kos">.</span><span class="pl-en">map</span><span class="pl-kos">(</span>&amp;<span class="pl-pds">:upcase</span><span class="pl-kos">)</span>
+<span class="pl-en">puts</span> <span class="pl-s1">upcased</span>
+<span class="pl-c">#=&gt; ["WATCH", "THESE", "WORDS", "GET", "UPCASED"]</span>
+ 
+<span class="pl-s1">sum</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span><span class="pl-c1">1</span><span class="pl-kos">,</span> <span class="pl-c1">2</span><span class="pl-kos">,</span> <span class="pl-c1">3</span><span class="pl-kos">,</span> <span class="pl-c1">4</span><span class="pl-kos">,</span> <span class="pl-c1">5</span><span class="pl-kos">]</span><span class="pl-kos">.</span><span class="pl-en">reduce</span><span class="pl-kos">(</span>&amp;<span class="pl-pds">:+</span><span class="pl-kos">)</span>
+<span class="pl-en">puts</span> <span class="pl-s1">sum</span>
+<span class="pl-c">#=&gt; 15</span>
+
+<span class="pl-c"># Destructuring</span>
+
+<span class="pl-c"># Ruby will automatically destructure arrays on assignment to multiple variables.</span>
+<span class="pl-s1">a</span><span class="pl-kos">,</span> <span class="pl-s1">b</span><span class="pl-kos">,</span> <span class="pl-s1">c</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span><span class="pl-c1">1</span><span class="pl-kos">,</span> <span class="pl-c1">2</span><span class="pl-kos">,</span> <span class="pl-c1">3</span><span class="pl-kos">]</span>
+<span class="pl-s1">a</span> <span class="pl-c">#=&gt; 1</span>
+<span class="pl-s1">b</span> <span class="pl-c">#=&gt; 2</span>
+<span class="pl-s1">c</span> <span class="pl-c">#=&gt; 3</span>
+
+<span class="pl-c"># In some cases, you will want to use the splat operator: `*` to prompt destructuring</span>
+<span class="pl-c"># of an array into a list.</span>
+<span class="pl-s1">ranked_competitors</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span><span class="pl-s">"John"</span><span class="pl-kos">,</span> <span class="pl-s">"Sally"</span><span class="pl-kos">,</span> <span class="pl-s">"Dingus"</span><span class="pl-kos">,</span> <span class="pl-s">"Moe"</span><span class="pl-kos">,</span> <span class="pl-s">"Marcy"</span><span class="pl-kos">]</span>
+
+<span class="pl-k">def</span> <span class="pl-en">best</span><span class="pl-kos">(</span><span class="pl-s1">first</span><span class="pl-kos">,</span> <span class="pl-s1">second</span><span class="pl-kos">,</span> <span class="pl-s1">third</span><span class="pl-kos">)</span>
+  <span class="pl-en">puts</span> <span class="pl-s">"Winners are <span class="pl-s1"><span class="pl-kos">#{</span><span class="pl-s1">first</span><span class="pl-kos">}</span></span>, <span class="pl-s1"><span class="pl-kos">#{</span><span class="pl-s1">second</span><span class="pl-kos">}</span></span>, and <span class="pl-s1"><span class="pl-kos">#{</span><span class="pl-s1">third</span><span class="pl-kos">}</span></span>."</span>
+<span class="pl-k">end</span>
+
+<span class="pl-en">best</span> *<span class="pl-s1">ranked_competitors</span><span class="pl-kos">.</span><span class="pl-en">first</span><span class="pl-kos">(</span><span class="pl-c1">3</span><span class="pl-kos">)</span> <span class="pl-c">#=&gt; Winners are John, Sally, and Dingus.</span>
+
+<span class="pl-c"># The splat operator can also be used in parameters.</span>
+<span class="pl-k">def</span> <span class="pl-en">best</span><span class="pl-kos">(</span><span class="pl-s1">first</span><span class="pl-kos">,</span> <span class="pl-s1">second</span><span class="pl-kos">,</span> <span class="pl-s1">third</span><span class="pl-kos">,</span> *<span class="pl-s1">others</span><span class="pl-kos">)</span>
+  <span class="pl-en">puts</span> <span class="pl-s">"Winners are <span class="pl-s1"><span class="pl-kos">#{</span><span class="pl-s1">first</span><span class="pl-kos">}</span></span>, <span class="pl-s1"><span class="pl-kos">#{</span><span class="pl-s1">second</span><span class="pl-kos">}</span></span>, and <span class="pl-s1"><span class="pl-kos">#{</span><span class="pl-s1">third</span><span class="pl-kos">}</span></span>."</span>
+  <span class="pl-en">puts</span> <span class="pl-s">"There were <span class="pl-s1"><span class="pl-kos">#{</span><span class="pl-s1">others</span><span class="pl-kos">.</span><span class="pl-en">count</span><span class="pl-kos">}</span></span> other participants."</span>
+<span class="pl-k">end</span>
+
+<span class="pl-en">best</span> *<span class="pl-s1">ranked_competitors</span> 
+<span class="pl-c">#=&gt; Winners are John, Sally, and Dingus.</span>
+<span class="pl-c">#=&gt; There were 2 other participants.</span>
+
+<span class="pl-c"># By convention, all methods that return booleans end with a question mark.</span>
+<span class="pl-c1">5</span><span class="pl-kos">.</span><span class="pl-en">even?</span> <span class="pl-c">#=&gt; false</span>
+<span class="pl-c1">5</span><span class="pl-kos">.</span><span class="pl-en">odd?</span> <span class="pl-c">#=&gt; true</span>
+
+<span class="pl-c"># By convention, if a method name ends with an exclamation mark, it does something destructive</span>
+<span class="pl-c"># like mutate the receiver. Many methods have a ! version to make a change, and</span>
+<span class="pl-c"># a non-! version to just return a new changed version.</span>
+<span class="pl-s1">company_name</span> <span class="pl-c1">=</span> <span class="pl-s">"Dunder Mifflin"</span>
+<span class="pl-s1">company_name</span><span class="pl-kos">.</span><span class="pl-en">upcase</span> <span class="pl-c">#=&gt; "DUNDER MIFFLIN"</span>
+<span class="pl-s1">company_name</span> <span class="pl-c">#=&gt; "Dunder Mifflin"</span>
+<span class="pl-c"># We're mutating company_name this time.</span>
+<span class="pl-s1">company_name</span><span class="pl-kos">.</span><span class="pl-en">upcase!</span> <span class="pl-c">#=&gt; "DUNDER MIFFLIN"</span>
+<span class="pl-s1">company_name</span> <span class="pl-c">#=&gt; "DUNDER MIFFLIN"</span>
+
+<span class="pl-c"># Classes</span>
+
+<span class="pl-c"># You can define a class with the 'class' keyword.</span>
+<span class="pl-k">class</span> <span class="pl-v">Human</span>
+
+  <span class="pl-c"># A class variable. It is shared by all instances of this class.</span>
+  <span class="pl-c1">@@species</span> <span class="pl-c1">=</span> <span class="pl-s">'H. sapiens'</span>
+
+  <span class="pl-c"># Basic initializer</span>
+  <span class="pl-k">def</span> <span class="pl-en">initialize</span><span class="pl-kos">(</span><span class="pl-s1">name</span><span class="pl-kos">,</span> <span class="pl-s1">age</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span><span class="pl-kos">)</span>
+    <span class="pl-c"># Assign the argument to the 'name' instance variable for the instance.</span>
+    <span class="pl-c1">@name</span> <span class="pl-c1">=</span> <span class="pl-s1">name</span>
+    <span class="pl-c"># If no age given, we will fall back to the default in the arguments list.</span>
+    <span class="pl-c1">@age</span> <span class="pl-c1">=</span> <span class="pl-s1">age</span>
+  <span class="pl-k">end</span>
+
+  <span class="pl-c"># Basic setter method</span>
+  <span class="pl-k">def</span> <span class="pl-en">name</span><span class="pl-c1">=</span><span class="pl-kos">(</span><span class="pl-s1">name</span><span class="pl-kos">)</span>
+    <span class="pl-c1">@name</span> <span class="pl-c1">=</span> <span class="pl-s1">name</span>
+  <span class="pl-k">end</span>
+
+  <span class="pl-c"># Basic getter method</span>
+  <span class="pl-k">def</span> <span class="pl-en">name</span>
+    <span class="pl-c1">@name</span>
+  <span class="pl-k">end</span>
+
+  <span class="pl-c"># The above functionality can be encapsulated using the attr_accessor method as follows.</span>
+  <span class="pl-en">attr_accessor</span> <span class="pl-pds">:name</span>
+
+  <span class="pl-c"># Getter/setter methods can also be created individually like this.</span>
+  <span class="pl-en">attr_reader</span> <span class="pl-pds">:name</span>
+  <span class="pl-en">attr_writer</span> <span class="pl-pds">:name</span>
+
+  <span class="pl-c"># A class method uses self to distinguish from instance methods.</span>
+  <span class="pl-c"># It can only be called on the class, not an instance.</span>
+  <span class="pl-k">def</span> <span class="pl-smi">self</span><span class="pl-kos">.</span><span class="pl-en">say</span><span class="pl-kos">(</span><span class="pl-s1">msg</span><span class="pl-kos">)</span>
+    <span class="pl-en">puts</span> <span class="pl-s1">msg</span>
+  <span class="pl-k">end</span>
+
+  <span class="pl-k">def</span> <span class="pl-en">species</span>
+    <span class="pl-c1">@@species</span>
+  <span class="pl-k">end</span>
+<span class="pl-k">end</span>
+
+<span class="pl-c"># Instantiating of a class</span>
+<span class="pl-s1">jim</span> <span class="pl-c1">=</span> <span class="pl-v">Human</span><span class="pl-kos">.</span><span class="pl-en">new</span><span class="pl-kos">(</span><span class="pl-s">'Jim Halpert'</span><span class="pl-kos">)</span>
+<span class="pl-s1">dwight</span> <span class="pl-c1">=</span> <span class="pl-v">Human</span><span class="pl-kos">.</span><span class="pl-en">new</span><span class="pl-kos">(</span><span class="pl-s">'Dwight K. Schrute'</span><span class="pl-kos">)</span>
+
+<span class="pl-c"># You can call the methods of the generated object.</span>
+<span class="pl-s1">jim</span><span class="pl-kos">.</span><span class="pl-en">species</span> <span class="pl-c">#=&gt; "H. sapiens"</span>
+<span class="pl-s1">jim</span><span class="pl-kos">.</span><span class="pl-en">name</span> <span class="pl-c">#=&gt; "Jim Halpert"</span>
+<span class="pl-s1">jim</span><span class="pl-kos">.</span><span class="pl-en">name</span> <span class="pl-c1">=</span> <span class="pl-s">"Jim Halpert II"</span> <span class="pl-c">#=&gt; "Jim Halpert II"</span>
+<span class="pl-s1">jim</span><span class="pl-kos">.</span><span class="pl-en">name</span> <span class="pl-c">#=&gt; "Jim Halpert II"</span>
+<span class="pl-s1">dwight</span><span class="pl-kos">.</span><span class="pl-en">species</span> <span class="pl-c">#=&gt; "H. sapiens"</span>
+<span class="pl-s1">dwight</span><span class="pl-kos">.</span><span class="pl-en">name</span> <span class="pl-c">#=&gt; "Dwight K. Schrute"</span>
+
+<span class="pl-c"># Calling of a class method</span>
+<span class="pl-v">Human</span><span class="pl-kos">.</span><span class="pl-en">say</span><span class="pl-kos">(</span><span class="pl-s">'Hi'</span><span class="pl-kos">)</span> <span class="pl-c">#=&gt; "Hi"</span>
+
+<span class="pl-c"># Variable's scopes are defined by the way we name them.</span>
+<span class="pl-c"># Variables that start with $ have global scope.</span>
+$var <span class="pl-c1">=</span> <span class="pl-s">"I'm a global var"</span>
+<span class="pl-en">defined?</span> $var <span class="pl-c">#=&gt; "global-variable"</span>
+
+<span class="pl-c"># Variables that start with @ have instance scope.</span>
+<span class="pl-c1">@var</span> <span class="pl-c1">=</span> <span class="pl-s">"I'm an instance var"</span>
+<span class="pl-en">defined?</span> <span class="pl-c1">@var</span> <span class="pl-c">#=&gt; "instance-variable"</span>
+
+<span class="pl-c"># Variables that start with @@ have class scope.</span>
+<span class="pl-c1">@@var</span> <span class="pl-c1">=</span> <span class="pl-s">"I'm a class var"</span>
+<span class="pl-en">defined?</span> <span class="pl-c1">@@var</span> <span class="pl-c">#=&gt; "class variable"</span>
+
+<span class="pl-c"># Variables that start with a capital letter are constants.</span>
+<span class="pl-v">Var</span> <span class="pl-c1">=</span> <span class="pl-s">"I'm a constant"</span>
+<span class="pl-en">defined?</span> <span class="pl-v">Var</span> <span class="pl-c">#=&gt; "constant"</span>
+
+<span class="pl-c"># Class is also an object in ruby. So a class can have instance variables.</span>
+<span class="pl-c"># A class variable is shared among the class and all of its descendants.</span>
+
+<span class="pl-c"># Base class</span>
+<span class="pl-k">class</span> <span class="pl-v">Human</span>
+  <span class="pl-c1">@@foo</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span>
+
+  <span class="pl-k">def</span> <span class="pl-smi">self</span><span class="pl-kos">.</span><span class="pl-en">foo</span>
+    <span class="pl-c1">@@foo</span>
+  <span class="pl-k">end</span>
+
+  <span class="pl-k">def</span> <span class="pl-smi">self</span><span class="pl-kos">.</span><span class="pl-en">foo</span><span class="pl-c1">=</span><span class="pl-kos">(</span><span class="pl-s1">value</span><span class="pl-kos">)</span>
+    <span class="pl-c1">@@foo</span> <span class="pl-c1">=</span> <span class="pl-s1">value</span>
+  <span class="pl-k">end</span>
+<span class="pl-k">end</span>
+
+<span class="pl-c"># Derived class</span>
+<span class="pl-k">class</span> <span class="pl-v">Worker</span> &lt; <span class="pl-v">Human</span>
+<span class="pl-k">end</span>
+
+<span class="pl-v">Human</span><span class="pl-kos">.</span><span class="pl-en">foo</span> <span class="pl-c">#=&gt; 0</span>
+<span class="pl-v">Worker</span><span class="pl-kos">.</span><span class="pl-en">foo</span> <span class="pl-c">#=&gt; 0</span>
+
+<span class="pl-v">Human</span><span class="pl-kos">.</span><span class="pl-en">foo</span> <span class="pl-c1">=</span> <span class="pl-c1">2</span>
+<span class="pl-v">Worker</span><span class="pl-kos">.</span><span class="pl-en">foo</span> <span class="pl-c">#=&gt; 2</span>
+
+<span class="pl-c"># A class instance variable is not shared by the class's descendants.</span>
+<span class="pl-k">class</span> <span class="pl-v">Human</span>
+  <span class="pl-c1">@bar</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span>
+
+  <span class="pl-k">def</span> <span class="pl-smi">self</span><span class="pl-kos">.</span><span class="pl-en">bar</span>
+    <span class="pl-c1">@bar</span>
+  <span class="pl-k">end</span>
+
+  <span class="pl-k">def</span> <span class="pl-smi">self</span><span class="pl-kos">.</span><span class="pl-en">bar</span><span class="pl-c1">=</span><span class="pl-kos">(</span><span class="pl-s1">value</span><span class="pl-kos">)</span>
+    <span class="pl-c1">@bar</span> <span class="pl-c1">=</span> <span class="pl-s1">value</span>
+  <span class="pl-k">end</span>
+<span class="pl-k">end</span>
+
+<span class="pl-k">class</span> <span class="pl-v">Doctor</span> &lt; <span class="pl-v">Human</span>
+<span class="pl-k">end</span>
+
+<span class="pl-v">Human</span><span class="pl-kos">.</span><span class="pl-en">bar</span> <span class="pl-c">#=&gt; 0</span>
+<span class="pl-v">Doctor</span><span class="pl-kos">.</span><span class="pl-en">bar</span> <span class="pl-c">#=&gt; nil</span>
+
+<span class="pl-k">module</span> <span class="pl-v">ModuleExample</span>
+  <span class="pl-k">def</span> <span class="pl-en">foo</span>
+    <span class="pl-s">'foo'</span>
+  <span class="pl-k">end</span>
+<span class="pl-k">end</span>
+
+<span class="pl-c"># Including modules binds their methods to the class instances.</span>
+<span class="pl-c"># Extending modules binds their methods to the class itself.</span>
+<span class="pl-k">class</span> <span class="pl-v">Person</span>
+  <span class="pl-en">include</span> <span class="pl-v">ModuleExample</span>
+<span class="pl-k">end</span>
+
+<span class="pl-k">class</span> <span class="pl-v">Book</span>
+  <span class="pl-en">extend</span> <span class="pl-v">ModuleExample</span>
+<span class="pl-k">end</span>
+
+<span class="pl-v">Person</span><span class="pl-kos">.</span><span class="pl-en">foo</span>     <span class="pl-c">#=&gt; NoMethodError: undefined method `foo' for Person:Class</span>
+<span class="pl-v">Person</span><span class="pl-kos">.</span><span class="pl-en">new</span><span class="pl-kos">.</span><span class="pl-en">foo</span> <span class="pl-c">#=&gt; "foo"</span>
+<span class="pl-v">Book</span><span class="pl-kos">.</span><span class="pl-en">foo</span>       <span class="pl-c">#=&gt; "foo"</span>
+<span class="pl-v">Book</span><span class="pl-kos">.</span><span class="pl-en">new</span><span class="pl-kos">.</span><span class="pl-en">foo</span>   <span class="pl-c">#=&gt; NoMethodError: undefined method `foo'</span>
+
+<span class="pl-c"># Callbacks are executed when including and extending a module</span>
+<span class="pl-k">module</span> <span class="pl-v">ConcernExample</span>
+  <span class="pl-k">def</span> <span class="pl-smi">self</span><span class="pl-kos">.</span><span class="pl-en">included</span><span class="pl-kos">(</span><span class="pl-s1">base</span><span class="pl-kos">)</span>
+    <span class="pl-s1">base</span><span class="pl-kos">.</span><span class="pl-en">extend</span><span class="pl-kos">(</span><span class="pl-v">ClassMethods</span><span class="pl-kos">)</span>
+    <span class="pl-s1">base</span><span class="pl-kos">.</span><span class="pl-en">send</span><span class="pl-kos">(</span><span class="pl-pds">:include</span><span class="pl-kos">,</span> <span class="pl-v">InstanceMethods</span><span class="pl-kos">)</span>
+  <span class="pl-k">end</span>
+
+  <span class="pl-k">module</span> <span class="pl-v">ClassMethods</span>
+    <span class="pl-k">def</span> <span class="pl-en">bar</span>
+      <span class="pl-s">'bar'</span>
+    <span class="pl-k">end</span>
+  <span class="pl-k">end</span>
+
+  <span class="pl-k">module</span> <span class="pl-v">InstanceMethods</span>
+    <span class="pl-k">def</span> <span class="pl-en">qux</span>
+      <span class="pl-s">'qux'</span>
+    <span class="pl-k">end</span>
+  <span class="pl-k">end</span>
+<span class="pl-k">end</span>
+
+<span class="pl-k">class</span> <span class="pl-v">Something</span>
+  <span class="pl-en">include</span> <span class="pl-v">ConcernExample</span>
+<span class="pl-k">end</span>
+
+<span class="pl-v">Something</span><span class="pl-kos">.</span><span class="pl-en">bar</span>     <span class="pl-c">#=&gt; "bar"</span>
+<span class="pl-v">Something</span><span class="pl-kos">.</span><span class="pl-en">qux</span>     <span class="pl-c">#=&gt; NoMethodError: undefined method `qux'</span>
+<span class="pl-v">Something</span><span class="pl-kos">.</span><span class="pl-en">new</span><span class="pl-kos">.</span><span class="pl-en">bar</span> <span class="pl-c">#=&gt; NoMethodError: undefined method `bar'</span>
+<span class="pl-v">Something</span><span class="pl-kos">.</span><span class="pl-en">new</span><span class="pl-kos">.</span><span class="pl-en">qux</span> <span class="pl-c">#=&gt; "qux"</span></pre></div>
+<h2>Additional resources</h2>
+<ul>
+<li><a href="http://www.learneroo.com/modules/61/nodes/338" rel="nofollow">Learn Ruby by Example with Challenges</a> - A variant of this reference with in-browser challenges.</li>
+<li><a href="https://rubymonk.com/" rel="nofollow">An Interactive Tutorial for Ruby</a> - Learn Ruby through a series of interactive tutorials.</li>
+<li><a href="http://ruby-doc.org/core" rel="nofollow">Official Documentation</a></li>
+<li><a href="https://www.ruby-lang.org/en/documentation/ruby-from-other-languages/" rel="nofollow">Ruby from other languages</a></li>
+<li><a href="http://www.amazon.com/Programming-Ruby-1-9-2-0-Programmers/dp/1937785491/" rel="nofollow">Programming Ruby</a> - An older <a href="http://ruby-doc.com/docs/ProgrammingRuby/" rel="nofollow">free edition</a> is available online.</li>
+<li><a href="https://github.com/bbatsov/ruby-style-guide">Ruby Style Guide</a> - A community-driven Ruby coding style guide.</li>
+<li><a href="https://try.ruby-lang.org/" rel="nofollow">Try Ruby</a> - Learn the basic of Ruby programming language, interactive in the browser.</li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<ul>
+<li>["David Underwood", "http://theflyingdeveloper.com"]</li>
+<li>["Joel Walden", "http://joelwalden.net"]</li>
+<li>["Luke Holder", "http://twitter.com/lukeholder"]</li>
+<li>["Tristan Hume", "http://thume.ca/"]</li>
+<li>["Nick LaMuro", "https://github.com/NickLaMuro"]</li>
+<li>["Marcos Brizeno", "http://www.about.me/marcosbrizeno"]</li>
+<li>["Ariel Krakowski", "http://www.learneroo.com"]</li>
+<li>["Dzianis Dashkevich", "https://github.com/dskecse"]</li>
+<li>["Levi Bostian", "https://github.com/levibostian"]</li>
+<li>["Rahil Momin", "https://github.com/iamrahil"]</li>
+<li>["Gabriel Halley", "https://github.com/ghalley"]</li>
+<li>["Persa Zula", "http://persazula.com"]</li>
+<li>["Jake Faris", "https://github.com/farisj"]</li>
+<li>["Corey Ward", "https://github.com/coreyward"]</li>
+<li>["Jannik Siebert", "https://github.com/janniks"]</li>
+<li>["Keith Miyake", "https://github.com/kaymmm"]</li>
+</ul>

@@ -1,0 +1,1174 @@
+<h1>Chapel</h1>
+<p>You can read all about Chapel at <a href="https://chapel-lang.org" rel="nofollow">Cray's official Chapel website</a>.<br>
+In short, Chapel is an open-source, high-productivity, parallel-programming<br>
+language in development at Cray Inc., and is designed to run on multi-core PCs<br>
+as well as multi-kilocore supercomputers.</p>
+<p>More information and support can be found at the bottom of this document.</p>
+<div class="highlight highlight-source-chapel"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> Comments are C-family style</span>
+
+<span class="pl-c"><span class="pl-c">//</span> one line comment</span>
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c"> multi-line comment</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span> Basic printing</span>
+
+<span class="pl-c1">write</span>(<span class="pl-s"><span class="pl-pds">"</span>Hello, <span class="pl-pds">"</span></span>);
+<span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>World!<span class="pl-pds">"</span></span>);
+
+<span class="pl-c"><span class="pl-c">//</span> write and writeln can take a list of things to print.</span>
+<span class="pl-c"><span class="pl-c">//</span> Each thing is printed right next to the others, so include your spacing!</span>
+<span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>There are <span class="pl-pds">"</span></span>, <span class="pl-c1">3</span>, <span class="pl-s"><span class="pl-pds">"</span> commas (<span class="pl-cce">\"</span>,<span class="pl-cce">\"</span>) in this line of code<span class="pl-pds">"</span></span>);
+
+<span class="pl-c"><span class="pl-c">//</span> Different output channels:</span>
+stdout.<span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>This goes to standard output, just like plain writeln() does<span class="pl-pds">"</span></span>);
+stderr.<span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>This goes to standard error<span class="pl-pds">"</span></span>);
+
+
+<span class="pl-c"><span class="pl-c">//</span> Variables don't have to be explicitly typed as long as</span>
+<span class="pl-c"><span class="pl-c">//</span> the compiler can figure out the type that it will hold.</span>
+<span class="pl-c"><span class="pl-c">//</span> 10 is an int, so myVar is implicitly an int</span>
+<span class="pl-k">var</span> myVar <span class="pl-k">=</span> <span class="pl-c1">10</span>;
+myVar <span class="pl-k">=</span> <span class="pl-k">-</span><span class="pl-c1">10</span>;
+<span class="pl-k">var</span> mySecondVar <span class="pl-k">=</span> myVar;
+<span class="pl-c"><span class="pl-c">//</span> var anError; would be a compile-time error.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> We can (and should) explicitly type things.</span>
+<span class="pl-k">var</span> myThirdVar<span class="pl-k">:</span> <span class="pl-k">real</span>;
+<span class="pl-k">var</span> myFourthVar<span class="pl-k">:</span> <span class="pl-k">real</span> <span class="pl-k">=</span> <span class="pl-k">-</span><span class="pl-c1">1.234</span>;
+myThirdVar <span class="pl-k">=</span> myFourthVar;
+
+<span class="pl-c"><span class="pl-c">//</span> Types</span>
+
+<span class="pl-c"><span class="pl-c">//</span> There are a number of basic types.</span>
+<span class="pl-k">var</span> myInt<span class="pl-k">:</span> <span class="pl-k">int</span> <span class="pl-k">=</span> <span class="pl-k">-</span><span class="pl-c1">1000</span>; <span class="pl-c"><span class="pl-c">//</span> Signed ints</span>
+<span class="pl-k">var</span> myUint<span class="pl-k">:</span> <span class="pl-k">uint</span> <span class="pl-k">=</span> <span class="pl-c1">1234</span>; <span class="pl-c"><span class="pl-c">//</span> Unsigned ints</span>
+<span class="pl-k">var</span> myReal<span class="pl-k">:</span> <span class="pl-k">real</span> <span class="pl-k">=</span> <span class="pl-c1">9.876</span>; <span class="pl-c"><span class="pl-c">//</span> Floating point numbers</span>
+<span class="pl-k">var</span> myImag<span class="pl-k">:</span> <span class="pl-k">imag</span> <span class="pl-k">=</span> <span class="pl-c1">5.</span>0i; <span class="pl-c"><span class="pl-c">//</span> Imaginary numbers</span>
+<span class="pl-k">var</span> myCplx<span class="pl-k">:</span> <span class="pl-k">complex</span> <span class="pl-k">=</span> <span class="pl-c1">10</span> <span class="pl-k">+</span> 9i; <span class="pl-c"><span class="pl-c">//</span> Complex numbers</span>
+myCplx <span class="pl-k">=</span> myInt <span class="pl-k">+</span> myImag; <span class="pl-c"><span class="pl-c">//</span> Another way to form complex numbers</span>
+<span class="pl-k">var</span> myBool<span class="pl-k">:</span> <span class="pl-k">bool</span> <span class="pl-k">=</span> <span class="pl-c1">false</span>; <span class="pl-c"><span class="pl-c">//</span> Booleans</span>
+<span class="pl-k">var</span> myStr<span class="pl-k">:</span> <span class="pl-k">string</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Some string...<span class="pl-pds">"</span></span>; <span class="pl-c"><span class="pl-c">//</span> Strings</span>
+<span class="pl-k">var</span> singleQuoteStr <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>Another string...<span class="pl-pds">'</span></span>; <span class="pl-c"><span class="pl-c">//</span> String literal with single quotes</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Some types can have sizes.</span>
+<span class="pl-k">var</span> my8Int<span class="pl-k">:</span> <span class="pl-k">int</span>(<span class="pl-c1">8</span>) <span class="pl-k">=</span> <span class="pl-c1">10</span>; <span class="pl-c"><span class="pl-c">//</span> 8 bit (one byte) sized int;</span>
+<span class="pl-k">var</span> my64Real<span class="pl-k">:</span> <span class="pl-k">real</span>(<span class="pl-c1">64</span>) <span class="pl-k">=</span> <span class="pl-c1">1.516</span>; <span class="pl-c"><span class="pl-c">//</span> 64 bit (8 bytes) sized real</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Typecasting.</span>
+<span class="pl-k">var</span> intFromReal <span class="pl-k">=</span> myReal <span class="pl-k">:</span> <span class="pl-k">int</span>;
+<span class="pl-k">var</span> intFromReal2<span class="pl-k">:</span> <span class="pl-k">int</span> <span class="pl-k">=</span> myReal <span class="pl-k">:</span> <span class="pl-k">int</span>;
+
+<span class="pl-c"><span class="pl-c">//</span> Type aliasing.</span>
+<span class="pl-k">type</span> chroma <span class="pl-k">=</span> <span class="pl-k">int</span>;        <span class="pl-c"><span class="pl-c">//</span> Type of a single hue</span>
+<span class="pl-k">type</span> RGBColor <span class="pl-k">=</span> <span class="pl-c1">3</span><span class="pl-k">*</span>chroma; <span class="pl-c"><span class="pl-c">//</span> Type representing a full color</span>
+<span class="pl-k">var</span> black<span class="pl-k">:</span> RGBColor <span class="pl-k">=</span> (<span class="pl-c1">0</span>,<span class="pl-c1">0</span>,<span class="pl-c1">0</span>);
+<span class="pl-k">var</span> white<span class="pl-k">:</span> RGBColor <span class="pl-k">=</span> (<span class="pl-c1">255</span>, <span class="pl-c1">255</span>, <span class="pl-c1">255</span>);
+
+<span class="pl-c"><span class="pl-c">//</span> Constants and Parameters</span>
+
+<span class="pl-c"><span class="pl-c">//</span> A const is a constant, and cannot be changed after set in runtime.</span>
+<span class="pl-k">const</span> almostPi<span class="pl-k">:</span> <span class="pl-k">real</span> <span class="pl-k">=</span> <span class="pl-c1">22.0</span><span class="pl-k">/</span><span class="pl-c1">7.0</span>;
+
+<span class="pl-c"><span class="pl-c">//</span> A param is a constant whose value must be known statically at</span>
+<span class="pl-c"><span class="pl-c">//</span> compile-time.</span>
+<span class="pl-k">param</span> compileTimeConst<span class="pl-k">:</span> <span class="pl-k">int</span> <span class="pl-k">=</span> <span class="pl-c1">16</span>;
+
+<span class="pl-c"><span class="pl-c">//</span> The config modifier allows values to be set at the command line.</span>
+<span class="pl-c"><span class="pl-c">//</span> Set with --varCmdLineArg=Value or --varCmdLineArg Value at runtime.</span>
+<span class="pl-k">config</span> <span class="pl-k">var</span> varCmdLineArg<span class="pl-k">:</span> <span class="pl-k">int</span> <span class="pl-k">=</span> <span class="pl-k">-</span><span class="pl-c1">123</span>;
+<span class="pl-k">config</span> <span class="pl-k">const</span> constCmdLineArg<span class="pl-k">:</span> <span class="pl-k">int</span> <span class="pl-k">=</span> <span class="pl-c1">777</span>;
+
+<span class="pl-c"><span class="pl-c">//</span> config param can be set at compile-time.</span>
+<span class="pl-c"><span class="pl-c">//</span> Set with --set paramCmdLineArg=value at compile-time.</span>
+<span class="pl-k">config</span> <span class="pl-k">param</span> paramCmdLineArg<span class="pl-k">:</span> <span class="pl-k">bool</span> <span class="pl-k">=</span> <span class="pl-c1">false</span>;
+<span class="pl-c1">writeln</span>(varCmdLineArg, <span class="pl-s"><span class="pl-pds">"</span>, <span class="pl-pds">"</span></span>, constCmdLineArg, <span class="pl-s"><span class="pl-pds">"</span>, <span class="pl-pds">"</span></span>, paramCmdLineArg);
+
+<span class="pl-c"><span class="pl-c">//</span> References</span>
+
+<span class="pl-c"><span class="pl-c">//</span> ref operates much like a reference in C++. In Chapel, a ref cannot</span>
+<span class="pl-c"><span class="pl-c">//</span> be made to alias a variable other than the variable it is initialized with.</span>
+<span class="pl-c"><span class="pl-c">//</span> Here, refToActual refers to actual.</span>
+<span class="pl-k">var</span> actual <span class="pl-k">=</span> <span class="pl-c1">10</span>;
+<span class="pl-k">ref</span> refToActual <span class="pl-k">=</span> actual;
+<span class="pl-c1">writeln</span>(actual, <span class="pl-s"><span class="pl-pds">"</span> == <span class="pl-pds">"</span></span>, refToActual); <span class="pl-c"><span class="pl-c">//</span> prints the same value</span>
+actual <span class="pl-k">=</span> <span class="pl-k">-</span><span class="pl-c1">123</span>; <span class="pl-c"><span class="pl-c">//</span> modify actual (which refToActual refers to)</span>
+<span class="pl-c1">writeln</span>(actual, <span class="pl-s"><span class="pl-pds">"</span> == <span class="pl-pds">"</span></span>, refToActual); <span class="pl-c"><span class="pl-c">//</span> prints the same value</span>
+refToActual <span class="pl-k">=</span> <span class="pl-c1">99999999</span>; <span class="pl-c"><span class="pl-c">//</span> modify what refToActual refers to (which is actual)</span>
+<span class="pl-c1">writeln</span>(actual, <span class="pl-s"><span class="pl-pds">"</span> == <span class="pl-pds">"</span></span>, refToActual); <span class="pl-c"><span class="pl-c">//</span> prints the same value</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Operators</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Math operators:</span>
+<span class="pl-k">var</span> a<span class="pl-k">:</span> <span class="pl-k">int</span>, thisInt <span class="pl-k">=</span> <span class="pl-c1">1234</span>, thatInt <span class="pl-k">=</span> <span class="pl-c1">5678</span>;
+a <span class="pl-k">=</span> thisInt <span class="pl-k">+</span> thatInt;  <span class="pl-c"><span class="pl-c">//</span> Addition</span>
+a <span class="pl-k">=</span> thisInt <span class="pl-k">*</span> thatInt;  <span class="pl-c"><span class="pl-c">//</span> Multiplication</span>
+a <span class="pl-k">=</span> thisInt <span class="pl-k">-</span> thatInt;  <span class="pl-c"><span class="pl-c">//</span> Subtraction</span>
+a <span class="pl-k">=</span> thisInt <span class="pl-k">/</span> thatInt;  <span class="pl-c"><span class="pl-c">//</span> Division</span>
+a <span class="pl-k">=</span> thisInt <span class="pl-k">**</span> thatInt; <span class="pl-c"><span class="pl-c">//</span> Exponentiation</span>
+a <span class="pl-k">=</span> thisInt <span class="pl-k">%</span> thatInt;  <span class="pl-c"><span class="pl-c">//</span> Remainder (modulo)</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Logical operators:</span>
+<span class="pl-k">var</span> b<span class="pl-k">:</span> <span class="pl-k">bool</span>, thisBool <span class="pl-k">=</span> <span class="pl-c1">false</span>, thatBool <span class="pl-k">=</span> <span class="pl-c1">true</span>;
+b <span class="pl-k">=</span> thisBool <span class="pl-k">&amp;&amp;</span> thatBool; <span class="pl-c"><span class="pl-c">//</span> Logical and</span>
+b <span class="pl-k">=</span> thisBool <span class="pl-k">||</span> thatBool; <span class="pl-c"><span class="pl-c">//</span> Logical or</span>
+b <span class="pl-k">=</span> !thisBool;            <span class="pl-c"><span class="pl-c">//</span> Logical negation</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Relational operators:</span>
+b <span class="pl-k">=</span> thisInt <span class="pl-k">&gt;</span> thatInt;           <span class="pl-c"><span class="pl-c">//</span> Greater-than</span>
+b <span class="pl-k">=</span> thisInt <span class="pl-k">&gt;=</span> thatInt;          <span class="pl-c"><span class="pl-c">//</span> Greater-than-or-equal-to</span>
+b <span class="pl-k">=</span> thisInt <span class="pl-k">&lt;</span> a <span class="pl-k">&amp;&amp;</span> a <span class="pl-k">&lt;=</span> thatInt; <span class="pl-c"><span class="pl-c">//</span> Less-than, and, less-than-or-equal-to</span>
+b <span class="pl-k">=</span> thisInt <span class="pl-k">!=</span> thatInt;          <span class="pl-c"><span class="pl-c">//</span> Not-equal-to</span>
+b <span class="pl-k">=</span> thisInt <span class="pl-k">==</span> thatInt;          <span class="pl-c"><span class="pl-c">//</span> Equal-to</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Bitwise operators:</span>
+a <span class="pl-k">=</span> thisInt <span class="pl-k">&lt;&lt;</span> <span class="pl-c1">10</span>;     <span class="pl-c"><span class="pl-c">//</span> Left-bit-shift by 10 bits;</span>
+a <span class="pl-k">=</span> thatInt <span class="pl-k">&gt;&gt;</span> <span class="pl-c1">5</span>;      <span class="pl-c"><span class="pl-c">//</span> Right-bit-shift by 5 bits;</span>
+a <span class="pl-k">=</span> <span class="pl-k">~</span>thisInt;          <span class="pl-c"><span class="pl-c">//</span> Bitwise-negation</span>
+a <span class="pl-k">=</span> thisInt <span class="pl-k">^</span> thatInt; <span class="pl-c"><span class="pl-c">//</span> Bitwise exclusive-or</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Compound assignment operators:</span>
+a <span class="pl-k">+=</span> thisInt;          <span class="pl-c"><span class="pl-c">//</span> Addition-equals (a = a + thisInt;)</span>
+a <span class="pl-k">*=</span> thatInt;          <span class="pl-c"><span class="pl-c">//</span> Times-equals (a = a * thatInt;)</span>
+b <span class="pl-k">&amp;</span><span class="pl-k">&amp;=</span> thatBool;        <span class="pl-c"><span class="pl-c">//</span> Logical-and-equals (b = b &amp;&amp; thatBool;)</span>
+a <span class="pl-k">&lt;&lt;=</span> <span class="pl-c1">3</span>;               <span class="pl-c"><span class="pl-c">//</span> Left-bit-shift-equals (a = a &lt;&lt; 10;)</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Unlike other C family languages, there are no</span>
+<span class="pl-c"><span class="pl-c">//</span> pre/post-increment/decrement operators, such as:</span>
+<span class="pl-c"><span class="pl-c">//</span></span>
+<span class="pl-c"><span class="pl-c">//</span> ++j, --j, j++, j--</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Swap operator:</span>
+<span class="pl-k">var</span> old_this <span class="pl-k">=</span> thisInt;
+<span class="pl-k">var</span> old_that <span class="pl-k">=</span> thatInt;
+thisInt <span class="pl-k">&lt;=&gt;</span> thatInt; <span class="pl-c"><span class="pl-c">//</span> Swap the values of thisInt and thatInt</span>
+<span class="pl-c1">writeln</span>((old_this <span class="pl-k">==</span> thatInt) <span class="pl-k">&amp;&amp;</span> (old_that <span class="pl-k">==</span> thisInt));
+
+<span class="pl-c"><span class="pl-c">//</span> Operator overloads can also be defined, as we'll see with procedures.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Tuples</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Tuples can be of the same type or different types.</span>
+<span class="pl-k">var</span> sameTup<span class="pl-k">:</span> <span class="pl-c1">2</span><span class="pl-k">*</span><span class="pl-k">int</span> <span class="pl-k">=</span> (<span class="pl-c1">10</span>, <span class="pl-k">-</span><span class="pl-c1">1</span>);
+<span class="pl-k">var</span> sameTup2 <span class="pl-k">=</span> (<span class="pl-c1">11</span>, <span class="pl-k">-</span><span class="pl-c1">6</span>);
+<span class="pl-k">var</span> diffTup<span class="pl-k">:</span> (<span class="pl-k">int</span>,<span class="pl-k">real</span>,<span class="pl-k">complex</span>) <span class="pl-k">=</span> (<span class="pl-c1">5</span>, <span class="pl-c1">1.928</span>, myCplx);
+<span class="pl-k">var</span> diffTupe2 <span class="pl-k">=</span> (<span class="pl-c1">7</span>, <span class="pl-c1">5.64</span>, <span class="pl-c1">6.0</span><span class="pl-k">+</span><span class="pl-c1">1.</span>5i);
+
+<span class="pl-c"><span class="pl-c">//</span> Tuples can be accessed using square brackets or parentheses, and are</span>
+<span class="pl-c"><span class="pl-c">//</span> 1-indexed.</span>
+<span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>(<span class="pl-pds">"</span></span>, sameTup<span class="pl-k">[</span><span class="pl-c1">1</span><span class="pl-k">]</span>, <span class="pl-s"><span class="pl-pds">"</span>,<span class="pl-pds">"</span></span>, sameTup(<span class="pl-c1">2</span>), <span class="pl-s"><span class="pl-pds">"</span>)<span class="pl-pds">"</span></span>);
+<span class="pl-c1">writeln</span>(diffTup);
+
+<span class="pl-c"><span class="pl-c">//</span> Tuples can also be written into.</span>
+diffTup(<span class="pl-c1">1</span>) <span class="pl-k">=</span> <span class="pl-k">-</span><span class="pl-c1">1</span>;
+
+<span class="pl-c"><span class="pl-c">//</span> Tuple values can be expanded into their own variables.</span>
+<span class="pl-k">var</span> (tupInt, tupReal, tupCplx) <span class="pl-k">=</span> diffTup;
+<span class="pl-c1">writeln</span>(diffTup <span class="pl-k">==</span> (tupInt, tupReal, tupCplx));
+
+<span class="pl-c"><span class="pl-c">//</span> They are also useful for writing a list of variables, as is common in debugging.</span>
+<span class="pl-c1">writeln</span>((a,b,thisInt,thatInt,thisBool,thatBool));
+
+<span class="pl-c"><span class="pl-c">//</span> Control Flow</span>
+
+<span class="pl-c"><span class="pl-c">//</span> if - then - else works just like any other C-family language.</span>
+<span class="pl-k">if</span> <span class="pl-c1">10</span> <span class="pl-k">&lt;</span> <span class="pl-c1">100</span> <span class="pl-k">then</span>
+  <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>All is well<span class="pl-pds">"</span></span>);
+
+<span class="pl-k">if</span> <span class="pl-k">-</span><span class="pl-c1">1</span> <span class="pl-k">&lt;</span> <span class="pl-c1">1</span> <span class="pl-k">then</span>
+  <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>Continuing to believe reality<span class="pl-pds">"</span></span>);
+<span class="pl-k">else</span>
+  <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>Send mathematician, something is wrong<span class="pl-pds">"</span></span>);
+
+<span class="pl-c"><span class="pl-c">//</span> You can use parentheses if you prefer.</span>
+<span class="pl-k">if</span> (<span class="pl-c1">10</span> <span class="pl-k">&gt;</span> <span class="pl-c1">100</span>) {
+  <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>Universe broken. Please reboot universe.<span class="pl-pds">"</span></span>);
+}
+
+<span class="pl-k">if</span> a <span class="pl-k">%</span> <span class="pl-c1">2</span> <span class="pl-k">==</span> <span class="pl-c1">0</span> {
+  <span class="pl-c1">writeln</span>(a, <span class="pl-s"><span class="pl-pds">"</span> is even.<span class="pl-pds">"</span></span>);
+} <span class="pl-k">else</span> {
+  <span class="pl-c1">writeln</span>(a, <span class="pl-s"><span class="pl-pds">"</span> is odd.<span class="pl-pds">"</span></span>);
+}
+
+<span class="pl-k">if</span> a <span class="pl-k">%</span> <span class="pl-c1">3</span> <span class="pl-k">==</span> <span class="pl-c1">0</span> {
+  <span class="pl-c1">writeln</span>(a, <span class="pl-s"><span class="pl-pds">"</span> is even divisible by 3.<span class="pl-pds">"</span></span>);
+} <span class="pl-k">else</span> <span class="pl-k">if</span> a <span class="pl-k">%</span> <span class="pl-c1">3</span> <span class="pl-k">==</span> <span class="pl-c1">1</span> {
+  <span class="pl-c1">writeln</span>(a, <span class="pl-s"><span class="pl-pds">"</span> is divided by 3 with a remainder of 1.<span class="pl-pds">"</span></span>);
+} <span class="pl-k">else</span> {
+  <span class="pl-c1">writeln</span>(b, <span class="pl-s"><span class="pl-pds">"</span> is divided by 3 with a remainder of 2.<span class="pl-pds">"</span></span>);
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Ternary: if - then - else in a statement.</span>
+<span class="pl-k">var</span> maximum <span class="pl-k">=</span> <span class="pl-k">if</span> thisInt <span class="pl-k">&lt;</span> thatInt <span class="pl-k">then</span> thatInt <span class="pl-k">else</span> thisInt;
+
+<span class="pl-c"><span class="pl-c">//</span> select statements are much like switch statements in other languages.</span>
+<span class="pl-c"><span class="pl-c">//</span> However, select statements do not cascade like in C or Java.</span>
+<span class="pl-k">var</span> inputOption <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>anOption<span class="pl-pds">"</span></span>;
+<span class="pl-k">select</span> inputOption {
+  <span class="pl-k">when</span> <span class="pl-s"><span class="pl-pds">"</span>anOption<span class="pl-pds">"</span></span> <span class="pl-k">do</span> <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>Chose 'anOption'<span class="pl-pds">"</span></span>);
+  <span class="pl-k">when</span> <span class="pl-s"><span class="pl-pds">"</span>otherOption<span class="pl-pds">"</span></span> {
+    <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>Chose 'otherOption'<span class="pl-pds">"</span></span>);
+    <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>Which has a body<span class="pl-pds">"</span></span>);
+  }
+  <span class="pl-k">otherwise</span> {
+    <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>Any other Input<span class="pl-pds">"</span></span>);
+    <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>the otherwise case does not need a do if the body is one line<span class="pl-pds">"</span></span>);
+  }
+}
+
+<span class="pl-c"><span class="pl-c">//</span> while and do-while loops also behave like their C counterparts.</span>
+<span class="pl-k">var</span> j<span class="pl-k">:</span> <span class="pl-k">int</span> <span class="pl-k">=</span> <span class="pl-c1">1</span>;
+<span class="pl-k">var</span> jSum<span class="pl-k">:</span> <span class="pl-k">int</span> <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+<span class="pl-k">while</span> (j <span class="pl-k">&lt;=</span> <span class="pl-c1">1000</span>) {
+  jSum <span class="pl-k">+=</span> j;
+  j <span class="pl-k">+=</span> <span class="pl-c1">1</span>;
+}
+<span class="pl-c1">writeln</span>(jSum);
+
+<span class="pl-k">do</span> {
+  jSum <span class="pl-k">+=</span> j;
+  j <span class="pl-k">+=</span> <span class="pl-c1">1</span>;
+} <span class="pl-k">while</span> (j <span class="pl-k">&lt;=</span> <span class="pl-c1">10000</span>);
+<span class="pl-c1">writeln</span>(jSum);
+
+<span class="pl-c"><span class="pl-c">//</span> for loops are much like those in Python in that they iterate over a</span>
+<span class="pl-c"><span class="pl-c">//</span> range. Ranges (like the 1..10 expression below) are a first-class object</span>
+<span class="pl-c"><span class="pl-c">//</span> in Chapel, and as such can be stored in variables.</span>
+<span class="pl-k">for</span> i <span class="pl-k">in</span> <span class="pl-c1">1</span>..<span class="pl-c1">10</span> <span class="pl-k">do</span> <span class="pl-c1">write</span>(i, <span class="pl-s"><span class="pl-pds">"</span>, <span class="pl-pds">"</span></span>);
+<span class="pl-c1">writeln</span>();
+
+<span class="pl-k">var</span> iSum<span class="pl-k">:</span> <span class="pl-k">int</span> <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+<span class="pl-k">for</span> i <span class="pl-k">in</span> <span class="pl-c1">1</span>..<span class="pl-c1">1000</span> {
+  iSum <span class="pl-k">+=</span> i;
+}
+<span class="pl-c1">writeln</span>(iSum);
+
+<span class="pl-k">for</span> x <span class="pl-k">in</span> <span class="pl-c1">1</span>..<span class="pl-c1">10</span> {
+  <span class="pl-k">for</span> y <span class="pl-k">in</span> <span class="pl-c1">1</span>..<span class="pl-c1">10</span> {
+    <span class="pl-c1">write</span>((x,y), <span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">\t</span><span class="pl-pds">"</span></span>);
+  }
+  <span class="pl-c1">writeln</span>();
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Ranges and Domains</span>
+
+<span class="pl-c"><span class="pl-c">//</span> For-loops and arrays both use ranges and domains to define an index set that</span>
+<span class="pl-c"><span class="pl-c">//</span> can be iterated over. Ranges are single dimensional integer indices, while</span>
+<span class="pl-c"><span class="pl-c">//</span> domains can be multi-dimensional and represent indices of different types.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> They are first-class citizen types, and can be assigned into variables.</span>
+<span class="pl-k">var</span> range1to10<span class="pl-k">:</span> <span class="pl-k">range</span> <span class="pl-k">=</span> <span class="pl-c1">1</span>..<span class="pl-c1">10</span>;  <span class="pl-c"><span class="pl-c">//</span> 1, 2, 3, ..., 10</span>
+<span class="pl-k">var</span> range2to11 <span class="pl-k">=</span> <span class="pl-c1">2</span>..<span class="pl-c1">11</span>; <span class="pl-c"><span class="pl-c">//</span> 2, 3, 4, ..., 11</span>
+<span class="pl-k">var</span> rangeThisToThat<span class="pl-k">:</span> <span class="pl-k">range</span> <span class="pl-k">=</span> thisInt..thatInt; <span class="pl-c"><span class="pl-c">//</span> using variables</span>
+<span class="pl-k">var</span> rangeEmpty<span class="pl-k">:</span> <span class="pl-k">range</span> <span class="pl-k">=</span> <span class="pl-c1">100</span>..<span class="pl-k">-</span><span class="pl-c1">100</span>; <span class="pl-c"><span class="pl-c">//</span> this is valid but contains no indices</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Ranges can be unbounded.</span>
+<span class="pl-k">var</span> range1toInf<span class="pl-k">:</span> <span class="pl-k">range</span>(boundedType<span class="pl-k">=</span>BoundedRangeType.boundedLow) <span class="pl-k">=</span> <span class="pl-c1">1</span>.. ; <span class="pl-c"><span class="pl-c">//</span> 1, 2, 3, 4, 5, ...</span>
+<span class="pl-k">var</span> rangeNegInfTo1 <span class="pl-k">=</span> ..<span class="pl-c1">1</span>; <span class="pl-c"><span class="pl-c">//</span> ..., -4, -3, -2, -1, 0, 1</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Ranges can be strided (and reversed) using the by operator.</span>
+<span class="pl-k">var</span> range2to10by2<span class="pl-k">:</span> <span class="pl-k">range</span>(stridable<span class="pl-k">=</span><span class="pl-c1">true</span>) <span class="pl-k">=</span> <span class="pl-c1">2</span>..<span class="pl-c1">10</span> <span class="pl-k">by</span> <span class="pl-c1">2</span>; <span class="pl-c"><span class="pl-c">//</span> 2, 4, 6, 8, 10</span>
+<span class="pl-k">var</span> reverse2to10by2 <span class="pl-k">=</span> <span class="pl-c1">2</span>..<span class="pl-c1">10</span> <span class="pl-k">by</span> <span class="pl-k">-</span><span class="pl-c1">2</span>; <span class="pl-c"><span class="pl-c">//</span> 10, 8, 6, 4, 2</span>
+
+<span class="pl-k">var</span> trapRange <span class="pl-k">=</span> <span class="pl-c1">10</span>..<span class="pl-c1">1</span> <span class="pl-k">by</span> <span class="pl-k">-</span><span class="pl-c1">1</span>; <span class="pl-c"><span class="pl-c">//</span> Do not be fooled, this is still an empty range</span>
+<span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>Size of range <span class="pl-pds">"</span></span>, trapRange, <span class="pl-s"><span class="pl-pds">"</span> = <span class="pl-pds">"</span></span>, trapRange.length);
+
+<span class="pl-c"><span class="pl-c">//</span> Note: range(boundedType= ...) and range(stridable= ...) are only</span>
+<span class="pl-c"><span class="pl-c">//</span> necessary if we explicitly type the variable.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> The end point of a range can be determined using the count (#) operator.</span>
+<span class="pl-k">var</span> rangeCount<span class="pl-k">:</span> <span class="pl-k">range</span> <span class="pl-k">=</span> <span class="pl-k">-</span><span class="pl-c1">5</span>..#<span class="pl-c1">12</span>; <span class="pl-c"><span class="pl-c">//</span> range from -5 to 6</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Operators can be mixed.</span>
+<span class="pl-k">var</span> rangeCountBy<span class="pl-k">:</span> <span class="pl-k">range</span>(stridable<span class="pl-k">=</span><span class="pl-c1">true</span>) <span class="pl-k">=</span> <span class="pl-k">-</span><span class="pl-c1">5</span>..#<span class="pl-c1">12</span> <span class="pl-k">by</span> <span class="pl-c1">2</span>; <span class="pl-c"><span class="pl-c">//</span> -5, -3, -1, 1, 3, 5</span>
+<span class="pl-c1">writeln</span>(rangeCountBy);
+
+<span class="pl-c"><span class="pl-c">//</span> Properties of the range can be queried.</span>
+<span class="pl-c"><span class="pl-c">//</span> In this example, printing the first index, last index, number of indices,</span>
+<span class="pl-c"><span class="pl-c">//</span> stride, and if 2 is include in the range.</span>
+<span class="pl-c1">writeln</span>((rangeCountBy.first, rangeCountBy.last, rangeCountBy.length,
+           rangeCountBy.stride, rangeCountBy.member(<span class="pl-c1">2</span>)));
+
+<span class="pl-k">for</span> i <span class="pl-k">in</span> rangeCountBy {
+  <span class="pl-c1">write</span>(i, <span class="pl-k">if</span> i <span class="pl-k">==</span> rangeCountBy.last <span class="pl-k">then</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span> <span class="pl-k">else</span> <span class="pl-s"><span class="pl-pds">"</span>, <span class="pl-pds">"</span></span>);
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Rectangular domains are defined using the same range syntax,</span>
+<span class="pl-c"><span class="pl-c">//</span> but they are required to be bounded (unlike ranges).</span>
+<span class="pl-k">var</span> domain1to10<span class="pl-k">:</span> <span class="pl-k">domain</span>(<span class="pl-c1">1</span>) <span class="pl-k">=</span> {<span class="pl-c1">1</span>..<span class="pl-c1">10</span>};        <span class="pl-c"><span class="pl-c">//</span> 1D domain from 1..10;</span>
+<span class="pl-k">var</span> twoDimensions<span class="pl-k">:</span> <span class="pl-k">domain</span>(<span class="pl-c1">2</span>) <span class="pl-k">=</span> {<span class="pl-k">-</span><span class="pl-c1">2</span>..<span class="pl-c1">2</span>,<span class="pl-c1">0</span>..<span class="pl-c1">2</span>}; <span class="pl-c"><span class="pl-c">//</span> 2D domain over product of ranges</span>
+<span class="pl-k">var</span> thirdDim<span class="pl-k">:</span> <span class="pl-k">range</span> <span class="pl-k">=</span> <span class="pl-c1">1</span>..<span class="pl-c1">16</span>;
+<span class="pl-k">var</span> threeDims<span class="pl-k">:</span> <span class="pl-k">domain</span>(<span class="pl-c1">3</span>) <span class="pl-k">=</span> {thirdDim, <span class="pl-c1">1</span>..<span class="pl-c1">10</span>, <span class="pl-c1">5</span>..<span class="pl-c1">10</span>}; <span class="pl-c"><span class="pl-c">//</span> using a range variable</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Domains can also be resized</span>
+<span class="pl-k">var</span> resizedDom <span class="pl-k">=</span> {<span class="pl-c1">1</span>..<span class="pl-c1">10</span>};
+<span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>before, resizedDom = <span class="pl-pds">"</span></span>, resizedDom);
+resizedDom <span class="pl-k">=</span> {<span class="pl-k">-</span><span class="pl-c1">10</span>..#<span class="pl-c1">10</span>};
+<span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>after, resizedDom = <span class="pl-pds">"</span></span>, resizedDom);
+
+<span class="pl-c"><span class="pl-c">//</span> Indices can be iterated over as tuples.</span>
+<span class="pl-k">for</span> idx <span class="pl-k">in</span> twoDimensions <span class="pl-k">do</span>
+  <span class="pl-c1">write</span>(idx, <span class="pl-s"><span class="pl-pds">"</span>, <span class="pl-pds">"</span></span>);
+<span class="pl-c1">writeln</span>();
+
+<span class="pl-c"><span class="pl-c">//</span> These tuples can also be deconstructed.</span>
+<span class="pl-k">for</span> (x,y) <span class="pl-k">in</span> twoDimensions {
+  <span class="pl-c1">write</span>(<span class="pl-s"><span class="pl-pds">"</span>(<span class="pl-pds">"</span></span>, x, <span class="pl-s"><span class="pl-pds">"</span>, <span class="pl-pds">"</span></span>, y, <span class="pl-s"><span class="pl-pds">"</span>)<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>, <span class="pl-pds">"</span></span>);
+}
+<span class="pl-c1">writeln</span>();
+
+<span class="pl-c"><span class="pl-c">//</span> Associative domains act like sets.</span>
+<span class="pl-k">var</span> stringSet<span class="pl-k">:</span> <span class="pl-k">domain</span>(<span class="pl-k">string</span>); <span class="pl-c"><span class="pl-c">//</span> empty set of strings</span>
+stringSet <span class="pl-k">+=</span> <span class="pl-s"><span class="pl-pds">"</span>a<span class="pl-pds">"</span></span>;
+stringSet <span class="pl-k">+=</span> <span class="pl-s"><span class="pl-pds">"</span>b<span class="pl-pds">"</span></span>;
+stringSet <span class="pl-k">+=</span> <span class="pl-s"><span class="pl-pds">"</span>c<span class="pl-pds">"</span></span>;
+stringSet <span class="pl-k">+=</span> <span class="pl-s"><span class="pl-pds">"</span>a<span class="pl-pds">"</span></span>; <span class="pl-c"><span class="pl-c">//</span> Redundant add "a"</span>
+stringSet <span class="pl-k">-=</span> <span class="pl-s"><span class="pl-pds">"</span>c<span class="pl-pds">"</span></span>; <span class="pl-c"><span class="pl-c">//</span> Remove "c"</span>
+<span class="pl-c1">writeln</span>(stringSet.sorted());
+
+<span class="pl-c"><span class="pl-c">//</span> Associative domains can also have a literal syntax</span>
+<span class="pl-k">var</span> intSet <span class="pl-k">=</span> {<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">4</span>, <span class="pl-c1">5</span>, <span class="pl-c1">100</span>};
+
+<span class="pl-c"><span class="pl-c">//</span> Both ranges and domains can be sliced to produce a range or domain with the</span>
+<span class="pl-c"><span class="pl-c">//</span> intersection of indices.</span>
+<span class="pl-k">var</span> rangeA <span class="pl-k">=</span> <span class="pl-c1">1</span>.. ; <span class="pl-c"><span class="pl-c">//</span> range from 1 to infinity</span>
+<span class="pl-k">var</span> rangeB <span class="pl-k">=</span>  ..<span class="pl-c1">5</span>; <span class="pl-c"><span class="pl-c">//</span> range from negative infinity to 5</span>
+<span class="pl-k">var</span> rangeC <span class="pl-k">=</span> rangeA<span class="pl-k">[</span>rangeB<span class="pl-k">]</span>; <span class="pl-c"><span class="pl-c">//</span> resulting range is 1..5</span>
+<span class="pl-c1">writeln</span>((rangeA, rangeB, rangeC));
+
+<span class="pl-k">var</span> domainA <span class="pl-k">=</span> {<span class="pl-c1">1</span>..<span class="pl-c1">10</span>, <span class="pl-c1">5</span>..<span class="pl-c1">20</span>};
+<span class="pl-k">var</span> domainB <span class="pl-k">=</span> {<span class="pl-k">-</span><span class="pl-c1">5</span>..<span class="pl-c1">5</span>, <span class="pl-c1">1</span>..<span class="pl-c1">10</span>};
+<span class="pl-k">var</span> domainC <span class="pl-k">=</span> domainA<span class="pl-k">[</span>domainB<span class="pl-k">]</span>;
+<span class="pl-c1">writeln</span>((domainA, domainB, domainC));
+
+<span class="pl-c"><span class="pl-c">//</span> Arrays</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Arrays are similar to those of other languages.</span>
+<span class="pl-c"><span class="pl-c">//</span> Their sizes are defined using domains that represent their indices.</span>
+<span class="pl-k">var</span> intArray<span class="pl-k">:</span> <span class="pl-k">[</span><span class="pl-c1">1</span>..<span class="pl-c1">10</span><span class="pl-k">]</span> <span class="pl-k">int</span>;
+<span class="pl-k">var</span> intArray2<span class="pl-k">:</span> <span class="pl-k">[</span>{<span class="pl-c1">1</span>..<span class="pl-c1">10</span>}<span class="pl-k">]</span> <span class="pl-k">int</span>; <span class="pl-c"><span class="pl-c">//</span> equivalent</span>
+
+<span class="pl-c"><span class="pl-c">//</span> They can be accessed using either brackets or parentheses</span>
+<span class="pl-k">for</span> i <span class="pl-k">in</span> <span class="pl-c1">1</span>..<span class="pl-c1">10</span> <span class="pl-k">do</span>
+  intArray<span class="pl-k">[</span>i<span class="pl-k">]</span> <span class="pl-k">=</span> <span class="pl-k">-</span>i;
+<span class="pl-c1">writeln</span>(intArray);
+
+<span class="pl-c"><span class="pl-c">//</span> We cannot access intArray[0] because it exists outside</span>
+<span class="pl-c"><span class="pl-c">//</span> of the index set, {1..10}, we defined it to have.</span>
+<span class="pl-c"><span class="pl-c">//</span> intArray[11] is illegal for the same reason.</span>
+<span class="pl-k">var</span> realDomain<span class="pl-k">:</span> <span class="pl-k">domain</span>(<span class="pl-c1">2</span>) <span class="pl-k">=</span> {<span class="pl-c1">1</span>..<span class="pl-c1">5</span>,<span class="pl-c1">1</span>..<span class="pl-c1">7</span>};
+<span class="pl-k">var</span> realArray<span class="pl-k">:</span> <span class="pl-k">[</span>realDomain<span class="pl-k">]</span> <span class="pl-k">real</span>;
+<span class="pl-k">var</span> realArray2<span class="pl-k">:</span> <span class="pl-k">[</span><span class="pl-c1">1</span>..<span class="pl-c1">5</span>,<span class="pl-c1">1</span>..<span class="pl-c1">7</span><span class="pl-k">]</span> <span class="pl-k">real</span>;   <span class="pl-c"><span class="pl-c">//</span> equivalent</span>
+<span class="pl-k">var</span> realArray3<span class="pl-k">:</span> <span class="pl-k">[</span>{<span class="pl-c1">1</span>..<span class="pl-c1">5</span>,<span class="pl-c1">1</span>..<span class="pl-c1">7</span>}<span class="pl-k">]</span> <span class="pl-k">real</span>; <span class="pl-c"><span class="pl-c">//</span> equivalent</span>
+
+<span class="pl-k">for</span> i <span class="pl-k">in</span> <span class="pl-c1">1</span>..<span class="pl-c1">5</span> {
+  <span class="pl-k">for</span> j <span class="pl-k">in</span> realDomain.dim(<span class="pl-c1">2</span>) {   <span class="pl-c"><span class="pl-c">//</span> Only use the 2nd dimension of the domain</span>
+    realArray<span class="pl-k">[</span>i,j<span class="pl-k">]</span> <span class="pl-k">=</span> <span class="pl-k">-</span><span class="pl-c1">1.61803</span> <span class="pl-k">*</span> i <span class="pl-k">+</span> <span class="pl-c1">0.5</span> <span class="pl-k">*</span> j;  <span class="pl-c"><span class="pl-c">//</span> Access using index list</span>
+    <span class="pl-k">var</span> idx<span class="pl-k">:</span> <span class="pl-c1">2</span><span class="pl-k">*</span><span class="pl-k">int</span> <span class="pl-k">=</span> (i,j);                   <span class="pl-c"><span class="pl-c">//</span> Note: 'index' is a keyword</span>
+    realArray<span class="pl-k">[</span>idx<span class="pl-k">]</span> <span class="pl-k">=</span> <span class="pl-k">-</span> realArray<span class="pl-k">[</span>(i,j)<span class="pl-k">]</span>;      <span class="pl-c"><span class="pl-c">//</span> Index using tuples</span>
+  }
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Arrays have domains as members, and can be iterated over as normal.</span>
+<span class="pl-k">for</span> idx <span class="pl-k">in</span> realArray.<span class="pl-k">domain</span> {  <span class="pl-c"><span class="pl-c">//</span> Again, idx is a 2*int tuple</span>
+  realArray<span class="pl-k">[</span>idx<span class="pl-k">]</span> <span class="pl-k">=</span> <span class="pl-c1">1</span> <span class="pl-k">/</span> realArray<span class="pl-k">[</span>idx<span class="pl-k">[</span><span class="pl-c1">1</span><span class="pl-k">]</span>, idx<span class="pl-k">[</span><span class="pl-c1">2</span><span class="pl-k">]]</span>; <span class="pl-c"><span class="pl-c">//</span> Access by tuple and list</span>
+}
+
+<span class="pl-c1">writeln</span>(realArray);
+
+<span class="pl-c"><span class="pl-c">//</span> The values of an array can also be iterated directly.</span>
+<span class="pl-k">var</span> rSum<span class="pl-k">:</span> <span class="pl-k">real</span> <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+<span class="pl-k">for</span> value <span class="pl-k">in</span> realArray {
+  rSum <span class="pl-k">+=</span> value; <span class="pl-c"><span class="pl-c">//</span> Read a value</span>
+  value <span class="pl-k">=</span> rSum;  <span class="pl-c"><span class="pl-c">//</span> Write a value</span>
+}
+<span class="pl-c1">writeln</span>(rSum, <span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, realArray);
+
+<span class="pl-c"><span class="pl-c">//</span> Associative arrays (dictionaries) can be created using associative domains.</span>
+<span class="pl-k">var</span> dictDomain<span class="pl-k">:</span> <span class="pl-k">domain</span>(<span class="pl-k">string</span>) <span class="pl-k">=</span> { <span class="pl-s"><span class="pl-pds">"</span>one<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>two<span class="pl-pds">"</span></span> };
+<span class="pl-k">var</span> dict<span class="pl-k">:</span> <span class="pl-k">[</span>dictDomain<span class="pl-k">]</span> <span class="pl-k">int</span> <span class="pl-k">=</span> <span class="pl-k">[</span><span class="pl-s"><span class="pl-pds">"</span>one<span class="pl-pds">"</span></span> <span class="pl-k">=</span><span class="pl-k">&gt;</span> <span class="pl-c1">1</span>, <span class="pl-s"><span class="pl-pds">"</span>two<span class="pl-pds">"</span></span> <span class="pl-k">=</span><span class="pl-k">&gt;</span> <span class="pl-c1">2</span><span class="pl-k">]</span>;
+dict<span class="pl-k">[</span><span class="pl-s"><span class="pl-pds">"</span>three<span class="pl-pds">"</span></span><span class="pl-k">]</span> <span class="pl-k">=</span> <span class="pl-c1">3</span>; <span class="pl-c"><span class="pl-c">//</span> Adds 'three' to 'dictDomain' implicitly</span>
+<span class="pl-k">for</span> key <span class="pl-k">in</span> dictDomain.sorted() <span class="pl-k">do</span>
+  <span class="pl-c1">writeln</span>(dict<span class="pl-k">[</span>key<span class="pl-k">]</span>);
+
+<span class="pl-c"><span class="pl-c">//</span> Arrays can be assigned to each other in a few different ways.</span>
+<span class="pl-c"><span class="pl-c">//</span> These arrays will be used in the example.</span>
+<span class="pl-k">var</span> thisArray <span class="pl-k">:</span> <span class="pl-k">[</span><span class="pl-c1">0</span>..<span class="pl-c1">5</span><span class="pl-k">]</span> <span class="pl-k">int</span> <span class="pl-k">=</span> <span class="pl-k">[</span><span class="pl-c1">0</span>,<span class="pl-c1">1</span>,<span class="pl-c1">2</span>,<span class="pl-c1">3</span>,<span class="pl-c1">4</span>,<span class="pl-c1">5</span><span class="pl-k">]</span>;
+<span class="pl-k">var</span> thatArray <span class="pl-k">:</span> <span class="pl-k">[</span><span class="pl-c1">0</span>..<span class="pl-c1">5</span><span class="pl-k">]</span> <span class="pl-k">int</span>;
+
+<span class="pl-c"><span class="pl-c">//</span> First, simply assign one to the other. This copies thisArray into</span>
+<span class="pl-c"><span class="pl-c">//</span> thatArray, instead of just creating a reference. Therefore, modifying</span>
+<span class="pl-c"><span class="pl-c">//</span> thisArray does not also modify thatArray.</span>
+
+thatArray <span class="pl-k">=</span> thisArray;
+thatArray<span class="pl-k">[</span><span class="pl-c1">1</span><span class="pl-k">]</span> <span class="pl-k">=</span> <span class="pl-k">-</span><span class="pl-c1">1</span>;
+<span class="pl-c1">writeln</span>((thisArray, thatArray));
+
+<span class="pl-c"><span class="pl-c">//</span> Assign a slice from one array to a slice (of the same size) in the other.</span>
+thatArray<span class="pl-k">[</span><span class="pl-c1">4</span>..<span class="pl-c1">5</span><span class="pl-k">]</span> <span class="pl-k">=</span> thisArray<span class="pl-k">[</span><span class="pl-c1">1</span>..<span class="pl-c1">2</span><span class="pl-k">]</span>;
+<span class="pl-c1">writeln</span>((thisArray, thatArray));
+
+<span class="pl-c"><span class="pl-c">//</span> Operations can also be promoted to work on arrays. 'thisPlusThat' is also</span>
+<span class="pl-c"><span class="pl-c">//</span> an array.</span>
+<span class="pl-k">var</span> thisPlusThat <span class="pl-k">=</span> thisArray <span class="pl-k">+</span> thatArray;
+<span class="pl-c1">writeln</span>(thisPlusThat);
+
+<span class="pl-c"><span class="pl-c">//</span> Moving on, arrays and loops can also be expressions, where the loop</span>
+<span class="pl-c"><span class="pl-c">//</span> body expression is the result of each iteration.</span>
+<span class="pl-k">var</span> arrayFromLoop <span class="pl-k">=</span> <span class="pl-k">for</span> i <span class="pl-k">in</span> <span class="pl-c1">1</span>..<span class="pl-c1">10</span> <span class="pl-k">do</span> i;
+<span class="pl-c1">writeln</span>(arrayFromLoop);
+
+<span class="pl-c"><span class="pl-c">//</span> An expression can result in nothing, such as when filtering with an if-expression.</span>
+<span class="pl-k">var</span> evensOrFives <span class="pl-k">=</span> <span class="pl-k">for</span> i <span class="pl-k">in</span> <span class="pl-c1">1</span>..<span class="pl-c1">10</span> <span class="pl-k">do</span> <span class="pl-k">if</span> (i <span class="pl-k">%</span> <span class="pl-c1">2</span> <span class="pl-k">==</span> <span class="pl-c1">0</span> <span class="pl-k">||</span> i <span class="pl-k">%</span> <span class="pl-c1">5</span> <span class="pl-k">==</span> <span class="pl-c1">0</span>) <span class="pl-k">then</span> i;
+
+<span class="pl-c1">writeln</span>(arrayFromLoop);
+
+<span class="pl-c"><span class="pl-c">//</span> Array expressions can also be written with a bracket notation.</span>
+<span class="pl-c"><span class="pl-c">//</span> Note: this syntax uses the forall parallel concept discussed later.</span>
+<span class="pl-k">var</span> evensOrFivesAgain <span class="pl-k">=</span> <span class="pl-k">[</span>i <span class="pl-k">in</span> <span class="pl-c1">1</span>..<span class="pl-c1">10</span><span class="pl-k">]</span> <span class="pl-k">if</span> (i <span class="pl-k">%</span> <span class="pl-c1">2</span> <span class="pl-k">==</span> <span class="pl-c1">0</span> <span class="pl-k">||</span> i <span class="pl-k">%</span> <span class="pl-c1">5</span> <span class="pl-k">==</span> <span class="pl-c1">0</span>) <span class="pl-k">then</span> i;
+
+<span class="pl-c"><span class="pl-c">//</span> They can also be written over the values of the array.</span>
+arrayFromLoop <span class="pl-k">=</span> <span class="pl-k">[</span>value <span class="pl-k">in</span> arrayFromLoop<span class="pl-k">]</span> value <span class="pl-k">+</span> <span class="pl-c1">1</span>;
+
+
+<span class="pl-c"><span class="pl-c">//</span> Procedures</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Chapel procedures have similar syntax functions in other languages.</span>
+<span class="pl-k">proc</span> fibonacci(n <span class="pl-k">:</span> <span class="pl-k">int</span>) <span class="pl-k">:</span> <span class="pl-k">int</span> {
+  <span class="pl-k">if</span> n <span class="pl-k">&lt;=</span> <span class="pl-c1">1</span> <span class="pl-k">then</span> <span class="pl-k">return</span> n;
+  <span class="pl-k">return</span> fibonacci(n<span class="pl-k">-</span><span class="pl-c1">1</span>) <span class="pl-k">+</span> fibonacci(n<span class="pl-k">-</span><span class="pl-c1">2</span>);
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Input parameters can be untyped to create a generic procedure.</span>
+<span class="pl-k">proc</span> doublePrint(thing)<span class="pl-k">:</span> <span class="pl-k">void</span> {
+  <span class="pl-c1">write</span>(thing, <span class="pl-s"><span class="pl-pds">"</span> <span class="pl-pds">"</span></span>, thing, <span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>);
+}
+
+<span class="pl-c"><span class="pl-c">//</span> The return type can be inferred, as long as the compiler can figure it out.</span>
+<span class="pl-k">proc</span> addThree(n) {
+  <span class="pl-k">return</span> n <span class="pl-k">+</span> <span class="pl-c1">3</span>;
+}
+
+doublePrint(addThree(fibonacci(<span class="pl-c1">20</span>)));
+
+<span class="pl-c"><span class="pl-c">//</span> It is also possible to take a variable number of parameters.</span>
+<span class="pl-k">proc</span> maxOf(x ...?k) {
+  <span class="pl-c"><span class="pl-c">//</span> x refers to a tuple of one type, with k elements</span>
+  <span class="pl-k">var</span> maximum <span class="pl-k">=</span> x<span class="pl-k">[</span><span class="pl-c1">1</span><span class="pl-k">]</span>;
+  <span class="pl-k">for</span> i <span class="pl-k">in</span> <span class="pl-c1">2</span>..k <span class="pl-k">do</span> maximum <span class="pl-k">=</span> <span class="pl-k">if</span> maximum <span class="pl-k">&lt;</span> x<span class="pl-k">[</span>i<span class="pl-k">]</span> <span class="pl-k">then</span> x<span class="pl-k">[</span>i<span class="pl-k">]</span> <span class="pl-k">else</span> maximum;
+  <span class="pl-k">return</span> maximum;
+}
+<span class="pl-c1">writeln</span>(maxOf(<span class="pl-c1">1</span>, <span class="pl-k">-</span><span class="pl-c1">10</span>, <span class="pl-c1">189</span>, <span class="pl-k">-</span><span class="pl-c1">9071982</span>, <span class="pl-c1">5</span>, <span class="pl-c1">17</span>, <span class="pl-c1">20001</span>, <span class="pl-c1">42</span>));
+
+<span class="pl-c"><span class="pl-c">//</span> Procedures can have default parameter values, and</span>
+<span class="pl-c"><span class="pl-c">//</span> the parameters can be named in the call, even out of order.</span>
+<span class="pl-k">proc</span> defaultsProc(x<span class="pl-k">:</span> <span class="pl-k">int</span>, y<span class="pl-k">:</span> <span class="pl-k">real</span> <span class="pl-k">=</span> <span class="pl-c1">1.2634</span>)<span class="pl-k">:</span> (<span class="pl-k">int</span>,<span class="pl-k">real</span>) {
+  <span class="pl-k">return</span> (x,y);
+}
+
+<span class="pl-c1">writeln</span>(defaultsProc(<span class="pl-c1">10</span>));
+<span class="pl-c1">writeln</span>(defaultsProc(x<span class="pl-k">=</span><span class="pl-c1">11</span>));
+<span class="pl-c1">writeln</span>(defaultsProc(x<span class="pl-k">=</span><span class="pl-c1">12</span>, y<span class="pl-k">=</span><span class="pl-c1">5.432</span>));
+<span class="pl-c1">writeln</span>(defaultsProc(y<span class="pl-k">=</span><span class="pl-c1">9.876</span>, x<span class="pl-k">=</span><span class="pl-c1">13</span>));
+
+<span class="pl-c"><span class="pl-c">//</span> The ? operator is called the query operator, and is used to take</span>
+<span class="pl-c"><span class="pl-c">//</span> undetermined values like tuple or array sizes and generic types.</span>
+<span class="pl-c"><span class="pl-c">//</span> For example, taking arrays as parameters. The query operator is used to</span>
+<span class="pl-c"><span class="pl-c">//</span> determine the domain of A. This is uesful for defining the return type,</span>
+<span class="pl-c"><span class="pl-c">//</span> though it's not required.</span>
+<span class="pl-k">proc</span> invertArray(A<span class="pl-k">:</span> <span class="pl-k">[</span>?D<span class="pl-k">]</span> <span class="pl-k">int</span>)<span class="pl-k">:</span> <span class="pl-k">[</span>D<span class="pl-k">]</span> <span class="pl-k">int</span>{
+  <span class="pl-k">for</span> a <span class="pl-k">in</span> A <span class="pl-k">do</span> a <span class="pl-k">=</span> <span class="pl-k">-</span>a;
+  <span class="pl-k">return</span> A;
+}
+
+<span class="pl-c1">writeln</span>(invertArray(intArray));
+
+<span class="pl-c"><span class="pl-c">//</span> We can query the type of arguments to generic procedures.</span>
+<span class="pl-c"><span class="pl-c">//</span> Here we define a procedure that takes two arguments of</span>
+<span class="pl-c"><span class="pl-c">//</span> the same type, yet we don't define what that type is.</span>
+<span class="pl-k">proc</span> genericProc(arg1 <span class="pl-k">:</span> ?valueType, arg2 <span class="pl-k">:</span> valueType)<span class="pl-k">:</span> <span class="pl-k">void</span> {
+  <span class="pl-k">select</span>(valueType) {
+    <span class="pl-k">when</span> <span class="pl-k">int</span> <span class="pl-k">do</span> <span class="pl-c1">writeln</span>(arg1, <span class="pl-s"><span class="pl-pds">"</span> and <span class="pl-pds">"</span></span>, arg2, <span class="pl-s"><span class="pl-pds">"</span> are ints<span class="pl-pds">"</span></span>);
+    <span class="pl-k">when</span> <span class="pl-k">real</span> <span class="pl-k">do</span> <span class="pl-c1">writeln</span>(arg1, <span class="pl-s"><span class="pl-pds">"</span> and <span class="pl-pds">"</span></span>, arg2, <span class="pl-s"><span class="pl-pds">"</span> are reals<span class="pl-pds">"</span></span>);
+    <span class="pl-k">otherwise</span> <span class="pl-c1">writeln</span>(arg1, <span class="pl-s"><span class="pl-pds">"</span> and <span class="pl-pds">"</span></span>, arg2, <span class="pl-s"><span class="pl-pds">"</span> are somethings!<span class="pl-pds">"</span></span>);
+  }
+}
+
+genericProc(<span class="pl-c1">1</span>, <span class="pl-c1">2</span>);
+genericProc(<span class="pl-c1">1.2</span>, <span class="pl-c1">2.3</span>);
+genericProc(<span class="pl-c1">1.0</span><span class="pl-k">+</span><span class="pl-c1">2.</span>0i, <span class="pl-c1">3.0</span><span class="pl-k">+</span><span class="pl-c1">4.</span>0i);
+
+<span class="pl-c"><span class="pl-c">//</span> We can also enforce a form of polymorphism with the where clause</span>
+<span class="pl-c"><span class="pl-c">//</span> This allows the compiler to decide which function to use.</span>
+<span class="pl-c"><span class="pl-c">//</span> Note: That means that all information needs to be known at compile-time.</span>
+<span class="pl-c"><span class="pl-c">//</span> The param modifier on the arg is used to enforce this constraint.</span>
+<span class="pl-k">proc</span> whereProc(<span class="pl-k">param</span> N <span class="pl-k">:</span> <span class="pl-k">int</span>)<span class="pl-k">:</span> <span class="pl-k">void</span>
+ <span class="pl-k">where</span> (N <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>) {
+  <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>N is greater than 0<span class="pl-pds">"</span></span>);
+}
+
+<span class="pl-k">proc</span> whereProc(<span class="pl-k">param</span> N <span class="pl-k">:</span> <span class="pl-k">int</span>)<span class="pl-k">:</span> <span class="pl-k">void</span>
+ <span class="pl-k">where</span> (N <span class="pl-k">&lt;</span> <span class="pl-c1">0</span>) {
+  <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>N is less than 0<span class="pl-pds">"</span></span>);
+}
+
+whereProc(<span class="pl-c1">10</span>);
+whereProc(<span class="pl-k">-</span><span class="pl-c1">1</span>);
+
+<span class="pl-c"><span class="pl-c">//</span> whereProc(0) would result in a compiler error because there</span>
+<span class="pl-c"><span class="pl-c">//</span> are no functions that satisfy the where clause's condition.</span>
+<span class="pl-c"><span class="pl-c">//</span> We could have defined a whereProc without a where clause</span>
+<span class="pl-c"><span class="pl-c">//</span> that would then have served as a catch all for all the other cases</span>
+<span class="pl-c"><span class="pl-c">//</span> (of which there is only one).</span>
+
+<span class="pl-c"><span class="pl-c">//</span> where clauses can also be used to constrain based on argument type.</span>
+<span class="pl-k">proc</span> whereType(x<span class="pl-k">:</span> ?t) <span class="pl-k">where</span> t <span class="pl-k">==</span> <span class="pl-k">int</span> {
+  <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>Inside 'int' version of 'whereType': <span class="pl-pds">"</span></span>, x);
+}
+
+<span class="pl-k">proc</span> whereType(x<span class="pl-k">:</span> ?t) {
+  <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>Inside general version of 'whereType': <span class="pl-pds">"</span></span>, x);
+}
+
+whereType(<span class="pl-c1">42</span>);
+whereType(<span class="pl-s"><span class="pl-pds">"</span>hello<span class="pl-pds">"</span></span>);
+
+<span class="pl-c"><span class="pl-c">//</span> Intents</span>
+
+<span class="pl-c"><span class="pl-c">/*</span> Intent modifiers on the arguments convey how those arguments are passed to the procedure.</span>
+<span class="pl-c"></span>
+<span class="pl-c">     * in: copy arg in, but not out</span>
+<span class="pl-c">     * out: copy arg out, but not in</span>
+<span class="pl-c">     * inout: copy arg in, copy arg out</span>
+<span class="pl-c">     * ref: pass arg by reference</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+<span class="pl-k">proc</span> intentsProc(<span class="pl-k">in</span> inarg, <span class="pl-k">out</span> outarg, <span class="pl-k">inout</span> inoutarg, <span class="pl-k">ref</span> refarg) {
+  <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>Inside Before: <span class="pl-pds">"</span></span>, (inarg, outarg, inoutarg, refarg));
+  inarg <span class="pl-k">=</span> inarg <span class="pl-k">+</span> <span class="pl-c1">100</span>;
+  outarg <span class="pl-k">=</span> outarg <span class="pl-k">+</span> <span class="pl-c1">100</span>;
+  inoutarg <span class="pl-k">=</span> inoutarg <span class="pl-k">+</span> <span class="pl-c1">100</span>;
+  refarg <span class="pl-k">=</span> refarg <span class="pl-k">+</span> <span class="pl-c1">100</span>;
+  <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>Inside After: <span class="pl-pds">"</span></span>, (inarg, outarg, inoutarg, refarg));
+}
+
+<span class="pl-k">var</span> inVar<span class="pl-k">:</span> <span class="pl-k">int</span> <span class="pl-k">=</span> <span class="pl-c1">1</span>;
+<span class="pl-k">var</span> outVar<span class="pl-k">:</span> <span class="pl-k">int</span> <span class="pl-k">=</span> <span class="pl-c1">2</span>;
+<span class="pl-k">var</span> inoutVar<span class="pl-k">:</span> <span class="pl-k">int</span> <span class="pl-k">=</span> <span class="pl-c1">3</span>;
+<span class="pl-k">var</span> refVar<span class="pl-k">:</span> <span class="pl-k">int</span> <span class="pl-k">=</span> <span class="pl-c1">4</span>;
+<span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>Outside Before: <span class="pl-pds">"</span></span>, (inVar, outVar, inoutVar, refVar));
+intentsProc(inVar, outVar, inoutVar, refVar);
+<span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>Outside After: <span class="pl-pds">"</span></span>, (inVar, outVar, inoutVar, refVar));
+
+<span class="pl-c"><span class="pl-c">//</span> Similarly, we can define intents on the return type.</span>
+<span class="pl-c"><span class="pl-c">//</span> refElement returns a reference to an element of array.</span>
+<span class="pl-c"><span class="pl-c">//</span> This makes more practical sense for class methods where references to</span>
+<span class="pl-c"><span class="pl-c">//</span> elements in a data-structure are returned via a method or iterator.</span>
+<span class="pl-k">proc</span> refElement(array <span class="pl-k">:</span> <span class="pl-k">[</span>?D<span class="pl-k">]</span> ?T, idx) <span class="pl-k">ref</span> <span class="pl-k">:</span> T {
+  <span class="pl-k">return</span> array<span class="pl-k">[</span>idx<span class="pl-k">]</span>;
+}
+
+<span class="pl-k">var</span> myChangingArray <span class="pl-k">:</span> <span class="pl-k">[</span><span class="pl-c1">1</span>..<span class="pl-c1">5</span><span class="pl-k">]</span> <span class="pl-k">int</span> <span class="pl-k">=</span> <span class="pl-k">[</span><span class="pl-c1">1</span>,<span class="pl-c1">2</span>,<span class="pl-c1">3</span>,<span class="pl-c1">4</span>,<span class="pl-c1">5</span><span class="pl-k">]</span>;
+<span class="pl-c1">writeln</span>(myChangingArray);
+<span class="pl-k">ref</span> refToElem <span class="pl-k">=</span> refElement(myChangingArray, <span class="pl-c1">5</span>); <span class="pl-c"><span class="pl-c">//</span> store reference to element in ref variable</span>
+<span class="pl-c1">writeln</span>(refToElem);
+refToElem <span class="pl-k">=</span> <span class="pl-k">-</span><span class="pl-c1">2</span>; <span class="pl-c"><span class="pl-c">//</span> modify reference which modifies actual value in array</span>
+<span class="pl-c1">writeln</span>(refToElem);
+<span class="pl-c1">writeln</span>(myChangingArray);
+
+<span class="pl-c"><span class="pl-c">//</span> Operator Definitions</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Chapel allows for operators to be overloaded.</span>
+<span class="pl-c"><span class="pl-c">//</span> We can define the unary operators:</span>
+<span class="pl-c"><span class="pl-c">//</span> + - ! ~</span>
+<span class="pl-c"><span class="pl-c">//</span> and the binary operators:</span>
+<span class="pl-c"><span class="pl-c">//</span> + - * / % ** == &lt;= &gt;= &lt; &gt; &lt;&lt; &gt;&gt; &amp; | ˆ by</span>
+<span class="pl-c"><span class="pl-c">//</span> += -= *= /= %= **= &amp;= |= ˆ= &lt;&lt;= &gt;&gt;= &lt;=&gt;</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Boolean exclusive or operator.</span>
+<span class="pl-k">proc</span> <span class="pl-k">^</span>(left <span class="pl-k">:</span> <span class="pl-k">bool</span>, right <span class="pl-k">:</span> <span class="pl-k">bool</span>)<span class="pl-k">:</span> <span class="pl-k">bool</span> {
+  <span class="pl-k">return</span> (left <span class="pl-k">||</span> right) <span class="pl-k">&amp;&amp;</span> !(left <span class="pl-k">&amp;&amp;</span> right);
+}
+
+<span class="pl-c1">writeln</span>(<span class="pl-c1">true</span>  <span class="pl-k">^</span> <span class="pl-c1">true</span>);
+<span class="pl-c1">writeln</span>(<span class="pl-c1">false</span> <span class="pl-k">^</span> <span class="pl-c1">true</span>);
+<span class="pl-c1">writeln</span>(<span class="pl-c1">true</span>  <span class="pl-k">^</span> <span class="pl-c1">false</span>);
+<span class="pl-c1">writeln</span>(<span class="pl-c1">false</span> <span class="pl-k">^</span> <span class="pl-c1">false</span>);
+
+<span class="pl-c"><span class="pl-c">//</span> Define a * operator on any two types that returns a tuple of those types.</span>
+<span class="pl-k">proc</span> <span class="pl-k">*</span>(left <span class="pl-k">:</span> ?ltype, right <span class="pl-k">:</span> ?rtype)<span class="pl-k">:</span> (ltype, rtype) {
+  <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">\t</span>In our '*' overload!<span class="pl-pds">"</span></span>);
+  <span class="pl-k">return</span> (left, right);
+}
+
+<span class="pl-c1">writeln</span>(<span class="pl-c1">1</span> <span class="pl-k">*</span> <span class="pl-s"><span class="pl-pds">"</span>a<span class="pl-pds">"</span></span>); <span class="pl-c"><span class="pl-c">//</span> Uses our * operator.</span>
+<span class="pl-c1">writeln</span>(<span class="pl-c1">1</span> <span class="pl-k">*</span> <span class="pl-c1">2</span>);   <span class="pl-c"><span class="pl-c">//</span> Uses the default * operator.</span>
+
+<span class="pl-c"><span class="pl-c">//</span>  Note: You could break everything if you get careless with your overloads.</span>
+<span class="pl-c"><span class="pl-c">//</span>  This here will break everything. Don't do it.</span>
+
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">    proc +(left: int, right: int): int {</span>
+<span class="pl-c">      return left - right;</span>
+<span class="pl-c">    }</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span> Iterators</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Iterators are sisters to the procedure, and almost everything about</span>
+<span class="pl-c"><span class="pl-c">//</span> procedures also applies to iterators. However, instead of returning a single</span>
+<span class="pl-c"><span class="pl-c">//</span> value, iterators may yield multiple values to a loop.</span>
+<span class="pl-c"><span class="pl-c">//</span></span>
+<span class="pl-c"><span class="pl-c">//</span> This is useful when a complicated set or order of iterations is needed, as</span>
+<span class="pl-c"><span class="pl-c">//</span> it allows the code defining the iterations to be separate from the loop</span>
+<span class="pl-c"><span class="pl-c">//</span> body.</span>
+<span class="pl-k">iter</span> oddsThenEvens(N<span class="pl-k">:</span> <span class="pl-k">int</span>)<span class="pl-k">:</span> <span class="pl-k">int</span> {
+  <span class="pl-k">for</span> i <span class="pl-k">in</span> <span class="pl-c1">1</span>..N <span class="pl-k">by</span> <span class="pl-c1">2</span> <span class="pl-k">do</span>
+    <span class="pl-k">yield</span> i; <span class="pl-c"><span class="pl-c">//</span> yield values instead of returning.</span>
+  <span class="pl-k">for</span> i <span class="pl-k">in</span> <span class="pl-c1">2</span>..N <span class="pl-k">by</span> <span class="pl-c1">2</span> <span class="pl-k">do</span>
+    <span class="pl-k">yield</span> i;
+}
+
+<span class="pl-k">for</span> i <span class="pl-k">in</span> oddsThenEvens(<span class="pl-c1">10</span>) <span class="pl-k">do</span> <span class="pl-c1">write</span>(i, <span class="pl-s"><span class="pl-pds">"</span>, <span class="pl-pds">"</span></span>);
+<span class="pl-c1">writeln</span>();
+
+<span class="pl-c"><span class="pl-c">//</span> Iterators can also yield conditionally, the result of which can be nothing</span>
+<span class="pl-k">iter</span> absolutelyNothing(N)<span class="pl-k">:</span> <span class="pl-k">int</span> {
+  <span class="pl-k">for</span> i <span class="pl-k">in</span> <span class="pl-c1">1</span>..N {
+    <span class="pl-k">if</span> N <span class="pl-k">&lt;</span> i { <span class="pl-c"><span class="pl-c">//</span> Always false</span>
+      <span class="pl-k">yield</span> i;     <span class="pl-c"><span class="pl-c">//</span> Yield statement never happens</span>
+    }
+  }
+}
+
+<span class="pl-k">for</span> i <span class="pl-k">in</span> absolutelyNothing(<span class="pl-c1">10</span>) {
+  <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>Woa there! absolutelyNothing yielded <span class="pl-pds">"</span></span>, i);
+}
+
+<span class="pl-c"><span class="pl-c">//</span> We can zipper together two or more iterators (who have the same number</span>
+<span class="pl-c"><span class="pl-c">//</span> of iterations) using zip() to create a single zipped iterator, where each</span>
+<span class="pl-c"><span class="pl-c">//</span> iteration of the zipped iterator yields a tuple of one value yielded</span>
+<span class="pl-c"><span class="pl-c">//</span> from each iterator.</span>
+<span class="pl-k">for</span> (positive, negative) <span class="pl-k">in</span> <span class="pl-k">zip</span>(<span class="pl-c1">1</span>..<span class="pl-c1">5</span>, <span class="pl-k">-</span><span class="pl-c1">5</span>..<span class="pl-k">-</span><span class="pl-c1">1</span>) <span class="pl-k">do</span>
+  <span class="pl-c1">writeln</span>((positive, negative));
+
+<span class="pl-c"><span class="pl-c">//</span> Zipper iteration is quite important in the assignment of arrays,</span>
+<span class="pl-c"><span class="pl-c">//</span> slices of arrays, and array/loop expressions.</span>
+<span class="pl-k">var</span> fromThatArray <span class="pl-k">:</span> <span class="pl-k">[</span><span class="pl-c1">1</span>..#<span class="pl-c1">5</span><span class="pl-k">]</span> <span class="pl-k">int</span> <span class="pl-k">=</span> <span class="pl-k">[</span><span class="pl-c1">1</span>,<span class="pl-c1">2</span>,<span class="pl-c1">3</span>,<span class="pl-c1">4</span>,<span class="pl-c1">5</span><span class="pl-k">]</span>;
+<span class="pl-k">var</span> toThisArray <span class="pl-k">:</span> <span class="pl-k">[</span><span class="pl-c1">100</span>..#<span class="pl-c1">5</span><span class="pl-k">]</span> <span class="pl-k">int</span>;
+
+<span class="pl-c"><span class="pl-c">//</span> Some zipper operations implement other operations.</span>
+<span class="pl-c"><span class="pl-c">//</span> The first statement and the loop are equivalent.</span>
+toThisArray <span class="pl-k">=</span> fromThatArray;
+<span class="pl-k">for</span> (i,j) <span class="pl-k">in</span> <span class="pl-k">zip</span>(toThisArray.<span class="pl-k">domain</span>, fromThatArray.<span class="pl-k">domain</span>) {
+  toThisArray<span class="pl-k">[</span>i<span class="pl-k">]</span> <span class="pl-k">=</span> fromThatArray<span class="pl-k">[</span>j<span class="pl-k">]</span>;
+}
+
+<span class="pl-c"><span class="pl-c">//</span> These two chunks are also equivalent.</span>
+toThisArray <span class="pl-k">=</span> <span class="pl-k">[</span>j <span class="pl-k">in</span> <span class="pl-k">-</span><span class="pl-c1">100</span>..#<span class="pl-c1">5</span><span class="pl-k">]</span> j;
+<span class="pl-c1">writeln</span>(toThisArray);
+
+<span class="pl-k">for</span> (i, j) <span class="pl-k">in</span> <span class="pl-k">zip</span>(toThisArray.<span class="pl-k">domain</span>, <span class="pl-k">-</span><span class="pl-c1">100</span>..#<span class="pl-c1">5</span>) {
+  toThisArray<span class="pl-k">[</span>i<span class="pl-k">]</span> <span class="pl-k">=</span> j;
+}
+<span class="pl-c1">writeln</span>(toThisArray);
+
+<span class="pl-c"><span class="pl-c">//</span> This is very important in understanding why this statement exhibits a</span>
+<span class="pl-c"><span class="pl-c">//</span> runtime error.</span>
+
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">  var iterArray : [1..10] int = [i in 1..10] if (i % 2 == 1) then i;</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span> Even though the domain of the array and the loop-expression are</span>
+<span class="pl-c"><span class="pl-c">//</span> the same size, the body of the expression can be thought of as an iterator.</span>
+<span class="pl-c"><span class="pl-c">//</span> Because iterators can yield nothing, that iterator yields a different number</span>
+<span class="pl-c"><span class="pl-c">//</span> of things than the domain of the array or loop, which is not allowed.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Classes</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Classes are similar to those in C++ and Java, allocated on the heap.</span>
+<span class="pl-k">class</span> MyClass {
+
+<span class="pl-c"><span class="pl-c">//</span> Member variables</span>
+  <span class="pl-k">var</span> memberInt <span class="pl-k">:</span> <span class="pl-k">int</span>;
+  <span class="pl-k">var</span> memberBool <span class="pl-k">:</span> <span class="pl-k">bool</span> <span class="pl-k">=</span> <span class="pl-c1">true</span>;
+
+<span class="pl-c"><span class="pl-c">//</span> Explicitly defined initializer.</span>
+<span class="pl-c"><span class="pl-c">//</span> We also get the compiler-generated initializer, with one argument per field.</span>
+<span class="pl-c"><span class="pl-c">//</span> Note that soon there will be no compiler-generated initializer when we</span>
+<span class="pl-c"><span class="pl-c">//</span> define any initializer(s) explicitly.</span>
+  <span class="pl-k">proc</span> <span class="pl-en">init</span>(val <span class="pl-k">:</span> <span class="pl-k">real</span>) {
+    <span class="pl-c1">this</span>.memberInt <span class="pl-k">=</span> ceil(val)<span class="pl-k">:</span> <span class="pl-k">int</span>;
+  }
+
+<span class="pl-c"><span class="pl-c">//</span> Explicitly defined deinitializer.</span>
+<span class="pl-c"><span class="pl-c">//</span> If we did not write one, we would get the compiler-generated deinitializer,</span>
+<span class="pl-c"><span class="pl-c">//</span> which has an empty body.</span>
+  <span class="pl-k">proc</span> <span class="pl-en">deinit</span>() {
+    <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>MyClass deinitializer called <span class="pl-pds">"</span></span>, (<span class="pl-c1">this</span>.memberInt, <span class="pl-c1">this</span>.memberBool));
+  }
+
+<span class="pl-c"><span class="pl-c">//</span> Class methods.</span>
+  <span class="pl-k">proc</span> <span class="pl-en">setMemberInt</span>(val<span class="pl-k">:</span> <span class="pl-k">int</span>) {
+    <span class="pl-c1">this</span>.memberInt <span class="pl-k">=</span> val;
+  }
+
+  <span class="pl-k">proc</span> <span class="pl-en">setMemberBool</span>(val<span class="pl-k">:</span> <span class="pl-k">bool</span>) {
+    <span class="pl-c1">this</span>.memberBool <span class="pl-k">=</span> val;
+  }
+
+  <span class="pl-k">proc</span> <span class="pl-en">getMemberInt</span>()<span class="pl-k">:</span> <span class="pl-k">int</span>{
+    <span class="pl-k">return</span> <span class="pl-c1">this</span>.memberInt;
+  }
+
+  <span class="pl-k">proc</span> <span class="pl-en">getMemberBool</span>()<span class="pl-k">:</span> <span class="pl-k">bool</span> {
+    <span class="pl-k">return</span> <span class="pl-c1">this</span>.memberBool;
+  }
+} <span class="pl-c"><span class="pl-c">//</span> end MyClass</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Call compiler-generated initializer, using default value for memberBool.</span>
+<span class="pl-k">var</span> myObject <span class="pl-k">=</span> <span class="pl-k">new</span> MyClass(<span class="pl-c1">10</span>);
+    myObject <span class="pl-k">=</span> <span class="pl-k">new</span> MyClass(memberInt <span class="pl-k">=</span> <span class="pl-c1">10</span>); <span class="pl-c"><span class="pl-c">//</span> Equivalent</span>
+<span class="pl-c1">writeln</span>(myObject.getMemberInt());
+
+<span class="pl-c"><span class="pl-c">//</span> Same, but provide a memberBool value explicitly.</span>
+<span class="pl-k">var</span> myDiffObject <span class="pl-k">=</span> <span class="pl-k">new</span> MyClass(<span class="pl-k">-</span><span class="pl-c1">1</span>, <span class="pl-c1">true</span>);
+    myDiffObject <span class="pl-k">=</span> <span class="pl-k">new</span> MyClass(memberInt <span class="pl-k">=</span> <span class="pl-k">-</span><span class="pl-c1">1</span>,
+                                memberBool <span class="pl-k">=</span> <span class="pl-c1">true</span>); <span class="pl-c"><span class="pl-c">//</span> Equivalent</span>
+<span class="pl-c1">writeln</span>(myDiffObject);
+
+<span class="pl-c"><span class="pl-c">//</span> Call the initializer we wrote.</span>
+<span class="pl-k">var</span> myOtherObject <span class="pl-k">=</span> <span class="pl-k">new</span> MyClass(<span class="pl-c1">1.95</span>);
+    myOtherObject <span class="pl-k">=</span> <span class="pl-k">new</span> MyClass(val <span class="pl-k">=</span> <span class="pl-c1">1.95</span>); <span class="pl-c"><span class="pl-c">//</span> Equivalent</span>
+<span class="pl-c1">writeln</span>(myOtherObject.getMemberInt());
+
+<span class="pl-c"><span class="pl-c">//</span> We can define an operator on our class as well, but</span>
+<span class="pl-c"><span class="pl-c">//</span> the definition has to be outside the class definition.</span>
+<span class="pl-k">proc</span> <span class="pl-k">+</span>(A <span class="pl-k">:</span> MyClass, B <span class="pl-k">:</span> MyClass) <span class="pl-k">:</span> MyClass {
+  <span class="pl-k">return</span> <span class="pl-k">new</span> MyClass(memberInt <span class="pl-k">=</span> A.getMemberInt() <span class="pl-k">+</span> B.getMemberInt(),
+                      memberBool <span class="pl-k">=</span> A.getMemberBool() <span class="pl-k">||</span> B.getMemberBool());
+}
+
+<span class="pl-k">var</span> plusObject <span class="pl-k">=</span> myObject <span class="pl-k">+</span> myDiffObject;
+<span class="pl-c1">writeln</span>(plusObject);
+
+<span class="pl-c"><span class="pl-c">//</span> Destruction.</span>
+<span class="pl-k">delete</span> myObject;
+<span class="pl-k">delete</span> myDiffObject;
+<span class="pl-k">delete</span> myOtherObject;
+<span class="pl-k">delete</span> plusObject;
+
+<span class="pl-c"><span class="pl-c">//</span> Classes can inherit from one or more parent classes</span>
+<span class="pl-k">class</span> MyChildClass <span class="pl-k">:</span> MyClass {
+  <span class="pl-k">var</span> memberComplex<span class="pl-k">:</span> <span class="pl-k">complex</span>;
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Here's an example of generic classes.</span>
+<span class="pl-k">class</span> GenericClass {
+  <span class="pl-k">type</span> classType;
+  <span class="pl-k">var</span> classDomain<span class="pl-k">:</span> <span class="pl-k">domain</span>(<span class="pl-c1">1</span>);
+  <span class="pl-k">var</span> classArray<span class="pl-k">:</span> <span class="pl-k">[</span>classDomain<span class="pl-k">]</span> classType;
+
+<span class="pl-c"><span class="pl-c">//</span> Explicit constructor.</span>
+  <span class="pl-k">proc</span> <span class="pl-en">GenericClass</span>(<span class="pl-k">type</span> classType, elements <span class="pl-k">:</span> <span class="pl-k">int</span>) {
+    <span class="pl-c1">this</span>.classDomain <span class="pl-k">=</span> {<span class="pl-c1">1</span>..#elements};
+  }
+
+<span class="pl-c"><span class="pl-c">//</span> Copy constructor.</span>
+<span class="pl-c"><span class="pl-c">//</span> Note: We still have to put the type as an argument, but we can</span>
+<span class="pl-c"><span class="pl-c">//</span> default to the type of the other object using the query (?) operator.</span>
+<span class="pl-c"><span class="pl-c">//</span> Further, we can take advantage of this to allow our copy constructor</span>
+<span class="pl-c"><span class="pl-c">//</span> to copy classes of different types and cast on the fly.</span>
+  <span class="pl-k">proc</span> <span class="pl-en">GenericClass</span>(other <span class="pl-k">:</span> GenericClass(?otherType),
+                     <span class="pl-k">type</span> classType <span class="pl-k">=</span> otherType) {
+    <span class="pl-c1">this</span>.classDomain <span class="pl-k">=</span> other.classDomain;
+    <span class="pl-c"><span class="pl-c">//</span> Copy and cast</span>
+    <span class="pl-k">for</span> idx <span class="pl-k">in</span> <span class="pl-c1">this</span>.classDomain <span class="pl-k">do</span> <span class="pl-c1">this</span><span class="pl-k">[</span>idx<span class="pl-k">]</span> <span class="pl-k">=</span> other<span class="pl-k">[</span>idx<span class="pl-k">]</span> <span class="pl-k">:</span> classType;
+  }
+
+<span class="pl-c"><span class="pl-c">//</span> Define bracket notation on a GenericClass</span>
+<span class="pl-c"><span class="pl-c">//</span> object so it can behave like a normal array</span>
+<span class="pl-c"><span class="pl-c">//</span> i.e. objVar[i] or objVar(i)</span>
+  <span class="pl-k">proc</span> <span class="pl-en">this</span>(i <span class="pl-k">:</span> <span class="pl-k">int</span>) <span class="pl-k">ref</span> <span class="pl-k">:</span> classType {
+    <span class="pl-k">return</span> <span class="pl-c1">this</span>.classArray<span class="pl-k">[</span>i<span class="pl-k">]</span>;
+  }
+
+<span class="pl-c"><span class="pl-c">//</span> Define an implicit iterator for the class</span>
+<span class="pl-c"><span class="pl-c">//</span> to yield values from the array to a loop</span>
+<span class="pl-c"><span class="pl-c">//</span> i.e. for i in objVar do ...</span>
+  <span class="pl-k">iter</span> <span class="pl-c1">these</span>() <span class="pl-k">ref</span> <span class="pl-k">:</span> classType {
+    <span class="pl-k">for</span> i <span class="pl-k">in</span> <span class="pl-c1">this</span>.classDomain <span class="pl-k">do</span>
+      <span class="pl-k">yield</span> <span class="pl-c1">this</span><span class="pl-k">[</span>i<span class="pl-k">]</span>;
+  }
+} <span class="pl-c"><span class="pl-c">//</span> end GenericClass</span>
+
+<span class="pl-c"><span class="pl-c">//</span> We can assign to the member array of the object using the bracket</span>
+<span class="pl-c"><span class="pl-c">//</span> notation that we defined.</span>
+<span class="pl-k">var</span> realList <span class="pl-k">=</span> <span class="pl-k">new</span> GenericClass(<span class="pl-k">real</span>, <span class="pl-c1">10</span>);
+<span class="pl-k">for</span> i <span class="pl-k">in</span> realList.classDomain <span class="pl-k">do</span> realList<span class="pl-k">[</span>i<span class="pl-k">]</span> <span class="pl-k">=</span> i <span class="pl-k">+</span> <span class="pl-c1">1.0</span>;
+
+<span class="pl-c"><span class="pl-c">//</span> We can iterate over the values in our list with the iterator</span>
+<span class="pl-c"><span class="pl-c">//</span> we defined.</span>
+<span class="pl-k">for</span> value <span class="pl-k">in</span> realList <span class="pl-k">do</span> <span class="pl-c1">write</span>(value, <span class="pl-s"><span class="pl-pds">"</span>, <span class="pl-pds">"</span></span>);
+<span class="pl-c1">writeln</span>();
+
+<span class="pl-c"><span class="pl-c">//</span> Make a copy of realList using the copy constructor.</span>
+<span class="pl-k">var</span> copyList <span class="pl-k">=</span> <span class="pl-k">new</span> GenericClass(realList);
+<span class="pl-k">for</span> value <span class="pl-k">in</span> copyList <span class="pl-k">do</span> <span class="pl-c1">write</span>(value, <span class="pl-s"><span class="pl-pds">"</span>, <span class="pl-pds">"</span></span>);
+<span class="pl-c1">writeln</span>();
+
+<span class="pl-c"><span class="pl-c">//</span> Make a copy of realList and change the type, also using the copy constructor.</span>
+<span class="pl-k">var</span> copyNewTypeList <span class="pl-k">=</span> <span class="pl-k">new</span> GenericClass(realList, <span class="pl-k">int</span>);
+<span class="pl-k">for</span> value <span class="pl-k">in</span> copyNewTypeList <span class="pl-k">do</span> <span class="pl-c1">write</span>(value, <span class="pl-s"><span class="pl-pds">"</span>, <span class="pl-pds">"</span></span>);
+<span class="pl-c1">writeln</span>();
+
+
+<span class="pl-c"><span class="pl-c">//</span> Modules</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Modules are Chapel's way of managing name spaces.</span>
+<span class="pl-c"><span class="pl-c">//</span> The files containing these modules do not need to be named after the modules</span>
+<span class="pl-c"><span class="pl-c">//</span> (as in Java), but files implicitly name modules.</span>
+<span class="pl-c"><span class="pl-c">//</span> For example, this file implicitly names the learnChapelInYMinutes module</span>
+
+<span class="pl-k">module</span> OurModule {
+
+<span class="pl-c"><span class="pl-c">//</span> We can use modules inside of other modules.</span>
+<span class="pl-c"><span class="pl-c">//</span> Time is one of the standard modules.</span>
+  <span class="pl-k">use</span> Time;
+
+<span class="pl-c"><span class="pl-c">//</span> We'll use this procedure in the parallelism section.</span>
+  <span class="pl-k">proc</span> <span class="pl-en">countdown</span>(seconds<span class="pl-k">:</span> <span class="pl-k">int</span>) {
+    <span class="pl-k">for</span> i <span class="pl-k">in</span> <span class="pl-c1">1</span>..seconds <span class="pl-k">by</span> <span class="pl-k">-</span><span class="pl-c1">1</span> {
+      <span class="pl-c1">writeln</span>(i);
+      sleep(<span class="pl-c1">1</span>);
+    }
+  }
+
+<span class="pl-c"><span class="pl-c">//</span> It is possible to create arbitrarily deep module nests.</span>
+<span class="pl-c"><span class="pl-c">//</span> i.e. submodules of OurModule</span>
+  <span class="pl-k">module</span> ChildModule {
+    <span class="pl-k">proc</span> <span class="pl-en">foo</span>() {
+      <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>ChildModule.foo()<span class="pl-pds">"</span></span>);
+    }
+  }
+
+  <span class="pl-k">module</span> SiblingModule {
+    <span class="pl-k">proc</span> <span class="pl-en">foo</span>() {
+      <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>SiblingModule.foo()<span class="pl-pds">"</span></span>);
+    }
+  }
+} <span class="pl-c"><span class="pl-c">//</span> end OurModule</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Using OurModule also uses all the modules it uses.</span>
+<span class="pl-c"><span class="pl-c">//</span> Since OurModule uses Time, we also use Time.</span>
+<span class="pl-k">use</span> OurModule;
+
+<span class="pl-c"><span class="pl-c">//</span> At this point we have not used ChildModule or SiblingModule so</span>
+<span class="pl-c"><span class="pl-c">//</span> their symbols (i.e. foo) are not available to us. However, the module</span>
+<span class="pl-c"><span class="pl-c">//</span> names are available, and we can explicitly call foo() through them.</span>
+SiblingModule.foo();
+OurModule.ChildModule.foo();
+
+<span class="pl-c"><span class="pl-c">//</span> Now we use ChildModule, enabling unqualified calls.</span>
+<span class="pl-k">use</span> ChildModule;
+foo();
+
+<span class="pl-c"><span class="pl-c">//</span> Parallelism</span>
+
+<span class="pl-c"><span class="pl-c">//</span> In other languages, parallelism is typically done with</span>
+<span class="pl-c"><span class="pl-c">//</span> complicated libraries and strange class structure hierarchies.</span>
+<span class="pl-c"><span class="pl-c">//</span> Chapel has it baked right into the language.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> We can declare a main procedure, but all the code above main still gets</span>
+<span class="pl-c"><span class="pl-c">//</span> executed.</span>
+<span class="pl-k">proc</span> main() {
+
+<span class="pl-c"><span class="pl-c">//</span> A begin statement will spin the body of that statement off</span>
+<span class="pl-c"><span class="pl-c">//</span> into one new task.</span>
+<span class="pl-c"><span class="pl-c">//</span> A sync statement will ensure that the progress of the main</span>
+<span class="pl-c"><span class="pl-c">//</span> task will not progress until the children have synced back up.</span>
+
+  <span class="pl-k">sync</span> {
+    <span class="pl-k">begin</span> { <span class="pl-c"><span class="pl-c">//</span> Start of new task's body</span>
+      <span class="pl-k">var</span> a <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+      <span class="pl-k">for</span> i <span class="pl-k">in</span> <span class="pl-c1">1</span>..<span class="pl-c1">1000</span> <span class="pl-k">do</span> a <span class="pl-k">+=</span> <span class="pl-c1">1</span>;
+      <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>Done: <span class="pl-pds">"</span></span>, a);
+    } <span class="pl-c"><span class="pl-c">//</span> End of new tasks body</span>
+    <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>spun off a task!<span class="pl-pds">"</span></span>);
+  }
+  <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>Back together<span class="pl-pds">"</span></span>);
+
+  <span class="pl-k">proc</span> <span class="pl-en">printFibb</span>(n<span class="pl-k">:</span> <span class="pl-k">int</span>) {
+    <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>fibonacci(<span class="pl-pds">"</span></span>,n,<span class="pl-s"><span class="pl-pds">"</span>) = <span class="pl-pds">"</span></span>, fibonacci(n));
+  }
+
+<span class="pl-c"><span class="pl-c">//</span> A cobegin statement will spin each statement of the body into one new</span>
+<span class="pl-c"><span class="pl-c">//</span> task. Notice here that the prints from each statement may happen in any</span>
+<span class="pl-c"><span class="pl-c">//</span> order.</span>
+  <span class="pl-k">cobegin</span> {
+    printFibb(<span class="pl-c1">20</span>); <span class="pl-c"><span class="pl-c">//</span> new task</span>
+    printFibb(<span class="pl-c1">10</span>); <span class="pl-c"><span class="pl-c">//</span> new task</span>
+    printFibb(<span class="pl-c1">5</span>);  <span class="pl-c"><span class="pl-c">//</span> new task</span>
+    {
+      <span class="pl-c"><span class="pl-c">//</span> This is a nested statement body and thus is a single statement</span>
+      <span class="pl-c"><span class="pl-c">//</span> to the parent statement, executed by a single task.</span>
+      <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>this gets<span class="pl-pds">"</span></span>);
+      <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>executed as<span class="pl-pds">"</span></span>);
+      <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>a whole<span class="pl-pds">"</span></span>);
+    }
+  }
+
+<span class="pl-c"><span class="pl-c">//</span> A coforall loop will create a new task for EACH iteration.</span>
+<span class="pl-c"><span class="pl-c">//</span> Again we see that prints happen in any order.</span>
+<span class="pl-c"><span class="pl-c">//</span> NOTE: coforall should be used only for creating tasks!</span>
+<span class="pl-c"><span class="pl-c">//</span> Using it to iterating over a structure is very a bad idea!</span>
+  <span class="pl-k">var</span> num_tasks <span class="pl-k">=</span> <span class="pl-c1">10</span>; <span class="pl-c"><span class="pl-c">//</span> Number of tasks we want</span>
+  <span class="pl-k">coforall</span> taskID <span class="pl-k">in</span> <span class="pl-c1">1</span>..#num_tasks {
+    <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>Hello from task# <span class="pl-pds">"</span></span>, taskID);
+  }
+
+<span class="pl-c"><span class="pl-c">//</span> forall loops are another parallel loop, but only create a smaller number</span>
+<span class="pl-c"><span class="pl-c">//</span> of tasks, specifically --dataParTasksPerLocale= number of tasks.</span>
+  <span class="pl-k">forall</span> i <span class="pl-k">in</span> <span class="pl-c1">1</span>..<span class="pl-c1">100</span> {
+    <span class="pl-c1">write</span>(i, <span class="pl-s"><span class="pl-pds">"</span>, <span class="pl-pds">"</span></span>);
+  }
+  <span class="pl-c1">writeln</span>();
+
+<span class="pl-c"><span class="pl-c">//</span> Here we see that there are sections that are in order, followed by</span>
+<span class="pl-c"><span class="pl-c">//</span> a section that would not follow (e.g. 1, 2, 3, 7, 8, 9, 4, 5, 6,).</span>
+<span class="pl-c"><span class="pl-c">//</span> This is because each task is taking on a chunk of the range 1..10</span>
+<span class="pl-c"><span class="pl-c">//</span> (1..3, 4..6, or 7..9) doing that chunk serially, but each task happens</span>
+<span class="pl-c"><span class="pl-c">//</span> in parallel. Your results may depend on your machine and configuration</span>
+
+<span class="pl-c"><span class="pl-c">//</span> For both the forall and coforall loops, the execution of the</span>
+<span class="pl-c"><span class="pl-c">//</span> parent task will not continue until all the children sync up.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> forall loops are particularly useful for parallel iteration over arrays.</span>
+<span class="pl-c"><span class="pl-c">//</span> Lets run an experiment to see how much faster a parallel loop is</span>
+  <span class="pl-k">use</span> Time; <span class="pl-c"><span class="pl-c">//</span> Import the Time module to use Timer objects</span>
+  <span class="pl-k">var</span> timer<span class="pl-k">:</span> Timer;
+  <span class="pl-k">var</span> myBigArray<span class="pl-k">:</span> <span class="pl-k">[</span>{<span class="pl-c1">1</span>..<span class="pl-c1">4000</span>,<span class="pl-c1">1</span>..<span class="pl-c1">4000</span>}<span class="pl-k">]</span> <span class="pl-k">real</span>; <span class="pl-c"><span class="pl-c">//</span> Large array we will write into</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Serial Experiment:</span>
+  timer.start(); <span class="pl-c"><span class="pl-c">//</span> Start timer</span>
+  <span class="pl-k">for</span> (x,y) <span class="pl-k">in</span> myBigArray.<span class="pl-k">domain</span> { <span class="pl-c"><span class="pl-c">//</span> Serial iteration</span>
+    myBigArray<span class="pl-k">[</span>x,y<span class="pl-k">]</span> <span class="pl-k">=</span> (x<span class="pl-k">:</span><span class="pl-k">real</span>) <span class="pl-k">/</span> (y<span class="pl-k">:</span><span class="pl-k">real</span>);
+  }
+  timer.stop(); <span class="pl-c"><span class="pl-c">//</span> Stop timer</span>
+  <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>Serial: <span class="pl-pds">"</span></span>, timer.elapsed()); <span class="pl-c"><span class="pl-c">//</span> Print elapsed time</span>
+  timer.clear(); <span class="pl-c"><span class="pl-c">//</span> Clear timer for parallel loop</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Parallel Experiment:</span>
+  timer.start(); <span class="pl-c"><span class="pl-c">//</span> start timer</span>
+  <span class="pl-k">forall</span> (x,y) <span class="pl-k">in</span> myBigArray.<span class="pl-k">domain</span> { <span class="pl-c"><span class="pl-c">//</span> Parallel iteration</span>
+    myBigArray<span class="pl-k">[</span>x,y<span class="pl-k">]</span> <span class="pl-k">=</span> (x<span class="pl-k">:</span><span class="pl-k">real</span>) <span class="pl-k">/</span> (y<span class="pl-k">:</span><span class="pl-k">real</span>);
+  }
+  timer.stop(); <span class="pl-c"><span class="pl-c">//</span> Stop timer</span>
+  <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>Parallel: <span class="pl-pds">"</span></span>, timer.elapsed()); <span class="pl-c"><span class="pl-c">//</span> Print elapsed time</span>
+  timer.clear();
+
+<span class="pl-c"><span class="pl-c">//</span> You may have noticed that (depending on how many cores you have)</span>
+<span class="pl-c"><span class="pl-c">//</span> the parallel loop went faster than the serial loop.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> The bracket style loop-expression described</span>
+<span class="pl-c"><span class="pl-c">//</span> much earlier implicitly uses a forall loop.</span>
+  <span class="pl-k">[</span>val <span class="pl-k">in</span> myBigArray<span class="pl-k">]</span> val <span class="pl-k">=</span> <span class="pl-c1">1</span> <span class="pl-k">/</span> val; <span class="pl-c"><span class="pl-c">//</span> Parallel operation</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Atomic variables, common to many languages, are ones whose operations</span>
+<span class="pl-c"><span class="pl-c">//</span> occur uninterrupted. Multiple threads can therefore modify atomic</span>
+<span class="pl-c"><span class="pl-c">//</span> variables and can know that their values are safe.</span>
+<span class="pl-c"><span class="pl-c">//</span> Chapel atomic variables can be of type bool, int,</span>
+<span class="pl-c"><span class="pl-c">//</span> uint, and real.</span>
+  <span class="pl-k">var</span> uranium<span class="pl-k">:</span> <span class="pl-k">atomic</span> <span class="pl-k">int</span>;
+  uranium.<span class="pl-c1">write</span>(<span class="pl-c1">238</span>);      <span class="pl-c"><span class="pl-c">//</span> atomically write a variable</span>
+  <span class="pl-c1">writeln</span>(uranium.<span class="pl-c1">read</span>()); <span class="pl-c"><span class="pl-c">//</span> atomically read a variable</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Atomic operations are described as functions, so you can define your own.</span>
+  uranium.sub(<span class="pl-c1">3</span>); <span class="pl-c"><span class="pl-c">//</span> atomically subtract a variable</span>
+  <span class="pl-c1">writeln</span>(uranium.<span class="pl-c1">read</span>());
+
+  <span class="pl-k">var</span> replaceWith <span class="pl-k">=</span> <span class="pl-c1">239</span>;
+  <span class="pl-k">var</span> was <span class="pl-k">=</span> uranium.exchange(replaceWith);
+  <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>uranium was <span class="pl-pds">"</span></span>, was, <span class="pl-s"><span class="pl-pds">"</span> but is now <span class="pl-pds">"</span></span>, replaceWith);
+
+  <span class="pl-k">var</span> isEqualTo <span class="pl-k">=</span> <span class="pl-c1">235</span>;
+  <span class="pl-k">if</span> uranium.compareExchange(isEqualTo, replaceWith) {
+    <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>uranium was equal to <span class="pl-pds">"</span></span>, isEqualTo,
+             <span class="pl-s"><span class="pl-pds">"</span> so replaced value with <span class="pl-pds">"</span></span>, replaceWith);
+  } <span class="pl-k">else</span> {
+    <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>uranium was not equal to <span class="pl-pds">"</span></span>, isEqualTo,
+             <span class="pl-s"><span class="pl-pds">"</span> so value stays the same...  whatever it was<span class="pl-pds">"</span></span>);
+  }
+
+  <span class="pl-k">sync</span> {
+    <span class="pl-k">begin</span> { <span class="pl-c"><span class="pl-c">//</span> Reader task</span>
+      <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>Reader: waiting for uranium to be <span class="pl-pds">"</span></span>, isEqualTo);
+      uranium.waitFor(isEqualTo);
+      <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>Reader: uranium was set (by someone) to <span class="pl-pds">"</span></span>, isEqualTo);
+    }
+
+    <span class="pl-k">begin</span> { <span class="pl-c"><span class="pl-c">//</span> Writer task</span>
+      <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>Writer: will set uranium to the value <span class="pl-pds">"</span></span>, isEqualTo, <span class="pl-s"><span class="pl-pds">"</span> in...<span class="pl-pds">"</span></span>);
+      countdown(<span class="pl-c1">3</span>);
+      uranium.<span class="pl-c1">write</span>(isEqualTo);
+    }
+  }
+
+<span class="pl-c"><span class="pl-c">//</span> sync variables have two states: empty and full.</span>
+<span class="pl-c"><span class="pl-c">//</span> If you read an empty variable or write a full variable, you are waited</span>
+<span class="pl-c"><span class="pl-c">//</span> until the variable is full or empty again.</span>
+  <span class="pl-k">var</span> someSyncVar$<span class="pl-k">:</span> <span class="pl-k">sync</span> <span class="pl-k">int</span>; <span class="pl-c"><span class="pl-c">//</span> varName$ is a convention not a law.</span>
+  <span class="pl-k">sync</span> {
+    <span class="pl-k">begin</span> { <span class="pl-c"><span class="pl-c">//</span> Reader task</span>
+      <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>Reader: waiting to read.<span class="pl-pds">"</span></span>);
+      <span class="pl-k">var</span> read_sync <span class="pl-k">=</span> someSyncVar$;
+      <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>Reader: value is <span class="pl-pds">"</span></span>, read_sync);
+    }
+
+    <span class="pl-k">begin</span> { <span class="pl-c"><span class="pl-c">//</span> Writer task</span>
+      <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>Writer: will write in...<span class="pl-pds">"</span></span>);
+      countdown(<span class="pl-c1">3</span>);
+      someSyncVar$ <span class="pl-k">=</span> <span class="pl-c1">123</span>;
+    }
+  }
+
+<span class="pl-c"><span class="pl-c">//</span> single vars can only be written once. A read on an unwritten single</span>
+<span class="pl-c"><span class="pl-c">//</span> results in a wait, but when the variable has a value it can be read</span>
+<span class="pl-c"><span class="pl-c">//</span> indefinitely.</span>
+  <span class="pl-k">var</span> someSingleVar$<span class="pl-k">:</span> <span class="pl-k">single</span> <span class="pl-k">int</span>; <span class="pl-c"><span class="pl-c">//</span> varName$ is a convention not a law.</span>
+  <span class="pl-k">sync</span> {
+    <span class="pl-k">begin</span> { <span class="pl-c"><span class="pl-c">//</span> Reader task</span>
+      <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>Reader: waiting to read.<span class="pl-pds">"</span></span>);
+      <span class="pl-k">for</span> i <span class="pl-k">in</span> <span class="pl-c1">1</span>..<span class="pl-c1">5</span> {
+        <span class="pl-k">var</span> read_single <span class="pl-k">=</span> someSingleVar$;
+        <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>Reader: iteration <span class="pl-pds">"</span></span>, i,<span class="pl-s"><span class="pl-pds">"</span>, and the value is <span class="pl-pds">"</span></span>, read_single);
+      }
+    }
+
+    <span class="pl-k">begin</span> { <span class="pl-c"><span class="pl-c">//</span> Writer task</span>
+      <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>Writer: will write in...<span class="pl-pds">"</span></span>);
+      countdown(<span class="pl-c1">3</span>);
+      someSingleVar$ <span class="pl-k">=</span> <span class="pl-c1">5</span>; <span class="pl-c"><span class="pl-c">//</span> first and only write ever.</span>
+    }
+  }
+
+<span class="pl-c"><span class="pl-c">//</span> Here's an example using atomics and a sync variable to create a</span>
+<span class="pl-c"><span class="pl-c">//</span> count-down mutex (also known as a multiplexer).</span>
+  <span class="pl-k">var</span> count<span class="pl-k">:</span> <span class="pl-k">atomic</span> <span class="pl-k">int</span>; <span class="pl-c"><span class="pl-c">//</span> our counter</span>
+  <span class="pl-k">var</span> lock$<span class="pl-k">:</span> <span class="pl-k">sync</span> <span class="pl-k">bool</span>;   <span class="pl-c"><span class="pl-c">//</span> the mutex lock</span>
+
+  count.<span class="pl-c1">write</span>(<span class="pl-c1">2</span>);       <span class="pl-c"><span class="pl-c">//</span> Only let two tasks in at a time.</span>
+  lock$.writeXF(<span class="pl-c1">true</span>);  <span class="pl-c"><span class="pl-c">//</span> Set lock$ to full (unlocked)</span>
+  <span class="pl-c"><span class="pl-c">//</span> Note: The value doesn't actually matter, just the state</span>
+  <span class="pl-c"><span class="pl-c">//</span> (full:unlocked / empty:locked)</span>
+  <span class="pl-c"><span class="pl-c">//</span> Also, writeXF() fills (F) the sync var regardless of its state (X)</span>
+
+  <span class="pl-k">coforall</span> task <span class="pl-k">in</span> <span class="pl-c1">1</span>..#<span class="pl-c1">5</span> { <span class="pl-c"><span class="pl-c">//</span> Generate tasks</span>
+    <span class="pl-c"><span class="pl-c">//</span> Create a barrier</span>
+    <span class="pl-k">do</span> {
+      lock$;                 <span class="pl-c"><span class="pl-c">//</span> Read lock$ (wait)</span>
+    } <span class="pl-k">while</span> (count.<span class="pl-c1">read</span>() <span class="pl-k">&lt;</span> <span class="pl-c1">1</span>); <span class="pl-c"><span class="pl-c">//</span> Keep waiting until a spot opens up</span>
+
+    count.sub(<span class="pl-c1">1</span>);          <span class="pl-c"><span class="pl-c">//</span> decrement the counter</span>
+    lock$.writeXF(<span class="pl-c1">true</span>); <span class="pl-c"><span class="pl-c">//</span> Set lock$ to full (signal)</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> Actual 'work'</span>
+    <span class="pl-c1">writeln</span>(<span class="pl-s"><span class="pl-pds">"</span>Task #<span class="pl-pds">"</span></span>, task, <span class="pl-s"><span class="pl-pds">"</span> doing work.<span class="pl-pds">"</span></span>);
+    sleep(<span class="pl-c1">2</span>);
+
+    count.add(<span class="pl-c1">1</span>);        <span class="pl-c"><span class="pl-c">//</span> Increment the counter</span>
+    lock$.writeXF(<span class="pl-c1">true</span>); <span class="pl-c"><span class="pl-c">//</span> Set lock$ to full (signal)</span>
+  }
+
+<span class="pl-c"><span class="pl-c">//</span> We can define the operations + * &amp; | ^ &amp;&amp; || min max minloc maxloc</span>
+<span class="pl-c"><span class="pl-c">//</span> over an entire array using scans and reductions.</span>
+<span class="pl-c"><span class="pl-c">//</span> Reductions apply the operation over the entire array and</span>
+<span class="pl-c"><span class="pl-c">//</span> result in a scalar value.</span>
+  <span class="pl-k">var</span> listOfValues<span class="pl-k">:</span> <span class="pl-k">[</span><span class="pl-c1">1</span>..<span class="pl-c1">10</span><span class="pl-k">]</span> <span class="pl-k">int</span> <span class="pl-k">=</span> <span class="pl-k">[</span><span class="pl-c1">15</span>,<span class="pl-c1">57</span>,<span class="pl-c1">354</span>,<span class="pl-c1">36</span>,<span class="pl-c1">45</span>,<span class="pl-c1">15</span>,<span class="pl-c1">456</span>,<span class="pl-c1">8</span>,<span class="pl-c1">678</span>,<span class="pl-c1">2</span><span class="pl-k">]</span>;
+  <span class="pl-k">var</span> sumOfValues <span class="pl-k">=</span> <span class="pl-k">+</span> <span class="pl-k">reduce</span> listOfValues;
+  <span class="pl-k">var</span> maxValue <span class="pl-k">=</span> max <span class="pl-k">reduce</span> listOfValues; <span class="pl-c"><span class="pl-c">//</span> 'max' give just max value</span>
+
+<span class="pl-c"><span class="pl-c">//</span> maxloc gives max value and index of the max value.</span>
+<span class="pl-c"><span class="pl-c">//</span> Note: We have to zip the array and domain together with the zip iterator.</span>
+  <span class="pl-k">var</span> (theMaxValue, idxOfMax) <span class="pl-k">=</span> maxloc <span class="pl-k">reduce</span> <span class="pl-k">zip</span>(listOfValues,
+                                                  listOfValues.<span class="pl-k">domain</span>);
+
+  <span class="pl-c1">writeln</span>((sumOfValues, maxValue, idxOfMax, listOfValues<span class="pl-k">[</span>idxOfMax<span class="pl-k">]</span>));
+
+<span class="pl-c"><span class="pl-c">//</span> Scans apply the operation incrementally and return an array with the</span>
+<span class="pl-c"><span class="pl-c">//</span> values of the operation at that index as it progressed through the</span>
+<span class="pl-c"><span class="pl-c">//</span> array from array.domain.low to array.domain.high.</span>
+  <span class="pl-k">var</span> runningSumOfValues <span class="pl-k">=</span> <span class="pl-k">+</span> <span class="pl-k">scan</span> listOfValues;
+  <span class="pl-k">var</span> maxScan <span class="pl-k">=</span> max <span class="pl-k">scan</span> listOfValues;
+  <span class="pl-c1">writeln</span>(runningSumOfValues);
+  <span class="pl-c1">writeln</span>(maxScan);
+} <span class="pl-c"><span class="pl-c">//</span> end main()</span></pre></div>
+<h2>Who is this tutorial for?</h2>
+<p>This tutorial is for people who want to learn the ropes of chapel without<br>
+having to hear about what fiber mixture the ropes are, or how they were<br>
+braided, or how the braid configurations differ between one another. It won't<br>
+teach you how to develop amazingly performant code, and it's not exhaustive.<br>
+Refer to the <a href="https://chapel-lang.org/docs/latest/language/spec.html" rel="nofollow">language specification</a> and<br>
+the <a href="https://chapel-lang.org/docs/latest/" rel="nofollow">module documentation</a> for more<br>
+details.</p>
+<p>Occasionally check back here and on the <a href="https://chapel-lang.org" rel="nofollow">Chapel site</a><br>
+to see if more topics have been added or more tutorials created.</p>
+<h3>What this tutorial is lacking:</h3>
+<ul>
+<li>Exposition of the <a href="https://chapel-lang.org/docs/latest/modules/standard.html" rel="nofollow">standard modules</a></li>
+<li>Multiple Locales (distributed memory system)</li>
+<li>Records</li>
+<li>Parallel iterators</li>
+</ul>
+<h2>Your input, questions, and discoveries are important to the developers!</h2>
+<p>The Chapel language is still in active development, so there are<br>
+occasional hiccups with performance and language features. The more information<br>
+you give the Chapel development team about issues you encounter or features you<br>
+would like to see, the better the language becomes.<br>
+There are several ways to interact with the developers:</p>
+<ul>
+<li><a href="https://gitter.im/chapel-lang/chapel" rel="nofollow">Gitter chat</a></li>
+<li><a href="https://sourceforge.net/p/chapel/mailman" rel="nofollow">sourceforge email lists</a></li>
+</ul>
+<p>If you're really interested in the development of the compiler or contributing<br>
+to the project, <a href="https://github.com/chapel-lang/chapel">check out the master GitHub repository</a>.<br>
+It is under the <a href="http://www.apache.org/licenses/LICENSE-2.0" rel="nofollow">Apache 2.0 License</a>.</p>
+<h2>Installing the Compiler</h2>
+<p><a href="https://chapel-lang.org/docs/usingchapel/QUICKSTART.html" rel="nofollow">The Official Chapel documentation details how to download and compile the Chapel compiler.</a></p>
+<p>Chapel can be built and installed on your average 'nix machine (and cygwin).<br>
+<a href="https://github.com/chapel-lang/chapel/releases/">Download the latest release version</a><br>
+and it's as easy as</p>
+<ol>
+<li><code class="notranslate">tar -xvf chapel-&lt;VERSION&gt;.tar.gz</code></li>
+<li><code class="notranslate">cd chapel-&lt;VERSION&gt;</code></li>
+<li><code class="notranslate">source util/setchplenv.bash # or .sh or .csh or .fish</code></li>
+<li><code class="notranslate">make</code></li>
+<li><code class="notranslate">make check # optional</code></li>
+</ol>
+<p>You will need to <code class="notranslate">source util/setchplenv.EXT</code> from within the Chapel directory<br>
+(<code class="notranslate">$CHPL_HOME</code>) every time your terminal starts so it's suggested that you drop<br>
+that command in a script that will get executed on startup (like .bashrc).</p>
+<p>Chapel is easily installed with Brew for macOS</p>
+<ol>
+<li><code class="notranslate">brew update</code></li>
+<li><code class="notranslate">brew install chapel</code></li>
+</ol>
+<h2>Compiling Code</h2>
+<p>Builds like other compilers:</p>
+<p><code class="notranslate">chpl myFile.chpl -o myExe</code></p>
+<p>Notable arguments:</p>
+<ul>
+<li><code class="notranslate">--fast</code>: enables a number of optimizations and disables array bounds<br>
+checks. Should only enable when application is stable.</li>
+<li><code class="notranslate">--set &lt;Symbol Name&gt;=&lt;Value&gt;</code>: set config param <code class="notranslate">&lt;Symbol Name&gt;</code> to <code class="notranslate">&lt;Value&gt;</code><br>
+at compile-time.</li>
+<li><code class="notranslate">--main-module &lt;Module Name&gt;</code>: use the main() procedure found in the module<br>
+<code class="notranslate">&lt;Module Name&gt;</code> as the executable's main.</li>
+<li><code class="notranslate">--module-dir &lt;Directory&gt;</code>: includes <code class="notranslate">&lt;Directory&gt;</code> in the module search path.</li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Ian J. Bertolacci", "https://www.cs.arizona.edu/~ianbertolacci/"]
+- ["Ben Harshbarger", "https://github.com/benharsh/"]
+</code></pre>

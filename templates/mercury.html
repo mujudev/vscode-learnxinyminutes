@@ -1,0 +1,254 @@
+<h1>Mercury</h1>
+<p>Mercury is a strict, pure functional/logic programming language, with<br>
+influences from Prolog, ML, and Haskell.</p>
+<div class="highlight highlight-source-prolog"><pre class="notranslate"><span class="pl-c">% Percent sign starts a one-line comment.</span>
+
+    <span class="pl-c">% foo(Bar, Baz)</span>
+    <span class="pl-c">%</span>
+    <span class="pl-c">% Documentation comments are indented before what they describe.</span>
+:- <span class="pl-c1">pred</span> foo(<span class="pl-c1">bar</span>::<span class="pl-c1">in</span>, <span class="pl-c1">baz</span>::<span class="pl-c1">out</span>)<span class="pl-k"> is </span><span class="pl-c1">det</span><span class="pl-k">.</span>
+
+<span class="pl-c">% All toplevel syntax elements end with a '.' -- a full stop.</span>
+
+<span class="pl-c">% Mercury terminology comes from predicate logic. Very roughly:</span>
+
+<span class="pl-c">% | Mercury               | C                            |</span>
+<span class="pl-c">% |                       |                              |</span>
+<span class="pl-c">% | Goal                  | statement                    |</span>
+<span class="pl-c">% | expression            | expression                   |</span>
+<span class="pl-c">% | predicate rule        | void function                |</span>
+<span class="pl-c">% | function rule         | function                     |</span>
+<span class="pl-c">% | head (of a rule)      | function name and parameters |</span>
+<span class="pl-c">% | body (of a rule)      | function body                |</span>
+<span class="pl-c">% | fact                  | (rule without a body)        |</span>
+<span class="pl-c">% | pred/func declaration | function signature           |</span>
+<span class="pl-c">% | A, B  (conjunction)   | A &amp;&amp; B                       |</span>
+<span class="pl-c">% | A ; B (disjunction)   | if (A) {} else if (B) {}     |</span>
+
+<span class="pl-c">% some facts:</span>
+<span class="pl-en">man</span>(<span class="pl-c1">socrates</span>)<span class="pl-k">.</span>  <span class="pl-c">% "it is a fact that Socrates is a man"</span>
+<span class="pl-en">man</span>(<span class="pl-c1">plato</span>)<span class="pl-k">.</span>
+<span class="pl-en">man</span>(<span class="pl-c1">aristotle</span>)<span class="pl-k">.</span>
+
+<span class="pl-c">% a rule:</span>
+<span class="pl-en">mortal</span>(<span class="pl-v">X</span>) <span class="pl-k">:-</span> man(<span class="pl-v">X</span>)<span class="pl-k">.</span>  <span class="pl-c">% "It is a rule that X is a mortal if X is a man."</span>
+<span class="pl-c">%            ^^^^^^-- the body of the rule</span>
+<span class="pl-c">%         ^^-- an arrow &lt;--, pointing to the head from the body</span>
+<span class="pl-c">%^^^^^^^^-- the head of the rule</span>
+<span class="pl-c">% this is also a single clause that defines the rule.</span>
+
+<span class="pl-c">% that X is capitalized is how you know it's a variable.</span>
+<span class="pl-c">% that socrates is uncapitalized is how you know it's a term.</span>
+
+<span class="pl-c">% it's an error for 'socrates' to be undefined. It must have a type:</span>
+
+<span class="pl-c">% declarations begin with ':-'</span>
+:- <span class="pl-c1">type</span> <span class="pl-c1">people</span>
+    <span class="pl-k">--</span><span class="pl-k">-&gt;</span>    <span class="pl-c1">socrates</span>
+    ;       <span class="pl-c1">plato</span>
+    ;       <span class="pl-c1">aristotle</span>
+    ;       <span class="pl-c1">hermes</span><span class="pl-k">.</span>
+    <span class="pl-c">%&lt;--first tab stop (using 4-space tabs)</span>
+            <span class="pl-c">%&lt;--third tab stop (first after ---&gt;)</span>
+
+:- <span class="pl-c1">pred</span> man(<span class="pl-c1">people</span>)<span class="pl-k">.</span>  <span class="pl-c">% rules and facts also require types</span>
+
+<span class="pl-c">% a rule's modes tell you how it can be used.</span>
+:- <span class="pl-c1">mode</span> man(<span class="pl-c1">in</span>)<span class="pl-k"> is </span><span class="pl-c1">semidet</span><span class="pl-k">.</span>  <span class="pl-c">% man(plato) succeeds. man(hermes) fails.</span>
+:- <span class="pl-c1">mode</span> man(<span class="pl-c1">out</span>)<span class="pl-k"> is </span><span class="pl-c1">multi</span><span class="pl-k">.</span>   <span class="pl-c">% man(X) binds X to one of socrates ; plato ; aristotle</span>
+
+<span class="pl-c">% a semidet predicate is like a test. It doesn't return a value, but</span>
+<span class="pl-c">% it can succeed or fail, triggering backtracking or the other side of</span>
+<span class="pl-c">% a disjunction or conditional.</span>
+
+<span class="pl-c">% 'is semidet' provides the determinism of a mode. Other determinisms:</span>
+<span class="pl-c">% | Can fail? | 0 solutions | 1       | more than 1 |</span>
+<span class="pl-c">% |           |             |         |             |</span>
+<span class="pl-c">% | no        | erroneous   | det     | multi       |</span>
+<span class="pl-c">% | yes       | failure     | semidet | nondet      |</span>
+
+:- <span class="pl-c1">pred</span> mortal(<span class="pl-c1">people</span>::<span class="pl-c1">in</span>)<span class="pl-k"> is </span><span class="pl-c1">semidet</span><span class="pl-k">.</span>  <span class="pl-c">% type/mode in one declaration</span>
+
+<span class="pl-c">% this rule's body consists of two conjunctions: A, B, C</span>
+<span class="pl-c">% this rule is true if A, B, and C are all true.</span>
+<span class="pl-c">% if age(P) returns 16, it fails.</span>
+<span class="pl-c">% if alive(P) fails, it fails.</span>
+:- <span class="pl-c1">type</span> voter(<span class="pl-c1">people</span>::<span class="pl-c1">in</span>)<span class="pl-k"> is </span><span class="pl-c1">semidet</span><span class="pl-k">.</span>
+<span class="pl-en">voter</span>(<span class="pl-v">P</span>) <span class="pl-k">:-</span>
+    alive(<span class="pl-v">P</span>),
+    registered(<span class="pl-v">P</span>, locale(<span class="pl-v">P</span>)),
+    age(<span class="pl-v">P</span>) <span class="pl-k">&gt;=</span> <span class="pl-c1">18</span><span class="pl-k">.</span>  <span class="pl-c">% age/1 is a function; int.&gt;= is a function used as an operator</span>
+
+<span class="pl-c">% "a P is a voter if it is alive, is registered in P's locale, and if</span>
+<span class="pl-c">% P's age is 18 or older."</span>
+
+<span class="pl-c">% the &gt;= used here is provided by the 'int' module, which isn't</span>
+<span class="pl-c">% imported by default. Mercury has a very small 'Prelude' (the</span>
+<span class="pl-c">% 'builtin' module). You even need to import the 'list' module if</span>
+<span class="pl-c">% you're going to use list literals.</span></pre></div>
+<p>Complete runnable example. File in 'types.m'; compile with 'mmc --make types'.</p>
+<div class="highlight highlight-source-prolog"><pre class="notranslate">:- <span class="pl-k">module</span> <span class="pl-c1">types</span><span class="pl-k">.</span>
+:- <span class="pl-c1">interface</span><span class="pl-k">.</span>
+:- <span class="pl-c1">import_module</span> <span class="pl-c1">io</span><span class="pl-k">.</span>  <span class="pl-c">% required for io.io types in...</span>
+<span class="pl-c">% main/2 is usually 'det'. threading and exceptions require 'cc_multi'</span>
+:- <span class="pl-c1">pred</span> main(<span class="pl-c1">io</span>::<span class="pl-c1">di</span>, <span class="pl-c1">io</span>::<span class="pl-c1">uo</span>)<span class="pl-k"> is </span><span class="pl-c1">cc_multi</span><span class="pl-k">.</span>  <span class="pl-c">% program entry point</span>
+:- <span class="pl-c1">implementation</span><span class="pl-k">.</span>
+:- <span class="pl-c1">import_module</span> <span class="pl-c1">int</span>, <span class="pl-c1">float</span>, <span class="pl-c1">string</span>, <span class="pl-c1">list</span>, <span class="pl-c1">bool</span>, <span class="pl-c1">map</span>, <span class="pl-c1">exception</span><span class="pl-k">.</span>
+
+<span class="pl-c">% enum.</span>
+:- <span class="pl-c1">type</span> <span class="pl-c1">days</span>
+    <span class="pl-k">--</span><span class="pl-k">-&gt;</span>    <span class="pl-c1">sunday</span>
+    ;       <span class="pl-c1">monday</span>
+    ;       <span class="pl-c1">tuesday</span>
+    ;       <span class="pl-c1">wednesday</span>
+    ;       <span class="pl-c1">thursday</span>
+    ;       <span class="pl-c1">friday</span>
+    ;       <span class="pl-c1">saturday</span><span class="pl-k">.</span>
+
+<span class="pl-c">% discriminated union, like datatype in ML.</span>
+:- <span class="pl-c1">type</span> <span class="pl-c1">payment_method</span>
+    <span class="pl-k">--</span><span class="pl-k">-&gt;</span>    cash(<span class="pl-c1">int</span>)
+    ;       credit_card(
+                <span class="pl-c1">name</span> :: <span class="pl-c1">string</span>,         <span class="pl-c">% named fields</span>
+                <span class="pl-c1">cc_number</span> :: <span class="pl-c1">string</span>,
+                <span class="pl-c1">cvv</span> :: <span class="pl-c1">int</span>,
+                <span class="pl-c1">expiration</span> :: <span class="pl-c1">string</span>
+            )
+    ;       crypto(<span class="pl-c1">coin_type</span>, <span class="pl-c1">wallet</span>, <span class="pl-c1">amount</span>)<span class="pl-k">.</span>
+
+:- <span class="pl-c1">type</span> <span class="pl-c1">coin_type</span>
+    <span class="pl-k">--</span><span class="pl-k">-&gt;</span>    <span class="pl-c1">etherium</span>
+    ;       <span class="pl-c1">monero</span><span class="pl-k">.</span>  <span class="pl-c">% "other coins are available"</span>
+
+<span class="pl-c">% type aliases.</span>
+:- <span class="pl-c1">type</span> <span class="pl-c1">wallet</span> <span class="pl-k">==</span> <span class="pl-c1">string</span><span class="pl-k">.</span>
+:- <span class="pl-c1">type</span> <span class="pl-c1">amount</span> <span class="pl-k">==</span> <span class="pl-c1">int</span><span class="pl-k">.</span>
+
+<span class="pl-c">% !IO is the pair of io.io arguments</span>
+<span class="pl-c">% pass it to anything doing I/O, in order to perform I/O.</span>
+<span class="pl-c">% many otherwise-impure functions can 'attach to the I/O state' by taking !IO</span>
+<span class="pl-en">main</span>(!<span class="pl-v">IO</span>) <span class="pl-k">:-</span>
+    <span class="pl-v">Ints</span> <span class="pl-k">=</span> [
+        <span class="pl-c1">3</span>,
+        <span class="pl-c1">1</span> <span class="pl-k">+</span> <span class="pl-c1">1</span>,
+        <span class="pl-c1">8</span> <span class="pl-k">-</span> <span class="pl-c1">1</span>,
+        <span class="pl-c1">10</span> <span class="pl-k">*</span> <span class="pl-c1">2</span>,
+        <span class="pl-c1">35</span> / <span class="pl-c1">5</span>,
+        <span class="pl-c1">5</span> / <span class="pl-c1">2</span>,      <span class="pl-c">% truncating division</span>
+        <span class="pl-c1">int</span><span class="pl-k">.</span>div(5, 2),  <span class="pl-c">% floored division</span>
+        <span class="pl-en">div</span>(<span class="pl-c1">5</span>, <span class="pl-c1">2</span>),  % (<span class="pl-c1">module</span> <span class="pl-c1">is</span> <span class="pl-c1">unambiguous</span> <span class="pl-c1">due</span> <span class="pl-c1">to</span> <span class="pl-c1">types</span>)
+        <span class="pl-c1">5</span> `<span class="pl-c1">div</span>` <span class="pl-c1">2</span>,  % (<span class="pl-c1">any</span> <span class="pl-c1">binary</span> <span class="pl-c1">function</span> <span class="pl-c1">can</span> <span class="pl-c1">be</span> <span class="pl-c1">an</span> <span class="pl-c1">operator</span> <span class="pl-c1">with</span> ``)
+        <span class="pl-c1">7</span> `<span class="pl-c1">mod</span>` <span class="pl-c1">3</span>,  % <span class="pl-c1">modulo</span> <span class="pl-c1">of</span> <span class="pl-c1">floored</span> <span class="pl-c1">division</span>
+        <span class="pl-c1">7</span> `<span class="pl-c1">rem</span>` <span class="pl-c1">3</span>,  % <span class="pl-c1">remainder</span> <span class="pl-c1">of</span> <span class="pl-c1">truncating</span> <span class="pl-c1">division</span>
+        <span class="pl-c1">2</span> `<span class="pl-c1">pow</span>` <span class="pl-c1">4</span>,  % <span class="pl-c1">2</span> <span class="pl-c1">to</span> <span class="pl-c1">the</span> <span class="pl-c1">4</span>th <span class="pl-c1">power</span>
+        (<span class="pl-c1">1</span> + <span class="pl-c1">3</span>) * <span class="pl-c1">2</span>,    % <span class="pl-c1">parens</span> <span class="pl-c1">have</span> <span class="pl-c1">their</span> <span class="pl-c1">usual</span> <span class="pl-c1">meaning</span>
+
+        <span class="pl-c1">2</span> &gt;&gt; <span class="pl-c1">3</span>,     % <span class="pl-c1">bitwise</span> <span class="pl-c1">right</span> <span class="pl-c1">shift</span>
+        <span class="pl-c1">128</span> &lt;&lt; <span class="pl-c1">3</span>,   % <span class="pl-c1">bitwise</span> <span class="pl-c1">left</span> <span class="pl-c1">shift</span>
+        \ <span class="pl-c1">0</span>,        % <span class="pl-c1">bitwise</span> <span class="pl-c1">complement</span>
+        <span class="pl-c1">5</span> /\ <span class="pl-c1">1</span>,     % <span class="pl-c1">bitwise</span> <span class="pl-c1">and</span>
+        <span class="pl-c1">5</span> \/ <span class="pl-c1">1</span>,     % <span class="pl-c1">bitwise</span> <span class="pl-c1">or</span>
+        <span class="pl-c1">5</span> `<span class="pl-c1">xor</span>` <span class="pl-c1">3</span>,  % <span class="pl-c1">bitwise</span> <span class="pl-c1">xor</span>
+
+        <span class="pl-c1">max_int</span>,
+        <span class="pl-c1">min_int</span>,
+
+        <span class="pl-c1">5</span> `<span class="pl-c1">min</span>` <span class="pl-c1">3</span>,  % ( <span class="pl-c1">if</span> <span class="pl-c1">5</span> &gt; <span class="pl-c1">3</span> <span class="pl-c1">then</span> <span class="pl-c1">3</span> <span class="pl-c1">else</span> <span class="pl-c1">5</span> )
+        <span class="pl-c1">5</span> `<span class="pl-c1">max</span>` <span class="pl-c1">3</span>
+    ],
+    <span class="pl-v">Bools</span> = [
+        <span class="pl-c1">yes</span>,
+        <span class="pl-c1">no</span>
+        % <span class="pl-c1">bools</span> <span class="pl-c1">are</span> <span class="pl-c1">much</span> <span class="pl-c1">less</span> <span class="pl-c1">important</span> <span class="pl-c1">in</span> <span class="pl-v">Mercury</span> <span class="pl-c1">because</span> <span class="pl-c1">control</span> <span class="pl-c1">flow</span> <span class="pl-c1">goes</span> <span class="pl-c1">by</span>
+        % <span class="pl-c1">semidet</span> <span class="pl-c1">goals</span> <span class="pl-c1">instead</span> <span class="pl-c1">of</span> <span class="pl-c1">boolean</span> <span class="pl-c1">expressions</span><span class="pl-k">.</span>
+    ],
+    <span class="pl-en">Strings</span> = [
+        <span class="pl-s">"this is a string"</span>,
+        <span class="pl-s">"strings can have "" embedded doublequotes via doubling"</span>,
+        <span class="pl-s">"strings support \u4F60\u597D the usual escapes\n"</span>,
+        % <span class="pl-c1">no</span> <span class="pl-c1">implicit</span> <span class="pl-c1">concatenation</span> <span class="pl-c1">of</span> <span class="pl-c1">strings</span>: <span class="pl-s">"concat:"</span> <span class="pl-s">"together"</span>
+        <span class="pl-s">"but you can "</span> ++ <span class="pl-s">" use the string.++ operator"</span>,
+
+        % <span class="pl-c1">second</span> <span class="pl-c1">param</span> <span class="pl-c1">is</span> <span class="pl-c1">a</span> list(<span class="pl-c1">string</span><span class="pl-k">.</span><span class="pl-c1">poly_type</span>)
+        <span class="pl-c">% s/1 is a function that takes a string and returns a poly_type</span>
+        <span class="pl-c">% i/1 takes an int. f/1 takes a float. c/1 takes a char.</span>
+        <span class="pl-en">string</span><span class="pl-k">.</span>format("<span class="pl-v">Hello</span>, <span class="pl-c">%d'th %s\n", [i(45), s("World")])</span>
+    ],
+
+    <span class="pl-c">% start with purely functional types like 'map' and 'list'!</span>
+    <span class="pl-c">% arrays and hash tables are available too, but using them</span>
+    <span class="pl-c">% requires knowing a lot more about Mercury</span>
+    <span class="pl-en">get_map1</span>(<span class="pl-v">Map1</span>),
+    get_map2(<span class="pl-v">Map2</span>),
+
+    % <span class="pl-c1">list</span><span class="pl-k">.</span><span class="pl-c1">foldl</span> <span class="pl-c1">has</span> *<span class="pl-c1">many</span>* <span class="pl-c1">variations</span>
+    <span class="pl-c">% this one calls io.print_line(X, !IO) for each X of the list</span>
+    <span class="pl-en">foldl</span>(<span class="pl-c1">io</span><span class="pl-k">.</span><span class="pl-c1">print_line</span>, <span class="pl-v">Ints</span>, !<span class="pl-v">IO</span>),
+    <span class="pl-en">foldl</span>(<span class="pl-c1">io</span><span class="pl-k">.</span><span class="pl-c1">print_line</span>, <span class="pl-v">Bools</span>, !<span class="pl-v">IO</span>),
+    <span class="pl-en">foldl</span>(<span class="pl-c1">io</span><span class="pl-k">.</span><span class="pl-c1">print_line</span>, <span class="pl-v">Strings</span>, !<span class="pl-v">IO</span>),
+    <span class="pl-en">io</span><span class="pl-k">.</span>print_line(<span class="pl-v">Map1</span>, !<span class="pl-v">IO</span>),
+    <span class="pl-c">% ( if Cond then ThenGoal else ElseGoal )</span>
+    <span class="pl-c">% I/O not allowed in Cond: I/O isn't allowed to fail!</span>
+    ( <span class="pl-c1">if</span> <span class="pl-v">Map2</span>^elem(42) = <span class="pl-v">Elem</span> <span class="pl-c1">then</span>
+        <span class="pl-en">io</span><span class="pl-k">.</span>print_line(<span class="pl-v">Elem</span>, !<span class="pl-v">IO</span>)
+    <span class="pl-en">else</span> % <span class="pl-c1">always</span> <span class="pl-c1">required</span>
+        <span class="pl-c1">true</span>  % <span class="pl-c1">do</span> <span class="pl-c1">nothing</span>, successfully (<span class="pl-c1">vs</span><span class="pl-k">.</span> <span class="pl-c1">'fail'</span>)
+    ),
+
+    <span class="pl-c">% exception handling:</span>
+    ( <span class="pl-c1">try</span> [io(!<span class="pl-v">IO</span>)] ( <span class="pl-c">% io/1 param required or no I/O allowed here</span>
+        <span class="pl-en">io</span><span class="pl-k">.</span>print_line(received(cash(1234)), !<span class="pl-v">IO</span>),
+        <span class="pl-en">io</span><span class="pl-k">.</span>print_line(received(crypto(<span class="pl-c1">monero</span>, "<span class="pl-c1">invalid</span>", 123)), !<span class="pl-v">IO</span>)
+    ) <span class="pl-c1">then</span>
+        <span class="pl-en">io</span><span class="pl-k">.</span>write_string("<span class="pl-c1">all</span> <span class="pl-c1">payments</span> <span class="pl-c1">accepted</span>\<span class="pl-c1">n</span>", !<span class="pl-v">IO</span>) <span class="pl-c">% never reached</span>
+    <span class="pl-en">catch</span> <span class="pl-s">"monero not yet supported"</span> -&gt; % <span class="pl-c1">extremely</span> <span class="pl-c1">specific</span> <span class="pl-c1">catch</span>!
+        <span class="pl-c1">io</span><span class="pl-k">.</span>write_string("<span class="pl-c1">monero</span> <span class="pl-c1">payment</span> <span class="pl-c1">failed</span>\<span class="pl-c1">n</span>", !<span class="pl-v">IO</span>)
+    ).
+
+:- <span class="pl-c1">pred</span> get_map1(map(<span class="pl-c1">string</span>, <span class="pl-c1">int</span>)::<span class="pl-c1">out</span>)<span class="pl-k"> is </span><span class="pl-c1">det</span><span class="pl-k">.</span>
+<span class="pl-en">get_map1</span>(!:<span class="pl-v">Map</span>) <span class="pl-k">:-</span>  <span class="pl-c">% !:Map in the head is the final (free, unbound) Map</span>
+    <span class="pl-k">!</span>:<span class="pl-v">Map</span> <span class="pl-k">=</span> <span class="pl-c1">init</span>,   <span class="pl-c">% !:Map in the body is the next Map</span>
+    det_insert(<span class="pl-s">"hello"</span>, <span class="pl-c1">1</span>, <span class="pl-k">!</span><span class="pl-v">Map</span>),  <span class="pl-c">% pair of Map vars</span>
+    det_insert(<span class="pl-s">"world"</span>, <span class="pl-c1">2</span>, <span class="pl-k">!</span><span class="pl-v">Map</span>),
+
+    <span class="pl-c">% debug print of current (bound) Map</span>
+    <span class="pl-c">% other [Params] can make it optional per runtime or compiletime flags</span>
+    <span class="pl-c1">trace</span> [io(<span class="pl-k">!</span><span class="pl-v">IO</span>)] (<span class="pl-c1">io</span><span class="pl-k">.</span>print_line(!.<span class="pl-v">Map</span>, !<span class="pl-v">IO</span>)),
+
+    <span class="pl-en">det_insert_from_corresponding_lists</span>(<span class="pl-v">K</span>, <span class="pl-v">V</span>, !<span class="pl-v">Map</span>),
+    % <span class="pl-c1">this</span> <span class="pl-c1">code</span> <span class="pl-c1">is</span> <span class="pl-c1">reordered</span> <span class="pl-c1">so</span> <span class="pl-c1">that</span> <span class="pl-v">K</span> <span class="pl-c1">and</span> <span class="pl-v">V</span> <span class="pl-c1">and</span> <span class="pl-c1">defined</span> <span class="pl-c1">prior</span> <span class="pl-c1">to</span> <span class="pl-c1">their</span> <span class="pl-c1">use</span>
+    <span class="pl-v">K</span> = [<span class="pl-s">"more"</span>, <span class="pl-s">"words"</span>, <span class="pl-s">"here"</span>],
+    <span class="pl-v">V</span> = [<span class="pl-c1">3</span>, <span class="pl-c1">4</span>, <span class="pl-c1">5</span>]<span class="pl-k">.</span>
+
+:- <span class="pl-c1">pred</span> get_map2(map(<span class="pl-c1">int</span>, <span class="pl-c1">bool</span>)::<span class="pl-c1">out</span>)<span class="pl-k"> is </span><span class="pl-c1">det</span><span class="pl-k">.</span>
+<span class="pl-en">get_map2</span>(<span class="pl-v">Map</span>) <span class="pl-k">:-</span>
+    det_insert(<span class="pl-c1">42</span>, <span class="pl-c1">yes</span>, <span class="pl-c1">map</span><span class="pl-k">.</span><span class="pl-c1">init</span>, <span class="pl-v">Map</span>).
+
+:- <span class="pl-c1">func</span> received(<span class="pl-c1">payment_method</span>) <span class="pl-k">=</span> <span class="pl-c1">string</span><span class="pl-k">.</span>
+<span class="pl-en">received</span>(cash(<span class="pl-v">N</span>)) = <span class="pl-c1">string</span><span class="pl-k">.</span>format("<span class="pl-c1">received</span> <span class="pl-c">%d dollars", [i(N)]).</span>
+<span class="pl-en">received</span>(credit_card(<span class="pl-v">_</span>, <span class="pl-v">_</span>, <span class="pl-v">_</span>, <span class="pl-v">_</span>)) = <span class="pl-s">"received credit card"</span><span class="pl-k">.</span>  <span class="pl-c">% _ is throwaway</span>
+<span class="pl-en">received</span>(crypto(<span class="pl-v">Type</span>, <span class="pl-v">_Wallet</span>, <span class="pl-v">Amount</span>)) = <span class="pl-v">S</span> <span class="pl-k">:-</span>  <span class="pl-c">% _Wallet is named throwaway</span>
+    ( <span class="pl-c">% case/switch structure</span>
+        <span class="pl-v">Type</span> <span class="pl-k">=</span> <span class="pl-c1">etherium</span>,
+        <span class="pl-v">S</span> <span class="pl-k">=</span> <span class="pl-c1">string</span><span class="pl-k">.</span>format("<span class="pl-c1">receiving</span> <span class="pl-c">%d ETH", [i(Amount)])</span>
+    <span class="pl-k">;</span>
+        <span class="pl-v">Type</span> <span class="pl-k">=</span> <span class="pl-c1">monero</span>,
+        throw(<span class="pl-s">"monero not yet supported"</span>)  <span class="pl-c">% exception with string as payload</span>
+    )<span class="pl-k">.</span></pre></div>
+<h2>That was quick! Want more?</h2>
+<h3>More Tutorials</h3>
+<ul>
+<li><a href="https://mercurylang.org/documentation/papers/book.pdf" rel="nofollow">Mercury Tutorial</a> (pdf link) - a more traditional tutorial with a more relaxed pace</li>
+<li><a href="https://mercury-in.space/crash.html" rel="nofollow">Mercury Crash Course</a> - a dense example-driven tutorial with Q&amp;A format</li>
+<li><a href="https://github.com/Mercury-Language/mercury/wiki/Tutorial">Github Wiki Tutorial</a></li>
+<li><a href="https://bluishcoder.co.nz/2019/06/23/getting-started-with-mercury.html" rel="nofollow">Getting Started with Mercury</a> - installation and your first steps</li>
+</ul>
+<h3>Documentation</h3>
+<ul>
+<li>Language manual, user's guide, and library reference are all at<br>
+<a href="https://mercurylang.org/documentation/documentation.html" rel="nofollow">mercurylang.org</a></li>
+</ul>
+<hr>
+<h1>Contributors</h1>
+<pre class="notranslate"><code class="notranslate">- ["Julian Fondren", "https://mercury-in.space/"]
+</code></pre>

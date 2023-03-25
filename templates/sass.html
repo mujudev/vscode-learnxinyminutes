@@ -1,0 +1,573 @@
+<h1>Sass</h1>
+<p>Sass is a CSS extension language that adds features such as variables, nesting, mixins and more.<br>
+Sass (and other preprocessors, such as <a href="http://lesscss.org/" rel="nofollow">Less</a>) help developers write maintainable and DRY (Don't Repeat Yourself) code.</p>
+<p>Sass has two different syntax options to choose from. SCSS, which has the same syntax as CSS but with the added features of Sass. Or Sass (the original syntax), which uses indentation rather than curly braces and semicolons.<br>
+This tutorial is written using SCSS.</p>
+<p>If you're already familiar with CSS3, you'll be able to pick up Sass relatively quickly. It does not provide any new styling properties but rather the tools to write your CSS more efficiently and make maintenance much easier.</p>
+<div class="highlight highlight-source-css-scss"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span>Single line comments are removed when Sass is compiled to CSS.</span>
+
+<span class="pl-c"><span class="pl-c">/*</span> Multi line comments are preserved. <span class="pl-c">*/</span></span>
+
+
+
+<span class="pl-c"><span class="pl-c">/*</span> Variables</span>
+<span class="pl-c">============================== <span class="pl-c">*/</span></span>
+
+
+
+<span class="pl-c"><span class="pl-c">/*</span> You can store a CSS value (such as a color) in a variable.</span>
+<span class="pl-c">Use the '$' symbol to create a variable. <span class="pl-c">*/</span></span>
+
+<span class="pl-v">$primary-color</span>: <span class="pl-c1">#A3A4FF</span>;
+<span class="pl-v">$secondary-color</span>: <span class="pl-c1">#51527F</span>;
+<span class="pl-v">$body-font</span>: <span class="pl-s"><span class="pl-pds">'</span>Roboto<span class="pl-pds">'</span></span>, <span class="pl-c1">sans-serif</span>;
+
+<span class="pl-c"><span class="pl-c">/*</span> You can use the variables throughout your stylesheet.</span>
+<span class="pl-c">Now if you want to change a color, you only have to make the change once. <span class="pl-c">*/</span></span>
+
+<span class="pl-ent">body</span> {
+	<span class="pl-c1"><span class="pl-c1">background-color</span></span>: <span class="pl-v">$primary-color</span>;
+	<span class="pl-c1"><span class="pl-c1">color</span></span>: <span class="pl-v">$secondary-color</span>;
+	<span class="pl-c1"><span class="pl-c1">font-family</span></span>: <span class="pl-v">$body-font</span>;
+}
+
+<span class="pl-c"><span class="pl-c">/*</span> This would compile to: <span class="pl-c">*/</span></span>
+<span class="pl-ent">body</span> {
+	<span class="pl-c1"><span class="pl-c1">background-color</span></span>: <span class="pl-c1">#A3A4FF</span>;
+	<span class="pl-c1"><span class="pl-c1">color</span></span>: <span class="pl-c1">#51527F</span>;
+	<span class="pl-c1"><span class="pl-c1">font-family</span></span>: <span class="pl-s"><span class="pl-pds">'</span>Roboto<span class="pl-pds">'</span></span>, <span class="pl-c1">sans-serif</span>;
+}
+
+<span class="pl-c"><span class="pl-c">/*</span> This is much more maintainable than having to change the color</span>
+<span class="pl-c">each time it appears throughout your stylesheet. <span class="pl-c">*/</span></span>
+
+
+
+<span class="pl-c"><span class="pl-c">/*</span> Control Directives</span>
+<span class="pl-c">============================== <span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">/*</span> Sass lets you use @if, @else, @for, @while, and @each to control the</span>
+<span class="pl-c">   compilation of your code to CSS. <span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">/*</span> @if/@else blocks behave exactly as you might expect <span class="pl-c">*/</span></span>
+
+<span class="pl-v">$debug</span>: true <span class="pl-k">!default</span>;
+
+<span class="pl-k">@mixin</span> <span class="pl-en">debugmode</span> {
+	<span class="pl-k">@if</span> <span class="pl-v">$debug</span> {
+		<span class="pl-k">@debug</span> <span class="pl-s"><span class="pl-pds">"</span>Debug mode enabled<span class="pl-pds">"</span></span>;
+
+		<span class="pl-c1"><span class="pl-c1">display</span></span>: <span class="pl-c1">inline-block</span>;
+	}
+	<span class="pl-k">@else </span>{
+		<span class="pl-c1"><span class="pl-c1">display</span></span>: <span class="pl-c1">none</span>;
+	}
+}
+
+<span class="pl-e">.info</span> {
+	<span class="pl-k">@include</span> <span class="pl-en">debugmode</span>;
+}
+
+<span class="pl-c"><span class="pl-c">/*</span> If $debug is set to true, .info is displayed; if it's set to false then</span>
+<span class="pl-c">.info is not displayed.</span>
+<span class="pl-c"></span>
+<span class="pl-c">Note: @debug will output debugging information to the command line.</span>
+<span class="pl-c">Useful for checking variables while debugging your SCSS. <span class="pl-c">*/</span></span>
+
+<span class="pl-e">.info</span> {
+	<span class="pl-c1"><span class="pl-c1">display</span></span>: <span class="pl-c1">inline-block</span>;
+}
+
+<span class="pl-c"><span class="pl-c">/*</span> @for is a control loop that iterates through a range of values.</span>
+<span class="pl-c">Particularly useful for setting styles on a collection of items.</span>
+<span class="pl-c">There are two forms, "through" and "to". The former includes the last value,</span>
+<span class="pl-c">the latter stops at the last value. <span class="pl-c">*/</span></span>
+
+<span class="pl-k">@for</span> <span class="pl-v">$c</span> <span class="pl-k">from</span> <span class="pl-c1">1</span> <span class="pl-k">to</span> <span class="pl-c1">4</span> {
+	<span class="pl-ent">div</span><span class="pl-e">:nth-of-type</span>(<span class="pl-v">#{<span class="pl-v">$c</span>}</span>) {
+		<span class="pl-c1"><span class="pl-c1">left</span></span>: (<span class="pl-v">$c</span> <span class="pl-k">-</span> <span class="pl-c1">1</span>) <span class="pl-k">*</span> <span class="pl-c1">900</span> <span class="pl-k">/</span> <span class="pl-c1">3</span>;
+	}
+}
+
+<span class="pl-k">@for</span> <span class="pl-v">$c</span> <span class="pl-k">from</span> <span class="pl-c1">1</span> <span class="pl-k">through</span> <span class="pl-c1">3</span> {
+	<span class="pl-e">.myclass-<span class="pl-v">#{<span class="pl-v">$c</span>}</span></span> {
+		<span class="pl-c1"><span class="pl-c1">color</span></span>: <span class="pl-c1">rgb</span>(<span class="pl-v">$c</span> <span class="pl-k">*</span> <span class="pl-c1">255</span> <span class="pl-k">/</span> <span class="pl-c1">3</span>, <span class="pl-v">$c</span> <span class="pl-k">*</span> <span class="pl-c1">255</span> <span class="pl-k">/</span> <span class="pl-c1">3</span>, <span class="pl-v">$c</span> <span class="pl-k">*</span> <span class="pl-c1">255</span> <span class="pl-k">/</span> <span class="pl-c1">3</span>);
+	}
+}
+
+<span class="pl-c"><span class="pl-c">/*</span> Will compile to: <span class="pl-c">*/</span></span>
+
+<span class="pl-ent">div</span><span class="pl-e">:nth-of-type</span>(<span class="pl-c1">1</span>) {
+	<span class="pl-c1"><span class="pl-c1">left</span></span>: <span class="pl-c1">0</span>;
+}
+
+<span class="pl-ent">div</span><span class="pl-e">:nth-of-type</span>(<span class="pl-c1">2</span>) {
+	<span class="pl-c1"><span class="pl-c1">left</span></span>: <span class="pl-c1">300</span>;
+}
+
+<span class="pl-ent">div</span><span class="pl-e">:nth-of-type</span>(<span class="pl-c1">3</span>) {
+	<span class="pl-c1"><span class="pl-c1">left</span></span>: <span class="pl-c1">600</span>;
+}
+
+<span class="pl-e">.myclass-1</span> {
+	<span class="pl-c1"><span class="pl-c1">color</span></span>: <span class="pl-c1">#555555</span>;
+}
+
+<span class="pl-e">.myclass-2</span> {
+	<span class="pl-c1"><span class="pl-c1">color</span></span>: <span class="pl-c1">#aaaaaa</span>;
+}
+
+<span class="pl-e">.myclass-3</span> {
+	<span class="pl-c1"><span class="pl-c1">color</span></span>: <span class="pl-c1">white</span>;
+<span class="pl-c"><span class="pl-c">//</span> SASS automatically converts #FFFFFF to white</span>
+}
+
+<span class="pl-c"><span class="pl-c">/*</span> @while is very straightforward: <span class="pl-c">*/</span></span>
+
+<span class="pl-v">$columns</span>: <span class="pl-c1">4</span>;
+<span class="pl-v">$column-width</span>: <span class="pl-c1">80<span class="pl-k">px</span></span>;
+
+<span class="pl-k">@while</span> <span class="pl-v">$columns</span> <span class="pl-k">&gt;</span> <span class="pl-c1">0</span> {
+	<span class="pl-e">.col-<span class="pl-v">#{<span class="pl-v">$columns</span>}</span></span> {
+		<span class="pl-c1"><span class="pl-c1">width</span></span>: <span class="pl-v">$column-width</span>;
+		<span class="pl-c1"><span class="pl-c1">left</span></span>: <span class="pl-v">$column-width</span> <span class="pl-k">*</span> (<span class="pl-v">$columns</span> <span class="pl-k">-</span> <span class="pl-c1">1</span>);
+	}
+
+	<span class="pl-v">$columns</span>: <span class="pl-v">$columns</span> <span class="pl-k">-</span> <span class="pl-c1">1</span>;
+}
+
+<span class="pl-c"><span class="pl-c">/*</span> Will output the following CSS: <span class="pl-c">*/</span></span>
+
+<span class="pl-e">.col-4</span> {
+	<span class="pl-c1"><span class="pl-c1">width</span></span>: <span class="pl-c1">80<span class="pl-k">px</span></span>;
+	<span class="pl-c1"><span class="pl-c1">left</span></span>: <span class="pl-c1">240<span class="pl-k">px</span></span>;
+}
+
+<span class="pl-e">.col-3</span> {
+	<span class="pl-c1"><span class="pl-c1">width</span></span>: <span class="pl-c1">80<span class="pl-k">px</span></span>;
+	<span class="pl-c1"><span class="pl-c1">left</span></span>: <span class="pl-c1">160<span class="pl-k">px</span></span>;
+}
+
+<span class="pl-e">.col-2</span> {
+	<span class="pl-c1"><span class="pl-c1">width</span></span>: <span class="pl-c1">80<span class="pl-k">px</span></span>;
+	<span class="pl-c1"><span class="pl-c1">left</span></span>: <span class="pl-c1">80<span class="pl-k">px</span></span>;
+}
+
+<span class="pl-e">.col-1</span> {
+	<span class="pl-c1"><span class="pl-c1">width</span></span>: <span class="pl-c1">80<span class="pl-k">px</span></span>;
+	<span class="pl-c1"><span class="pl-c1">left</span></span>: <span class="pl-c1">0<span class="pl-k">px</span></span>;
+}
+
+<span class="pl-c"><span class="pl-c">/*</span> @each functions like @for, except using a list instead of ordinal values</span>
+<span class="pl-c">Note: you specify lists just like other variables, with spaces as</span>
+<span class="pl-c">delimiters. <span class="pl-c">*/</span></span>
+
+<span class="pl-v">$social-links</span>: facebook twitter linkedin reddit;
+
+<span class="pl-e">.social-links</span> {
+	<span class="pl-k">@each</span> <span class="pl-v">$sm</span> <span class="pl-k">in</span> <span class="pl-v">$social-links</span> {
+		<span class="pl-e">.icon-<span class="pl-v">#{<span class="pl-v">$sm</span>}</span></span> {
+			<span class="pl-c1"><span class="pl-c1">background-image</span></span>: <span class="pl-c1">url</span>(<span class="pl-s"><span class="pl-pds">"</span>images/<span class="pl-v">#{<span class="pl-v">$sm</span>}</span>.png<span class="pl-pds">"</span></span>);
+		}
+	}
+}
+
+<span class="pl-c"><span class="pl-c">/*</span> Which will output: <span class="pl-c">*/</span></span>
+
+<span class="pl-e">.social-links</span> <span class="pl-e">.icon-facebook</span> {
+	<span class="pl-c1"><span class="pl-c1">background-image</span></span>: <span class="pl-c1">url</span>(<span class="pl-s"><span class="pl-pds">"</span>images/facebook.png<span class="pl-pds">"</span></span>);
+}
+
+<span class="pl-e">.social-links</span> <span class="pl-e">.icon-twitter</span> {
+	<span class="pl-c1"><span class="pl-c1">background-image</span></span>: <span class="pl-c1">url</span>(<span class="pl-s"><span class="pl-pds">"</span>images/twitter.png<span class="pl-pds">"</span></span>);
+}
+
+<span class="pl-e">.social-links</span> <span class="pl-e">.icon-linkedin</span> {
+	<span class="pl-c1"><span class="pl-c1">background-image</span></span>: <span class="pl-c1">url</span>(<span class="pl-s"><span class="pl-pds">"</span>images/linkedin.png<span class="pl-pds">"</span></span>);
+}
+
+<span class="pl-e">.social-links</span> <span class="pl-e">.icon-reddit</span> {
+	<span class="pl-c1"><span class="pl-c1">background-image</span></span>: <span class="pl-c1">url</span>(<span class="pl-s"><span class="pl-pds">"</span>images/reddit.png<span class="pl-pds">"</span></span>);
+}
+
+
+<span class="pl-c"><span class="pl-c">/*</span> Mixins</span>
+<span class="pl-c">==============================<span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">/*</span> If you find you are writing the same code for more than one</span>
+<span class="pl-c">element, you might want to store that code in a mixin.</span>
+<span class="pl-c"></span>
+<span class="pl-c">Use the '@mixin' directive, plus a name for your mixin. <span class="pl-c">*/</span></span>
+
+<span class="pl-k">@mixin</span> <span class="pl-en">center</span> {
+	<span class="pl-c1"><span class="pl-c1">display</span></span>: <span class="pl-c1">block</span>;
+	<span class="pl-c1"><span class="pl-c1">margin-left</span></span>: <span class="pl-c1">auto</span>;
+	<span class="pl-c1"><span class="pl-c1">margin-right</span></span>: <span class="pl-c1">auto</span>;
+	<span class="pl-c1"><span class="pl-c1">left</span></span>: <span class="pl-c1">0</span>;
+	<span class="pl-c1"><span class="pl-c1">right</span></span>: <span class="pl-c1">0</span>;
+}
+
+<span class="pl-c"><span class="pl-c">/*</span> You can use the mixin with '@include' and the mixin name. <span class="pl-c">*/</span></span>
+
+<span class="pl-ent">div</span> {
+	<span class="pl-k">@include</span> <span class="pl-en">center</span>;
+	<span class="pl-c1"><span class="pl-c1">background-color</span></span>: <span class="pl-v">$primary-color</span>;
+}
+
+<span class="pl-c"><span class="pl-c">/*</span> Which would compile to: <span class="pl-c">*/</span></span>
+<span class="pl-ent">div</span> {
+	<span class="pl-c1"><span class="pl-c1">display</span></span>: <span class="pl-c1">block</span>;
+	<span class="pl-c1"><span class="pl-c1">margin-left</span></span>: <span class="pl-c1">auto</span>;
+	<span class="pl-c1"><span class="pl-c1">margin-right</span></span>: <span class="pl-c1">auto</span>;
+	<span class="pl-c1"><span class="pl-c1">left</span></span>: <span class="pl-c1">0</span>;
+	<span class="pl-c1"><span class="pl-c1">right</span></span>: <span class="pl-c1">0</span>;
+	<span class="pl-c1"><span class="pl-c1">background-color</span></span>: <span class="pl-c1">#A3A4FF</span>;
+}
+
+<span class="pl-c"><span class="pl-c">/*</span> You can use mixins to create a shorthand property. <span class="pl-c">*/</span></span>
+
+<span class="pl-k">@mixin</span> <span class="pl-en">size</span>(<span class="pl-v">$width</span>, <span class="pl-v">$height</span>) {
+	<span class="pl-c1"><span class="pl-c1">width</span></span>: <span class="pl-v">$width</span>;
+	<span class="pl-c1"><span class="pl-c1">height</span></span>: <span class="pl-v">$height</span>;
+}
+
+<span class="pl-c"><span class="pl-c">/*</span> Which you can invoke by passing width and height arguments. <span class="pl-c">*/</span></span>
+
+<span class="pl-e">.rectangle</span> {
+	<span class="pl-k">@include</span> <span class="pl-en">size</span>(<span class="pl-c1">100<span class="pl-k">px</span></span>, <span class="pl-c1">60<span class="pl-k">px</span></span>);
+}
+
+<span class="pl-e">.square</span> {
+	<span class="pl-k">@include</span> <span class="pl-en">size</span>(<span class="pl-c1">40<span class="pl-k">px</span></span>, <span class="pl-c1">40<span class="pl-k">px</span></span>);
+}
+
+<span class="pl-c"><span class="pl-c">/*</span> Compiles to: <span class="pl-c">*/</span></span>
+<span class="pl-e">.rectangle</span> {
+  <span class="pl-c1"><span class="pl-c1">width</span></span>: <span class="pl-c1">100<span class="pl-k">px</span></span>;
+  <span class="pl-c1"><span class="pl-c1">height</span></span>: <span class="pl-c1">60<span class="pl-k">px</span></span>;
+}
+
+<span class="pl-e">.square</span> {
+  <span class="pl-c1"><span class="pl-c1">width</span></span>: <span class="pl-c1">40<span class="pl-k">px</span></span>;
+  <span class="pl-c1"><span class="pl-c1">height</span></span>: <span class="pl-c1">40<span class="pl-k">px</span></span>;
+}
+
+
+
+<span class="pl-c"><span class="pl-c">/*</span> Functions</span>
+<span class="pl-c">============================== <span class="pl-c">*/</span></span>
+
+
+
+<span class="pl-c"><span class="pl-c">/*</span> Sass provides functions that can be used to accomplish a variety of</span>
+<span class="pl-c">   tasks. Consider the following <span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">/*</span> Functions can be invoked by using their name and passing in the</span>
+<span class="pl-c">   required arguments <span class="pl-c">*/</span></span>
+<span class="pl-ent">body</span> {
+  <span class="pl-c1"><span class="pl-c1">width</span></span>: <span class="pl-c1">round</span>(<span class="pl-c1">10.25<span class="pl-k">px</span></span>);
+}
+
+<span class="pl-e">.footer</span> {
+  <span class="pl-c1"><span class="pl-c1">background-color</span></span>: <span class="pl-c1">fade_out</span>(<span class="pl-c1">#000000</span>, <span class="pl-c1">0.25</span>);
+}
+
+<span class="pl-c"><span class="pl-c">/*</span> Compiles to: <span class="pl-c">*/</span></span>
+
+<span class="pl-ent">body</span> {
+  <span class="pl-c1"><span class="pl-c1">width</span></span>: <span class="pl-c1">10<span class="pl-k">px</span></span>;
+}
+
+<span class="pl-e">.footer</span> {
+  <span class="pl-c1"><span class="pl-c1">background-color</span></span>: <span class="pl-c1">rgba</span>(<span class="pl-c1">0</span>, <span class="pl-c1">0</span>, <span class="pl-c1">0</span>, <span class="pl-c1">0.75</span>);
+}
+
+<span class="pl-c"><span class="pl-c">/*</span> You may also define your own functions. Functions are very similar to</span>
+<span class="pl-c">   mixins. When trying to choose between a function or a mixin, remember</span>
+<span class="pl-c">   that mixins are best for generating CSS while functions are better for</span>
+<span class="pl-c">   logic that might be used throughout your Sass code. The examples in</span>
+<span class="pl-c">   the 'Math Operators' section are ideal candidates for becoming a reusable</span>
+<span class="pl-c">   function. <span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">/*</span> This function will take a target size and the parent size and calculate</span>
+<span class="pl-c">   and return the percentage <span class="pl-c">*/</span></span>
+
+<span class="pl-k">@function</span> <span class="pl-c1">calculate-percentage</span>(<span class="pl-v">$target-size</span>, <span class="pl-v">$parent-size</span>) {
+  <span class="pl-k">@return</span> <span class="pl-v">$target-size</span> <span class="pl-k">/</span> <span class="pl-v">$parent-size</span> <span class="pl-k">*</span> <span class="pl-c1">100<span class="pl-k">%</span></span>;
+}
+
+<span class="pl-v">$main-content</span>: <span class="pl-c1">calculate-percentage</span>(<span class="pl-c1">600<span class="pl-k">px</span></span>, <span class="pl-c1">960<span class="pl-k">px</span></span>);
+
+<span class="pl-e">.main-content</span> {
+  <span class="pl-c1"><span class="pl-c1">width</span></span>: <span class="pl-v">$main-content</span>;
+}
+
+<span class="pl-e">.sidebar</span> {
+  <span class="pl-c1"><span class="pl-c1">width</span></span>: <span class="pl-c1">calculate-percentage</span>(<span class="pl-c1">300<span class="pl-k">px</span></span>, <span class="pl-c1">960<span class="pl-k">px</span></span>);
+}
+
+<span class="pl-c"><span class="pl-c">/*</span> Compiles to: <span class="pl-c">*/</span></span>
+
+<span class="pl-e">.main-content</span> {
+  <span class="pl-c1"><span class="pl-c1">width</span></span>: <span class="pl-c1">62.5<span class="pl-k">%</span></span>;
+}
+
+<span class="pl-e">.sidebar</span> {
+  <span class="pl-c1"><span class="pl-c1">width</span></span>: <span class="pl-c1">31.25<span class="pl-k">%</span></span>;
+}
+
+
+
+<span class="pl-c"><span class="pl-c">/*</span> Extend (Inheritance)</span>
+<span class="pl-c">============================== <span class="pl-c">*/</span></span>
+
+
+
+<span class="pl-c"><span class="pl-c">/*</span> Extend is a way to share the properties of one selector with another. <span class="pl-c">*/</span></span>
+
+<span class="pl-e">.display</span> {
+	<span class="pl-k">@include</span> <span class="pl-en">size</span>(<span class="pl-c1">5<span class="pl-k">em</span></span>, <span class="pl-c1">5<span class="pl-k">em</span></span>);
+	<span class="pl-c1"><span class="pl-c1">border</span></span>: <span class="pl-c1">5<span class="pl-k">px</span></span> <span class="pl-c1">solid</span> <span class="pl-v">$secondary-color</span>;
+}
+
+<span class="pl-e">.display-success</span> {
+	<span class="pl-k">@extend</span> <span class="pl-e">.display</span>;
+	<span class="pl-c1"><span class="pl-c1">border-color</span></span>: <span class="pl-c1">#22df56</span>;
+}
+
+<span class="pl-c"><span class="pl-c">/*</span> Compiles to: <span class="pl-c">*/</span></span>
+<span class="pl-e">.display</span>, <span class="pl-e">.display-success</span> {
+  <span class="pl-c1"><span class="pl-c1">width</span></span>: <span class="pl-c1">5<span class="pl-k">em</span></span>;
+  <span class="pl-c1"><span class="pl-c1">height</span></span>: <span class="pl-c1">5<span class="pl-k">em</span></span>;
+  <span class="pl-c1"><span class="pl-c1">border</span></span>: <span class="pl-c1">5<span class="pl-k">px</span></span> <span class="pl-c1">solid</span> <span class="pl-c1">#51527F</span>;
+}
+
+<span class="pl-e">.display-success</span> {
+  <span class="pl-c1"><span class="pl-c1">border-color</span></span>: <span class="pl-c1">#22df56</span>;
+}
+
+<span class="pl-c"><span class="pl-c">/*</span> Extending a CSS statement is preferable to creating a mixin</span>
+<span class="pl-c">   because of the way Sass groups together the classes that all share</span>
+<span class="pl-c">   the same base styling. If this was done with a mixin, the width,</span>
+<span class="pl-c">   height, and border would be duplicated for each statement that</span>
+<span class="pl-c">   called the mixin. While it won't affect your workflow, it will</span>
+<span class="pl-c">   add unnecessary bloat to the files created by the Sass compiler. <span class="pl-c">*/</span></span>
+
+
+
+<span class="pl-c"><span class="pl-c">/*</span> Nesting</span>
+<span class="pl-c">============================== <span class="pl-c">*/</span></span>
+
+
+
+<span class="pl-c"><span class="pl-c">/*</span> Sass allows you to nest selectors within selectors <span class="pl-c">*/</span></span>
+
+<span class="pl-ent">ul</span> {
+	<span class="pl-c1"><span class="pl-c1">list-style-type</span></span>: <span class="pl-c1">none</span>;
+	<span class="pl-c1"><span class="pl-c1">margin-top</span></span>: <span class="pl-c1">2<span class="pl-k">em</span></span>;
+
+	<span class="pl-ent">li</span> {
+		<span class="pl-c1"><span class="pl-c1">background-color</span></span>: <span class="pl-c1">#FF0000</span>;
+	}
+}
+
+<span class="pl-c"><span class="pl-c">/*</span> '&amp;' will be replaced by the parent selector. <span class="pl-c">*/</span></span>
+<span class="pl-c"><span class="pl-c">/*</span> You can also nest pseudo-classes. <span class="pl-c">*/</span></span>
+<span class="pl-c"><span class="pl-c">/*</span> Keep in mind that over-nesting will make your code less maintainable.</span>
+<span class="pl-c">Best practices recommend going no more than 3 levels deep when nesting.</span>
+<span class="pl-c">For example: <span class="pl-c">*/</span></span>
+
+<span class="pl-ent">ul</span> {
+	<span class="pl-c1"><span class="pl-c1">list-style-type</span></span>: <span class="pl-c1">none</span>;
+	<span class="pl-c1"><span class="pl-c1">margin-top</span></span>: <span class="pl-c1">2<span class="pl-k">em</span></span>;
+
+	<span class="pl-ent">li</span> {
+		<span class="pl-c1"><span class="pl-c1">background-color</span></span>: <span class="pl-c1">red</span>;
+
+		<span class="pl-ent">&amp;</span><span class="pl-e">:hover</span> {
+		  <span class="pl-c1"><span class="pl-c1">background-color</span></span>: <span class="pl-c1">blue</span>;
+		}
+
+		<span class="pl-ent">a</span> {
+		  <span class="pl-c1"><span class="pl-c1">color</span></span>: <span class="pl-c1">white</span>;
+		}
+	}
+}
+
+<span class="pl-c"><span class="pl-c">/*</span> Compiles to: <span class="pl-c">*/</span></span>
+
+<span class="pl-ent">ul</span> {
+  <span class="pl-c1"><span class="pl-c1">list-style-type</span></span>: <span class="pl-c1">none</span>;
+  <span class="pl-c1"><span class="pl-c1">margin-top</span></span>: <span class="pl-c1">2<span class="pl-k">em</span></span>;
+}
+
+<span class="pl-ent">ul</span> <span class="pl-ent">li</span> {
+  <span class="pl-c1"><span class="pl-c1">background-color</span></span>: <span class="pl-c1">red</span>;
+}
+
+<span class="pl-ent">ul</span> <span class="pl-ent">li</span><span class="pl-e">:hover</span> {
+  <span class="pl-c1"><span class="pl-c1">background-color</span></span>: <span class="pl-c1">blue</span>;
+}
+
+<span class="pl-ent">ul</span> <span class="pl-ent">li</span> <span class="pl-ent">a</span> {
+  <span class="pl-c1"><span class="pl-c1">color</span></span>: <span class="pl-c1">white</span>;
+}
+
+
+
+<span class="pl-c"><span class="pl-c">/*</span> Partials and Imports</span>
+<span class="pl-c">============================== <span class="pl-c">*/</span></span>
+
+
+
+<span class="pl-c"><span class="pl-c">/*</span> Sass allows you to create partial files. This can help keep your Sass</span>
+<span class="pl-c">   code modularized. Partial files should begin with an '_', e.g. _reset.css.</span>
+<span class="pl-c">   Partials are not generated into CSS. <span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">/*</span> Consider the following CSS which we'll put in a file called _reset.css <span class="pl-c">*/</span></span>
+
+<span class="pl-ent">html</span>,
+<span class="pl-ent">body</span>,
+<span class="pl-ent">ul</span>,
+<span class="pl-ent">ol</span> {
+  <span class="pl-c1"><span class="pl-c1">margin</span></span>: <span class="pl-c1">0</span>;
+  <span class="pl-c1"><span class="pl-c1">padding</span></span>: <span class="pl-c1">0</span>;
+}
+
+<span class="pl-c"><span class="pl-c">/*</span> Sass offers @import which can be used to import partials into a file.</span>
+<span class="pl-c">   This differs from the traditional CSS @import statement which makes</span>
+<span class="pl-c">   another HTTP request to fetch the imported file. Sass takes the</span>
+<span class="pl-c">   imported file and combines it with the compiled code. <span class="pl-c">*/</span></span>
+
+<span class="pl-k">@import</span> <span class="pl-s"><span class="pl-pds">'</span>reset<span class="pl-pds">'</span></span>;
+
+<span class="pl-ent">body</span> {
+  <span class="pl-c1"><span class="pl-c1">font-size</span></span>: <span class="pl-c1">16<span class="pl-k">px</span></span>;
+  <span class="pl-c1"><span class="pl-c1">font-family</span></span>: <span class="pl-c1">Helvetica</span>, <span class="pl-c1">Arial</span>, <span class="pl-c1">Sans-serif</span>;
+}
+
+<span class="pl-c"><span class="pl-c">/*</span> Compiles to: <span class="pl-c">*/</span></span>
+
+<span class="pl-ent">html</span>, <span class="pl-ent">body</span>, <span class="pl-ent">ul</span>, <span class="pl-ent">ol</span> {
+  <span class="pl-c1"><span class="pl-c1">margin</span></span>: <span class="pl-c1">0</span>;
+  <span class="pl-c1"><span class="pl-c1">padding</span></span>: <span class="pl-c1">0</span>;
+}
+
+<span class="pl-ent">body</span> {
+  <span class="pl-c1"><span class="pl-c1">font-size</span></span>: <span class="pl-c1">16<span class="pl-k">px</span></span>;
+  <span class="pl-c1"><span class="pl-c1">font-family</span></span>: <span class="pl-c1">Helvetica</span>, <span class="pl-c1">Arial</span>, <span class="pl-c1">Sans-serif</span>;
+}
+
+
+
+<span class="pl-c"><span class="pl-c">/*</span> Placeholder Selectors</span>
+<span class="pl-c">============================== <span class="pl-c">*/</span></span>
+
+
+
+<span class="pl-c"><span class="pl-c">/*</span> Placeholders are useful when creating a CSS statement to extend. If you</span>
+<span class="pl-c">   wanted to create a CSS statement that was exclusively used with @extend,</span>
+<span class="pl-c">   you can do so using a placeholder. Placeholders begin with a '%' instead</span>
+<span class="pl-c">   of '.' or '#'. Placeholders will not appear in the compiled CSS. <span class="pl-c">*/</span></span>
+
+<span class="pl-e">%content-window</span> {
+  <span class="pl-c1"><span class="pl-c1">font-size</span></span>: <span class="pl-c1">14<span class="pl-k">px</span></span>;
+  <span class="pl-c1"><span class="pl-c1">padding</span></span>: <span class="pl-c1">10<span class="pl-k">px</span></span>;
+  <span class="pl-c1"><span class="pl-c1">color</span></span>: <span class="pl-c1">#000</span>;
+  <span class="pl-c1"><span class="pl-c1">border-radius</span></span>: <span class="pl-c1">4<span class="pl-k">px</span></span>;
+}
+
+<span class="pl-e">.message-window</span> {
+  <span class="pl-k">@extend</span> <span class="pl-e">%content-window</span>;
+  <span class="pl-c1"><span class="pl-c1">background-color</span></span>: <span class="pl-c1">#0000ff</span>;
+}
+
+<span class="pl-c"><span class="pl-c">/*</span> Compiles to: <span class="pl-c">*/</span></span>
+
+<span class="pl-e">.message-window</span> {
+  <span class="pl-c1"><span class="pl-c1">font-size</span></span>: <span class="pl-c1">14<span class="pl-k">px</span></span>;
+  <span class="pl-c1"><span class="pl-c1">padding</span></span>: <span class="pl-c1">10<span class="pl-k">px</span></span>;
+  <span class="pl-c1"><span class="pl-c1">color</span></span>: <span class="pl-c1">#000</span>;
+  <span class="pl-c1"><span class="pl-c1">border-radius</span></span>: <span class="pl-c1">4<span class="pl-k">px</span></span>;
+}
+
+<span class="pl-e">.message-window</span> {
+  <span class="pl-c1"><span class="pl-c1">background-color</span></span>: <span class="pl-c1">#0000ff</span>;
+}
+
+
+
+<span class="pl-c"><span class="pl-c">/*</span> Math Operations</span>
+<span class="pl-c">============================== <span class="pl-c">*/</span></span>
+
+
+
+<span class="pl-c"><span class="pl-c">/*</span> Sass provides the following operators: +, -, *, /, and %. These can</span>
+<span class="pl-c">   be useful for calculating values directly in your Sass files instead</span>
+<span class="pl-c">   of using values that you've already calculated by hand. Below is an example</span>
+<span class="pl-c">   of a setting up a simple two column design. <span class="pl-c">*/</span></span>
+
+<span class="pl-v">$content-area</span>: <span class="pl-c1">960<span class="pl-k">px</span></span>;
+<span class="pl-v">$main-content</span>: <span class="pl-c1">600<span class="pl-k">px</span></span>;
+<span class="pl-v">$sidebar-content</span>: <span class="pl-c1">300<span class="pl-k">px</span></span>;
+
+<span class="pl-v">$main-size</span>: <span class="pl-v">$main-content</span> <span class="pl-k">/</span> <span class="pl-v">$content-area</span> <span class="pl-k">*</span> <span class="pl-c1">100<span class="pl-k">%</span></span>;
+<span class="pl-v">$sidebar-size</span>: <span class="pl-v">$sidebar-content</span> <span class="pl-k">/</span> <span class="pl-v">$content-area</span> <span class="pl-k">*</span> <span class="pl-c1">100<span class="pl-k">%</span></span>;
+<span class="pl-v">$gutter</span>: <span class="pl-c1">100<span class="pl-k">%</span></span> <span class="pl-k">-</span> (<span class="pl-v">$main-size</span> <span class="pl-k">+</span> <span class="pl-v">$sidebar-size</span>);
+
+<span class="pl-ent">body</span> {
+  <span class="pl-c1"><span class="pl-c1">width</span></span>: <span class="pl-c1">100<span class="pl-k">%</span></span>;
+}
+
+<span class="pl-e">.main-content</span> {
+  <span class="pl-c1"><span class="pl-c1">width</span></span>: <span class="pl-v">$main-size</span>;
+}
+
+<span class="pl-e">.sidebar</span> {
+  <span class="pl-c1"><span class="pl-c1">width</span></span>: <span class="pl-v">$sidebar-size</span>;
+}
+
+<span class="pl-e">.gutter</span> {
+  <span class="pl-c1"><span class="pl-c1">width</span></span>: <span class="pl-v">$gutter</span>;
+}
+
+<span class="pl-c"><span class="pl-c">/*</span> Compiles to: <span class="pl-c">*/</span></span>
+
+<span class="pl-ent">body</span> {
+  <span class="pl-c1"><span class="pl-c1">width</span></span>: <span class="pl-c1">100<span class="pl-k">%</span></span>;
+}
+
+<span class="pl-e">.main-content</span> {
+  <span class="pl-c1"><span class="pl-c1">width</span></span>: <span class="pl-c1">62.5<span class="pl-k">%</span></span>;
+}
+
+<span class="pl-e">.sidebar</span> {
+  <span class="pl-c1"><span class="pl-c1">width</span></span>: <span class="pl-c1">31.25<span class="pl-k">%</span></span>;
+}
+
+<span class="pl-e">.gutter</span> {
+  <span class="pl-c1"><span class="pl-c1">width</span></span>: <span class="pl-c1">6.25<span class="pl-k">%</span></span>;
+}
+</pre></div>
+<h2>SASS or Sass?</h2>
+<p>Have you ever wondered whether Sass is an acronym or not? You probably haven't, but I'll tell you anyway. The name of the language is a word, "Sass", and not an acronym.<br>
+Because people were constantly writing it as "SASS", the creator of the language jokingly called it "Syntactically Awesome StyleSheets".</p>
+<h2>Practice Sass</h2>
+<p>If you want to play with Sass in your browser, check out <a href="http://sassmeister.com/" rel="nofollow">SassMeister</a>.<br>
+You can use either syntax, just go into the settings and select either Sass or SCSS.</p>
+<h2>Compatibility</h2>
+<p>Sass can be used in any project as long as you have a program to compile it into CSS. You'll want to verify that the CSS you're using is compatible with your target browsers.</p>
+<p><a href="http://www.quirksmode.org/css/" rel="nofollow">QuirksMode CSS</a> and <a href="http://caniuse.com" rel="nofollow">CanIUse</a> are great resources for checking compatibility.</p>
+<h2>Further reading</h2>
+<ul>
+<li><a href="http://sass-lang.com/documentation/file.SASS_REFERENCE.html" rel="nofollow">Official Documentation</a></li>
+<li><a href="http://thesassway.com/" rel="nofollow">The Sass Way</a> provides tutorials (beginner-advanced) and articles.</li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<ul>
+<li>["Laura Kyle", "https://github.com/LauraNK"]</li>
+<li>["Sean Corrales", "https://github.com/droidenator"]</li>
+<li>["Kyle Mendes", "https://github.com/pink401k"]</li>
+<li>["Keith Miyake", "https://github.com/kaymmm"]</li>
+</ul>

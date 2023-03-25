@@ -1,0 +1,933 @@
+<h1>Smalltalk</h1>
+<ul>
+<li>Smalltalk is a fully object-oriented, dynamically typed, reflective programming language with no 'non-object' types.</li>
+<li>Smalltalk was created as the language to underpin the "new world" of computing exemplified by "human–computer symbiosis."</li>
+<li>It was designed and created in part for educational use, more so for constructionist learning, at the Learning Research Group (LRG) of Xerox PARC by Alan Kay, Dan Ingalls, Adele Goldberg, Ted Kaehler, Scott Wallace, and others during the 1970s.</li>
+</ul>
+<p><code class="notranslate">Feedback highly appreciated! Reach me at [@jigyasa_grover](https://twitter.com/jigyasa_grover) or send me an e-mail at grover.jigyasa1@gmail.com.</code></p>
+<h2>The Basics</h2>
+<h3>Everything is an object</h3>
+<p>Yes, everything. Integers are instances of one of the numeric classes. Classes are instances of the class Metaclass and are just as manipulable as any other object. All classes are part of a single class tree; no disjoint class trees. Stack frames are objects and can be manipulated, which is how the debugger works. There are no pointers into memory locations that you can dereference and mess with.</p>
+<h3>Functions are not called; messages are sent to objects</h3>
+<ul>
+<li>Work is done by sending messages to objects, which decide how to respond to that message and run a method as a result, which eventually returns some object to the original message sending code.</li>
+<li>The system knows the class of the object receiving a message and looks up the message in that class's list of methods. If it is not found, the lookup continues in the super class until either it is found or the root of the classes is reached and there is still no relevant method.</li>
+<li>If a suitable method is found the code is run, and the same process keeps on going with all the methods sent by that method and so on forever.</li>
+<li>If no suitable method is found an exception is raised, which typically results in a user interface notifier to tell the user that the message was not understood. It is entirely possible to catch the exception and do something to fix the problem, which might range from 'ignore it' to 'load some new packages for this class and try again'.</li>
+<li>A method (more strictly an instance of the class CompiledMethod) is a chunk of Smalltalk code that has been compiled into bytecodes. Executing methods start at the beginning and return to the sender when a return is encountered (we use ^ to signify 'return the following object') or the end of the code is reached, in which case the current object running the code is returned.</li>
+</ul>
+<h3>Simple syntax</h3>
+<p>Smalltalk has a simple syntax with very few rules.<br>
+The most basic operation is to send a message to an object<br>
+<code class="notranslate">anObject aMessage</code></p>
+<p>There are three sorts of messages</p>
+<ul>
+<li>unary - a single symbol that may be several words conjoined in what we call camelcase form, with no arguments. For example 'size', 'reverseBytes', 'convertToLargerFormatPixels'</li>
+<li>binary - a small set of symbols of the sort often used for arithmetic operations in most languages, requiring a single argument. For example '+', '//', '@'. We do not use traditional arithmetic precedence, something to keep an eye on.</li>
+<li>keyword - the general form where multiple arguments can be passed. As with the unary form we use camelcase to join words together but arguments are inserted in the midst of the message with colons used to separate them lexically. For example 'setTemperature:', 'at:put:', 'drawFrom:to:lineWidth:fillColor:'</li>
+</ul>
+<h4>An example</h4>
+<p><code class="notranslate">result := myObject doSomethingWith: thatObject</code><br>
+We are sending the message 'doSomethingWith:' to myObject. This happens to be a message that has a single argument but that's not important yet.<br>
+'myObject' is a 'MyExampleClass' instance so the system looks at the list of messages understood by MyExampleClass</p>
+<ul>
+<li>beClever</li>
+<li>doWeirdThing:</li>
+<li>doSomethingWith</li>
+</ul>
+<p>In searching we see what initially looks like a match - but no, it lacks the final colon. So we find the super class of MyExampleClass - BigExampleClass. Which has a list of known messages of its own</p>
+<ul>
+<li>beClever</li>
+<li>doSomethingWith:</li>
+<li>buildCastleInAir</li>
+<li>annoyUserByDoing:</li>
+</ul>
+<p>We find a proper exact match and start to execute the code:</p>
+<div class="highlight highlight-source-smalltalk"><pre class="notranslate"><span class="pl-c1">doSomethingWith:</span> argumentObject
+    <span class="pl-k">self</span> size <span class="pl-k">&gt;</span> <span class="pl-c1">4</span> <span class="pl-k">ifTrue:</span> [<span class="pl-k">^</span>argumentObject <span class="pl-c1">sizeRelatingTo:</span> <span class="pl-k">self</span>].</pre></div>
+<p>Everything here except the <code class="notranslate">^</code> involves sending more messages. Event the <code class="notranslate">ifTrue:</code> that you might think is a language control structure is just Smalltalk code.</p>
+<p>We start by sending <code class="notranslate">size</code> to <code class="notranslate">self</code>. <code class="notranslate">self</code> is the object currently running the code - so in this case it is the myObject we started with. <code class="notranslate">size</code> is a very common message that we might anticipate tells us something about how big an object is; you could look it up with the Smalltalk tools very simply. The result we get is then sent the message <code class="notranslate">&gt;</code> with the plain old integer 4 (which is an object too; no strange primitive types to pollute the system here) and nobody should be surprised the <code class="notranslate">&gt;</code> is a comparison that answers true or false. That boolean (which is actually a Boolean object in Smalltalk) is sent the message <code class="notranslate">ifTrue:</code> with the block of code between the <code class="notranslate">[]</code> as its argument; obviously a true boolean might be expected to run that block of code and a false to ignore it.</p>
+<p>If the block is run then we do some more message sending to the argument object and noting the <code class="notranslate">^</code> we return the answer back to our starting point and it gets assigned to <code class="notranslate">result</code>. If the block is ignored we seem to run out of code and so <code class="notranslate">self</code> is returned and assigned to <code class="notranslate">result</code>.</p>
+<h2>Smalltalk quick reference cheat-sheet</h2>
+<p>Taken from <a href="http://www.angelfire.com/tx4/cus/notes/smalltalk.html" rel="nofollow">Smalltalk Cheatsheet</a></p>
+<h4>Allowable characters:</h4>
+<ul>
+<li>a-z</li>
+<li>A-Z</li>
+<li>0-9</li>
+<li>.+/*~&lt;&gt;@%|&amp;?</li>
+<li>blank, tab, cr, ff, lf</li>
+</ul>
+<h4>Variables:</h4>
+<ul>
+<li>variable names must be declared before use but are untyped</li>
+<li>shared vars (globals, class vars) conventionally begin with uppercase (except the reserved names shown below)</li>
+<li>local vars (instance vars, temporaries, method &amp; block arguments) conventionally begin with lowercase</li>
+<li>reserved names: <code class="notranslate">nil</code>, <code class="notranslate">true</code>, <code class="notranslate">false</code>, <code class="notranslate">self</code>, <code class="notranslate">super</code>, and <code class="notranslate">thisContext</code></li>
+</ul>
+<h4>Variable scope:</h4>
+<ul>
+<li>Global: defined in a Dictionary named 'Smalltalk' and accessible by all objects in system</li>
+<li>Special: (reserved) <code class="notranslate">Smalltalk</code>, <code class="notranslate">super</code>, <code class="notranslate">self</code>, <code class="notranslate">true</code>, <code class="notranslate">false</code>, &amp; <code class="notranslate">nil</code></li>
+<li>Method Temporary: local to a method</li>
+<li>Block Temporary: local to a block</li>
+<li>Pool: variables in a Dictionary object, possibly shared with classes not directly related by inheritance</li>
+<li>Method Parameters: automatic method temp vars that name the incoming parameters. Cannot be assigned to</li>
+<li>Block Parameters: automatic block temp vars that name the incoming parameters. Cannot be assigned to</li>
+<li>Class: shared with all instances of a class &amp; its subclasses</li>
+<li>Class Instance: unique to each instance of a class. Too commonly confused with class variables</li>
+<li>Instance Variables: unique to each instance of a class</li>
+</ul>
+<p><code class="notranslate">"Comments are enclosed in quotes and may be arbitrary length"</code></p>
+<p><code class="notranslate">"Period (.) is the statement separator. Not required on last line of a method"</code></p>
+<h4>Transcript:</h4>
+<div class="highlight highlight-source-smalltalk"><pre class="notranslate"><span class="pl-c1">Transcript</span> clear.                        <span class="pl-c"><span class="pl-c">"</span>clear to transcript window<span class="pl-c">"</span></span>
+<span class="pl-c1">Transcript</span> <span class="pl-c1">show:</span> <span class="pl-s"><span class="pl-pds">'</span>Hello World<span class="pl-pds">'</span></span>.          <span class="pl-c"><span class="pl-c">"</span>output string in transcript window<span class="pl-c">"</span></span>
+<span class="pl-c1">Transcript</span> <span class="pl-c1">nextPutAll:</span> <span class="pl-s"><span class="pl-pds">'</span>Hello World<span class="pl-pds">'</span></span>.    <span class="pl-c"><span class="pl-c">"</span>output string in transcript window<span class="pl-c">"</span></span>
+<span class="pl-c1">Transcript</span> <span class="pl-c1">nextPut:</span> $<span class="pl-c1">A</span>.                  <span class="pl-c"><span class="pl-c">"</span>output character in transcript window<span class="pl-c">"</span></span>
+<span class="pl-c1">Transcript</span> space.                        <span class="pl-c"><span class="pl-c">"</span>output space character in transcript window<span class="pl-c">"</span></span>
+<span class="pl-c1">Transcript</span> tab.                          <span class="pl-c"><span class="pl-c">"</span>output tab character in transcript window<span class="pl-c">"</span></span>
+<span class="pl-c1">Transcript</span> cr.                           <span class="pl-c"><span class="pl-c">"</span>carriage return / linefeed<span class="pl-c">"</span></span>
+<span class="pl-s"><span class="pl-pds">'</span>Hello<span class="pl-pds">'</span></span> <span class="pl-c1">printOn:</span> <span class="pl-c1">Transcript</span>.             <span class="pl-c"><span class="pl-c">"</span>append print string into the window<span class="pl-c">"</span></span>
+<span class="pl-s"><span class="pl-pds">'</span>Hello<span class="pl-pds">'</span></span> <span class="pl-c1">storeOn:</span> <span class="pl-c1">Transcript</span>.             <span class="pl-c"><span class="pl-c">"</span>append store string into the window<span class="pl-c">"</span></span>
+<span class="pl-c1">Transcript</span> endEntry.                     <span class="pl-c"><span class="pl-c">"</span>flush the output buffer<span class="pl-c">"</span></span></pre></div>
+<h4>Assignment:</h4>
+<div class="highlight highlight-source-smalltalk"><pre class="notranslate">| <span class="pl-c1">x</span> <span class="pl-c1">y</span> |
+x _ <span class="pl-c1">4</span>.                            <span class="pl-c"><span class="pl-c">"</span>assignment (Squeak) &lt;-<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">5</span>.                           <span class="pl-c"><span class="pl-c">"</span>assignment<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> y <span class="pl-k">:=</span> z <span class="pl-k">:=</span> <span class="pl-c1">6</span>.                 <span class="pl-c"><span class="pl-c">"</span>compound assignment<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> (y <span class="pl-k">:=</span> <span class="pl-c1">6</span>) <span class="pl-k">+</span> <span class="pl-c1">1</span>.
+x <span class="pl-k">:=</span> <span class="pl-c1">Object</span> <span class="pl-k">new</span>.                  <span class="pl-c"><span class="pl-c">"</span>bind to allocated instance of a class<span class="pl-c">"</span></span></pre></div>
+<h4>Constants:</h4>
+<div class="highlight highlight-source-smalltalk"><pre class="notranslate">| <span class="pl-c1">b</span> |
+b <span class="pl-k">:=</span> <span class="pl-c1">true</span>.                <span class="pl-c"><span class="pl-c">"</span>true constant<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> <span class="pl-c1">false</span>.               <span class="pl-c"><span class="pl-c">"</span>false constant<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">nil</span>.                 <span class="pl-c"><span class="pl-c">"</span>nil object constant<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">1</span>.                   <span class="pl-c"><span class="pl-c">"</span>integer constants<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">3.14</span>.                <span class="pl-c"><span class="pl-c">"</span>float constants<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">2e-2</span>.                <span class="pl-c"><span class="pl-c">"</span>fractional constants<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> 16r0F.               <span class="pl-c"><span class="pl-c">"</span>hex constant<span class="pl-c">"</span></span>.
+x <span class="pl-k">:=</span> <span class="pl-k">-</span><span class="pl-c1">1</span>.                  <span class="pl-c"><span class="pl-c">"</span>negative constants<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-s"><span class="pl-pds">'</span>Hello<span class="pl-pds">'</span></span>.             <span class="pl-c"><span class="pl-c">"</span>string constant<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-s"><span class="pl-pds">'</span>I<span class="pl-pds">'</span><span class="pl-pds">'</span>m here<span class="pl-pds">'</span></span>.         <span class="pl-c"><span class="pl-c">"</span>single quote escape<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> $<span class="pl-c1">A</span>.                  <span class="pl-c"><span class="pl-c">"</span>character constant<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> $ .                  <span class="pl-c"><span class="pl-c">"</span>character constant (space)<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">#aSymbol</span>.            <span class="pl-c"><span class="pl-c">"</span>symbol constants<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">#(3 2 1)</span>.            <span class="pl-c"><span class="pl-c">"</span>array constants<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">#('abc' 2 $a)</span>.       <span class="pl-c"><span class="pl-c">"</span>mixing of types allowed<span class="pl-c">"</span></span></pre></div>
+<h4>Booleans:</h4>
+<div class="highlight highlight-source-smalltalk"><pre class="notranslate">| <span class="pl-c1">b</span> <span class="pl-c1">x</span> <span class="pl-c1">y</span> |
+x <span class="pl-k">:=</span> <span class="pl-c1">1</span>. y <span class="pl-k">:=</span> <span class="pl-c1">2</span>.
+b <span class="pl-k">:=</span> (x <span class="pl-k">=</span> y).                         <span class="pl-c"><span class="pl-c">"</span>equals<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> (x <span class="pl-k">~=</span> y).                         <span class="pl-c"><span class="pl-c">"</span>not equals<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> (x <span class="pl-k">==</span> y).                         <span class="pl-c"><span class="pl-c">"</span>identical<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> (x <span class="pl-k">~~</span> y).                         <span class="pl-c"><span class="pl-c">"</span>not identical<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> (x <span class="pl-k">&gt;</span> y).                          <span class="pl-c"><span class="pl-c">"</span>greater than<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> (x <span class="pl-k">&lt;</span> y).                          <span class="pl-c"><span class="pl-c">"</span>less than<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> (x <span class="pl-k">&gt;=</span> y).                         <span class="pl-c"><span class="pl-c">"</span>greater than or equal<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> (x <span class="pl-k">&lt;=</span> y).                         <span class="pl-c"><span class="pl-c">"</span>less than or equal<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> b <span class="pl-k">not</span>.                            <span class="pl-c"><span class="pl-c">"</span>boolean not<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> (x <span class="pl-k">&lt;</span> <span class="pl-c1">5</span>) <span class="pl-k">&amp;</span> (y <span class="pl-k">&gt;</span> <span class="pl-c1">1</span>).                <span class="pl-c"><span class="pl-c">"</span>boolean and<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> (x <span class="pl-k">&lt;</span> <span class="pl-c1">5</span>) <span class="pl-k">|</span> (y <span class="pl-k">&gt;</span> <span class="pl-c1">1</span>).                <span class="pl-c"><span class="pl-c">"</span>boolean or<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> (x <span class="pl-k">&lt;</span> <span class="pl-c1">5</span>) <span class="pl-k">and</span>: [y <span class="pl-k">&gt;</span> <span class="pl-c1">1</span>].             <span class="pl-c"><span class="pl-c">"</span>boolean and (short-circuit)<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> (x <span class="pl-k">&lt;</span> <span class="pl-c1">5</span>) <span class="pl-k">or</span>: [y <span class="pl-k">&gt;</span> <span class="pl-c1">1</span>].              <span class="pl-c"><span class="pl-c">"</span>boolean or (short-circuit)<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> (x <span class="pl-k">&lt;</span> <span class="pl-c1">5</span>) <span class="pl-c1">eqv:</span> (y <span class="pl-k">&gt;</span> <span class="pl-c1">1</span>).             <span class="pl-c"><span class="pl-c">"</span>test if both true or both false<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> (x <span class="pl-k">&lt;</span> <span class="pl-c1">5</span>) <span class="pl-c1">xor:</span> (y <span class="pl-k">&gt;</span> <span class="pl-c1">1</span>).             <span class="pl-c"><span class="pl-c">"</span>test if one true and other false<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> <span class="pl-c1">5</span> <span class="pl-c1">between:</span> <span class="pl-c1">3</span> <span class="pl-k">and</span>: <span class="pl-c1">12</span>.             <span class="pl-c"><span class="pl-c">"</span>between (inclusive)<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> <span class="pl-c1">123</span> <span class="pl-c1">isKindOf:</span> <span class="pl-c1">Number</span>.             <span class="pl-c"><span class="pl-c">"</span>test if object is class or subclass of<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> <span class="pl-c1">123</span> <span class="pl-c1">isMemberOf:</span> <span class="pl-c1">SmallInteger</span>.     <span class="pl-c"><span class="pl-c">"</span>test if object is type of class<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> <span class="pl-c1">123</span> <span class="pl-c1">respondsTo:</span> sqrt.             <span class="pl-c"><span class="pl-c">"</span>test if object responds to message<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> x isNil.                          <span class="pl-c"><span class="pl-c">"</span>test if object is nil<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> x isZero.                         <span class="pl-c"><span class="pl-c">"</span>test if number is zero<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> x positive.                       <span class="pl-c"><span class="pl-c">"</span>test if number is positive<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> x strictlyPositive.               <span class="pl-c"><span class="pl-c">"</span>test if number is greater than zero<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> x negative.                       <span class="pl-c"><span class="pl-c">"</span>test if number is negative<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> x even.                           <span class="pl-c"><span class="pl-c">"</span>test if number is even<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> x odd.                            <span class="pl-c"><span class="pl-c">"</span>test if number is odd<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> x isLiteral.                      <span class="pl-c"><span class="pl-c">"</span>test if literal constant<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> x isInteger.                      <span class="pl-c"><span class="pl-c">"</span>test if object is integer<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> x isFloat.                        <span class="pl-c"><span class="pl-c">"</span>test if object is float<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> x isNumber.                       <span class="pl-c"><span class="pl-c">"</span>test if object is number<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> $<span class="pl-c1">A</span> isUppercase.                   <span class="pl-c"><span class="pl-c">"</span>test if upper case character<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> $<span class="pl-c1">A</span> isLowercase.                   <span class="pl-c"><span class="pl-c">"</span>test if lower case character<span class="pl-c">"</span></span></pre></div>
+<h4>Arithmetic expressions:</h4>
+<div class="highlight highlight-source-smalltalk"><pre class="notranslate">| <span class="pl-c1">x</span> |
+x <span class="pl-k">:=</span> <span class="pl-c1">6</span> <span class="pl-k">+</span> <span class="pl-c1">3</span>.                             <span class="pl-c"><span class="pl-c">"</span>addition<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">6</span> <span class="pl-k">-</span> <span class="pl-c1">3</span>.                             <span class="pl-c"><span class="pl-c">"</span>subtraction<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">6</span> <span class="pl-k">*</span> <span class="pl-c1">3</span>.                             <span class="pl-c"><span class="pl-c">"</span>multiplication<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">1</span> <span class="pl-k">+</span> <span class="pl-c1">2</span> <span class="pl-k">*</span> <span class="pl-c1">3</span>.                         <span class="pl-c"><span class="pl-c">"</span>evaluation always left to right (1 + 2) * 3<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">5</span> <span class="pl-k">/</span> <span class="pl-c1">3</span>.                             <span class="pl-c"><span class="pl-c">"</span>division with fractional result<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">5.0</span> <span class="pl-k">/</span> <span class="pl-c1">3.0</span>.                         <span class="pl-c"><span class="pl-c">"</span>division with float result<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">5.0</span> <span class="pl-k">//</span> <span class="pl-c1">3.0</span>.                        <span class="pl-c"><span class="pl-c">"</span>integer divide<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">5.0</span> <span class="pl-k">\\</span> <span class="pl-c1">3.0</span>.                        <span class="pl-c"><span class="pl-c">"</span>integer remainder<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-k">-</span><span class="pl-c1">5</span>.                                <span class="pl-c"><span class="pl-c">"</span>unary minus<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">5</span> sign.                            <span class="pl-c"><span class="pl-c">"</span>numeric sign (1, -1 or 0)<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">5</span> negated.                         <span class="pl-c"><span class="pl-c">"</span>negate receiver<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">1.2</span> integerPart.                   <span class="pl-c"><span class="pl-c">"</span>integer part of number (1.0)<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">1.2</span> fractionPart.                  <span class="pl-c"><span class="pl-c">"</span>fractional part of number (0.2)<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">5</span> reciprocal.                      <span class="pl-c"><span class="pl-c">"</span>reciprocal function<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">6</span> <span class="pl-k">*</span> <span class="pl-c1">3.1</span>.                           <span class="pl-c"><span class="pl-c">"</span>auto convert to float<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">5</span> squared.                         <span class="pl-c"><span class="pl-c">"</span>square function<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">25</span> sqrt.                           <span class="pl-c"><span class="pl-c">"</span>square root<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">5</span> <span class="pl-c1">raisedTo:</span> <span class="pl-c1">2</span>.                     <span class="pl-c"><span class="pl-c">"</span>power function<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">5</span> <span class="pl-c1">raisedToInteger:</span> <span class="pl-c1">2</span>.              <span class="pl-c"><span class="pl-c">"</span>power function with integer<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">5</span> exp.                             <span class="pl-c"><span class="pl-c">"</span>exponential<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-k">-</span><span class="pl-c1">5</span> abs.                            <span class="pl-c"><span class="pl-c">"</span>absolute value<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">3.99</span> rounded.                      <span class="pl-c"><span class="pl-c">"</span>round<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">3.99</span> truncated.                    <span class="pl-c"><span class="pl-c">"</span>truncate<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">3.99</span> <span class="pl-c1">roundTo:</span> <span class="pl-c1">1</span>.                   <span class="pl-c"><span class="pl-c">"</span>round to specified decimal places<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">3.99</span> <span class="pl-c1">truncateTo:</span> <span class="pl-c1">1</span>.                <span class="pl-c"><span class="pl-c">"</span>truncate to specified decimal places<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">3.99</span> floor.                        <span class="pl-c"><span class="pl-c">"</span>truncate<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">3.99</span> ceiling.                      <span class="pl-c"><span class="pl-c">"</span>round up<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">5</span> factorial.                       <span class="pl-c"><span class="pl-c">"</span>factorial<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-k">-</span><span class="pl-c1">5</span> <span class="pl-c1">quo:</span> <span class="pl-c1">3</span>.                         <span class="pl-c"><span class="pl-c">"</span>integer divide rounded toward zero<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-k">-</span><span class="pl-c1">5</span> <span class="pl-c1">rem:</span> <span class="pl-c1">3</span>.                         <span class="pl-c"><span class="pl-c">"</span>integer remainder rounded toward zero<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">28</span> <span class="pl-c1">gcd:</span> <span class="pl-c1">12</span>.                        <span class="pl-c"><span class="pl-c">"</span>greatest common denominator<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">28</span> <span class="pl-c1">lcm:</span> <span class="pl-c1">12</span>.                        <span class="pl-c"><span class="pl-c">"</span>least common multiple<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">100</span> ln.                            <span class="pl-c"><span class="pl-c">"</span>natural logarithm<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">100</span> log.                           <span class="pl-c"><span class="pl-c">"</span>base 10 logarithm<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">100</span> <span class="pl-c1">log:</span> <span class="pl-c1">10</span>.                       <span class="pl-c"><span class="pl-c">"</span>floor of the log<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">180</span> degreesToRadians.              <span class="pl-c"><span class="pl-c">"</span>convert degrees to radians<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">3.14</span> radiansToDegrees.             <span class="pl-c"><span class="pl-c">"</span>convert radians to degrees<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">0.7</span> sin.                           <span class="pl-c"><span class="pl-c">"</span>sine<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">0.7</span> cos.                           <span class="pl-c"><span class="pl-c">"</span>cosine<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">0.7</span> tan.                           <span class="pl-c"><span class="pl-c">"</span>tangent<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">0.7</span> arcSin.                        <span class="pl-c"><span class="pl-c">"</span>arcsine<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">0.7</span> arcCos.                        <span class="pl-c"><span class="pl-c">"</span>arccosine<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">0.7</span> arcTan.                        <span class="pl-c"><span class="pl-c">"</span>arctangent<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">10</span> <span class="pl-c1">max:</span> <span class="pl-c1">20</span>.                        <span class="pl-c"><span class="pl-c">"</span>get maximum of two numbers<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">10</span> <span class="pl-c1">min:</span> <span class="pl-c1">20</span>.                        <span class="pl-c"><span class="pl-c">"</span>get minimum of two numbers<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">Float</span> pi.                          <span class="pl-c"><span class="pl-c">"</span>pi<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">Float</span> e.                           <span class="pl-c"><span class="pl-c">"</span>exp constant<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">Float</span> infinity.                    <span class="pl-c"><span class="pl-c">"</span>infinity<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">Float</span> nan.                         <span class="pl-c"><span class="pl-c">"</span>not-a-number<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">Random</span> <span class="pl-k">new</span> next; <span class="pl-k">yourself</span>. x next. <span class="pl-c"><span class="pl-c">"</span>random number stream (0.0 to 1.0)<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">100</span> atRandom.                      <span class="pl-c"><span class="pl-c">"</span>quick random number<span class="pl-c">"</span></span></pre></div>
+<h4>Bitwise Manipulation:</h4>
+<div class="highlight highlight-source-smalltalk"><pre class="notranslate">| <span class="pl-c1">b</span> <span class="pl-c1">x</span> |
+x <span class="pl-k">:=</span> 16rFF <span class="pl-c1">bitAnd:</span> 16r0F.           <span class="pl-c"><span class="pl-c">"</span>and bits<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> 16rF0 <span class="pl-c1">bitOr:</span> 16r0F.            <span class="pl-c"><span class="pl-c">"</span>or bits<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> 16rFF <span class="pl-c1">bitXor:</span> 16r0F.           <span class="pl-c"><span class="pl-c">"</span>xor bits<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> 16rFF bitInvert.               <span class="pl-c"><span class="pl-c">"</span>invert bits<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> 16r0F <span class="pl-c1">bitShift:</span> <span class="pl-c1">4</span>.             <span class="pl-c"><span class="pl-c">"</span>left shift<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> 16rF0 <span class="pl-c1">bitShift:</span> <span class="pl-k">-</span><span class="pl-c1">4</span>.            <span class="pl-c"><span class="pl-c">"</span>right shift<span class="pl-c">"</span></span>
+<span class="pl-c"><span class="pl-c">"</span>x := 16r80 bitAt: 7.<span class="pl-c">"</span></span>              <span class="pl-c"><span class="pl-c">"</span>bit at position (0|1) [!Squeak]<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> 16r80 highbit.                 <span class="pl-c"><span class="pl-c">"</span>position of highest bit set<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> 16rFF <span class="pl-c1">allMask:</span> 16r0F.          <span class="pl-c"><span class="pl-c">"</span>test if all bits set in mask set in receiver<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> 16rFF <span class="pl-c1">anyMask:</span> 16r0F.          <span class="pl-c"><span class="pl-c">"</span>test if any bits set in mask set in receiver<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> 16rFF <span class="pl-c1">noMask:</span> 16r0F.           <span class="pl-c"><span class="pl-c">"</span>test if all bits set in mask clear in receiver<span class="pl-c">"</span></span></pre></div>
+<h4>Conversion:</h4>
+<div class="highlight highlight-source-smalltalk"><pre class="notranslate">| <span class="pl-c1">x</span> |
+x <span class="pl-k">:=</span> <span class="pl-c1">3.99</span> asInteger.               <span class="pl-c"><span class="pl-c">"</span>convert number to integer (truncates in Squeak)<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">3.99</span> asFraction.              <span class="pl-c"><span class="pl-c">"</span>convert number to fraction<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">3</span> asFloat.                    <span class="pl-c"><span class="pl-c">"</span>convert number to float<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">65</span> asCharacter.               <span class="pl-c"><span class="pl-c">"</span>convert integer to character<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> $<span class="pl-c1">A</span> asciiValue.                <span class="pl-c"><span class="pl-c">"</span>convert character to integer<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">3.99</span> printString.             <span class="pl-c"><span class="pl-c">"</span>convert object to string via printOn:<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">3.99</span> storeString.             <span class="pl-c"><span class="pl-c">"</span>convert object to string via storeOn:<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">15</span> <span class="pl-c1">radix:</span> <span class="pl-c1">16</span>.                 <span class="pl-c"><span class="pl-c">"</span>convert to string in given base<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">15</span> <span class="pl-c1">printStringBase:</span> <span class="pl-c1">16</span>.
+x <span class="pl-k">:=</span> <span class="pl-c1">15</span> <span class="pl-c1">storeStringBase:</span> <span class="pl-c1">16</span>.</pre></div>
+<h4>Blocks:</h4>
+<ul>
+<li>blocks are objects and may be assigned to a variable</li>
+<li>value is last expression evaluated unless explicit return</li>
+<li>blocks may be nested</li>
+<li>specification [ arguments | | localvars | expressions ]</li>
+<li>Squeak does not currently support localvars in blocks</li>
+<li>max of three arguments allowed</li>
+<li><code class="notranslate">^</code>expression terminates block &amp; method (exits all nested blocks)</li>
+<li>blocks intended for long term storage should not contain <code class="notranslate">^</code></li>
+</ul>
+<div class="highlight highlight-source-smalltalk"><pre class="notranslate">| <span class="pl-c1">x</span> <span class="pl-c1">y</span> <span class="pl-c1">z</span> |
+x <span class="pl-k">:=</span> [ y <span class="pl-k">:=</span> <span class="pl-c1">1</span>. z <span class="pl-k">:=</span> <span class="pl-c1">2</span>. ]. x value.                          <span class="pl-c"><span class="pl-c">"</span>simple block usage<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> [ <span class="pl-en">:argOne</span> <span class="pl-en">:argTwo</span> |   argOne, <span class="pl-s"><span class="pl-pds">'</span> and <span class="pl-pds">'</span></span> , argTwo.].      <span class="pl-c"><span class="pl-c">"</span>set up block with argument passing<span class="pl-c">"</span></span>
+<span class="pl-c1">Transcript</span> <span class="pl-c1">show:</span> (x <span class="pl-c1">value:</span> <span class="pl-s"><span class="pl-pds">'</span>First<span class="pl-pds">'</span></span> <span class="pl-c1">value:</span> <span class="pl-s"><span class="pl-pds">'</span>Second<span class="pl-pds">'</span></span>); cr.    <span class="pl-c"><span class="pl-c">"</span>use block with argument passing<span class="pl-c">"</span></span>
+
+<span class="pl-c"><span class="pl-c">"</span>x := [ | z | z := 1.]. *** localvars not available in squeak blocks<span class="pl-c">"</span></span></pre></div>
+<h4>Method calls:</h4>
+<ul>
+<li>unary methods are messages with no arguments</li>
+<li>binary methods</li>
+<li>keyword methods are messages with selectors including colons standard categories/protocols:</li>
+<li>initialize-release    (methods called for new instance)</li>
+<li>accessing             (get/set methods)</li>
+<li>testing               (boolean tests - is)</li>
+<li>comparing             (boolean tests with parameter</li>
+<li>displaying            (gui related methods)</li>
+<li>printing              (methods for printing)</li>
+<li>updating              (receive notification of changes)</li>
+<li>private               (methods private to class)</li>
+<li>instance-creation     (class methods for creating instance)</li>
+</ul>
+<div class="highlight highlight-source-smalltalk"><pre class="notranslate">| <span class="pl-c1">x</span> |
+x <span class="pl-k">:=</span> <span class="pl-c1">2</span> sqrt.                                  <span class="pl-c"><span class="pl-c">"</span>unary message<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">2</span> <span class="pl-c1">raisedTo:</span> <span class="pl-c1">10</span>.                          <span class="pl-c"><span class="pl-c">"</span>keyword message<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">194</span> <span class="pl-k">*</span> <span class="pl-c1">9</span>.                                 <span class="pl-c"><span class="pl-c">"</span>binary message<span class="pl-c">"</span></span>
+<span class="pl-c1">Transcript</span> <span class="pl-c1">show:</span> (<span class="pl-c1">194</span> <span class="pl-k">*</span> <span class="pl-c1">9</span>) printString; cr.   <span class="pl-c"><span class="pl-c">"</span>combination (chaining)<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">2</span> <span class="pl-c1">perform:</span> <span class="pl-c1">#sqrt</span>.                        <span class="pl-c"><span class="pl-c">"</span>indirect method invocation<span class="pl-c">"</span></span>
+<span class="pl-c1">Transcript</span>                                    <span class="pl-c"><span class="pl-c">"</span>Cascading - send multiple messages to receiver<span class="pl-c">"</span></span>
+   <span class="pl-c1">show:</span> <span class="pl-s"><span class="pl-pds">'</span>hello <span class="pl-pds">'</span></span>;
+   <span class="pl-c1">show:</span> <span class="pl-s"><span class="pl-pds">'</span>world<span class="pl-pds">'</span></span>;
+   cr.
+x <span class="pl-k">:=</span> <span class="pl-c1">3</span> <span class="pl-k">+</span> <span class="pl-c1">2</span>; <span class="pl-k">*</span> <span class="pl-c1">100</span>.                            <span class="pl-c"><span class="pl-c">"</span>result=300. Sends message to same receiver (3)<span class="pl-c">"</span></span></pre></div>
+<h4>Conditional Statements:</h4>
+<div class="highlight highlight-source-smalltalk"><pre class="notranslate">| <span class="pl-c1">x</span> |
+x <span class="pl-k">&gt;</span> <span class="pl-c1">10</span> <span class="pl-k">ifTrue:</span> [<span class="pl-c1">Transcript</span> <span class="pl-c1">show:</span> <span class="pl-s"><span class="pl-pds">'</span>ifTrue<span class="pl-pds">'</span></span>; cr].     <span class="pl-c"><span class="pl-c">"</span>if then<span class="pl-c">"</span></span>
+x <span class="pl-k">&gt;</span> <span class="pl-c1">10</span> <span class="pl-k">ifFalse:</span> [<span class="pl-c1">Transcript</span> <span class="pl-c1">show:</span> <span class="pl-s"><span class="pl-pds">'</span>ifFalse<span class="pl-pds">'</span></span>; cr].   <span class="pl-c"><span class="pl-c">"</span>if else<span class="pl-c">"</span></span>
+
+<span class="pl-c"><span class="pl-c">"</span>if then else<span class="pl-c">"</span></span>
+x <span class="pl-k">&gt;</span> <span class="pl-c1">10</span>                                                      
+   <span class="pl-k">ifTrue:</span> [<span class="pl-c1">Transcript</span> <span class="pl-c1">show:</span> <span class="pl-s"><span class="pl-pds">'</span>ifTrue<span class="pl-pds">'</span></span>; cr]
+   <span class="pl-k">ifFalse:</span> [<span class="pl-c1">Transcript</span> <span class="pl-c1">show:</span> <span class="pl-s"><span class="pl-pds">'</span>ifFalse<span class="pl-pds">'</span></span>; cr].
+
+<span class="pl-c"><span class="pl-c">"</span>if else then<span class="pl-c">"</span></span>
+x <span class="pl-k">&gt;</span> <span class="pl-c1">10</span>                                                      
+   <span class="pl-k">ifFalse:</span> [<span class="pl-c1">Transcript</span> <span class="pl-c1">show:</span> <span class="pl-s"><span class="pl-pds">'</span>ifFalse<span class="pl-pds">'</span></span>; cr]
+   <span class="pl-k">ifTrue:</span> [<span class="pl-c1">Transcript</span> <span class="pl-c1">show:</span> <span class="pl-s"><span class="pl-pds">'</span>ifTrue<span class="pl-pds">'</span></span>; cr].
+<span class="pl-c1">Transcript</span>
+   <span class="pl-c1">show:</span>
+      (x <span class="pl-k">&gt;</span> <span class="pl-c1">10</span>
+         <span class="pl-k">ifTrue:</span> [<span class="pl-s"><span class="pl-pds">'</span>ifTrue<span class="pl-pds">'</span></span>]
+         <span class="pl-k">ifFalse:</span> [<span class="pl-s"><span class="pl-pds">'</span>ifFalse<span class="pl-pds">'</span></span>]);
+   cr.
+
+<span class="pl-c"><span class="pl-c">"</span>nested if then else<span class="pl-c">"</span></span>
+<span class="pl-c1">Transcript</span>                                                  
+   <span class="pl-c1">show:</span>
+      (x <span class="pl-k">&gt;</span> <span class="pl-c1">10</span>
+         <span class="pl-k">ifTrue:</span> [x <span class="pl-k">&gt;</span> <span class="pl-c1">5</span>
+            <span class="pl-k">ifTrue:</span> [<span class="pl-s"><span class="pl-pds">'</span>A<span class="pl-pds">'</span></span>]
+            <span class="pl-k">ifFalse:</span> [<span class="pl-s"><span class="pl-pds">'</span>B<span class="pl-pds">'</span></span>]]
+         <span class="pl-k">ifFalse:</span> [<span class="pl-s"><span class="pl-pds">'</span>C<span class="pl-pds">'</span></span>]);
+   cr.
+
+<span class="pl-c"><span class="pl-c">"</span>switch functionality<span class="pl-c">"</span></span>
+switch <span class="pl-k">:=</span> <span class="pl-c1">Dictionary</span> <span class="pl-k">new</span>.     
+switch <span class="pl-c1">at:</span> $<span class="pl-c1">A</span> <span class="pl-c1">put:</span> [<span class="pl-c1">Transcript</span> <span class="pl-c1">show:</span> <span class="pl-s"><span class="pl-pds">'</span>Case A<span class="pl-pds">'</span></span>; cr].
+switch <span class="pl-c1">at:</span> $<span class="pl-c1">B</span> <span class="pl-c1">put:</span> [<span class="pl-c1">Transcript</span> <span class="pl-c1">show:</span> <span class="pl-s"><span class="pl-pds">'</span>Case B<span class="pl-pds">'</span></span>; cr].
+switch <span class="pl-c1">at:</span> $<span class="pl-c1">C</span> <span class="pl-c1">put:</span> [<span class="pl-c1">Transcript</span> <span class="pl-c1">show:</span> <span class="pl-s"><span class="pl-pds">'</span>Case C<span class="pl-pds">'</span></span>; cr].
+result <span class="pl-k">:=</span> (switch <span class="pl-c1">at:</span> $<span class="pl-c1">B</span>) value.</pre></div>
+<h4>Iteration statements:</h4>
+<div class="highlight highlight-source-smalltalk"><pre class="notranslate">| <span class="pl-c1">x</span> <span class="pl-c1">y</span> |
+x <span class="pl-k">:=</span> <span class="pl-c1">4</span>. y <span class="pl-k">:=</span> <span class="pl-c1">1</span>.
+[x <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>] <span class="pl-k">whileTrue:</span> [x <span class="pl-k">:=</span> x <span class="pl-k">-</span> <span class="pl-c1">1</span>. y <span class="pl-k">:=</span> y <span class="pl-k">*</span> <span class="pl-c1">2</span>].     <span class="pl-c"><span class="pl-c">"</span>while true loop<span class="pl-c">"</span></span>
+[x <span class="pl-k">&gt;=</span> <span class="pl-c1">4</span>] <span class="pl-k">whileFalse:</span> [x <span class="pl-k">:=</span> x <span class="pl-k">+</span> <span class="pl-c1">1</span>. y <span class="pl-k">:=</span> y <span class="pl-k">*</span> <span class="pl-c1">2</span>].   <span class="pl-c"><span class="pl-c">"</span>while false loop<span class="pl-c">"</span></span>
+x <span class="pl-c1">timesRepeat:</span> [y <span class="pl-k">:=</span> y <span class="pl-k">*</span> <span class="pl-c1">2</span>].                     <span class="pl-c"><span class="pl-c">"</span>times repeat loop (i := 1 to x)<span class="pl-c">"</span></span>
+<span class="pl-c1">1</span> <span class="pl-c1">to:</span> x <span class="pl-c1">do:</span> [<span class="pl-en">:a</span> | y <span class="pl-k">:=</span> y <span class="pl-k">*</span> <span class="pl-c1">2</span>].                   <span class="pl-c"><span class="pl-c">"</span>for loop<span class="pl-c">"</span></span>
+<span class="pl-c1">1</span> <span class="pl-c1">to:</span> x <span class="pl-c1">by:</span> <span class="pl-c1">2</span> <span class="pl-c1">do:</span> [<span class="pl-en">:a</span> | y <span class="pl-k">:=</span> y <span class="pl-k">/</span> <span class="pl-c1">2</span>].             <span class="pl-c"><span class="pl-c">"</span>for loop with specified increment<span class="pl-c">"</span></span>
+<span class="pl-c1">#(5 4 3)</span> <span class="pl-c1">do:</span> [<span class="pl-en">:a</span> | x <span class="pl-k">:=</span> x <span class="pl-k">+</span> a].                  <span class="pl-c"><span class="pl-c">"</span>iterate over array elements<span class="pl-c">"</span></span></pre></div>
+<h4>Character:</h4>
+<div class="highlight highlight-source-smalltalk"><pre class="notranslate">| <span class="pl-c1">x</span> <span class="pl-c1">y</span> |
+x <span class="pl-k">:=</span> $<span class="pl-c1">A</span>.                         <span class="pl-c"><span class="pl-c">"</span>character assignment<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x isLowercase.              <span class="pl-c"><span class="pl-c">"</span>test if lower case<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x isUppercase.              <span class="pl-c"><span class="pl-c">"</span>test if upper case<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x isLetter.                 <span class="pl-c"><span class="pl-c">"</span>test if letter<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x isDigit.                  <span class="pl-c"><span class="pl-c">"</span>test if digit<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x isAlphaNumeric.           <span class="pl-c"><span class="pl-c">"</span>test if alphanumeric<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x isSeparator.              <span class="pl-c"><span class="pl-c">"</span>test if separator char<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x isVowel.                  <span class="pl-c"><span class="pl-c">"</span>test if vowel<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x digitValue.               <span class="pl-c"><span class="pl-c">"</span>convert to numeric digit value<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asLowercase.              <span class="pl-c"><span class="pl-c">"</span>convert to lower case<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asUppercase.              <span class="pl-c"><span class="pl-c">"</span>convert to upper case<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asciiValue.               <span class="pl-c"><span class="pl-c">"</span>convert to numeric ascii value<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asString.                 <span class="pl-c"><span class="pl-c">"</span>convert to string<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> $<span class="pl-c1">A</span> <span class="pl-k">&lt;=</span> $<span class="pl-c1">B</span>.                   <span class="pl-c"><span class="pl-c">"</span>comparison<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> $<span class="pl-c1">A</span> <span class="pl-c1">max:</span> $<span class="pl-c1">B</span>.</pre></div>
+<h4>Symbol:</h4>
+<div class="highlight highlight-source-smalltalk"><pre class="notranslate">| <span class="pl-c1">b</span> <span class="pl-c1">x</span> <span class="pl-c1">y</span> |
+x <span class="pl-k">:=</span> <span class="pl-c1">#Hello</span>.                                      <span class="pl-c"><span class="pl-c">"</span>symbol assignment<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> <span class="pl-c1">#Symbol</span>, <span class="pl-c1">#Concatenation</span>.                     <span class="pl-c"><span class="pl-c">"</span>symbol concatenation (result is string)<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> x isEmpty.                                   <span class="pl-c"><span class="pl-c">"</span>test if symbol is empty<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x size.                                      <span class="pl-c"><span class="pl-c">"</span>string size<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">at:</span> <span class="pl-c1">2</span>.                                     <span class="pl-c"><span class="pl-c">"</span>char at location<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">copyFrom:</span> <span class="pl-c1">2</span> <span class="pl-c1">to:</span> <span class="pl-c1">4</span>.                         <span class="pl-c"><span class="pl-c">"</span>substring<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">indexOf:</span> $e <span class="pl-c1">ifAbsent:</span> [<span class="pl-c1">0</span>].                 <span class="pl-c"><span class="pl-c">"</span>first position of character within string<span class="pl-c">"</span></span>
+x <span class="pl-c1">do:</span> [<span class="pl-en">:a</span> | <span class="pl-c1">Transcript</span> <span class="pl-c1">show:</span> a printString; cr].  <span class="pl-c"><span class="pl-c">"</span>iterate over the string<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> x <span class="pl-c1">conform:</span> [<span class="pl-en">:a</span> | (a <span class="pl-k">&gt;=</span> $a) <span class="pl-k">&amp;</span> (a <span class="pl-k">&lt;=</span> $z)].     <span class="pl-c"><span class="pl-c">"</span>test if all elements meet condition<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">select:</span> [<span class="pl-en">:a</span> | a <span class="pl-k">&gt;</span> $a].                     <span class="pl-c"><span class="pl-c">"</span>return all elements that meet condition<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asString.                                  <span class="pl-c"><span class="pl-c">"</span>convert symbol to string<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asText.                                    <span class="pl-c"><span class="pl-c">"</span>convert symbol to text<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asArray.                                   <span class="pl-c"><span class="pl-c">"</span>convert symbol to array<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asOrderedCollection.                       <span class="pl-c"><span class="pl-c">"</span>convert symbol to ordered collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asSortedCollection.                        <span class="pl-c"><span class="pl-c">"</span>convert symbol to sorted collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asBag.                                     <span class="pl-c"><span class="pl-c">"</span>convert symbol to bag collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asSet.                                     <span class="pl-c"><span class="pl-c">"</span>convert symbol to set collection<span class="pl-c">"</span></span></pre></div>
+<h4>String:</h4>
+<div class="highlight highlight-source-smalltalk"><pre class="notranslate">| <span class="pl-c1">b</span> <span class="pl-c1">x</span> <span class="pl-c1">y</span> |
+x <span class="pl-k">:=</span> <span class="pl-s"><span class="pl-pds">'</span>This is a string<span class="pl-pds">'</span></span>.                           <span class="pl-c"><span class="pl-c">"</span>string assignment<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-s"><span class="pl-pds">'</span>String<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>Concatenation<span class="pl-pds">'</span></span>.                    <span class="pl-c"><span class="pl-c">"</span>string concatenation<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> x isEmpty.                                    <span class="pl-c"><span class="pl-c">"</span>test if string is empty<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x size.                                       <span class="pl-c"><span class="pl-c">"</span>string size<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">at:</span> <span class="pl-c1">2</span>.                                      <span class="pl-c"><span class="pl-c">"</span>char at location<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">copyFrom:</span> <span class="pl-c1">2</span> <span class="pl-c1">to:</span> <span class="pl-c1">4</span>.                          <span class="pl-c"><span class="pl-c">"</span>substring<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">indexOf:</span> $a <span class="pl-c1">ifAbsent:</span> [<span class="pl-c1">0</span>].                  <span class="pl-c"><span class="pl-c">"</span>first position of character within string<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">String</span> <span class="pl-k">new</span>: <span class="pl-c1">4</span>.                                <span class="pl-c"><span class="pl-c">"</span>allocate string object<span class="pl-c">"</span></span>
+x                                                  <span class="pl-c"><span class="pl-c">"</span>set string elements<span class="pl-c">"</span></span>
+   <span class="pl-c1">at:</span> <span class="pl-c1">1</span> <span class="pl-c1">put:</span> $a;
+   <span class="pl-c1">at:</span> <span class="pl-c1">2</span> <span class="pl-c1">put:</span> $b;
+   <span class="pl-c1">at:</span> <span class="pl-c1">3</span> <span class="pl-c1">put:</span> $c;
+   <span class="pl-c1">at:</span> <span class="pl-c1">4</span> <span class="pl-c1">put:</span> $e.
+x <span class="pl-k">:=</span> <span class="pl-c1">String</span> <span class="pl-c1">with:</span> $a <span class="pl-c1">with:</span> $b <span class="pl-c1">with:</span> $c <span class="pl-c1">with:</span> $d.  <span class="pl-c"><span class="pl-c">"</span>set up to 4 elements at a time<span class="pl-c">"</span></span>
+x <span class="pl-c1">do:</span> [<span class="pl-en">:a</span> | <span class="pl-c1">Transcript</span> <span class="pl-c1">show:</span> a printString; cr].  <span class="pl-c"><span class="pl-c">"</span>iterate over the string<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> x <span class="pl-c1">conform:</span> [<span class="pl-en">:a</span> | (a <span class="pl-k">&gt;=</span> $a) <span class="pl-k">&amp;</span> (a <span class="pl-k">&lt;=</span> $z)].     <span class="pl-c"><span class="pl-c">"</span>test if all elements meet condition<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">select:</span> [<span class="pl-en">:a</span> | a <span class="pl-k">&gt;</span> $a].                     <span class="pl-c"><span class="pl-c">"</span>return all elements that meet condition<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asSymbol.                                  <span class="pl-c"><span class="pl-c">"</span>convert string to symbol<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asArray.                                   <span class="pl-c"><span class="pl-c">"</span>convert string to array<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-s"><span class="pl-pds">'</span>ABCD<span class="pl-pds">'</span></span> asByteArray.                          <span class="pl-c"><span class="pl-c">"</span>convert string to byte array<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asOrderedCollection.                       <span class="pl-c"><span class="pl-c">"</span>convert string to ordered collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asSortedCollection.                        <span class="pl-c"><span class="pl-c">"</span>convert string to sorted collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asBag.                                     <span class="pl-c"><span class="pl-c">"</span>convert string to bag collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asSet.                                     <span class="pl-c"><span class="pl-c">"</span>convert string to set collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x shuffled.                                  <span class="pl-c"><span class="pl-c">"</span>randomly shuffle string<span class="pl-c">"</span></span></pre></div>
+<h4>Array:</h4>
+<p>Fixed length collection</p>
+<ul>
+<li>ByteArray:     Array limited to byte elements (0-255)</li>
+<li>WordArray:     Array limited to word elements (0-2^32)</li>
+</ul>
+<div class="highlight highlight-source-smalltalk"><pre class="notranslate">| <span class="pl-c1">b</span> <span class="pl-c1">x</span> <span class="pl-c1">y</span> <span class="pl-c1">sum</span> <span class="pl-c1">max</span> |
+x <span class="pl-k">:=</span> <span class="pl-c1">#(4 3 2 1)</span>.                                 <span class="pl-c"><span class="pl-c">"</span>constant array<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">Array</span> <span class="pl-c1">with:</span> <span class="pl-c1">5</span> <span class="pl-c1">with:</span> <span class="pl-c1">4</span> <span class="pl-c1">with:</span> <span class="pl-c1">3</span> <span class="pl-c1">with:</span> <span class="pl-c1">2</span>.      <span class="pl-c"><span class="pl-c">"</span>create array with up to 4 elements<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">Array</span> <span class="pl-k">new</span>: <span class="pl-c1">4</span>.                               <span class="pl-c"><span class="pl-c">"</span>allocate an array with specified size<span class="pl-c">"</span></span>
+x                                                <span class="pl-c"><span class="pl-c">"</span>set array elements<span class="pl-c">"</span></span>
+   <span class="pl-c1">at:</span> <span class="pl-c1">1</span> <span class="pl-c1">put:</span> <span class="pl-c1">5</span>;
+   <span class="pl-c1">at:</span> <span class="pl-c1">2</span> <span class="pl-c1">put:</span> <span class="pl-c1">4</span>;
+   <span class="pl-c1">at:</span> <span class="pl-c1">3</span> <span class="pl-c1">put:</span> <span class="pl-c1">3</span>;
+   <span class="pl-c1">at:</span> <span class="pl-c1">4</span> <span class="pl-c1">put:</span> <span class="pl-c1">2</span>.
+b <span class="pl-k">:=</span> x isEmpty.                                  <span class="pl-c"><span class="pl-c">"</span>test if array is empty<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x size.                                     <span class="pl-c"><span class="pl-c">"</span>array size<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">at:</span> <span class="pl-c1">4</span>.                                    <span class="pl-c"><span class="pl-c">"</span>get array element at index<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> x <span class="pl-c1">includes:</span> <span class="pl-c1">3</span>.                              <span class="pl-c"><span class="pl-c">"</span>test if element is in array<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">copyFrom:</span> <span class="pl-c1">2</span> <span class="pl-c1">to:</span> <span class="pl-c1">4</span>.                        <span class="pl-c"><span class="pl-c">"</span>subarray<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">indexOf:</span> <span class="pl-c1">3</span> <span class="pl-c1">ifAbsent:</span> [<span class="pl-c1">0</span>].                 <span class="pl-c"><span class="pl-c">"</span>first position of element within array<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">occurrencesOf:</span> <span class="pl-c1">3</span>.                         <span class="pl-c"><span class="pl-c">"</span>number of times object in collection<span class="pl-c">"</span></span>
+x <span class="pl-c1">do:</span> [<span class="pl-en">:a</span> | <span class="pl-c1">Transcript</span> <span class="pl-c1">show:</span> a printString; cr]. <span class="pl-c"><span class="pl-c">"</span>iterate over the array<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> x <span class="pl-c1">conform:</span> [<span class="pl-en">:a</span> | (a <span class="pl-k">&gt;=</span> <span class="pl-c1">1</span>) <span class="pl-k">&amp;</span> (a <span class="pl-k">&lt;=</span> <span class="pl-c1">4</span>)].      <span class="pl-c"><span class="pl-c">"</span>test if all elements meet condition<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">select:</span> [<span class="pl-en">:a</span> | a <span class="pl-k">&gt;</span> <span class="pl-c1">2</span>].                     <span class="pl-c"><span class="pl-c">"</span>return collection of elements that pass test<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">reject:</span> [<span class="pl-en">:a</span> | a <span class="pl-k">&lt;</span> <span class="pl-c1">2</span>].                     <span class="pl-c"><span class="pl-c">"</span>return collection of elements that fail test<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">collect:</span> [<span class="pl-en">:a</span> | a <span class="pl-k">+</span> a].                    <span class="pl-c"><span class="pl-c">"</span>transform each element for new collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">detect:</span> [<span class="pl-en">:a</span> | a <span class="pl-k">&gt;</span> <span class="pl-c1">3</span>] <span class="pl-c1">ifNone:</span> [].          <span class="pl-c"><span class="pl-c">"</span>find position of first element that passes test<span class="pl-c">"</span></span>
+sum <span class="pl-k">:=</span> <span class="pl-c1">0</span>. x <span class="pl-c1">do:</span> [<span class="pl-en">:a</span> | sum <span class="pl-k">:=</span> sum <span class="pl-k">+</span> a]. sum.      <span class="pl-c"><span class="pl-c">"</span>sum array elements<span class="pl-c">"</span></span>
+sum <span class="pl-k">:=</span> <span class="pl-c1">0</span>. <span class="pl-c1">1</span> <span class="pl-c1">to:</span> (x size) 
+            <span class="pl-c1">do:</span> [<span class="pl-en">:a</span> | sum <span class="pl-k">:=</span> sum <span class="pl-k">+</span> (x <span class="pl-c1">at:</span> a)].   <span class="pl-c"><span class="pl-c">"</span>sum array elements<span class="pl-c">"</span></span>
+sum <span class="pl-k">:=</span> x <span class="pl-c1">inject:</span> <span class="pl-c1">0</span> <span class="pl-c1">into:</span> [<span class="pl-en">:a</span> <span class="pl-en">:c</span> | a <span class="pl-k">+</span> c].        <span class="pl-c"><span class="pl-c">"</span>sum array elements<span class="pl-c">"</span></span>
+max <span class="pl-k">:=</span> x <span class="pl-c1">inject:</span> <span class="pl-c1">0</span> <span class="pl-c1">into:</span> [<span class="pl-en">:a</span> <span class="pl-en">:c</span> | (a <span class="pl-k">&gt;</span> c)        <span class="pl-c"><span class="pl-c">"</span>find max element in array<span class="pl-c">"</span></span>
+   <span class="pl-k">ifTrue:</span> [a]
+   <span class="pl-k">ifFalse:</span> [c]].
+y <span class="pl-k">:=</span> x shuffled.                                 <span class="pl-c"><span class="pl-c">"</span>randomly shuffle collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asArray.                                  <span class="pl-c"><span class="pl-c">"</span>convert to array<span class="pl-c">"</span></span>
+<span class="pl-c"><span class="pl-c">"</span>y := x asByteArray.<span class="pl-c">"</span></span>                            <span class="pl-c"><span class="pl-c">"</span>note: this instruction not available on Squeak<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asWordArray.                              <span class="pl-c"><span class="pl-c">"</span>convert to word array<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asOrderedCollection.                      <span class="pl-c"><span class="pl-c">"</span>convert to ordered collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asSortedCollection.                       <span class="pl-c"><span class="pl-c">"</span>convert to sorted collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asBag.                                    <span class="pl-c"><span class="pl-c">"</span>convert to bag collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asSet.                                    <span class="pl-c"><span class="pl-c">"</span>convert to set collection<span class="pl-c">"</span></span></pre></div>
+<h4>OrderedCollection:</h4>
+<p>acts like an expandable array</p>
+<div class="highlight highlight-source-smalltalk"><pre class="notranslate">| <span class="pl-c1">b</span> <span class="pl-c1">x</span> <span class="pl-c1">y</span> <span class="pl-c1">sum</span> <span class="pl-c1">max</span> |
+x <span class="pl-k">:=</span> <span class="pl-c1">OrderedCollection</span> 
+     <span class="pl-c1">with:</span> <span class="pl-c1">4</span> <span class="pl-c1">with:</span> <span class="pl-c1">3</span> <span class="pl-c1">with:</span> <span class="pl-c1">2</span> <span class="pl-c1">with:</span> <span class="pl-c1">1</span>.            <span class="pl-c"><span class="pl-c">"</span>create collection with up to 4 elements<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">OrderedCollection</span> <span class="pl-k">new</span>.                      <span class="pl-c"><span class="pl-c">"</span>allocate collection<span class="pl-c">"</span></span>
+x <span class="pl-c1">add:</span> <span class="pl-c1">3</span>; <span class="pl-c1">add:</span> <span class="pl-c1">2</span>; <span class="pl-c1">add:</span> <span class="pl-c1">1</span>; <span class="pl-c1">add:</span> <span class="pl-c1">4</span>; <span class="pl-k">yourself</span>.      <span class="pl-c"><span class="pl-c">"</span>add element to collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">addFirst:</span> <span class="pl-c1">5</span>.                              <span class="pl-c"><span class="pl-c">"</span>add element at beginning of collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x removeFirst.                              <span class="pl-c"><span class="pl-c">"</span>remove first element in collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">addLast:</span> <span class="pl-c1">6</span>.                               <span class="pl-c"><span class="pl-c">"</span>add element at end of collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x removeLast.                               <span class="pl-c"><span class="pl-c">"</span>remove last element in collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">addAll:</span> <span class="pl-c1">#(7 8 9)</span>.                         <span class="pl-c"><span class="pl-c">"</span>add multiple elements to collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">removeAll:</span> <span class="pl-c1">#(7 8 9)</span>.                      <span class="pl-c"><span class="pl-c">"</span>remove multiple elements from collection<span class="pl-c">"</span></span>
+x <span class="pl-c1">at:</span> <span class="pl-c1">2</span> <span class="pl-c1">put:</span> <span class="pl-c1">3</span>.                                  <span class="pl-c"><span class="pl-c">"</span>set element at index<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">remove:</span> <span class="pl-c1">5</span> <span class="pl-c1">ifAbsent:</span> [].                   <span class="pl-c"><span class="pl-c">"</span>remove element from collection<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> x isEmpty.                                  <span class="pl-c"><span class="pl-c">"</span>test if empty<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x size.                                     <span class="pl-c"><span class="pl-c">"</span>number of elements<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">at:</span> <span class="pl-c1">2</span>.                                    <span class="pl-c"><span class="pl-c">"</span>retrieve element at index<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x first.                                    <span class="pl-c"><span class="pl-c">"</span>retrieve first element in collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x last.                                     <span class="pl-c"><span class="pl-c">"</span>retrieve last element in collection<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> x <span class="pl-c1">includes:</span> <span class="pl-c1">5</span>.                              <span class="pl-c"><span class="pl-c">"</span>test if element is in collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">copyFrom:</span> <span class="pl-c1">2</span> <span class="pl-c1">to:</span> <span class="pl-c1">3</span>.                        <span class="pl-c"><span class="pl-c">"</span>subcollection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">indexOf:</span> <span class="pl-c1">3</span> <span class="pl-c1">ifAbsent:</span> [<span class="pl-c1">0</span>].                 <span class="pl-c"><span class="pl-c">"</span>first position of element within collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">occurrencesOf:</span> <span class="pl-c1">3</span>.                         <span class="pl-c"><span class="pl-c">"</span>number of times object in collection<span class="pl-c">"</span></span>
+x <span class="pl-c1">do:</span> [<span class="pl-en">:a</span> | <span class="pl-c1">Transcript</span> <span class="pl-c1">show:</span> a printString; cr]. <span class="pl-c"><span class="pl-c">"</span>iterate over the collection<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> x <span class="pl-c1">conform:</span> [<span class="pl-en">:a</span> | (a <span class="pl-k">&gt;=</span> <span class="pl-c1">1</span>) <span class="pl-k">&amp;</span> (a <span class="pl-k">&lt;=</span> <span class="pl-c1">4</span>)].      <span class="pl-c"><span class="pl-c">"</span>test if all elements meet condition<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">select:</span> [<span class="pl-en">:a</span> | a <span class="pl-k">&gt;</span> <span class="pl-c1">2</span>].                     <span class="pl-c"><span class="pl-c">"</span>return collection of elements that pass test<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">reject:</span> [<span class="pl-en">:a</span> | a <span class="pl-k">&lt;</span> <span class="pl-c1">2</span>].                     <span class="pl-c"><span class="pl-c">"</span>return collection of elements that fail test<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">collect:</span> [<span class="pl-en">:a</span> | a <span class="pl-k">+</span> a].                    <span class="pl-c"><span class="pl-c">"</span>transform each element for new collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">detect:</span> [<span class="pl-en">:a</span> | a <span class="pl-k">&gt;</span> <span class="pl-c1">3</span>] <span class="pl-c1">ifNone:</span> [].          <span class="pl-c"><span class="pl-c">"</span>find position of first element that passes test<span class="pl-c">"</span></span>
+sum <span class="pl-k">:=</span> <span class="pl-c1">0</span>. x <span class="pl-c1">do:</span> [<span class="pl-en">:a</span> | sum <span class="pl-k">:=</span> sum <span class="pl-k">+</span> a]. sum.      <span class="pl-c"><span class="pl-c">"</span>sum elements<span class="pl-c">"</span></span>
+sum <span class="pl-k">:=</span> <span class="pl-c1">0</span>. <span class="pl-c1">1</span> <span class="pl-c1">to:</span> (x size) 
+            <span class="pl-c1">do:</span> [<span class="pl-en">:a</span> | sum <span class="pl-k">:=</span> sum <span class="pl-k">+</span> (x <span class="pl-c1">at:</span> a)].   <span class="pl-c"><span class="pl-c">"</span>sum elements<span class="pl-c">"</span></span>
+sum <span class="pl-k">:=</span> x <span class="pl-c1">inject:</span> <span class="pl-c1">0</span> <span class="pl-c1">into:</span> [<span class="pl-en">:a</span> <span class="pl-en">:c</span> | a <span class="pl-k">+</span> c].        <span class="pl-c"><span class="pl-c">"</span>sum elements<span class="pl-c">"</span></span>
+max <span class="pl-k">:=</span> x <span class="pl-c1">inject:</span> <span class="pl-c1">0</span> <span class="pl-c1">into:</span> [<span class="pl-en">:a</span> <span class="pl-en">:c</span> | (a <span class="pl-k">&gt;</span> c)        <span class="pl-c"><span class="pl-c">"</span>find max element in collection<span class="pl-c">"</span></span>
+   <span class="pl-k">ifTrue:</span> [a]
+   <span class="pl-k">ifFalse:</span> [c]].
+y <span class="pl-k">:=</span> x shuffled.                                 <span class="pl-c"><span class="pl-c">"</span>randomly shuffle collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asArray.                                  <span class="pl-c"><span class="pl-c">"</span>convert to array<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asOrderedCollection.                      <span class="pl-c"><span class="pl-c">"</span>convert to ordered collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asSortedCollection.                       <span class="pl-c"><span class="pl-c">"</span>convert to sorted collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asBag.                                    <span class="pl-c"><span class="pl-c">"</span>convert to bag collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asSet.                                    <span class="pl-c"><span class="pl-c">"</span>convert to set collection<span class="pl-c">"</span></span></pre></div>
+<h4>SortedCollection:</h4>
+<p>like OrderedCollection except order of elements determined by sorting criteria</p>
+<div class="highlight highlight-source-smalltalk"><pre class="notranslate">| <span class="pl-c1">b</span> <span class="pl-c1">x</span> <span class="pl-c1">y</span> <span class="pl-c1">sum</span> <span class="pl-c1">max</span> |
+x <span class="pl-k">:=</span> <span class="pl-c1">SortedCollection</span> 
+     <span class="pl-c1">with:</span> <span class="pl-c1">4</span> <span class="pl-c1">with:</span> <span class="pl-c1">3</span> <span class="pl-c1">with:</span> <span class="pl-c1">2</span> <span class="pl-c1">with:</span> <span class="pl-c1">1</span>.              <span class="pl-c"><span class="pl-c">"</span>create collection with up to 4 elements<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">SortedCollection</span> <span class="pl-k">new</span>.                         <span class="pl-c"><span class="pl-c">"</span>allocate collection<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">SortedCollection</span> <span class="pl-c1">sortBlock:</span> [<span class="pl-en">:a</span> <span class="pl-en">:c</span> | a <span class="pl-k">&gt;</span> c].  <span class="pl-c"><span class="pl-c">"</span>set sort criteria<span class="pl-c">"</span></span>
+x <span class="pl-c1">add:</span> <span class="pl-c1">3</span>; <span class="pl-c1">add:</span> <span class="pl-c1">2</span>; <span class="pl-c1">add:</span> <span class="pl-c1">1</span>; <span class="pl-c1">add:</span> <span class="pl-c1">4</span>; <span class="pl-k">yourself</span>.        <span class="pl-c"><span class="pl-c">"</span>add element to collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">addFirst:</span> <span class="pl-c1">5</span>.                                <span class="pl-c"><span class="pl-c">"</span>add element at beginning of collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x removeFirst.                                <span class="pl-c"><span class="pl-c">"</span>remove first element in collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">addLast:</span> <span class="pl-c1">6</span>.                                 <span class="pl-c"><span class="pl-c">"</span>add element at end of collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x removeLast.                                 <span class="pl-c"><span class="pl-c">"</span>remove last element in collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">addAll:</span> <span class="pl-c1">#(7 8 9)</span>.                           <span class="pl-c"><span class="pl-c">"</span>add multiple elements to collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">removeAll:</span> <span class="pl-c1">#(7 8 9)</span>.                        <span class="pl-c"><span class="pl-c">"</span>remove multiple elements from collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">remove:</span> <span class="pl-c1">5</span> <span class="pl-c1">ifAbsent:</span> [].                     <span class="pl-c"><span class="pl-c">"</span>remove element from collection<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> x isEmpty.                                    <span class="pl-c"><span class="pl-c">"</span>test if empty<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x size.                                       <span class="pl-c"><span class="pl-c">"</span>number of elements<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">at:</span> <span class="pl-c1">2</span>.                                      <span class="pl-c"><span class="pl-c">"</span>retrieve element at index<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x first.                                      <span class="pl-c"><span class="pl-c">"</span>retrieve first element in collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x last.                                       <span class="pl-c"><span class="pl-c">"</span>retrieve last element in collection<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> x <span class="pl-c1">includes:</span> <span class="pl-c1">4</span>.                                <span class="pl-c"><span class="pl-c">"</span>test if element is in collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">copyFrom:</span> <span class="pl-c1">2</span> <span class="pl-c1">to:</span> <span class="pl-c1">3</span>.                          <span class="pl-c"><span class="pl-c">"</span>subcollection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">indexOf:</span> <span class="pl-c1">3</span> <span class="pl-c1">ifAbsent:</span> [<span class="pl-c1">0</span>].                   <span class="pl-c"><span class="pl-c">"</span>first position of element within collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">occurrencesOf:</span> <span class="pl-c1">3</span>.                           <span class="pl-c"><span class="pl-c">"</span>number of times object in collection<span class="pl-c">"</span></span>
+x <span class="pl-c1">do:</span> [<span class="pl-en">:a</span> | <span class="pl-c1">Transcript</span> <span class="pl-c1">show:</span> a printString; cr].   <span class="pl-c"><span class="pl-c">"</span>iterate over the collection<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> x <span class="pl-c1">conform:</span> [<span class="pl-en">:a</span> | (a <span class="pl-k">&gt;=</span> <span class="pl-c1">1</span>) <span class="pl-k">&amp;</span> (a <span class="pl-k">&lt;=</span> <span class="pl-c1">4</span>)].        <span class="pl-c"><span class="pl-c">"</span>test if all elements meet condition<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">select:</span> [<span class="pl-en">:a</span> | a <span class="pl-k">&gt;</span> <span class="pl-c1">2</span>].                       <span class="pl-c"><span class="pl-c">"</span>return collection of elements that pass test<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">reject:</span> [<span class="pl-en">:a</span> | a <span class="pl-k">&lt;</span> <span class="pl-c1">2</span>].                       <span class="pl-c"><span class="pl-c">"</span>return collection of elements that fail test<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">collect:</span> [<span class="pl-en">:a</span> | a <span class="pl-k">+</span> a].                      <span class="pl-c"><span class="pl-c">"</span>transform each element for new collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">detect:</span> [<span class="pl-en">:a</span> | a <span class="pl-k">&gt;</span> <span class="pl-c1">3</span>] <span class="pl-c1">ifNone:</span> [].            <span class="pl-c"><span class="pl-c">"</span>find position of first element that passes test<span class="pl-c">"</span></span>
+sum <span class="pl-k">:=</span> <span class="pl-c1">0</span>. x <span class="pl-c1">do:</span> [<span class="pl-en">:a</span> | sum <span class="pl-k">:=</span> sum <span class="pl-k">+</span> a]. sum.        <span class="pl-c"><span class="pl-c">"</span>sum elements<span class="pl-c">"</span></span>
+sum <span class="pl-k">:=</span> <span class="pl-c1">0</span>. <span class="pl-c1">1</span> <span class="pl-c1">to:</span> (x size) 
+            <span class="pl-c1">do:</span> [<span class="pl-en">:a</span> | sum <span class="pl-k">:=</span> sum <span class="pl-k">+</span> (x <span class="pl-c1">at:</span> a)].     <span class="pl-c"><span class="pl-c">"</span>sum elements<span class="pl-c">"</span></span>
+sum <span class="pl-k">:=</span> x <span class="pl-c1">inject:</span> <span class="pl-c1">0</span> <span class="pl-c1">into:</span> [<span class="pl-en">:a</span> <span class="pl-en">:c</span> | a <span class="pl-k">+</span> c].          <span class="pl-c"><span class="pl-c">"</span>sum elements<span class="pl-c">"</span></span>
+max <span class="pl-k">:=</span> x <span class="pl-c1">inject:</span> <span class="pl-c1">0</span> <span class="pl-c1">into:</span> [<span class="pl-en">:a</span> <span class="pl-en">:c</span> | (a <span class="pl-k">&gt;</span> c)          <span class="pl-c"><span class="pl-c">"</span>find max element in collection<span class="pl-c">"</span></span>
+   <span class="pl-k">ifTrue:</span> [a]
+   <span class="pl-k">ifFalse:</span> [c]].
+y <span class="pl-k">:=</span> x asArray.                                     <span class="pl-c"><span class="pl-c">"</span>convert to array<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asOrderedCollection.                         <span class="pl-c"><span class="pl-c">"</span>convert to ordered collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asSortedCollection.                          <span class="pl-c"><span class="pl-c">"</span>convert to sorted collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asBag.                                       <span class="pl-c"><span class="pl-c">"</span>convert to bag collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asSet.                                       <span class="pl-c"><span class="pl-c">"</span>convert to set collection<span class="pl-c">"</span></span></pre></div>
+<h4>Bag:</h4>
+<p>like OrderedCollection except elements are in no particular order</p>
+<div class="highlight highlight-source-smalltalk"><pre class="notranslate">| <span class="pl-c1">b</span> <span class="pl-c1">x</span> <span class="pl-c1">y</span> <span class="pl-c1">sum</span> <span class="pl-c1">max</span> |
+x <span class="pl-k">:=</span> <span class="pl-c1">Bag</span> <span class="pl-c1">with:</span> <span class="pl-c1">4</span> <span class="pl-c1">with:</span> <span class="pl-c1">3</span> <span class="pl-c1">with:</span> <span class="pl-c1">2</span> <span class="pl-c1">with:</span> <span class="pl-c1">1</span>.        <span class="pl-c"><span class="pl-c">"</span>create collection with up to 4 elements<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">Bag</span> <span class="pl-k">new</span>.                                    <span class="pl-c"><span class="pl-c">"</span>allocate collection<span class="pl-c">"</span></span>
+x <span class="pl-c1">add:</span> <span class="pl-c1">4</span>; <span class="pl-c1">add:</span> <span class="pl-c1">3</span>; <span class="pl-c1">add:</span> <span class="pl-c1">1</span>; <span class="pl-c1">add:</span> <span class="pl-c1">2</span>; <span class="pl-k">yourself</span>.      <span class="pl-c"><span class="pl-c">"</span>add element to collection<span class="pl-c">"</span></span>
+x <span class="pl-c1">add:</span> <span class="pl-c1">3</span> <span class="pl-c1">withOccurrences:</span> <span class="pl-c1">2</span>.                     <span class="pl-c"><span class="pl-c">"</span>add multiple copies to collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">addAll:</span> <span class="pl-c1">#(7 8 9)</span>.                         <span class="pl-c"><span class="pl-c">"</span>add multiple elements to collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">removeAll:</span> <span class="pl-c1">#(7 8 9)</span>.                      <span class="pl-c"><span class="pl-c">"</span>remove multiple elements from collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">remove:</span> <span class="pl-c1">4</span> <span class="pl-c1">ifAbsent:</span> [].                   <span class="pl-c"><span class="pl-c">"</span>remove element from collection<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> x isEmpty.                                  <span class="pl-c"><span class="pl-c">"</span>test if empty<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x size.                                     <span class="pl-c"><span class="pl-c">"</span>number of elements<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> x <span class="pl-c1">includes:</span> <span class="pl-c1">3</span>.                              <span class="pl-c"><span class="pl-c">"</span>test if element is in collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">occurrencesOf:</span> <span class="pl-c1">3</span>.                         <span class="pl-c"><span class="pl-c">"</span>number of times object in collection<span class="pl-c">"</span></span>
+x <span class="pl-c1">do:</span> [<span class="pl-en">:a</span> | <span class="pl-c1">Transcript</span> <span class="pl-c1">show:</span> a printString; cr]. <span class="pl-c"><span class="pl-c">"</span>iterate over the collection<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> x <span class="pl-c1">conform:</span> [<span class="pl-en">:a</span> | (a <span class="pl-k">&gt;=</span> <span class="pl-c1">1</span>) <span class="pl-k">&amp;</span> (a <span class="pl-k">&lt;=</span> <span class="pl-c1">4</span>)].      <span class="pl-c"><span class="pl-c">"</span>test if all elements meet condition<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">select:</span> [<span class="pl-en">:a</span> | a <span class="pl-k">&gt;</span> <span class="pl-c1">2</span>].                     <span class="pl-c"><span class="pl-c">"</span>return collection of elements that pass test<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">reject:</span> [<span class="pl-en">:a</span> | a <span class="pl-k">&lt;</span> <span class="pl-c1">2</span>].                     <span class="pl-c"><span class="pl-c">"</span>return collection of elements that fail test<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">collect:</span> [<span class="pl-en">:a</span> | a <span class="pl-k">+</span> a].                    <span class="pl-c"><span class="pl-c">"</span>transform each element for new collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">detect:</span> [<span class="pl-en">:a</span> | a <span class="pl-k">&gt;</span> <span class="pl-c1">3</span>] <span class="pl-c1">ifNone:</span> [].          <span class="pl-c"><span class="pl-c">"</span>find position of first element that passes test<span class="pl-c">"</span></span>
+sum <span class="pl-k">:=</span> <span class="pl-c1">0</span>. x <span class="pl-c1">do:</span> [<span class="pl-en">:a</span> | sum <span class="pl-k">:=</span> sum <span class="pl-k">+</span> a]. sum.      <span class="pl-c"><span class="pl-c">"</span>sum elements<span class="pl-c">"</span></span>
+sum <span class="pl-k">:=</span> x <span class="pl-c1">inject:</span> <span class="pl-c1">0</span> <span class="pl-c1">into:</span> [<span class="pl-en">:a</span> <span class="pl-en">:c</span> | a <span class="pl-k">+</span> c].        <span class="pl-c"><span class="pl-c">"</span>sum elements<span class="pl-c">"</span></span>
+max <span class="pl-k">:=</span> x <span class="pl-c1">inject:</span> <span class="pl-c1">0</span> <span class="pl-c1">into:</span> [<span class="pl-en">:a</span> <span class="pl-en">:c</span> | (a <span class="pl-k">&gt;</span> c)        <span class="pl-c"><span class="pl-c">"</span>find max element in collection<span class="pl-c">"</span></span>
+   <span class="pl-k">ifTrue:</span> [a]
+   <span class="pl-k">ifFalse:</span> [c]].
+y <span class="pl-k">:=</span> x asOrderedCollection.                       <span class="pl-c"><span class="pl-c">"</span>convert to ordered collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asSortedCollection.                        <span class="pl-c"><span class="pl-c">"</span>convert to sorted collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asBag.                                     <span class="pl-c"><span class="pl-c">"</span>convert to bag collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asSet.                                     <span class="pl-c"><span class="pl-c">"</span>convert to set collection<span class="pl-c">"</span></span></pre></div>
+<h4>Set:</h4>
+<p>like Bag except duplicates not allowed</p>
+<h4>IdentitySet:</h4>
+<p>uses identity test (== rather than =)</p>
+<div class="highlight highlight-source-smalltalk"><pre class="notranslate">| <span class="pl-c1">b</span> <span class="pl-c1">x</span> <span class="pl-c1">y</span> <span class="pl-c1">sum</span> <span class="pl-c1">max</span> |
+x <span class="pl-k">:=</span> <span class="pl-c1">Set</span> <span class="pl-c1">with:</span> <span class="pl-c1">4</span> <span class="pl-c1">with:</span> <span class="pl-c1">3</span> <span class="pl-c1">with:</span> <span class="pl-c1">2</span> <span class="pl-c1">with:</span> <span class="pl-c1">1</span>.        <span class="pl-c"><span class="pl-c">"</span>create collection with up to 4 elements<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">Set</span> <span class="pl-k">new</span>.                                    <span class="pl-c"><span class="pl-c">"</span>allocate collection<span class="pl-c">"</span></span>
+x <span class="pl-c1">add:</span> <span class="pl-c1">4</span>; <span class="pl-c1">add:</span> <span class="pl-c1">3</span>; <span class="pl-c1">add:</span> <span class="pl-c1">1</span>; <span class="pl-c1">add:</span> <span class="pl-c1">2</span>; <span class="pl-k">yourself</span>.      <span class="pl-c"><span class="pl-c">"</span>add element to collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">addAll:</span> <span class="pl-c1">#(7 8 9)</span>.                         <span class="pl-c"><span class="pl-c">"</span>add multiple elements to collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">removeAll:</span> <span class="pl-c1">#(7 8 9)</span>.                      <span class="pl-c"><span class="pl-c">"</span>remove multiple elements from collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">remove:</span> <span class="pl-c1">4</span> <span class="pl-c1">ifAbsent:</span> [].                   <span class="pl-c"><span class="pl-c">"</span>remove element from collection<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> x isEmpty.                                  <span class="pl-c"><span class="pl-c">"</span>test if empty<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x size.                                     <span class="pl-c"><span class="pl-c">"</span>number of elements<span class="pl-c">"</span></span>
+x <span class="pl-c1">includes:</span> <span class="pl-c1">4</span>.                                   <span class="pl-c"><span class="pl-c">"</span>test if element is in collection<span class="pl-c">"</span></span>
+x <span class="pl-c1">do:</span> [<span class="pl-en">:a</span> | <span class="pl-c1">Transcript</span> <span class="pl-c1">show:</span> a printString; cr]. <span class="pl-c"><span class="pl-c">"</span>iterate over the collection<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> x <span class="pl-c1">conform:</span> [<span class="pl-en">:a</span> | (a <span class="pl-k">&gt;=</span> <span class="pl-c1">1</span>) <span class="pl-k">&amp;</span> (a <span class="pl-k">&lt;=</span> <span class="pl-c1">4</span>)].      <span class="pl-c"><span class="pl-c">"</span>test if all elements meet condition<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">select:</span> [<span class="pl-en">:a</span> | a <span class="pl-k">&gt;</span> <span class="pl-c1">2</span>].                     <span class="pl-c"><span class="pl-c">"</span>return collection of elements that pass test<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">reject:</span> [<span class="pl-en">:a</span> | a <span class="pl-k">&lt;</span> <span class="pl-c1">2</span>].                     <span class="pl-c"><span class="pl-c">"</span>return collection of elements that fail test<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">collect:</span> [<span class="pl-en">:a</span> | a <span class="pl-k">+</span> a].                    <span class="pl-c"><span class="pl-c">"</span>transform each element for new collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">detect:</span> [<span class="pl-en">:a</span> | a <span class="pl-k">&gt;</span> <span class="pl-c1">3</span>] <span class="pl-c1">ifNone:</span> [].          <span class="pl-c"><span class="pl-c">"</span>find position of first element that passes test<span class="pl-c">"</span></span>
+sum <span class="pl-k">:=</span> <span class="pl-c1">0</span>. x <span class="pl-c1">do:</span> [<span class="pl-en">:a</span> | sum <span class="pl-k">:=</span> sum <span class="pl-k">+</span> a]. sum.      <span class="pl-c"><span class="pl-c">"</span>sum elements<span class="pl-c">"</span></span>
+sum <span class="pl-k">:=</span> x <span class="pl-c1">inject:</span> <span class="pl-c1">0</span> <span class="pl-c1">into:</span> [<span class="pl-en">:a</span> <span class="pl-en">:c</span> | a <span class="pl-k">+</span> c].        <span class="pl-c"><span class="pl-c">"</span>sum elements<span class="pl-c">"</span></span>
+max <span class="pl-k">:=</span> x <span class="pl-c1">inject:</span> <span class="pl-c1">0</span> <span class="pl-c1">into:</span> [<span class="pl-en">:a</span> <span class="pl-en">:c</span> | (a <span class="pl-k">&gt;</span> c)        <span class="pl-c"><span class="pl-c">"</span>find max element in collection<span class="pl-c">"</span></span>
+   <span class="pl-k">ifTrue:</span> [a]
+   <span class="pl-k">ifFalse:</span> [c]].
+y <span class="pl-k">:=</span> x asArray.                                  <span class="pl-c"><span class="pl-c">"</span>convert to array<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asOrderedCollection.                      <span class="pl-c"><span class="pl-c">"</span>convert to ordered collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asSortedCollection.                       <span class="pl-c"><span class="pl-c">"</span>convert to sorted collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asBag.                                    <span class="pl-c"><span class="pl-c">"</span>convert to bag collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asSet.                                    <span class="pl-c"><span class="pl-c">"</span>convert to set collection<span class="pl-c">"</span></span></pre></div>
+<h4>Interval:</h4>
+<div class="highlight highlight-source-smalltalk"><pre class="notranslate">| <span class="pl-c1">b</span> <span class="pl-c1">x</span> <span class="pl-c1">y</span> <span class="pl-c1">sum</span> <span class="pl-c1">max</span> |
+x <span class="pl-k">:=</span> <span class="pl-c1">Interval</span> <span class="pl-c1">from:</span> <span class="pl-c1">5</span> <span class="pl-c1">to:</span> <span class="pl-c1">10</span>.                     <span class="pl-c"><span class="pl-c">"</span>create interval object<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">5</span> <span class="pl-c1">to:</span> <span class="pl-c1">10</span>.
+x <span class="pl-k">:=</span> <span class="pl-c1">Interval</span> <span class="pl-c1">from:</span> <span class="pl-c1">5</span> <span class="pl-c1">to:</span> <span class="pl-c1">10</span> <span class="pl-c1">by:</span> <span class="pl-c1">2</span>.               <span class="pl-c"><span class="pl-c">"</span>create interval object with specified increment<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">5</span> <span class="pl-c1">to:</span> <span class="pl-c1">10</span> <span class="pl-c1">by:</span> <span class="pl-c1">2</span>.
+b <span class="pl-k">:=</span> x isEmpty.                                   <span class="pl-c"><span class="pl-c">"</span>test if empty<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x size.                                      <span class="pl-c"><span class="pl-c">"</span>number of elements<span class="pl-c">"</span></span>
+x <span class="pl-c1">includes:</span> <span class="pl-c1">9</span>.                                    <span class="pl-c"><span class="pl-c">"</span>test if element is in collection<span class="pl-c">"</span></span>
+x <span class="pl-c1">do:</span> [<span class="pl-en">:k</span> | <span class="pl-c1">Transcript</span> <span class="pl-c1">show:</span> k printString; cr].  <span class="pl-c"><span class="pl-c">"</span>iterate over interval<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> x <span class="pl-c1">conform:</span> [<span class="pl-en">:a</span> | (a <span class="pl-k">&gt;=</span> <span class="pl-c1">1</span>) <span class="pl-k">&amp;</span> (a <span class="pl-k">&lt;=</span> <span class="pl-c1">4</span>)].       <span class="pl-c"><span class="pl-c">"</span>test if all elements meet condition<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">select:</span> [<span class="pl-en">:a</span> | a <span class="pl-k">&gt;</span> <span class="pl-c1">7</span>].                      <span class="pl-c"><span class="pl-c">"</span>return collection of elements that pass test<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">reject:</span> [<span class="pl-en">:a</span> | a <span class="pl-k">&lt;</span> <span class="pl-c1">2</span>].                      <span class="pl-c"><span class="pl-c">"</span>return collection of elements that fail test<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">collect:</span> [<span class="pl-en">:a</span> | a <span class="pl-k">+</span> a].                     <span class="pl-c"><span class="pl-c">"</span>transform each element for new collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">detect:</span> [<span class="pl-en">:a</span> | a <span class="pl-k">&gt;</span> <span class="pl-c1">3</span>] <span class="pl-c1">ifNone:</span> [].           <span class="pl-c"><span class="pl-c">"</span>find position of first element that passes test<span class="pl-c">"</span></span>
+sum <span class="pl-k">:=</span> <span class="pl-c1">0</span>. x <span class="pl-c1">do:</span> [<span class="pl-en">:a</span> | sum <span class="pl-k">:=</span> sum <span class="pl-k">+</span> a]. sum.       <span class="pl-c"><span class="pl-c">"</span>sum elements<span class="pl-c">"</span></span>
+sum <span class="pl-k">:=</span> <span class="pl-c1">0</span>. <span class="pl-c1">1</span> <span class="pl-c1">to:</span> (x size) 
+            <span class="pl-c1">do:</span> [<span class="pl-en">:a</span> | sum <span class="pl-k">:=</span> sum <span class="pl-k">+</span> (x <span class="pl-c1">at:</span> a)].    <span class="pl-c"><span class="pl-c">"</span>sum elements<span class="pl-c">"</span></span>
+sum <span class="pl-k">:=</span> x <span class="pl-c1">inject:</span> <span class="pl-c1">0</span> <span class="pl-c1">into:</span> [<span class="pl-en">:a</span> <span class="pl-en">:c</span> | a <span class="pl-k">+</span> c].         <span class="pl-c"><span class="pl-c">"</span>sum elements<span class="pl-c">"</span></span>
+max <span class="pl-k">:=</span> x <span class="pl-c1">inject:</span> <span class="pl-c1">0</span> <span class="pl-c1">into:</span> [<span class="pl-en">:a</span> <span class="pl-en">:c</span> | (a <span class="pl-k">&gt;</span> c)         <span class="pl-c"><span class="pl-c">"</span>find max element in collection<span class="pl-c">"</span></span>
+   <span class="pl-k">ifTrue:</span> [a]
+   <span class="pl-k">ifFalse:</span> [c]].
+y <span class="pl-k">:=</span> x asArray.                                   <span class="pl-c"><span class="pl-c">"</span>convert to array<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asOrderedCollection.                       <span class="pl-c"><span class="pl-c">"</span>convert to ordered collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asSortedCollection.                        <span class="pl-c"><span class="pl-c">"</span>convert to sorted collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asBag.                                     <span class="pl-c"><span class="pl-c">"</span>convert to bag collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asSet.                                     <span class="pl-c"><span class="pl-c">"</span>convert to set collection<span class="pl-c">"</span></span></pre></div>
+<h4>Associations:</h4>
+<div class="highlight highlight-source-smalltalk"><pre class="notranslate">| <span class="pl-c1">x</span> <span class="pl-c1">y</span> |
+x <span class="pl-k">:=</span> <span class="pl-c1">#myVar</span><span class="pl-k">-</span><span class="pl-k">&gt;</span><span class="pl-s"><span class="pl-pds">'</span>hello<span class="pl-pds">'</span></span>.
+y <span class="pl-k">:=</span> x key.
+y <span class="pl-k">:=</span> x value.</pre></div>
+<h4>Dictionary:</h4>
+<h4>IdentityDictionary:</h4>
+<p>uses identity test (== rather than =)</p>
+<div class="highlight highlight-source-smalltalk"><pre class="notranslate">| <span class="pl-c1">b</span> <span class="pl-c1">x</span> <span class="pl-c1">y</span> |
+x <span class="pl-k">:=</span> <span class="pl-c1">Dictionary</span> <span class="pl-k">new</span>.                   <span class="pl-c"><span class="pl-c">"</span>allocate collection<span class="pl-c">"</span></span>
+x <span class="pl-c1">add:</span> <span class="pl-c1">#a</span><span class="pl-k">-</span><span class="pl-k">&gt;</span><span class="pl-c1">4</span>; 
+  <span class="pl-c1">add:</span> <span class="pl-c1">#b</span><span class="pl-k">-</span><span class="pl-k">&gt;</span><span class="pl-c1">3</span>; 
+  <span class="pl-c1">add:</span> <span class="pl-c1">#c</span><span class="pl-k">-</span><span class="pl-k">&gt;</span><span class="pl-c1">1</span>; 
+  <span class="pl-c1">add:</span> <span class="pl-c1">#d</span><span class="pl-k">-</span><span class="pl-k">&gt;</span><span class="pl-c1">2</span>; <span class="pl-k">yourself</span>.                <span class="pl-c"><span class="pl-c">"</span>add element to collection<span class="pl-c">"</span></span>
+x <span class="pl-c1">at:</span> <span class="pl-c1">#e</span> <span class="pl-c1">put:</span> <span class="pl-c1">3</span>.                       <span class="pl-c"><span class="pl-c">"</span>set element at index<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> x isEmpty.                        <span class="pl-c"><span class="pl-c">"</span>test if empty<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x size.                           <span class="pl-c"><span class="pl-c">"</span>number of elements<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">at:</span> <span class="pl-c1">#a</span> <span class="pl-c1">ifAbsent:</span> [].            <span class="pl-c"><span class="pl-c">"</span>retrieve element at index<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">keyAtValue:</span> <span class="pl-c1">3</span> <span class="pl-c1">ifAbsent:</span> [].     <span class="pl-c"><span class="pl-c">"</span>retrieve key for given value with error block<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">removeKey:</span> <span class="pl-c1">#e</span> <span class="pl-c1">ifAbsent:</span> [].     <span class="pl-c"><span class="pl-c">"</span>remove element from collection<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> x <span class="pl-c1">includes:</span> <span class="pl-c1">3</span>.                    <span class="pl-c"><span class="pl-c">"</span>test if element is in values collection<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> x <span class="pl-c1">includesKey:</span> <span class="pl-c1">#a</span>.                <span class="pl-c"><span class="pl-c">"</span>test if element is in keys collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">occurrencesOf:</span> <span class="pl-c1">3</span>.               <span class="pl-c"><span class="pl-c">"</span>number of times object in collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x keys.                           <span class="pl-c"><span class="pl-c">"</span>set of keys<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x values.                         <span class="pl-c"><span class="pl-c">"</span>bag of values<span class="pl-c">"</span></span>
+x <span class="pl-c1">do:</span> [<span class="pl-en">:a</span> | <span class="pl-c1">Transcript</span> <span class="pl-c1">show:</span> a printString; cr].            <span class="pl-c"><span class="pl-c">"</span>iterate over the values collection<span class="pl-c">"</span></span>
+x <span class="pl-c1">keysDo:</span> [<span class="pl-en">:a</span> | <span class="pl-c1">Transcript</span> <span class="pl-c1">show:</span> a printString; cr].        <span class="pl-c"><span class="pl-c">"</span>iterate over the keys collection<span class="pl-c">"</span></span>
+x <span class="pl-c1">associationsDo:</span> [<span class="pl-en">:a</span> | <span class="pl-c1">Transcript</span> <span class="pl-c1">show:</span> a printString; cr].<span class="pl-c"><span class="pl-c">"</span>iterate over the associations<span class="pl-c">"</span></span>
+x <span class="pl-c1">keysAndValuesDo:</span> [<span class="pl-en">:aKey</span> <span class="pl-en">:aValue</span> | <span class="pl-c1">Transcript</span>              <span class="pl-c"><span class="pl-c">"</span>iterate over keys and values<span class="pl-c">"</span></span>
+   <span class="pl-c1">show:</span> aKey printString; space;
+   <span class="pl-c1">show:</span> aValue printString; cr].
+b <span class="pl-k">:=</span> x <span class="pl-c1">conform:</span> [<span class="pl-en">:a</span> | (a <span class="pl-k">&gt;=</span> <span class="pl-c1">1</span>) <span class="pl-k">&amp;</span> (a <span class="pl-k">&lt;=</span> <span class="pl-c1">4</span>)].      <span class="pl-c"><span class="pl-c">"</span>test if all elements meet condition<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">select:</span> [<span class="pl-en">:a</span> | a <span class="pl-k">&gt;</span> <span class="pl-c1">2</span>].                     <span class="pl-c"><span class="pl-c">"</span>return collection of elements that pass test<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">reject:</span> [<span class="pl-en">:a</span> | a <span class="pl-k">&lt;</span> <span class="pl-c1">2</span>].                     <span class="pl-c"><span class="pl-c">"</span>return collection of elements that fail test<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">collect:</span> [<span class="pl-en">:a</span> | a <span class="pl-k">+</span> a].                    <span class="pl-c"><span class="pl-c">"</span>transform each element for new collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">detect:</span> [<span class="pl-en">:a</span> | a <span class="pl-k">&gt;</span> <span class="pl-c1">3</span>] <span class="pl-c1">ifNone:</span> [].          <span class="pl-c"><span class="pl-c">"</span>find position of first element that passes test<span class="pl-c">"</span></span>
+sum <span class="pl-k">:=</span> <span class="pl-c1">0</span>. x <span class="pl-c1">do:</span> [<span class="pl-en">:a</span> | sum <span class="pl-k">:=</span> sum <span class="pl-k">+</span> a]. sum.      <span class="pl-c"><span class="pl-c">"</span>sum elements<span class="pl-c">"</span></span>
+sum <span class="pl-k">:=</span> x <span class="pl-c1">inject:</span> <span class="pl-c1">0</span> <span class="pl-c1">into:</span> [<span class="pl-en">:a</span> <span class="pl-en">:c</span> | a <span class="pl-k">+</span> c].        <span class="pl-c"><span class="pl-c">"</span>sum elements<span class="pl-c">"</span></span>
+max <span class="pl-k">:=</span> x <span class="pl-c1">inject:</span> <span class="pl-c1">0</span> <span class="pl-c1">into:</span> [<span class="pl-en">:a</span> <span class="pl-en">:c</span> | (a <span class="pl-k">&gt;</span> c)        <span class="pl-c"><span class="pl-c">"</span>find max element in collection<span class="pl-c">"</span></span>
+   <span class="pl-k">ifTrue:</span> [a]
+   <span class="pl-k">ifFalse:</span> [c]].
+y <span class="pl-k">:=</span> x asArray.                                   <span class="pl-c"><span class="pl-c">"</span>convert to array<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asOrderedCollection.                       <span class="pl-c"><span class="pl-c">"</span>convert to ordered collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asSortedCollection.                        <span class="pl-c"><span class="pl-c">"</span>convert to sorted collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asBag.                                     <span class="pl-c"><span class="pl-c">"</span>convert to bag collection<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asSet.                                     <span class="pl-c"><span class="pl-c">"</span>convert to set collection<span class="pl-c">"</span></span>
+
+<span class="pl-k">Smalltalk</span> <span class="pl-c1">at:</span> <span class="pl-c1">#CMRGlobal</span> <span class="pl-c1">put:</span> <span class="pl-s"><span class="pl-pds">'</span>CMR entry<span class="pl-pds">'</span></span>.        <span class="pl-c"><span class="pl-c">"</span>put global in Smalltalk Dictionary<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-k">Smalltalk</span> <span class="pl-c1">at:</span> <span class="pl-c1">#CMRGlobal</span>.                    <span class="pl-c"><span class="pl-c">"</span>read global from Smalltalk Dictionary<span class="pl-c">"</span></span>
+<span class="pl-c1">Transcript</span> <span class="pl-c1">show:</span> (<span class="pl-c1">CMRGlobal</span> printString).         <span class="pl-c"><span class="pl-c">"</span>entries are directly accessible by name<span class="pl-c">"</span></span>
+<span class="pl-k">Smalltalk</span> keys <span class="pl-c1">do:</span> [ <span class="pl-en">:k</span> |                         <span class="pl-c"><span class="pl-c">"</span>print out all classes<span class="pl-c">"</span></span>
+   ((<span class="pl-k">Smalltalk</span> <span class="pl-c1">at:</span> k) <span class="pl-c1">isKindOf:</span> <span class="pl-c1">Class</span>)
+      <span class="pl-k">ifFalse:</span> [<span class="pl-c1">Transcript</span> <span class="pl-c1">show:</span> k printString; cr]].
+<span class="pl-k">Smalltalk</span> <span class="pl-c1">at:</span> <span class="pl-c1">#CMRDictionary</span> <span class="pl-c1">put:</span> (<span class="pl-c1">Dictionary</span> <span class="pl-k">new</span>). <span class="pl-c"><span class="pl-c">"</span>set up user defined dictionary<span class="pl-c">"</span></span>
+<span class="pl-c1">CMRDictionary</span> <span class="pl-c1">at:</span> <span class="pl-c1">#MyVar1</span> <span class="pl-c1">put:</span> <span class="pl-s"><span class="pl-pds">'</span>hello1<span class="pl-pds">'</span></span>.            <span class="pl-c"><span class="pl-c">"</span>put entry in dictionary<span class="pl-c">"</span></span>
+<span class="pl-c1">CMRDictionary</span> <span class="pl-c1">add:</span> <span class="pl-c1">#MyVar2</span><span class="pl-k">-</span><span class="pl-k">&gt;</span><span class="pl-s"><span class="pl-pds">'</span>hello2<span class="pl-pds">'</span></span>.               <span class="pl-c"><span class="pl-c">"</span>add entry to dictionary use key-&gt;value combo<span class="pl-c">"</span></span>
+<span class="pl-c1">CMRDictionary</span> size.                                 <span class="pl-c"><span class="pl-c">"</span>dictionary size<span class="pl-c">"</span></span>
+<span class="pl-c1">CMRDictionary</span> keys <span class="pl-c1">do:</span> [ <span class="pl-en">:k</span> |                       <span class="pl-c"><span class="pl-c">"</span>print out keys in dictionary<span class="pl-c">"</span></span>
+   <span class="pl-c1">Transcript</span> <span class="pl-c1">show:</span> k printString; cr].
+<span class="pl-c1">CMRDictionary</span> values <span class="pl-c1">do:</span> [ <span class="pl-en">:k</span> |                     <span class="pl-c"><span class="pl-c">"</span>print out values in dictionary<span class="pl-c">"</span></span>
+   <span class="pl-c1">Transcript</span> <span class="pl-c1">show:</span> k printString; cr].
+<span class="pl-c1">CMRDictionary</span> <span class="pl-c1">keysAndValuesDo:</span> [<span class="pl-en">:aKey</span> <span class="pl-en">:aValue</span> |     <span class="pl-c"><span class="pl-c">"</span>print out keys and values<span class="pl-c">"</span></span>
+   <span class="pl-c1">Transcript</span>
+      <span class="pl-c1">show:</span> aKey printString;
+      space;
+      <span class="pl-c1">show:</span> aValue printString;
+      cr].
+<span class="pl-c1">CMRDictionary</span> <span class="pl-c1">associationsDo:</span> [<span class="pl-en">:aKeyValue</span> |           <span class="pl-c"><span class="pl-c">"</span>another iterator for printing key values<span class="pl-c">"</span></span>
+   <span class="pl-c1">Transcript</span> <span class="pl-c1">show:</span> aKeyValue printString; cr].
+<span class="pl-k">Smalltalk</span> <span class="pl-c1">removeKey:</span> <span class="pl-c1">#CMRGlobal</span> <span class="pl-c1">ifAbsent:</span> [].         <span class="pl-c"><span class="pl-c">"</span>remove entry from Smalltalk dictionary<span class="pl-c">"</span></span>
+<span class="pl-k">Smalltalk</span> <span class="pl-c1">removeKey:</span> <span class="pl-c1">#CMRDictionary</span> <span class="pl-c1">ifAbsent:</span> [].     <span class="pl-c"><span class="pl-c">"</span>remove user dictionary from Smalltalk dictionary<span class="pl-c">"</span></span></pre></div>
+<h4>Internal Stream:</h4>
+<div class="highlight highlight-source-smalltalk"><pre class="notranslate">| <span class="pl-c1">b</span> <span class="pl-c1">x</span> <span class="pl-c1">ios</span> |
+ios <span class="pl-k">:=</span> <span class="pl-c1">ReadStream</span> <span class="pl-c1">on:</span> <span class="pl-s"><span class="pl-pds">'</span>Hello read stream<span class="pl-pds">'</span></span>.
+ios <span class="pl-k">:=</span> <span class="pl-c1">ReadStream</span> <span class="pl-c1">on:</span> <span class="pl-s"><span class="pl-pds">'</span>Hello read stream<span class="pl-pds">'</span></span> <span class="pl-c1">from:</span> <span class="pl-c1">1</span> <span class="pl-c1">to:</span> <span class="pl-c1">5</span>.
+[(x <span class="pl-k">:=</span> ios nextLine) notNil] <span class="pl-k">whileTrue:</span> [<span class="pl-c1">Transcript</span> <span class="pl-c1">show:</span> x; cr].
+ios <span class="pl-c1">position:</span> <span class="pl-c1">3</span>.
+ios position.
+x <span class="pl-k">:=</span> ios next.
+x <span class="pl-k">:=</span> ios peek.
+x <span class="pl-k">:=</span> ios contents.
+b <span class="pl-k">:=</span> ios atEnd.
+
+ios <span class="pl-k">:=</span> <span class="pl-c1">ReadWriteStream</span> <span class="pl-c1">on:</span> <span class="pl-s"><span class="pl-pds">'</span>Hello read stream<span class="pl-pds">'</span></span>.
+ios <span class="pl-k">:=</span> <span class="pl-c1">ReadWriteStream</span> <span class="pl-c1">on:</span> <span class="pl-s"><span class="pl-pds">'</span>Hello read stream<span class="pl-pds">'</span></span> <span class="pl-c1">from:</span> <span class="pl-c1">1</span> <span class="pl-c1">to:</span> <span class="pl-c1">5</span>.
+ios <span class="pl-k">:=</span> <span class="pl-c1">ReadWriteStream</span> <span class="pl-c1">with:</span> <span class="pl-s"><span class="pl-pds">'</span>Hello read stream<span class="pl-pds">'</span></span>.
+ios <span class="pl-k">:=</span> <span class="pl-c1">ReadWriteStream</span> <span class="pl-c1">with:</span> <span class="pl-s"><span class="pl-pds">'</span>Hello read stream<span class="pl-pds">'</span></span> <span class="pl-c1">from:</span> <span class="pl-c1">1</span> <span class="pl-c1">to:</span> <span class="pl-c1">10</span>.
+ios <span class="pl-c1">position:</span> <span class="pl-c1">0</span>.
+[(x <span class="pl-k">:=</span> ios nextLine) notNil] <span class="pl-k">whileTrue:</span> [<span class="pl-c1">Transcript</span> <span class="pl-c1">show:</span> x; cr].
+ios <span class="pl-c1">position:</span> <span class="pl-c1">6</span>.
+ios position.
+ios <span class="pl-c1">nextPutAll:</span> <span class="pl-s"><span class="pl-pds">'</span>Chris<span class="pl-pds">'</span></span>.
+x <span class="pl-k">:=</span> ios next.
+x <span class="pl-k">:=</span> ios peek.
+x <span class="pl-k">:=</span> ios contents.
+b <span class="pl-k">:=</span> ios atEnd.</pre></div>
+<h4>FileStream:</h4>
+<div class="highlight highlight-source-smalltalk"><pre class="notranslate">| <span class="pl-c1">b</span> <span class="pl-c1">x</span> <span class="pl-c1">ios</span> |
+ios <span class="pl-k">:=</span> <span class="pl-c1">FileStream</span> <span class="pl-c1">newFileNamed:</span> <span class="pl-s"><span class="pl-pds">'</span>ios.txt<span class="pl-pds">'</span></span>.
+ios <span class="pl-c1">nextPut:</span> $<span class="pl-c1">H</span>; cr.
+ios <span class="pl-c1">nextPutAll:</span> <span class="pl-s"><span class="pl-pds">'</span>Hello File<span class="pl-pds">'</span></span>; cr.
+<span class="pl-s"><span class="pl-pds">'</span>Hello File<span class="pl-pds">'</span></span> <span class="pl-c1">printOn:</span> ios.
+<span class="pl-s"><span class="pl-pds">'</span>Hello File<span class="pl-pds">'</span></span> <span class="pl-c1">storeOn:</span> ios.
+ios close.
+
+ios <span class="pl-k">:=</span> <span class="pl-c1">FileStream</span> <span class="pl-c1">oldFileNamed:</span> <span class="pl-s"><span class="pl-pds">'</span>ios.txt<span class="pl-pds">'</span></span>.
+[(x <span class="pl-k">:=</span> ios nextLine) notNil] <span class="pl-k">whileTrue:</span> [<span class="pl-c1">Transcript</span> <span class="pl-c1">show:</span> x; cr].
+ios <span class="pl-c1">position:</span> <span class="pl-c1">3</span>.
+x <span class="pl-k">:=</span> ios position.
+x <span class="pl-k">:=</span> ios next.
+x <span class="pl-k">:=</span> ios peek.
+b <span class="pl-k">:=</span> ios atEnd.
+ios close.</pre></div>
+<h4>Date:</h4>
+<div class="highlight highlight-source-smalltalk"><pre class="notranslate">| <span class="pl-c1">x</span> <span class="pl-c1">y</span> |
+x <span class="pl-k">:=</span> <span class="pl-c1">Date</span> today.                                <span class="pl-c"><span class="pl-c">"</span>create date for today<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">Date</span> dateAndTimeNow.                       <span class="pl-c"><span class="pl-c">"</span>create date from current time/date<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">Date</span> <span class="pl-c1">readFromString:</span> <span class="pl-s"><span class="pl-pds">'</span>01/02/1999<span class="pl-pds">'</span></span>.         <span class="pl-c"><span class="pl-c">"</span>create date from formatted string<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">Date</span> <span class="pl-c1">newDay:</span> <span class="pl-c1">12</span> <span class="pl-c1">month:</span> <span class="pl-c1">#July</span> <span class="pl-c1">year:</span> <span class="pl-c1">1999</span>    <span class="pl-c"><span class="pl-c">"</span>create date from parts<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">Date</span> <span class="pl-c1">fromDays:</span> <span class="pl-c1">36000</span>.                      <span class="pl-c"><span class="pl-c">"</span>create date from elapsed days since 1/1/1901<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> <span class="pl-c1">Date</span> <span class="pl-c1">dayOfWeek:</span> <span class="pl-c1">#Monday</span>.                   <span class="pl-c"><span class="pl-c">"</span>day of week as int (1-7)<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> <span class="pl-c1">Date</span> <span class="pl-c1">indexOfMonth:</span> <span class="pl-c1">#January</span>.               <span class="pl-c"><span class="pl-c">"</span>month of year as int (1-12)<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> <span class="pl-c1">Date</span> <span class="pl-c1">daysInMonth:</span> <span class="pl-c1">2</span> <span class="pl-c1">forYear:</span> <span class="pl-c1">1996</span>.         <span class="pl-c"><span class="pl-c">"</span>day of month as int (1-31)<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> <span class="pl-c1">Date</span> <span class="pl-c1">daysInYear:</span> <span class="pl-c1">1996</span>.                     <span class="pl-c"><span class="pl-c">"</span>days in year (365|366)<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> <span class="pl-c1">Date</span> <span class="pl-c1">nameOfDay:</span> <span class="pl-c1">1</span>                          <span class="pl-c"><span class="pl-c">"</span>weekday name (#Monday,...)<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> <span class="pl-c1">Date</span> <span class="pl-c1">nameOfMonth:</span> <span class="pl-c1">1</span>.                       <span class="pl-c"><span class="pl-c">"</span>month name (#January,...)<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> <span class="pl-c1">Date</span> <span class="pl-c1">leapYear:</span> <span class="pl-c1">1996</span>.                       <span class="pl-c"><span class="pl-c">"</span>1 if leap year; 0 if not leap year<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x weekday.                                 <span class="pl-c"><span class="pl-c">"</span>day of week (#Monday,...)<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">previous:</span> <span class="pl-c1">#Monday</span>.                       <span class="pl-c"><span class="pl-c">"</span>date for previous day of week<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x dayOfMonth.                              <span class="pl-c"><span class="pl-c">"</span>day of month (1-31)<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x day.                                     <span class="pl-c"><span class="pl-c">"</span>day of year (1-366)<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x firstDayOfMonth.                         <span class="pl-c"><span class="pl-c">"</span>day of year for first day of month<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x monthName.                               <span class="pl-c"><span class="pl-c">"</span>month of year (#January,...)<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x monthIndex.                              <span class="pl-c"><span class="pl-c">"</span>month of year (1-12)<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x daysInMonth.                             <span class="pl-c"><span class="pl-c">"</span>days in month (1-31)<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x year.                                    <span class="pl-c"><span class="pl-c">"</span>year (19xx)<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x daysInYear.                              <span class="pl-c"><span class="pl-c">"</span>days in year (365|366)<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x daysLeftInYear.                          <span class="pl-c"><span class="pl-c">"</span>days left in year (364|365)<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asSeconds.                               <span class="pl-c"><span class="pl-c">"</span>seconds elapsed since 1/1/1901<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">addDays:</span> <span class="pl-c1">10</span>.                             <span class="pl-c"><span class="pl-c">"</span>add days to date object<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">subtractDays:</span> <span class="pl-c1">10</span>.                        <span class="pl-c"><span class="pl-c">"</span>subtract days to date object<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">subtractDate:</span> (<span class="pl-c1">Date</span> today).              <span class="pl-c"><span class="pl-c">"</span>subtract date (result in days)<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">printFormat:</span> <span class="pl-c1">#(2 1 3 $/ 1 1)</span>.            <span class="pl-c"><span class="pl-c">"</span>print formatted date<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> (x <span class="pl-k">&lt;=</span> <span class="pl-c1">Date</span> today).                         <span class="pl-c"><span class="pl-c">"</span>comparison<span class="pl-c">"</span></span></pre></div>
+<h4>Time:</h4>
+<div class="highlight highlight-source-smalltalk"><pre class="notranslate">| <span class="pl-c1">x</span> <span class="pl-c1">y</span> |
+x <span class="pl-k">:=</span> <span class="pl-c1">Time</span> now.                                      <span class="pl-c"><span class="pl-c">"</span>create time from current time<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">Time</span> dateAndTimeNow.                           <span class="pl-c"><span class="pl-c">"</span>create time from current time/date<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">Time</span> <span class="pl-c1">readFromString:</span> <span class="pl-s"><span class="pl-pds">'</span>3:47:26 pm<span class="pl-pds">'</span></span>.             <span class="pl-c"><span class="pl-c">"</span>create time from formatted string<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">Time</span> <span class="pl-c1">fromSeconds:</span> (<span class="pl-c1">60</span> <span class="pl-k">*</span> <span class="pl-c1">60</span> <span class="pl-k">*</span> <span class="pl-c1">4</span>).               <span class="pl-c"><span class="pl-c">"</span>create time from elapsed time from midnight<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> <span class="pl-c1">Time</span> millisecondClockValue.                    <span class="pl-c"><span class="pl-c">"</span>milliseconds since midnight<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> <span class="pl-c1">Time</span> totalSeconds.                             <span class="pl-c"><span class="pl-c">"</span>total seconds since 1/1/1901<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x seconds.                                     <span class="pl-c"><span class="pl-c">"</span>seconds past minute (0-59)<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x minutes.                                     <span class="pl-c"><span class="pl-c">"</span>minutes past hour (0-59)<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x hours.                                       <span class="pl-c"><span class="pl-c">"</span>hours past midnight (0-23)<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">addTime:</span> (<span class="pl-c1">Time</span> now).                         <span class="pl-c"><span class="pl-c">"</span>add time to time object<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x <span class="pl-c1">subtractTime:</span> (<span class="pl-c1">Time</span> now).                    <span class="pl-c"><span class="pl-c">"</span>subtract time to time object<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x asSeconds.                                   <span class="pl-c"><span class="pl-c">"</span>convert time to seconds<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">Time</span> <span class="pl-c1">millisecondsToRun:</span> [                      <span class="pl-c"><span class="pl-c">"</span>timing facility<span class="pl-c">"</span></span>
+   <span class="pl-c1">1</span> <span class="pl-c1">to:</span> <span class="pl-c1">1000</span> <span class="pl-c1">do:</span> [<span class="pl-en">:index</span> | y <span class="pl-k">:=</span> <span class="pl-c1">3.14</span> <span class="pl-k">*</span> index]].
+b <span class="pl-k">:=</span> (x <span class="pl-k">&lt;=</span> <span class="pl-c1">Time</span> now).                               <span class="pl-c"><span class="pl-c">"</span>comparison<span class="pl-c">"</span></span></pre></div>
+<h4>Point:</h4>
+<div class="highlight highlight-source-smalltalk"><pre class="notranslate">| <span class="pl-c1">x</span> <span class="pl-c1">y</span> |
+x <span class="pl-k">:=</span> <span class="pl-c1">200</span>@<span class="pl-c1">100</span>.                            <span class="pl-c"><span class="pl-c">"</span>obtain a new point<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x x.                                <span class="pl-c"><span class="pl-c">"</span>x coordinate<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x y.                                <span class="pl-c"><span class="pl-c">"</span>y coordinate<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">200</span>@<span class="pl-c1">100</span> negated.                    <span class="pl-c"><span class="pl-c">"</span>negates x and y<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> (<span class="pl-k">-</span><span class="pl-c1">200</span>@<span class="pl-k">-</span><span class="pl-c1">100</span>) abs.                    <span class="pl-c"><span class="pl-c">"</span>absolute value of x and y<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> (<span class="pl-c1">200.5</span>@<span class="pl-c1">100.5</span>) rounded.              <span class="pl-c"><span class="pl-c">"</span>round x and y<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> (<span class="pl-c1">200.5</span>@<span class="pl-c1">100.5</span>) truncated.            <span class="pl-c"><span class="pl-c">"</span>truncate x and y<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">200</span>@<span class="pl-c1">100</span> <span class="pl-k">+</span> <span class="pl-c1">100</span>.                      <span class="pl-c"><span class="pl-c">"</span>add scale to both x and y<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">200</span>@<span class="pl-c1">100</span> <span class="pl-k">-</span> <span class="pl-c1">100</span>.                      <span class="pl-c"><span class="pl-c">"</span>subtract scale from both x and y<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">200</span>@<span class="pl-c1">100</span> <span class="pl-k">*</span> <span class="pl-c1">2</span>.                        <span class="pl-c"><span class="pl-c">"</span>multiply x and y by scale<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">200</span>@<span class="pl-c1">100</span> <span class="pl-k">/</span> <span class="pl-c1">2</span>.                        <span class="pl-c"><span class="pl-c">"</span>divide x and y by scale<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">200</span>@<span class="pl-c1">100</span> <span class="pl-k">//</span> <span class="pl-c1">2</span>.                       <span class="pl-c"><span class="pl-c">"</span>divide x and y by scale<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">200</span>@<span class="pl-c1">100</span> <span class="pl-k">\\</span> <span class="pl-c1">3</span>.                       <span class="pl-c"><span class="pl-c">"</span>remainder of x and y by scale<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">200</span>@<span class="pl-c1">100</span> <span class="pl-k">+</span> <span class="pl-c1">50</span>@<span class="pl-c1">25</span>.                    <span class="pl-c"><span class="pl-c">"</span>add points<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">200</span>@<span class="pl-c1">100</span> <span class="pl-k">-</span> <span class="pl-c1">50</span>@<span class="pl-c1">25</span>.                    <span class="pl-c"><span class="pl-c">"</span>subtract points<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">200</span>@<span class="pl-c1">100</span> <span class="pl-k">*</span> <span class="pl-c1">3</span>@<span class="pl-c1">4</span>.                      <span class="pl-c"><span class="pl-c">"</span>multiply points<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">200</span>@<span class="pl-c1">100</span> <span class="pl-k">//</span> <span class="pl-c1">3</span>@<span class="pl-c1">4</span>.                     <span class="pl-c"><span class="pl-c">"</span>divide points<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">200</span>@<span class="pl-c1">100</span> <span class="pl-c1">max:</span> <span class="pl-c1">50</span>@<span class="pl-c1">200</span>.                <span class="pl-c"><span class="pl-c">"</span>max x and y<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">200</span>@<span class="pl-c1">100</span> <span class="pl-c1">min:</span> <span class="pl-c1">50</span>@<span class="pl-c1">200</span>.                <span class="pl-c"><span class="pl-c">"</span>min x and y<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">20</span>@<span class="pl-c1">5</span> <span class="pl-c1">dotProduct:</span> <span class="pl-c1">10</span>@<span class="pl-c1">2</span>.              <span class="pl-c"><span class="pl-c">"</span>sum of product (x1*x2 + y1*y2)<span class="pl-c">"</span></span></pre></div>
+<h4>Rectangle:</h4>
+<div class="highlight highlight-source-smalltalk"><pre class="notranslate"><span class="pl-c1">Rectangle</span> fromUser.</pre></div>
+<h4>Pen:</h4>
+<div class="highlight highlight-source-smalltalk"><pre class="notranslate">| <span class="pl-c1">myPen</span> |
+<span class="pl-c1">Display</span> <span class="pl-c1">restoreAfter:</span> [
+   <span class="pl-c1">Display</span> fillWhite.
+
+myPen <span class="pl-k">:=</span> <span class="pl-c1">Pen</span> <span class="pl-k">new</span>.                            <span class="pl-c"><span class="pl-c">"</span>get graphic pen<span class="pl-c">"</span></span>
+myPen <span class="pl-c1">squareNib:</span> <span class="pl-c1">1</span>.
+myPen <span class="pl-c1">color:</span> (<span class="pl-c1">Color</span> blue).                   <span class="pl-c"><span class="pl-c">"</span>set pen color<span class="pl-c">"</span></span>
+myPen home.                                  <span class="pl-c"><span class="pl-c">"</span>position pen at center of display<span class="pl-c">"</span></span>
+myPen up.                                    <span class="pl-c"><span class="pl-c">"</span>makes nib unable to draw<span class="pl-c">"</span></span>
+myPen down.                                  <span class="pl-c"><span class="pl-c">"</span>enable the nib to draw<span class="pl-c">"</span></span>
+myPen north.                                 <span class="pl-c"><span class="pl-c">"</span>points direction towards top<span class="pl-c">"</span></span>
+myPen <span class="pl-c1">turn:</span> <span class="pl-k">-</span><span class="pl-c1">180</span>.                            <span class="pl-c"><span class="pl-c">"</span>add specified degrees to direction<span class="pl-c">"</span></span>
+myPen direction.                             <span class="pl-c"><span class="pl-c">"</span>get current angle of pen<span class="pl-c">"</span></span>
+myPen <span class="pl-c1">go:</span> <span class="pl-c1">50</span>.                                <span class="pl-c"><span class="pl-c">"</span>move pen specified number of pixels<span class="pl-c">"</span></span>
+myPen location.                              <span class="pl-c"><span class="pl-c">"</span>get the pen position<span class="pl-c">"</span></span>
+myPen <span class="pl-c1">goto:</span> <span class="pl-c1">200</span>@<span class="pl-c1">200</span>.                         <span class="pl-c"><span class="pl-c">"</span>move to specified point<span class="pl-c">"</span></span>
+myPen <span class="pl-c1">place:</span> <span class="pl-c1">250</span>@<span class="pl-c1">250</span>.                        <span class="pl-c"><span class="pl-c">"</span>move to specified point without drawing<span class="pl-c">"</span></span>
+myPen <span class="pl-c1">print:</span> <span class="pl-s"><span class="pl-pds">'</span>Hello World<span class="pl-pds">'</span></span> 
+      <span class="pl-c1">withFont:</span> (<span class="pl-c1">TextStyle</span> default <span class="pl-c1">fontAt:</span> <span class="pl-c1">1</span>).
+<span class="pl-c1">Display</span> extent.                              <span class="pl-c"><span class="pl-c">"</span>get display width@height<span class="pl-c">"</span></span>
+<span class="pl-c1">Display</span> width.                               <span class="pl-c"><span class="pl-c">"</span>get display width<span class="pl-c">"</span></span>
+<span class="pl-c1">Display</span> height.                              <span class="pl-c"><span class="pl-c">"</span>get display height<span class="pl-c">"</span></span>
+
+].</pre></div>
+<h4>Dynamic Message Calling/Compiling:</h4>
+<div class="highlight highlight-source-smalltalk"><pre class="notranslate">| <span class="pl-c1">receiver</span> <span class="pl-c1">message</span> <span class="pl-c1">result</span> <span class="pl-c1">argument</span> <span class="pl-c1">keyword1</span> <span class="pl-c1">keyword2</span> <span class="pl-c1">argument1</span> <span class="pl-c1">argument2</span> |
+
+<span class="pl-c"><span class="pl-c">"</span>unary message<span class="pl-c">"</span></span>
+receiver <span class="pl-k">:=</span> <span class="pl-c1">5</span>.
+message <span class="pl-k">:=</span> <span class="pl-s"><span class="pl-pds">'</span>factorial<span class="pl-pds">'</span></span> asSymbol.
+result <span class="pl-k">:=</span> receiver <span class="pl-c1">perform:</span> message.
+result <span class="pl-k">:=</span> <span class="pl-c1">Compiler</span> <span class="pl-c1">evaluate:</span> ((receiver storeString), <span class="pl-s"><span class="pl-pds">'</span> <span class="pl-pds">'</span></span>, message).
+result <span class="pl-k">:=</span> (<span class="pl-c1">Message</span> <span class="pl-k">new</span> <span class="pl-c1">setSelector:</span> message <span class="pl-c1">arguments:</span> <span class="pl-c1">#()</span>) <span class="pl-c1">sentTo:</span> receiver.
+
+<span class="pl-c"><span class="pl-c">"</span>binary message<span class="pl-c">"</span></span>
+receiver <span class="pl-k">:=</span> <span class="pl-c1">1</span>.
+message <span class="pl-k">:=</span> <span class="pl-s"><span class="pl-pds">'</span>+<span class="pl-pds">'</span></span> asSymbol.
+argument <span class="pl-k">:=</span> <span class="pl-c1">2</span>.
+result <span class="pl-k">:=</span> receiver <span class="pl-c1">perform:</span> message <span class="pl-c1">withArguments:</span> (<span class="pl-c1">Array</span> <span class="pl-c1">with:</span> argument).
+result <span class="pl-k">:=</span> <span class="pl-c1">Compiler</span> <span class="pl-c1">evaluate:</span> ((receiver storeString), <span class="pl-s"><span class="pl-pds">'</span> <span class="pl-pds">'</span></span>, message, <span class="pl-s"><span class="pl-pds">'</span> <span class="pl-pds">'</span></span>, (argument storeString)).
+result <span class="pl-k">:=</span> (<span class="pl-c1">Message</span> <span class="pl-k">new</span> <span class="pl-c1">setSelector:</span> message <span class="pl-c1">arguments:</span> (<span class="pl-c1">Array</span> <span class="pl-c1">with:</span> argument)) <span class="pl-c1">sentTo:</span> receiver.
+
+<span class="pl-c"><span class="pl-c">"</span>keyword messages<span class="pl-c">"</span></span>
+receiver <span class="pl-k">:=</span> <span class="pl-c1">12</span>.
+keyword1 <span class="pl-k">:=</span> <span class="pl-s"><span class="pl-pds">'</span>between:<span class="pl-pds">'</span></span> asSymbol.
+keyword2 <span class="pl-k">:=</span> <span class="pl-s"><span class="pl-pds">'</span>and:<span class="pl-pds">'</span></span> asSymbol.
+argument1 <span class="pl-k">:=</span> <span class="pl-c1">10</span>.
+argument2 <span class="pl-k">:=</span> <span class="pl-c1">20</span>.
+
+result <span class="pl-k">:=</span> receiver
+   <span class="pl-c1">perform:</span> (keyword1, keyword2) asSymbol
+   <span class="pl-c1">withArguments:</span> (<span class="pl-c1">Array</span> <span class="pl-c1">with:</span> argument1 <span class="pl-c1">with:</span> argument2).
+   
+result <span class="pl-k">:=</span> <span class="pl-c1">Compiler</span> <span class="pl-c1">evaluate:</span>
+   ((receiver storeString), <span class="pl-s"><span class="pl-pds">'</span> <span class="pl-pds">'</span></span>, keyword1, (argument1 storeString) , <span class="pl-s"><span class="pl-pds">'</span> <span class="pl-pds">'</span></span>, keyword2, (argument2 storeString)).
+   
+result <span class="pl-k">:=</span> (<span class="pl-c1">Message</span>
+   <span class="pl-k">new</span>
+      <span class="pl-c1">setSelector:</span> (keyword1, keyword2) asSymbol
+      <span class="pl-c1">arguments:</span> (<span class="pl-c1">Array</span> <span class="pl-c1">with:</span> argument1 <span class="pl-c1">with:</span> argument2))
+   <span class="pl-c1">sentTo:</span> receiver.</pre></div>
+<h4>Class/Meta-Class:</h4>
+<div class="highlight highlight-source-smalltalk"><pre class="notranslate">| <span class="pl-c1">b</span> <span class="pl-c1">x</span> |
+x <span class="pl-k">:=</span> <span class="pl-c1">String</span> name.                     <span class="pl-c"><span class="pl-c">"</span>class name<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">String</span> category.                 <span class="pl-c"><span class="pl-c">"</span>organization category<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">String</span> comment.                  <span class="pl-c"><span class="pl-c">"</span>class comment<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">String</span> kindOfSubclass.           <span class="pl-c"><span class="pl-c">"</span>subclass type - subclass: variableSubclass, etc<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">String</span> definition.               <span class="pl-c"><span class="pl-c">"</span>class definition<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">String</span> instVarNames.             <span class="pl-c"><span class="pl-c">"</span>immediate instance variable names<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">String</span> allInstVarNames.          <span class="pl-c"><span class="pl-c">"</span>accumulated instance variable names<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">String</span> classVarNames.            <span class="pl-c"><span class="pl-c">"</span>immediate class variable names<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">String</span> allClassVarNames.         <span class="pl-c"><span class="pl-c">"</span>accumulated class variable names<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">String</span> sharedPools.              <span class="pl-c"><span class="pl-c">"</span>immediate dictionaries used as shared pools<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">String</span> allSharedPools.           <span class="pl-c"><span class="pl-c">"</span>accumulated dictionaries used as shared pools<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">String</span> selectors.                <span class="pl-c"><span class="pl-c">"</span>message selectors for class<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">String</span> <span class="pl-c1">sourceCodeAt:</span> <span class="pl-c1">#size</span>.      <span class="pl-c"><span class="pl-c">"</span>source code for specified method<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">String</span> allInstances.             <span class="pl-c"><span class="pl-c">"</span>collection of all instances of class<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">String</span> superclass.               <span class="pl-c"><span class="pl-c">"</span>immediate superclass<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">String</span> allSuperclasses.          <span class="pl-c"><span class="pl-c">"</span>accumulated superclasses<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">String</span> withAllSuperclasses.      <span class="pl-c"><span class="pl-c">"</span>receiver class and accumulated superclasses<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">String</span> subclasses.               <span class="pl-c"><span class="pl-c">"</span>immediate subclasses<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">String</span> allSubclasses.            <span class="pl-c"><span class="pl-c">"</span>accumulated subclasses<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">String</span> withAllSubclasses.        <span class="pl-c"><span class="pl-c">"</span>receiver class and accumulated subclasses<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> <span class="pl-c1">String</span> instSize.                 <span class="pl-c"><span class="pl-c">"</span>number of named instance variables<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> <span class="pl-c1">String</span> isFixed.                  <span class="pl-c"><span class="pl-c">"</span>true if no indexed instance variables<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> <span class="pl-c1">String</span> isVariable.               <span class="pl-c"><span class="pl-c">"</span>true if has indexed instance variables<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> <span class="pl-c1">String</span> isPointers.               <span class="pl-c"><span class="pl-c">"</span>true if index instance vars contain objects<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> <span class="pl-c1">String</span> isBits.                   <span class="pl-c"><span class="pl-c">"</span>true if index instance vars contain bytes/words<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> <span class="pl-c1">String</span> isBytes.                  <span class="pl-c"><span class="pl-c">"</span>true if index instance vars contain bytes<span class="pl-c">"</span></span>
+b <span class="pl-k">:=</span> <span class="pl-c1">String</span> isWords.                  <span class="pl-c"><span class="pl-c">"</span>true if index instance vars contain words<span class="pl-c">"</span></span>
+<span class="pl-c1">Object</span> withAllSubclasses size.        <span class="pl-c"><span class="pl-c">"</span>get total number of class entries<span class="pl-c">"</span></span></pre></div>
+<h4>Debugging:</h4>
+<div class="highlight highlight-source-smalltalk"><pre class="notranslate">| <span class="pl-c1">a</span> <span class="pl-c1">b</span> <span class="pl-c1">x</span> |
+x <span class="pl-k">yourself</span>.                             <span class="pl-c"><span class="pl-c">"</span>returns receiver<span class="pl-c">"</span></span>
+<span class="pl-c1">String</span> browse.                          <span class="pl-c"><span class="pl-c">"</span>browse specified class<span class="pl-c">"</span></span>
+x inspect.                              <span class="pl-c"><span class="pl-c">"</span>open object inspector window<span class="pl-c">"</span></span>
+x <span class="pl-c1">confirm:</span> <span class="pl-s"><span class="pl-pds">'</span>Is this correct?<span class="pl-pds">'</span></span>.
+x halt.                                 <span class="pl-c"><span class="pl-c">"</span>breakpoint to open debugger window<span class="pl-c">"</span></span>
+x <span class="pl-c1">halt:</span> <span class="pl-s"><span class="pl-pds">'</span>Halt message<span class="pl-pds">'</span></span>.
+x <span class="pl-c1">notify:</span> <span class="pl-s"><span class="pl-pds">'</span>Notify text<span class="pl-pds">'</span></span>.
+x <span class="pl-c1">error:</span> <span class="pl-s"><span class="pl-pds">'</span>Error string<span class="pl-pds">'</span></span>.                <span class="pl-c"><span class="pl-c">"</span>open up error window with title<span class="pl-c">"</span></span>
+x <span class="pl-c1">doesNotUnderstand:</span> <span class="pl-c1">#cmrMessage</span>.       <span class="pl-c"><span class="pl-c">"</span>flag message is not handled<span class="pl-c">"</span></span>
+x shouldNotImplement.                   <span class="pl-c"><span class="pl-c">"</span>flag message should not be implemented<span class="pl-c">"</span></span>
+x subclassResponsibility.               <span class="pl-c"><span class="pl-c">"</span>flag message as abstract<span class="pl-c">"</span></span>
+x errorImproperStore.                   <span class="pl-c"><span class="pl-c">"</span>flag an improper store into indexable object<span class="pl-c">"</span></span>
+x errorNonIntegerIndex.                 <span class="pl-c"><span class="pl-c">"</span>flag only integers should be used as index<span class="pl-c">"</span></span>
+x errorSubscriptBounds.                 <span class="pl-c"><span class="pl-c">"</span>flag subscript out of bounds<span class="pl-c">"</span></span>
+x primitiveFailed.                      <span class="pl-c"><span class="pl-c">"</span>system primitive failed<span class="pl-c">"</span></span>
+
+a <span class="pl-k">:=</span> <span class="pl-s"><span class="pl-pds">'</span>A1<span class="pl-pds">'</span></span>. b <span class="pl-k">:=</span> <span class="pl-s"><span class="pl-pds">'</span>B2<span class="pl-pds">'</span></span>. a <span class="pl-c1">become:</span> b.      <span class="pl-c"><span class="pl-c">"</span>switch two objects<span class="pl-c">"</span></span>
+<span class="pl-c1">Transcript</span> <span class="pl-c1">show:</span> a, b; cr.</pre></div>
+<h4>Miscellaneous</h4>
+<div class="highlight highlight-source-smalltalk"><pre class="notranslate">| <span class="pl-c1">x</span> |
+x <span class="pl-k">:=</span> <span class="pl-c1">1.2</span> hash.                                  <span class="pl-c"><span class="pl-c">"</span>hash value for object<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x copy.                                    <span class="pl-c"><span class="pl-c">"</span>copy object<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x shallowCopy.                             <span class="pl-c"><span class="pl-c">"</span>copy object (not overridden)<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x deepCopy.                                <span class="pl-c"><span class="pl-c">"</span>copy object and instance vars<span class="pl-c">"</span></span>
+y <span class="pl-k">:=</span> x veryDeepCopy.                            <span class="pl-c"><span class="pl-c">"</span>complete tree copy using a dictionary<span class="pl-c">"</span></span>
+<span class="pl-c"><span class="pl-c">"</span>Smalltalk condenseChanges.<span class="pl-c">"</span></span>                    <span class="pl-c"><span class="pl-c">"</span>compress the change file<span class="pl-c">"</span></span>
+x <span class="pl-k">:=</span> <span class="pl-c1">FillInTheBlank</span> <span class="pl-c1">request:</span> <span class="pl-s"><span class="pl-pds">'</span>Prompt Me<span class="pl-pds">'</span></span>.       <span class="pl-c"><span class="pl-c">"</span>prompt user for input<span class="pl-c">"</span></span>
+<span class="pl-c1">Utilities</span> openCommandKeyHelp</pre></div>
+<h2>Ready For More?</h2>
+<h3>Online Smalltalk systems</h3>
+<p>Most Smalltalks are either free as in OSS or have a free downloadable version with some payment required for commercial usage.</p>
+<ul>
+<li><a href="https://www.squeak.org" rel="nofollow">Squeak</a></li>
+<li><a href="http://pharo.org" rel="nofollow">Pharo</a></li>
+<li><a href="https://www.exept.de/en/smalltalk-x.html" rel="nofollow">Smalltalk/X</a></li>
+<li><a href="http://gemtalksystems.com/" rel="nofollow">Gemstone</a></li>
+<li><a href="http://www.instantiations.com/products/vasmalltalk/" rel="nofollow">VA Smalltalk</a></li>
+<li><a href="http://www.cincomsmalltalk.com/" rel="nofollow">VisualWorks Smalltalk</a></li>
+</ul>
+<h3>Online Smalltalk books and articles</h3>
+<ul>
+<li><a href="http://www.whoishostingthis.com/resources/smalltalk/" rel="nofollow">Smalltalk Programming Resources</a></li>
+<li><a href="http://www.angelfire.com/tx4/cus/notes/smalltalk.html" rel="nofollow">Smalltalk Cheatsheet</a></li>
+<li><a href="http://www.bitsavers.org/pdf/xerox/parc/techReports/Smalltalk-72_Instruction_Manual_Mar76.pdf" rel="nofollow">Smalltalk-72 Manual</a></li>
+<li><a href="https://www.gnu.org/software/smalltalk/manual/html_node/Tutorial.html" rel="nofollow">GNU Smalltalk User's Guide</a></li>
+</ul>
+<h4>Historical Documentation(s)</h4>
+<ul>
+<li><a href="https://archive.org/details/byte-magazine-1981-08" rel="nofollow">BYTE: A Special issue on Smalltalk</a></li>
+<li><a href="http://www.bitsavers.org/pdf/xerox/parc/techReports/Smalltalk-72_Instruction_Manual_Mar76.pdf" rel="nofollow">Smalltalk-72 Manual</a></li>
+<li><a href="https://books.google.co.in/books?id=W8_Une9cbbgC&amp;printsec=frontcover&amp;dq=smalltalk&amp;hl=en&amp;sa=X&amp;ved=0CCIQ6AEwAWoVChMIw63Vo6CpyAIV0HGOCh3S2Alf#v=onepage&amp;q=smalltalk&amp;f=false" rel="nofollow">Smalltalk, Objects, and Design</a></li>
+<li><a href="https://books.google.co.in/books?id=zalQAAAAMAAJ&amp;q=smalltalk&amp;dq=smalltalk&amp;hl=en&amp;sa=X&amp;ved=0CCgQ6AEwAmoVChMIw63Vo6CpyAIV0HGOCh3S2Alf/" rel="nofollow">Smalltalk: An Introduction to Application Development Using VisualWorks</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Jigyasa Grover", "https://github.com/jigyasa-grover"]
+- ["tim Rowledge", "tim@rowledge.org"]
+</code></pre>

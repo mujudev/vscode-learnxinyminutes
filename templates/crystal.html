@@ -1,0 +1,558 @@
+<h1>Crystal</h1>
+<div class="highlight highlight-source-crystal"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> This is a comment</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Everything is an object</span>
+<span class="pl-c1">nil</span>.class  <span class="pl-c"><span class="pl-c">#</span>=&gt; Nil</span>
+<span class="pl-c1">100</span>.class  <span class="pl-c"><span class="pl-c">#</span>=&gt; Int32</span>
+<span class="pl-c1">true</span>.class <span class="pl-c"><span class="pl-c">#</span>=&gt; Bool</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Falsey values are: nil, false and null pointers</span>
+!<span class="pl-c1">nil</span>   <span class="pl-c"><span class="pl-c">#</span>=&gt; true  : Bool</span>
+!<span class="pl-c1">false</span> <span class="pl-c"><span class="pl-c">#</span>=&gt; true  : Bool</span>
+!<span class="pl-c1">0</span>     <span class="pl-c"><span class="pl-c">#</span>=&gt; false : Bool</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Integers</span>
+
+<span class="pl-c1">1</span>.class <span class="pl-c"><span class="pl-c">#</span>=&gt; Int32</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Five signed integer types</span>
+<span class="pl-c1">1</span>_<span class="pl-en">i8</span>.class   <span class="pl-c"><span class="pl-c">#</span>=&gt; Int8</span>
+<span class="pl-c1">1</span>_<span class="pl-en">i16</span>.class  <span class="pl-c"><span class="pl-c">#</span>=&gt; Int16</span>
+<span class="pl-c1">1</span>_<span class="pl-en">i32</span>.class  <span class="pl-c"><span class="pl-c">#</span>=&gt; Int32</span>
+<span class="pl-c1">1</span>_<span class="pl-en">i64</span>.class  <span class="pl-c"><span class="pl-c">#</span>=&gt; Int64</span>
+<span class="pl-c1">1</span>_i128.class <span class="pl-c"><span class="pl-c">#</span>=&gt; Int128</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Five unsigned integer types</span>
+<span class="pl-c1">1</span>_<span class="pl-en">u8</span>.class   <span class="pl-c"><span class="pl-c">#</span>=&gt; UInt8</span>
+<span class="pl-c1">1</span>_<span class="pl-en">u16</span>.class  <span class="pl-c"><span class="pl-c">#</span>=&gt; UInt16</span>
+<span class="pl-c1">1</span>_<span class="pl-en">u32</span>.class  <span class="pl-c"><span class="pl-c">#</span>=&gt; UInt32</span>
+<span class="pl-c1">1</span>_<span class="pl-en">u64</span>.class  <span class="pl-c"><span class="pl-c">#</span>=&gt; UInt64</span>
+<span class="pl-c1">1</span>_u128.class <span class="pl-c"><span class="pl-c">#</span>=&gt; UInt128</span>
+
+<span class="pl-c1">2147483648</span>.class          <span class="pl-c"><span class="pl-c">#</span>=&gt; Int64</span>
+<span class="pl-c1">9223372036854775808</span>.class <span class="pl-c"><span class="pl-c">#</span>=&gt; UInt64</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Binary numbers</span>
+<span class="pl-c1">0b1101</span> <span class="pl-c"><span class="pl-c">#</span>=&gt; 13 : Int32</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Octal numbers</span>
+<span class="pl-c1">0o123</span> <span class="pl-c"><span class="pl-c">#</span>=&gt; 83 : Int32</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Hexadecimal numbers</span>
+<span class="pl-c1">0xFE012D</span> <span class="pl-c"><span class="pl-c">#</span>=&gt; 16646445 : Int32</span>
+<span class="pl-c1">0xfe012d</span> <span class="pl-c"><span class="pl-c">#</span>=&gt; 16646445 : Int32</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Floats</span>
+
+<span class="pl-c1">1.0</span>.class <span class="pl-c"><span class="pl-c">#</span>=&gt; Float64</span>
+
+<span class="pl-c"><span class="pl-c">#</span> There are two floating point types</span>
+<span class="pl-c1">1.0</span>_<span class="pl-en">f32</span>.class <span class="pl-c"><span class="pl-c">#</span>=&gt; Float32</span>
+<span class="pl-c1">1</span>_<span class="pl-en">f32</span>.class   <span class="pl-c"><span class="pl-c">#</span>=&gt; Float32</span>
+
+<span class="pl-c1">1e10</span>.class    <span class="pl-c"><span class="pl-c">#</span>=&gt; Float64</span>
+<span class="pl-c1">1.5e10</span>.class  <span class="pl-c"><span class="pl-c">#</span>=&gt; Float64</span>
+<span class="pl-c1">1.5e-7</span>.class  <span class="pl-c"><span class="pl-c">#</span>=&gt; Float64</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Chars use 'a' pair of single quotes</span>
+
+<span class="pl-s">'a'</span>.class <span class="pl-c"><span class="pl-c">#</span>=&gt; Char</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Chars are 32-bit unicode</span>
+<span class="pl-s">'あ'</span> <span class="pl-c"><span class="pl-c">#</span>=&gt; 'あ' : Char</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Unicode codepoint</span>
+<span class="pl-s">'\u0041'</span> <span class="pl-c"><span class="pl-c">#</span>=&gt; 'A' : Char</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Strings use a "pair" of double quotes</span>
+
+<span class="pl-s"><span class="pl-pds">"</span>s<span class="pl-pds">"</span></span>.class <span class="pl-c"><span class="pl-c">#</span>=&gt; String</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Strings are immutable</span>
+s <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>hello, <span class="pl-pds">"</span></span>  <span class="pl-c"><span class="pl-c">#</span>=&gt; "hello, "        : String</span>
+s.object_id    <span class="pl-c"><span class="pl-c">#</span>=&gt; 134667712        : UInt64</span>
+s <span class="pl-k">+=</span> <span class="pl-s"><span class="pl-pds">"</span>Crystal<span class="pl-pds">"</span></span>
+s              <span class="pl-c"><span class="pl-c">#</span>=&gt; "hello, Crystal" : String</span>
+s.object_id    <span class="pl-c"><span class="pl-c">#</span>=&gt; 142528472        : UInt64</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Supports interpolation</span>
+<span class="pl-s"><span class="pl-pds">"</span>sum = <span class="pl-pse"><span class="pl-s1">#{</span></span><span class="pl-s1"><span class="pl-c1">1</span> <span class="pl-k">+</span> <span class="pl-c1">2</span></span><span class="pl-pse"><span class="pl-s1">}</span></span><span class="pl-pds">"</span></span> <span class="pl-c"><span class="pl-c">#</span>=&gt; "sum = 3" : String</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Multiline string</span>
+<span class="pl-s"><span class="pl-pds">"</span>This is</span>
+<span class="pl-s">   multiline string<span class="pl-pds">"</span></span> <span class="pl-c"><span class="pl-c">#</span>=&gt; "This is\n   multiline string"</span>
+
+
+<span class="pl-c"><span class="pl-c">#</span> String with double quotes</span>
+<span class="pl-s"><span class="pl-pds">%(</span>hello "world"<span class="pl-pds">)</span></span> <span class="pl-c"><span class="pl-c">#</span>=&gt; "hello \"world\""</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Symbols</span>
+<span class="pl-c"><span class="pl-c">#</span> Immutable, reusable constants represented internally as Int32 integer value.</span>
+<span class="pl-c"><span class="pl-c">#</span> They're often used instead of strings to efficiently convey specific,</span>
+<span class="pl-c"><span class="pl-c">#</span> meaningful values</span>
+
+<span class="pl-c1">:symbol</span>.class <span class="pl-c"><span class="pl-c">#</span>=&gt; Symbol</span>
+
+sentence <span class="pl-k">=</span> <span class="pl-c1">:question?</span>     <span class="pl-c"><span class="pl-c">#</span> :"question?" : Symbol</span>
+
+sentence <span class="pl-k">==</span> <span class="pl-c1">:question?</span>    <span class="pl-c"><span class="pl-c">#</span>=&gt; true  : Bool</span>
+sentence <span class="pl-k">==</span> <span class="pl-c1">:exclamation!</span> <span class="pl-c"><span class="pl-c">#</span>=&gt; false : Bool</span>
+sentence <span class="pl-k">==</span> <span class="pl-s"><span class="pl-pds">"</span>question?<span class="pl-pds">"</span></span>   <span class="pl-c"><span class="pl-c">#</span>=&gt; false : Bool</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Arrays</span>
+
+[<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>].class         <span class="pl-c"><span class="pl-c">#</span>=&gt; Array(Int32)</span>
+[<span class="pl-c1">1</span>, <span class="pl-s"><span class="pl-pds">"</span>hello<span class="pl-pds">"</span></span>, <span class="pl-s">'x'</span>].class <span class="pl-c"><span class="pl-c">#</span>=&gt; Array(Char | Int32 | String)</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Empty arrays should specify a type</span>
+[]               <span class="pl-c"><span class="pl-c">#</span> Syntax error: for empty arrays use '[] of ElementType'</span>
+[] of <span class="pl-c1">Int32</span>      <span class="pl-c"><span class="pl-c">#</span>=&gt; [] : Array(Int32)</span>
+<span class="pl-c1">Array</span>(<span class="pl-c1">Int32</span>).new <span class="pl-c"><span class="pl-c">#</span>=&gt; [] : Array(Int32)</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Arrays can be indexed</span>
+array <span class="pl-k">=</span> [<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span>, <span class="pl-c1">5</span>] <span class="pl-c"><span class="pl-c">#</span>=&gt; [1, 2, 3, 4, 5] : Array(Int32)</span>
+array[<span class="pl-c1">0</span>]                <span class="pl-c"><span class="pl-c">#</span>=&gt; 1               : Int32</span>
+array[<span class="pl-c1">10</span>]               <span class="pl-c"><span class="pl-c">#</span> raises IndexError</span>
+array[<span class="pl-c1">-6</span>]               <span class="pl-c"><span class="pl-c">#</span> raises IndexError</span>
+array[<span class="pl-c1">10</span>]?              <span class="pl-c"><span class="pl-c">#</span>=&gt; nil             : (Int32 | Nil)</span>
+array[<span class="pl-c1">-6</span>]?              <span class="pl-c"><span class="pl-c">#</span>=&gt; nil             : (Int32 | Nil)</span>
+
+<span class="pl-c"><span class="pl-c">#</span> From the end</span>
+array[<span class="pl-c1">-1</span>] <span class="pl-c"><span class="pl-c">#</span>=&gt; 5</span>
+
+<span class="pl-c"><span class="pl-c">#</span> With a start index and size</span>
+array[<span class="pl-c1">2</span>, <span class="pl-c1">3</span>] <span class="pl-c"><span class="pl-c">#</span>=&gt; [3, 4, 5]</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Or with range</span>
+array[<span class="pl-c1">1</span>..3] <span class="pl-c"><span class="pl-c">#</span>=&gt; [2, 3, 4]</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Add to an array</span>
+array <span class="pl-k">&lt;&lt;</span> <span class="pl-c1">6</span>  <span class="pl-c"><span class="pl-c">#</span>=&gt; [1, 2, 3, 4, 5, 6]</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Remove from the end of the array</span>
+array.pop <span class="pl-c"><span class="pl-c">#</span>=&gt; 6</span>
+array     <span class="pl-c"><span class="pl-c">#</span>=&gt; [1, 2, 3, 4, 5]</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Remove from the beginning of the array</span>
+array.shift <span class="pl-c"><span class="pl-c">#</span>=&gt; 1</span>
+array       <span class="pl-c"><span class="pl-c">#</span>=&gt; [2, 3, 4, 5]</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Check if an item exists in an array</span>
+array.includes? <span class="pl-c1">3</span> <span class="pl-c"><span class="pl-c">#</span>=&gt; true</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Special syntax for an array of string and an array of symbols</span>
+<span class="pl-s">%w(one two three)</span> <span class="pl-c"><span class="pl-c">#</span>=&gt; ["one", "two", "three"] : Array(String)</span>
+<span class="pl-c1">%i(one two three)</span> <span class="pl-c"><span class="pl-c">#</span>=&gt; [:one, :two, :three]    : Array(Symbol)</span>
+
+<span class="pl-c"><span class="pl-c">#</span> There is a special array syntax with other types too, as long as</span>
+<span class="pl-c"><span class="pl-c">#</span> they define a .new and a #&lt;&lt; method</span>
+set <span class="pl-k">=</span> <span class="pl-c1">Set</span>{<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>} <span class="pl-c"><span class="pl-c">#</span>=&gt; Set{1, 2, 3}</span>
+set.class          <span class="pl-c"><span class="pl-c">#</span>=&gt; Set(Int32)</span>
+
+<span class="pl-c"><span class="pl-c">#</span> The above is equivalent to</span>
+set <span class="pl-k">=</span> <span class="pl-c1">Set</span>(<span class="pl-k">typeof</span>(<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>)).new <span class="pl-c"><span class="pl-c">#</span>=&gt; Set{} : Set(Int32)</span>
+set <span class="pl-k">&lt;&lt;</span> <span class="pl-c1">1</span>                       <span class="pl-c"><span class="pl-c">#</span>=&gt; Set{1} : Set(Int32)</span>
+set <span class="pl-k">&lt;&lt;</span> <span class="pl-c1">2</span>                       <span class="pl-c"><span class="pl-c">#</span>=&gt; Set{1, 2} : Set(Int32)</span>
+set <span class="pl-k">&lt;&lt;</span> <span class="pl-c1">3</span>                       <span class="pl-c"><span class="pl-c">#</span>=&gt; Set{1, 2, 3} : Set(Int32)</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Hashes</span>
+
+{<span class="pl-c1">1</span> =&gt; <span class="pl-c1">2</span>, <span class="pl-c1">3</span> =&gt; <span class="pl-c1">4</span>}.class   <span class="pl-c"><span class="pl-c">#</span>=&gt; Hash(Int32, Int32)</span>
+{<span class="pl-c1">1</span> =&gt; <span class="pl-c1">2</span>, <span class="pl-s">'a'</span> =&gt; <span class="pl-c1">3</span>}.class <span class="pl-c"><span class="pl-c">#</span>=&gt; Hash(Char| Int32, Int32)</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Empty hashes must specify a type</span>
+{}                     <span class="pl-c"><span class="pl-c">#</span> Syntax Error: for empty hashes use '{} of KeyType =&gt; ValueType'</span>
+{} of <span class="pl-c1">Int32</span> =&gt; <span class="pl-c1">Int32</span>   <span class="pl-c"><span class="pl-c">#</span> {} : Hash(Int32, Int32)</span>
+<span class="pl-c1">Hash</span>(<span class="pl-c1">Int32</span>, <span class="pl-c1">Int32</span>).new <span class="pl-c"><span class="pl-c">#</span> {} : Hash(Int32, Int32)</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Hashes can be quickly looked up by key</span>
+hash <span class="pl-k">=</span> {<span class="pl-s"><span class="pl-pds">"</span>color<span class="pl-pds">"</span></span> =&gt; <span class="pl-s"><span class="pl-pds">"</span>green<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>number<span class="pl-pds">"</span></span> =&gt; <span class="pl-c1">5</span>}
+hash[<span class="pl-s"><span class="pl-pds">"</span>color<span class="pl-pds">"</span></span>]        <span class="pl-c"><span class="pl-c">#</span>=&gt; "green"</span>
+hash[<span class="pl-s"><span class="pl-pds">"</span>no_such_key<span class="pl-pds">"</span></span>]  <span class="pl-c"><span class="pl-c">#</span>=&gt; Missing hash key: "no_such_key" (KeyError)</span>
+hash[<span class="pl-s"><span class="pl-pds">"</span>no_such_key<span class="pl-pds">"</span></span>]? <span class="pl-c"><span class="pl-c">#</span>=&gt; nil</span>
+
+<span class="pl-c"><span class="pl-c">#</span> The type of the returned value is based on all key types</span>
+hash[<span class="pl-s"><span class="pl-pds">"</span>number<span class="pl-pds">"</span></span>] <span class="pl-c"><span class="pl-c">#</span>=&gt; 5 : (Int32 | String)</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Check existence of keys hash</span>
+hash.has_key? <span class="pl-s"><span class="pl-pds">"</span>color<span class="pl-pds">"</span></span> <span class="pl-c"><span class="pl-c">#</span>=&gt; true</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Special notation for symbol and string keys</span>
+{<span class="pl-c1">key1:</span> <span class="pl-s">'a'</span>, <span class="pl-c1">key2:</span> <span class="pl-s">'b'</span>}     <span class="pl-c"><span class="pl-c">#</span> {:key1 =&gt; 'a', :key2 =&gt; 'b'}</span>
+{<span class="pl-s"><span class="pl-pds">"</span>key1<span class="pl-pds">"</span></span>: <span class="pl-s">'a'</span>, <span class="pl-s"><span class="pl-pds">"</span>key2<span class="pl-pds">"</span></span>: <span class="pl-s">'b'</span>} <span class="pl-c"><span class="pl-c">#</span> {"key1" =&gt; 'a', "key2" =&gt; 'b'}</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Special hash literal syntax with other types too, as long as</span>
+<span class="pl-c"><span class="pl-c">#</span> they define a .new and a #[]= methods</span>
+<span class="pl-k">class</span> <span class="pl-en">MyType</span>
+  <span class="pl-k">def</span> <span class="pl-en">[]=</span>(<span class="pl-smi">key</span>, <span class="pl-smi">value</span>)
+    <span class="pl-c1">puts</span> <span class="pl-s"><span class="pl-pds">"</span>do stuff<span class="pl-pds">"</span></span>
+  <span class="pl-k">end</span>
+<span class="pl-k">end</span>
+
+<span class="pl-c1">MyType</span>{<span class="pl-s"><span class="pl-pds">"</span>foo<span class="pl-pds">"</span></span> =&gt; <span class="pl-s"><span class="pl-pds">"</span>bar<span class="pl-pds">"</span></span>}
+
+<span class="pl-c"><span class="pl-c">#</span> The above is equivalent to</span>
+tmp <span class="pl-k">=</span> <span class="pl-c1">MyType</span>.new
+tmp[<span class="pl-s"><span class="pl-pds">"</span>foo<span class="pl-pds">"</span></span>] <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>bar<span class="pl-pds">"</span></span>
+tmp
+
+<span class="pl-c"><span class="pl-c">#</span> Ranges</span>
+
+<span class="pl-c1">1</span>..10                  <span class="pl-c"><span class="pl-c">#</span>=&gt; Range(Int32, Int32)</span>
+<span class="pl-c1">Range</span>.new(<span class="pl-c1">1</span>, <span class="pl-c1">10</span>).class <span class="pl-c"><span class="pl-c">#</span>=&gt; Range(Int32, Int32)</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Can be inclusive or exclusive</span>
+(<span class="pl-c1">3</span>..5).to_a  <span class="pl-c"><span class="pl-c">#</span>=&gt; [3, 4, 5]</span>
+(<span class="pl-c1">3...5</span>).to_a <span class="pl-c"><span class="pl-c">#</span>=&gt; [3, 4]</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Check whether range includes the given value or not</span>
+(<span class="pl-c1">1</span>..8).includes? <span class="pl-c1">2</span> <span class="pl-c"><span class="pl-c">#</span>=&gt; true</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Tuples are a fixed-size, immutable, stack-allocated sequence of values of</span>
+<span class="pl-c"><span class="pl-c">#</span> possibly different types.</span>
+{<span class="pl-c1">1</span>, <span class="pl-s"><span class="pl-pds">"</span>hello<span class="pl-pds">"</span></span>, <span class="pl-s">'x'</span>}.class <span class="pl-c"><span class="pl-c">#</span>=&gt; Tuple(Int32, String, Char)</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Access tuple's value by its index</span>
+tuple <span class="pl-k">=</span> {<span class="pl-c1">:key1</span>, <span class="pl-c1">:key2</span>}
+tuple[<span class="pl-c1">1</span>] <span class="pl-c"><span class="pl-c">#</span>=&gt; :key2</span>
+tuple[<span class="pl-c1">2</span>] <span class="pl-c"><span class="pl-c">#</span>=&gt; Error: index out of bounds for Tuple(Symbol, Symbol) (2 not in -2..1)</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Can be expanded into multiple variables</span>
+a, b, c <span class="pl-k">=</span> {<span class="pl-c1">:a</span>, <span class="pl-s">'b'</span>, <span class="pl-s"><span class="pl-pds">"</span>c<span class="pl-pds">"</span></span>}
+a <span class="pl-c"><span class="pl-c">#</span>=&gt; :a</span>
+b <span class="pl-c"><span class="pl-c">#</span>=&gt; 'b'</span>
+c <span class="pl-c"><span class="pl-c">#</span>=&gt; "c"</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Procs represent a function pointer with an optional context (the closure data)</span>
+<span class="pl-c"><span class="pl-c">#</span> It is typically created with a proc literal</span>
+<span class="pl-c1">proc</span> <span class="pl-k">=</span> <span class="pl-k">-</span><span class="pl-k">&gt;</span>(x : <span class="pl-c1">Int32</span>) { x.to_s }
+proc.class <span class="pl-c"><span class="pl-c">#</span> Proc(Int32, String)</span>
+<span class="pl-c"><span class="pl-c">#</span> Or using the new method</span>
+<span class="pl-c1">Proc</span>(<span class="pl-c1">Int32</span>, <span class="pl-c1">String</span>).new { |<span class="pl-smi">x</span>| x.to_s }
+
+<span class="pl-c"><span class="pl-c">#</span> Invoke proc with call method</span>
+proc.call <span class="pl-c1">10</span> <span class="pl-c"><span class="pl-c">#</span>=&gt; "10"</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Control statements</span>
+
+<span class="pl-k">if</span> <span class="pl-c1">true</span>
+  <span class="pl-s"><span class="pl-pds">"</span>if statement<span class="pl-pds">"</span></span>
+<span class="pl-k">elsif</span> <span class="pl-c1">false</span>
+  <span class="pl-s"><span class="pl-pds">"</span>else-if, optional<span class="pl-pds">"</span></span>
+<span class="pl-k">else</span>
+  <span class="pl-s"><span class="pl-pds">"</span>else, also optional<span class="pl-pds">"</span></span>
+<span class="pl-k">end</span> 
+
+<span class="pl-c1">puts</span> <span class="pl-s"><span class="pl-pds">"</span>if as a suffix<span class="pl-pds">"</span></span> <span class="pl-k">if</span> <span class="pl-c1">true</span>
+
+<span class="pl-c"><span class="pl-c">#</span> If as an expression</span>
+a <span class="pl-k">=</span> <span class="pl-k">if</span> <span class="pl-c1">2</span> <span class="pl-k">&gt;</span> <span class="pl-c1">1</span>
+      <span class="pl-c1">3</span>
+    <span class="pl-k">else</span>
+      <span class="pl-c1">4</span>
+    <span class="pl-k">end</span>
+
+a <span class="pl-c"><span class="pl-c">#</span>=&gt; 3</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Ternary if</span>
+a <span class="pl-k">=</span> <span class="pl-c1">1</span> <span class="pl-k">&gt;</span> <span class="pl-c1">2</span> <span class="pl-k">?</span> <span class="pl-c1">3</span> : <span class="pl-c1">4</span> <span class="pl-c"><span class="pl-c">#</span>=&gt; 4</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Case statement</span>
+cmd <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>move<span class="pl-pds">"</span></span>
+
+action <span class="pl-k">=</span> <span class="pl-k">case</span> cmd
+  <span class="pl-k">when</span> <span class="pl-s"><span class="pl-pds">"</span>create<span class="pl-pds">"</span></span>
+    <span class="pl-s"><span class="pl-pds">"</span>Creating...<span class="pl-pds">"</span></span>
+  <span class="pl-k">when</span> <span class="pl-s"><span class="pl-pds">"</span>copy<span class="pl-pds">"</span></span>
+    <span class="pl-s"><span class="pl-pds">"</span>Copying...<span class="pl-pds">"</span></span>
+  <span class="pl-k">when</span> <span class="pl-s"><span class="pl-pds">"</span>move<span class="pl-pds">"</span></span>
+    <span class="pl-s"><span class="pl-pds">"</span>Moving...<span class="pl-pds">"</span></span>
+  <span class="pl-k">when</span> <span class="pl-s"><span class="pl-pds">"</span>delete<span class="pl-pds">"</span></span>
+    <span class="pl-s"><span class="pl-pds">"</span>Deleting...<span class="pl-pds">"</span></span>
+<span class="pl-k">end</span>
+
+action <span class="pl-c"><span class="pl-c">#</span>=&gt; "Moving..."</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Loops</span>
+index <span class="pl-k">=</span> <span class="pl-c1">0</span>
+<span class="pl-k">while</span> index <span class="pl-k">&lt;=</span> <span class="pl-c1">3</span>
+  <span class="pl-c1">puts</span> <span class="pl-s"><span class="pl-pds">"</span>Index: <span class="pl-pse"><span class="pl-s1">#{</span></span><span class="pl-s1">index</span><span class="pl-pse"><span class="pl-s1">}</span></span><span class="pl-pds">"</span></span>
+  index <span class="pl-k">+=</span> <span class="pl-c1">1</span>
+<span class="pl-k">end</span>
+<span class="pl-c"><span class="pl-c">#</span> Index: 0</span>
+<span class="pl-c"><span class="pl-c">#</span> Index: 1</span>
+<span class="pl-c"><span class="pl-c">#</span> Index: 2</span>
+<span class="pl-c"><span class="pl-c">#</span> Index: 3</span>
+
+index <span class="pl-k">=</span> <span class="pl-c1">0</span>
+<span class="pl-k">until</span> index <span class="pl-k">&gt;</span> <span class="pl-c1">3</span>
+  <span class="pl-c1">puts</span> <span class="pl-s"><span class="pl-pds">"</span>Index: <span class="pl-pse"><span class="pl-s1">#{</span></span><span class="pl-s1">index</span><span class="pl-pse"><span class="pl-s1">}</span></span><span class="pl-pds">"</span></span>
+  index <span class="pl-k">+=</span> <span class="pl-c1">1</span>
+<span class="pl-k">end</span>
+<span class="pl-c"><span class="pl-c">#</span> Index: 0</span>
+<span class="pl-c"><span class="pl-c">#</span> Index: 1</span>
+<span class="pl-c"><span class="pl-c">#</span> Index: 2</span>
+<span class="pl-c"><span class="pl-c">#</span> Index: 3</span>
+
+<span class="pl-c"><span class="pl-c">#</span> But the preferable way is to use each</span>
+(<span class="pl-c1">1</span>..3).each <span class="pl-k">do</span> |<span class="pl-smi">index</span>|
+  <span class="pl-c1">puts</span> <span class="pl-s"><span class="pl-pds">"</span>Index: <span class="pl-pse"><span class="pl-s1">#{</span></span><span class="pl-s1">index</span><span class="pl-pse"><span class="pl-s1">}</span></span><span class="pl-pds">"</span></span>
+<span class="pl-k">end</span>
+<span class="pl-c"><span class="pl-c">#</span> Index: 1</span>
+<span class="pl-c"><span class="pl-c">#</span> Index: 2</span>
+<span class="pl-c"><span class="pl-c">#</span> Index: 3</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Variable's type depends on the type of the expression</span>
+<span class="pl-c"><span class="pl-c">#</span> in control statements</span>
+<span class="pl-k">if</span> a <span class="pl-k">&lt;</span> <span class="pl-c1">3</span>
+  a <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>hello<span class="pl-pds">"</span></span>
+<span class="pl-k">else</span>
+  a <span class="pl-k">=</span> <span class="pl-c1">true</span>
+<span class="pl-k">end</span>
+<span class="pl-k">typeof</span>(a) <span class="pl-c"><span class="pl-c">#</span>=&gt; (Bool | String)</span>
+
+<span class="pl-k">if</span> a <span class="pl-k">&amp;&amp;</span> b
+  <span class="pl-c"><span class="pl-c">#</span> here both a and b are guaranteed not to be Nil</span>
+<span class="pl-k">end</span>
+
+<span class="pl-k">if</span> a.is_a? <span class="pl-c1">String</span>
+  a.class <span class="pl-c"><span class="pl-c">#</span>=&gt; String</span>
+<span class="pl-k">end</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Functions</span>
+
+<span class="pl-k">def</span> <span class="pl-en">double</span>(<span class="pl-en">x</span>)
+  x <span class="pl-k">*</span> <span class="pl-c1">2</span>
+<span class="pl-k">end</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Functions (and all blocks) implicitly return the value of the last statement</span>
+double(<span class="pl-c1">2</span>) <span class="pl-c"><span class="pl-c">#</span>=&gt; 4</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Parentheses are optional where the call is unambiguous</span>
+double <span class="pl-c1">3</span> <span class="pl-c"><span class="pl-c">#</span>=&gt; 6</span>
+
+double double <span class="pl-c1">3</span> <span class="pl-c"><span class="pl-c">#</span>=&gt; 12</span>
+
+<span class="pl-k">def</span> <span class="pl-en">sum</span>(x, y)
+  x <span class="pl-k">+</span> y
+<span class="pl-k">end</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Method arguments are separated by a comma</span>
+sum <span class="pl-c1">3</span>, <span class="pl-c1">4</span> <span class="pl-c"><span class="pl-c">#</span>=&gt; 7</span>
+
+sum sum(<span class="pl-c1">3</span>, <span class="pl-c1">4</span>), <span class="pl-c1">5</span> <span class="pl-c"><span class="pl-c">#</span>=&gt; 12</span>
+
+<span class="pl-c"><span class="pl-c">#</span> yield</span>
+<span class="pl-c"><span class="pl-c">#</span> All methods have an implicit, optional block parameter</span>
+<span class="pl-c"><span class="pl-c">#</span> it can be called with the 'yield' keyword</span>
+
+<span class="pl-k">def</span> <span class="pl-en">surround</span>
+  <span class="pl-c1">puts</span> <span class="pl-s">'{'</span>
+  <span class="pl-k">yield</span>
+  <span class="pl-c1">puts</span> <span class="pl-s">'}'</span>
+<span class="pl-k">end</span>
+
+surround { <span class="pl-c1">puts</span> <span class="pl-s"><span class="pl-pds">"</span>hello world<span class="pl-pds">"</span></span> }
+
+<span class="pl-c"><span class="pl-c">#</span> {</span>
+<span class="pl-c"><span class="pl-c">#</span> hello world</span>
+<span class="pl-c"><span class="pl-c">#</span> }</span>
+
+
+<span class="pl-c"><span class="pl-c">#</span> You can pass a block to a function</span>
+<span class="pl-c"><span class="pl-c">#</span> "&amp;" marks a reference to a passed block</span>
+<span class="pl-k">def</span> <span class="pl-en">guests</span>(<span class="pl-k">&amp;</span>block)
+  block.call <span class="pl-s"><span class="pl-pds">"</span>some_argument<span class="pl-pds">"</span></span>
+<span class="pl-k">end</span>
+
+<span class="pl-c"><span class="pl-c">#</span> You can pass a list of arguments, which will be converted into an array</span>
+<span class="pl-c"><span class="pl-c">#</span> That's what splat operator ("*") is for</span>
+<span class="pl-k">def</span> <span class="pl-en">guests</span>(<span class="pl-k">*</span>array)
+  array.each { |<span class="pl-smi">guest</span>| <span class="pl-c1">puts</span> guest }
+<span class="pl-k">end</span>
+
+<span class="pl-c"><span class="pl-c">#</span> If a method returns an array, you can use destructuring assignment</span>
+<span class="pl-k">def</span> <span class="pl-en">foods</span>
+    [<span class="pl-s"><span class="pl-pds">"</span>pancake<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>sandwich<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>quesadilla<span class="pl-pds">"</span></span>]
+<span class="pl-k">end</span>
+breakfast, lunch, dinner <span class="pl-k">=</span> foods
+breakfast <span class="pl-c"><span class="pl-c">#</span>=&gt; "pancake"</span>
+dinner    <span class="pl-c"><span class="pl-c">#</span>=&gt; "quesadilla"</span>
+
+<span class="pl-c"><span class="pl-c">#</span> By convention, all methods that return booleans end with a question mark</span>
+<span class="pl-c1">5</span>.even? <span class="pl-c"><span class="pl-c">#</span> false</span>
+<span class="pl-c1">5</span>.odd?  <span class="pl-c"><span class="pl-c">#</span> true</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Also by convention, if a method ends with an exclamation mark, it does </span>
+<span class="pl-c"><span class="pl-c">#</span> something destructive like mutate the receiver.</span>
+<span class="pl-c"><span class="pl-c">#</span> Some methods have a ! version to make a change, and</span>
+<span class="pl-c"><span class="pl-c">#</span> a non-! version to just return a new changed version</span>
+fruits <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">"</span>grapes<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>apples<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>bananas<span class="pl-pds">"</span></span>]
+fruits.sort  <span class="pl-c"><span class="pl-c">#</span>=&gt; ["apples", "bananas", "grapes"]</span>
+fruits       <span class="pl-c"><span class="pl-c">#</span>=&gt; ["grapes", "apples", "bananas"]</span>
+fruits.sort! <span class="pl-c"><span class="pl-c">#</span>=&gt; ["apples", "bananas", "grapes"]</span>
+fruits       <span class="pl-c"><span class="pl-c">#</span>=&gt; ["apples", "bananas", "grapes"]</span>
+
+<span class="pl-c"><span class="pl-c">#</span> However, some mutating methods do not end in !</span>
+fruits.shift <span class="pl-c"><span class="pl-c">#</span>=&gt; "apples"</span>
+fruits       <span class="pl-c"><span class="pl-c">#</span>=&gt; ["bananas", "grapes"]</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Define a class with the class keyword</span>
+<span class="pl-k">class</span> <span class="pl-en">Human</span>
+
+  <span class="pl-c"><span class="pl-c">#</span> A class variable. It is shared by all instances of this class.</span>
+  <span class="pl-smi">@@species</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>H. sapiens<span class="pl-pds">"</span></span>
+
+  <span class="pl-c"><span class="pl-c">#</span> An instance variable. Type of name is String</span>
+  <span class="pl-smi">@name</span> : <span class="pl-c1">String</span>
+
+  <span class="pl-c"><span class="pl-c">#</span> Basic initializer</span>
+  <span class="pl-c"><span class="pl-c">#</span> Assign the argument to the "name" instance variable for the instance</span>
+  <span class="pl-c"><span class="pl-c">#</span> If no age given, we will fall back to the default in the arguments list.</span>
+  <span class="pl-k">def</span> <span class="pl-en">initialize</span>(<span class="pl-smi">@name</span>, <span class="pl-smi">@age</span> <span class="pl-k">=</span> <span class="pl-c1">0</span>)
+  <span class="pl-k">end</span>
+
+  <span class="pl-c"><span class="pl-c">#</span> Basic setter method</span>
+  <span class="pl-k">def</span> <span class="pl-en">name</span><span class="pl-k">=</span>(name)
+    <span class="pl-smi">@name</span> <span class="pl-k">=</span> name
+  <span class="pl-k">end</span>
+
+  <span class="pl-c"><span class="pl-c">#</span> Basic getter method</span>
+  <span class="pl-k">def</span> <span class="pl-en">name</span>
+    <span class="pl-smi">@name</span>
+  <span class="pl-k">end</span>
+
+  <span class="pl-c"><span class="pl-c">#</span> The above functionality can be encapsulated using the propery method as follows</span>
+  <span class="pl-k">property</span> <span class="pl-c1">:name</span>
+
+  <span class="pl-c"><span class="pl-c">#</span> Getter/setter methods can also be created individually like this</span>
+  <span class="pl-k">getter</span> <span class="pl-c1">:name</span>
+  <span class="pl-k">setter</span> <span class="pl-c1">:name</span>
+
+  <span class="pl-c"><span class="pl-c">#</span> A class method uses self to distinguish from instance methods.</span>
+  <span class="pl-c"><span class="pl-c">#</span> It can only be called on the class, not an instance.</span>
+  <span class="pl-k">def</span> <span class="pl-en">self.say</span>(<span class="pl-en">msg</span>)
+    <span class="pl-c1">puts</span> msg
+  <span class="pl-k">end</span>
+
+  <span class="pl-k">def</span> <span class="pl-en">species</span>
+    <span class="pl-smi">@@species</span>
+  <span class="pl-k">end</span>
+<span class="pl-k">end</span>
+
+
+<span class="pl-c"><span class="pl-c">#</span> Instantiate a class</span>
+jim <span class="pl-k">=</span> <span class="pl-c1">Human</span>.new(<span class="pl-s"><span class="pl-pds">"</span>Jim Halpert<span class="pl-pds">"</span></span>)
+
+dwight <span class="pl-k">=</span> <span class="pl-c1">Human</span>.new(<span class="pl-s"><span class="pl-pds">"</span>Dwight K. Schrute<span class="pl-pds">"</span></span>)
+
+<span class="pl-c"><span class="pl-c">#</span> Let's call a couple of methods</span>
+jim.species <span class="pl-c"><span class="pl-c">#</span>=&gt; "H. sapiens"</span>
+jim.name <span class="pl-c"><span class="pl-c">#</span>=&gt; "Jim Halpert"</span>
+jim.name <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Jim Halpert II<span class="pl-pds">"</span></span> <span class="pl-c"><span class="pl-c">#</span>=&gt; "Jim Halpert II"</span>
+jim.name <span class="pl-c"><span class="pl-c">#</span>=&gt; "Jim Halpert II"</span>
+dwight.species <span class="pl-c"><span class="pl-c">#</span>=&gt; "H. sapiens"</span>
+dwight.name <span class="pl-c"><span class="pl-c">#</span>=&gt; "Dwight K. Schrute"</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Call the class method</span>
+<span class="pl-c1">Human</span>.say(<span class="pl-s"><span class="pl-pds">"</span>Hi<span class="pl-pds">"</span></span>) <span class="pl-c"><span class="pl-c">#</span>=&gt; print Hi and returns nil</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Variables that start with @ have instance scope</span>
+<span class="pl-k">class</span> <span class="pl-en">TestClass</span>
+  <span class="pl-smi">@var</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>I'm an instance var<span class="pl-pds">"</span></span>
+<span class="pl-k">end</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Variables that start with @@ have class scope</span>
+<span class="pl-k">class</span> <span class="pl-en">TestClass</span>
+  <span class="pl-smi">@@var</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>I'm a class var<span class="pl-pds">"</span></span>
+<span class="pl-k">end</span>
+<span class="pl-c"><span class="pl-c">#</span> Variables that start with a capital letter are constants</span>
+<span class="pl-c1">Var</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>I'm a constant<span class="pl-pds">"</span></span>
+<span class="pl-c1">Var</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>can't be updated<span class="pl-pds">"</span></span> <span class="pl-c"><span class="pl-c">#</span> Error: already initialized constant Var</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Class is also an object in Crystal. So a class can have instance variables.</span>
+<span class="pl-c"><span class="pl-c">#</span> Class variable is shared among the class and all of its descendants.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> base class</span>
+<span class="pl-k">class</span> <span class="pl-en">Human</span>
+  <span class="pl-smi">@@foo</span> <span class="pl-k">=</span> <span class="pl-c1">0</span>
+
+  <span class="pl-k">def</span> <span class="pl-en">self.foo</span>
+    <span class="pl-smi">@@foo</span>
+  <span class="pl-k">end</span>
+
+  <span class="pl-k">def</span> <span class="pl-en">self.foo</span><span class="pl-k">=</span>(value)
+    <span class="pl-smi">@@foo</span> <span class="pl-k">=</span> value
+  <span class="pl-k">end</span>
+<span class="pl-k">end</span>
+
+<span class="pl-c"><span class="pl-c">#</span> derived class</span>
+<span class="pl-k">class</span> <span class="pl-en">Worker</span> &lt; <span class="pl-e">Human</span>
+<span class="pl-k">end</span>
+
+<span class="pl-c1">Human</span>.foo   <span class="pl-c"><span class="pl-c">#</span>=&gt; 0</span>
+<span class="pl-c1">Worker</span>.foo  <span class="pl-c"><span class="pl-c">#</span>=&gt; 0</span>
+
+<span class="pl-c1">Human</span>.foo <span class="pl-k">=</span> <span class="pl-c1">2</span> <span class="pl-c"><span class="pl-c">#</span>=&gt; 2</span>
+<span class="pl-c1">Worker</span>.foo    <span class="pl-c"><span class="pl-c">#</span>=&gt; 0</span>
+
+<span class="pl-c1">Worker</span>.foo <span class="pl-k">=</span> <span class="pl-c1">3</span> <span class="pl-c"><span class="pl-c">#</span>=&gt; 3</span>
+<span class="pl-c1">Human</span>.foo   <span class="pl-c"><span class="pl-c">#</span>=&gt; 2</span>
+<span class="pl-c1">Worker</span>.foo  <span class="pl-c"><span class="pl-c">#</span>=&gt; 3</span>
+
+<span class="pl-k">module</span> <span class="pl-en">ModuleExample</span>
+  <span class="pl-k">def</span> <span class="pl-en">foo</span>
+    <span class="pl-s"><span class="pl-pds">"</span>foo<span class="pl-pds">"</span></span>
+  <span class="pl-k">end</span>
+<span class="pl-k">end</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Including modules binds their methods to the class instances</span>
+<span class="pl-c"><span class="pl-c">#</span> Extending modules binds their methods to the class itself</span>
+
+<span class="pl-k">class</span> <span class="pl-en">Person</span>
+  <span class="pl-k">include</span> <span class="pl-c1">ModuleExample</span>
+<span class="pl-k">end</span>
+
+<span class="pl-k">class</span> <span class="pl-en">Book</span>
+  <span class="pl-k">extend</span> <span class="pl-c1">ModuleExample</span>
+<span class="pl-k">end</span>
+
+<span class="pl-c1">Person</span>.foo     <span class="pl-c"><span class="pl-c">#</span> =&gt; undefined method 'foo' for Person:Class</span>
+<span class="pl-c1">Person</span>.new.foo <span class="pl-c"><span class="pl-c">#</span> =&gt; 'foo'</span>
+<span class="pl-c1">Book</span>.foo       <span class="pl-c"><span class="pl-c">#</span> =&gt; 'foo'</span>
+<span class="pl-c1">Book</span>.new.foo   <span class="pl-c"><span class="pl-c">#</span> =&gt; undefined method 'foo' for Book</span>
+
+
+<span class="pl-c"><span class="pl-c">#</span> Exception handling</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Define new exception</span>
+<span class="pl-k">class</span> <span class="pl-en">MyException</span> &lt; <span class="pl-e">Exception</span>
+<span class="pl-k">end</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Define another exception</span>
+<span class="pl-k">class</span> <span class="pl-en">MyAnotherException</span> &lt; <span class="pl-e">Exception</span>; <span class="pl-k">end</span>
+
+ex <span class="pl-k">=</span> <span class="pl-k">begin</span>
+   <span class="pl-k">raise</span> <span class="pl-c1">MyException</span>.new
+<span class="pl-k">rescue</span> ex1 : <span class="pl-c1">IndexError</span>
+  <span class="pl-s"><span class="pl-pds">"</span>ex1<span class="pl-pds">"</span></span>
+<span class="pl-k">rescue</span> ex2 : <span class="pl-c1">MyException</span> <span class="pl-k">|</span> <span class="pl-c1">MyAnotherException</span>
+  <span class="pl-s"><span class="pl-pds">"</span>ex2<span class="pl-pds">"</span></span>
+<span class="pl-k">rescue</span> ex3 : <span class="pl-c1">Exception</span>
+  <span class="pl-s"><span class="pl-pds">"</span>ex3<span class="pl-pds">"</span></span>
+<span class="pl-k">rescue</span> ex4 <span class="pl-c"><span class="pl-c">#</span> catch any kind of exception</span>
+  <span class="pl-s"><span class="pl-pds">"</span>ex4<span class="pl-pds">"</span></span>
+<span class="pl-k">end</span>
+
+ex <span class="pl-c"><span class="pl-c">#</span>=&gt; "ex2"</span>
+</pre></div>
+<h2>Additional resources</h2>
+<ul>
+<li><a href="https://crystal-lang.org/" rel="nofollow">Official Documentation</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Vitalii Elenhaupt", "http://veelenga.com"]
+- ["Arnaud Fernandés", "https://github.com/TechMagister/"]
+- ["Valentin Baca", "https://github.com/valbaca/"]
+</code></pre>

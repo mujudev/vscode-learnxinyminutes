@@ -1,0 +1,109 @@
+<h1>EDN</h1>
+<p>Extensible Data Notation (EDN) is a format for serializing data.</p>
+<p>EDN is a subset of the syntax used by Clojure. Reading data defined by EDN is<br>
+safer than that defined by the full Clojure syntax, especially from untrusted<br>
+sources. EDN is restricted to data, no code. It is similar in intent to JSON.<br>
+Though it is more commonly used in Clojure, there are implementations of EDN<br>
+for many other languages.</p>
+<p>The main benefit of EDN over JSON and YAML is that it is extensible. We<br>
+will see how it is extended later on.</p>
+<div class="highlight highlight-source-clojure"><pre class="notranslate"><span class="pl-c"><span class="pl-c">;</span> Comments start with a semicolon.</span>
+<span class="pl-c"><span class="pl-c">;</span> Anything after the semicolon is ignored.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c"><span class="pl-c">;</span>;; Basic Types ;;;</span>
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;</span>
+
+<span class="pl-c1">nil</span>         <span class="pl-c"><span class="pl-c">;</span> also known in other languages as null</span>
+
+<span class="pl-c"><span class="pl-c">;</span> Booleans</span>
+<span class="pl-c1">true</span>
+<span class="pl-c1">false</span>
+
+<span class="pl-c"><span class="pl-c">;</span> Strings are enclosed in double quotes</span>
+<span class="pl-s"><span class="pl-pds">"</span>hungarian breakfast<span class="pl-pds">"</span></span>
+<span class="pl-s"><span class="pl-pds">"</span>farmer's cheesy omelette<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">;</span> Characters are preceded by backslashes</span>
+\g \r \a \c \e
+
+<span class="pl-c"><span class="pl-c">;</span> Keywords start with a colon. They behave like enums. Kind of</span>
+<span class="pl-c"><span class="pl-c">;</span> like symbols in Ruby.</span>
+:eggs
+:cheese
+:olives
+
+<span class="pl-c"><span class="pl-c">;</span> Symbols are used to represent identifiers. </span>
+<span class="pl-c"><span class="pl-c">;</span> You can namespace symbols by using /. Whatever precedes / is</span>
+<span class="pl-c"><span class="pl-c">;</span> the namespace of the symbol.</span>
+spoon
+kitchen/spoon <span class="pl-c"><span class="pl-c">;</span> not the same as spoon</span>
+kitchen/fork
+github/fork   <span class="pl-c"><span class="pl-c">;</span> you can't eat with this</span>
+
+<span class="pl-c"><span class="pl-c">;</span> Integers and floats</span>
+<span class="pl-c1">42</span>
+<span class="pl-c1">3.14159</span>
+
+<span class="pl-c"><span class="pl-c">;</span> Lists are sequences of values</span>
+(<span class="pl-c1">:bun</span> <span class="pl-c1">:beef-patty</span> <span class="pl-c1">9</span> <span class="pl-s"><span class="pl-pds">"</span>yum!<span class="pl-pds">"</span></span>)
+
+<span class="pl-c"><span class="pl-c">;</span> Vectors allow random access</span>
+[<span class="pl-c1">:gelato</span> <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">-2</span>]
+
+<span class="pl-c"><span class="pl-c">;</span> Maps are associative data structures that associate the key with its value</span>
+{<span class="pl-c1">:eggs</span>        <span class="pl-c1">2</span>
+ <span class="pl-c1">:lemon-juice</span> <span class="pl-c1">3.5</span>
+ <span class="pl-c1">:butter</span>      <span class="pl-c1">1</span>}
+
+<span class="pl-c"><span class="pl-c">;</span> You're not restricted to using keywords as keys</span>
+{[<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span>] <span class="pl-s"><span class="pl-pds">"</span>tell the people what she wore<span class="pl-pds">"</span></span>,
+ [<span class="pl-c1">5</span> <span class="pl-c1">6</span> <span class="pl-c1">7</span> <span class="pl-c1">8</span>] <span class="pl-s"><span class="pl-pds">"</span>the more you see the more you hate<span class="pl-pds">"</span></span>}
+
+<span class="pl-c"><span class="pl-c">;</span> You may use commas for readability. They are treated as whitespace.</span>
+
+<span class="pl-c"><span class="pl-c">;</span> Sets are collections that contain unique elements.</span>
+#{<span class="pl-c1">:a</span> <span class="pl-c1">:b</span> <span class="pl-c1">88</span> <span class="pl-s"><span class="pl-pds">"</span>huat<span class="pl-pds">"</span></span>}
+
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c"><span class="pl-c">;</span>;; Tagged Elements ;;;</span>
+<span class="pl-c"><span class="pl-c">;</span>;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="pl-c"><span class="pl-c">;</span> EDN can be extended by tagging elements with # symbols.</span>
+
+#MyYelpClone/MenuItem {<span class="pl-c1">:name</span> <span class="pl-s"><span class="pl-pds">"</span>eggs-benedict<span class="pl-pds">"</span></span> <span class="pl-c1">:rating</span> <span class="pl-c1">10</span>}
+
+<span class="pl-c"><span class="pl-c">;</span> Let me explain this with a Clojure example. Suppose I want to transform that</span>
+<span class="pl-c"><span class="pl-c">;</span> piece of EDN into a MenuItem record.</span>
+
+(<span class="pl-k">defrecord</span> <span class="pl-e">MenuItem</span> [name rating])
+
+<span class="pl-c"><span class="pl-c">;</span> defrecord defined, among other things, map-&gt;MenuItem which will take a map</span>
+<span class="pl-c"><span class="pl-c">;</span> of field names (as keywords) to values and generate a user.MenuItem record</span>
+
+<span class="pl-c"><span class="pl-c">;</span> To transform EDN to Clojure values, I will need to use the built-in EDN</span>
+<span class="pl-c"><span class="pl-c">;</span> reader, clojure.edn/read-string</span>
+
+(<span class="pl-en">clojure.edn/read-string</span> <span class="pl-s"><span class="pl-pds">"</span>{:eggs 2 :butter 1 :flour 5}<span class="pl-pds">"</span></span>)
+<span class="pl-c"><span class="pl-c">;</span> -&gt; {:eggs 2 :butter 1 :flour 5}</span>
+
+<span class="pl-c"><span class="pl-c">;</span> To transform tagged elements, pass to clojure.edn/read-string an option map</span>
+<span class="pl-c"><span class="pl-c">;</span> with a :readers map that maps tag symbols to data-reader functions, like so</span>
+
+(<span class="pl-en">clojure.edn/read-string</span>
+    {<span class="pl-c1">:readers</span> {'MyYelpClone/MenuItem map-&gt;MenuItem}}
+    <span class="pl-s"><span class="pl-pds">"</span>#MyYelpClone/MenuItem {:name <span class="pl-cce">\"</span>eggs-benedict<span class="pl-cce">\"</span> :rating 10}<span class="pl-pds">"</span></span>)
+<span class="pl-c"><span class="pl-c">;</span> -&gt; #user.MenuItem{:name "eggs-benedict", :rating 10}</span>
+</pre></div>
+<h1>References</h1>
+<ul>
+<li><a href="https://github.com/edn-format/edn">EDN spec</a></li>
+<li><a href="https://github.com/edn-format/edn/wiki/Implementations">Implementations</a></li>
+<li><a href="http://www.compoundtheory.com/clojure-edn-walkthrough/" rel="nofollow">Tagged Elements</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<ul>
+<li>["Jason Yeo", "https://github.com/jsyeo"]</li>
+<li>["Jonathan D Johnston", "https://github.com/jdjohnston"]</li>
+</ul>

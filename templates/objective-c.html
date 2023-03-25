@@ -1,0 +1,809 @@
+<h1>Objective-C</h1>
+<p>Objective-C is the main programming language used by Apple for the macOS and iOS operating systems and their respective frameworks, Cocoa and Cocoa Touch.<br>
+It is a general-purpose, object-oriented programming language that adds Smalltalk-style messaging to the C programming language.</p>
+<div class="highlight highlight-source-objc"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> Single-line comments start with //</span>
+
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">Multi-line comments look like this</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span> XCode supports pragma mark directive that improve jump bar readability</span>
+#<span class="pl-k">pragma mark</span> Navigation Functions // New tag on jump bar named 'Navigation Functions'
+#<span class="pl-k">pragma mark</span> - Navigation Functions // Same tag, now with a separator
+
+<span class="pl-c"><span class="pl-c">//</span> Imports the Foundation headers with #import</span>
+<span class="pl-c"><span class="pl-c">//</span> Use &lt;&gt; to import global files (in general frameworks)</span>
+<span class="pl-c"><span class="pl-c">//</span> Use "" to import local files (from project)</span>
+#<span class="pl-k">import</span> <span class="pl-s"><span class="pl-pds">&lt;</span>Foundation/Foundation.h<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">import</span> <span class="pl-s"><span class="pl-pds">"</span>MyClass.h<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span> If you enable modules for iOS &gt;= 7.0 or OS X &gt;= 10.9 projects in</span>
+<span class="pl-c"><span class="pl-c">//</span> Xcode 5 you can import frameworks like that:</span>
+@import Foundation;
+
+<span class="pl-c"><span class="pl-c">//</span> Your program's entry point is a function called</span>
+<span class="pl-c"><span class="pl-c">//</span> main with an integer return type</span>
+<span class="pl-k">int</span> <span class="pl-en">main</span> (<span class="pl-k">int</span> argc, <span class="pl-k">const</span> <span class="pl-k">char</span> * argv[])
+{
+    <span class="pl-c"><span class="pl-c">//</span> Create an autorelease pool to manage the memory into the program</span>
+    <span class="pl-c1">NSAutoreleasePool</span> * pool = [[<span class="pl-c1">NSAutoreleasePool</span> <span class="pl-c1">alloc</span>] <span class="pl-c1">init</span>];
+    <span class="pl-c"><span class="pl-c">//</span> If using automatic reference counting (ARC), use @autoreleasepool instead:</span>
+    @autoreleasepool {
+
+    <span class="pl-c"><span class="pl-c">//</span> Use NSLog to print lines to the console</span>
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span>Hello World!<span class="pl-pds">"</span></span>); <span class="pl-c"><span class="pl-c">//</span> Print the string "Hello World!"</span>
+
+    <span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+    <span class="pl-c"><span class="pl-c">//</span> Types &amp; Variables</span>
+    <span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> Primitive declarations</span>
+    <span class="pl-k">int</span> myPrimitive1  = <span class="pl-c1">1</span>;
+    <span class="pl-k">long</span> myPrimitive2 = <span class="pl-c1">234554664565</span>;
+
+    <span class="pl-c"><span class="pl-c">//</span> Object declarations</span>
+    <span class="pl-c"><span class="pl-c">//</span> Put the * in front of the variable names for strongly-typed object declarations</span>
+    MyClass *myObject1 = <span class="pl-c1">nil</span>;  <span class="pl-c"><span class="pl-c">//</span> Strong typing</span>
+    <span class="pl-c1">id</span>       myObject2 = <span class="pl-c1">nil</span>;  <span class="pl-c"><span class="pl-c">//</span> Weak typing</span>
+    <span class="pl-c"><span class="pl-c">//</span> %@ is an object</span>
+    <span class="pl-c"><span class="pl-c">//</span> 'description' is a convention to display the value of the Objects</span>
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span><span class="pl-c1">%@</span> and <span class="pl-c1">%@</span><span class="pl-pds">"</span></span>, myObject1, [myObject2 <span class="pl-c1">description</span>]); <span class="pl-c"><span class="pl-c">//</span> prints =&gt; "(null) and (null)"</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> String</span>
+    <span class="pl-c1">NSString</span> *worldString = <span class="pl-s"><span class="pl-pds">@"</span>World<span class="pl-pds">"</span></span>;
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span>Hello <span class="pl-c1">%@</span>!<span class="pl-pds">"</span></span>, worldString); <span class="pl-c"><span class="pl-c">//</span> prints =&gt; "Hello World!"</span>
+    <span class="pl-c"><span class="pl-c">//</span> NSMutableString is a mutable version of the NSString object</span>
+    <span class="pl-c1">NSMutableString</span> *mutableString = [<span class="pl-c1">NSMutableString</span> <span class="pl-c1">stringWithString:</span><span class="pl-s"><span class="pl-pds">@"</span>Hello<span class="pl-pds">"</span></span>];
+    [mutableString <span class="pl-c1">appendString:</span><span class="pl-s"><span class="pl-pds">@"</span> World!<span class="pl-pds">"</span></span>];
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span><span class="pl-c1">%@</span><span class="pl-pds">"</span></span>, mutableString); <span class="pl-c"><span class="pl-c">//</span> prints =&gt; "Hello World!"</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> Character literals</span>
+    <span class="pl-c1">NSNumber</span> *theLetterZNumber = @<span class="pl-s"><span class="pl-pds">'</span>Z<span class="pl-pds">'</span></span>;
+    <span class="pl-k">char</span> theLetterZ            = [theLetterZNumber <span class="pl-c1">charValue</span>]; <span class="pl-c"><span class="pl-c">//</span> or 'Z'</span>
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span><span class="pl-c1">%c</span><span class="pl-pds">"</span></span>, theLetterZ);
+
+    <span class="pl-c"><span class="pl-c">//</span> Integral literals</span>
+    <span class="pl-c1">NSNumber</span> *fortyTwoNumber = @<span class="pl-c1">42</span>;
+    <span class="pl-k">int</span> fortyTwo             = [fortyTwoNumber <span class="pl-c1">intValue</span>]; <span class="pl-c"><span class="pl-c">//</span> or 42</span>
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span><span class="pl-c1">%i</span><span class="pl-pds">"</span></span>, fortyTwo);
+
+    <span class="pl-c1">NSNumber</span> *fortyTwoUnsignedNumber = @<span class="pl-c1">42U</span>;
+    <span class="pl-k">unsigned</span> <span class="pl-k">int</span> fortyTwoUnsigned    = [fortyTwoUnsignedNumber <span class="pl-c1">unsignedIntValue</span>]; <span class="pl-c"><span class="pl-c">//</span> or 42</span>
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span><span class="pl-c1">%u</span><span class="pl-pds">"</span></span>, fortyTwoUnsigned);
+
+    <span class="pl-c1">NSNumber</span> *fortyTwoShortNumber = [<span class="pl-c1">NSNumber</span> <span class="pl-c1">numberWithShort:</span><span class="pl-c1">42</span>];
+    <span class="pl-k">short</span> fortyTwoShort           = [fortyTwoShortNumber <span class="pl-c1">shortValue</span>]; <span class="pl-c"><span class="pl-c">//</span> or 42</span>
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span><span class="pl-c1">%hi</span><span class="pl-pds">"</span></span>, fortyTwoShort);
+
+    <span class="pl-c1">NSNumber</span> *fortyOneShortNumber   = [<span class="pl-c1">NSNumber</span> <span class="pl-c1">numberWithShort:</span><span class="pl-c1">41</span>];
+    <span class="pl-k">unsigned</span> <span class="pl-k">short</span> fortyOneUnsigned = [fortyOneShortNumber <span class="pl-c1">unsignedShortValue</span>]; <span class="pl-c"><span class="pl-c">//</span> or 41</span>
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span><span class="pl-c1">%u</span><span class="pl-pds">"</span></span>, fortyOneUnsigned);
+
+    <span class="pl-c1">NSNumber</span> *fortyTwoLongNumber = @<span class="pl-c1">42L</span>;
+    <span class="pl-k">long</span> fortyTwoLong            = [fortyTwoLongNumber <span class="pl-c1">longValue</span>]; <span class="pl-c"><span class="pl-c">//</span> or 42</span>
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span><span class="pl-c1">%li</span><span class="pl-pds">"</span></span>, fortyTwoLong);
+
+    <span class="pl-c1">NSNumber</span> *fiftyThreeLongNumber   = @<span class="pl-c1">53L</span>;
+    <span class="pl-k">unsigned</span> <span class="pl-k">long</span> fiftyThreeUnsigned = [fiftyThreeLongNumber <span class="pl-c1">unsignedLongValue</span>]; <span class="pl-c"><span class="pl-c">//</span> or 53</span>
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span><span class="pl-c1">%lu</span><span class="pl-pds">"</span></span>, fiftyThreeUnsigned);
+
+    <span class="pl-c"><span class="pl-c">//</span> Floating point literals</span>
+    <span class="pl-c1">NSNumber</span> *piFloatNumber = @<span class="pl-c1">3</span>.<span class="pl-c1">141592654F</span>;
+    <span class="pl-k">float</span> piFloat           = [piFloatNumber <span class="pl-c1">floatValue</span>]; <span class="pl-c"><span class="pl-c">//</span> or 3.141592654f</span>
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span><span class="pl-c1">%f</span><span class="pl-pds">"</span></span>, piFloat); <span class="pl-c"><span class="pl-c">//</span> prints =&gt; 3.141592654</span>
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span><span class="pl-c1">%5.2f</span><span class="pl-pds">"</span></span>, piFloat); <span class="pl-c"><span class="pl-c">//</span> prints =&gt; " 3.14"</span>
+
+    <span class="pl-c1">NSNumber</span> *piDoubleNumber = @<span class="pl-c1">3.1415926535</span>;
+    <span class="pl-k">double</span> piDouble          = [piDoubleNumber <span class="pl-c1">doubleValue</span>]; <span class="pl-c"><span class="pl-c">//</span> or 3.1415926535</span>
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span><span class="pl-c1">%f</span><span class="pl-pds">"</span></span>, piDouble);
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span><span class="pl-c1">%4.2f</span><span class="pl-pds">"</span></span>, piDouble); <span class="pl-c"><span class="pl-c">//</span> prints =&gt; "3.14"</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> NSDecimalNumber is a fixed-point class that's more precise than float or double</span>
+    <span class="pl-c1">NSDecimalNumber</span> *oneDecNum = [<span class="pl-c1">NSDecimalNumber</span> <span class="pl-c1">decimalNumberWithString:</span><span class="pl-s"><span class="pl-pds">@"</span>10.99<span class="pl-pds">"</span></span>];
+    <span class="pl-c1">NSDecimalNumber</span> *twoDecNum = [<span class="pl-c1">NSDecimalNumber</span> <span class="pl-c1">decimalNumberWithString:</span><span class="pl-s"><span class="pl-pds">@"</span>5.002<span class="pl-pds">"</span></span>];
+    <span class="pl-c"><span class="pl-c">//</span> NSDecimalNumber isn't able to use standard +, -, *, / operators so it provides its own:</span>
+    [oneDecNum <span class="pl-c1">decimalNumberByAdding:</span>twoDecNum];
+    [oneDecNum <span class="pl-c1">decimalNumberBySubtracting:</span>twoDecNum];
+    [oneDecNum <span class="pl-c1">decimalNumberByMultiplyingBy:</span>twoDecNum];
+    [oneDecNum <span class="pl-c1">decimalNumberByDividingBy:</span>twoDecNum];
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span><span class="pl-c1">%@</span><span class="pl-pds">"</span></span>, oneDecNum); <span class="pl-c"><span class="pl-c">//</span> prints =&gt; 10.99 as NSDecimalNumber is immutable</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> BOOL literals</span>
+    <span class="pl-c1">NSNumber</span> *yesNumber = @<span class="pl-c1">YES</span>;
+    <span class="pl-c1">NSNumber</span> *noNumber  = @<span class="pl-c1">NO</span>;
+    <span class="pl-c"><span class="pl-c">//</span> or</span>
+    <span class="pl-c1">BOOL</span> yesBool = <span class="pl-c1">YES</span>;
+    <span class="pl-c1">BOOL</span> noBool  = <span class="pl-c1">NO</span>;
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span><span class="pl-c1">%i</span><span class="pl-pds">"</span></span>, yesBool); <span class="pl-c"><span class="pl-c">//</span> prints =&gt; 1</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> Array object</span>
+    <span class="pl-c"><span class="pl-c">//</span> May contain different data types, but must be an Objective-C object</span>
+    <span class="pl-c1">NSArray</span> *anArray      = @[@<span class="pl-c1">1</span>, @<span class="pl-c1">2</span>, @<span class="pl-c1">3</span>, @<span class="pl-c1">4</span>];
+    <span class="pl-c1">NSNumber</span> *thirdNumber = anArray[<span class="pl-c1">2</span>];
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span>Third number = <span class="pl-c1">%@</span><span class="pl-pds">"</span></span>, thirdNumber); <span class="pl-c"><span class="pl-c">//</span> prints =&gt; "Third number = 3"</span>
+    <span class="pl-c"><span class="pl-c">//</span> Since Xcode 7, NSArray objects can be typed (Generics)</span>
+    <span class="pl-c1">NSArray</span>&lt;<span class="pl-c1">NSString</span> *&gt; *stringArray = @[<span class="pl-s"><span class="pl-pds">@"</span>hello<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">@"</span>world<span class="pl-pds">"</span></span>];
+    <span class="pl-c"><span class="pl-c">//</span> NSMutableArray is a mutable version of NSArray, allowing you to change</span>
+    <span class="pl-c"><span class="pl-c">//</span> the items in the array and to extend or shrink the array object.</span>
+    <span class="pl-c"><span class="pl-c">//</span> Convenient, but not as efficient as NSArray.</span>
+    <span class="pl-c1">NSMutableArray</span> *mutableArray = [<span class="pl-c1">NSMutableArray</span> <span class="pl-c1">arrayWithCapacity:</span><span class="pl-c1">2</span>];
+    [mutableArray <span class="pl-c1">addObject:</span><span class="pl-s"><span class="pl-pds">@"</span>Hello<span class="pl-pds">"</span></span>];
+    [mutableArray <span class="pl-c1">addObject:</span><span class="pl-s"><span class="pl-pds">@"</span>World<span class="pl-pds">"</span></span>];
+    [mutableArray <span class="pl-c1">removeObjectAtIndex:</span><span class="pl-c1">0</span>];
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span><span class="pl-c1">%@</span><span class="pl-pds">"</span></span>, [mutableArray <span class="pl-c1">objectAtIndex:</span><span class="pl-c1">0</span>]); <span class="pl-c"><span class="pl-c">//</span> prints =&gt; "World"</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> Dictionary object</span>
+    <span class="pl-c1">NSDictionary</span> *aDictionary = @{ <span class="pl-s"><span class="pl-pds">@"</span>key1<span class="pl-pds">"</span></span> : <span class="pl-s"><span class="pl-pds">@"</span>value1<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">@"</span>key2<span class="pl-pds">"</span></span> : <span class="pl-s"><span class="pl-pds">@"</span>value2<span class="pl-pds">"</span></span> };
+    <span class="pl-c1">NSObject</span> *valueObject     = aDictionary[<span class="pl-s"><span class="pl-pds">@"</span>A Key<span class="pl-pds">"</span></span>];
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span>Object = <span class="pl-c1">%@</span><span class="pl-pds">"</span></span>, valueObject); <span class="pl-c"><span class="pl-c">//</span> prints =&gt; "Object = (null)"</span>
+    <span class="pl-c"><span class="pl-c">//</span> Since Xcode 7, NSDictionary objects can be typed (Generics)</span>
+    <span class="pl-c1">NSDictionary</span>&lt;<span class="pl-c1">NSString</span> *, <span class="pl-c1">NSNumber</span> *&gt; *numberDictionary = @{<span class="pl-s"><span class="pl-pds">@"</span>a<span class="pl-pds">"</span></span>: @<span class="pl-c1">1</span>, <span class="pl-s"><span class="pl-pds">@"</span>b<span class="pl-pds">"</span></span>: @<span class="pl-c1">2</span>};
+    <span class="pl-c"><span class="pl-c">//</span> NSMutableDictionary also available as a mutable dictionary object</span>
+    <span class="pl-c1">NSMutableDictionary</span> *mutableDictionary = [<span class="pl-c1">NSMutableDictionary</span> <span class="pl-c1">dictionaryWithCapacity:</span><span class="pl-c1">2</span>];
+    [mutableDictionary <span class="pl-c1">setObject:</span><span class="pl-s"><span class="pl-pds">@"</span>value1<span class="pl-pds">"</span></span> <span class="pl-c1">forKey:</span><span class="pl-s"><span class="pl-pds">@"</span>key1<span class="pl-pds">"</span></span>];
+    [mutableDictionary <span class="pl-c1">setObject:</span><span class="pl-s"><span class="pl-pds">@"</span>value2<span class="pl-pds">"</span></span> <span class="pl-c1">forKey:</span><span class="pl-s"><span class="pl-pds">@"</span>key2<span class="pl-pds">"</span></span>];
+    [mutableDictionary <span class="pl-c1">removeObjectForKey:</span><span class="pl-s"><span class="pl-pds">@"</span>key1<span class="pl-pds">"</span></span>];
+
+    <span class="pl-c"><span class="pl-c">//</span> Change types from Mutable To Immutable</span>
+    <span class="pl-c"><span class="pl-c">//</span>In general [object mutableCopy] will make the object mutable whereas [object copy] will make the object immutable</span>
+    <span class="pl-c1">NSMutableDictionary</span> *aMutableDictionary = [aDictionary <span class="pl-c1">mutableCopy</span>];
+    <span class="pl-c1">NSDictionary</span> *mutableDictionaryChanged = [mutableDictionary <span class="pl-c1">copy</span>];
+
+
+    <span class="pl-c"><span class="pl-c">//</span> Set object</span>
+    <span class="pl-c1">NSSet</span> *set = [<span class="pl-c1">NSSet</span> <span class="pl-c1">setWithObjects:</span><span class="pl-s"><span class="pl-pds">@"</span>Hello<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">@"</span>Hello<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">@"</span>World<span class="pl-pds">"</span></span>, <span class="pl-c1">nil</span>];
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span><span class="pl-c1">%@</span><span class="pl-pds">"</span></span>, set); <span class="pl-c"><span class="pl-c">//</span> prints =&gt; {(Hello, World)} (may be in different order)</span>
+    <span class="pl-c"><span class="pl-c">//</span> Since Xcode 7, NSSet objects can be typed (Generics)</span>
+    <span class="pl-c1">NSSet</span>&lt;<span class="pl-c1">NSString</span> *&gt; *stringSet = [<span class="pl-c1">NSSet</span> <span class="pl-c1">setWithObjects:</span><span class="pl-s"><span class="pl-pds">@"</span>hello<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">@"</span>world<span class="pl-pds">"</span></span>, <span class="pl-c1">nil</span>];
+    <span class="pl-c"><span class="pl-c">//</span> NSMutableSet also available as a mutable set object</span>
+    <span class="pl-c1">NSMutableSet</span> *mutableSet = [<span class="pl-c1">NSMutableSet</span> <span class="pl-c1">setWithCapacity:</span><span class="pl-c1">2</span>];
+    [mutableSet <span class="pl-c1">addObject:</span><span class="pl-s"><span class="pl-pds">@"</span>Hello<span class="pl-pds">"</span></span>];
+    [mutableSet <span class="pl-c1">addObject:</span><span class="pl-s"><span class="pl-pds">@"</span>Hello<span class="pl-pds">"</span></span>];
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span><span class="pl-c1">%@</span><span class="pl-pds">"</span></span>, mutableSet); <span class="pl-c"><span class="pl-c">//</span> prints =&gt; {(Hello)}</span>
+
+    <span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+    <span class="pl-c"><span class="pl-c">//</span> Operators</span>
+    <span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> The operators works like in the C language</span>
+    <span class="pl-c"><span class="pl-c">//</span> For example:</span>
+    <span class="pl-c1">2</span> + <span class="pl-c1">5</span>; <span class="pl-c"><span class="pl-c">//</span> =&gt; 7</span>
+    <span class="pl-c1">4</span>.<span class="pl-c1">2f</span> + <span class="pl-c1">5</span>.<span class="pl-c1">1f</span>; <span class="pl-c"><span class="pl-c">//</span> =&gt; 9.3f</span>
+    <span class="pl-c1">3</span> == <span class="pl-c1">2</span>; <span class="pl-c"><span class="pl-c">//</span> =&gt; 0 (NO)</span>
+    <span class="pl-c1">3</span> != <span class="pl-c1">2</span>; <span class="pl-c"><span class="pl-c">//</span> =&gt; 1 (YES)</span>
+    <span class="pl-c1">1</span> &amp;&amp; <span class="pl-c1">1</span>; <span class="pl-c"><span class="pl-c">//</span> =&gt; 1 (Logical and)</span>
+    <span class="pl-c1">0</span> || <span class="pl-c1">1</span>; <span class="pl-c"><span class="pl-c">//</span> =&gt; 1 (Logical or)</span>
+    ~<span class="pl-c1">0x0F</span>; <span class="pl-c"><span class="pl-c">//</span> =&gt; 0xF0 (bitwise negation)</span>
+    <span class="pl-c1">0x0F</span> &amp; <span class="pl-c1">0xF0</span>; <span class="pl-c"><span class="pl-c">//</span> =&gt; 0x00 (bitwise AND)</span>
+    <span class="pl-c1">0x01</span> &lt;&lt; <span class="pl-c1">1</span>; <span class="pl-c"><span class="pl-c">//</span> =&gt; 0x02 (bitwise left shift (by 1))</span>
+
+    <span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+    <span class="pl-c"><span class="pl-c">//</span> Control Structures</span>
+    <span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> If-Else statement</span>
+    <span class="pl-k">if</span> (<span class="pl-c1">NO</span>)
+    {
+        <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span>I am never run<span class="pl-pds">"</span></span>);
+    } <span class="pl-k">else</span> <span class="pl-k">if</span> (<span class="pl-c1">0</span>)
+    {
+        <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span>I am also never run<span class="pl-pds">"</span></span>);
+    } <span class="pl-k">else</span>
+    {
+        <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span>I print<span class="pl-pds">"</span></span>);
+    }
+
+    <span class="pl-c"><span class="pl-c">//</span> Switch statement</span>
+    <span class="pl-k">switch</span> (<span class="pl-c1">2</span>)
+    {
+        <span class="pl-k">case</span> <span class="pl-c1">0</span>:
+        {
+            <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span>I am never run<span class="pl-pds">"</span></span>);
+        } <span class="pl-k">break</span>;
+        <span class="pl-k">case</span> <span class="pl-c1">1</span>:
+        {
+            <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span>I am also never run<span class="pl-pds">"</span></span>);
+        } <span class="pl-k">break</span>;
+        <span class="pl-k">default</span>:
+        {
+            <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span>I print<span class="pl-pds">"</span></span>);
+        } <span class="pl-k">break</span>;
+    }
+
+    <span class="pl-c"><span class="pl-c">//</span> While loops statements</span>
+    <span class="pl-k">int</span> ii = <span class="pl-c1">0</span>;
+    <span class="pl-k">while</span> (ii &lt; <span class="pl-c1">4</span>)
+    {
+        <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span><span class="pl-c1">%d</span>,<span class="pl-pds">"</span></span>, ii++); <span class="pl-c"><span class="pl-c">//</span> ii++ increments ii in-place, after using its value</span>
+    } <span class="pl-c"><span class="pl-c">//</span> prints =&gt; "0,"</span>
+      <span class="pl-c"><span class="pl-c">//</span>           "1,"</span>
+      <span class="pl-c"><span class="pl-c">//</span>           "2,"</span>
+      <span class="pl-c"><span class="pl-c">//</span>           "3,"</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> For loops statements</span>
+    <span class="pl-k">int</span> jj;
+    <span class="pl-k">for</span> (jj=<span class="pl-c1">0</span>; jj &lt; <span class="pl-c1">4</span>; jj++)
+    {
+        <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span><span class="pl-c1">%d</span>,<span class="pl-pds">"</span></span>, jj);
+    } <span class="pl-c"><span class="pl-c">//</span> prints =&gt; "0,"</span>
+      <span class="pl-c"><span class="pl-c">//</span>           "1,"</span>
+      <span class="pl-c"><span class="pl-c">//</span>           "2,"</span>
+      <span class="pl-c"><span class="pl-c">//</span>           "3,"</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> Foreach statements</span>
+    <span class="pl-c1">NSArray</span> *values = @[@<span class="pl-c1">0</span>, @<span class="pl-c1">1</span>, @<span class="pl-c1">2</span>, @<span class="pl-c1">3</span>];
+    <span class="pl-k">for</span> (<span class="pl-c1">NSNumber</span> *value in values)
+    {
+        <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span><span class="pl-c1">%@</span>,<span class="pl-pds">"</span></span>, value);
+    } <span class="pl-c"><span class="pl-c">//</span> prints =&gt; "0,"</span>
+      <span class="pl-c"><span class="pl-c">//</span>           "1,"</span>
+      <span class="pl-c"><span class="pl-c">//</span>           "2,"</span>
+      <span class="pl-c"><span class="pl-c">//</span>           "3,"</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> Object for loop statement. Can be used with any Objective-C object type</span>
+    <span class="pl-k">for</span> (<span class="pl-c1">id</span> item in values) {
+        <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span><span class="pl-c1">%@</span>,<span class="pl-pds">"</span></span>, item);
+    } <span class="pl-c"><span class="pl-c">//</span> prints =&gt; "0,"</span>
+      <span class="pl-c"><span class="pl-c">//</span>           "1,"</span>
+      <span class="pl-c"><span class="pl-c">//</span>           "2,"</span>
+      <span class="pl-c"><span class="pl-c">//</span>           "3,"</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> Try-Catch-Finally statements</span>
+    <span class="pl-k">@try</span>
+    {
+        <span class="pl-c"><span class="pl-c">//</span> Your statements here</span>
+        <span class="pl-k">@throw</span> [<span class="pl-c1">NSException</span> <span class="pl-c1">exceptionWithName:</span><span class="pl-s"><span class="pl-pds">@"</span>FileNotFoundException<span class="pl-pds">"</span></span>
+                            <span class="pl-c1">reason:</span><span class="pl-s"><span class="pl-pds">@"</span>File Not Found on System<span class="pl-pds">"</span></span> <span class="pl-c1">userInfo:</span><span class="pl-c1">nil</span>];
+    } <span class="pl-k">@catch</span> (<span class="pl-c1">NSException</span> * e) <span class="pl-c"><span class="pl-c">//</span> use: @catch (id exceptionName) to catch all objects.</span>
+    {
+        <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span>Exception: <span class="pl-c1">%@</span><span class="pl-pds">"</span></span>, e);
+    } <span class="pl-k">@finally</span>
+    {
+        <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span>Finally. Time to clean up.<span class="pl-pds">"</span></span>);
+    } <span class="pl-c"><span class="pl-c">//</span> prints =&gt; "Exception: File Not Found on System"</span>
+      <span class="pl-c"><span class="pl-c">//</span>           "Finally. Time to clean up."</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> NSError objects are useful for function arguments to populate on user mistakes.</span>
+    <span class="pl-c1">NSError</span> *error = [<span class="pl-c1">NSError</span> <span class="pl-c1">errorWithDomain:</span><span class="pl-s"><span class="pl-pds">@"</span>Invalid email.<span class="pl-pds">"</span></span> <span class="pl-c1">code:</span><span class="pl-c1">4</span> <span class="pl-c1">userInfo:</span><span class="pl-c1">nil</span>];
+
+    <span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+    <span class="pl-c"><span class="pl-c">//</span> Objects</span>
+    <span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> Create an object instance by allocating memory and initializing it</span>
+    <span class="pl-c"><span class="pl-c">//</span> An object is not fully functional until both steps have been completed</span>
+    MyClass *myObject = [[MyClass <span class="pl-c1">alloc</span>] <span class="pl-c1">init</span>];
+
+    <span class="pl-c"><span class="pl-c">//</span> The Objective-C model of object-oriented programming is based on message</span>
+    <span class="pl-c"><span class="pl-c">//</span> passing to object instances</span>
+    <span class="pl-c"><span class="pl-c">//</span> In Objective-C one does not simply call a method; one sends a message</span>
+    [myObject <span class="pl-c1">instanceMethodWithParameter:</span><span class="pl-s"><span class="pl-pds">@"</span>Steve Jobs<span class="pl-pds">"</span></span>];
+
+    <span class="pl-c"><span class="pl-c">//</span> Clean up the memory you used into your program</span>
+    [pool <span class="pl-c1">drain</span>];
+
+    <span class="pl-c"><span class="pl-c">//</span> End of @autoreleasepool</span>
+    }
+
+    <span class="pl-c"><span class="pl-c">//</span> End the program</span>
+    <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+}
+
+<span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> Classes And Functions</span>
+<span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Declare your class in a header file (MyClass.h):</span>
+<span class="pl-c"><span class="pl-c">//</span> Class declaration syntax:</span>
+<span class="pl-c"><span class="pl-c">//</span> @interface ClassName : ParentClassName &lt;ImplementedProtocols&gt;</span>
+<span class="pl-c"><span class="pl-c">//</span> {</span>
+<span class="pl-c"><span class="pl-c">//</span>    type name; &lt;= variable declarations;</span>
+<span class="pl-c"><span class="pl-c">//</span> }</span>
+<span class="pl-c"><span class="pl-c">//</span> @property type name; &lt;= property declarations</span>
+<span class="pl-c"><span class="pl-c">//</span> -/+ (type) Method declarations; &lt;= Method declarations</span>
+<span class="pl-c"><span class="pl-c">//</span> @end</span>
+<span class="pl-k">@interface</span> <span class="pl-en">MyClass</span> : <span class="pl-e">NSObject</span> &lt;MyProtocol&gt; <span class="pl-c"><span class="pl-c">//</span> NSObject is Objective-C's base object class.</span>
+{
+    <span class="pl-c"><span class="pl-c">//</span> Instance variable declarations (can exist in either interface or implementation file)</span>
+    <span class="pl-k">int</span> count; <span class="pl-c"><span class="pl-c">//</span> Protected access by default.</span>
+    <span class="pl-k">@private</span> <span class="pl-c1">id</span> data; <span class="pl-c"><span class="pl-c">//</span> Private access (More convenient to declare in implementation file)</span>
+    <span class="pl-c1">NSString</span> *name;
+}
+<span class="pl-c"><span class="pl-c">//</span> Convenient notation for public access variables to auto generate a setter method</span>
+<span class="pl-c"><span class="pl-c">//</span> By default, setter method name is 'set' followed by @property variable name</span>
+<span class="pl-k">@property</span> <span class="pl-k">int</span> propInt; <span class="pl-c"><span class="pl-c">//</span> Setter method name = 'setPropInt'</span>
+<span class="pl-k">@property</span> (<span class="pl-k">copy</span>) <span class="pl-c1">id</span> copyId; <span class="pl-c"><span class="pl-c">//</span> (copy) =&gt; Copy the object during assignment</span>
+<span class="pl-c"><span class="pl-c">//</span> (readonly) =&gt; Cannot set value outside @interface</span>
+<span class="pl-k">@property</span> (<span class="pl-k">readonly</span>) <span class="pl-c1">NSString</span> *roString; <span class="pl-c"><span class="pl-c">//</span> Use @synthesize in @implementation to create accessor</span>
+<span class="pl-c"><span class="pl-c">//</span> You can customize the getter and setter names instead of using default 'set' name:</span>
+<span class="pl-k">@property</span> (<span class="pl-k">getter</span>=lengthGet, <span class="pl-k">setter</span>=lengthSet:) <span class="pl-k">int</span> length;
+
+<span class="pl-c"><span class="pl-c">//</span> Methods</span>
++/- (<span class="pl-k">return</span> type)<span class="pl-en">methodSignature</span><span class="pl-en">:</span>(Parameter Type *)<span class="pl-smi">parameterName</span>;
+
+<span class="pl-c"><span class="pl-c">//</span> + for class methods:</span>
++ (<span class="pl-c1">NSString</span> *)<span class="pl-en">classMethod</span>;
++ (MyClass *)<span class="pl-en">myClassFromHeight</span><span class="pl-en">:</span>(<span class="pl-c1">NSNumber</span> *)<span class="pl-smi">defaultHeight</span>;
+
+<span class="pl-c"><span class="pl-c">//</span> - for instance methods:</span>
+- (<span class="pl-c1">NSString</span> *)<span class="pl-en">instanceMethodWithParameter</span><span class="pl-en">:</span>(<span class="pl-c1">NSString</span> *)<span class="pl-smi">string</span>;
+- (<span class="pl-c1">NSNumber</span> *)<span class="pl-en">methodAParameterAsString</span><span class="pl-en">:</span>(<span class="pl-c1">NSString</span>*)<span class="pl-smi">string</span> <span class="pl-en">andAParameterAsNumber</span><span class="pl-en">:</span>(<span class="pl-c1">NSNumber</span> *)<span class="pl-smi">number</span>;
+
+<span class="pl-c"><span class="pl-c">//</span> Constructor methods with arguments:</span>
+- (<span class="pl-c1">id</span>)<span class="pl-en">initWithDistance</span><span class="pl-en">:</span>(<span class="pl-k">int</span>)<span class="pl-smi">defaultDistance</span>;
+<span class="pl-c"><span class="pl-c">//</span> Objective-C method names are very descriptive. Always name methods according to their arguments</span>
+
+<span class="pl-k">@end</span> <span class="pl-c"><span class="pl-c">//</span> States the end of the interface</span>
+
+
+<span class="pl-c"><span class="pl-c">//</span> To access public variables from the implementation file, @property generates a setter method</span>
+<span class="pl-c"><span class="pl-c">//</span> automatically. Method name is 'set' followed by @property variable name:</span>
+MyClass *myClass = [[MyClass <span class="pl-c1">alloc</span>] <span class="pl-c1">init</span>]; <span class="pl-c"><span class="pl-c">//</span> create MyClass object instance</span>
+[myClass <span class="pl-c1">setCount:</span><span class="pl-c1">10</span>];
+<span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span><span class="pl-c1">%d</span><span class="pl-pds">"</span></span>, [myClass <span class="pl-c1">count</span>]); <span class="pl-c"><span class="pl-c">//</span> prints =&gt; 10</span>
+<span class="pl-c"><span class="pl-c">//</span> Or using the custom getter and setter method defined in @interface:</span>
+[myClass <span class="pl-c1">lengthSet:</span><span class="pl-c1">32</span>];
+<span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span><span class="pl-c1">%i</span><span class="pl-pds">"</span></span>, [myClass <span class="pl-c1">lengthGet</span>]); <span class="pl-c"><span class="pl-c">//</span> prints =&gt; 32</span>
+<span class="pl-c"><span class="pl-c">//</span> For convenience, you may use dot notation to set and access object instance variables:</span>
+myClass.count = <span class="pl-c1">45</span>;
+<span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span><span class="pl-c1">%i</span><span class="pl-pds">"</span></span>, myClass.count); <span class="pl-c"><span class="pl-c">//</span> prints =&gt; 45</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Call class methods:</span>
+<span class="pl-c1">NSString</span> *classMethodString = [MyClass <span class="pl-c1">classMethod</span>];
+MyClass *classFromName = [MyClass <span class="pl-c1">myClassFromName:</span><span class="pl-s"><span class="pl-pds">@"</span>Hello<span class="pl-pds">"</span></span>];
+
+<span class="pl-c"><span class="pl-c">//</span> Call instance methods:</span>
+MyClass *myClass = [[MyClass <span class="pl-c1">alloc</span>] <span class="pl-c1">init</span>]; <span class="pl-c"><span class="pl-c">//</span> Create MyClass object instance</span>
+<span class="pl-c1">NSString</span> *stringFromInstanceMethod = [myClass <span class="pl-c1">instanceMethodWithParameter:</span><span class="pl-s"><span class="pl-pds">@"</span>Hello<span class="pl-pds">"</span></span>];
+
+<span class="pl-c"><span class="pl-c">//</span> Selectors</span>
+<span class="pl-c"><span class="pl-c">//</span> Way to dynamically represent methods. Used to call methods of a class, pass methods</span>
+<span class="pl-c"><span class="pl-c">//</span> through functions to tell other classes they should call it, and to save methods</span>
+<span class="pl-c"><span class="pl-c">//</span> as a variable</span>
+<span class="pl-c"><span class="pl-c">//</span> SEL is the data type. @selector() returns a selector from method name provided</span>
+<span class="pl-c"><span class="pl-c">//</span> methodAParameterAsString:andAParameterAsNumber: is method name for method in MyClass</span>
+<span class="pl-c1">SEL</span> selectorVar = <span class="pl-k">@selector</span>(<span class="pl-c1">methodAParameterAsString:andAParameterAsNumber:</span>);
+<span class="pl-k">if</span> ([myClass <span class="pl-c1">respondsToSelector:</span>selectorVar]) { <span class="pl-c"><span class="pl-c">//</span> Checks if class contains method</span>
+    <span class="pl-c"><span class="pl-c">//</span> Must put all method arguments into one object to send to performSelector function</span>
+    <span class="pl-c1">NSArray</span> *arguments = [<span class="pl-c1">NSArray</span> <span class="pl-c1">arrayWithObjects:</span><span class="pl-s"><span class="pl-pds">@"</span>Hello<span class="pl-pds">"</span></span>, @<span class="pl-c1">4</span>, <span class="pl-c1">nil</span>];
+    [myClass <span class="pl-c1">performSelector:</span>selectorVar <span class="pl-c1">withObject:</span>arguments]; <span class="pl-c"><span class="pl-c">//</span> Calls the method</span>
+} <span class="pl-k">else</span> {
+    <span class="pl-c"><span class="pl-c">//</span> NSStringFromSelector() returns a NSString of the method name of a given selector</span>
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span>MyClass does not have method: <span class="pl-c1">%@</span><span class="pl-pds">"</span></span>, <span class="pl-c1">NSStringFromSelector</span>(selectedVar));
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Implement the methods in an implementation (MyClass.m) file:</span>
+<span class="pl-k">@implementation</span> <span class="pl-en">MyClass</span> {
+    <span class="pl-k">long</span> distance; <span class="pl-c"><span class="pl-c">//</span> Private access instance variable</span>
+    <span class="pl-c1">NSNumber</span> height;
+}
+
+<span class="pl-c"><span class="pl-c">//</span> To access a public variable from the interface file, use '_' followed by variable name:</span>
+_count = <span class="pl-c1">5</span>; <span class="pl-c"><span class="pl-c">//</span> References "int count" from MyClass interface</span>
+<span class="pl-c"><span class="pl-c">//</span> Access variables defined in implementation file:</span>
+distance = <span class="pl-c1">18</span>; <span class="pl-c"><span class="pl-c">//</span> References "long distance" from MyClass implementation</span>
+<span class="pl-c"><span class="pl-c">//</span> To use @property variable in implementation, use @synthesize to create accessor variable:</span>
+<span class="pl-k">@synthesize</span> roString = _roString; <span class="pl-c"><span class="pl-c">//</span> _roString available now in @implementation</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Called before calling any class methods or instantiating any objects</span>
++ (<span class="pl-k">void</span>)<span class="pl-en">initialize</span>
+{
+    <span class="pl-k">if</span> (self == [MyClass <span class="pl-c1">class</span>]) {
+        distance = <span class="pl-c1">0</span>;
+    }
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Counterpart to initialize method. Called when an object's reference count is zero</span>
+- (<span class="pl-k">void</span>)<span class="pl-en">dealloc</span>
+{
+    [height <span class="pl-c1">release</span>]; <span class="pl-c"><span class="pl-c">//</span> If not using ARC, make sure to release class variable objects</span>
+    [<span class="pl-c1">super</span> <span class="pl-c1">dealloc</span>];  <span class="pl-c"><span class="pl-c">//</span> and call parent class dealloc</span>
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Constructors are a way of creating instances of a class</span>
+<span class="pl-c"><span class="pl-c">//</span> This is a default constructor which is called when the object is initialized.</span>
+- (<span class="pl-c1">id</span>)<span class="pl-en">init</span>
+{
+    <span class="pl-k">if</span> ((self = [<span class="pl-c1">super</span> <span class="pl-c1">init</span>])) <span class="pl-c"><span class="pl-c">//</span> 'super' used to access methods from parent class</span>
+    {
+        self.<span class="pl-smi">count</span> = <span class="pl-c1">1</span>; <span class="pl-c"><span class="pl-c">//</span> 'self' used for object to call itself</span>
+    }
+    <span class="pl-k">return</span> self;
+}
+<span class="pl-c"><span class="pl-c">//</span> Can create constructors that contain arguments:</span>
+- (<span class="pl-c1">id</span>)<span class="pl-en">initWithDistance</span><span class="pl-en">:</span>(<span class="pl-k">int</span>)<span class="pl-smi">defaultDistance</span>
+{
+    distance = defaultDistance;
+    <span class="pl-k">return</span> self;
+}
+
++ (<span class="pl-c1">NSString</span> *)<span class="pl-en">classMethod</span>
+{
+    <span class="pl-k">return</span> <span class="pl-s"><span class="pl-pds">@"</span>Some string<span class="pl-pds">"</span></span>;
+}
+
++ (MyClass *)<span class="pl-en">myClassFromHeight</span><span class="pl-en">:</span>(<span class="pl-c1">NSNumber</span> *)<span class="pl-smi">defaultHeight</span>
+{
+    height = defaultHeight;
+    <span class="pl-k">return</span> [[<span class="pl-c1">self</span> <span class="pl-c1">alloc</span>] <span class="pl-c1">init</span>];
+}
+
+- (<span class="pl-c1">NSString</span> *)<span class="pl-en">instanceMethodWithParameter</span><span class="pl-en">:</span>(<span class="pl-c1">NSString</span> *)<span class="pl-smi">string</span>
+{
+    <span class="pl-k">return</span> <span class="pl-s"><span class="pl-pds">@"</span>New string<span class="pl-pds">"</span></span>;
+}
+
+- (<span class="pl-c1">NSNumber</span> *)<span class="pl-en">methodAParameterAsString</span><span class="pl-en">:</span>(<span class="pl-c1">NSString</span>*)<span class="pl-smi">string</span> <span class="pl-en">andAParameterAsNumber</span><span class="pl-en">:</span>(<span class="pl-c1">NSNumber</span> *)<span class="pl-smi">number</span>
+{
+    <span class="pl-k">return</span> @<span class="pl-c1">42</span>;
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Objective-C does not have private method declarations, but you can simulate them.</span>
+<span class="pl-c"><span class="pl-c">//</span> To simulate a private method, create the method in the @implementation but not in the @interface.</span>
+- (<span class="pl-c1">NSNumber</span> *)<span class="pl-en">secretPrivateMethod</span> {
+    <span class="pl-k">return</span> @<span class="pl-c1">72</span>;
+}
+[<span class="pl-c1">self</span> <span class="pl-c1">secretPrivateMethod</span>]; <span class="pl-c"><span class="pl-c">//</span> Calls private method</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Methods declared into MyProtocol</span>
+- (<span class="pl-k">void</span>)<span class="pl-en">myProtocolMethod</span>
+{
+    <span class="pl-c"><span class="pl-c">//</span> statements</span>
+}
+
+<span class="pl-k">@end</span> <span class="pl-c"><span class="pl-c">//</span> States the end of the implementation</span>
+
+<span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> Categories</span>
+<span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> A category is a group of methods designed to extend a class. They allow you to add new methods</span>
+<span class="pl-c"><span class="pl-c">//</span> to an existing class for organizational purposes. This is not to be mistaken with subclasses.</span>
+<span class="pl-c"><span class="pl-c">//</span> Subclasses are meant to CHANGE functionality of an object while categories instead ADD</span>
+<span class="pl-c"><span class="pl-c">//</span> functionality to an object.</span>
+<span class="pl-c"><span class="pl-c">//</span> Categories allow you to:</span>
+<span class="pl-c"><span class="pl-c">//</span> -- Add methods to an existing class for organizational purposes.</span>
+<span class="pl-c"><span class="pl-c">//</span> -- Allow you to extend Objective-C object classes (ex: NSString) to add your own methods.</span>
+<span class="pl-c"><span class="pl-c">//</span> -- Add ability to create protected and private methods to classes.</span>
+<span class="pl-c"><span class="pl-c">//</span> NOTE: Do not override methods of the base class in a category even though you have the ability</span>
+<span class="pl-c"><span class="pl-c">//</span> to. Overriding methods may cause compiler errors later between different categories and it</span>
+<span class="pl-c"><span class="pl-c">//</span> ruins the purpose of categories to only ADD functionality. Subclass instead to override methods.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Here is a simple Car base class.</span>
+<span class="pl-k">@interface</span> <span class="pl-en">Car</span> : <span class="pl-e">NSObject</span>
+
+<span class="pl-k">@property</span> <span class="pl-c1">NSString</span> *make;
+<span class="pl-k">@property</span> <span class="pl-c1">NSString</span> *color;
+
+- (<span class="pl-k">void</span>)<span class="pl-en">turnOn</span>;
+- (<span class="pl-k">void</span>)<span class="pl-en">accelerate</span>;
+
+<span class="pl-k">@end</span>
+
+<span class="pl-c"><span class="pl-c">//</span> And the simple Car base class implementation:</span>
+#<span class="pl-k">import</span> <span class="pl-s"><span class="pl-pds">"</span>Car.h<span class="pl-pds">"</span></span>
+
+<span class="pl-k">@implementation</span> <span class="pl-en">Car</span>
+
+<span class="pl-k">@synthesize</span> make = _make;
+<span class="pl-k">@synthesize</span> color = _color;
+
+- (<span class="pl-k">void</span>)<span class="pl-en">turnOn</span> {
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span>Car is on.<span class="pl-pds">"</span></span>);
+}
+- (<span class="pl-k">void</span>)<span class="pl-en">accelerate</span> {
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span>Accelerating.<span class="pl-pds">"</span></span>);
+}
+
+<span class="pl-k">@end</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Now, if we wanted to create a Truck object, we would instead create a subclass of Car as it would</span>
+<span class="pl-c"><span class="pl-c">//</span> be changing the functionality of the Car to behave like a truck. But lets say we want to just add</span>
+<span class="pl-c"><span class="pl-c">//</span> functionality to this existing Car. A good example would be to clean the car. So we would create</span>
+<span class="pl-c"><span class="pl-c">//</span> a category to add these cleaning methods:</span>
+<span class="pl-c"><span class="pl-c">//</span> @interface filename: Car+Clean.h (BaseClassName+CategoryName.h)</span>
+#<span class="pl-k">import</span> <span class="pl-s"><span class="pl-pds">"</span>Car.h<span class="pl-pds">"</span></span> <span class="pl-c"><span class="pl-c">//</span> Make sure to import base class to extend.</span>
+
+<span class="pl-k">@interface</span> <span class="pl-en">Car</span> (Clean) <span class="pl-c"><span class="pl-c">//</span> The category name is inside () following the name of the base class.</span>
+
+- (<span class="pl-k">void</span>)<span class="pl-en">washWindows</span>; <span class="pl-c"><span class="pl-c">//</span> Names of the new methods we are adding to our Car object.</span>
+- (<span class="pl-k">void</span>)<span class="pl-en">wax</span>;
+
+<span class="pl-k">@end</span>
+
+<span class="pl-c"><span class="pl-c">//</span> @implementation filename: Car+Clean.m (BaseClassName+CategoryName.m)</span>
+#<span class="pl-k">import</span> <span class="pl-s"><span class="pl-pds">"</span>Car+Clean.h<span class="pl-pds">"</span></span> <span class="pl-c"><span class="pl-c">//</span> Import the Clean category's @interface file.</span>
+
+<span class="pl-k">@implementation</span> <span class="pl-en">Car</span> (Clean)
+
+- (<span class="pl-k">void</span>)<span class="pl-en">washWindows</span> {
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span>Windows washed.<span class="pl-pds">"</span></span>);
+}
+- (<span class="pl-k">void</span>)<span class="pl-en">wax</span> {
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span>Waxed.<span class="pl-pds">"</span></span>);
+}
+
+<span class="pl-k">@end</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Any Car object instance has the ability to use a category. All they need to do is import it:</span>
+#<span class="pl-k">import</span> <span class="pl-s"><span class="pl-pds">"</span>Car+Clean.h<span class="pl-pds">"</span></span> <span class="pl-c"><span class="pl-c">//</span> Import as many different categories as you want to use.</span>
+#<span class="pl-k">import</span> <span class="pl-s"><span class="pl-pds">"</span>Car.h<span class="pl-pds">"</span></span> <span class="pl-c"><span class="pl-c">//</span> Also need to import base class to use it's original functionality.</span>
+
+<span class="pl-k">int</span> <span class="pl-en">main</span> (<span class="pl-k">int</span> argc, <span class="pl-k">const</span> <span class="pl-k">char</span> * argv[]) {
+    @autoreleasepool {
+        Car *mustang = [[Car <span class="pl-c1">alloc</span>] <span class="pl-c1">init</span>];
+        mustang.<span class="pl-smi">color</span> = <span class="pl-s"><span class="pl-pds">@"</span>Red<span class="pl-pds">"</span></span>;
+        mustang.<span class="pl-smi">make</span> = <span class="pl-s"><span class="pl-pds">@"</span>Ford<span class="pl-pds">"</span></span>;
+
+        [mustang <span class="pl-c1">turnOn</span>]; <span class="pl-c"><span class="pl-c">//</span> Use methods from base Car class.</span>
+        [mustang <span class="pl-c1">washWindows</span>]; <span class="pl-c"><span class="pl-c">//</span> Use methods from Car's Clean category.</span>
+    }
+    <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Objective-C does not have protected method declarations but you can simulate them.</span>
+<span class="pl-c"><span class="pl-c">//</span> Create a category containing all of the protected methods, then import it ONLY into the</span>
+<span class="pl-c"><span class="pl-c">//</span> @implementation file of a class belonging to the Car class:</span>
+<span class="pl-k">@interface</span> <span class="pl-en">Car</span> (Protected) <span class="pl-c"><span class="pl-c">//</span> Naming category 'Protected' to remember methods are protected.</span>
+
+- (<span class="pl-k">void</span>)<span class="pl-en">lockCar</span>; <span class="pl-c"><span class="pl-c">//</span> Methods listed here may only be created by Car objects.</span>
+
+<span class="pl-k">@end</span>
+<span class="pl-c"><span class="pl-c">//</span>To use protected methods, import the category, then implement the methods:</span>
+#<span class="pl-k">import</span> <span class="pl-s"><span class="pl-pds">"</span>Car+Protected.h<span class="pl-pds">"</span></span> <span class="pl-c"><span class="pl-c">//</span> Remember, import in the @implementation file only.</span>
+
+<span class="pl-k">@implementation</span> <span class="pl-en">Car</span>
+
+- (<span class="pl-k">void</span>)<span class="pl-en">lockCar</span> {
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span>Car locked.<span class="pl-pds">"</span></span>); <span class="pl-c"><span class="pl-c">//</span> Instances of Car can't use lockCar because it's not in the @interface.</span>
+}
+
+<span class="pl-k">@end</span>
+
+<span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> Extensions</span>
+<span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> Extensions allow you to override public access property attributes and methods of an @interface.</span>
+<span class="pl-c"><span class="pl-c">//</span> @interface filename: Shape.h</span>
+<span class="pl-k">@interface</span> <span class="pl-en">Shape</span> : <span class="pl-e">NSObject</span> <span class="pl-c"><span class="pl-c">//</span> Base Shape class extension overrides below.</span>
+
+<span class="pl-k">@property</span> (<span class="pl-k">readonly</span>) <span class="pl-c1">NSNumber</span> *numOfSides;
+
+- (<span class="pl-k">int</span>)<span class="pl-en">getNumOfSides</span>;
+
+<span class="pl-k">@end</span>
+<span class="pl-c"><span class="pl-c">//</span> You can override numOfSides variable or getNumOfSides method to edit them with an extension:</span>
+<span class="pl-c"><span class="pl-c">//</span> @implementation filename: Shape.m</span>
+#<span class="pl-k">import</span> <span class="pl-s"><span class="pl-pds">"</span>Shape.h<span class="pl-pds">"</span></span>
+<span class="pl-c"><span class="pl-c">//</span> Extensions live in the same file as the class @implementation.</span>
+<span class="pl-k">@interface</span> <span class="pl-en">Shape</span> () <span class="pl-c"><span class="pl-c">//</span> () after base class name declares an extension.</span>
+
+<span class="pl-k">@property</span> (<span class="pl-k">copy</span>) <span class="pl-c1">NSNumber</span> *numOfSides; <span class="pl-c"><span class="pl-c">//</span> Make numOfSides copy instead of readonly.</span>
+-(<span class="pl-c1">NSNumber</span>)<span class="pl-en">getNumOfSides</span>; <span class="pl-c"><span class="pl-c">//</span> Make getNumOfSides return a NSNumber instead of an int.</span>
+-(<span class="pl-k">void</span>)<span class="pl-en">privateMethod</span>; <span class="pl-c"><span class="pl-c">//</span> You can also create new private methods inside of extensions.</span>
+
+<span class="pl-k">@end</span>
+<span class="pl-c"><span class="pl-c">//</span> The main @implementation:</span>
+<span class="pl-k">@implementation</span> <span class="pl-en">Shape</span>
+
+<span class="pl-k">@synthesize</span> numOfSides = _numOfSides;
+
+-(<span class="pl-c1">NSNumber</span>)<span class="pl-en">getNumOfSides</span> { <span class="pl-c"><span class="pl-c">//</span> All statements inside of extension must be in the @implementation.</span>
+    <span class="pl-k">return</span> _numOfSides;
+}
+-(<span class="pl-k">void</span>)<span class="pl-en">privateMethod</span> {
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span>Private method created by extension. Shape instances cannot call me.<span class="pl-pds">"</span></span>);
+}
+
+<span class="pl-k">@end</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Starting in Xcode 7.0, you can create Generic classes,</span>
+<span class="pl-c"><span class="pl-c">//</span> allowing you to provide greater type safety and clarity</span>
+<span class="pl-c"><span class="pl-c">//</span> without writing excessive boilerplate.</span>
+<span class="pl-k">@interface</span> <span class="pl-en">Result</span>&lt;__covariant A&gt; : <span class="pl-c1">NSObject</span>
+
+- (<span class="pl-k">void</span>)<span class="pl-en">handleSuccess</span><span class="pl-en">:</span>(<span class="pl-k">void</span>(^)(A))<span class="pl-en">success</span>
+              <span class="pl-en">failure</span><span class="pl-en">:</span>(<span class="pl-k">void</span>(^)(<span class="pl-c1">NSError</span> *))<span class="pl-en">failure</span>;
+
+<span class="pl-k">@property</span> (<span class="pl-k">nonatomic</span>) A object;
+
+<span class="pl-k">@end</span>
+
+<span class="pl-c"><span class="pl-c">//</span> we can now declare instances of this class like</span>
+Result&lt;<span class="pl-c1">NSNumber</span> *&gt; *result;
+Result&lt;<span class="pl-c1">NSArray</span> *&gt; *result;
+
+<span class="pl-c"><span class="pl-c">//</span> Each of these cases would be equivalent to rewriting Result's interface</span>
+<span class="pl-c"><span class="pl-c">//</span> and substituting the appropriate type for A</span>
+<span class="pl-k">@interface</span> <span class="pl-en">Result</span> : <span class="pl-e">NSObject</span>
+- (<span class="pl-k">void</span>)<span class="pl-en">handleSuccess</span><span class="pl-en">:</span>(<span class="pl-k">void</span>(^)(<span class="pl-c1">NSArray</span> *))<span class="pl-en">success</span>
+              <span class="pl-en">failure</span><span class="pl-en">:</span>(<span class="pl-k">void</span>(^)(<span class="pl-c1">NSError</span> *))<span class="pl-en">failure</span>;
+<span class="pl-k">@property</span> (<span class="pl-k">nonatomic</span>) <span class="pl-c1">NSArray</span> * object;
+<span class="pl-k">@end</span>
+
+<span class="pl-k">@interface</span> <span class="pl-en">Result</span> : <span class="pl-e">NSObject</span>
+- (<span class="pl-k">void</span>)<span class="pl-en">handleSuccess</span><span class="pl-en">:</span>(<span class="pl-k">void</span>(^)(<span class="pl-c1">NSNumber</span> *))<span class="pl-en">success</span>
+              <span class="pl-en">failure</span><span class="pl-en">:</span>(<span class="pl-k">void</span>(^)(<span class="pl-c1">NSError</span> *))<span class="pl-en">failure</span>;
+<span class="pl-k">@property</span> (<span class="pl-k">nonatomic</span>) <span class="pl-c1">NSNumber</span> * object;
+<span class="pl-k">@end</span>
+
+<span class="pl-c"><span class="pl-c">//</span> It should be obvious, however, that writing one</span>
+<span class="pl-c"><span class="pl-c">//</span>  Class to solve a problem is always preferable to writing two</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Note that Clang will not accept generic types in @implementations,</span>
+<span class="pl-c"><span class="pl-c">//</span> so your @implemnation of Result would have to look like this:</span>
+
+<span class="pl-k">@implementation</span> <span class="pl-en">Result</span>
+
+- (<span class="pl-k">void</span>)<span class="pl-en">handleSuccess</span><span class="pl-en">:</span>(<span class="pl-k">void</span> (^)(<span class="pl-c1">id</span>))<span class="pl-en">success</span>
+              <span class="pl-en">failure</span><span class="pl-en">:</span>(<span class="pl-k">void</span> (^)(<span class="pl-c1">NSError</span> *))<span class="pl-en">failure</span> {
+  <span class="pl-c"><span class="pl-c">//</span> Do something</span>
+}
+
+<span class="pl-k">@end</span>
+
+
+<span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> Protocols</span>
+<span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> A protocol declares methods that can be implemented by any class.</span>
+<span class="pl-c"><span class="pl-c">//</span> Protocols are not classes themselves. They simply define an interface</span>
+<span class="pl-c"><span class="pl-c">//</span> that other objects are responsible for implementing.</span>
+<span class="pl-c"><span class="pl-c">//</span> @protocol filename: "CarUtilities.h"</span>
+<span class="pl-k">@protocol</span> <span class="pl-en">CarUtilities</span> &lt;<span class="pl-c1">NSObject</span>&gt; <span class="pl-c"><span class="pl-c">//</span> &lt;NSObject&gt; =&gt; Name of another protocol this protocol includes.</span>
+    <span class="pl-k">@property</span> <span class="pl-c1">BOOL</span> engineOn; <span class="pl-c"><span class="pl-c">//</span> Adopting class must @synthesize all defined @properties and</span>
+    - (<span class="pl-k">void</span>)turnOnEngine; <span class="pl-c"><span class="pl-c">//</span> all defined methods.</span>
+<span class="pl-k">@end</span>
+<span class="pl-c"><span class="pl-c">//</span> Below is an example class implementing the protocol.</span>
+#<span class="pl-k">import</span> <span class="pl-s"><span class="pl-pds">"</span>CarUtilities.h<span class="pl-pds">"</span></span> <span class="pl-c"><span class="pl-c">//</span> Import the @protocol file.</span>
+
+<span class="pl-k">@interface</span> <span class="pl-en">Car</span> : <span class="pl-e">NSObject</span> &lt;CarUtilities&gt; <span class="pl-c"><span class="pl-c">//</span> Name of protocol goes inside &lt;&gt;</span>
+    <span class="pl-c"><span class="pl-c">//</span> You don't need the @property or method names here for CarUtilities. Only @implementation does.</span>
+- (<span class="pl-k">void</span>)<span class="pl-en">turnOnEngineWithUtilities</span><span class="pl-en">:</span>(<span class="pl-k">id</span> &lt;CarUtilities&gt;)<span class="pl-smi">car</span>; <span class="pl-c"><span class="pl-c">//</span> You can use protocols as data too.</span>
+<span class="pl-k">@end</span>
+<span class="pl-c"><span class="pl-c">//</span> The @implementation needs to implement the @properties and methods for the protocol.</span>
+<span class="pl-k">@implementation</span> <span class="pl-en">Car</span> : <span class="pl-e">NSObject</span> &lt;CarUtilities&gt;
+
+<span class="pl-k">@synthesize</span> engineOn = _engineOn; <span class="pl-c"><span class="pl-c">//</span> Create a @synthesize statement for the engineOn @property.</span>
+
+- (<span class="pl-k">void</span>)<span class="pl-en">turnOnEngine</span> { <span class="pl-c"><span class="pl-c">//</span> Implement turnOnEngine however you would like. Protocols do not define</span>
+    _engineOn = <span class="pl-c1">YES</span>; <span class="pl-c"><span class="pl-c">//</span> how you implement a method, it just requires that you do implement it.</span>
+}
+<span class="pl-c"><span class="pl-c">//</span> You may use a protocol as data as you know what methods and variables it has implemented.</span>
+- (<span class="pl-k">void</span>)<span class="pl-en">turnOnEngineWithCarUtilities</span><span class="pl-en">:</span>(<span class="pl-k">id</span> &lt;CarUtilities&gt;)<span class="pl-smi">objectOfSomeKind</span> {
+    [objectOfSomeKind <span class="pl-c1">engineOn</span>]; <span class="pl-c"><span class="pl-c">//</span> You have access to object variables</span>
+    [objectOfSomeKind <span class="pl-c1">turnOnEngine</span>]; <span class="pl-c"><span class="pl-c">//</span> and the methods inside.</span>
+    [objectOfSomeKind <span class="pl-c1">engineOn</span>]; <span class="pl-c"><span class="pl-c">//</span> May or may not be YES. Class implements it however it wants.</span>
+}
+
+<span class="pl-k">@end</span>
+<span class="pl-c"><span class="pl-c">//</span> Instances of Car now have access to the protocol.</span>
+Car *carInstance = [[Car <span class="pl-c1">alloc</span>] <span class="pl-c1">init</span>];
+[carInstance <span class="pl-c1">setEngineOn:</span><span class="pl-c1">NO</span>];
+[carInstance <span class="pl-c1">turnOnEngine</span>];
+<span class="pl-k">if</span> ([carInstance <span class="pl-c1">engineOn</span>]) {
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span>Car engine is on.<span class="pl-pds">"</span></span>); <span class="pl-c"><span class="pl-c">//</span> prints =&gt; "Car engine is on."</span>
+}
+<span class="pl-c"><span class="pl-c">//</span> Make sure to check if an object of type 'id' implements a protocol before calling protocol methods:</span>
+<span class="pl-k">if</span> ([myClass <span class="pl-c1">conformsToProtocol:</span><span class="pl-k">@protocol</span>(CarUtilities)]) {
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span>This does not run as the MyClass class does not implement the CarUtilities protocol.<span class="pl-pds">"</span></span>);
+} <span class="pl-k">else</span> <span class="pl-k">if</span> ([carInstance <span class="pl-c1">conformsToProtocol:</span><span class="pl-k">@protocol</span>(CarUtilities)]) {
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span>This does run as the Car class implements the CarUtilities protocol.<span class="pl-pds">"</span></span>);
+}
+<span class="pl-c"><span class="pl-c">//</span> Categories may implement protocols as well: @interface Car (CarCategory) &lt;CarUtilities&gt;</span>
+<span class="pl-c"><span class="pl-c">//</span> You may implement many protocols: @interface Car : NSObject &lt;CarUtilities, CarCleaning&gt;</span>
+<span class="pl-c"><span class="pl-c">//</span> NOTE: If two or more protocols rely on each other, make sure to forward-declare them:</span>
+#<span class="pl-k">import</span> <span class="pl-s"><span class="pl-pds">"</span>Brother.h<span class="pl-pds">"</span></span>
+
+<span class="pl-k">@protocol</span> Brother; <span class="pl-c"><span class="pl-c">//</span> Forward-declare statement. Without it, compiler will throw error.</span>
+
+<span class="pl-k">@protocol</span> <span class="pl-en">Sister</span> &lt;<span class="pl-c1">NSObject</span>&gt;
+
+- (<span class="pl-k">void</span>)<span class="pl-en">beNiceToBrother</span><span class="pl-en">:</span>(<span class="pl-k">id</span> &lt;Brother&gt;)<span class="pl-smi">brother</span>;
+
+<span class="pl-k">@end</span>
+
+<span class="pl-c"><span class="pl-c">//</span> See the problem is that Sister relies on Brother, and Brother relies on Sister.</span>
+#<span class="pl-k">import</span> <span class="pl-s"><span class="pl-pds">"</span>Sister.h<span class="pl-pds">"</span></span>
+
+<span class="pl-k">@protocol</span> Sister; <span class="pl-c"><span class="pl-c">//</span> These lines stop the recursion, resolving the issue.</span>
+
+<span class="pl-k">@protocol</span> <span class="pl-en">Brother</span> &lt;<span class="pl-c1">NSObject</span>&gt;
+
+- (<span class="pl-k">void</span>)<span class="pl-en">beNiceToSister</span><span class="pl-en">:</span>(<span class="pl-k">id</span> &lt;Sister&gt;)<span class="pl-smi">sister</span>;
+
+<span class="pl-k">@end</span>
+
+
+<span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> Blocks</span>
+<span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> Blocks are statements of code, just like a function, that are able to be used as data.</span>
+<span class="pl-c"><span class="pl-c">//</span> Below is a simple block with an integer argument that returns the argument plus 4.</span>
+^(<span class="pl-k">int</span> n) {
+    <span class="pl-k">return</span> n + <span class="pl-c1">4</span>;
+}
+<span class="pl-k">int</span> (^addUp)(<span class="pl-k">int</span> n); <span class="pl-c"><span class="pl-c">//</span> Declare a variable to store a block.</span>
+<span class="pl-k">void</span> (^noParameterBlockVar)(<span class="pl-k">void</span>); <span class="pl-c"><span class="pl-c">//</span> Example variable declaration of block with no arguments.</span>
+<span class="pl-c"><span class="pl-c">//</span> Blocks have access to variables in the same scope. But the variables are readonly and the</span>
+<span class="pl-c"><span class="pl-c">//</span> value passed to the block is the value of the variable when the block is created.</span>
+<span class="pl-k">int</span> outsideVar = <span class="pl-c1">17</span>; <span class="pl-c"><span class="pl-c">//</span> If we edit outsideVar after declaring addUp, outsideVar is STILL 17.</span>
+__block <span class="pl-k">long</span> mutableVar = <span class="pl-c1">3</span>; <span class="pl-c"><span class="pl-c">//</span> __block makes variables writable to blocks, unlike outsideVar.</span>
+addUp = ^(<span class="pl-k">int</span> n) { <span class="pl-c"><span class="pl-c">//</span> Remove (int n) to have a block that doesn't take in any parameters.</span>
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span>You may have as many lines in a block as you would like.<span class="pl-pds">"</span></span>);
+    <span class="pl-c1">NSSet</span> *blockSet; <span class="pl-c"><span class="pl-c">//</span> Also, you can declare local variables.</span>
+    mutableVar = <span class="pl-c1">32</span>; <span class="pl-c"><span class="pl-c">//</span> Assigning new value to __block variable.</span>
+    <span class="pl-k">return</span> n + outsideVar; <span class="pl-c"><span class="pl-c">//</span> Return statements are optional.</span>
+}
+<span class="pl-k">int</span> addUp = addUp(<span class="pl-c1">10</span> + <span class="pl-c1">16</span>); <span class="pl-c"><span class="pl-c">//</span> Calls block code with arguments.</span>
+<span class="pl-c"><span class="pl-c">//</span> Blocks are often used as arguments to functions to be called later, or for callbacks.</span>
+<span class="pl-k">@implementation</span> <span class="pl-en">BlockExample</span> : <span class="pl-e">NSObject</span>
+
+ - (<span class="pl-k">void</span>)runBlock:(<span class="pl-k">void</span> (^)(<span class="pl-c1">NSString</span>))block {
+    <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span>Block argument returns nothing and takes in a NSString object.<span class="pl-pds">"</span></span>);
+    <span class="pl-c1">block</span>(<span class="pl-s"><span class="pl-pds">@"</span>Argument given to block to execute.<span class="pl-pds">"</span></span>); <span class="pl-c"><span class="pl-c">//</span> Calling block.</span>
+ }
+
+ <span class="pl-k">@end</span>
+
+
+<span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> Memory Management</span>
+<span class="pl-c"><span class="pl-c">//</span>/////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">For each object used in an application, memory must be allocated for that object. When the application</span>
+<span class="pl-c">is done using that object, memory must be deallocated to ensure application efficiency.</span>
+<span class="pl-c">Objective-C does not use garbage collection and instead uses reference counting. As long as</span>
+<span class="pl-c">there is at least one reference to an object (also called "owning" an object), then the object</span>
+<span class="pl-c">will be available to use (known as "ownership").</span>
+<span class="pl-c"></span>
+<span class="pl-c">When an instance owns an object, its reference counter is increments by one. When the</span>
+<span class="pl-c">object is released, the reference counter decrements by one. When reference count is zero,</span>
+<span class="pl-c">the object is removed from memory.</span>
+<span class="pl-c"></span>
+<span class="pl-c">With all object interactions, follow the pattern of:</span>
+<span class="pl-c">(1) create the object, (2) use the object, (3) then free the object from memory.</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+
+MyClass *classVar = [MyClass <span class="pl-c1">alloc</span>]; <span class="pl-c"><span class="pl-c">//</span> 'alloc' sets classVar's reference count to one. Returns pointer to object</span>
+[classVar <span class="pl-c1">release</span>]; <span class="pl-c"><span class="pl-c">//</span> Decrements classVar's reference count</span>
+<span class="pl-c"><span class="pl-c">//</span> 'retain' claims ownership of existing object instance and increments reference count. Returns pointer to object</span>
+MyClass *newVar = [classVar <span class="pl-c1">retain</span>]; <span class="pl-c"><span class="pl-c">//</span> If classVar is released, object is still in memory because newVar is owner</span>
+[classVar <span class="pl-c1">autorelease</span>]; <span class="pl-c"><span class="pl-c">//</span> Removes ownership of object at end of @autoreleasepool block. Returns pointer to object</span>
+
+<span class="pl-c"><span class="pl-c">//</span> @property can use 'retain' and 'assign' as well for small convenient definitions</span>
+@property (retain) MyClass *instance; <span class="pl-c"><span class="pl-c">//</span> Release old value and retain a new one (strong reference)</span>
+@property (assign) <span class="pl-c1">NSSet</span> *set; <span class="pl-c"><span class="pl-c">//</span> Pointer to new value without retaining/releasing old (weak reference)</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Automatic Reference Counting (ARC)</span>
+<span class="pl-c"><span class="pl-c">//</span> Because memory management can be a pain, Xcode 4.2 and iOS 4 introduced Automatic Reference Counting (ARC).</span>
+<span class="pl-c"><span class="pl-c">//</span> ARC is a compiler feature that inserts retain, release, and autorelease automatically for you, so when using ARC,</span>
+<span class="pl-c"><span class="pl-c">//</span> you must not use retain, release, or autorelease</span>
+MyClass *arcMyClass = [[MyClass <span class="pl-c1">alloc</span>] <span class="pl-c1">init</span>];
+<span class="pl-c"><span class="pl-c">//</span> ... code using arcMyClass</span>
+<span class="pl-c"><span class="pl-c">//</span> Without ARC, you will need to call: [arcMyClass release] after you're done using arcMyClass. But with ARC,</span>
+<span class="pl-c"><span class="pl-c">//</span> there is no need. It will insert this release statement for you</span>
+
+<span class="pl-c"><span class="pl-c">//</span> As for the 'assign' and 'retain' @property attributes, with ARC you use 'weak' and 'strong'</span>
+@property (weak) MyClass *weakVar; <span class="pl-c"><span class="pl-c">//</span> 'weak' does not take ownership of object. If original instance's reference count</span>
+<span class="pl-c"><span class="pl-c">//</span> is set to zero, weakVar will automatically receive value of nil to avoid application crashing</span>
+@property (strong) MyClass *strongVar; <span class="pl-c"><span class="pl-c">//</span> 'strong' takes ownership of object. Ensures object will stay in memory to use</span>
+
+<span class="pl-c"><span class="pl-c">//</span> For regular variables (not @property declared variables), use the following:</span>
+__strong <span class="pl-c1">NSString</span> *strongString; <span class="pl-c"><span class="pl-c">//</span> Default. Variable is retained in memory until it leaves it's scope</span>
+__weak <span class="pl-c1">NSSet</span> *weakSet; <span class="pl-c"><span class="pl-c">//</span> Weak reference to existing object. When existing object is released, weakSet is set to nil</span>
+__unsafe_unretained <span class="pl-c1">NSArray</span> *unsafeArray; <span class="pl-c"><span class="pl-c">//</span> Like __weak, but unsafeArray not set to nil when existing object is released</span>
+</pre></div>
+<h2>Further Reading</h2>
+<p><a href="http://en.wikipedia.org/wiki/Objective-C" rel="nofollow">Wikipedia Objective-C</a></p>
+<p><a href="https://developer.apple.com/library/ios/documentation/cocoa/conceptual/ProgrammingWithObjectiveC/ProgrammingWithObjectiveC.pdf" rel="nofollow">Programming with Objective-C. Apple PDF book</a></p>
+<p><a href="https://developer.apple.com/library/ios/documentation/General/Conceptual/DevPedia-CocoaCore/ObjectiveC.html" rel="nofollow">Programming with Objective-C for iOS</a></p>
+<p><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ProgrammingWithObjectiveC/Introduction/Introduction.html" rel="nofollow">Programming with Objective-C for Mac OSX</a></p>
+<p><a href="http://www.raywenderlich.com/5600/ios-for-high-school-students-getting-started" rel="nofollow">iOS For High School Students: Getting Started</a></p>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Eugene Yagrushkin", "www.about.me/yagrushkin"]
+- ["Yannick Loriot", "https://github.com/YannickL"]
+- ["Levi Bostian", "https://github.com/levibostian"]
+- ["Clayton Walker", "https://github.com/cwalk"]
+- ["Fernando Valverde", "http://visualcosita.xyz"]
+</code></pre>

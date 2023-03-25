@@ -1,0 +1,744 @@
+<h1>DirectX 9</h1>
+<p><strong>Microsoft DirectX</strong> is a collection of application programming interfaces (APIs) for handling tasks related to<br>
+multimedia, especially game programming and video, on Microsoft platforms. Originally, the names of these APIs<br>
+all began with Direct, such as Direct3D, DirectDraw, DirectMusic, DirectPlay, DirectSound, and so forth. [...]<br>
+Direct3D (the 3D graphics API within DirectX) is widely used in the development of video games for Microsoft<br>
+Windows and the Xbox line of consoles.<sup>[1]</sup></p>
+<p>In this tutorial we will be focusing on DirectX 9, which is not as low-level as it's successors, which are aimed at programmers very familiar with how graphics hardware works. It makes a great starting point for learning Direct3D. In this tutorial I will be using the Win32-API for window handling and the DirectX 2010 SDK.</p>
+<h2>Window creation</h2>
+<div class="highlight highlight-source-c++"><pre class="notranslate">#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>Windows.h<span class="pl-pds">&gt;</span></span>
+
+<span class="pl-k">bool</span> _running{ <span class="pl-c1">false</span> };
+
+LRESULT CALLBACK <span class="pl-en">WndProc</span>(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+    <span class="pl-c"><span class="pl-c">//</span> Handle incoming message.</span>
+    <span class="pl-k">switch</span> (msg) {
+        <span class="pl-c"><span class="pl-c">//</span> Set running to false if the user tries to close the window.</span>
+        <span class="pl-k">case</span> WM_DESTROY:
+            _running = <span class="pl-c1">false</span>;
+            <span class="pl-c1">PostQuitMessage</span>(<span class="pl-c1">0</span>);
+            <span class="pl-k">break</span>;
+    }
+    <span class="pl-c"><span class="pl-c">//</span> Return the handled event.</span>
+    <span class="pl-k">return</span> <span class="pl-c1">DefWindowProc</span>(hWnd, msg, wParam, lParam);
+}
+
+<span class="pl-k">int</span> WINAPI <span class="pl-en">WinMain</span>(HINSTANCE hInstance, HINSTANCE hPrevInstance,
+                   LPSTR lpCmdLine, <span class="pl-k">int</span> nCmdShow) {
+    <span class="pl-c"><span class="pl-c">//</span> Set window properties we want to use.</span>
+    WNDCLASSEX wndEx{ };
+    wndEx.<span class="pl-smi">cbSize</span>        = <span class="pl-k">sizeof</span>(WNDCLASSEX);        <span class="pl-c"><span class="pl-c">//</span> structure size</span>
+    wndEx.<span class="pl-smi">style</span>         = CS_VREDRAW | CS_HREDRAW;   <span class="pl-c"><span class="pl-c">//</span> class styles</span>
+    wndEx.<span class="pl-smi">lpfnWndProc</span>   = WndProc;                   <span class="pl-c"><span class="pl-c">//</span> window procedure</span>
+    wndEx.<span class="pl-smi">cbClsExtra</span>    = <span class="pl-c1">0</span>;                         <span class="pl-c"><span class="pl-c">//</span> extra memory (struct)</span>
+    wndEx.<span class="pl-smi">cbWndExtra</span>    = <span class="pl-c1">0</span>;                         <span class="pl-c"><span class="pl-c">//</span> extra memory (window)</span>
+    wndEx.<span class="pl-smi">hInstance</span>     = hInstance;                 <span class="pl-c"><span class="pl-c">//</span> module instance</span>
+    wndEx.<span class="pl-smi">hIcon</span>         = <span class="pl-c1">LoadIcon</span>(<span class="pl-c1">nullptr</span>, IDI_APPLICATION); <span class="pl-c"><span class="pl-c">//</span> icon</span>
+    wndEx.<span class="pl-smi">hCursor</span>       = <span class="pl-c1">LoadCursor</span>(<span class="pl-c1">nullptr</span>, IDC_ARROW);     <span class="pl-c"><span class="pl-c">//</span> cursor</span>
+    wndEx.<span class="pl-smi">hbrBackground</span> = (HBRUSH) COLOR_WINDOW;     <span class="pl-c"><span class="pl-c">//</span> background color</span>
+    wndEx.<span class="pl-smi">lpszMenuName</span>  = <span class="pl-c1">nullptr</span>;                   <span class="pl-c"><span class="pl-c">//</span> menu name</span>
+    wndEx.<span class="pl-smi">lpszClassName</span> = <span class="pl-s"><span class="pl-pds">"</span>DirectXClass<span class="pl-pds">"</span></span>;            <span class="pl-c"><span class="pl-c">//</span> register class name</span>
+    wndEx.<span class="pl-smi">hIconSm</span>       = <span class="pl-c1">nullptr</span>;                   <span class="pl-c"><span class="pl-c">//</span> small icon (taskbar)</span>
+    <span class="pl-c"><span class="pl-c">//</span> Register created class for window creation.</span>
+    <span class="pl-c1">RegisterClassEx</span>(&amp;wndEx);
+    <span class="pl-c"><span class="pl-c">//</span> Create a new window handle.</span>
+    HWND hWnd{ <span class="pl-c1">nullptr</span> };
+    <span class="pl-c"><span class="pl-c">//</span> Create a new window handle using the registered class.</span>
+    hWnd = <span class="pl-c1">CreateWindow</span>(<span class="pl-s"><span class="pl-pds">"</span>DirectXClass<span class="pl-pds">"</span></span>,      <span class="pl-c"><span class="pl-c">//</span> registered class</span>
+                        <span class="pl-s"><span class="pl-pds">"</span>directx window<span class="pl-pds">"</span></span>,    <span class="pl-c"><span class="pl-c">//</span> window title</span>
+                        WS_OVERLAPPEDWINDOW, <span class="pl-c"><span class="pl-c">//</span> window style</span>
+                        <span class="pl-c1">50</span>, <span class="pl-c1">50</span>,              <span class="pl-c"><span class="pl-c">//</span> x, y (position)</span>
+                        <span class="pl-c1">1024</span>, <span class="pl-c1">768</span>,           <span class="pl-c"><span class="pl-c">//</span> width, height (size)</span>
+                        <span class="pl-c1">nullptr</span>,             <span class="pl-c"><span class="pl-c">//</span> parent window</span>
+                        <span class="pl-c1">nullptr</span>,             <span class="pl-c"><span class="pl-c">//</span> menu</span>
+                        hInstance,           <span class="pl-c"><span class="pl-c">//</span> module instance</span>
+                        <span class="pl-c1">nullptr</span>);            <span class="pl-c"><span class="pl-c">//</span> struct for infos</span>
+    <span class="pl-c"><span class="pl-c">//</span> Check if a window handle has been created.</span>
+    <span class="pl-k">if</span> (!hWnd)
+        <span class="pl-k">return</span> -<span class="pl-c1">1</span>;   
+    <span class="pl-c"><span class="pl-c">//</span> Show and update the new window.</span>
+    <span class="pl-c1">ShowWindow</span>(hWnd, nCmdShow);
+    <span class="pl-c1">UpdateWindow</span>(hWnd);
+    <span class="pl-c"><span class="pl-c">//</span> Start the game loop and send incoming messages to the window procedure.</span>
+    _running = <span class="pl-c1">true</span>;
+    MSG msg{ };
+    <span class="pl-k">while</span> (_running) {
+        <span class="pl-k">while</span> (<span class="pl-c1">PeekMessage</span>(&amp;msg, hWnd, <span class="pl-c1">0</span>, <span class="pl-c1">0</span>, PM_REMOVE)) {
+            <span class="pl-c1">TranslateMessage</span>(&amp;msg);
+            <span class="pl-c1">DispatchMessage</span>(&amp;msg);
+        }
+    }  
+    <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+}</pre></div>
+<p>This should create a window, that can the moved, resized and closed.</p>
+<h2>Direct3D initialization</h2>
+<div class="highlight highlight-source-c++"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> Includes DirectX 9 structures and functions.</span>
+<span class="pl-c"><span class="pl-c">//</span> Remember to link "d3d9.lib" and "d3dx9.lib".</span>
+<span class="pl-c"><span class="pl-c">//</span> For "d3dx9.lib" the DirectX SDK (June 2010) is needed.</span>
+<span class="pl-c"><span class="pl-c">//</span> Don't forget to set your subsystem to Windows.</span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>d3d9.h<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>d3dx9.h<span class="pl-pds">&gt;</span></span>
+<span class="pl-c"><span class="pl-c">//</span> Includes the ComPtr, a smart pointer automatically releasing COM objects.</span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>wrl.h<span class="pl-pds">&gt;</span></span>
+<span class="pl-k">using</span> <span class="pl-k">namespace</span> <span class="pl-en">Microsoft</span>::WRL<span class="pl-k">;</span>
+<span class="pl-c"><span class="pl-c">//</span> Next we define some Direct3D9 interface structs we need.</span>
+ComPtr&lt;IDirect3D9&gt; _d3d{ };
+ComPtr&lt;IDirect3DDevice9&gt; _device{ };</pre></div>
+<p>With all interfaces declared we can now initialize Direct3D.</p>
+<div class="highlight highlight-source-c++"><pre class="notranslate"><span class="pl-k">bool</span> <span class="pl-en">InitD3D</span>(HWND hWnd) {
+    <span class="pl-c"><span class="pl-c">//</span> Store the size of the window rectangle.</span>
+    RECT clientRect{ };
+    <span class="pl-c1">GetClientRect</span>(hWnd, &amp;clientRect);
+    <span class="pl-c"><span class="pl-c">//</span> Initialize Direct3D</span>
+    _d3d = <span class="pl-c1">Direct3DCreate9</span>(D3D_SDK_VERSION);
+    <span class="pl-c"><span class="pl-c">//</span> Get the display mode which format will be the window format.</span>
+    D3DDISPLAYMODE displayMode{ };
+    _d3d-&gt;<span class="pl-c1">GetAdapterDisplayMode</span>(D3DADAPTER_DEFAULT, <span class="pl-c"><span class="pl-c">//</span> use default graphics card</span>
+                                &amp;displayMode);      <span class="pl-c"><span class="pl-c">//</span> display mode pointer</span>
+    <span class="pl-c"><span class="pl-c">//</span> Next we have to set some presentation parameters.</span>
+    D3DPRESENT_PARAMETERS pp{ };
+    pp.<span class="pl-smi">BackBufferWidth</span> = clientRect.<span class="pl-smi">right</span>;    <span class="pl-c"><span class="pl-c">//</span> width is window width</span>
+    pp.<span class="pl-smi">BackBufferHeight</span> = clientRect.<span class="pl-smi">bottom</span>;  <span class="pl-c"><span class="pl-c">//</span> height is window height</span>
+    pp.<span class="pl-smi">BackBufferFormat</span> = displayMode.<span class="pl-smi">Format</span>; <span class="pl-c"><span class="pl-c">//</span> use adapter format</span>
+    pp.<span class="pl-smi">BackBufferCount</span> = <span class="pl-c1">1</span>;                   <span class="pl-c"><span class="pl-c">//</span> 1 back buffer (default)</span>
+    pp.<span class="pl-smi">SwapEffect</span> = D3DSWAPEFFECT_DISCARD;    <span class="pl-c"><span class="pl-c">//</span> discard after presentation</span>
+    pp.<span class="pl-smi">hDeviceWindow</span> = hWnd;                  <span class="pl-c"><span class="pl-c">//</span> associated window handle</span>
+    pp.<span class="pl-smi">Windowed</span> = <span class="pl-c1">true</span>;                       <span class="pl-c"><span class="pl-c">//</span> display in window mode</span>
+    pp.<span class="pl-smi">Flags</span> = <span class="pl-c1">0</span>;                             <span class="pl-c"><span class="pl-c">//</span> no special flags</span>
+    <span class="pl-c"><span class="pl-c">//</span> Variable to store results of methods to check if everything succeeded.</span>
+    HRESULT result{ };
+    result = _d3d-&gt;<span class="pl-c1">CreateDevice</span>(D3DADAPTER_DEFAULT, <span class="pl-c"><span class="pl-c">//</span> use default graphics card</span>
+                                D3DDEVTYPE_HAL,     <span class="pl-c"><span class="pl-c">//</span> use hardware acceleration</span>
+                                hWnd,               <span class="pl-c"><span class="pl-c">//</span> the window handle</span>
+                                D3DCREATE_HARDWARE_VERTEXPROCESSING,
+                                    <span class="pl-c"><span class="pl-c">//</span> vertices are processed by the hardware</span>
+                                &amp;pp,       <span class="pl-c"><span class="pl-c">//</span> the present parameters</span>
+                                &amp;_device); <span class="pl-c"><span class="pl-c">//</span> struct to store the device</span>
+    <span class="pl-c"><span class="pl-c">//</span> Return false if the device creation failed.</span>
+    <span class="pl-c"><span class="pl-c">//</span> It is helpful to set breakpoints at the return line.</span>
+    <span class="pl-k">if</span> (<span class="pl-c1">FAILED</span>(result))
+        <span class="pl-k">return</span> <span class="pl-c1">false</span>;
+    <span class="pl-c"><span class="pl-c">//</span> Create a viewport which hold information about which region to draw to.</span>
+    D3DVIEWPORT9 viewport{ };
+    viewport.<span class="pl-smi">X</span> = <span class="pl-c1">0</span>;         <span class="pl-c"><span class="pl-c">//</span> start at top left corner</span>
+    viewport.<span class="pl-smi">Y</span> = <span class="pl-c1">0</span>;         <span class="pl-c"><span class="pl-c">//</span> ..</span>
+    viewport.<span class="pl-smi">Width</span> = clientRect.<span class="pl-smi">right</span>;   <span class="pl-c"><span class="pl-c">//</span> use the entire window</span>
+    viewport.<span class="pl-smi">Height</span> = clientRect.<span class="pl-smi">bottom</span>; <span class="pl-c"><span class="pl-c">//</span> ..</span>
+    viewport.<span class="pl-smi">MinZ</span> = <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>;   <span class="pl-c"><span class="pl-c">//</span> minimum view distance</span>
+    viewport.<span class="pl-smi">MaxZ</span> = <span class="pl-c1">100</span>.<span class="pl-c1">0f</span>; <span class="pl-c"><span class="pl-c">//</span> maximum view distance</span>
+    <span class="pl-c"><span class="pl-c">//</span> Apply the created viewport.</span>
+    result = _device-&gt;<span class="pl-c1">SetViewport</span>(&amp;viewport);
+    <span class="pl-c"><span class="pl-c">//</span> Always check if something failed.</span>
+    <span class="pl-k">if</span> (<span class="pl-c1">FAILED</span>(result))
+        <span class="pl-k">return</span> <span class="pl-c1">false</span>;
+    <span class="pl-c"><span class="pl-c">//</span> Everything was successful, return true.</span>
+    <span class="pl-k">return</span> <span class="pl-c1">true</span>;
+}
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+<span class="pl-c"><span class="pl-c">//</span> Back in our WinMain function we call our initialization function.</span>
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+<span class="pl-c"><span class="pl-c">//</span> Check if Direct3D initialization succeeded, else exit the application.</span>
+<span class="pl-k">if</span> (!InitD3D(hWnd))
+    <span class="pl-k">return</span> -<span class="pl-c1">1</span>;
+        
+MSG msg{ };
+<span class="pl-k">while</span> (_running) {
+    <span class="pl-k">while</span> (<span class="pl-c1">PeekMessage</span>(&amp;msg, hWnd, <span class="pl-c1">0</span>, <span class="pl-c1">0</span>, PM_REMOVE)) {
+        <span class="pl-c1">TranslateMessage</span>(&amp;msg);
+        <span class="pl-c1">DispatchMessage</span>(&amp;msg);
+    }
+    <span class="pl-c"><span class="pl-c">//</span> Clear to render target to a specified color.</span>
+    _device-&gt;<span class="pl-c1">Clear</span>(<span class="pl-c1">0</span>,               <span class="pl-c"><span class="pl-c">//</span> number of rects to clear</span>
+                   <span class="pl-c1">nullptr</span>,         <span class="pl-c"><span class="pl-c">//</span> indicates to clear the entire window</span>
+                   D3DCLEAR_TARGET, <span class="pl-c"><span class="pl-c">//</span> clear all render targets</span>
+                   D3DXCOLOR{ <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span> }, <span class="pl-c"><span class="pl-c">//</span> color (red)</span>
+                   <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>,            <span class="pl-c"><span class="pl-c">//</span> depth buffer clear value</span>
+                   <span class="pl-c1">0</span>);              <span class="pl-c"><span class="pl-c">//</span> stencil buffer clear value</span>
+    <span class="pl-c"><span class="pl-c">//</span> ...</span>
+    <span class="pl-c"><span class="pl-c">//</span> Drawing operations go here.</span>
+    <span class="pl-c"><span class="pl-c">//</span> ...</span>
+    <span class="pl-c"><span class="pl-c">//</span> Flip the front- and backbuffer.</span>
+    _device-&gt;<span class="pl-c1">Present</span>(<span class="pl-c1">nullptr</span>,  <span class="pl-c"><span class="pl-c">//</span> no source rectangle</span>
+                     <span class="pl-c1">nullptr</span>,  <span class="pl-c"><span class="pl-c">//</span> no destination rectangle</span>
+                     <span class="pl-c1">nullptr</span>,  <span class="pl-c"><span class="pl-c">//</span> don't change the current window handle</span>
+                     <span class="pl-c1">nullptr</span>); <span class="pl-c"><span class="pl-c">//</span> pretty much always nullptr</span>
+}
+<span class="pl-c"><span class="pl-c">//</span> ...</span></pre></div>
+<p>Now the window should be displayed in a bright red color.</p>
+<h2>Vertex Buffer</h2>
+<p>Let's create a vertex buffer to store the vertices for our triangle</p>
+<div class="highlight highlight-source-c++"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> At the top of the file we need to add a include.</span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>vector<span class="pl-pds">&gt;</span></span>
+<span class="pl-c"><span class="pl-c">//</span> First we declare a new ComPtr holding a vertex buffer.</span>
+ComPtr&lt;IDirect3DVertexBuffer9&gt; _vertexBuffer{ };
+<span class="pl-c"><span class="pl-c">//</span> Lets define a function to calculate the byte size of a std::vector</span>
+<span class="pl-k">template </span>&lt;<span class="pl-k">typename</span> T&gt;
+<span class="pl-k">unsigned</span> <span class="pl-k">int</span> <span class="pl-en">GetByteSize</span>(<span class="pl-k">const</span> std::vector&lt;T&gt;&amp; vec) {
+    <span class="pl-k">return</span> <span class="pl-k">sizeof</span>(vec[<span class="pl-c1">0</span>]) * vec.<span class="pl-c1">size</span>();
+}
+<span class="pl-c"><span class="pl-c">//</span> Define "flexible vertex format" describing the content of our vertex struct.</span>
+<span class="pl-c"><span class="pl-c">//</span> Use the defined color as diffuse color.</span>
+<span class="pl-k">const</span> <span class="pl-k">unsigned</span> <span class="pl-k">long</span> VertexStructFVF = D3DFVF_XYZ | D3DFVF_DIFFUSE;
+<span class="pl-c"><span class="pl-c">//</span> Define a struct representing the vertex data the buffer will hold.</span>
+<span class="pl-k">struct</span> <span class="pl-en">VStruct</span> {
+    <span class="pl-k">float</span> x, y, z;   <span class="pl-c"><span class="pl-c">//</span> store the 3D position</span>
+    D3DCOLOR color;  <span class="pl-c"><span class="pl-c">//</span> store a color</span>
+};
+<span class="pl-c"><span class="pl-c">//</span> Declare a new function to create a vertex buffer.</span>
+IDirect3DVertexBuffer9* <span class="pl-en">CreateBuffer</span>(<span class="pl-k">const</span> std::vector&lt;VStruct&gt;&amp; vertices) {
+    <span class="pl-c"><span class="pl-c">//</span> Declare the buffer to be returned.</span>
+    IDirect3DVertexBuffer9* buffer{ };
+    HRESULT result{ };
+    result = _device-&gt;<span class="pl-c1">CreateVertexBuffer</span>(
+                 <span class="pl-c1">GetByteSize</span>(vertices), <span class="pl-c"><span class="pl-c">//</span> vector size in bytes</span>
+                 <span class="pl-c1">0</span>,                     <span class="pl-c"><span class="pl-c">//</span> data usage</span>
+                 VertexStructFVF,       <span class="pl-c"><span class="pl-c">//</span> FVF of the struct</span>
+                 D3DPOOL_DEFAULT,       <span class="pl-c"><span class="pl-c">//</span> use default pool for the buffer</span>
+                 &amp;buffer,               <span class="pl-c"><span class="pl-c">//</span> receiving buffer</span>
+                 <span class="pl-c1">nullptr</span>);              <span class="pl-c"><span class="pl-c">//</span> special shared handle</span>
+    <span class="pl-c"><span class="pl-c">//</span> Check if buffer was created successfully.</span>
+    <span class="pl-k">if</span> (<span class="pl-c1">FAILED</span>(result))
+        <span class="pl-k">return</span> <span class="pl-c1">nullptr</span>;
+    <span class="pl-c"><span class="pl-c">//</span> Create a data pointer for copying the vertex data</span>
+    <span class="pl-k">void</span>* data{ };
+    <span class="pl-c"><span class="pl-c">//</span> Lock the buffer to get a buffer for data storage.</span>
+    result = buffer-&gt;<span class="pl-c1">Lock</span>(<span class="pl-c1">0</span>,                     <span class="pl-c"><span class="pl-c">//</span> byte offset</span>
+                          <span class="pl-c1">GetByteSize</span>(vertices), <span class="pl-c"><span class="pl-c">//</span> size to lock</span>
+                          &amp;data,                 <span class="pl-c"><span class="pl-c">//</span> receiving data pointer</span>
+                          <span class="pl-c1">0</span>);                    <span class="pl-c"><span class="pl-c">//</span> special lock flags</span>
+    <span class="pl-c"><span class="pl-c">//</span> Check if buffer was locked successfully.</span>
+    <span class="pl-k">if</span> (<span class="pl-c1">FAILED</span>(result))
+        <span class="pl-k">return</span> <span class="pl-c1">nullptr</span>;
+    <span class="pl-c"><span class="pl-c">//</span> Copy the vertex data using C standard libraries memcpy.</span>
+    <span class="pl-c1">memcpy</span>(data, vertices.<span class="pl-c1">data</span>(), <span class="pl-c1">GetByteSize</span>(vertices));
+    buffer-&gt;<span class="pl-c1">Unlock</span>();
+    <span class="pl-c"><span class="pl-c">//</span> Set the FVF Direct3D uses for rendering.</span>
+    _device-&gt;<span class="pl-c1">SetFVF</span>(VertexStructFVF);
+    <span class="pl-c"><span class="pl-c">//</span> If everything was successful return the filled vertex buffer.</span>
+    <span class="pl-k">return</span> buffer;
+}</pre></div>
+<p>In our <strong>WinMain</strong> we can now call the new function after the Direct3D initialization.</p>
+<div class="highlight highlight-source-c++"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> ...</span>
+<span class="pl-k">if</span> (!InitD3D(hWnd))
+    <span class="pl-k">return</span> -<span class="pl-c1">1</span>;
+<span class="pl-c"><span class="pl-c">//</span> Define the vertices we need to draw a triangle.</span>
+<span class="pl-c"><span class="pl-c">//</span> Values are declared in a clockwise direction else Direct3D would cull them.</span>
+<span class="pl-c"><span class="pl-c">//</span> If you want to disable culling just call:</span>
+<span class="pl-c"><span class="pl-c">//</span> _device-&gt;SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);</span>
+std::vector&lt;VStruct&gt; vertices {
+    <span class="pl-c"><span class="pl-c">//</span> Bottom left</span>
+    VStruct{ -<span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, -<span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, D3DXCOLOR{ <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span> } },
+    <span class="pl-c"><span class="pl-c">//</span> Top left</span>
+    VStruct{ -<span class="pl-c1">1</span>.<span class="pl-c1">0f</span>,  <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, D3DXCOLOR{ <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span> } },
+    <span class="pl-c"><span class="pl-c">//</span> Top right</span>
+    VStruct{  <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>,  <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, D3DXCOLOR{ <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span> } }
+};
+<span class="pl-c"><span class="pl-c">//</span> Try to create the vertex buffer else exit the application.</span>
+<span class="pl-k">if</span> (!(_vertexBuffer = CreateBuffer(vertices)))
+    <span class="pl-k">return</span> -<span class="pl-c1">1</span>;
+<span class="pl-c"><span class="pl-c">//</span> ...</span></pre></div>
+<h2>Transformations</h2>
+<p>Before we can use the vertex buffer to draw our primitives, we first need to set up the matrices.</p>
+<div class="highlight highlight-source-c++"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> Lets create a new functions for the matrix transformations.</span>
+<span class="pl-k">bool</span> <span class="pl-en">SetupTransform</span>() {
+    <span class="pl-c"><span class="pl-c">//</span> Create a view matrix that transforms world space to</span>
+    <span class="pl-c"><span class="pl-c">//</span> view space.</span>
+    D3DXMATRIX view{ };
+    <span class="pl-c"><span class="pl-c">//</span> Use a left-handed coordinate system.</span>
+    <span class="pl-c1">D3DXMatrixLookAtLH</span>(
+        &amp;view,                              <span class="pl-c"><span class="pl-c">//</span> receiving matrix</span>
+        &amp;D3DXVECTOR3{ <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, -<span class="pl-c1">20</span>.<span class="pl-c1">0f</span> }, <span class="pl-c"><span class="pl-c">//</span> "camera" position</span>
+        &amp;D3DXVECTOR3{ <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span> },   <span class="pl-c"><span class="pl-c">//</span> position where to look at</span>
+        &amp;D3DXVECTOR3{ <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span> });  <span class="pl-c"><span class="pl-c">//</span> positive y-axis is up</span>
+    HRESULT result{ };
+    result = _device-&gt;<span class="pl-c1">SetTransform</span>(D3DTS_VIEW, &amp;view); <span class="pl-c"><span class="pl-c">//</span> apply the view matrix</span>
+    <span class="pl-k">if</span> (<span class="pl-c1">FAILED</span>(result))
+        <span class="pl-k">return</span> <span class="pl-c1">false</span>;
+    <span class="pl-c"><span class="pl-c">//</span> Create a projection matrix that defines the view frustrum.</span>
+    <span class="pl-c"><span class="pl-c">//</span> It transforms the view space to projection space.</span>
+    D3DXMATRIX projection{ };
+    <span class="pl-c"><span class="pl-c">//</span> Create a perspective projection using a left-handed coordinate system.</span>
+    <span class="pl-c1">D3DXMatrixPerspectiveFovLH</span>(
+        &amp;projection,         <span class="pl-c"><span class="pl-c">//</span> receiving matrix</span>
+        <span class="pl-c1">D3DXToRadian</span>(<span class="pl-c1">60</span>.<span class="pl-c1">0f</span>), <span class="pl-c"><span class="pl-c">//</span> field of view in radians</span>
+        <span class="pl-c1">1024</span>.<span class="pl-c1">0f</span> / <span class="pl-c1">768</span>.<span class="pl-c1">0f</span>,    <span class="pl-c"><span class="pl-c">//</span> aspect ratio (width / height)</span>
+        <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>,                <span class="pl-c"><span class="pl-c">//</span> minimum view distance</span>
+        <span class="pl-c1">100</span>.<span class="pl-c1">0f</span>);             <span class="pl-c"><span class="pl-c">//</span> maximum view distance</span>
+    result = _device-&gt;<span class="pl-c1">SetTransform</span>(D3DTS_PROJECTION, &amp;projection);
+    <span class="pl-k">if</span> (<span class="pl-c1">FAILED</span>(result))
+        <span class="pl-k">return</span> <span class="pl-c1">false</span>;
+    <span class="pl-c"><span class="pl-c">//</span> Disable lighting for now so we can see what we want to render.</span>
+    result = _device-&gt;<span class="pl-c1">SetRenderState</span>(D3DRS_LIGHTING, <span class="pl-c1">false</span>);
+    <span class="pl-c"><span class="pl-c">//</span> View and projection matrix are successfully applied, return true.</span>
+    <span class="pl-k">return</span> <span class="pl-c1">true</span>;
+}
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+<span class="pl-c"><span class="pl-c">//</span> Back in the WinMain function we can now call the transformation function.</span>
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+<span class="pl-k">if</span> (!(_vertexBuffer = CreateVertexBuffer(vertices)))
+    <span class="pl-k">return</span> -<span class="pl-c1">1</span>;
+<span class="pl-c"><span class="pl-c">//</span> Call the transformation setup function.</span>
+<span class="pl-k">if</span> (!SetupTransform())
+    <span class="pl-k">return</span> -<span class="pl-c1">1</span>;
+<span class="pl-c"><span class="pl-c">//</span> ...</span></pre></div>
+<h2>Rendering</h2>
+<p>Now that everything is setup we can start drawing our first 2D triangle in 3D space.</p>
+<div class="highlight highlight-source-c++"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> ...</span>
+<span class="pl-k">if</span> (!SetupTransform())
+    <span class="pl-k">return</span> -<span class="pl-c1">1</span>;
+<span class="pl-c"><span class="pl-c">//</span> First we have to bind our vertex buffer to the data stream.</span>
+HRESULT result{ };
+result = _device-&gt;<span class="pl-en">SetStreamSource</span>(<span class="pl-c1">0</span>,                   <span class="pl-c"><span class="pl-c">//</span> use the default stream</span>
+                                  _vertexBuffer.Get(), <span class="pl-c"><span class="pl-c">//</span> pass the vertex buffer</span>
+                                  0,                   <span class="pl-c"><span class="pl-c">//</span> no offset</span>
+                                  sizeof(VStruct));    <span class="pl-c"><span class="pl-c">//</span> size of vertex struct</span>
+<span class="pl-k">if</span> (FAILED(result))
+    <span class="pl-k">return</span> -<span class="pl-c1">1</span>;
+
+<span class="pl-c"><span class="pl-c">//</span> Create a world transformation matrix and set it to an identity matrix.</span>
+D3DXMATRIX world{ };
+<span class="pl-en">D3DXMatrixIdentity</span>(&amp;world);
+<span class="pl-c"><span class="pl-c">//</span> Create a scalation matrix scaling our primitive by 10 in the x,</span>
+<span class="pl-c"><span class="pl-c">//</span> 10 in the y and keeping the z direction.</span>
+D3DXMATRIX scaling{ };
+<span class="pl-en">D3DXMatrixScaling</span>(&amp;scaling, <span class="pl-c"><span class="pl-c">//</span> matrix to scale</span>
+                  <span class="pl-c1">10</span>,       <span class="pl-c"><span class="pl-c">//</span> x scaling</span>
+                  <span class="pl-c1">10</span>,       <span class="pl-c"><span class="pl-c">//</span> y scaling</span>
+                  <span class="pl-c1">1</span>);       <span class="pl-c"><span class="pl-c">//</span> z scaling</span>
+<span class="pl-c"><span class="pl-c">//</span> Create a rotation matrix storing the current rotation of our primitive.</span>
+<span class="pl-c"><span class="pl-c">//</span> We set the current rotation matrix to an identity matrix for now.</span>
+D3DXMATRIX rotation{ };
+<span class="pl-en">D3DXMatrixIdentity</span>(&amp;rotation);
+<span class="pl-c"><span class="pl-c">//</span> Now we multiply the scalation and rotation matrix and store the result</span>
+<span class="pl-c"><span class="pl-c">//</span> in the world matrix.</span>
+<span class="pl-en">D3DXMatrixMultiply</span>(&amp;world,     <span class="pl-c"><span class="pl-c">//</span> destination matrix</span>
+                   &amp;scaling,   <span class="pl-c"><span class="pl-c">//</span> matrix 1</span>
+                   &amp;rotation); <span class="pl-c"><span class="pl-c">//</span> matrix 2</span>
+<span class="pl-c"><span class="pl-c">//</span> Apply the current world matrix.</span>
+_device-&gt;<span class="pl-en">SetTransform</span>(D3DTS_WORLD, &amp;world);
+<span class="pl-c"><span class="pl-c">//</span> Disable culling so we can see the back of our primitive when it rotates.</span>
+_device-&gt;<span class="pl-en">SetRenderState</span>(D3DRS_CULLMODE, D3DCULL_NONE);
+<span class="pl-c"><span class="pl-c">//</span> The default cullmode is D3DCULL_CW.</span>
+<span class="pl-c"><span class="pl-c">//</span> After we used our the rotation matrix for multiplication we can set it</span>
+<span class="pl-c"><span class="pl-c">//</span> to rotate a small amount.</span>
+<span class="pl-c"><span class="pl-c">//</span> D3DXToRadian() function converts degree to radians.</span>
+<span class="pl-en">D3DXMatrixRotationY</span>(&amp;rotation,           <span class="pl-c"><span class="pl-c">//</span> matrix to rotate</span>
+                    <span class="pl-en">D3DXToRadian</span>(<span class="pl-c1">0</span>.<span class="pl-c1">5f</span>)); <span class="pl-c"><span class="pl-c">//</span> rotation angle in radians</span>
+
+MSG msg{ };
+    <span class="pl-k">while</span> (_running) {
+    <span class="pl-c"><span class="pl-c">//</span> ...</span>
+        _device-&gt;<span class="pl-c1">Clear</span>(<span class="pl-c1">0</span>, <span class="pl-c1">nullptr</span>, D3DCLEAR_TARGET,
+                       D3DXCOLOR{ <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span> }, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>);
+        <span class="pl-c"><span class="pl-c">//</span> With everything setup we can call the draw function.</span>
+        _device-&gt;<span class="pl-c1">BeginScene</span>();
+        _device-&gt;<span class="pl-c1">DrawPrimitive</span>(D3DPT_TRIANGLELIST, <span class="pl-c"><span class="pl-c">//</span> primitive type</span>
+                               <span class="pl-c1">0</span>,                  <span class="pl-c"><span class="pl-c">//</span> start vertex</span>
+                               <span class="pl-c1">1</span>);                 <span class="pl-c"><span class="pl-c">//</span> primitive count</span>
+        _device-&gt;<span class="pl-c1">EndScene</span>();
+    
+        _device-&gt;<span class="pl-c1">Present</span>(<span class="pl-c1">nullptr</span>, <span class="pl-c1">nullptr</span>, <span class="pl-c1">nullptr</span>, <span class="pl-c1">nullptr</span>);
+        <span class="pl-c"><span class="pl-c">//</span> We can keep multiplying the world matrix with our rotation matrix</span>
+        <span class="pl-c"><span class="pl-c">//</span> to add it's rotation to the world matrix.</span>
+        <span class="pl-c1">D3DXMatrixMultiply</span>(&amp;world, &amp;world, &amp;rotation);
+        <span class="pl-c"><span class="pl-c">//</span> Update the modified world matrix.</span>
+        _device-&gt;<span class="pl-c1">SetTransform</span>(D3DTS_WORLD, &amp;world);
+    <span class="pl-c"><span class="pl-c">//</span> ...</span></pre></div>
+<p>You should now be viewing a 10x10 units colored triangle from 20 units away, rotating around its origin.<br><br>
+You can find the complete working code here: <a href="https://pastebin.com/YkSF2rkk" rel="nofollow">DirectX - 1</a></p>
+<h2>Indexing</h2>
+<p>To make it easier to draw primitives sharing a lot of vertices we can use indexing, so we only have to declare the unique vertices and put the order they are called in another array.</p>
+<div class="highlight highlight-source-c++"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> First we declare a new ComPtr for our index buffer.</span>
+ComPtr&lt;IDirect3DIndexBuffer9&gt; _indexBuffer{ };
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+<span class="pl-c"><span class="pl-c">//</span> Declare a function creating a index buffer from a std::vector</span>
+IDirect3DIndexBuffer9* <span class="pl-en">CreateIBuffer</span>(std::vector&lt;<span class="pl-k">unsigned</span> <span class="pl-k">int</span>&gt;&amp; indices) {
+    IDirect3DIndexBuffer9* buffer{ };
+    HRESULT result{ };
+    result = _device-&gt;<span class="pl-c1">CreateIndexBuffer</span>(
+                 <span class="pl-c1">GetByteSize</span>(indices), <span class="pl-c"><span class="pl-c">//</span> vector size in bytes</span>
+                 <span class="pl-c1">0</span>,                    <span class="pl-c"><span class="pl-c">//</span> data usage </span>
+                 D3DFMT_INDEX32,       <span class="pl-c"><span class="pl-c">//</span> format is 32 bit int</span>
+                 D3DPOOL_DEFAULT,      <span class="pl-c"><span class="pl-c">//</span> default pool</span>
+                 &amp;buffer,              <span class="pl-c"><span class="pl-c">//</span> receiving buffer</span>
+                 <span class="pl-c1">nullptr</span>);             <span class="pl-c"><span class="pl-c">//</span> special shared handle</span>
+    <span class="pl-k">if</span> (<span class="pl-c1">FAILED</span>(result))
+        <span class="pl-k">return</span> <span class="pl-c1">nullptr</span>;
+    <span class="pl-c"><span class="pl-c">//</span> Create a data pointer pointing to the buffer data.</span>
+    <span class="pl-k">void</span>* data{ };
+    result = buffer-&gt;<span class="pl-c1">Lock</span>(<span class="pl-c1">0</span>,                    <span class="pl-c"><span class="pl-c">//</span> byte offset</span>
+                          <span class="pl-c1">GetByteSize</span>(indices), <span class="pl-c"><span class="pl-c">//</span> byte size</span>
+                          &amp;data,                <span class="pl-c"><span class="pl-c">//</span> receiving data pointer</span>
+                          <span class="pl-c1">0</span>);                   <span class="pl-c"><span class="pl-c">//</span> special lock flag</span>
+    <span class="pl-k">if</span> (<span class="pl-c1">FAILED</span>(result))
+        <span class="pl-k">return</span> <span class="pl-c1">nullptr</span>;
+    <span class="pl-c"><span class="pl-c">//</span> Copy the index data and unlock after copying.</span>
+    <span class="pl-c1">memcpy</span>(data, indices.<span class="pl-c1">data</span>(), <span class="pl-c1">GetByteSize</span>(indices));
+    buffer-&gt;<span class="pl-c1">Unlock</span>();
+    <span class="pl-c"><span class="pl-c">//</span> Return the filled index buffer.</span>
+    <span class="pl-k">return</span> buffer;
+}
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+<span class="pl-c"><span class="pl-c">//</span> In our WinMain we can now change the vertex data and create new index data.</span>
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+std::vector&lt;VStruct&gt; vertices {
+    VStruct{ -<span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, -<span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, D3DXCOLOR{ <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span> } },
+    VStruct{ -<span class="pl-c1">1</span>.<span class="pl-c1">0f</span>,  <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, D3DXCOLOR{ <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span> } },
+    VStruct{  <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>,  <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, D3DXCOLOR{ <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span> } },
+    <span class="pl-c"><span class="pl-c">//</span> Add a vertex for the bottom right.</span>
+    VStruct{  <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, -<span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, D3DXCOLOR{ <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span> } }
+};
+<span class="pl-c"><span class="pl-c">//</span> Declare the index data, here we build a rectangle from two triangles.</span>
+std::vector&lt;<span class="pl-k">unsigned</span> <span class="pl-k">int</span>&gt; indices {
+    <span class="pl-c1">0</span>, <span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c"><span class="pl-c">//</span> the first triangle (b,left -&gt; t,left -&gt; t,right)</span>
+    <span class="pl-c1">0</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>  <span class="pl-c"><span class="pl-c">//</span> the second triangle (b,left -&gt; t,right -&gt; b,right)</span>
+};
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+<span class="pl-c"><span class="pl-c">//</span> Now we call the "CreateIBuffer" function to create a index buffer.</span>
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+<span class="pl-k">if</span> (!(_indexBuffer = CreateIBuffer(indices)))
+    <span class="pl-k">return</span> -<span class="pl-c1">1</span>;
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+<span class="pl-c"><span class="pl-c">//</span> After binding the vertex buffer we have to bind the index buffer to</span>
+<span class="pl-c"><span class="pl-c">//</span> use indexed rendering.</span>
+result = _device-&gt;<span class="pl-en">SetStreamSource</span>(<span class="pl-c1">0</span>, _vertexBuffer.Get(), 0, sizeof(VStruct));
+<span class="pl-k">if</span> (FAILED(result))
+    <span class="pl-k">return</span> -<span class="pl-c1">1</span>;
+<span class="pl-c"><span class="pl-c">//</span> Bind the index data to the default data stream.</span>
+result = _device-&gt;<span class="pl-en">SetIndices</span>(_indexBuffer.Get())
+if (FAILED(result))
+    return -1;
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+<span class="pl-c"><span class="pl-c">//</span> Now we replace the "DrawPrimitive" function with an indexed version.</span>
+_device-&gt;<span class="pl-en">DrawIndexedPrimitive</span>(D3DPT_TRIANGLELIST, <span class="pl-c"><span class="pl-c">//</span> primitive type</span>
+                              <span class="pl-c1">0</span>,                  <span class="pl-c"><span class="pl-c">//</span> base vertex index</span>
+                              <span class="pl-c1">0</span>,                  <span class="pl-c"><span class="pl-c">//</span> minimum index</span>
+                              indices.size(),     <span class="pl-c"><span class="pl-c">//</span> amount of vertices</span>
+                              0,                  <span class="pl-c"><span class="pl-c">//</span> start in index buffer</span>
+                              2);                 <span class="pl-c"><span class="pl-c">//</span> primitive count</span>
+<span class="pl-c"><span class="pl-c">//</span> ...</span></pre></div>
+<p>Now you should see a colored rectangle made up of 2 triangles. If you set the primitive count in the "DrawIndexedPrimitive" method to 1 only the first triangle should be rendered and if you set the start of the index buffer to 3 and the primitive count to 1 only the second triangle should be rendered.<br><br>
+You can find the complete working code here: <a href="https://pastebin.com/yWBPWPRG" rel="nofollow">DirectX - 2</a></p>
+<h2>Vertex declaration</h2>
+<p>Instead of using the old "flexible vertex format" we should use vertex declarations instead, as the FVF declarations get converted to vertex declarations internally anyway.</p>
+<div class="highlight highlight-source-c++"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> First we have to REMOVE the following lines:</span>
+<span class="pl-k">const</span> <span class="pl-k">unsigned</span> <span class="pl-k">long</span> VertexStructFVF = D3DFVF_XYZ | D3DFVF_DIFFUSE;
+<span class="pl-c"><span class="pl-c">//</span> and</span>
+_device-&gt;<span class="pl-en">SetFVF</span>(VertexStructFVF);
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+<span class="pl-c"><span class="pl-c">//</span> We also have to change the vertex buffer creation FVF-flag.</span>
+result = _device-&gt;<span class="pl-en">CreateVertexBuffer</span>(
+                      <span class="pl-en">GetByteSize</span>(vertices),
+                      0,
+                      0,        <span class="pl-c"><span class="pl-c">//</span> &lt;- 0 indicates we use vertex declarations</span>
+                      D3DPOOL_DEFAULT,
+                      &amp;buffer,
+                      nullptr); 
+<span class="pl-c"><span class="pl-c">//</span> Next we have to declare a new ComPtr.</span>
+ComPtr&lt;IDirect3DVertexDeclaration9&gt; _vertexDecl{ };
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+result = _device-&gt;<span class="pl-en">SetIndices</span>(_indexBuffer.Get());
+<span class="pl-k">if</span> (FAILED(result))
+    return -1;
+<span class="pl-c"><span class="pl-c">//</span> Now we have to declare and apply the vertex declaration.</span>
+<span class="pl-c"><span class="pl-c">//</span> Create a vector of vertex elements making up the vertex declaration.</span>
+std::vector&lt;D3DVERTEXELEMENT9&gt; vertexDeclDesc {
+    { <span class="pl-c1">0</span>,                     <span class="pl-c"><span class="pl-c">//</span> stream index</span>
+      <span class="pl-c1">0</span>,                     <span class="pl-c"><span class="pl-c">//</span> byte offset from the struct beginning</span>
+      D3DDECLTYPE_FLOAT3,    <span class="pl-c"><span class="pl-c">//</span> data type (3d float vector)</span>
+      D3DDECLMETHOD_DEFAULT, <span class="pl-c"><span class="pl-c">//</span> tessellator operation</span>
+      D3DDECLUSAGE_POSITION,  <span class="pl-c"><span class="pl-c">//</span> usage of the data</span>
+      <span class="pl-c1">0</span> },                   <span class="pl-c"><span class="pl-c">//</span> index (multiples usage of the same type)</span>
+    { <span class="pl-c1">0</span>,
+      <span class="pl-c1">12</span>,                    <span class="pl-c"><span class="pl-c">//</span> byte offset (3 * sizeof(float) bytes)</span>
+      D3DDECLTYPE_D3DCOLOR,
+      D3DDECLMETHOD_DEFAULT,
+      D3DDECLUSAGE_COLOR,
+      <span class="pl-c1">0</span> },
+    <span class="pl-c1">D3DDECL_END</span>()            <span class="pl-c"><span class="pl-c">//</span> marks the end of the vertex declaration</span>
+};
+<span class="pl-c"><span class="pl-c">//</span> After having defined the vector we can create a vertex declaration from it.</span>
+result = _device-&gt;<span class="pl-en">CreateVertexDeclaration</span>(
+                      vertexDeclDesc.data(), <span class="pl-c"><span class="pl-c">//</span> the vertex element array</span>
+                      &amp;_vertexDecl);         <span class="pl-c"><span class="pl-c">//</span> receiving pointer</span>
+<span class="pl-k">if</span> (FAILED(result)) 
+    <span class="pl-k">return</span> -<span class="pl-c1">1</span>;
+<span class="pl-c"><span class="pl-c">//</span> Apply the created vertex declaration.</span>
+_device-&gt;<span class="pl-en">SetVertexDeclaration</span>(_vertexDecl.Get());
+<span class="pl-c"><span class="pl-c">//</span> ...</span></pre></div>
+<h2>Shader</h2>
+<p>The maximum shader model for Direct3D 9 is shader model 3.0. Even though every modern graphics card should support it, it is best to check for capabilities.</p>
+<div class="highlight highlight-source-c++"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> ...</span>
+_device-&gt;<span class="pl-en">SetVertexDeclaration</span>(_vertexDecl.Get());
+<span class="pl-c"><span class="pl-c">//</span> First we have to request the device capabilities.</span>
+D3DCAPS9 deviceCaps{ };
+_device-&gt;<span class="pl-en">GetDeviceCaps</span>(&amp;deviceCaps);
+<span class="pl-c"><span class="pl-c">//</span> Now we check if shader model 3.0 is supported for the vertex shader.</span>
+<span class="pl-k">if</span> (deviceCaps.VertexShaderVersion &lt; D3DVS_VERSION(<span class="pl-c1">3</span>, <span class="pl-c1">0</span>))
+    <span class="pl-k">return</span> -<span class="pl-c1">1</span>;
+<span class="pl-c"><span class="pl-c">//</span> And the same for the pixel shader.</span>
+<span class="pl-k">if</span> (deviceCaps.PixelShaderVersion &lt; D3DPS_VERSION(<span class="pl-c1">3</span>, <span class="pl-c1">0</span>))
+    <span class="pl-k">return</span> -<span class="pl-c1">1</span>;</pre></div>
+<p>Now that we are sure shader model 3.0 is supported let's create the vertex and pixel shader files.<br>
+DirectX 9 introduced the HLSL (<strong>High Level Shading Language</strong>), a C-like shader language, which<br>
+simplified the shader programming a lot, as you could only write shaders in shader assembly in DirectX 8.<br>
+Let's create a simple vertex- and pixel shader.</p>
+<p><strong>Vertex Shader</strong></p>
+<div class="highlight highlight-source-c++"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> 3 4x4 float matrices representing the matrices we set in the fixed-function</span>
+<span class="pl-c"><span class="pl-c">//</span> pipeline by using the SetTransform() method.</span>
+float4x4 projectionMatrix;
+float4x4 viewMatrix;
+float4x4 worldMatrix;
+<span class="pl-c"><span class="pl-c">//</span> The input struct to the vertex shader.</span>
+<span class="pl-c"><span class="pl-c">//</span> It holds a 3d float vector for the position and a 4d float vector</span>
+<span class="pl-c"><span class="pl-c">//</span> for the color.</span>
+<span class="pl-k">struct</span> <span class="pl-en">VS_INPUT</span> {
+    float3 position : POSITION;
+    float4 color : COLOR;
+};
+<span class="pl-c"><span class="pl-c">//</span> The output struct of the vertex shader, that is passed to the pixel shader.</span>
+<span class="pl-k">struct</span> <span class="pl-en">VS_OUTPUT</span> {
+    float4 position : POSITION;
+    float4 color : COLOR;
+};
+<span class="pl-c"><span class="pl-c">//</span> The main function of the vertex shader returns the output it sends to the</span>
+<span class="pl-c"><span class="pl-c">//</span> pixel shader and receives it's input as a parameter.</span>
+VS_OUTPUT <span class="pl-en">main</span>(VS_INPUT input) {
+    <span class="pl-c"><span class="pl-c">//</span> Declare a empty struct, that the vertex shader returns.</span>
+    VS_OUTPUT output;
+    <span class="pl-c"><span class="pl-c">//</span> Set the output position to the input position and set</span>
+    <span class="pl-c"><span class="pl-c">//</span> the w-component to 1, as the input position is a 3d vector and</span>
+    <span class="pl-c"><span class="pl-c">//</span> the output position a 4d vector.</span>
+    output.<span class="pl-smi">position</span> = <span class="pl-c1">float4</span>(input.<span class="pl-smi">position</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>);
+    <span class="pl-c"><span class="pl-c">//</span> Multiply the output position step by step with the world, view and</span>
+    <span class="pl-c"><span class="pl-c">//</span> projection matrices.</span>
+    output.<span class="pl-smi">position</span> = <span class="pl-c1">mul</span>(output.<span class="pl-smi">position</span>, worldMatrix);	
+    output.<span class="pl-smi">position</span> = <span class="pl-c1">mul</span>(output.<span class="pl-smi">position</span>, viewMatrix);
+    output.<span class="pl-smi">position</span> = <span class="pl-c1">mul</span>(output.<span class="pl-smi">position</span>, projectionMatrix);
+	<span class="pl-c"><span class="pl-c">//</span> Pass the input color unchanged to the pixel shader.</span>
+    output.<span class="pl-smi">color</span> = input.<span class="pl-smi">color</span>;
+    <span class="pl-c"><span class="pl-c">//</span> Return the output struct to the pixel shader.</span>
+    <span class="pl-c"><span class="pl-c">//</span> The position value is automatically used as the vertex position.</span>
+    <span class="pl-k">return</span> output;
+}</pre></div>
+<p><strong>Pixel Shader</strong></p>
+<div class="highlight highlight-source-c++"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> The pixel shader input struct must be the same as the vertex shader output!</span>
+<span class="pl-k">struct</span> <span class="pl-en">PS_INPUT</span> {
+    float4 position : POSITION;
+    float4 color : COLOR;
+};
+<span class="pl-c"><span class="pl-c">//</span> The pixel shader simply returns a 4d vector representing the vertex color.</span>
+<span class="pl-c"><span class="pl-c">//</span> It receives it's input as a parameter just like the vertex shader.</span>
+<span class="pl-c"><span class="pl-c">//</span> We have to declare the output semantic as color to it gets interpreted</span>
+<span class="pl-c"><span class="pl-c">//</span> correctly.</span>
+float4 <span class="pl-en">main</span>(PS_INPUT input) : COLOR {
+    <span class="pl-k">return</span> input.<span class="pl-smi">color</span>;
+}</pre></div>
+<p>For more on semantics: <a href="https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-semantics#vertex-shader-semantics" rel="nofollow">DirectX - Semantics</a></p>
+<p>Now we have to do quite some changes to the code.</p>
+<div class="highlight highlight-source-c++"><pre class="notranslate">ComPtr&lt;IDirect3DDevice9&gt; _device{ };
+ComPtr&lt;IDirect3DVertexBuffer9&gt; _vertexBuffer{ };
+ComPtr&lt;IDirect3DIndexBuffer9&gt; _indexBuffer{ };
+ComPtr&lt;IDirect3DVertexDeclaration9&gt; _vertexDecl{ };
+<span class="pl-c"><span class="pl-c">//</span> We have to add a ComPtr for the vertex- and pixel shader, aswell as one</span>
+<span class="pl-c"><span class="pl-c">//</span> for the constants (matrices) in our vertex shader.</span>
+ComPtr&lt;IDirect3DVertexShader9&gt; _vertexShader{ };
+ComPtr&lt;IDirect3DPixelShader9&gt; _pixelShader{ };
+ComPtr&lt;ID3DXConstantTable&gt; _vertexTable{ };
+<span class="pl-c"><span class="pl-c">//</span> Declare the world and rotation matrix as global, because we use them in</span>
+<span class="pl-c"><span class="pl-c">//</span> WinMain and SetupTransform now.</span>
+D3DXMATRIX _worldMatrix{ };
+D3DXMATRIX _rotationMatrix{ };
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+<span class="pl-k">bool</span> <span class="pl-en">SetupTransform</span>() {
+    <span class="pl-c"><span class="pl-c">//</span> Set the world and rotation matrix to an identity matrix.</span>
+    <span class="pl-c1">D3DXMatrixIdentity</span>(&amp;_worldMatrix);
+    <span class="pl-c1">D3DXMatrixIdentity</span>(&amp;_rotationMatrix);
+	
+    D3DXMATRIX scaling{ };
+    <span class="pl-c1">D3DXMatrixScaling</span>(&amp;scaling, <span class="pl-c1">10</span>, <span class="pl-c1">10</span>, <span class="pl-c1">1</span>);
+    <span class="pl-c1">D3DXMatrixMultiply</span>(&amp;_worldMatrix, &amp;scaling, &amp;_rotationMatrix);
+    <span class="pl-c"><span class="pl-c">//</span> After multiplying the scalation and rotation matrix the have to pass</span>
+    <span class="pl-c"><span class="pl-c">//</span> them to the shader, by using a method from the constant table</span>
+    <span class="pl-c"><span class="pl-c">//</span> of the vertex shader.</span>
+    HRESULT result{ };
+    result = _vertexTable-&gt;<span class="pl-c1">SetMatrix</span>(
+                         _device.<span class="pl-c1">Get</span>(),   <span class="pl-c"><span class="pl-c">//</span> direct3d device</span>
+                         <span class="pl-s"><span class="pl-pds">"</span>worldMatrix<span class="pl-pds">"</span></span>,   <span class="pl-c"><span class="pl-c">//</span> matrix name in the shader</span>
+                          &amp;_worldMatrix); <span class="pl-c"><span class="pl-c">//</span> pointer to the matrix</span>
+    <span class="pl-k">if</span> (<span class="pl-c1">FAILED</span>(result))
+        <span class="pl-k">return</span> <span class="pl-c1">false</span>;
+
+    D3DXMATRIX view{ };
+    <span class="pl-c1">D3DXMatrixLookAtLH</span>(&amp;view, &amp;D3DXVECTOR3{ <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, -<span class="pl-c1">20</span>.<span class="pl-c1">0f</span> },
+           &amp;D3DXVECTOR3{ <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span> }, &amp;D3DXVECTOR3{ <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span> });
+    <span class="pl-c"><span class="pl-c">//</span> Do the same for the view matrix.</span>
+    result = _vertexTable-&gt;<span class="pl-c1">SetMatrix</span>(
+	                       _device.<span class="pl-c1">Get</span>(), <span class="pl-c"><span class="pl-c">//</span> direct 3d device</span>
+	                       <span class="pl-s"><span class="pl-pds">"</span>viewMatrix<span class="pl-pds">"</span></span>,  <span class="pl-c"><span class="pl-c">//</span> matrix name</span>
+	                       &amp;view);        <span class="pl-c"><span class="pl-c">//</span> matrix</span>
+    <span class="pl-k">if</span> (<span class="pl-c1">FAILED</span>(result))
+        <span class="pl-k">return</span> <span class="pl-c1">false</span>;
+
+    D3DXMATRIX projection{ };
+    <span class="pl-c1">D3DXMatrixPerspectiveFovLH</span>(&amp;projection, <span class="pl-c1">D3DXToRadian</span>(<span class="pl-c1">60</span>.<span class="pl-c1">0f</span>),
+        <span class="pl-c1">1024</span>.<span class="pl-c1">0f</span> / <span class="pl-c1">768</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">100</span>.<span class="pl-c1">0f</span>);
+    <span class="pl-c"><span class="pl-c">//</span> And also for the projection matrix.</span>
+    result = _vertexTable-&gt;<span class="pl-c1">SetMatrix</span>(
+	                       _device.<span class="pl-c1">Get</span>(),
+	                       <span class="pl-s"><span class="pl-pds">"</span>projectionMatrix<span class="pl-pds">"</span></span>,
+	                       &amp;projection);
+    <span class="pl-k">if</span> (<span class="pl-c1">FAILED</span>(result))
+        <span class="pl-k">return</span> <span class="pl-c1">false</span>;
+
+    <span class="pl-c1">D3DXMatrixRotationY</span>(&amp;_rotationMatrix, <span class="pl-c1">D3DXToRadian</span>(<span class="pl-c1">0</span>.<span class="pl-c1">5f</span>));
+    <span class="pl-k">return</span> <span class="pl-c1">true</span>;
+}
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+<span class="pl-c"><span class="pl-c">//</span> Vertex and index buffer creation aswell as initialization stay unchanged.</span>
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+<span class="pl-c"><span class="pl-c">//</span> After checking that shader model 3.0 is available we have to compile and</span>
+<span class="pl-c"><span class="pl-c">//</span> create the shaders.</span>
+<span class="pl-c"><span class="pl-c">//</span> Declare two temporary buffers storing the compiled shader code.</span>
+ID3DXBuffer* vertexShaderBuffer{ };
+ID3DXBuffer* pixelShaderBuffer{ };
+result = D3DXCompileShaderFromFile(<span class="pl-s"><span class="pl-pds">"</span>vertex.hlsl<span class="pl-pds">"</span></span>,  <span class="pl-c"><span class="pl-c">//</span> shader name</span>
+                                   <span class="pl-c1">nullptr</span>,        <span class="pl-c"><span class="pl-c">//</span> macro definitions</span>
+                                   <span class="pl-c1">nullptr</span>,        <span class="pl-c"><span class="pl-c">//</span> special includes</span>
+                                   <span class="pl-s"><span class="pl-pds">"</span>main<span class="pl-pds">"</span></span>,         <span class="pl-c"><span class="pl-c">//</span> entry point name</span>
+                                   <span class="pl-s"><span class="pl-pds">"</span>vs_3_0<span class="pl-pds">"</span></span>,       <span class="pl-c"><span class="pl-c">//</span> shader model version</span>
+                                   <span class="pl-c1">0</span>,              <span class="pl-c"><span class="pl-c">//</span> special flags</span>
+                                   &amp;vertexShaderBuffer, <span class="pl-c"><span class="pl-c">//</span> code buffer</span>
+                                   <span class="pl-c1">nullptr</span>,        <span class="pl-c"><span class="pl-c">//</span> error message</span>
+                                   &amp;_vertexTable); <span class="pl-c"><span class="pl-c">//</span> constant table</span>
+<span class="pl-k">if</span> (FAILED(result))
+    <span class="pl-k">return</span> -<span class="pl-c1">1</span>;
+<span class="pl-c"><span class="pl-c">//</span> After the vertex shader compile the pixel shader.</span>
+result = D3DXCompileShaderFromFile(<span class="pl-s"><span class="pl-pds">"</span>pixel.hlsl<span class="pl-pds">"</span></span>,
+                                   <span class="pl-c1">nullptr</span>,
+                                   <span class="pl-c1">nullptr</span>,
+                                   <span class="pl-s"><span class="pl-pds">"</span>main<span class="pl-pds">"</span></span>,
+                                   <span class="pl-s"><span class="pl-pds">"</span>ps_3_0<span class="pl-pds">"</span></span>, <span class="pl-c"><span class="pl-c">//</span> pixel shader model 3.0</span>
+                                   <span class="pl-c1">0</span>,
+                                   &amp;pixelShaderBuffer,
+                                   <span class="pl-c1">nullptr</span>,
+                                   <span class="pl-c1">nullptr</span>); <span class="pl-c"><span class="pl-c">//</span> no need for a constant table</span>
+<span class="pl-k">if</span> (FAILED(result))
+    <span class="pl-k">return</span> -<span class="pl-c1">1</span>;
+<span class="pl-c"><span class="pl-c">//</span> Create the vertex shader from the code buffer.</span>
+result = _device-&gt;<span class="pl-en">CreateVertexShader</span>(
+             (DWORD*)vertexShaderBuffer-&gt;GetBufferPointer(), <span class="pl-c"><span class="pl-c">//</span> code buffer</span>
+             &amp;_vertexShader); <span class="pl-c"><span class="pl-c">//</span> vertex shader pointer</span>
+<span class="pl-k">if</span> (FAILED(result))
+    <span class="pl-k">return</span> -<span class="pl-c1">1</span>;
+	
+result = _device-&gt;<span class="pl-en">CreatePixelShader</span>(
+             (DWORD*)pixelShaderBuffer-&gt;GetBufferPointer(),
+             &amp;_pixelShader);
+<span class="pl-k">if</span> (FAILED(result))
+    <span class="pl-k">return</span> -<span class="pl-c1">1</span>;
+<span class="pl-c"><span class="pl-c">//</span> Release the temporary code buffers after the shaders are created.</span>
+vertexShaderBuffer-&gt;<span class="pl-en">Release</span>();
+pixelShaderBuffer-&gt;<span class="pl-en">Release</span>();
+<span class="pl-c"><span class="pl-c">//</span> Apply the vertex- and pixel shader.</span>
+_device-&gt;<span class="pl-en">SetVertexShader</span>(_vertexShader.Get());
+_device-&gt;<span class="pl-en">SetPixelShader</span>(_pixelShader.Get());
+<span class="pl-c"><span class="pl-c">//</span> Apply the transform after the shaders have been set.</span>
+<span class="pl-k">if</span> (!SetupTransform())
+    <span class="pl-k">return</span> -<span class="pl-c1">1</span>;
+<span class="pl-c"><span class="pl-c">//</span> You can also REMOVE the call so set the lighting render state.</span>
+_device-&gt;<span class="pl-en">SetRenderState</span>(D3DRS_LIGHTING, <span class="pl-c1">false</span>);</pre></div>
+<p>You can find the complete code here: <a href="https://pastebin.com/y4NrvawY" rel="nofollow">DirectX - 3</a></p>
+<h2>Texturing</h2>
+<div class="highlight highlight-source-c++"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> First we need to declare a ComPtr for the texture.</span>
+ComPtr&lt;IDirect3DTexture9&gt; _texture{ };
+<span class="pl-c"><span class="pl-c">//</span> Then we have to change the vertex struct.</span>
+<span class="pl-k">struct</span> <span class="pl-en">VStruct</span> {
+    <span class="pl-k">float</span> x, y, z;
+    <span class="pl-k">float</span> u, v;      <span class="pl-c"><span class="pl-c">//</span> Add texture u and v coordinates</span>
+    D3DCOLOR color;
+};
+<span class="pl-c"><span class="pl-c">//</span> In the vertex declaration we have to add the texture coordinates.</span>
+<span class="pl-c"><span class="pl-c">//</span> the top left of the texture is u: 0, v: 0.</span>
+std::vector&lt;VStruct&gt; vertices {
+    VStruct{ -<span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, -<span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, ... }, <span class="pl-c"><span class="pl-c">//</span> bottom left</span>
+    VStruct{ -<span class="pl-c1">1</span>.<span class="pl-c1">0f</span>,  <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, ... }, <span class="pl-c"><span class="pl-c">//</span> top left</span>
+    VStruct{  <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>,  <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">0</span>.<span class="pl-c1">0f</span>, ... }, <span class="pl-c"><span class="pl-c">//</span> top right</span>
+    VStruct{  <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, -<span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>, ... }  <span class="pl-c"><span class="pl-c">//</span> bottom right</span>
+};
+<span class="pl-c"><span class="pl-c">//</span> Next is the vertex declaration.</span>
+std::vector&lt;D3DVERTEXELEMENT9&gt; vertexDecl{
+    {<span class="pl-c1">0</span>, <span class="pl-c1">0</span>, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_POSITION, <span class="pl-c1">0</span>},
+    <span class="pl-c"><span class="pl-c">//</span> Add a 2d float vector used for texture coordinates.</span>
+    {<span class="pl-c1">0</span>, <span class="pl-c1">12</span>, D3DDECLTYPE_FLOAT2, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_TEXCOORD, <span class="pl-c1">0</span>},
+    <span class="pl-c"><span class="pl-c">//</span> The color offset is not (3 + 2) * sizeof(float) = 20 bytes</span>
+    {<span class="pl-c1">0</span>, <span class="pl-c1">20</span>, D3DDECLTYPE_D3DCOLOR, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_COLOR, <span class="pl-c1">0</span>},
+    <span class="pl-c1">D3DDECL_END</span>()
+};
+<span class="pl-c"><span class="pl-c">//</span> Now we have to load the texture and pass its to the shader.</span>
+<span class="pl-c"><span class="pl-c">//</span> ...</span>
+_device-&gt;<span class="pl-en">SetRenderState</span>(D3DRS_CULLMODE, D3DCULL_NONE);
+<span class="pl-c"><span class="pl-c">//</span> Create a Direct3D texture from a png file.</span>
+result = D3DXCreateTextureFromFile(_device.Get(), <span class="pl-c"><span class="pl-c">//</span> direct3d device</span>
+                                   <span class="pl-s"><span class="pl-pds">"</span>texture.png<span class="pl-pds">"</span></span>, <span class="pl-c"><span class="pl-c">//</span> texture path</span>
+                                   &amp;_texture);    <span class="pl-c"><span class="pl-c">//</span> receiving texture pointer</span>
+<span class="pl-k">if</span> (FAILED(result))
+    <span class="pl-k">return</span> -<span class="pl-c1">1</span>;
+<span class="pl-c"><span class="pl-c">//</span> Attach the texture to shader stage 0, which is equal to texture register 0</span>
+<span class="pl-c"><span class="pl-c">//</span> in the pixel shader.</span>
+_device-&gt;<span class="pl-en">SetTexture</span>(<span class="pl-c1">0</span>, _texture.Get());</pre></div>
+<p>With the main code ready we now have to adjust the shaders to these changes.</p>
+<p><strong>Vertex Shader</strong></p>
+<div class="highlight highlight-source-c++"><pre class="notranslate">float4x4 projectionMatrix;
+float4x4 viewMatrix;
+float4x4 worldMatrix;
+<span class="pl-c"><span class="pl-c">//</span> Add the texture coordinates to the vertex shader in- and output.</span>
+<span class="pl-k">struct</span> <span class="pl-en">VS_INPUT</span> {
+    float3 position : POSITION;
+    float2 texcoord : TEXCOORD;
+    float4 color : COLOR;
+};
+
+<span class="pl-k">struct</span> <span class="pl-en">VS_OUTPUT</span> {
+    float4 position : POSITION;
+    float2 texcoord : TEXCOORD;
+    float4 color : COLOR;
+};
+
+VS_OUTPUT <span class="pl-en">main</span>(VS_INPUT input) {
+    VS_OUTPUT output;
+    
+    output.<span class="pl-smi">position</span> = <span class="pl-c1">float4</span>(input.<span class="pl-smi">position</span>, <span class="pl-c1">1</span>.<span class="pl-c1">0f</span>);
+    output.<span class="pl-smi">position</span> = <span class="pl-c1">mul</span>(output.<span class="pl-smi">position</span>, worldMatrix);	
+    output.<span class="pl-smi">position</span> = <span class="pl-c1">mul</span>(output.<span class="pl-smi">position</span>, viewMatrix);
+    output.<span class="pl-smi">position</span> = <span class="pl-c1">mul</span>(output.<span class="pl-smi">position</span>, projectionMatrix);
+
+    output.<span class="pl-smi">color</span> = input.<span class="pl-smi">color</span>;
+    <span class="pl-c"><span class="pl-c">//</span> Set the texcoord output to the input.</span>
+    output.<span class="pl-smi">texcoord</span> = input.<span class="pl-smi">texcoord</span>;
+    
+    <span class="pl-k">return</span> output;
+}</pre></div>
+<p><strong>Pixel Shader</strong></p>
+<div class="highlight highlight-source-c++"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> Create  a sampler called "sam0" using sampler register 0, which is equal</span>
+<span class="pl-c"><span class="pl-c">//</span> to the texture stage 0, to which we passed the texture.</span>
+sampler sam0 : <span class="pl-k">register</span>(s0);
+
+<span class="pl-k">struct</span> <span class="pl-en">PS_INPUT</span> {
+    float4 position : POSITION;
+    float2 texcoord : TEXCOORD;
+    float4 color : COLOR;
+};
+
+float4 <span class="pl-en">main</span>(PS_INPUT input) : COLOR{
+    <span class="pl-c"><span class="pl-c">//</span> Do a linear interpolation between the texture color and the input color</span>
+    <span class="pl-c"><span class="pl-c">//</span> using 75% of the input color.</span>
+    <span class="pl-c"><span class="pl-c">//</span> tex2D returns the texture data at the specified texture coordinate.</span>
+    <span class="pl-k">return</span> <span class="pl-c1">lerp</span>(<span class="pl-c1">tex2D</span>(sam0, input.<span class="pl-smi">texcoord</span>), input.<span class="pl-smi">color</span>, <span class="pl-c1">0</span>.<span class="pl-c1">75f</span>);
+}</pre></div>
+<h2>Quotes</h2>
+<p><sup>[1]</sup><a href="https://en.wikipedia.org/wiki/DirectX" rel="nofollow">DirectX - Wikipedia</a></p>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Simon Deitermann", "s.f.deitermann@t-online.de"]
+</code></pre>

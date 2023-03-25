@@ -1,0 +1,94 @@
+<h1>bc</h1>
+<div class="highlight highlight-source-c"><pre class="notranslate"><span class="pl-c"><span class="pl-c">/*</span>This is a multi-</span>
+<span class="pl-c">line comment.<span class="pl-c">*/</span></span>
+# This is also <span class="pl-en">a</span> (one-line) comment! (in GNU bc).
+
+    <span class="pl-c"><span class="pl-c">/*</span>1. Variables and control structures<span class="pl-c">*/</span></span>
+num = 45 <span class="pl-c"><span class="pl-c">/*</span>All variables save only doubles, and you cannot save</span>
+<span class="pl-c">    string constants directly.<span class="pl-c">*/</span></span>
+num = 45; <span class="pl-c"><span class="pl-c">/*</span>You can choose to add a semicolon after</span>
+<span class="pl-c">    every statement. This is optional.<span class="pl-c">*/</span></span>
+<span class="pl-c"><span class="pl-c">/*</span>Blocks are denoted using the {} operators(similar to C):<span class="pl-c">*/</span></span>
+<span class="pl-k">while</span>(num &lt; <span class="pl-c1">50</span>) {
+    num += <span class="pl-c1">1</span> <span class="pl-c"><span class="pl-c">/*</span>equivalent to num=num+1.</span>
+<span class="pl-c">    a = a op b is equivalent to a op= b.<span class="pl-c">*/</span></span>
+}
+<span class="pl-c"><span class="pl-c">/*</span>And there are ++(increment) and --(decrement) operators.<span class="pl-c">*/</span></span>
+<span class="pl-c"><span class="pl-c">/*</span>There are 3 special variables:</span>
+<span class="pl-c">scale: defines the scale of the double numbers.</span>
+<span class="pl-c">ibase: defines the base of input.</span>
+<span class="pl-c">obase: defines the base of output.<span class="pl-c">*/</span></span>
+<span class="pl-c"><span class="pl-c">/*</span>If clauses:<span class="pl-c">*/</span></span>
+hour = read() <span class="pl-c"><span class="pl-c">/*</span>Input a number<span class="pl-c">*/</span></span>
+
+<span class="pl-k">if</span>(hour &lt; <span class="pl-c1">12</span>) { <span class="pl-c"><span class="pl-c">/*</span>Operators are exactly like C.<span class="pl-c">*/</span></span>
+    print <span class="pl-s"><span class="pl-pds">"</span>Good morning<span class="pl-cce">\n</span><span class="pl-pds">"</span></span> <span class="pl-c"><span class="pl-c">/*</span>"print" outputs strings or variables</span>
+<span class="pl-c">	separated by commas.<span class="pl-c">*/</span></span>
+} <span class="pl-k">else</span> <span class="pl-k">if</span>(hour == <span class="pl-c1">12</span>) {
+    print <span class="pl-s"><span class="pl-pds">"</span>Hello<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>
+    <span class="pl-c"><span class="pl-c">/*</span>Escaping sequences start with a \ in a string.</span>
+<span class="pl-c">    In order to make the escaping sequences clearer, here</span>
+<span class="pl-c">	is a simplified list of them that will work in bc:</span>
+<span class="pl-c">    \b: backspace</span>
+<span class="pl-c">    \c: carriage return</span>
+<span class="pl-c">    \n: newline</span>
+<span class="pl-c">    \t: tab</span>
+<span class="pl-c">    \\: backslash<span class="pl-c">*/</span></span>
+} <span class="pl-k">else</span> {
+    <span class="pl-c"><span class="pl-c">/*</span>Variables are global by default.<span class="pl-c">*/</span></span>
+    thisIsGlobal = <span class="pl-c1">5</span>
+    <span class="pl-c"><span class="pl-c">/*</span>You can make a variable local. Use the "auto" keyword in a function.<span class="pl-c">*/</span></span>
+}
+
+<span class="pl-c"><span class="pl-c">/*</span>Every variable is pre-set to 0.<span class="pl-c">*/</span></span>
+num = blankVariable <span class="pl-c"><span class="pl-c">/*</span>num is set to 0.<span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">/*</span>Like C, only 0 is falsy.<span class="pl-c">*/</span></span>
+<span class="pl-k">if</span>(!num) {print <span class="pl-s"><span class="pl-pds">"</span>false<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>}
+
+<span class="pl-c"><span class="pl-c">/*</span>Unlike C, bc does not have the ?: operators. For example,</span>
+<span class="pl-c"> this block of code will cause an error:</span>
+<span class="pl-c">a = (num) ? 1 : 0</span>
+<span class="pl-c">However, you can simulate one:<span class="pl-c">*/</span></span>
+a = (num) &amp;&amp; (<span class="pl-c1">1</span>) || (<span class="pl-c1">0</span>) <span class="pl-c"><span class="pl-c">/*</span>&amp;&amp; is and, || is or<span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">/*</span>For loops<span class="pl-c">*/</span></span>
+num = <span class="pl-c1">0</span>
+<span class="pl-k">for</span>(i = <span class="pl-c1">1</span>; i &lt;= <span class="pl-c1">100</span>; i++) {<span class="pl-c"><span class="pl-c">/*</span>Similar to the C for loop.<span class="pl-c">*/</span></span>
+    num += i
+}
+
+    <span class="pl-c"><span class="pl-c">/*</span>2.Functions and Arrays<span class="pl-c">*/</span></span>
+define <span class="pl-en">fac</span>(n) { <span class="pl-c"><span class="pl-c">/*</span>define a function using define.<span class="pl-c">*/</span></span>
+    <span class="pl-k">if</span>(n == <span class="pl-c1">1</span> || n == <span class="pl-c1">0</span>) {
+        <span class="pl-k">return</span> <span class="pl-c1">1</span> <span class="pl-c"><span class="pl-c">/*</span>return a value<span class="pl-c">*/</span></span>
+    }
+    <span class="pl-k">return</span> n * <span class="pl-c1">fac</span>(n - <span class="pl-c1">1</span>) <span class="pl-c"><span class="pl-c">/*</span>recursion is possible<span class="pl-c">*/</span></span>
+}
+
+<span class="pl-c"><span class="pl-c">/*</span>Closures and anonymous functions are impossible.<span class="pl-c">*/</span></span>
+
+num = fac(<span class="pl-c1">4</span>) <span class="pl-c"><span class="pl-c">/*</span>24<span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">/*</span>This is an example of local variables:<span class="pl-c">*/</span></span>
+define <span class="pl-en">x</span>(n) {
+    <span class="pl-k">auto</span> x
+    x = <span class="pl-c1">1</span>
+    <span class="pl-k">return</span> n + x
+}
+<span class="pl-en">x</span>(<span class="pl-c1">3</span>) <span class="pl-c"><span class="pl-c">/*</span>4<span class="pl-c">*/</span></span>
+print x <span class="pl-c"><span class="pl-c">/*</span>It turns out that x is not accessible out of the function.<span class="pl-c">*/</span></span>
+<span class="pl-c"><span class="pl-c">/*</span>Arrays are equivalent to the C array.<span class="pl-c">*/</span></span>
+for(i = <span class="pl-c1">0</span>; i &lt;= <span class="pl-c1">3</span>; i++) {
+    a[i] = <span class="pl-c1">1</span>
+}
+<span class="pl-c"><span class="pl-c">/*</span>Access it like this:<span class="pl-c">*/</span></span>
+print a[<span class="pl-c1">0</span>], <span class="pl-s"><span class="pl-pds">"</span> <span class="pl-pds">"</span></span>, a[<span class="pl-c1">1</span>], <span class="pl-s"><span class="pl-pds">"</span> <span class="pl-pds">"</span></span>, a[<span class="pl-c1">2</span>], <span class="pl-s"><span class="pl-pds">"</span> <span class="pl-pds">"</span></span>, a[<span class="pl-c1">3</span>], <span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>
+quit <span class="pl-c"><span class="pl-c">/*</span>Add this line of code to make sure</span>
+<span class="pl-c">that your program exits. This line of code is optional.<span class="pl-c">*/</span></span></pre></div>
+<p>Enjoy this simple calculator! (Or this programming language, to be exact.)</p>
+<p>This whole program is written in GNU bc. To run it, use <code class="notranslate">bc learnbc.bc</code>.</p>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Btup"]
+</code></pre>

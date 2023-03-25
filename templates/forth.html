@@ -1,0 +1,219 @@
+<h1>Forth</h1>
+<p>Forth was created by Charles H. Moore in the 70s. It is an imperative,<br>
+stack-based language and programming environment, being used in projects<br>
+such as Open Firmware. It's also used by NASA.</p>
+<p>Note: This article focuses predominantly on the Gforth implementation of<br>
+Forth, but most of what is written here should work elsewhere.</p>
+<div class="highlight highlight-source-forth"><pre class="notranslate"><span class="pl-c">\ This is a comment</span>
+<span class="pl-c">( This is also a comment but it's only used when defining words )</span>
+
+<span class="pl-c">\ --------------------------------- Precursor ----------------------------------</span>
+
+<span class="pl-c">\ All programming in Forth is done by manipulating the parameter stack (more</span>
+<span class="pl-c">\ commonly just referred to as "the stack").</span>
+<span class="pl-c1">5</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">56</span> <span class="pl-c1">76</span> <span class="pl-c1">23</span> <span class="pl-c1">65</span>    <span class="pl-c">\ ok</span>
+
+<span class="pl-c">\ Those numbers get added to the stack, from left to right.</span>
+.s    <span class="pl-c">\ &lt;7&gt; 5 2 3 56 76 23 65 ok</span>
+
+<span class="pl-c">\ In Forth, everything is either a word or a number.</span>
+
+<span class="pl-c">\ ------------------------------ Basic Arithmetic ------------------------------</span>
+
+<span class="pl-c">\ Arithmetic (in fact most words requiring data) works by manipulating data on</span>
+<span class="pl-c">\ the stack.</span>
+<span class="pl-c1">5</span> <span class="pl-c1">4</span> +    <span class="pl-c">\ ok</span>
+
+<span class="pl-c">\ `.` pops the top result from the stack:</span>
+.    <span class="pl-c">\ 9 ok</span>
+
+<span class="pl-c">\ More examples of arithmetic:</span>
+<span class="pl-c1">6</span> <span class="pl-c1">7</span> * .        <span class="pl-c">\ 42 ok</span>
+<span class="pl-c1">1360</span> <span class="pl-c1">23</span> - .    <span class="pl-c">\ 1337 ok</span>
+<span class="pl-c1">12</span> <span class="pl-c1">12</span> / .      <span class="pl-c">\ 1 ok</span>
+<span class="pl-c1">13</span> <span class="pl-c1">2</span> mod .     <span class="pl-c">\ 1 ok</span>
+
+<span class="pl-c1">99</span> negate .    <span class="pl-c">\ -99 ok</span>
+<span class="pl-c1">-99</span> abs .      <span class="pl-c">\ 99 ok</span>
+<span class="pl-c1">52</span> <span class="pl-c1">23</span> max .    <span class="pl-c">\ 52 ok</span>
+<span class="pl-c1">52</span> <span class="pl-c1">23</span> min .    <span class="pl-c">\ 23 ok</span>
+
+<span class="pl-c">\ ----------------------------- Stack Manipulation -----------------------------</span>
+
+<span class="pl-c">\ Naturally, as we work with the stack, we'll want some useful methods:</span>
+
+<span class="pl-c1">3</span> dup -          <span class="pl-c">\ duplicate the top item (1st now equals 2nd): 3 - 3</span>
+<span class="pl-c1">2</span> <span class="pl-c1">5</span> swap /       <span class="pl-c">\ swap the top with the second element:        5 / 2</span>
+<span class="pl-c1">6</span> <span class="pl-c1">4</span> <span class="pl-c1">5</span> rot .s     <span class="pl-c">\ rotate the top 3 elements:                   4 5 6</span>
+<span class="pl-c1">4</span> <span class="pl-c1">0</span> drop <span class="pl-c1">2</span> /     <span class="pl-c">\ remove the top item (don't print to screen):  4 / 2</span>
+<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> nip .s     <span class="pl-c">\ remove the second item (similar to drop):    1 3</span>
+
+<span class="pl-c">\ ---------------------- More Advanced Stack Manipulation ----------------------</span>
+
+<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span> tuck   <span class="pl-c">\ duplicate the top item below the second slot:      1 2 4 3 4 ok</span>
+<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span> over   <span class="pl-c">\ duplicate the second item to the top:             1 2 3 4 3 ok</span>
+<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span> <span class="pl-c1">2</span> roll <span class="pl-c">\ *move* the item at that position to the top:      1 3 4 2 ok</span>
+<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span> <span class="pl-c1">2</span> pick <span class="pl-c">\ *duplicate* the item at that position to the top: 1 2 3 4 2 ok</span>
+
+<span class="pl-c">\ When referring to stack indexes, they are zero-based.</span>
+
+<span class="pl-c">\ ------------------------------ Creating Words --------------------------------</span>
+
+<span class="pl-c">\ The `:` word sets Forth into compile mode until it sees the `;` word.</span>
+: square <span class="pl-c">( n -- n )</span> dup * ;    <span class="pl-c">\ ok</span>
+<span class="pl-c1">5</span> square .                     <span class="pl-c">\ 25 ok</span>
+
+<span class="pl-c">\ We can view what a word does too:</span>
+<span class="pl-k">see</span> square     <span class="pl-c">\ : square dup * ; ok</span>
+
+<span class="pl-c">\ -------------------------------- Conditionals --------------------------------</span>
+
+<span class="pl-c">\ -1 == true, 0 == false. However, any non-zero value is usually treated as</span>
+<span class="pl-c">\ being true:</span>
+<span class="pl-c1">42</span> <span class="pl-c1">42</span> =    <span class="pl-c">\ -1 ok</span>
+<span class="pl-c1">12</span> <span class="pl-c1">53</span> =    <span class="pl-c">\ 0 ok</span>
+
+<span class="pl-c">\ `if` is a compile-only word. `if` &lt;stuff to do&gt; `then` &lt;rest of program&gt;.</span>
+: ?&gt;64 <span class="pl-c">( n -- n )</span> dup <span class="pl-c1">64</span> &gt; <span class="pl-k">if</span> ." <span class="pl-s">Greater than 64!"</span> <span class="pl-k">then</span> ; <span class="pl-c">\ ok</span>
+<span class="pl-c1">100</span> ?&gt;64                                                  <span class="pl-c">\ Greater than 64! ok</span>
+
+<span class="pl-c">\ Else:</span>
+: ?&gt;64 <span class="pl-c">( n -- n )</span> dup <span class="pl-c1">64</span> &gt; <span class="pl-k">if</span> ." <span class="pl-s">Greater than 64!"</span> <span class="pl-k">else</span> ." <span class="pl-s">Less than 64!"</span> <span class="pl-k">then</span> ;
+<span class="pl-c1">100</span> ?&gt;64    <span class="pl-c">\ Greater than 64! ok</span>
+<span class="pl-c1">20</span> ?&gt;64     <span class="pl-c">\ Less than 64! ok</span>
+
+<span class="pl-c">\ ------------------------------------ Loops -----------------------------------</span>
+
+<span class="pl-c">\ `do` is also a compile-only word.</span>
+: myloop <span class="pl-c">( -- )</span> <span class="pl-c1">5</span> <span class="pl-c1">0</span> <span class="pl-k">do</span> cr ." <span class="pl-s">Hello!"</span> <span class="pl-k">loop</span> ; <span class="pl-c">\ ok</span>
+myloop
+<span class="pl-c">\ Hello!</span>
+<span class="pl-c">\ Hello!</span>
+<span class="pl-c">\ Hello!</span>
+<span class="pl-c">\ Hello!</span>
+<span class="pl-c">\ Hello! ok</span>
+
+<span class="pl-c">\ `do` expects two numbers on the stack: the end number and the start number.</span>
+
+<span class="pl-c">\ We can get the value of the index as we loop with `i`:</span>
+: one-to-12 <span class="pl-c">( -- )</span> <span class="pl-c1">12</span> <span class="pl-c1">0</span> <span class="pl-k">do</span> <span class="pl-c1">i</span> . <span class="pl-k">loop</span> ;     <span class="pl-c">\ ok</span>
+one-to-12                                 <span class="pl-c">\ 0 1 2 3 4 5 6 7 8 9 10 11 12 ok</span>
+
+<span class="pl-c">\ `?do` works similarly, except it will skip the loop if the end and start</span>
+<span class="pl-c">\ numbers are equal.</span>
+: squares <span class="pl-c">( n -- )</span> <span class="pl-c1">0</span> <span class="pl-k">?do</span> <span class="pl-c1">i</span> square . <span class="pl-k">loop</span> ;   <span class="pl-c">\ ok</span>
+<span class="pl-c1">10</span> squares                                   <span class="pl-c">\ 0 1 4 9 16 25 36 49 64 81 ok</span>
+
+<span class="pl-c">\ Change the "step" with `+loop`:</span>
+: threes <span class="pl-c">( n n -- )</span> <span class="pl-k">?do</span> <span class="pl-c1">i</span> . <span class="pl-c1">3</span> <span class="pl-k">+loop</span> ;    <span class="pl-c">\ ok</span>
+<span class="pl-c1">15</span> <span class="pl-c1">0</span> threes                             <span class="pl-c">\ 0 3 6 9 12 ok</span>
+
+<span class="pl-c">\ Indefinite loops with `begin` &lt;stuff to do&gt; &lt;flag&gt; `until`:</span>
+: death <span class="pl-c">( -- )</span> <span class="pl-k">begin</span> ." <span class="pl-s">Are we there yet?"</span> <span class="pl-c1">0</span> <span class="pl-k">until</span> ;    <span class="pl-c">\ ok</span>
+
+<span class="pl-c">\ ---------------------------- Variables and Memory ----------------------------</span>
+
+<span class="pl-c">\ Use `variable` to declare `age` to be a variable.</span>
+<span class="pl-k">variable</span> age    <span class="pl-c">\ ok</span>
+
+<span class="pl-c">\ Then we write 21 to age with the word `!`.</span>
+<span class="pl-c1">21</span> age !    <span class="pl-c">\ ok</span>
+
+<span class="pl-c">\ Finally we can print our variable using the "read" word `@`, which adds the</span>
+<span class="pl-c">\ value to the stack, or use `?` that reads and prints it in one go.</span>
+age @ .    <span class="pl-c">\ 21 ok</span>
+age ?      <span class="pl-c">\ 21 ok</span>
+
+<span class="pl-c">\ Constants are quite similar, except we don't bother with memory addresses:</span>
+<span class="pl-c1">100</span> <span class="pl-k">constant</span> WATER-BOILING-POINT    <span class="pl-c">\ ok</span>
+WATER-BOILING-POINT .               <span class="pl-c">\ 100 ok</span>
+
+<span class="pl-c">\ ----------------------------------- Arrays -----------------------------------</span>
+
+<span class="pl-c">\ Creating arrays is similar to variables, except we need to allocate more</span>
+<span class="pl-c">\ memory to them.</span>
+
+<span class="pl-c">\ You can use `2 cells allot` to create an array that's 3 cells long:</span>
+<span class="pl-k">variable</span> mynumbers <span class="pl-c1">2</span> cells allot    <span class="pl-c">\ ok</span>
+
+<span class="pl-c">\ Initialize all the values to 0</span>
+mynumbers <span class="pl-c1">3</span> cells erase    <span class="pl-c">\ ok</span>
+
+<span class="pl-c">\ Alternatively we could use `fill`:</span>
+mynumbers <span class="pl-c1">3</span> cells <span class="pl-c1">0</span> fill
+
+<span class="pl-c">\ or we can just skip all the above and initialize with specific values:</span>
+<span class="pl-k">create</span> mynumbers <span class="pl-c1">64</span> , <span class="pl-c1">9001</span> , <span class="pl-c1">1337</span> , <span class="pl-c">\ ok (the last `,` is important!)</span>
+
+<span class="pl-c">\ ...which is equivalent to:</span>
+
+<span class="pl-c">\ Manually writing values to each index:</span>
+<span class="pl-c1">64</span> mynumbers <span class="pl-c1">0</span> cells + !      <span class="pl-c">\ ok</span>
+<span class="pl-c1">9001</span> mynumbers <span class="pl-c1">1</span> cells + !    <span class="pl-c">\ ok</span>
+<span class="pl-c1">1337</span> mynumbers <span class="pl-c1">2</span> cells + !    <span class="pl-c">\ ok</span>
+
+<span class="pl-c">\ Reading values at certain array indexes:</span>
+<span class="pl-c1">0</span> cells mynumbers + ?    <span class="pl-c">\ 64 ok</span>
+<span class="pl-c1">1</span> cells mynumbers + ?    <span class="pl-c">\ 9001 ok</span>
+
+<span class="pl-c">\ We can simplify it a little by making a helper word for manipulating arrays:</span>
+: of-arr <span class="pl-c">( n n -- n )</span> cells + ;    <span class="pl-c">\ ok</span>
+mynumbers <span class="pl-c1">2</span> of-arr ?               <span class="pl-c">\ 1337 ok</span>
+
+<span class="pl-c">\ Which we can use for writing too:</span>
+<span class="pl-c1">20</span> mynumbers <span class="pl-c1">1</span> of-arr !    <span class="pl-c">\ ok</span>
+mynumbers <span class="pl-c1">1</span> of-arr ?       <span class="pl-c">\ 20 ok</span>
+
+<span class="pl-c">\ ------------------------------ The Return Stack ------------------------------</span>
+
+<span class="pl-c">\ The return stack is used to the hold pointers to things when words are</span>
+<span class="pl-c">\ executing other words, e.g. loops.</span>
+
+<span class="pl-c">\ We've already seen one use of it: `i`, which duplicates the top of the return</span>
+<span class="pl-c">\ stack. `i` is equivalent to `r@`.</span>
+: myloop <span class="pl-c">( -- )</span> <span class="pl-c1">5</span> <span class="pl-c1">0</span> <span class="pl-k">do</span> r@ . <span class="pl-k">loop</span> ;    <span class="pl-c">\ ok</span>
+
+<span class="pl-c">\ As well as reading, we can add to the return stack and remove from it:</span>
+<span class="pl-c1">5</span> <span class="pl-c1">6</span> <span class="pl-c1">4</span> &gt;r swap r&gt; .s    <span class="pl-c">\ 6 5 4 ok</span>
+
+<span class="pl-c">\ NOTE: Because Forth uses the return stack for word pointers,  `&gt;r` should</span>
+<span class="pl-c">\ always be followed by `r&gt;`.</span>
+
+<span class="pl-c">\ ------------------------- Floating Point Operations --------------------------</span>
+
+<span class="pl-c">\ Most Forths tend to eschew the use of floating point operations.</span>
+<span class="pl-c1">8.3e</span> <span class="pl-c1">0.8e</span> f+ f.    <span class="pl-c">\ 9.1 ok</span>
+
+<span class="pl-c">\ Usually we simply prepend words with 'f' when dealing with floats:</span>
+<span class="pl-k">variable</span> myfloatingvar    <span class="pl-c">\ ok</span>
+<span class="pl-c1">4.4e</span> myfloatingvar f!     <span class="pl-c">\ ok</span>
+myfloatingvar f@ f.       <span class="pl-c">\ 4.4 ok</span>
+
+<span class="pl-c">\ --------------------------------- Final Notes --------------------------------</span>
+
+<span class="pl-c">\ Typing a non-existent word will empty the stack. However, there's also a word</span>
+<span class="pl-c">\ specifically for that:</span>
+clearstack
+
+<span class="pl-c">\ Clear the screen:</span>
+page
+
+<span class="pl-c">\ Loading Forth files:</span>
+<span class="pl-c">\ s" forthfile.fs" included</span>
+
+<span class="pl-c">\ You can list every word that's in Forth's dictionary (but it's a huge list!):</span>
+<span class="pl-c">\ words</span>
+
+<span class="pl-c">\ Exiting Gforth:</span>
+<span class="pl-c">\ bye</span>
+</pre></div>
+<p>##Ready For More?</p>
+<ul>
+<li><a href="http://www.forth.com/starting-forth/" rel="nofollow">Starting Forth</a></li>
+<li><a href="http://www.murphywong.net/hello/simple.htm" rel="nofollow">Simple Forth</a></li>
+<li><a href="http://thinking-forth.sourceforge.net/" rel="nofollow">Thinking Forth</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Horse M.D.", "http://github.com/HorseMD/"]
+</code></pre>

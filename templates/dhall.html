@@ -1,0 +1,355 @@
+<h1>Dhall</h1>
+<p>Dhall is a programmable configuration language that provides a non-repetitive<br>
+alternative to YAML.</p>
+<p>You can think of Dhall as: JSON + functions + types + imports</p>
+<p>Note that while Dhall is programmable, Dhall is not Turing-complete.  Many<br>
+of Dhall's features take advantage of this restriction to provide stronger<br>
+safety guarantees and more powerful tooling.</p>
+<div class="highlight highlight-source-haskell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">--</span> Single-line comment</span>
+
+<span class="pl-c"><span class="pl-c">{-</span> Multi-line comment</span>
+<span class="pl-c"></span>
+<span class="pl-c">   Unicode is fine 🙂</span>
+<span class="pl-c"></span>
+<span class="pl-c">   This file is a valid Dhall expression that evaluates to a large record</span>
+<span class="pl-c">   collecting the results of each step.</span>
+<span class="pl-c"></span>
+<span class="pl-c">   You can view the results by interpreting the file:</span>
+<span class="pl-c"></span>
+<span class="pl-c">       $ dhall --file learndhall.dhall</span>
+<span class="pl-c"></span>
+<span class="pl-c">   <span class="pl-c"><span class="pl-c">{-</span> Comments can be nested <span class="pl-c">-}</span></span></span>
+<span class="pl-c"><span class="pl-c">-}</span></span>
+
+<span class="pl-k">let</span> greeting <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Hello, world!<span class="pl-pds">"</span></span>
+
+<span class="pl-k">let</span> fruits <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>🍋🍓🍍🍉🍌<span class="pl-pds">"</span></span>
+
+<span class="pl-k">let</span> interpolation <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Enjoy some delicious fruit: ${fruits}<span class="pl-pds">"</span></span>
+
+<span class="pl-k">let</span> multilineText <span class="pl-c"><span class="pl-c">{-</span> Inline comments work, too <span class="pl-c">-}</span></span> <span class="pl-k">=</span>
+        ''
+        <span class="pl-ent">Leading</span> whitespace is stripped from multi<span class="pl-k">-</span>line text literals<span class="pl-k">.</span>
+
+        <span class="pl-ent">That</span> means you can freely indent <span class="pl-c1">or</span> dedent a text literal without
+        changing the result<span class="pl-k">.</span>
+
+            <span class="pl-ent">Relative</span> indentation within the literal is still preserved<span class="pl-k">.</span>
+
+        <span class="pl-ent">Other</span> than that, the text literal is preserved verbatim, similar to a
+        <span class="pl-s"><span class="pl-pds">"</span>literal<span class="pl-pds">"</span></span> <span class="pl-ent">YAML</span> multiline string<span class="pl-k">.</span>
+        ''
+
+<span class="pl-k">let</span> bool <span class="pl-k">=</span> <span class="pl-ent"><span class="pl-c1">True</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> Type annotations on bindings are optional, but helpful, so we'll use them</span>
+<span class="pl-k">let</span> annotation <span class="pl-k">:</span> <span class="pl-ent">Bool</span> <span class="pl-k">=</span> <span class="pl-ent"><span class="pl-c1">True</span></span>
+
+<span class="pl-k">let</span> renderedBool <span class="pl-k">:</span> <span class="pl-ent">Text</span> <span class="pl-k">=</span> <span class="pl-k">if</span> bool <span class="pl-k">then</span> <span class="pl-s"><span class="pl-pds">"</span>True<span class="pl-pds">"</span></span> <span class="pl-k">else</span> <span class="pl-s"><span class="pl-pds">"</span>False<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> Natural numbers are non-negative and are unsigned</span>
+<span class="pl-k">let</span> naturalNumber <span class="pl-k">:</span> <span class="pl-ent">Natural</span> <span class="pl-k">=</span> <span class="pl-c1">42</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Integers may be negative, but require an explicit sign, even if positive</span>
+<span class="pl-k">let</span> positiveInteger <span class="pl-k">:</span> <span class="pl-ent">Integer</span> <span class="pl-k">=</span> <span class="pl-k">+</span><span class="pl-c1">1</span>
+
+<span class="pl-k">let</span> negativeInteger <span class="pl-k">:</span> <span class="pl-ent">Integer</span> <span class="pl-k">=</span> <span class="pl-k">-</span><span class="pl-c1">12</span>
+
+<span class="pl-k">let</span> <span class="pl-c1">pi</span> <span class="pl-k">:</span> <span class="pl-ent">Double</span> <span class="pl-k">=</span> <span class="pl-c1">3.14159265359</span>
+
+<span class="pl-c"><span class="pl-c">{-</span> You can use a wider character range for identifiers (such as quotation</span>
+<span class="pl-c">   marks and whitespace) if you quote them using backticks</span>
+<span class="pl-c"><span class="pl-c">-}</span></span>
+<span class="pl-k">let</span> `<span class="pl-ent">Avogadro's</span> <span class="pl-ent">Number</span>` <span class="pl-k">:</span> <span class="pl-ent">Double</span> <span class="pl-k">=</span> <span class="pl-c1">6.0221409e+23</span>
+
+<span class="pl-k">let</span> origin <span class="pl-k">:</span> { x <span class="pl-k">:</span> <span class="pl-ent">Double</span>, y <span class="pl-k">:</span> <span class="pl-ent">Double</span> } <span class="pl-k">=</span> { x <span class="pl-k">=</span> <span class="pl-c1">0.0</span>, y <span class="pl-k">=</span> <span class="pl-c1">0.0</span> }
+
+<span class="pl-k">let</span> somePrimes <span class="pl-k">:</span> <span class="pl-ent">List</span> <span class="pl-ent">Natural</span> <span class="pl-k">=</span> [ <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">5</span>, <span class="pl-c1">7</span>, <span class="pl-c1">11</span> ]
+
+<span class="pl-c"><span class="pl-c">{-</span> A schema is the same thing as a type</span>
+<span class="pl-c"></span>
+<span class="pl-c">   Types begin with an uppercase letter by convention, but this convention is</span>
+<span class="pl-c">   not enforced</span>
+<span class="pl-c"><span class="pl-c">-}</span></span>
+<span class="pl-k">let</span> <span class="pl-ent">Profile</span> <span class="pl-k">:</span> <span class="pl-ent">Type</span>
+        <span class="pl-k">=</span> { person <span class="pl-k">:</span>
+              { name <span class="pl-k">:</span> <span class="pl-ent">Text</span>
+              , age  <span class="pl-k">:</span> <span class="pl-ent">Natural</span>
+              }
+          , address <span class="pl-k">:</span>
+              { country <span class="pl-k">:</span> <span class="pl-ent">Text</span>
+              , state   <span class="pl-k">:</span> <span class="pl-ent">Text</span>
+              , city    <span class="pl-k">:</span> <span class="pl-ent">Text</span>
+              }
+          }
+
+<span class="pl-k">let</span> john <span class="pl-k">:</span> <span class="pl-ent">Profile</span> <span class="pl-k">=</span>
+        { person <span class="pl-k">=</span>
+            { name <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>John Doe<span class="pl-pds">"</span></span>
+            , age  <span class="pl-k">=</span> <span class="pl-c1">67</span>
+            }
+        , address <span class="pl-k">=</span>
+            { country <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>United States<span class="pl-pds">"</span></span>
+            , state   <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Pennsylvania<span class="pl-pds">"</span></span>
+            , city    <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Philadelphia<span class="pl-pds">"</span></span>
+            }
+        }
+
+<span class="pl-k">let</span> philadelphia <span class="pl-k">:</span> <span class="pl-ent">Text</span> <span class="pl-k">=</span> john<span class="pl-k">.</span>address<span class="pl-k">.</span>city
+
+<span class="pl-c"><span class="pl-c">{-</span> Enum alternatives also begin with an uppercase letter by convention.  This</span>
+<span class="pl-c">   convention is not enforced</span>
+<span class="pl-c"><span class="pl-c">-}</span></span>
+<span class="pl-k">let</span> <span class="pl-ent">DNA</span> <span class="pl-k">:</span> <span class="pl-ent">Type</span> <span class="pl-k">=</span> <span class="pl-k">&lt;</span> <span class="pl-ent">Adenine</span> <span class="pl-k">|</span> <span class="pl-ent">Cytosine</span> <span class="pl-k">|</span> <span class="pl-ent">Guanine</span> <span class="pl-k">|</span> <span class="pl-ent">Thymine</span> <span class="pl-k">&gt;</span>
+
+<span class="pl-k">let</span> dnaSequence <span class="pl-k">:</span> <span class="pl-ent">List</span> <span class="pl-ent">DNA</span> <span class="pl-k">=</span> [ <span class="pl-ent"><span class="pl-c1">DNA.</span>Thymine</span>, <span class="pl-ent"><span class="pl-c1">DNA.</span>Guanine</span>, <span class="pl-ent"><span class="pl-c1">DNA.</span>Guanine</span> ]
+
+<span class="pl-k">let</span> compactDNASequence <span class="pl-k">:</span> <span class="pl-ent">List</span> <span class="pl-ent">DNA</span> <span class="pl-k">=</span>
+        <span class="pl-k">let</span> a <span class="pl-k">=</span> <span class="pl-ent"><span class="pl-c1">DNA.</span>Adenine</span>
+        <span class="pl-k">let</span> c <span class="pl-k">=</span> <span class="pl-ent"><span class="pl-c1">DNA.</span>Cytosine</span>
+        <span class="pl-k">let</span> g <span class="pl-k">=</span> <span class="pl-ent"><span class="pl-c1">DNA.</span>Guanine</span>
+        <span class="pl-k">let</span> t <span class="pl-k">=</span> <span class="pl-ent"><span class="pl-c1">DNA.</span>Thymine</span>
+        <span class="pl-k">in</span>  [ c, t, t, a, t, c, g, g, c ]
+
+<span class="pl-c"><span class="pl-c">--</span> You can transform enums by providing a record with one field per alternative</span>
+<span class="pl-k">let</span> theLetterG <span class="pl-k">:</span> <span class="pl-ent">Text</span> <span class="pl-k">=</span>
+            merge
+            { <span class="pl-ent">Adenine</span>  <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>A<span class="pl-pds">"</span></span>
+            , <span class="pl-ent">Cytosine</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>C<span class="pl-pds">"</span></span>
+            , <span class="pl-ent">Guanine</span>  <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>G<span class="pl-pds">"</span></span>
+            , <span class="pl-ent">Thymine</span>  <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>T<span class="pl-pds">"</span></span>
+            }
+            <span class="pl-ent"><span class="pl-c1">DNA.</span>Guanine</span>
+
+<span class="pl-k">let</span> presentOptionalValue <span class="pl-k">:</span> <span class="pl-ent">Optional</span> <span class="pl-ent">Natural</span> <span class="pl-k">=</span> <span class="pl-ent">Some</span> <span class="pl-c1">1</span>
+
+<span class="pl-k">let</span> absentOptionalValue <span class="pl-k">:</span> <span class="pl-ent">Optional</span> <span class="pl-ent">Natural</span> <span class="pl-k">=</span> <span class="pl-ent">None</span> <span class="pl-ent">Natural</span>
+
+<span class="pl-k">let</span> points <span class="pl-k">:</span> <span class="pl-ent">List</span> { x <span class="pl-k">:</span> <span class="pl-ent">Double</span>, y <span class="pl-k">:</span> <span class="pl-ent">Double</span> } <span class="pl-k">=</span>
+        [ { x <span class="pl-k">=</span> <span class="pl-c1">1.1</span>, y <span class="pl-k">=</span> <span class="pl-k">-</span><span class="pl-c1">4.2</span> }
+        , { x <span class="pl-k">=</span> <span class="pl-c1">4.4</span>, y <span class="pl-k">=</span> <span class="pl-k">-</span><span class="pl-c1">3.0</span> }
+        , { x <span class="pl-k">=</span> <span class="pl-c1">8.2</span>, y <span class="pl-k">=</span> <span class="pl-k">-</span><span class="pl-c1">5.5</span> }
+        ]
+
+<span class="pl-c"><span class="pl-c">{-</span> `Natural -&gt; List Natural` is the type of a function whose input type is a</span>
+<span class="pl-c">   `Natural` and whose output type is a `List Natural`</span>
+<span class="pl-c"></span>
+<span class="pl-c">   All functions in Dhall are anonymous functions (a.k.a. "lambdas"),</span>
+<span class="pl-c">   which you can optionally give a name</span>
+<span class="pl-c"></span>
+<span class="pl-c">   For example, the following function is equivalent to this Python code:</span>
+<span class="pl-c"></span>
+<span class="pl-c">       lambda n : [ n, n + 1 ]</span>
+<span class="pl-c"></span>
+<span class="pl-c">   ... and this JavaScript code:</span>
+<span class="pl-c"></span>
+<span class="pl-c">       function (n) { return [ n, n + 1 ]; }</span>
+<span class="pl-c"><span class="pl-c">-}</span></span>
+<span class="pl-k">let</span> exampleFunction <span class="pl-k">:</span> <span class="pl-ent">Natural</span> <span class="pl-k">-&gt;</span> <span class="pl-ent">List</span> <span class="pl-ent">Natural</span> <span class="pl-k">=</span>
+        <span class="pl-k">\</span>(n <span class="pl-k">:</span> <span class="pl-ent">Natural</span>) <span class="pl-k">-&gt;</span> [ n, n <span class="pl-k">+</span> <span class="pl-c1">1</span> ]
+
+<span class="pl-c"><span class="pl-c">--</span> Dhall also supports Unicode syntax, but this tutorial will stick to ASCII</span>
+<span class="pl-k">let</span> unicodeFunction <span class="pl-k">:</span> <span class="pl-ent">Natural</span> <span class="pl-k">→</span> <span class="pl-ent">List</span> <span class="pl-ent">Natural</span> <span class="pl-k">=</span>
+        λ(n <span class="pl-k">:</span> <span class="pl-ent">Natural</span>) <span class="pl-k">→</span> [ n, n <span class="pl-k">+</span> <span class="pl-c1">1</span> ]
+
+<span class="pl-c"><span class="pl-c">--</span> You don't need to parenthesize function arguments</span>
+<span class="pl-k">let</span> exampleFunctionApplication <span class="pl-k">:</span> <span class="pl-ent">List</span> <span class="pl-ent">Natural</span> <span class="pl-k">=</span>
+        exampleFunction <span class="pl-c1">2</span>
+
+<span class="pl-k">let</span> functionOfMultipleArguments <span class="pl-k">:</span> <span class="pl-ent">Natural</span> <span class="pl-k">-&gt;</span> <span class="pl-ent">Natural</span> <span class="pl-k">-&gt;</span> <span class="pl-ent">List</span> <span class="pl-ent">Natural</span> <span class="pl-k">=</span>
+        <span class="pl-k">\</span>(x <span class="pl-k">:</span> <span class="pl-ent">Natural</span>) <span class="pl-k">-&gt;</span> <span class="pl-k">\</span>(y <span class="pl-k">:</span> <span class="pl-ent">Natural</span>) <span class="pl-k">-&gt;</span> [ x, y ]
+
+<span class="pl-k">let</span> functionAppliedToMultipleArguments <span class="pl-k">:</span> <span class="pl-ent">List</span> <span class="pl-ent">Natural</span> <span class="pl-k">=</span>
+        functionOfMultipleArguments <span class="pl-c1">2</span> <span class="pl-c1">3</span>
+
+<span class="pl-c"><span class="pl-c">{-</span> Same as `exampleFunction` except we gave the function's input type a</span>
+<span class="pl-c">   name: "n"</span>
+<span class="pl-c"><span class="pl-c">-}</span></span>
+<span class="pl-k">let</span> namedArgumentType <span class="pl-k">:</span> forall (n <span class="pl-k">:</span> <span class="pl-ent">Natural</span>) <span class="pl-k">-&gt;</span> <span class="pl-ent">List</span> <span class="pl-ent">Natural</span> <span class="pl-k">=</span>
+        <span class="pl-k">\</span>(n <span class="pl-k">:</span> <span class="pl-ent">Natural</span>) <span class="pl-k">-&gt;</span> [ n, n <span class="pl-k">+</span> <span class="pl-c1">1</span> ]
+
+<span class="pl-c"><span class="pl-c">{-</span> If you name a function's input type, you can use that name later within the</span>
+<span class="pl-c">   same type</span>
+<span class="pl-c"></span>
+<span class="pl-c">   This lets you write a function that works for more than one type of input</span>
+<span class="pl-c">   (a.k.a. a "polymorphic" function)</span>
+<span class="pl-c"><span class="pl-c">-}</span></span>
+<span class="pl-k">let</span> duplicate <span class="pl-k">:</span> forall (a <span class="pl-k">:</span> <span class="pl-ent">Type</span>) <span class="pl-k">-&gt;</span> a <span class="pl-k">-&gt;</span> <span class="pl-ent">List</span> a <span class="pl-k">=</span>
+        <span class="pl-k">\</span>(a <span class="pl-k">:</span> <span class="pl-ent">Type</span>) <span class="pl-k">-&gt;</span> <span class="pl-k">\</span>(x <span class="pl-k">:</span> a) <span class="pl-k">-&gt;</span> [ x, x ] 
+
+<span class="pl-k">let</span> duplicatedNumber <span class="pl-k">:</span> <span class="pl-ent">List</span> <span class="pl-ent">Natural</span> <span class="pl-k">=</span>
+        duplicate <span class="pl-ent">Natural</span> <span class="pl-c1">2</span>
+
+<span class="pl-k">let</span> duplicatedBool <span class="pl-k">:</span> <span class="pl-ent">List</span> <span class="pl-ent">Bool</span> <span class="pl-k">=</span>
+        duplicate <span class="pl-ent">Bool</span> <span class="pl-ent"><span class="pl-c1">False</span></span>
+
+<span class="pl-c"><span class="pl-c">{-</span> The language also has some built-in polymorphic functions, such as:</span>
+<span class="pl-c"></span>
+<span class="pl-c">       List/head : forall (a : Type) -&gt; List a -&gt; Optional a</span>
+<span class="pl-c"><span class="pl-c">-}</span></span>
+<span class="pl-k">let</span> firstPrime <span class="pl-k">:</span> <span class="pl-ent">Optional</span> <span class="pl-ent">Natural</span> <span class="pl-k">=</span> <span class="pl-ent">List</span><span class="pl-k">/</span><span class="pl-c1">head</span> <span class="pl-ent">Natural</span> somePrimes
+
+<span class="pl-k">let</span> functionOfARecord <span class="pl-k">:</span> { x <span class="pl-k">:</span> <span class="pl-ent">Natural</span>, y <span class="pl-k">:</span> <span class="pl-ent">Natural</span> } <span class="pl-k">-&gt;</span> <span class="pl-ent">List</span> <span class="pl-ent">Natural</span> <span class="pl-k">=</span>
+        <span class="pl-k">\</span>(args <span class="pl-k">:</span> { x <span class="pl-k">:</span> <span class="pl-ent">Natural</span>, y <span class="pl-k">:</span> <span class="pl-ent">Natural</span> }) <span class="pl-k">-&gt;</span> [ args<span class="pl-k">.</span>x, args<span class="pl-k">.</span>y ]
+
+<span class="pl-k">let</span> functionAppliedToARecord <span class="pl-k">:</span> <span class="pl-ent">List</span> <span class="pl-ent">Natural</span> <span class="pl-k">=</span>
+        functionOfARecord { x <span class="pl-k">=</span> <span class="pl-c1">2</span>, y <span class="pl-k">=</span> <span class="pl-c1">5</span> }
+
+<span class="pl-c"><span class="pl-c">{-</span> All type conversions are explicit</span>
+<span class="pl-c"></span>
+<span class="pl-c">   `Natural/show` is a built-in function of the following type:</span>
+<span class="pl-c"></span>
+<span class="pl-c">       Natural/show : Natural -&gt; Text</span>
+<span class="pl-c"></span>
+<span class="pl-c">   ... that converts `Natural` numbers to their `Text` representation</span>
+<span class="pl-c"><span class="pl-c">-}</span></span>
+<span class="pl-k">let</span> typeConversion <span class="pl-k">:</span> <span class="pl-ent">Natural</span> <span class="pl-k">-&gt;</span> <span class="pl-ent">Text</span> <span class="pl-k">=</span>
+        <span class="pl-k">\</span>(age <span class="pl-k">:</span> <span class="pl-ent">Natural</span>) <span class="pl-k">-&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>I am ${Natural/show age} years old!<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> A "template" is the same thing as a function whose output type is `Text`</span>
+<span class="pl-k">let</span> mitLicense <span class="pl-k">:</span> { year <span class="pl-k">:</span> <span class="pl-ent">Natural</span>, copyrightHolder <span class="pl-k">:</span> <span class="pl-ent">Text</span> } <span class="pl-k">-&gt;</span> <span class="pl-ent">Text</span> <span class="pl-k">=</span>
+        <span class="pl-k">\</span>(args <span class="pl-k">:</span> { year <span class="pl-k">:</span> <span class="pl-ent">Natural</span>, copyrightHolder <span class="pl-k">:</span> <span class="pl-ent">Text</span> }) <span class="pl-k">-&gt;</span>
+''
+<span class="pl-ent">Copyright</span> <span class="pl-k">$</span>{<span class="pl-ent">Natural</span><span class="pl-k">/</span><span class="pl-c1">show</span> args<span class="pl-k">.</span>year} <span class="pl-k">$</span>{args<span class="pl-k">.</span>copyrightHolder}
+
+<span class="pl-ent">Permission</span> is hereby granted, free <span class="pl-k">of</span> charge, to <span class="pl-c1">any</span> person obtaining a copy <span class="pl-k">of</span> 
+this software <span class="pl-c1">and</span> associated documentation files (the <span class="pl-s"><span class="pl-pds">"</span>Software<span class="pl-pds">"</span></span>), to deal <span class="pl-k">in</span> 
+the <span class="pl-ent">Software</span> without restriction, including without limitation the rights to 
+use, copy, modify, merge, publish, distribute, sublicense, <span class="pl-c1">and</span><span class="pl-k">/</span><span class="pl-c1">or</span> sell copies 
+<span class="pl-k">of</span> the <span class="pl-ent">Software</span>, <span class="pl-c1">and</span> to permit persons to whom the <span class="pl-ent">Software</span> is furnished to <span class="pl-k">do</span> 
+so, subject to the following conditions<span class="pl-k">:</span>
+
+<span class="pl-ent">The</span> above copyright notice <span class="pl-c1">and</span> this permission notice shall be included <span class="pl-k">in</span> <span class="pl-c1">all</span> 
+copies <span class="pl-c1">or</span> substantial portions <span class="pl-k">of</span> the <span class="pl-ent">Software</span><span class="pl-k">.</span>
+
+<span class="pl-ent">THE</span> <span class="pl-ent">SOFTWARE</span> <span class="pl-ent">IS</span> <span class="pl-ent">PROVIDED</span> <span class="pl-s"><span class="pl-pds">"</span>AS IS<span class="pl-pds">"</span></span>, <span class="pl-ent">WITHOUT</span> <span class="pl-ent">WARRANTY</span> <span class="pl-ent">OF</span> <span class="pl-ent">ANY</span> <span class="pl-ent">KIND</span>, <span class="pl-ent">EXPRESS</span> <span class="pl-ent">OR</span> 
+<span class="pl-ent">IMPLIED</span>, <span class="pl-ent">INCLUDING</span> <span class="pl-ent">BUT</span> <span class="pl-ent">NOT</span> <span class="pl-ent">LIMITED</span> <span class="pl-ent">TO</span> <span class="pl-ent">THE</span> <span class="pl-ent">WARRANTIES</span> <span class="pl-ent">OF</span> <span class="pl-ent">MERCHANTABILITY</span>, 
+<span class="pl-ent">FITNESS</span> <span class="pl-ent">FOR</span> <span class="pl-ent">A</span> <span class="pl-ent">PARTICULAR</span> <span class="pl-ent">PURPOSE</span> <span class="pl-ent">AND</span> <span class="pl-ent">NONINFRINGEMENT</span><span class="pl-k">.</span> <span class="pl-ent">IN</span> <span class="pl-ent">NO</span> <span class="pl-ent">EVENT</span> <span class="pl-ent">SHALL</span> <span class="pl-ent">THE</span> 
+<span class="pl-ent">AUTHORS</span> <span class="pl-ent">OR</span> <span class="pl-ent">COPYRIGHT</span> <span class="pl-ent">HOLDERS</span> <span class="pl-ent">BE</span> <span class="pl-ent">LIABLE</span> <span class="pl-ent">FOR</span> <span class="pl-ent">ANY</span> <span class="pl-ent">CLAIM</span>, <span class="pl-ent">DAMAGES</span> <span class="pl-ent">OR</span> <span class="pl-ent">OTHER</span> 
+<span class="pl-ent">LIABILITY</span>, <span class="pl-ent">WHETHER</span> <span class="pl-ent">IN</span> <span class="pl-ent">AN</span> <span class="pl-ent">ACTION</span> <span class="pl-ent">OF</span> <span class="pl-ent">CONTRACT</span>, <span class="pl-ent">TORT</span> <span class="pl-ent">OR</span> <span class="pl-ent">OTHERWISE</span>, <span class="pl-ent">ARISING</span> <span class="pl-ent">FROM</span>, 
+<span class="pl-ent">OUT</span> <span class="pl-ent">OF</span> <span class="pl-ent">OR</span> <span class="pl-ent">IN</span> <span class="pl-ent">CONNECTION</span> <span class="pl-ent">WITH</span> <span class="pl-ent">THE</span> <span class="pl-ent">SOFTWARE</span> <span class="pl-ent">OR</span> <span class="pl-ent">THE</span> <span class="pl-ent">USE</span> <span class="pl-ent">OR</span> <span class="pl-ent">OTHER</span> <span class="pl-ent">DEALINGS</span> <span class="pl-ent">IN</span> <span class="pl-ent">THE</span> 
+<span class="pl-ent">SOFTWARE</span><span class="pl-k">.</span>
+''
+
+<span class="pl-c"><span class="pl-c">--</span> Template instantiation is the same thing as function application</span>
+<span class="pl-k">let</span> templatedLicense <span class="pl-k">:</span> <span class="pl-ent">Text</span> <span class="pl-k">=</span>
+        mitLicense { year <span class="pl-k">=</span> <span class="pl-c1">2019</span>, copyrightHolder <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Jane Smith<span class="pl-pds">"</span></span> }
+
+<span class="pl-c"><span class="pl-c">{-</span> You can import expressions by URL</span>
+<span class="pl-c"></span>
+<span class="pl-c">   Also, like Bash, you can import code from your local filesystem (not shown)</span>
+<span class="pl-c"></span>
+<span class="pl-c">   Security-conscious users can pin remotely-imported expressions by adding a</span>
+<span class="pl-c">   semantic integrity check.  The interpreter rejects any attempt to tamper with</span>
+<span class="pl-c">   an expression pinned in this way.  However, behavior-preserving refactors</span>
+<span class="pl-c">   of imported content will not perturb the hash.</span>
+<span class="pl-c"></span>
+<span class="pl-c">   Imported expressions pinned in this way are also locally cached in a</span>
+<span class="pl-c">   content-addressable store (typically underneath `~/.cache/dhall`)</span>
+<span class="pl-c"><span class="pl-c">-}</span></span>
+<span class="pl-k">let</span> <span class="pl-ent">Natural</span><span class="pl-k">/</span><span class="pl-c1">sum</span> <span class="pl-k">:</span> <span class="pl-ent">List</span> <span class="pl-ent">Natural</span> <span class="pl-k">-&gt;</span> <span class="pl-ent">Natural</span> <span class="pl-k">=</span>
+      https<span class="pl-k">://</span>prelude<span class="pl-k">.</span>dhall<span class="pl-k">-</span>lang<span class="pl-k">.</span>org<span class="pl-k">/</span><span class="pl-ent">Natural</span><span class="pl-k">/</span><span class="pl-c1">sum</span>
+      sha256<span class="pl-k">:</span><span class="pl-c1">33</span>f7f4c3aff62e5ecf4848f964363133452d420dcde045784518fb59fa970037
+
+<span class="pl-k">let</span> twentyEight <span class="pl-k">:</span> <span class="pl-ent">Natural</span> <span class="pl-k">=</span> <span class="pl-ent">Natural</span><span class="pl-k">/</span><span class="pl-c1">sum</span> somePrimes
+
+<span class="pl-c"><span class="pl-c">--</span> A "package" is the same thing as a (possibly nested) record that you can import</span>
+<span class="pl-k">let</span> <span class="pl-ent">Prelude</span> <span class="pl-k">=</span> https<span class="pl-k">://</span>prelude<span class="pl-k">.</span>dhall<span class="pl-k">-</span>lang<span class="pl-k">.</span>org<span class="pl-k">/</span>package<span class="pl-k">.</span>dhall
+
+<span class="pl-k">let</span> false <span class="pl-k">:</span> <span class="pl-ent">Bool</span> <span class="pl-k">=</span> <span class="pl-c1">Prelude.Bool.</span><span class="pl-c1">not</span> <span class="pl-ent"><span class="pl-c1">True</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> You can import the raw contents of a file by adding `as Text` to an import</span>
+<span class="pl-k">let</span> sourceCode <span class="pl-k">:</span> <span class="pl-ent">Text</span> <span class="pl-k">=</span> https<span class="pl-k">://</span>prelude<span class="pl-k">.</span>dhall<span class="pl-k">-</span>lang<span class="pl-k">.</span>org<span class="pl-k">/</span><span class="pl-ent">Bool</span><span class="pl-k">/</span><span class="pl-c1">not</span> as <span class="pl-ent">Text</span>
+
+<span class="pl-c"><span class="pl-c">--</span> You can import environment variables, too:</span>
+<span class="pl-k">let</span> presentWorkingDirectory <span class="pl-k">=</span> env<span class="pl-k">:</span><span class="pl-ent">PWD</span> as <span class="pl-ent">Text</span>
+
+<span class="pl-c"><span class="pl-c">--</span> You can provide a fallback expression if an import fails</span>
+<span class="pl-k">let</span> home <span class="pl-k">:</span> <span class="pl-ent">Optional</span> <span class="pl-ent">Text</span> <span class="pl-k">=</span> <span class="pl-ent">Some</span> env<span class="pl-k">:</span><span class="pl-ent">HOME</span> <span class="pl-k">?</span> <span class="pl-ent">None</span> <span class="pl-ent">Text</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Fallback expressions can contain alternative imports of their own</span>
+<span class="pl-k">let</span> possiblyCustomPrelude <span class="pl-k">=</span>
+        env<span class="pl-k">:</span><span class="pl-ent">DHALL_PRELUDE</span>
+      <span class="pl-k">?</span> https<span class="pl-k">://</span>prelude<span class="pl-k">.</span>dhall<span class="pl-k">-</span>lang<span class="pl-k">.</span>org<span class="pl-k">/</span>package<span class="pl-k">.</span>dhall
+
+<span class="pl-c"><span class="pl-c">{-</span> Tie everything together by auto-generating configurations for 10 build users</span>
+<span class="pl-c">   using the `generate` function:</span>
+<span class="pl-c"></span>
+<span class="pl-c">       Prelude.List.generate</span>
+<span class="pl-c">           : Natural -&gt; forall (a : Type) -&gt; (Natural -&gt; a) -&gt; List a</span>
+<span class="pl-c"><span class="pl-c">-}</span></span>
+<span class="pl-k">let</span> buildUsers <span class="pl-k">=</span>
+        <span class="pl-k">let</span> makeUser <span class="pl-k">=</span> <span class="pl-k">\</span>(user <span class="pl-k">:</span> <span class="pl-ent">Text</span>) <span class="pl-k">-&gt;</span>
+              <span class="pl-k">let</span> home       <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>/home/${user}<span class="pl-pds">"</span></span>
+              <span class="pl-k">let</span> privateKey <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>${home}/.ssh/id_ed25519<span class="pl-pds">"</span></span>
+              <span class="pl-k">let</span> publicKey  <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>${privateKey}.pub<span class="pl-pds">"</span></span>
+              <span class="pl-k">in</span>  { home <span class="pl-k">=</span> home
+                  , privateKey <span class="pl-k">=</span> privateKey
+                  , publicKey <span class="pl-k">=</span> publicKey
+                  }
+
+        <span class="pl-k">let</span> buildUser <span class="pl-k">=</span>
+                <span class="pl-k">\</span>(index <span class="pl-k">:</span> <span class="pl-ent">Natural</span>) <span class="pl-k">-&gt;</span> makeUser <span class="pl-s"><span class="pl-pds">"</span>build${Natural/show index}<span class="pl-pds">"</span></span>
+
+        <span class="pl-k">let</span> <span class="pl-ent">Config</span> <span class="pl-k">=</span>
+              { home <span class="pl-k">:</span> <span class="pl-ent">Text</span>
+              , privateKey <span class="pl-k">:</span> <span class="pl-ent">Text</span>
+              , publicKey <span class="pl-k">:</span> <span class="pl-ent">Text</span>
+              }
+
+        <span class="pl-k">in</span>  <span class="pl-c1">Prelude.List.</span>generate <span class="pl-c1">10</span> <span class="pl-ent">Config</span> buildUser
+
+<span class="pl-c"><span class="pl-c">--</span> Present all of the results in a final record</span>
+<span class="pl-k">in</span>  { greeting <span class="pl-k">=</span> greeting
+    , fruits <span class="pl-k">=</span> fruits
+    , interpolation <span class="pl-k">=</span> interpolation
+    , multilineText <span class="pl-k">=</span> multilineText
+    , bool <span class="pl-k">=</span> bool
+    , annotation <span class="pl-k">=</span> annotation
+    , renderedBool <span class="pl-k">=</span> renderedBool
+    , naturalNumber <span class="pl-k">=</span> naturalNumber
+    , positiveInteger <span class="pl-k">=</span> positiveInteger
+    , negativeInteger <span class="pl-k">=</span> negativeInteger
+    , <span class="pl-c1">pi</span> <span class="pl-k">=</span> <span class="pl-c1">pi</span>
+    , `<span class="pl-ent">Avogadro's</span> <span class="pl-ent">Number</span>` <span class="pl-k">=</span> `<span class="pl-ent">Avogadro's</span> <span class="pl-ent">Number</span>`
+    , origin <span class="pl-k">=</span> origin
+    , somePrimes <span class="pl-k">=</span> somePrimes
+    , john <span class="pl-k">=</span> john
+    , philadelphia <span class="pl-k">=</span> philadelphia
+    , dnaSequence <span class="pl-k">=</span> dnaSequence
+    , compactDNASequence <span class="pl-k">=</span> compactDNASequence
+    , theLetterG <span class="pl-k">=</span> theLetterG
+    , presentOptionalValue <span class="pl-k">=</span> presentOptionalValue
+    , absentOptionalValue <span class="pl-k">=</span> absentOptionalValue
+    , points <span class="pl-k">=</span> points
+    , exampleFunction <span class="pl-k">=</span> exampleFunction
+    , unicodeFunction <span class="pl-k">=</span> unicodeFunction
+    , exampleFunctionApplication <span class="pl-k">=</span> exampleFunctionApplication
+    , functionOfMultipleArguments <span class="pl-k">=</span> functionOfMultipleArguments
+    , functionAppliedToMultipleArguments <span class="pl-k">=</span> functionAppliedToMultipleArguments
+    , namedArgumentType <span class="pl-k">=</span> namedArgumentType
+    , duplicate <span class="pl-k">=</span> duplicate
+    , duplicatedNumber <span class="pl-k">=</span> duplicatedNumber
+    , duplicatedBool <span class="pl-k">=</span> duplicatedBool
+    , firstPrime <span class="pl-k">=</span> firstPrime
+    , functionOfARecord <span class="pl-k">=</span> functionOfARecord
+    , functionAppliedToARecord <span class="pl-k">=</span> functionAppliedToARecord
+    , typeConversion <span class="pl-k">=</span> typeConversion
+    , mitLicense <span class="pl-k">=</span> mitLicense
+    , templatedLicense <span class="pl-k">=</span> templatedLicense
+    , twentyEight <span class="pl-k">=</span> twentyEight
+    , false <span class="pl-k">=</span> false
+    , sourceCode <span class="pl-k">=</span> sourceCode
+    , presentWorkingDirectory <span class="pl-k">=</span> presentWorkingDirectory
+    , home <span class="pl-k">=</span> home
+    , buildUsers <span class="pl-k">=</span> buildUsers
+    }</pre></div>
+<p>To learn more, visit the official website, which also lets you try the<br>
+language live in your browser:</p>
+<ul>
+<li><a href="http://dhall-lang.org/" rel="nofollow">https://dhall-lang.org</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Gabriel Gonzalez", "http://www.haskellforall.com/"]
+</code></pre>

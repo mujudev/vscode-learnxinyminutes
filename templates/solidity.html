@@ -1,0 +1,952 @@
+<h1>Solidity</h1>
+<p>Solidity lets you program on <a href="https://www.ethereum.org/" rel="nofollow">Ethereum</a>, a<br>
+blockchain-based virtual machine that allows the creation and<br>
+execution of smart contracts, without requiring centralized or trusted parties.</p>
+<p>Solidity is a statically typed, contract programming language that has<br>
+similarities to Javascript and C. Like objects in OOP, each contract contains<br>
+state variables, functions, and common data types. Contract-specific features<br>
+include modifier (guard) clauses, event notifiers for listeners, and custom<br>
+global variables.</p>
+<p>Some Ethereum contract examples include crowdfunding, voting, <a href="https://defipulse.com/" rel="nofollow">decentralized finance</a>, and blind auctions.</p>
+<p>There is a high risk and high cost of errors in Solidity code, so you must be very careful to test<br>
+and slowly rollout. WITH THE RAPID CHANGES IN ETHEREUM, THIS DOCUMENT IS UNLIKELY TO STAY UP TO<br>
+DATE, SO YOU SHOULD FOLLOW THE SOLIDITY CHAT ROOM AND ETHEREUM BLOG FOR THE LATEST. ALL CODE HERE IS<br>
+PROVIDED AS IS, WITH SUBSTANTIAL RISK OF ERRORS OR DEPRECATED CODE PATTERNS.</p>
+<p>Unlike other code, you may also need to add in design patterns like pausing, deprecation, and<br>
+throttling usage to reduce risk. This document primarily discusses syntax, and so excludes many<br>
+popular design patterns.</p>
+<p>As Solidity and Ethereum are under active development, experimental or beta<br>
+features are typically marked, and subject to change. Pull requests welcome.</p>
+<h1>Working with Remix and Metamask</h1>
+<p>One of the easiest ways to build, deploy, and test solidity code is by using the:</p>
+<ol>
+<li><a href="https://remix.ethereum.org/" rel="nofollow">Remix Web IDE</a></li>
+<li><a href="https://metamask.io/" rel="nofollow">Metamask wallet</a>.</li>
+</ol>
+<p>To get started, <a href="https://metamask.io/" rel="nofollow">download the Metamask Browser Extension</a>.</p>
+<p>Once installed, we will be working with Remix. The below code will be pre-loaded, but before we head over there, let's look at a few tips to get started with remix. Load it all by <a href="https://remix.ethereum.org/#version=soljson-v0.6.6+commit.6c089d02.js&amp;optimize=false&amp;evmVersion=null&amp;gist=f490c0d51141dd0515244db40bbd0c17&amp;runs=200" rel="nofollow">hitting this link</a>.</p>
+<ol>
+<li>Choose the Solidity compiler</li>
+</ol>
+<p><a target="_blank" rel="noopener noreferrer" href="images/solidity/remix-solidity.png"><img src="images/solidity/remix-solidity.png" alt="Solidity-in-remix" style="max-width: 100%;"></a></p>
+<ol start="2">
+<li>Open the file loaded by that link</li>
+</ol>
+<p><a target="_blank" rel="noopener noreferrer" href="images/solidity/remix-choose-file.png"><img src="images/solidity/remix-choose-file.png" alt="Solidity-choose-file" style="max-width: 100%;"></a></p>
+<ol start="3">
+<li>Compile the file</li>
+</ol>
+<p><a target="_blank" rel="noopener noreferrer" href="images/solidity/remix-compile.png"><img src="images/solidity/remix-compile.png" alt="Solidity-compile" style="max-width: 100%;"></a></p>
+<ol start="4">
+<li>Deploy</li>
+</ol>
+<p><a target="_blank" rel="noopener noreferrer" href="images/solidity/remix-deploy.png"><img src="images/solidity/remix-deploy.png" alt="Solidity-deploy" style="max-width: 100%;"></a></p>
+<ol start="5">
+<li>Play with contracts</li>
+</ol>
+<p><a target="_blank" rel="noopener noreferrer" href="images/solidity/remix-interact.png"><img src="images/solidity/remix-interact.png" alt="Solidity-deploy" style="max-width: 100%;"></a></p>
+<p>You've deployed your first contract! Congrats!</p>
+<p>You can test out and play with the functions defined. Check out the comments to learn about what each does.</p>
+<h2>Working on a testnet</h2>
+<p>Deploying and testing on a testnet is the most accurate way to test your smart contracts in solidity.<br>
+To do this let's first get some testnet ETH from the Kovan testnet.</p>
+<p><a href="https://gitter.im/kovan-testnet/faucet" rel="nofollow">Pop into this Gitter Channel</a> and drop your metamask address in.</p>
+<p>In your metamask, you'll want to change to the <code class="notranslate">Kovan</code> testnet.</p>
+<p><a target="_blank" rel="noopener noreferrer" href="images/solidity/metamask-kovan.png"><img src="images/solidity/metamask-kovan.png" alt="Solidity-in-remix" style="max-width: 100%;"></a></p>
+<p>You'll be given some free test Ethereum. Ethereum is needed to deploy smart contracts when working with a testnet.</p>
+<p>In the previous example, we didn't use a testnet, we deployed to a fake virtual environment.<br>
+When working with a testnet, we can actually see and interact with our contracts in a persistent manner.</p>
+<p>To deploy to a testnet, on the <code class="notranslate">#4 Deploy</code> step, change your <code class="notranslate">environment</code> to <code class="notranslate">injected web3</code>.<br>
+This will use whatever network is currently selected in your metamask as the network to deploy to.</p>
+<p><a target="_blank" rel="noopener noreferrer" href="images/solidity/remix-testnet.png"><img src="images/solidity/remix-testnet.png" alt="Solidity-in-remix" style="max-width: 100%;"></a></p>
+<p>For now, please continue to use the <code class="notranslate">Javascript VM</code> unless instructed otherwise. When you deploy to a testnet, metamask will pop up to ask you to "confirm" the transaction. Hit yes, and after a delay, you'll get the same contract interface at the bottom of your screen.</p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-c">// First, a simple Bank contract</span>
+<span class="pl-c">// Allows deposits, withdrawals, and balance checks</span>
+
+<span class="pl-c">// simple_bank.sol (note .sol extension)</span>
+<span class="pl-c">/* **** START EXAMPLE **** */</span>
+
+<span class="pl-c">// Declare the source file compiler version</span>
+<span class="pl-s1">pragma</span> <span class="pl-s1">solidity</span> <span class="pl-c1">^</span><span class="pl-c1">0.6</span><span class="pl-c1">.6</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// Start with Natspec comment (the three slashes)</span>
+<span class="pl-c">// used for documentation - and as descriptive data for UI elements/actions</span>
+
+<span class="pl-c">/// <span class="pl-k">@title</span> SimpleBank</span>
+<span class="pl-c">/// <span class="pl-k">@author</span> nemild</span>
+
+<span class="pl-c">/* 'contract' has similarities to 'class' in other languages (class variables,</span>
+<span class="pl-c">inheritance, etc.) */</span>
+<span class="pl-s1">contract</span> <span class="pl-v">SimpleBank</span> <span class="pl-kos">{</span> <span class="pl-c">// CapWords</span>
+    <span class="pl-c">// Declare state variables outside function, persist through life of contract</span>
+
+    <span class="pl-c">// dictionary that maps addresses to balances</span>
+    <span class="pl-c">// always be careful about overflow attacks with numbers</span>
+    <span class="pl-en">mapping</span> <span class="pl-kos">(</span><span class="pl-s1">address</span> <span class="pl-c1">=&gt;</span> <span class="pl-s1">uint</span><span class="pl-kos">)</span> <span class="pl-s1">private</span> <span class="pl-s1">balances</span><span class="pl-kos">;</span>
+
+    <span class="pl-c">// "private" means that other contracts can't directly query balances</span>
+    <span class="pl-c">// but data is still viewable to other parties on blockchain</span>
+
+    <span class="pl-s1">address</span> <span class="pl-s1">public</span> <span class="pl-s1">owner</span><span class="pl-kos">;</span>
+    <span class="pl-c">// 'public' makes externally readable (not writeable) by users or contracts</span>
+
+    <span class="pl-c">// Events - publicize actions to external listeners</span>
+    <span class="pl-s1">event</span><span class="pl-kos"></span> <span class="pl-v">LogDepositMade</span><span class="pl-kos">(</span><span class="pl-s1">address</span> <span class="pl-s1">accountAddress</span><span class="pl-kos">,</span> <span class="pl-s1">uint</span> <span class="pl-s1">amount</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-c">// Constructor, can receive one or many variables here; only one allowed</span>
+    <span class="pl-en">constructor</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-s1">public</span> <span class="pl-kos">{</span>
+        <span class="pl-c">// msg provides details about the message that's sent to the contract</span>
+        <span class="pl-c">// msg.sender is contract caller (address of contract creator)</span>
+        <span class="pl-s1">owner</span> <span class="pl-c1">=</span> <span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-c">/// <span class="pl-k">@notice</span> Deposit ether into bank</span>
+    <span class="pl-c">/// <span class="pl-k">@return</span> The balance of the user after the deposit is made</span>
+    <span class="pl-k">function</span> <span class="pl-s1">deposit</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-s1">public</span> <span class="pl-s1">payable</span> <span class="pl-en">returns</span> <span class="pl-kos">(</span><span class="pl-s1">uint</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+        <span class="pl-c">// Use 'require' to test user inputs, 'assert' for internal invariants</span>
+        <span class="pl-c">// Here we are making sure that there isn't an overflow issue</span>
+        <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-kos">(</span><span class="pl-s1">balances</span><span class="pl-kos">[</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">]</span> <span class="pl-c1">+</span> <span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">value</span><span class="pl-kos">)</span> <span class="pl-c1">&gt;=</span> <span class="pl-s1">balances</span><span class="pl-kos">[</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+        <span class="pl-s1">balances</span><span class="pl-kos">[</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">]</span> <span class="pl-c1">+=</span> <span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">value</span><span class="pl-kos">;</span>
+        <span class="pl-c">// no "this." or "self." required with state variable</span>
+        <span class="pl-c">// all values set to data type's initial value by default</span>
+
+        <span class="pl-s1">emit</span><span class="pl-kos"></span> <span class="pl-v">LogDepositMade</span><span class="pl-kos">(</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">,</span> <span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">value</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// fire event</span>
+
+        <span class="pl-k">return</span> <span class="pl-s1">balances</span><span class="pl-kos">[</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">]</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-c">/// <span class="pl-k">@notice</span> Withdraw ether from bank</span>
+    <span class="pl-c">/// <span class="pl-k">@dev</span> This does not return any excess ether sent to it</span>
+    <span class="pl-c">/// <span class="pl-k">@param</span> withdrawAmount amount you want to withdraw</span>
+    <span class="pl-c">/// <span class="pl-k">@return</span> remainingBal</span>
+    <span class="pl-k">function</span> <span class="pl-en">withdraw</span><span class="pl-kos">(</span><span class="pl-s1">uint</span> <span class="pl-s1">withdrawAmount</span><span class="pl-kos">)</span> <span class="pl-s1">public</span> <span class="pl-s1">returns</span> <span class="pl-kos">(</span><span class="pl-s1">uint</span> <span class="pl-s1">remainingBal</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+        <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">withdrawAmount</span> <span class="pl-c1">&lt;=</span> <span class="pl-s1">balances</span><span class="pl-kos">[</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+        <span class="pl-c">// Note the way we deduct the balance right away, before sending</span>
+        <span class="pl-c">// Every .transfer/.send from this contract can call an external function</span>
+        <span class="pl-c">// This may allow the caller to request an amount greater</span>
+        <span class="pl-c">// than their balance using a recursive call</span>
+        <span class="pl-c">// Aim to commit state before calling external functions, including .transfer/.send</span>
+        <span class="pl-s1">balances</span><span class="pl-kos">[</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">]</span> <span class="pl-c1">-=</span> <span class="pl-s1">withdrawAmount</span><span class="pl-kos">;</span>
+
+        <span class="pl-c">// this automatically throws on a failure, which means the updated balance is reverted</span>
+        <span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">.</span><span class="pl-en">transfer</span><span class="pl-kos">(</span><span class="pl-s1">withdrawAmount</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+        <span class="pl-k">return</span> <span class="pl-s1">balances</span><span class="pl-kos">[</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">]</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-c">/// <span class="pl-k">@notice</span> Get balance</span>
+    <span class="pl-c">/// <span class="pl-k">@return</span> The balance of the user</span>
+    <span class="pl-c">// 'view' (ex: constant) prevents function from editing state variables;</span>
+    <span class="pl-c">// allows function to run locally/off blockchain</span>
+    <span class="pl-k">function</span> <span class="pl-s1">balance</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-s1">view</span> <span class="pl-s1">public</span> <span class="pl-en">returns</span> <span class="pl-kos">(</span><span class="pl-s1">uint</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+        <span class="pl-k">return</span> <span class="pl-s1">balances</span><span class="pl-kos">[</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">]</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+<span class="pl-kos">}</span>
+<span class="pl-c">// ** END EXAMPLE **</span>
+
+
+<span class="pl-c">// Now, the basics of Solidity</span>
+
+<span class="pl-c">// 1. DATA TYPES AND ASSOCIATED METHODS</span>
+<span class="pl-c">// uint used for currency amount (there are no doubles</span>
+<span class="pl-c">//  or floats) and for dates (in unix time)</span>
+<span class="pl-s1">uint</span> <span class="pl-s1">x</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// int of 256 bits, cannot be changed after instantiation</span>
+<span class="pl-s1">int</span> <span class="pl-s1">constant</span> <span class="pl-s1">a</span> <span class="pl-c1">=</span> <span class="pl-c1">8</span><span class="pl-kos">;</span>
+<span class="pl-s1">int256</span> <span class="pl-s1">constant</span> <span class="pl-s1">a</span> <span class="pl-c1">=</span> <span class="pl-c1">8</span><span class="pl-kos">;</span> <span class="pl-c">// same effect as line above, here the 256 is explicit</span>
+<span class="pl-s1">uint</span> <span class="pl-s1">constant</span> <span class="pl-c1">VERSION_ID</span> <span class="pl-c1">=</span> <span class="pl-c1">0x123A1</span><span class="pl-kos">;</span> <span class="pl-c">// A hex constant</span>
+<span class="pl-c">// with 'constant', compiler replaces each occurrence with actual value</span>
+
+<span class="pl-c">// All state variables (those outside a function)</span>
+<span class="pl-c">// are by default 'internal' and accessible inside contract</span>
+<span class="pl-c">// and in all contracts that inherit ONLY</span>
+<span class="pl-c">// Need to explicitly set to 'public' to allow external contracts to access</span>
+<span class="pl-s1">int256</span> <span class="pl-s1">public</span> <span class="pl-s1">a</span> <span class="pl-c1">=</span> <span class="pl-c1">8</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// For int and uint, can explicitly set space in steps of 8 up to 256</span>
+<span class="pl-c">// e.g., int8, int16, int24</span>
+<span class="pl-s1">uint8</span> <span class="pl-s1">b</span><span class="pl-kos">;</span>
+<span class="pl-s1">int64</span> <span class="pl-s1">c</span><span class="pl-kos">;</span>
+<span class="pl-s1">uint248</span> <span class="pl-s1">e</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// Be careful that you don't overflow, and protect against attacks that do</span>
+<span class="pl-c">// For example, for an addition, you'd do:</span>
+<span class="pl-s1">uint256</span> <span class="pl-s1">c</span> <span class="pl-c1">=</span> <span class="pl-s1">a</span> <span class="pl-c1">+</span> <span class="pl-s1">b</span><span class="pl-kos">;</span>
+<span class="pl-en">assert</span><span class="pl-kos">(</span><span class="pl-s1">c</span> <span class="pl-c1">&gt;=</span> <span class="pl-s1">a</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// assert tests for internal invariants; require is used for user inputs</span>
+<span class="pl-c">// For more examples of common arithmetic issues, see Zeppelin's SafeMath library</span>
+<span class="pl-c">// https://github.com/OpenZeppelin/zeppelin-solidity/blob/master/contracts/math/SafeMath.sol</span>
+
+
+<span class="pl-c">// No random functions built in, you can get a pseduo-random number by hashing the current blockhash, or get a truly random number using something like Chainlink VRF. </span>
+<span class="pl-c">// https://docs.chain.link/docs/get-a-random-number</span>
+
+<span class="pl-c">// Type casting</span>
+<span class="pl-s1">int</span> <span class="pl-s1">x</span> <span class="pl-c1">=</span> <span class="pl-en">int</span><span class="pl-kos">(</span><span class="pl-s1">b</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-s1">bool</span> <span class="pl-s1">b</span> <span class="pl-c1">=</span> <span class="pl-c1">true</span><span class="pl-kos">;</span> <span class="pl-c">// or do 'var b = true;' for inferred typing</span>
+
+<span class="pl-c">// Addresses - holds 20 byte/160 bit Ethereum addresses</span>
+<span class="pl-c">// No arithmetic allowed</span>
+<span class="pl-s1">address</span> <span class="pl-s1">public</span> <span class="pl-s1">owner</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// Types of accounts:</span>
+<span class="pl-c">// Contract account: address set on create (func of creator address, num transactions sent)</span>
+<span class="pl-c">// External Account: (person/external entity): address created from public key</span>
+
+<span class="pl-c">// Add 'public' field to indicate publicly/externally accessible</span>
+<span class="pl-c">// a getter is automatically created, but NOT a setter</span>
+
+<span class="pl-c">// All addresses can be sent ether</span>
+<span class="pl-s1">owner</span><span class="pl-kos">.</span><span class="pl-en">transfer</span><span class="pl-kos">(</span><span class="pl-c1">SOME_BALANCE</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// fails and reverts on failure</span>
+
+<span class="pl-c">// Can also do a lower level .send call, which returns a false if it failed</span>
+<span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">owner</span><span class="pl-kos">.</span><span class="pl-c1">send</span><span class="pl-kos">)</span> <span class="pl-kos">{</span><span class="pl-kos">}</span> <span class="pl-c">// REMEMBER: wrap send in 'if', as contract addresses have</span>
+<span class="pl-c">// functions executed on send and these can fail</span>
+<span class="pl-c">// Also, make sure to deduct balances BEFORE attempting a send, as there is a risk of a recursive</span>
+<span class="pl-c">// call that can drain the contract</span>
+
+<span class="pl-c">// Can check balance</span>
+<span class="pl-s1">owner</span><span class="pl-kos">.</span><span class="pl-c1">balance</span><span class="pl-kos">;</span> <span class="pl-c">// the balance of the owner (user or contract)</span>
+
+
+<span class="pl-c">// Bytes available from 1 to 32</span>
+<span class="pl-s1">byte</span> <span class="pl-s1">a</span><span class="pl-kos">;</span> <span class="pl-c">// byte is same as bytes1</span>
+<span class="pl-s1">bytes2</span> <span class="pl-s1">b</span><span class="pl-kos">;</span>
+<span class="pl-s1">bytes32</span> <span class="pl-s1">c</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// Dynamically sized bytes</span>
+<span class="pl-s1">bytes</span> <span class="pl-s1">m</span><span class="pl-kos">;</span> <span class="pl-c">// A special array, same as byte[] array (but packed tightly)</span>
+<span class="pl-c">// More expensive than byte1-byte32, so use those when possible</span>
+
+<span class="pl-c">// same as bytes, but does not allow length or index access (for now)</span>
+<span class="pl-s1">string</span> <span class="pl-s1">n</span> <span class="pl-c1">=</span> <span class="pl-s">"hello"</span><span class="pl-kos">;</span> <span class="pl-c">// stored in UTF8, note double quotes, not single</span>
+<span class="pl-c">// string utility functions to be added in future</span>
+<span class="pl-c">// prefer bytes32/bytes, as UTF8 uses more storage</span>
+
+<span class="pl-c">// Type inference</span>
+<span class="pl-c">// var does inferred typing based on first assignment,</span>
+<span class="pl-c">// can't be used in functions parameters</span>
+<span class="pl-k">var</span> <span class="pl-s1">a</span> <span class="pl-c1">=</span> <span class="pl-c1">true</span><span class="pl-kos">;</span>
+<span class="pl-c">// use carefully, inference may provide wrong type</span>
+<span class="pl-c">// e.g., an int8, when a counter needs to be int16</span>
+
+<span class="pl-c">// var can be used to assign function to variable</span>
+<span class="pl-k">function</span> <span class="pl-s1">a</span><span class="pl-kos">(</span><span class="pl-s1">uint</span> <span class="pl-s1">x</span><span class="pl-kos">)</span> <span class="pl-en">returns</span> <span class="pl-kos">(</span><span class="pl-s1">uint</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-k">return</span> <span class="pl-s1">x</span> <span class="pl-c1">*</span> <span class="pl-c1">2</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span>
+<span class="pl-k">var</span> <span class="pl-s1">f</span> <span class="pl-c1">=</span> <span class="pl-s1">a</span><span class="pl-kos">;</span>
+<span class="pl-s1">f</span><span class="pl-kos">(</span><span class="pl-c1">22</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// call</span>
+
+<span class="pl-c">// by default, all values are set to 0 on instantiation</span>
+
+<span class="pl-c">// Delete can be called on most types</span>
+<span class="pl-c">// (does NOT destroy value, but sets value to 0, the initial value)</span>
+<span class="pl-k">delete</span> <span class="pl-s1">x</span><span class="pl-kos">;</span>
+
+
+<span class="pl-c">// Destructuring/Tuples</span>
+<span class="pl-kos">(</span><span class="pl-s1">x</span><span class="pl-kos">,</span> <span class="pl-s1">y</span><span class="pl-kos">)</span> <span class="pl-c1">=</span> <span class="pl-kos">(</span><span class="pl-c1">2</span><span class="pl-kos">,</span> <span class="pl-c1">7</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// assign/swap multiple values</span>
+
+
+<span class="pl-c">// 2. DATA STRUCTURES</span>
+<span class="pl-c">// Arrays</span>
+<span class="pl-s1">bytes32</span><span class="pl-kos">[</span><span class="pl-c1">5</span><span class="pl-kos">]</span> <span class="pl-s1">nicknames</span><span class="pl-kos">;</span> <span class="pl-c">// static array</span>
+<span class="pl-s1">bytes32</span><span class="pl-kos">[</span><span class="pl-kos">]</span> <span class="pl-s1">names</span><span class="pl-kos"></span><span class="pl-kos">;</span> <span class="pl-c">// dynamic array</span>
+<span class="pl-s1">uint</span> <span class="pl-s1">newLength</span> <span class="pl-c1">=</span> <span class="pl-s1">names</span><span class="pl-kos">.</span><span class="pl-en">push</span><span class="pl-kos">(</span><span class="pl-s">"John"</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// adding returns new length of the array</span>
+<span class="pl-c">// Length</span>
+<span class="pl-s1">names</span><span class="pl-kos">.</span><span class="pl-c1">length</span><span class="pl-kos">;</span> <span class="pl-c">// get length</span>
+<span class="pl-s1">names</span><span class="pl-kos">.</span><span class="pl-c1">length</span> <span class="pl-c1">=</span> <span class="pl-c1">1</span><span class="pl-kos">;</span> <span class="pl-c">// lengths can be set (for dynamic arrays in storage only)</span>
+
+<span class="pl-c">// multidimensional array</span>
+<span class="pl-s1">uint</span><span class="pl-kos">[</span><span class="pl-kos">]</span><span class="pl-kos">[</span><span class="pl-c1">5</span><span class="pl-kos">]</span> <span class="pl-s1">x</span><span class="pl-kos">;</span> <span class="pl-c">// arr with 5 dynamic array elements (opp order of most languages)</span>
+
+<span class="pl-c">// Dictionaries (any type to any other type)</span>
+<span class="pl-en">mapping</span> <span class="pl-kos">(</span><span class="pl-s1">string</span> <span class="pl-c1">=&gt;</span> <span class="pl-s1">uint</span><span class="pl-kos">)</span> <span class="pl-s1">public</span> <span class="pl-s1">balances</span><span class="pl-kos">;</span>
+<span class="pl-s1">balances</span><span class="pl-kos">[</span><span class="pl-s">"charles"</span><span class="pl-kos">]</span> <span class="pl-c1">=</span> <span class="pl-c1">1</span><span class="pl-kos">;</span>
+<span class="pl-c">// balances["ada"] result is 0, all non-set key values return zeroes</span>
+<span class="pl-c">// 'public' allows following from another contract</span>
+<span class="pl-s1">contractName</span><span class="pl-kos">.</span><span class="pl-en">balances</span><span class="pl-kos">(</span><span class="pl-s">"charles"</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// returns 1</span>
+<span class="pl-c">// 'public' created a getter (but not setter) like the following:</span>
+<span class="pl-k">function</span> <span class="pl-en">balances</span><span class="pl-kos">(</span><span class="pl-s1">string</span> <span class="pl-s1">_account</span><span class="pl-kos">)</span> <span class="pl-s1">returns</span> <span class="pl-kos">(</span><span class="pl-s1">uint</span> <span class="pl-s1">balance</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-k">return</span> <span class="pl-s1">balances</span><span class="pl-kos">[</span><span class="pl-s1">_account</span><span class="pl-kos">]</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-c">// Nested mappings</span>
+<span class="pl-en">mapping</span> <span class="pl-kos">(</span><span class="pl-s1">address</span> <span class="pl-c1">=&gt;</span> <span class="pl-en">mapping</span> <span class="pl-kos">(</span><span class="pl-s1">address</span> <span class="pl-c1">=&gt;</span> <span class="pl-s1">uint</span><span class="pl-kos">)</span><span class="pl-kos">)</span> <span class="pl-s1">public</span> <span class="pl-s1">custodians</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// To delete</span>
+<span class="pl-k">delete</span> <span class="pl-s1">balances</span><span class="pl-kos">[</span><span class="pl-s">"John"</span><span class="pl-kos">]</span><span class="pl-kos">;</span>
+<span class="pl-k">delete</span> <span class="pl-s1">balances</span><span class="pl-kos">;</span> <span class="pl-c">// sets all elements to 0</span>
+
+<span class="pl-c">// Unlike other languages, CANNOT iterate through all elements in</span>
+<span class="pl-c">// mapping, without knowing source keys - can build data structure</span>
+<span class="pl-c">// on top to do this</span>
+
+<span class="pl-c">// Structs</span>
+<span class="pl-s1">struct</span> <span class="pl-v">Bank</span> <span class="pl-kos">{</span>
+    <span class="pl-s1">address</span> <span class="pl-s1">owner</span><span class="pl-kos">;</span>
+    <span class="pl-s1">uint</span> <span class="pl-s1">balance</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span>
+<span class="pl-v">Bank</span> <span class="pl-s1">b</span> <span class="pl-c1">=</span> <span class="pl-v">Bank</span><span class="pl-kos">(</span><span class="pl-kos">{</span>
+    <span class="pl-c1">owner</span>: <span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">,</span>
+    <span class="pl-c1">balance</span>: <span class="pl-c1">5</span>
+<span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-c">// or</span>
+<span class="pl-v">Bank</span> <span class="pl-s1">c</span> <span class="pl-c1">=</span> <span class="pl-v">Bank</span><span class="pl-kos">(</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">,</span> <span class="pl-c1">5</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-s1">c</span><span class="pl-kos">.</span><span class="pl-c1">balance</span> <span class="pl-c1">=</span> <span class="pl-c1">5</span><span class="pl-kos">;</span> <span class="pl-c">// set to new value</span>
+<span class="pl-k">delete</span> <span class="pl-s1">b</span><span class="pl-kos">;</span>
+<span class="pl-c">// sets to initial value, set all variables in struct to 0, except mappings</span>
+
+<span class="pl-c">// Enums</span>
+<span class="pl-s1">enum</span> <span class="pl-v">State</span> <span class="pl-kos">{</span> <span class="pl-v">Created</span><span class="pl-kos">,</span> <span class="pl-v">Locked</span><span class="pl-kos">,</span> <span class="pl-v">Inactive</span> <span class="pl-kos">}</span><span class="pl-kos">;</span> <span class="pl-c">// often used for state machine</span>
+<span class="pl-v">State</span> <span class="pl-s1">public</span> <span class="pl-s1">state</span><span class="pl-kos">;</span> <span class="pl-c">// Declare variable from enum</span>
+<span class="pl-s1">state</span> <span class="pl-c1">=</span> <span class="pl-v">State</span><span class="pl-kos">.</span><span class="pl-c1">Created</span><span class="pl-kos">;</span>
+<span class="pl-c">// enums can be explicitly converted to ints</span>
+<span class="pl-s1">uint</span><span class="pl-kos"></span> <span class="pl-s1">createdState</span> <span class="pl-c1">=</span> <span class="pl-en">uint</span><span class="pl-kos">(</span><span class="pl-v">State</span><span class="pl-kos">.</span><span class="pl-c1">Created</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">//  0</span>
+
+<span class="pl-c">// Data locations: Memory vs. storage vs. calldata - all complex types (arrays,</span>
+<span class="pl-c">// structs) have a data location</span>
+<span class="pl-c">// 'memory' does not persist, 'storage' does</span>
+<span class="pl-c">// Default is 'storage' for local and state variables; 'memory' for func params</span>
+<span class="pl-c">// stack holds small local variables</span>
+
+<span class="pl-c">// for most types, can explicitly set which data location to use</span>
+
+
+<span class="pl-c">// 3. Simple operators</span>
+<span class="pl-c">// Comparisons, bit operators and arithmetic operators are provided</span>
+<span class="pl-c">// exponentiation: **</span>
+<span class="pl-c">// exclusive or: ^</span>
+<span class="pl-c">// bitwise negation: ~</span>
+
+
+<span class="pl-c">// 4. Global Variables of note</span>
+<span class="pl-c">// ** this **</span>
+<span class="pl-smi">this</span><span class="pl-kos">;</span> <span class="pl-c">// address of contract</span>
+<span class="pl-c">// often used at end of contract life to transfer remaining balance to party</span>
+<span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">balance</span><span class="pl-kos">;</span>
+<span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-en">someFunction</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// calls func externally via call, not via internal jump</span>
+
+<span class="pl-c">// ** msg - Current message received by the contract ** **</span>
+<span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">;</span> <span class="pl-c">// address of sender</span>
+<span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">value</span><span class="pl-kos">;</span> <span class="pl-c">// amount of ether provided to this contract in wei, the function should be marked "payable"</span>
+<span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">data</span><span class="pl-kos">;</span> <span class="pl-c">// bytes, complete call data</span>
+<span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">gas</span><span class="pl-kos">;</span> <span class="pl-c">// remaining gas</span>
+
+<span class="pl-c">// ** tx - This transaction **</span>
+<span class="pl-s1">tx</span><span class="pl-kos">.</span><span class="pl-c1">origin</span><span class="pl-kos">;</span> <span class="pl-c">// address of sender of the transaction</span>
+<span class="pl-s1">tx</span><span class="pl-kos">.</span><span class="pl-c1">gasprice</span><span class="pl-kos">;</span> <span class="pl-c">// gas price of the transaction</span>
+
+<span class="pl-c">// ** block - Information about current block **</span>
+<span class="pl-s1">now</span><span class="pl-kos">;</span> <span class="pl-c">// current time (approximately), alias for block.timestamp (uses Unix time)</span>
+<span class="pl-c">// Note that this can be manipulated by miners, so use carefully</span>
+
+<span class="pl-s1">block</span><span class="pl-kos">.</span><span class="pl-c1">number</span><span class="pl-kos">;</span> <span class="pl-c">// current block number</span>
+<span class="pl-s1">block</span><span class="pl-kos">.</span><span class="pl-c1">difficulty</span><span class="pl-kos">;</span> <span class="pl-c">// current block difficulty</span>
+<span class="pl-s1">block</span><span class="pl-kos">.</span><span class="pl-en">blockhash</span><span class="pl-kos">(</span><span class="pl-c1">1</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// returns bytes32, only works for most recent 256 blocks</span>
+<span class="pl-s1">block</span><span class="pl-kos">.</span><span class="pl-en">gasLimit</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// ** storage - Persistent storage hash **</span>
+<span class="pl-s1">storage</span><span class="pl-kos">[</span><span class="pl-s">'abc'</span><span class="pl-kos">]</span> <span class="pl-c1">=</span> <span class="pl-s">'def'</span><span class="pl-kos">;</span> <span class="pl-c">// maps 256 bit words to 256 bit words</span>
+
+
+<span class="pl-c">// 5. FUNCTIONS AND MORE</span>
+<span class="pl-c">// A. Functions</span>
+<span class="pl-c">// Simple function</span>
+<span class="pl-k">function</span> <span class="pl-en">increment</span><span class="pl-kos">(</span><span class="pl-s1">uint</span> <span class="pl-s1">x</span><span class="pl-kos">)</span> <span class="pl-s1">returns</span> <span class="pl-kos">(</span><span class="pl-s1">uint</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-s1">x</span> <span class="pl-c1">+=</span> <span class="pl-c1">1</span><span class="pl-kos">;</span>
+    <span class="pl-k">return</span> <span class="pl-s1">x</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-c">// Functions can return many arguments,</span>
+<span class="pl-c">// and by specifying returned arguments name explicit return is not needed</span>
+<span class="pl-k">function</span> <span class="pl-en">increment</span><span class="pl-kos">(</span><span class="pl-s1">uint</span> <span class="pl-s1">x</span><span class="pl-kos">,</span> <span class="pl-s1">uint</span> <span class="pl-s1">y</span><span class="pl-kos">)</span> <span class="pl-s1">returns</span> <span class="pl-kos">(</span><span class="pl-s1">uint</span> <span class="pl-s1">x</span><span class="pl-kos">,</span> <span class="pl-s1">uint</span> <span class="pl-s1">y</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-s1">x</span> <span class="pl-c1">+=</span> <span class="pl-c1">1</span><span class="pl-kos">;</span>
+    <span class="pl-s1">y</span> <span class="pl-c1">+=</span> <span class="pl-c1">1</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span>
+<span class="pl-c">// Call previous function</span>
+<span class="pl-en">uint</span> <span class="pl-kos">(</span><span class="pl-s1">a</span><span class="pl-kos">,</span><span class="pl-s1">b</span><span class="pl-kos">)</span> <span class="pl-c1">=</span> <span class="pl-s1">increment</span><span class="pl-kos">(</span><span class="pl-c1">1</span><span class="pl-kos">,</span><span class="pl-c1">1</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// 'view' (alias for 'constant')</span>
+<span class="pl-c">// indicates that function does not/cannot change persistent vars</span>
+<span class="pl-c">// View function execute locally, not on blockchain</span>
+<span class="pl-c">// Noted: constant keyword will soon be deprecated.</span>
+<span class="pl-s1">uint</span> <span class="pl-s1">y</span> <span class="pl-c1">=</span> <span class="pl-c1">1</span><span class="pl-kos">;</span>
+
+<span class="pl-k">function</span> <span class="pl-en">increment</span><span class="pl-kos">(</span><span class="pl-s1">uint</span> <span class="pl-s1">x</span><span class="pl-kos">)</span> <span class="pl-s1">view</span> <span class="pl-s1">returns</span> <span class="pl-kos">(</span><span class="pl-s1">uint</span> <span class="pl-s1">x</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-s1">x</span> <span class="pl-c1">+=</span> <span class="pl-c1">1</span><span class="pl-kos">;</span>
+    <span class="pl-s1">y</span> <span class="pl-c1">+=</span> <span class="pl-c1">1</span><span class="pl-kos">;</span> <span class="pl-c">// this line would fail</span>
+    <span class="pl-c">// y is a state variable, and can't be changed in a view function</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-c">// 'pure' is more strict than 'view' or 'constant', and does not</span>
+<span class="pl-c">// even allow reading of state vars</span>
+<span class="pl-c">// The exact rules are more complicated, so see more about</span>
+<span class="pl-c">// view/pure:</span>
+<span class="pl-c">// http://solidity.readthedocs.io/en/develop/contracts.html#view-functions</span>
+
+<span class="pl-c">// 'Function Visibility specifiers'</span>
+<span class="pl-c">// These can be placed where 'view' is, including:</span>
+<span class="pl-c">// public - visible externally and internally (default for function)</span>
+<span class="pl-c">// external - only visible externally (including a call made with this.)</span>
+<span class="pl-c">// private - only visible in the current contract</span>
+<span class="pl-c">// internal - only visible in current contract, and those deriving from it</span>
+
+<span class="pl-c">// Generally, a good idea to mark each function explicitly</span>
+
+<span class="pl-c">// Functions hoisted - and can assign a function to a variable</span>
+<span class="pl-k">function</span> <span class="pl-s1">a</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-k">var</span> <span class="pl-s1">z</span> <span class="pl-c1">=</span> <span class="pl-s1">b</span><span class="pl-kos">;</span>
+    <span class="pl-s1">z</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-k">function</span> <span class="pl-en">b</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+
+<span class="pl-kos">}</span>
+
+<span class="pl-c">// All functions that receive ether must be marked 'payable'</span>
+<span class="pl-k">function</span> <span class="pl-en">depositEther</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-s1">public</span> <span class="pl-s1">payable</span> <span class="pl-kos">{</span>
+    <span class="pl-s1">balances</span><span class="pl-kos">[</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">]</span> <span class="pl-c1">+=</span> <span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">value</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span>
+
+
+<span class="pl-c">// Prefer loops to recursion (max call stack depth is 1024)</span>
+<span class="pl-c">// Also, don't setup loops that you haven't bounded,</span>
+<span class="pl-c">// as this can hit the gas limit</span>
+
+<span class="pl-c">// B. Events</span>
+<span class="pl-c">// Events are notify external parties; easy to search and</span>
+<span class="pl-c">// access events from outside blockchain (with lightweight clients)</span>
+<span class="pl-c">// typically declare after contract parameters</span>
+
+<span class="pl-c">// Typically, capitalized - and add Log in front to be explicit and prevent confusion</span>
+<span class="pl-c">// with a function call</span>
+
+<span class="pl-c">// Declare</span>
+<span class="pl-en">event</span> <span class="pl-v">LogSent</span><span class="pl-kos">(</span><span class="pl-s1">address</span> <span class="pl-s1">indexed</span> <span class="pl-k">from</span><span class="pl-kos">,</span> <span class="pl-s1">address</span> <span class="pl-s1">indexed</span> <span class="pl-s1">to</span><span class="pl-kos">,</span> <span class="pl-s1">uint</span> <span class="pl-s1">amount</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// note capital first letter</span>
+
+<span class="pl-c">// Call</span>
+<span class="pl-v">LogSent</span><span class="pl-kos">(</span><span class="pl-s1">from</span><span class="pl-kos">,</span> <span class="pl-s1">to</span><span class="pl-kos">,</span> <span class="pl-s1">amount</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-c">/**</span>
+<span class="pl-c"></span>
+<span class="pl-c">For an external party (a contract or external entity), to watch using</span>
+<span class="pl-c">the Web3 Javascript library:</span>
+<span class="pl-c"></span>
+<span class="pl-c">// The following is Javascript code, not Solidity code</span>
+<span class="pl-c">Coin.LogSent().watch({}, '', function(error, result) {</span>
+<span class="pl-c">    if (!error) {</span>
+<span class="pl-c">        console.log("Coin transfer: " + result.args.amount +</span>
+<span class="pl-c">            " coins were sent from " + result.args.from +</span>
+<span class="pl-c">            " to " + result.args.to + ".");</span>
+<span class="pl-c">        console.log("Balances now:\n" +</span>
+<span class="pl-c">            "Sender: " + Coin.balances.call(result.args.from) +</span>
+<span class="pl-c">            "Receiver: " + Coin.balances.call(result.args.to));</span>
+<span class="pl-c">    }</span>
+<span class="pl-c">}</span>
+<span class="pl-c">**/</span>
+
+<span class="pl-c">// Common paradigm for one contract to depend on another (e.g., a</span>
+<span class="pl-c">// contract that depends on current exchange rate provided by another)</span>
+
+<span class="pl-c">// C. Modifiers</span>
+<span class="pl-c">// Modifiers validate inputs to functions such as minimal balance or user auth;</span>
+<span class="pl-c">// similar to guard clause in other languages</span>
+
+<span class="pl-c">// '_' (underscore) often included as last line in body, and indicates</span>
+<span class="pl-c">// function being called should be placed there</span>
+<span class="pl-en">modifier</span> <span class="pl-s1">onlyAfter</span><span class="pl-kos">(</span><span class="pl-s1">uint</span> <span class="pl-s1">_time</span><span class="pl-kos">)</span><span class="pl-kos"></span> <span class="pl-kos">{</span> <span class="pl-en">require</span> <span class="pl-kos">(</span><span class="pl-s1">now</span> <span class="pl-c1">&gt;=</span> <span class="pl-s1">_time</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-s1">_</span><span class="pl-kos">;</span> <span class="pl-kos">}</span>
+<span class="pl-s1">modifier</span> <span class="pl-s1">onlyOwner</span> <span class="pl-kos">{</span> <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span> <span class="pl-c1">==</span> <span class="pl-s1">owner</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-s1">_</span><span class="pl-kos">;</span> <span class="pl-kos">}</span>
+<span class="pl-c">// commonly used with state machines</span>
+<span class="pl-s1">modifier</span><span class="pl-kos"></span> <span class="pl-en">onlyIfStateA</span> <span class="pl-kos">(</span><span class="pl-v">State</span> <span class="pl-s1">currState</span><span class="pl-kos">)</span><span class="pl-kos"></span> <span class="pl-kos">{</span> <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">currState</span> <span class="pl-c1">==</span> <span class="pl-v">State</span><span class="pl-kos">.</span><span class="pl-c1">A</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-s1">_</span><span class="pl-kos">;</span> <span class="pl-kos">}</span>
+
+<span class="pl-c">// Append right after function declaration</span>
+<span class="pl-k">function</span> <span class="pl-s1">changeOwner</span><span class="pl-kos">(</span><span class="pl-s1">newOwner</span><span class="pl-kos">)</span>
+<span class="pl-s1">onlyAfter</span><span class="pl-kos">(</span><span class="pl-s1">someTime</span><span class="pl-kos">)</span>
+<span class="pl-s1">onlyOwner</span><span class="pl-kos">(</span><span class="pl-kos">)</span>
+<span class="pl-en">onlyIfState</span><span class="pl-kos">(</span><span class="pl-v">State</span><span class="pl-kos">.</span><span class="pl-v">A</span><span class="pl-kos">)</span>
+<span class="pl-kos">{</span>
+    <span class="pl-s1">owner</span> <span class="pl-c1">=</span> <span class="pl-s1">newOwner</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-c">// underscore can be included before end of body,</span>
+<span class="pl-c">// but explicitly returning will skip, so use carefully</span>
+<span class="pl-en">modifier</span> <span class="pl-s1">checkValue</span><span class="pl-kos">(</span><span class="pl-s1">uint</span> <span class="pl-s1">amount</span><span class="pl-kos">)</span><span class="pl-kos"></span> <span class="pl-kos">{</span>
+    <span class="pl-s1">_</span><span class="pl-kos">;</span>
+    <span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">value</span> <span class="pl-c1">&gt;</span> <span class="pl-s1">amount</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+        <span class="pl-s1">uint</span> <span class="pl-s1">amountToRefund</span> <span class="pl-c1">=</span> <span class="pl-s1">amount</span> <span class="pl-c1">-</span> <span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">value</span><span class="pl-kos">;</span>
+        <span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">.</span><span class="pl-en">transfer</span><span class="pl-kos">(</span><span class="pl-s1">amountToRefund</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+<span class="pl-kos">}</span>
+
+
+<span class="pl-c">// 6. BRANCHING AND LOOPS</span>
+
+<span class="pl-c">// All basic logic blocks work - including if/else, for, while, break, continue</span>
+<span class="pl-c">// return - but no switch</span>
+
+<span class="pl-c">// Syntax same as javascript, but no type conversion from non-boolean</span>
+<span class="pl-c">// to boolean (comparison operators must be used to get the boolean val)</span>
+
+<span class="pl-c">// For loops that are determined by user behavior, be careful - as contracts have a maximal</span>
+<span class="pl-c">// amount of gas for a block of code - and will fail if that is exceeded</span>
+<span class="pl-c">// For example:</span>
+<span class="pl-k">for</span><span class="pl-kos">(</span><span class="pl-s1">uint</span> <span class="pl-s1">x</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span><span class="pl-kos">;</span> <span class="pl-s1">x</span> <span class="pl-c1">&lt;</span> <span class="pl-s1">refundAddressList</span><span class="pl-kos">.</span><span class="pl-c1">length</span><span class="pl-kos">;</span> <span class="pl-s1">x</span><span class="pl-c1">++</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-s1">refundAddressList</span><span class="pl-kos">[</span><span class="pl-s1">x</span><span class="pl-kos">]</span><span class="pl-kos">.</span><span class="pl-en">transfer</span><span class="pl-kos">(</span><span class="pl-c1">SOME_AMOUNT</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-c">// Two errors above:</span>
+<span class="pl-c">// 1. A failure on transfer stops the loop from completing, tying up money</span>
+<span class="pl-c">// 2. This loop could be arbitrarily long (based on the amount of users who need refunds), and</span>
+<span class="pl-c">// therefore may always fail as it exceeds the max gas for a block</span>
+<span class="pl-c">// Instead, you should let people withdraw individually from their subaccount, and mark withdrawn</span>
+<span class="pl-c">// e.g., favor pull payments over push payments</span>
+
+
+<span class="pl-c">// 7. OBJECTS/CONTRACTS</span>
+
+<span class="pl-c">// A. Calling external contract</span>
+<span class="pl-s1">contract</span> <span class="pl-v">InfoFeed</span> <span class="pl-kos">{</span>
+    <span class="pl-k">function</span> <span class="pl-s1">info</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-s1">payable</span> <span class="pl-en">returns</span> <span class="pl-kos">(</span><span class="pl-s1">uint</span> <span class="pl-s1">ret</span><span class="pl-kos">)</span>  <span class="pl-kos">{</span> <span class="pl-k">return</span> <span class="pl-c1">42</span><span class="pl-kos">;</span> <span class="pl-kos">}</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-s1">contract</span> <span class="pl-v">Consumer</span> <span class="pl-kos">{</span>
+    <span class="pl-v">InfoFeed</span> <span class="pl-s1">feed</span><span class="pl-kos">;</span> <span class="pl-c">// points to contract on blockchain</span>
+
+    <span class="pl-c">// Set feed to existing contract instance</span>
+    <span class="pl-k">function</span> <span class="pl-en">setFeed</span><span class="pl-kos">(</span><span class="pl-s1">address</span> <span class="pl-s1">addr</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+        <span class="pl-c">// automatically cast, be careful; constructor is not called</span>
+        <span class="pl-s1">feed</span> <span class="pl-c1">=</span> <span class="pl-v">InfoFeed</span><span class="pl-kos">(</span><span class="pl-s1">addr</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-c">// Set feed to new instance of contract</span>
+    <span class="pl-k">function</span> <span class="pl-en">createNewFeed</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+        <span class="pl-s1">feed</span> <span class="pl-c1">=</span> <span class="pl-k">new</span> <span class="pl-v">InfoFeed</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// new instance created; constructor called</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-k">function</span> <span class="pl-en">callFeed</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+        <span class="pl-c">// final parentheses call contract, can optionally add</span>
+        <span class="pl-c">// custom ether value or gas</span>
+        <span class="pl-s1">feed</span><span class="pl-kos">.</span><span class="pl-c1">info</span><span class="pl-kos">.</span><span class="pl-en">value</span><span class="pl-kos">(</span><span class="pl-c1">10</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">gas</span><span class="pl-kos">(</span><span class="pl-c1">800</span><span class="pl-kos">)</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-c">// B. Inheritance</span>
+
+<span class="pl-c">// Order matters, last inherited contract (i.e., 'def') can override parts of</span>
+<span class="pl-c">// previously inherited contracts</span>
+<span class="pl-s1">contract</span> <span class="pl-v">MyContract</span> <span class="pl-s1">is</span> <span class="pl-s1">abc</span><span class="pl-kos">,</span> <span class="pl-en">def</span><span class="pl-kos">(</span><span class="pl-s">"a custom argument to def"</span><span class="pl-kos">)</span><span class="pl-kos"></span> <span class="pl-kos">{</span>
+
+<span class="pl-c">// Override function</span>
+    <span class="pl-k">function</span> <span class="pl-en">z</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+        <span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span> <span class="pl-c1">==</span> <span class="pl-s1">owner</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+            <span class="pl-s1">def</span><span class="pl-kos">.</span><span class="pl-en">z</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// call overridden function from def</span>
+            <span class="pl-smi">super</span><span class="pl-kos">.</span><span class="pl-en">z</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// call immediate parent overridden function</span>
+        <span class="pl-kos">}</span>
+    <span class="pl-kos">}</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-c">// abstract function</span>
+<span class="pl-k">function</span> <span class="pl-s1">someAbstractFunction</span><span class="pl-kos">(</span><span class="pl-s1">uint</span> <span class="pl-s1">x</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-c">// cannot be compiled, so used in base/abstract contracts</span>
+<span class="pl-c">// that are then implemented</span>
+
+<span class="pl-c">// C. Import</span>
+
+<span class="pl-k">import</span> <span class="pl-s">"filename"</span><span class="pl-kos">;</span>
+<span class="pl-k">import</span> <span class="pl-s">"github.com/ethereum/dapp-bin/library/iterable_mapping.sol"</span><span class="pl-kos">;</span>
+
+
+<span class="pl-c">// 8. OTHER KEYWORDS</span>
+
+<span class="pl-c">// A. Selfdestruct</span>
+<span class="pl-c">// selfdestruct current contract, sending funds to address (often creator)</span>
+<span class="pl-en">selfdestruct</span><span class="pl-kos">(</span><span class="pl-c1">SOME_ADDRESS</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// removes storage/code from current/future blocks</span>
+<span class="pl-c">// helps thin clients, but previous data persists in blockchain</span>
+
+<span class="pl-c">// Common pattern, lets owner end the contract and receive remaining funds</span>
+<span class="pl-k">function</span> <span class="pl-en">remove</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-k">if</span><span class="pl-kos">(</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span> <span class="pl-c1">==</span> <span class="pl-s1">creator</span><span class="pl-kos">)</span> <span class="pl-kos">{</span> <span class="pl-c">// Only let the contract creator do this</span>
+        <span class="pl-en">selfdestruct</span><span class="pl-kos">(</span><span class="pl-s1">creator</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Makes contract inactive, returns funds</span>
+    <span class="pl-kos">}</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-c">// May want to deactivate contract manually, rather than selfdestruct</span>
+<span class="pl-c">// (ether sent to selfdestructed contract is lost)</span>
+
+
+<span class="pl-c">// 9. CONTRACT DESIGN NOTES</span>
+
+<span class="pl-c">// A. Obfuscation</span>
+<span class="pl-c">// All variables are publicly viewable on blockchain, so anything</span>
+<span class="pl-c">// that is private needs to be obfuscated (e.g., hashed w/secret)</span>
+
+<span class="pl-c">// Steps: 1. Commit to something, 2. Reveal commitment</span>
+<span class="pl-en">keccak256</span><span class="pl-kos">(</span><span class="pl-s">"some_bid_amount"</span><span class="pl-kos">,</span> <span class="pl-s">"some secret"</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// commit</span>
+
+<span class="pl-c">// call contract's reveal function in the future</span>
+<span class="pl-c">// showing bid plus secret that hashes to SHA3</span>
+<span class="pl-en">reveal</span><span class="pl-kos">(</span><span class="pl-c1">100</span><span class="pl-kos">,</span> <span class="pl-s">"mySecret"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// B. Storage optimization</span>
+<span class="pl-c">// Writing to blockchain can be expensive, as data stored forever; encourages</span>
+<span class="pl-c">// smart ways to use memory (eventually, compilation will be better, but for now</span>
+<span class="pl-c">// benefits to planning data structures - and storing min amount in blockchain)</span>
+
+<span class="pl-c">// Cost can often be high for items like multidimensional arrays</span>
+<span class="pl-c">// (cost is for storing data - not declaring unfilled variables)</span>
+
+<span class="pl-c">// C. Data access in blockchain</span>
+<span class="pl-c">// Cannot restrict human or computer from reading contents of</span>
+<span class="pl-c">// transaction or transaction's state</span>
+
+<span class="pl-c">// While 'private' prevents other *contracts* from reading data</span>
+<span class="pl-c">// directly - any other party can still read data in blockchain</span>
+
+<span class="pl-c">// All data to start of time is stored in blockchain, so</span>
+<span class="pl-c">// anyone can observe all previous data and changes</span>
+
+<span class="pl-c">// D. Oracles and External Data</span>
+<span class="pl-c">// Oracles are ways to interact with your smart contracts outside the blockchain. </span>
+<span class="pl-c">// They are used to get data from the real world, send post requests, to the real world</span>
+<span class="pl-c">// or vise versa.</span>
+
+<span class="pl-c">// Time-based implementations of contracts are also done through oracles, as </span>
+<span class="pl-c">// contracts need to be directly called and can not "subscribe" to a time. </span>
+<span class="pl-c">// Due to smart contracts being decentralized, you also want to get your data</span>
+<span class="pl-c">// in a decentralized manner, otherwise you run into the centralized risk that </span>
+<span class="pl-c">// smart contract design matter prevents. </span>
+
+<span class="pl-c">// To easiest way get and use pre-boxed decentralized data is with Chainlink Data Feeds</span>
+<span class="pl-c">// https://docs.chain.link/docs/get-the-latest-price</span>
+<span class="pl-c">// We can reference on-chain reference points that have already been aggregated by </span>
+<span class="pl-c">// multiple sources and delivered on-chain, and we can use it as a "data bank" </span>
+<span class="pl-c">// of sources. </span>
+
+<span class="pl-c">// You can see other examples making API calls here:</span>
+<span class="pl-c">// https://docs.chain.link/docs/make-a-http-get-request</span>
+
+<span class="pl-c">// And you can of course build your own oracle network, just be sure to know </span>
+<span class="pl-c">// how centralized vs decentralized your application is. </span>
+
+<span class="pl-c">// Setting up oracle networks yourself</span>
+
+<span class="pl-c">// E. Cron Job</span>
+<span class="pl-c">// Contracts must be manually called to handle time-based scheduling; can create external</span>
+<span class="pl-c">// code to regularly ping, or provide incentives (ether) for others to</span>
+<span class="pl-c">//</span>
+
+<span class="pl-c">// F. Observer Pattern</span>
+<span class="pl-c">// An Observer Pattern lets you register as a subscriber and</span>
+<span class="pl-c">// register a function which is called by the oracle (note, the oracle pays</span>
+<span class="pl-c">// for this action to be run)</span>
+<span class="pl-c">// Some similarities to subscription in Pub/sub</span>
+
+<span class="pl-c">// This is an abstract contract, both client and server classes import</span>
+<span class="pl-c">// the client should implement</span>
+<span class="pl-s1">contract</span> <span class="pl-v">SomeOracleCallback</span> <span class="pl-kos">{</span>
+    <span class="pl-k">function</span> <span class="pl-s1">oracleCallback</span><span class="pl-kos">(</span><span class="pl-s1">int</span> <span class="pl-s1">_value</span><span class="pl-kos">,</span> <span class="pl-s1">uint</span> <span class="pl-s1">_time</span><span class="pl-kos">,</span> <span class="pl-s1">bytes32</span> <span class="pl-s1">info</span><span class="pl-kos">)</span> <span class="pl-s1">external</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-s1">contract</span> <span class="pl-v">SomeOracle</span> <span class="pl-kos">{</span>
+    <span class="pl-v">SomeOracleCallback</span><span class="pl-kos">[</span><span class="pl-kos">]</span> <span class="pl-s1">callbacks</span><span class="pl-kos"></span><span class="pl-kos">;</span> <span class="pl-c">// array of all subscribers</span>
+
+    <span class="pl-c">// Register subscriber</span>
+    <span class="pl-k">function</span> <span class="pl-en">addSubscriber</span><span class="pl-kos">(</span><span class="pl-v">SomeOracleCallback</span> <span class="pl-s1">a</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+        <span class="pl-s1">callbacks</span><span class="pl-kos">.</span><span class="pl-en">push</span><span class="pl-kos">(</span><span class="pl-s1">a</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-k">function</span> <span class="pl-en">notify</span><span class="pl-kos">(</span><span class="pl-s1">value</span><span class="pl-kos">,</span> <span class="pl-s1">time</span><span class="pl-kos">,</span> <span class="pl-s1">info</span><span class="pl-kos">)</span> <span class="pl-s1">private</span> <span class="pl-kos">{</span>
+        <span class="pl-k">for</span><span class="pl-kos">(</span><span class="pl-s1">uint</span> <span class="pl-s1">i</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span><span class="pl-kos">;</span><span class="pl-s1">i</span> <span class="pl-c1">&lt;</span> <span class="pl-s1">callbacks</span><span class="pl-kos">.</span><span class="pl-c1">length</span><span class="pl-kos">;</span> <span class="pl-s1">i</span><span class="pl-c1">++</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+            <span class="pl-c">// all called subscribers must implement the oracleCallback</span>
+            <span class="pl-s1">callbacks</span><span class="pl-kos">[</span><span class="pl-s1">i</span><span class="pl-kos">]</span><span class="pl-kos">.</span><span class="pl-en">oracleCallback</span><span class="pl-kos">(</span><span class="pl-s1">value</span><span class="pl-kos">,</span> <span class="pl-s1">time</span><span class="pl-kos">,</span> <span class="pl-s1">info</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-kos">}</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-k">function</span> <span class="pl-en">doSomething</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-s1">public</span> <span class="pl-kos">{</span>
+        <span class="pl-c">// Code to do something</span>
+
+        <span class="pl-c">// Notify all subscribers</span>
+        <span class="pl-en">notify</span><span class="pl-kos">(</span><span class="pl-s1">_value</span><span class="pl-kos">,</span> <span class="pl-s1">_time</span><span class="pl-kos">,</span> <span class="pl-s1">_info</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-c">// Now, your client contract can addSubscriber by importing SomeOracleCallback</span>
+<span class="pl-c">// and registering with Some Oracle</span>
+
+<span class="pl-c">// G. State machines</span>
+<span class="pl-c">// see example below for State enum and inState modifier</span></pre></div>
+<p>Work with the full example below using the <a href="https://remix.ethereum.org/#version=soljson-v0.6.6+commit.6c089d02.js&amp;optimize=false&amp;evmVersion=null&amp;gist=3d12cd503dcedfcdd715ef61f786be0b&amp;runs=200" rel="nofollow"><code class="notranslate">Javascript VM</code> in remix here.</a></p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-c">// *** EXAMPLE: A crowdfunding example (broadly similar to Kickstarter) ***</span>
+<span class="pl-c">// ** START EXAMPLE **</span>
+
+<span class="pl-c">// CrowdFunder.sol</span>
+<span class="pl-s1">pragma</span> <span class="pl-s1">solidity</span> <span class="pl-c1">^</span><span class="pl-c1">0.6</span><span class="pl-c1">.6</span><span class="pl-kos">;</span>
+
+<span class="pl-c">/// <span class="pl-k">@title</span> CrowdFunder</span>
+<span class="pl-c">/// <span class="pl-k">@author</span> nemild</span>
+<span class="pl-s1">contract</span> <span class="pl-v">CrowdFunder</span> <span class="pl-kos">{</span>
+    <span class="pl-c">// Variables set on create by creator</span>
+    <span class="pl-s1">address</span> <span class="pl-s1">public</span> <span class="pl-s1">creator</span><span class="pl-kos">;</span>
+    <span class="pl-s1">address</span> <span class="pl-s1">payable</span> <span class="pl-s1">public</span> <span class="pl-s1">fundRecipient</span><span class="pl-kos">;</span> <span class="pl-c">// creator may be different than recipient, and must be payable</span>
+    <span class="pl-s1">uint</span> <span class="pl-s1">public</span> <span class="pl-s1">minimumToRaise</span><span class="pl-kos">;</span> <span class="pl-c">// required to tip, else everyone gets refund</span>
+    <span class="pl-s1">string</span><span class="pl-kos"></span> <span class="pl-s1">campaignUrl</span><span class="pl-kos">;</span>
+    <span class="pl-s1">byte</span> <span class="pl-s1">version</span> <span class="pl-c1">=</span> <span class="pl-s">"1"</span><span class="pl-kos">;</span>
+
+    <span class="pl-c">// Data structures</span>
+    <span class="pl-s1">enum</span> <span class="pl-v">State</span> <span class="pl-kos">{</span>
+        <span class="pl-v">Fundraising</span><span class="pl-kos">,</span>
+        <span class="pl-v">ExpiredRefund</span><span class="pl-kos">,</span>
+        <span class="pl-v">Successful</span>
+    <span class="pl-kos">}</span>
+    <span class="pl-s1">struct</span> <span class="pl-v">Contribution</span> <span class="pl-kos">{</span>
+        <span class="pl-s1">uint</span> <span class="pl-s1">amount</span><span class="pl-kos">;</span>
+        <span class="pl-s1">address</span> <span class="pl-s1">payable</span> <span class="pl-s1">contributor</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-c">// State variables</span>
+    <span class="pl-v">State</span> <span class="pl-s1">public</span> <span class="pl-s1">state</span> <span class="pl-c1">=</span> <span class="pl-v">State</span><span class="pl-kos">.</span><span class="pl-c1">Fundraising</span><span class="pl-kos">;</span> <span class="pl-c">// initialize on create</span>
+    <span class="pl-s1">uint</span> <span class="pl-s1">public</span> <span class="pl-s1">totalRaised</span><span class="pl-kos">;</span>
+    <span class="pl-s1">uint</span> <span class="pl-s1">public</span> <span class="pl-s1">raiseBy</span><span class="pl-kos">;</span>
+    <span class="pl-s1">uint</span> <span class="pl-s1">public</span> <span class="pl-s1">completeAt</span><span class="pl-kos">;</span>
+    <span class="pl-v">Contribution</span><span class="pl-kos">[</span><span class="pl-kos">]</span> <span class="pl-s1">contributions</span><span class="pl-kos">;</span>
+
+    <span class="pl-s1">event</span> <span class="pl-v">LogFundingReceived</span><span class="pl-kos">(</span><span class="pl-s1">address</span> <span class="pl-s1">addr</span><span class="pl-kos">,</span> <span class="pl-s1">uint</span> <span class="pl-s1">amount</span><span class="pl-kos">,</span> <span class="pl-s1">uint</span> <span class="pl-s1">currentTotal</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-s1">event</span> <span class="pl-v">LogWinnerPaid</span><span class="pl-kos">(</span><span class="pl-s1">address</span> <span class="pl-s1">winnerAddress</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-s1">modifier</span> <span class="pl-en">inState</span><span class="pl-kos">(</span><span class="pl-v">State</span> <span class="pl-s1">_state</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+        <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">state</span> <span class="pl-c1">==</span> <span class="pl-s1">_state</span><span class="pl-kos">)</span><span class="pl-kos"></span><span class="pl-kos">;</span>
+        <span class="pl-s1">_</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-en">modifier</span> <span class="pl-s1">isCreator</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos"></span> <span class="pl-kos">{</span>
+        <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span> <span class="pl-c1">==</span> <span class="pl-s1">creator</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-s1">_</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-c">// Wait 24 weeks after final contract state before allowing contract destruction</span>
+    <span class="pl-s1">modifier</span><span class="pl-kos"></span> <span class="pl-en">atEndOfLifecycle</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos"></span> <span class="pl-kos">{</span>
+    <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-kos">(</span><span class="pl-kos">(</span><span class="pl-s1">state</span> <span class="pl-c1">==</span> <span class="pl-v">State</span><span class="pl-kos">.</span><span class="pl-c1">ExpiredRefund</span> <span class="pl-c1">||</span> <span class="pl-s1">state</span> <span class="pl-c1">==</span> <span class="pl-v">State</span><span class="pl-kos">.</span><span class="pl-c1">Successful</span><span class="pl-kos">)</span> <span class="pl-c1">&amp;&amp;</span>
+        <span class="pl-s1">completeAt</span> <span class="pl-c1">+</span> <span class="pl-c1">24</span> <span class="pl-s1">weeks</span> <span class="pl-c1">&lt;</span> <span class="pl-s1">now</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-s1">_</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-k">function</span> <span class="pl-en">crowdFund</span><span class="pl-kos">(</span>
+        <span class="pl-s1">uint</span> <span class="pl-s1">timeInHoursForFundraising</span><span class="pl-kos">,</span>
+        <span class="pl-s1">string</span> <span class="pl-s1">memory</span> <span class="pl-s1">_campaignUrl</span><span class="pl-kos">,</span>
+        <span class="pl-s1">address</span> <span class="pl-s1">payable</span> <span class="pl-s1">_fundRecipient</span><span class="pl-kos">,</span>
+        <span class="pl-s1">uint</span> <span class="pl-s1">_minimumToRaise</span><span class="pl-kos">)</span>
+        <span class="pl-s1">public</span>
+    <span class="pl-kos">{</span>
+        <span class="pl-s1">creator</span> <span class="pl-c1">=</span> <span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">;</span>
+        <span class="pl-s1">fundRecipient</span> <span class="pl-c1">=</span> <span class="pl-s1">_fundRecipient</span><span class="pl-kos">;</span>
+        <span class="pl-s1">campaignUrl</span> <span class="pl-c1">=</span> <span class="pl-s1">_campaignUrl</span><span class="pl-kos">;</span>
+        <span class="pl-s1">minimumToRaise</span> <span class="pl-c1">=</span> <span class="pl-s1">_minimumToRaise</span><span class="pl-kos">;</span>
+        <span class="pl-s1">raiseBy</span> <span class="pl-c1">=</span> <span class="pl-s1">now</span> <span class="pl-c1">+</span> <span class="pl-kos">(</span><span class="pl-s1">timeInHoursForFundraising</span> <span class="pl-c1">*</span> <span class="pl-c1">1</span> <span class="pl-s1">hours</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-k">function</span> <span class="pl-s1">contribute</span><span class="pl-kos">(</span><span class="pl-kos">)</span>
+    <span class="pl-s1">public</span>
+    <span class="pl-s1">payable</span>
+    <span class="pl-s1">inState</span><span class="pl-kos">(</span><span class="pl-v">State</span><span class="pl-kos">.</span><span class="pl-v">Fundraising</span><span class="pl-kos">)</span>
+    <span class="pl-en">returns</span><span class="pl-kos">(</span><span class="pl-s1">uint256</span> <span class="pl-s1">id</span><span class="pl-kos">)</span>
+    <span class="pl-kos">{</span>
+        <span class="pl-s1">contributions</span><span class="pl-kos">.</span><span class="pl-en">push</span><span class="pl-kos">(</span>
+            <span class="pl-v">Contribution</span><span class="pl-kos">(</span><span class="pl-kos">{</span>
+                <span class="pl-c1">amount</span>: <span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">value</span><span class="pl-kos">,</span>
+                <span class="pl-c1">contributor</span>: <span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span>
+            <span class="pl-kos">}</span><span class="pl-kos">)</span> <span class="pl-c">// use array, so can iterate</span>
+        <span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-s1">totalRaised</span> <span class="pl-c1">+=</span> <span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">value</span><span class="pl-kos">;</span>
+
+        <span class="pl-s1">emit</span><span class="pl-kos"></span> <span class="pl-v">LogFundingReceived</span><span class="pl-kos">(</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">,</span> <span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">value</span><span class="pl-kos">,</span> <span class="pl-s1">totalRaised</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+        <span class="pl-en">checkIfFundingCompleteOrExpired</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-k">return</span> <span class="pl-s1">contributions</span><span class="pl-kos">.</span><span class="pl-c1">length</span> <span class="pl-c1">-</span> <span class="pl-c1">1</span><span class="pl-kos">;</span> <span class="pl-c">// return id</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-k">function</span> <span class="pl-en">checkIfFundingCompleteOrExpired</span><span class="pl-kos">(</span><span class="pl-kos">)</span>
+    <span class="pl-s1">public</span>
+    <span class="pl-kos">{</span>
+        <span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">totalRaised</span> <span class="pl-c1">&gt;</span> <span class="pl-s1">minimumToRaise</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+            <span class="pl-s1">state</span> <span class="pl-c1">=</span> <span class="pl-v">State</span><span class="pl-kos">.</span><span class="pl-c1">Successful</span><span class="pl-kos">;</span>
+            <span class="pl-en">payOut</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+            <span class="pl-c">// could incentivize sender who initiated state change here</span>
+        <span class="pl-kos">}</span> <span class="pl-k">else</span> <span class="pl-k">if</span> <span class="pl-kos">(</span> <span class="pl-s1">now</span> <span class="pl-c1">&gt;</span> <span class="pl-s1">raiseBy</span> <span class="pl-kos">)</span>  <span class="pl-kos">{</span>
+            <span class="pl-s1">state</span> <span class="pl-c1">=</span> <span class="pl-v">State</span><span class="pl-kos">.</span><span class="pl-c1">ExpiredRefund</span><span class="pl-kos">;</span> <span class="pl-c">// backers can now collect refunds by calling getRefund(id)</span>
+        <span class="pl-kos">}</span>
+        <span class="pl-s1">completeAt</span> <span class="pl-c1">=</span> <span class="pl-s1">now</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-k">function</span> <span class="pl-s1">payOut</span><span class="pl-kos">(</span><span class="pl-kos">)</span>
+    <span class="pl-s1">public</span>
+    <span class="pl-en">inState</span><span class="pl-kos">(</span><span class="pl-v">State</span><span class="pl-kos">.</span><span class="pl-v">Successful</span><span class="pl-kos">)</span>
+    <span class="pl-kos">{</span>
+        <span class="pl-s1">fundRecipient</span><span class="pl-kos">.</span><span class="pl-en">transfer</span><span class="pl-kos">(</span><span class="pl-en">address</span><span class="pl-kos">(</span><span class="pl-smi">this</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-c1">balance</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-v">LogWinnerPaid</span><span class="pl-kos">(</span><span class="pl-s1">fundRecipient</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-k">function</span> <span class="pl-s1">getRefund</span><span class="pl-kos">(</span><span class="pl-s1">uint256</span> <span class="pl-s1">id</span><span class="pl-kos">)</span>
+    <span class="pl-s1">inState</span><span class="pl-kos">(</span><span class="pl-v">State</span><span class="pl-kos">.</span><span class="pl-v">ExpiredRefund</span><span class="pl-kos">)</span>
+    <span class="pl-s1">public</span>
+    <span class="pl-en">returns</span><span class="pl-kos">(</span><span class="pl-s1">bool</span><span class="pl-kos">)</span>
+    <span class="pl-kos">{</span>
+        <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">contributions</span><span class="pl-kos">.</span><span class="pl-c1">length</span> <span class="pl-c1">&gt;</span> <span class="pl-s1">id</span> <span class="pl-c1">&amp;&amp;</span> <span class="pl-s1">id</span> <span class="pl-c1">&gt;=</span> <span class="pl-c1">0</span> <span class="pl-c1">&amp;&amp;</span> <span class="pl-s1">contributions</span><span class="pl-kos">[</span><span class="pl-s1">id</span><span class="pl-kos">]</span><span class="pl-kos">.</span><span class="pl-c1">amount</span> <span class="pl-c1">!=</span> <span class="pl-c1">0</span> <span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+        <span class="pl-s1">uint256</span><span class="pl-kos"></span> <span class="pl-s1">amountToRefund</span> <span class="pl-c1">=</span> <span class="pl-s1">contributions</span><span class="pl-kos">[</span><span class="pl-s1">id</span><span class="pl-kos">]</span><span class="pl-kos">.</span><span class="pl-c1">amount</span><span class="pl-kos">;</span>
+        <span class="pl-s1">contributions</span><span class="pl-kos">[</span><span class="pl-s1">id</span><span class="pl-kos">]</span><span class="pl-kos">.</span><span class="pl-c1">amount</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span><span class="pl-kos">;</span>
+
+        <span class="pl-s1">contributions</span><span class="pl-kos">[</span><span class="pl-s1">id</span><span class="pl-kos">]</span><span class="pl-kos">.</span><span class="pl-c1">contributor</span><span class="pl-kos">.</span><span class="pl-en">transfer</span><span class="pl-kos">(</span><span class="pl-s1">amountToRefund</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+        <span class="pl-k">return</span> <span class="pl-c1">true</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-k">function</span> <span class="pl-s1">removeContract</span><span class="pl-kos">(</span><span class="pl-kos">)</span>
+    <span class="pl-s1">public</span>
+    <span class="pl-s1">isCreator</span><span class="pl-kos">(</span><span class="pl-kos">)</span>
+    <span class="pl-en">atEndOfLifecycle</span><span class="pl-kos">(</span><span class="pl-kos">)</span>
+    <span class="pl-kos">{</span>
+        <span class="pl-en">selfdestruct</span><span class="pl-kos">(</span><span class="pl-s1">msg</span><span class="pl-kos">.</span><span class="pl-c1">sender</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-c">// creator gets all money that hasn't be claimed</span>
+    <span class="pl-kos">}</span>
+<span class="pl-kos">}</span>
+<span class="pl-c">// ** END EXAMPLE **</span></pre></div>
+<p>Some more functions.</p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-c">// 10. OTHER NATIVE FUNCTIONS</span>
+
+<span class="pl-c">// Currency units</span>
+<span class="pl-c">// Currency is defined using wei, smallest unit of Ether</span>
+<span class="pl-s1">uint</span> <span class="pl-s1">minAmount</span> <span class="pl-c1">=</span> <span class="pl-c1">1</span> <span class="pl-s1">wei</span><span class="pl-kos">;</span>
+<span class="pl-s1">uint</span> <span class="pl-s1">a</span> <span class="pl-c1">=</span> <span class="pl-c1">1</span> <span class="pl-s1">finney</span><span class="pl-kos">;</span> <span class="pl-c">// 1 ether == 1000 finney</span>
+<span class="pl-c">// Other units, see: http://ether.fund/tool/converter</span>
+
+<span class="pl-c">// Time units</span>
+<span class="pl-c1">1</span> <span class="pl-c1">==</span> <span class="pl-c1">1</span> <span class="pl-s1">second</span>
+<span class="pl-c1">1</span> <span class="pl-s1">minutes</span> <span class="pl-c1">==</span> <span class="pl-c1">60</span> <span class="pl-s1">seconds</span>
+
+<span class="pl-c">// Can multiply a variable times unit, as units are not stored in a variable</span>
+<span class="pl-s1">uint</span> <span class="pl-s1">x</span> <span class="pl-c1">=</span> <span class="pl-c1">5</span><span class="pl-kos">;</span>
+<span class="pl-kos">(</span><span class="pl-s1">x</span> <span class="pl-c1">*</span> <span class="pl-c1">1</span> <span class="pl-s1">days</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// 5 days</span>
+
+<span class="pl-c">// Careful about leap seconds/years with equality statements for time</span>
+<span class="pl-c">// (instead, prefer greater than/less than)</span>
+
+<span class="pl-c">// Cryptography</span>
+<span class="pl-c">// All strings passed are concatenated before hash action</span>
+<span class="pl-en">sha3</span><span class="pl-kos">(</span><span class="pl-s">"ab"</span><span class="pl-kos">,</span> <span class="pl-s">"cd"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-en">ripemd160</span><span class="pl-kos">(</span><span class="pl-s">"abc"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-en">sha256</span><span class="pl-kos">(</span><span class="pl-s">"def"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// 11. SECURITY</span>
+
+<span class="pl-c">// Bugs can be disastrous in Ethereum contracts - and even popular patterns in Solidity,</span>
+<span class="pl-c">// may be found to be antipatterns</span>
+
+<span class="pl-c">// See security links at the end of this doc</span>
+
+<span class="pl-c">// 12. LOW LEVEL FUNCTIONS</span>
+<span class="pl-c">// call - low level, not often used, does not provide type safety</span>
+<span class="pl-s1">successBoolean</span> <span class="pl-c1">=</span> <span class="pl-s1">someContractAddress</span><span class="pl-kos">.</span><span class="pl-en">call</span><span class="pl-kos">(</span><span class="pl-s">'function_name'</span><span class="pl-kos">,</span> <span class="pl-s">'arg1'</span><span class="pl-kos">,</span> <span class="pl-s">'arg2'</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// callcode - Code at target address executed in *context* of calling contract</span>
+<span class="pl-c">// provides library functionality</span>
+<span class="pl-s1">someContractAddress</span><span class="pl-kos">.</span><span class="pl-en">callcode</span><span class="pl-kos">(</span><span class="pl-s">'function_name'</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+
+<span class="pl-c">// 13. STYLE NOTES</span>
+<span class="pl-c">// Based on Python's PEP8 style guide</span>
+<span class="pl-c">// Full Style guide: http://solidity.readthedocs.io/en/develop/style-guide.html</span>
+
+<span class="pl-c">// Quick summary:</span>
+<span class="pl-c">// 4 spaces for indentation</span>
+<span class="pl-c">// Two lines separate contract declarations (and other top level declarations)</span>
+<span class="pl-c">// Avoid extraneous spaces in parentheses</span>
+<span class="pl-c">// Can omit curly braces for one line statement (if, for, etc)</span>
+<span class="pl-c">// else should be placed on own line</span>
+
+
+<span class="pl-c">// 14. NATSPEC COMMENTS</span>
+<span class="pl-c">// used for documentation, commenting, and external UIs</span>
+
+<span class="pl-c">// Contract natspec - always above contract definition</span>
+<span class="pl-c">/// <span class="pl-k">@title</span> Contract title</span>
+<span class="pl-c">/// <span class="pl-k">@author</span> Author name</span>
+
+<span class="pl-c">// Function natspec</span>
+<span class="pl-c">/// <span class="pl-k">@notice</span> information about what function does; shown when function to execute</span>
+<span class="pl-c">/// <span class="pl-k">@dev</span> Function documentation for developer</span>
+
+<span class="pl-c">// Function parameter/return value natspec</span>
+<span class="pl-c">/// <span class="pl-k">@param</span> someParam Some description of what the param does</span>
+<span class="pl-c">/// <span class="pl-k">@return</span> Description of the return value</span></pre></div>
+<h2>Additional resources</h2>
+<ul>
+<li><a href="https://solidity.readthedocs.org/en/latest/" rel="nofollow">Solidity Docs</a></li>
+<li><a href="https://docs.chain.link/docs/beginners-tutorial" rel="nofollow">Chainlink Beginner Tutorials</a></li>
+<li><a href="https://github.com/ConsenSys/smart-contract-best-practices">Smart Contract Best Practices</a></li>
+<li><a href="https://lab.superblocks.com/" rel="nofollow">Superblocks Lab - Browser based IDE for Solidity</a></li>
+<li><a href="https://ethfiddle.com/" rel="nofollow">EthFiddle - The JsFiddle for Solidity</a></li>
+<li><a href="https://remix.ethereum.org/" rel="nofollow">Browser-based Solidity Editor</a></li>
+<li><a href="https://gitter.im/ethereum/solidity" rel="nofollow">Gitter Solidity Chat room</a></li>
+<li><a href="https://docs.erisindustries.com/tutorials/solidity/" rel="nofollow">Modular design strategies for Ethereum Contracts</a></li>
+<li><a href="https://docs.chain.link/docs/getting-started" rel="nofollow">Chainlink Documentation</a></li>
+</ul>
+<h2>Smart Contract Development Frameworks</h2>
+<ul>
+<li><a href="https://hardhat.org/" rel="nofollow">Hardhat</a></li>
+<li><a href="https://github.com/eth-brownie/brownie">Brownie</a></li>
+<li><a href="https://www.trufflesuite.com/" rel="nofollow">Truffle</a></li>
+</ul>
+<h2>Important libraries</h2>
+<ul>
+<li><a href="https://github.com/OpenZeppelin/openzeppelin-contracts">Zeppelin</a>: Libraries that provide common contract patterns (crowdfuding, safemath, etc)</li>
+<li><a href="https://github.com/smartcontractkit/chainlink">Chainlink</a>: Code that allows you to interact with external data</li>
+</ul>
+<h2>Sample contracts</h2>
+<ul>
+<li><a href="https://github.com/ethereum/dapp-bin">Dapp Bin</a></li>
+<li><a href="https://github.com/PatrickAlphaC/chainlink_defi">Defi Example</a></li>
+<li><a href="https://github.com/fivedogit/solidity-baby-steps/tree/master/contracts">Solidity Baby Step Contracts</a></li>
+<li><a href="https://github.com/ConsenSys/dapp-store-contracts">ConsenSys Contracts</a></li>
+<li><a href="http://dapps.ethercasts.com/" rel="nofollow">State of Dapps</a></li>
+</ul>
+<h2>Security</h2>
+<ul>
+<li><a href="https://blog.ethereum.org/2016/06/19/thinking-smart-contract-security/" rel="nofollow">Thinking About Smart Contract Security</a></li>
+<li><a href="https://blog.ethereum.org/2016/06/10/smart-contract-security/" rel="nofollow">Smart Contract Security</a></li>
+<li><a href="http://hackingdistributed.com/" rel="nofollow">Hacking Distributed Blog</a></li>
+</ul>
+<h2>Style</h2>
+<ul>
+<li><a href="http://solidity.readthedocs.io/en/latest/style-guide.html" rel="nofollow">Solidity Style Guide</a>: Ethereum's style guide is heavily derived from Python's <a href="https://www.python.org/dev/peps/pep-0008/" rel="nofollow">PEP 8</a> style guide.</li>
+</ul>
+<h2>Editors</h2>
+<ul>
+<li><a href="https://remix.ethereum.org/" rel="nofollow">Remix</a></li>
+<li><a href="https://github.com/ethereum/emacs-solidity">Emacs Solidity Mode</a></li>
+<li><a href="https://github.com/tomlion/vim-solidity">Vim Solidity</a></li>
+<li>Editor Snippets (<a href="https://gist.github.com/nemild/98343ce6b16b747788bc">Ultisnips format</a>)</li>
+</ul>
+<h2>Future To Dos</h2>
+<ul>
+<li>New keywords: protected, inheritable</li>
+<li>List of common design patterns (throttling, RNG, version upgrade)</li>
+<li>Common security anti patterns</li>
+</ul>
+<p>Feel free to send a pull request with any edits - or email nemild -/at-/ gmail</p>
+<hr>
+<h2>Contributors</h2>
+<ul>
+<li>["Nemil Dalal", "https://www.nemil.com"]</li>
+<li>["Joseph Chow", ""]</li>
+<li>["Bhoomtawath Plinsut", "https://github.com/varshard"]</li>
+<li>["Shooter", "https://github.com/liushooter"]</li>
+<li>["Patrick Collins", "https://gist.github.com/PatrickAlphaC"]</li>
+</ul>

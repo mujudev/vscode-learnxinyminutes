@@ -1,0 +1,260 @@
+<h1>Docker</h1>
+<p>Docker is a tool that helps you build, test, ship and run applications<br>
+seamlessly across various machines. It replicates the environment our software<br>
+needs on any machine. You can get Docker for your machine from<br>
+<a href="https://docs.docker.com/get-docker/" rel="nofollow">https://docs.docker.com/get-docker/</a></p>
+<p>It has grown in popularity over the last decade due to being lightweight and<br>
+fast as compared to virtual-machines that are bulky and slow. Unlike VMs, docker<br>
+does not need a full blown OS of its own to be loaded to start and does not<br>
+compete for resources other than what the application it is running will use.<br>
+VMs on the other hand are pretty resource intensive on our processors, disks and<br>
+memory hence running multiple VMs for various applications becomes a challenge<br>
+in a limited capacity architecture.</p>
+<pre class="notranslate">┌────────────────────────┐ ┌───────────────────────┐
+│      ┌───────────┐     │ │      ┌───────────┐    │
+│      │   App     │     │ │      │   App     │    │
+│      └───────────┘     │ │      └───────────┘    │
+│  ┌────────┐ ┌────────┐ │ │  ┌────────┐ ┌───────┐ │
+│  │  Libs  │ │  Deps  │ │ │  │  Libs  │ │  Deps │ │
+│  └────────┘ └────────┘ │ │  └────────┘ └───────┘ │
+│  ┌───────────────────┐ │ │  ┌──────────────────┐ │
+│  │      Guest OS     │ │ │  │     Guest OS     │ │
+│  └───────────────────┘ │ │  └──────────────────┘ │
+│           VM1          │ │           VM2         │
+└────────────────────────┘ └───────────────────────┘
+┌──────────────────────────────────────────────────┐
+│                     Hypervisor                   │
+└──────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────┐
+│                      Host OS                     │
+└──────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────┐
+│             Hardware Infrastructure              │
+└──────────────────────────────────────────────────┘
+              (VM based architecture)
+
+┌────────────────────────┐ ┌───────────────────────┐
+│      ┌───────────┐     │ │      ┌───────────┐    │
+│      │   App     │     │ │      │   App     │    │
+│      └───────────┘     │ │      └───────────┘    │
+│  ┌────────┐ ┌────────┐ │ │  ┌────────┐ ┌───────┐ │
+│  │  Libs  │ │  Deps  │ │ │  │  Libs  │ │  Deps │ │
+│  └────────┘ └────────┘ │ │  └────────┘ └───────┘ │
+│        Container1      │ │       Container2      │
+└────────────────────────┘ └───────────────────────┘
+┌──────────────────────────────────────────────────┐
+│                       Docker                     │
+└──────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────┐
+│                        OS                        │
+└──────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────┐
+│             Hardware Infrastructure              │
+└──────────────────────────────────────────────────┘
+            (Docker based architecture)
+
+</pre>
+<p>Couple of terms we will encounter frequently are Docker Images and Docker<br>
+Containers. Images are packages or templates of containers all stored in a<br>
+container registry such as <a href="https://hub.docker.com/" rel="nofollow">Docker Hub</a>. Containers<br>
+are standalone, executable instances of these images which include code,<br>
+runtime, system tools, system libraries and settings - everything required to<br>
+get the software up and running. Coming to Docker, it follows a client-server<br>
+architecture wherein the CLI client communicates with the server component,<br>
+which here is, the Docker Engine using RESTful API to issue commands.</p>
+<h2>The Docker CLI</h2>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> after installing Docker from https://docs.docker.com/get-docker/</span>
+<span class="pl-c"><span class="pl-c">#</span> To list available commands, either run `docker` with no parameters or execute</span>
+<span class="pl-c"><span class="pl-c">#</span> `docker help`</span>
+$ docker
+
+&gt;&gt;&gt; docker [OPTIONS] COMMAND [ARG...]
+       docker [ --help <span class="pl-k">|</span> -v <span class="pl-k">|</span> --version ]
+
+    A self-sufficient runtime <span class="pl-k">for</span> containers.
+
+    Options:
+        --config string      Location of client config files (default <span class="pl-s"><span class="pl-pds">"</span>/root/.docker<span class="pl-pds">"</span></span>)
+    -c, --context string     Name of the context to use to connect to the daemon (overrides DOCKER_HOST env var and default context <span class="pl-c1">set</span> with <span class="pl-s"><span class="pl-pds">"</span>docker context use<span class="pl-pds">"</span></span>)
+    -D, --debug              Enable debug mode
+        --help               Print usage
+    -H, --host value         Daemon socket(s) to connect to (default [])
+    -l, --log-level string   Set the logging level (<span class="pl-s"><span class="pl-pds">"</span>debug<span class="pl-pds">"</span></span><span class="pl-k">|</span><span class="pl-s"><span class="pl-pds">"</span>info<span class="pl-pds">"</span></span><span class="pl-k">|</span><span class="pl-s"><span class="pl-pds">"</span>warn<span class="pl-pds">"</span></span><span class="pl-k">|</span><span class="pl-s"><span class="pl-pds">"</span>error<span class="pl-pds">"</span></span><span class="pl-k">|</span><span class="pl-s"><span class="pl-pds">"</span>fatal<span class="pl-pds">"</span></span>) (default <span class="pl-s"><span class="pl-pds">"</span>info<span class="pl-pds">"</span></span>)
+        --tls                Use TLS<span class="pl-k">;</span> implied by --tlsverify
+        --tlscacert string   Trust certs signed only by this CA (default <span class="pl-s"><span class="pl-pds">"</span>/root/.docker/ca.pem<span class="pl-pds">"</span></span>)
+        --tlscert string     Path to TLS certificate file (default <span class="pl-s"><span class="pl-pds">"</span>/root/.docker/cert.pem<span class="pl-pds">"</span></span>)
+        --tlskey string      Path to TLS key file (default <span class="pl-s"><span class="pl-pds">"</span>/root/.docker/key.pem<span class="pl-pds">"</span></span>)
+        --tlsverify          Use TLS and verify the remote
+    -v, --version            Print version information and quit
+
+    Commands:
+        attach    Attach to a running container
+        <span class="pl-c"><span class="pl-c">#</span> […]</span>
+
+$ docker run hello-world
+<span class="pl-c"><span class="pl-c">#</span> `docker run &lt;container-name&gt;` is used to run a container, it will pull the</span>
+<span class="pl-c"><span class="pl-c">#</span> images from Docker Hub if they don't already exist in your system. Here the</span>
+<span class="pl-c"><span class="pl-c">#</span> docker client connects to the daemon which in turn pulls the "hello-world"</span>
+<span class="pl-c"><span class="pl-c">#</span> image from the Docker Hub. The daemon then builds a new container from the</span>
+<span class="pl-c"><span class="pl-c">#</span> image which runs the executable that produces the output streamed back to the</span>
+<span class="pl-c"><span class="pl-c">#</span> client that we see on our terminals.</span>
+
+$ docker run -d ubuntu sleep 60s
+<span class="pl-c"><span class="pl-c">#</span> The -d (or --detach) flag is when we want to run a container in the background</span>
+<span class="pl-c"><span class="pl-c">#</span> and return back to the terminal. Here we detach an ubuntu container from the</span>
+<span class="pl-c"><span class="pl-c">#</span> terminal, the output should be the id and the command exits. If we check</span>
+<span class="pl-c"><span class="pl-c">#</span> running containers, we should still see ours there:</span>
+<span class="pl-c"><span class="pl-c">#</span> CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS         PORTS     NAMES</span>
+<span class="pl-c"><span class="pl-c">#</span> 133261b4894a   ubuntu    "sleep 60s"   3 seconds ago   Up 2 seconds             vigorous_gould</span>
+
+$ docker run <span class="pl-k">&lt;</span>container-id<span class="pl-k">&gt;</span> -p 3000:8000
+<span class="pl-c"><span class="pl-c">#</span> The -p (or --publish) flag is used to expose port 8000 inside the container to</span>
+<span class="pl-c"><span class="pl-c">#</span> port 3000 outside the container. This is because the app inside the container</span>
+<span class="pl-c"><span class="pl-c">#</span> runs in isolation, hence the port 8000 where the app runs is private to the</span>
+<span class="pl-c"><span class="pl-c">#</span> container.</span>
+
+$ docker run -i
+<span class="pl-c"><span class="pl-c">#</span> or</span>
+$ docker run -it
+<span class="pl-c"><span class="pl-c">#</span> Docker runs our containers in a non-interactive mode i.e. they do not accept</span>
+<span class="pl-c"><span class="pl-c">#</span> inputs or work dynamically while running. The -i flag keeps input open to the</span>
+<span class="pl-c"><span class="pl-c">#</span> container, and the -t flag creates a pseudo-terminal that the shell can attach</span>
+<span class="pl-c"><span class="pl-c">#</span> to (can be combined as -it)</span>
+
+$ docker ps -a
+<span class="pl-c"><span class="pl-c">#</span> The `docker ps` command only shows running containers by default. To see all</span>
+<span class="pl-c"><span class="pl-c">#</span> containers, use the -a (or --all) flag</span>
+<span class="pl-c"><span class="pl-c">#</span> Running the above command should output something similar in the terminal:</span>
+<span class="pl-c"><span class="pl-c">#</span> CONTAINER ID   IMAGE         COMMAND    CREATED         STATUS                     PORTS     NAMES</span>
+<span class="pl-c"><span class="pl-c">#</span> 82f84bf6912b   hello-world   "/hello"   9 minutes ago   Exited (0) 9 minutes ago             eloquent_sammet</span>
+
+
+$ docker stop hello-world
+<span class="pl-c"><span class="pl-c">#</span> or</span>
+$ docker start hello-world 
+<span class="pl-c"><span class="pl-c">#</span> The stop command simply stops one or more containers, and the start command</span>
+<span class="pl-c"><span class="pl-c">#</span> starts the container(s) up again! `docker start -a ubuntu` will attach our</span>
+<span class="pl-c"><span class="pl-c">#</span> detached container back to the terminal i.e. runs in the foreground</span>
+
+$ docker create alpine
+<span class="pl-c"><span class="pl-c">#</span> `docker create` creates a new container for us with the image specified (here,</span>
+<span class="pl-c"><span class="pl-c">#</span> alpine), the container does not auto-start unlike `docker run`. This command</span>
+<span class="pl-c"><span class="pl-c">#</span> is used to set up a container configuration and then `docker start` to shoot</span>
+<span class="pl-c"><span class="pl-c">#</span> it up when required. Note that the status is "Created":</span>
+<span class="pl-c"><span class="pl-c">#</span> CONTAINER ID   IMAGE         COMMAND       CREATED             STATUS           PORTS     NAMES</span>
+<span class="pl-c"><span class="pl-c">#</span> 4c71c727c73d   alpine        "/bin/sh"     29 seconds ago      Created                   naughty_ritchie</span>
+
+$ docker rm 82f84
+<span class="pl-c"><span class="pl-c">#</span> Removes one or more containers using their container ID.</span>
+<span class="pl-c"><span class="pl-c">#</span> P.S.: we can use only the first few characters of the entire ID to identify</span>
+<span class="pl-c"><span class="pl-c">#</span> containers</span>
+
+$ docker images
+<span class="pl-c"><span class="pl-c">#</span> Displays all images and their information, created here means the latest image</span>
+<span class="pl-c"><span class="pl-c">#</span> tag updated on Docker Hub:</span>
+<span class="pl-c"><span class="pl-c">#</span> REPOSITORY    TAG       IMAGE ID       CREATED         SIZE</span>
+<span class="pl-c"><span class="pl-c">#</span> ubuntu        latest    a8780b506fa4   9 days ago      77.8MB</span>
+<span class="pl-c"><span class="pl-c">#</span> alpine        latest    9c6f07244728   3 months ago    5.54MB</span>
+<span class="pl-c"><span class="pl-c">#</span> hello-world   latest    feb5d9fea6a5   13 months ago   13.3kB</span>
+
+$ docker rmi 
+<span class="pl-c"><span class="pl-c">#</span> Removes one or more images from your system which do not have their instances</span>
+<span class="pl-c"><span class="pl-c">#</span> (or containers as we know them) running. If the image has an attached</span>
+<span class="pl-c"><span class="pl-c">#</span> container, either delete the container first or use the -f (or --force) flag</span>
+<span class="pl-c"><span class="pl-c">#</span> to forcefully delete both the container and image.</span>
+
+$ docker pull busybox
+<span class="pl-c"><span class="pl-c">#</span> The pull command downloads the specified image on our system from Docker Hub.</span>
+
+$ docker <span class="pl-c1">exec</span> -it 7b272 bash
+<span class="pl-c"><span class="pl-c">#</span> This command is used to run a command in the running container's default</span>
+<span class="pl-c"><span class="pl-c">#</span> directory. Here 7b272 was our ubuntu container and the above command would</span>
+<span class="pl-c"><span class="pl-c">#</span> help us interact with the container by opening a bash session.</span>
+
+<span class="pl-smi">$docker</span> logs <span class="pl-k">&lt;</span>container-id<span class="pl-k">&gt;</span>
+<span class="pl-c"><span class="pl-c">#</span> Displays the information logged by the specified container</span>
+<span class="pl-c"><span class="pl-c">#</span> root@7b27222e4bb7:/# whoami</span>
+<span class="pl-c"><span class="pl-c">#</span> root</span>
+<span class="pl-c"><span class="pl-c">#</span> root@7b27222e4bb7:/# pwd</span>
+<span class="pl-c"><span class="pl-c">#</span> /</span>
+<span class="pl-c"><span class="pl-c">#</span> root@7b27222e4bb7:/# ls</span>
+<span class="pl-c"><span class="pl-c">#</span> bin  boot  dev  etc  home  lib  lib32  lib64 libx3 srv  sys  tmp  usr  var</span>
+<span class="pl-c"><span class="pl-c">#</span> root@7b27222e4bb7:/# exit</span>
+<span class="pl-c"><span class="pl-c">#</span> exit</span>
+
+<span class="pl-c"><span class="pl-c">#</span> More commands can be found at https://docs.docker.com/engine/reference/commandline/docker/</span></pre></div>
+<h2>The Dockerfile</h2>
+<p>The Dockerfile is a blueprint of a Docker image. We can mention the artifacts<br>
+from our application along with their configurations into this file in the<br>
+specific syntax to let anyone create a Docker image of our application.</p>
+<h3>A few things to keep in mind:</h3>
+<ul>
+<li>It is always strictly named <code class="notranslate">Dockerfile</code> without any extensions</li>
+<li>We have to build our custom image on top of some already available Docker base<br>
+image. (there is an empty image called <code class="notranslate">scratch</code> which literally lets you build<br>
+an image from scratch)</li>
+<li>All capitalised commands are part of the syntax, they are not case-sensitive<br>
+but used like a convention</li>
+<li>Below is a sample Dockerfile but you can read in depth from the <a href="https://docs.docker.com/engine/reference/builder/" rel="nofollow">official docs</a>.</li>
+</ul>
+<div class="highlight highlight-source-dockerfile"><pre class="notranslate"><span class="pl-k">FROM</span> &lt;base-image&gt;
+<span class="pl-c"><span class="pl-c">#</span> define base image</span>
+
+<span class="pl-k">ENV</span> USERNAME=<span class="pl-s">'admin'</span>\
+    PWD=<span class="pl-s">'****'</span>
+<span class="pl-c"><span class="pl-c">#</span> optionally define environmental variables</span>
+
+<span class="pl-k">RUN</span> apt-get update
+<span class="pl-c"><span class="pl-c">#</span> run linux commands inside container env, does not affect host env</span>
+<span class="pl-c"><span class="pl-c">#</span> This executes during the time of image creation</span>
+
+<span class="pl-k">COPY</span> &lt;src&gt; &lt;target&gt;
+<span class="pl-c"><span class="pl-c">#</span> executes on the host, copies files from src (usually on the host) to target</span>
+<span class="pl-c"><span class="pl-c">#</span> on the container</span>
+
+<span class="pl-k">ENTRYPOINT</span> [<span class="pl-s">"some-script.sh"</span>]
+<span class="pl-c"><span class="pl-c">#</span> executes an entire script as an entrypoint</span>
+
+<span class="pl-k">CMD</span> [&lt;args&gt;,...]
+<span class="pl-c"><span class="pl-c">#</span> always part of dockerfile, introduces entry point linux command e.g. </span>
+<span class="pl-c"><span class="pl-c">#</span> `CMD node server.js`</span>
+<span class="pl-c"><span class="pl-c">#</span> This executes after image creation only when the container from the image</span>
+<span class="pl-c"><span class="pl-c">#</span> is running.</span></pre></div>
+<h3>Build your images</h3>
+<p>Use the <code class="notranslate">docker build</code> command after wrapping your application into a Docker<br>
+image to run ( or build) it.</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-smi">$docker</span> build <span class="pl-k">&lt;</span>path-to-dockerfile<span class="pl-k">&gt;</span>
+<span class="pl-c"><span class="pl-c">#</span> used to build an image from the specified Dockerfile</span>
+<span class="pl-c"><span class="pl-c">#</span> instead of path we could also specify a URL</span>
+<span class="pl-c"><span class="pl-c">#</span> -t tag is optional and used to name and tag your images for e.g.</span>
+<span class="pl-c"><span class="pl-c">#</span> `$docker build -t my-image:0.1 ./home/app`</span>
+<span class="pl-c"><span class="pl-c">#</span> rebuild images everytime you make changes in the dockerfile</span></pre></div>
+<h2>Push your image to DockerHub</h2>
+<p>If you want your application's Docker image to be made publicly available for<br>
+any Docker user, you might wanna push it to the <a href="https://hub.docker.com/" rel="nofollow">Docker Hub</a> which is a<br>
+registry of Docker images. Make sure you have an account with a username and<br>
+password on Docker Hub.</p>
+<p>When pushing an image to Docker Hub, we must specify our Docker Hub username<br>
+as part of the source image name. We need to create the target image with the<br>
+tag name of username/image-name much like GitHub repositories.</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-smi">$docker</span> login
+<span class="pl-c"><span class="pl-c">#</span> to login to Docker Hub using your username and password</span>
+
+<span class="pl-smi">$docker</span> tag <span class="pl-k">&lt;</span>src-image<span class="pl-k">&gt;</span>[:<span class="pl-k">&lt;</span>src-tag<span class="pl-k">&gt;</span>] <span class="pl-k">&lt;</span>target-image<span class="pl-k">&gt;</span>[:<span class="pl-k">&lt;</span>target-tag<span class="pl-k">&gt;</span>]
+<span class="pl-c"><span class="pl-c">#</span> this tags a local src-image to a public target-image</span>
+<span class="pl-c"><span class="pl-c">#</span> e.g. `docker tag my-sample-app:1.0.0  akshitadixit/my-sample-app`</span>
+<span class="pl-c"><span class="pl-c">#</span> if tags are not specified, they're defaulted to `latest`</span>
+
+<span class="pl-smi">$docker</span> push <span class="pl-k">&lt;</span>target-image<span class="pl-k">&gt;</span>[:<span class="pl-k">&lt;</span>target-tag<span class="pl-k">&gt;</span>]
+<span class="pl-c"><span class="pl-c">#</span> uploads our image to Docker Hub</span>
+<span class="pl-c"><span class="pl-c">#</span> e.g. `docker push akshitadixit/my-sample-app`</span>
+<span class="pl-c"><span class="pl-c">#</span> this image will be accessible under your profile's repositories as</span>
+<span class="pl-c"><span class="pl-c">#</span> `https://hub.docker.com/r/username/image-name`</span>
+</pre></div>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Ruslan López", "http://javapro.org/"]
+- ["Michael Chen", "https://github.com/ML-Chen"]
+- ["Akshita Dixit", "https://github.com/akshitadixit"]
+- ["Marcel Ribeiro-Dantas", "https://github.com/mribeirodantas"]
+</code></pre>

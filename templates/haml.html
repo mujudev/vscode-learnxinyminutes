@@ -1,0 +1,212 @@
+<h1>Haml</h1>
+<p>Haml is a markup language predominantly used with Ruby that cleanly and simply describes the HTML of any web document without the use of inline code. It is a popular alternative to using Rails templating language (.erb) and allows you to embed Ruby code into your markup.</p>
+<p>It aims to reduce repetition in your markup by closing tags for you based on the structure of the indents in your code. The result is markup that is well-structured, DRY, logical, and easier to read.</p>
+<p>You can also use Haml on a project independent of Ruby, by installing the Haml gem on your machine and using the command line to convert it to html.</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">$ haml input_file.haml output_file.html</pre></div>
+<div class="highlight highlight-text-haml"><pre class="notranslate"><span class="pl-c">/ -------------------------------------------</span>
+<span class="pl-c">/ Indenting</span>
+<span class="pl-c">/ -------------------------------------------</span>
+<span class="pl-c"></span>
+<span class="pl-c">/</span>
+<span class="pl-c">  Because of the importance indentation has on how your code is rendered, the</span>
+<span class="pl-c">  indents should be consistent throughout the document. Any differences in</span>
+<span class="pl-c">  indentation will throw an error. It's common-practice to use two spaces,</span>
+<span class="pl-c">  but it's really up to you, as long as they're constant.</span>
+<span class="pl-c"></span>
+<span class="pl-c"></span>
+<span class="pl-c">/ -------------------------------------------</span>
+<span class="pl-c">/ Comments</span>
+<span class="pl-c">/ -------------------------------------------</span>
+<span class="pl-c"></span>
+<span class="pl-c">/ This is what a comment looks like in Haml.</span>
+<span class="pl-c"></span>
+<span class="pl-c">/</span>
+<span class="pl-c">  To write a multi line comment, indent your commented code to be</span>
+<span class="pl-c">  wrapped by the forward slash</span>
+<span class="pl-c"></span>
+<span class="pl-c">-# This is a silent comment, which means it won't be rendered into the doc at all</span>
+<span class="pl-c"></span>
+<span class="pl-c"></span>
+<span class="pl-c">/ -------------------------------------------</span>
+<span class="pl-c">/ Html elements</span>
+<span class="pl-c">/ -------------------------------------------</span>
+<span class="pl-c"></span>
+<span class="pl-c">/ To write your tags, use the percent sign followed by the name of the tag</span>
+<span class="pl-c"></span>%<span class="pl-ent">body</span>
+  %<span class="pl-ent">header</span>
+    %<span class="pl-ent">nav</span>
+
+<span class="pl-c">/ Notice no closing tags. The above code would output</span>
+<span class="pl-c">  &lt;body&gt;</span>
+<span class="pl-c">    &lt;header&gt;</span>
+<span class="pl-c">      &lt;nav&gt;&lt;/nav&gt;</span>
+<span class="pl-c">    &lt;/header&gt;</span>
+<span class="pl-c">  &lt;/body&gt;</span>
+<span class="pl-c"></span>
+<span class="pl-c">/</span>
+<span class="pl-c">  The div tag is the default element, so it can be omitted.</span>
+<span class="pl-c">  You can define only class/id using . or #</span>
+<span class="pl-c">  For example</span>
+<span class="pl-c"></span>
+<span class="pl-c"></span>%<span class="pl-ent">div</span><span class="pl-ent">.my_class</span>
+  %<span class="pl-ent">div</span><span class="pl-ent">#my_id</span>
+
+<span class="pl-c">/ Can be written</span>
+<span class="pl-c"></span><span class="pl-ent">.my_class</span>
+  <span class="pl-ent">#my_id</span>
+
+<span class="pl-c">/ To add content to a tag, add the text directly after the declaration</span>
+<span class="pl-c"></span>%<span class="pl-ent">h1</span> Headline copy
+
+<span class="pl-c">/ To write multiline content, nest it instead</span>
+<span class="pl-c"></span>%<span class="pl-ent">p</span>
+  This is a lot of content that we could probably split onto two
+  separate lines.
+
+<span class="pl-c">/</span>
+<span class="pl-c">  You can escape html by using the ampersand and equals sign ( &amp;= ). This</span>
+<span class="pl-c">  converts html-sensitive characters (&amp;, /, :) into their html encoded</span>
+<span class="pl-c">  equivalents. For example</span>
+<span class="pl-c"></span>
+<span class="pl-c"></span>%<span class="pl-ent">p</span>
+  &amp;=<span class="pl-sre"> <span class="pl-s"><span class="pl-pds">"</span>Yes &amp; yes<span class="pl-pds">"</span></span></span>
+
+<span class="pl-c">/ would output 'Yes &amp;amp; yes'</span>
+<span class="pl-c"></span>
+<span class="pl-c">/ You can unescape html by using the bang and equals sign ( != )</span>
+<span class="pl-c"></span>%<span class="pl-ent">p</span>
+  !=<span class="pl-sre"> <span class="pl-s"><span class="pl-pds">"</span>This is how you write a paragraph tag &lt;p&gt;&lt;/p&gt;<span class="pl-pds">"</span></span></span>
+
+<span class="pl-c">/ which would output 'This is how you write a paragraph tag &lt;p&gt;&lt;/p&gt;'</span>
+<span class="pl-c"></span>
+<span class="pl-c">/ CSS classes can be added to your tags either by chaining .classnames to the tag</span>
+<span class="pl-c"></span>%<span class="pl-ent">div</span><span class="pl-ent">.foo.bar</span>
+
+<span class="pl-c">/ or as part of a Ruby hash</span>
+<span class="pl-c"></span>%<span class="pl-ent">div</span>{:class =<span class="pl-sre">&gt; 'foo bar'}</span>
+
+/ Attributes for any tag can be added in the hash
+%a{:href =<span class="pl-sre">&gt; '<span class="pl-c">#', :class =&gt; 'bar', :title =&gt; 'Bar'}</span></span>
+
+/ For boolean attributes assign the value 'true'
+%input{:selected =<span class="pl-sre">&gt; true}</span>
+
+/ To write data-<span class="pl-sre">attributes, <span class="pl-k">use</span> the :data key with its value as another hash</span>
+%div{:data =<span class="pl-sre">&gt; {:attribute =&gt; 'foo'}}</span>
+
+/ For Ruby version 1.9 or higher you can use Ruby's new hash syntax
+%div{ data: { attribute: 'foo' } }
+
+<span class="pl-c">/ Also you can use HTML-style attribute syntax.</span>
+<span class="pl-c"></span>%<span class="pl-ent">a</span>(<span class="pl-c1">href</span>=<span class="pl-s">'#'</span> <span class="pl-c1">title</span>=<span class="pl-s">'bar'</span>)
+
+<span class="pl-c">/ And both syntaxes together</span>
+<span class="pl-c"></span>%<span class="pl-ent">a</span>(<span class="pl-c1">href</span>=<span class="pl-s">'#'</span>){ title: @my_class.title }
+
+
+<span class="pl-c">/ -------------------------------------------</span>
+<span class="pl-c">/ Inserting Ruby</span>
+<span class="pl-c">/ -------------------------------------------</span>
+<span class="pl-c"></span>
+<span class="pl-c">/</span>
+<span class="pl-c">  To output a Ruby value as the contents of a tag, use an equals sign followed</span>
+<span class="pl-c">  by the Ruby code</span>
+<span class="pl-c"></span>
+<span class="pl-c"></span>%<span class="pl-ent">h1</span>=<span class="pl-sre"> book.name</span>
+
+%<span class="pl-ent">p</span>
+  =<span class="pl-sre"> book.author</span>
+  =<span class="pl-sre"> book.publisher</span>
+
+
+<span class="pl-c">/ To run some Ruby code without rendering it to the html, use a hyphen instead</span>
+<span class="pl-c"></span>-<span class="pl-sre"> books = ['book 1', 'book 2', 'book 3']</span>
+
+<span class="pl-c">/ Allowing you to do all sorts of awesome, like Ruby blocks</span>
+<span class="pl-c"></span>-<span class="pl-sre"> books.shuffle.each_with_index do |book, index<span class="pl-s1">|</span></span>
+  %<span class="pl-ent">h1</span>=<span class="pl-sre"> book</span>
+
+  -<span class="pl-sre"> if book <span class="pl-k">do</span></span>
+    %<span class="pl-ent">p</span> This is a book
+    
+<span class="pl-c">/ Adding ordered / unordered list</span>
+<span class="pl-c"></span>%<span class="pl-ent">ul</span>
+  %<span class="pl-ent">li</span>
+    =<span class="pl-sre">item1</span>
+    =<span class="pl-sre">item2</span>
+
+<span class="pl-c">/</span>
+<span class="pl-c">  Again, no need to add the closing tags to the block, even for the Ruby.</span>
+<span class="pl-c">  Indentation will take care of that for you.</span>
+<span class="pl-c"></span>
+<span class="pl-c">/ -------------------------------------------</span>
+<span class="pl-c">/ Inserting Table with bootstrap classes</span>
+<span class="pl-c">/ -------------------------------------------</span>
+<span class="pl-c"></span>
+<span class="pl-c"></span>%<span class="pl-ent">table</span><span class="pl-ent">.table.table-hover</span>
+  %<span class="pl-ent">thead</span>
+    %<span class="pl-ent">tr</span>
+      %<span class="pl-ent">th</span> Header 1
+      %<span class="pl-ent">th</span> Header 2
+    
+    %<span class="pl-ent">tr</span>
+      %<span class="pl-ent">td</span> Value1
+      %<span class="pl-ent">td</span> value2
+    
+  %<span class="pl-ent">tfoot</span>
+    %<span class="pl-ent">tr</span>
+      %<span class="pl-ent">td</span>
+        Foot value
+
+
+<span class="pl-c">/ -------------------------------------------</span>
+<span class="pl-c">/ Inline Ruby / Ruby interpolation</span>
+<span class="pl-c">/ -------------------------------------------</span>
+<span class="pl-c"></span>
+<span class="pl-c">/ Include a Ruby variable in a line of plain text using #{}</span>
+<span class="pl-c"></span>%<span class="pl-ent">p</span> Your highest scoring game is #{best_game}
+
+
+<span class="pl-c">/ -------------------------------------------</span>
+<span class="pl-c">/ Filters</span>
+<span class="pl-c">/ -------------------------------------------</span>
+<span class="pl-c"></span>
+<span class="pl-c">/</span>
+<span class="pl-c">  Filters pass the block to another filtering program and return the result in Haml</span>
+<span class="pl-c">  To use a filter, type a colon and the name of the filter</span>
+<span class="pl-c"></span>
+<span class="pl-c">/ Markdown filter</span>
+<span class="pl-c"></span><span class="pl-ent">:markdown</span>
+  # Header
+
+  Text <span class="pl-mb">**inside**</span> the <span class="pl-mi">*block*</span>
+
+<span class="pl-c">/ The code above is compiled into</span>
+<span class="pl-c"></span>&lt;h1&gt;Header&lt;/h1&gt;
+
+&lt;p&gt;Text &lt;strong&gt;inside&lt;/strong&gt; the &lt;em&gt;block&lt;/em&gt;&lt;/p&gt;
+
+<span class="pl-c">/ Javascript filter</span>
+<span class="pl-c"></span><span class="pl-ent">:javascript</span>
+  <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>This is inline &lt;script&gt;<span class="pl-pds">'</span></span>);
+
+<span class="pl-c">/ is compiled into</span>
+<span class="pl-c"></span>&lt;script&gt;
+  console.log('This is inline &lt;script&gt;');
+&lt;/script&gt;
+
+<span class="pl-c">/</span>
+<span class="pl-c">  There are many types of filters (:markdown, :javascript, :coffee, :css, :ruby and so on)</span>
+<span class="pl-c">  Also you can define your own filters using Haml::Filters</span>
+<span class="pl-c"></span></pre></div>
+<h2>Additional resources</h2>
+<ul>
+<li><a href="http://haml.info/" rel="nofollow">What is HAML?</a> - A good introduction that does a much better job of explaining the benefits of using HAML.</li>
+<li><a href="http://haml.info/docs/yardoc/file.REFERENCE.html" rel="nofollow">Official Docs</a> - If you'd like to go a little deeper.</li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<ul>
+<li>["Simon Neveu", "https://github.com/sneveu"]</li>
+<li>["Vasiliy Petrov", "https://github.com/Saugardas"]</li>
+</ul>

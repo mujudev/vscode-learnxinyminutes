@@ -1,0 +1,222 @@
+<h1>Stylus</h1>
+<p>Stylus is a dynamic stylesheet preprocessor language that is compiled into CSS. It aims to add functionality to CSS without breaking compatibility across web browsers.<br>
+It does this using variables, nesting, mixins, functions and more.</p>
+<p>Stylus syntax is very flexible. You can use standard CSS syntax and leave the semicolon (;), colon (:) and even the ({) and (}) optional, making your code even more readable.</p>
+<p>Stylus does not provide new style options, but gives functionality that lets you make your CSS much more dynamic.</p>
+<div class="highlight highlight-source-css-scss"><pre class="notranslate"><span class="pl-c"><span class="pl-c">/*</span> Code style</span>
+<span class="pl-c">==============================<span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">/*</span> Keys, semicolon, and colon are optional in Stylus. <span class="pl-c">*/</span></span>
+
+<span class="pl-ent">body</span> {
+  <span class="pl-c1"><span class="pl-c1">background</span></span>: <span class="pl-c1">#000</span>;
+}
+
+<span class="pl-ent">body</span> {
+  <span class="pl-c1"><span class="pl-c1">background</span></span>: <span class="pl-c1">#000</span>
+}
+
+<span class="pl-ent">body</span> {
+  <span class="pl-c1"><span class="pl-c1">background</span></span> <span class="pl-e">#000</span>
+}
+
+<span class="pl-ent">body</span>
+  background <span class="pl-e">#000</span>
+
+<span class="pl-ent">body</span>
+  background: #000;
+
+<span class="pl-ent">body</span>
+  background: <span class="pl-e">#000</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Single-line comments are removed when Stylus is compiled into CSS.</span>
+
+<span class="pl-c"><span class="pl-c">/*</span> Multi-line comments are preserved. <span class="pl-c">*/</span></span>
+
+
+<span class="pl-c"><span class="pl-c">/*</span> Selectors</span>
+<span class="pl-c">==============================<span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">/*</span> Selecting elements within another element <span class="pl-c">*/</span></span>
+<span class="pl-ent">body</span> {
+  <span class="pl-c1"><span class="pl-c1">background</span></span>: <span class="pl-c1">#000000</span>;
+  <span class="pl-ent">h1</span> {
+    <span class="pl-c1"><span class="pl-c1">color</span></span>: <span class="pl-c1">#FF0000</span>;
+  }
+}
+
+<span class="pl-c"><span class="pl-c">/*</span> Or if you prefer... <span class="pl-c">*/</span></span>
+<span class="pl-ent">body</span>
+  background <span class="pl-e">#000000</span>
+  <span class="pl-ent">h1</span>
+    color <span class="pl-e">#FF0000</span>
+
+
+<span class="pl-c"><span class="pl-c">/*</span> Getting parent element reference</span>
+<span class="pl-c">==============================<span class="pl-c">*/</span></span>
+<span class="pl-ent">a</span> {
+  <span class="pl-c1"><span class="pl-c1">color</span></span>: <span class="pl-c1">#0088dd</span>;
+  <span class="pl-ent">&amp;</span><span class="pl-e">:hover</span> {
+    <span class="pl-c1"><span class="pl-c1">color</span></span>: <span class="pl-c1">#DD8800</span>;
+  }
+}
+
+
+<span class="pl-c"><span class="pl-c">/*</span> Variables</span>
+<span class="pl-c">==============================<span class="pl-c">*/</span></span>
+
+
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">  You can store a CSS value (such as the color) of a variable.</span>
+<span class="pl-c">  Although it is optional, it is recommended to add $ before a variable name</span>
+<span class="pl-c">  so you can distinguish a variable from another CSS value.</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+
+<span class="pl-v">$primary-color</span> = <span class="pl-e">#A3A4FF</span>
+<span class="pl-v">$secondary-color</span> = <span class="pl-e">#51527F</span>
+<span class="pl-v">$body-font</span> = 'Roboto', sans-serif
+
+<span class="pl-c"><span class="pl-c">/*</span> You can use variables throughout your style sheet.</span>
+<span class="pl-c">Now, if you want to change the color, you only have to make the change once. <span class="pl-c">*/</span></span>
+
+<span class="pl-ent">body</span>
+	<span class="pl-ent">background-color</span> <span class="pl-v">$primary-color</span>
+	color <span class="pl-v">$secondary-color</span>
+	<span class="pl-ent">font-family</span> <span class="pl-v">$body-font</span>
+
+<span class="pl-c"><span class="pl-c">/*</span> After compilation: <span class="pl-c">*/</span></span>
+<span class="pl-ent">body</span> {
+	<span class="pl-c1"><span class="pl-c1">background-color</span></span>: <span class="pl-c1">#A3A4FF</span>;
+	<span class="pl-c1"><span class="pl-c1">color</span></span>: <span class="pl-c1">#51527F</span>;
+	<span class="pl-c1"><span class="pl-c1">font-family</span></span>: <span class="pl-s"><span class="pl-pds">'</span>Roboto<span class="pl-pds">'</span></span>, <span class="pl-c1">sans-serif</span>;
+}
+
+/ <span class="pl-ent">*</span>
+This is much easier to maintain than having to change color
+each <span class="pl-ent">time</span> it appears throughout your <span class="pl-ent">style</span> sheet.
+<span class="pl-ent">*</span> /
+
+
+<span class="pl-c"><span class="pl-c">/*</span> Mixins</span>
+<span class="pl-c">==============================<span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">/*</span> If you find that you are writing the same code for more than one</span>
+<span class="pl-c">element, you may want to store that code in a mixin.</span>
+<span class="pl-c"></span>
+<span class="pl-c">center()</span>
+<span class="pl-c">  display block</span>
+<span class="pl-c">	margin-left auto</span>
+<span class="pl-c">	margin-right auto</span>
+<span class="pl-c">	left 0</span>
+<span class="pl-c">	right 0</span>
+<span class="pl-c"></span>
+<span class="pl-c">/* Using the mixin <span class="pl-c">*/</span></span>
+<span class="pl-ent">body</span> {
+  <span class="pl-c1">center</span>()
+  <span class="pl-c1"><span class="pl-c1">background-color</span></span>: <span class="pl-v">$primary-color</span>
+}
+
+<span class="pl-c"><span class="pl-c">/*</span> After compilation: <span class="pl-c">*/</span></span>
+<span class="pl-ent">div</span> {
+	<span class="pl-c1"><span class="pl-c1">display</span></span>: <span class="pl-c1">block</span>;
+	<span class="pl-c1"><span class="pl-c1">margin-left</span></span>: <span class="pl-c1">auto</span>;
+	<span class="pl-c1"><span class="pl-c1">margin-right</span></span>: <span class="pl-c1">auto</span>;
+	<span class="pl-c1"><span class="pl-c1">left</span></span>: <span class="pl-c1">0</span>;
+	<span class="pl-c1"><span class="pl-c1">right</span></span>: <span class="pl-c1">0</span>;
+	<span class="pl-c1"><span class="pl-c1">background-color</span></span>: <span class="pl-c1">#A3A4FF</span>;
+}
+
+<span class="pl-c"><span class="pl-c">/*</span> You can use mixins to create a shorthand property. <span class="pl-c">*/</span></span>
+
+size(<span class="pl-v">$width</span>, <span class="pl-v">$height</span>)
+  width <span class="pl-v">$width</span>
+  height <span class="pl-v">$height</span>
+
+<span class="pl-e">.rectangle</span>
+  size(100px, 60px)
+
+<span class="pl-e">.square</span>
+	size(40px, 40px)
+
+<span class="pl-c"><span class="pl-c">/*</span> You can use a mixin as a CSS property. <span class="pl-c">*/</span></span>
+circle(<span class="pl-v">$ratio</span>)
+  width <span class="pl-v">$ratio</span> <span class="pl-ent">*</span> 2
+  height <span class="pl-v">$ratio</span> <span class="pl-ent">*</span> 2
+  <span class="pl-ent">border-radius</span> <span class="pl-v">$ratio</span>
+
+<span class="pl-e">.ball</span>
+  <span class="pl-ent">circle</span> 25px
+
+
+<span class="pl-c"><span class="pl-c">/*</span> Interpolation</span>
+<span class="pl-c">==============================<span class="pl-c">*/</span></span>
+
+vendor(prop, args)
+  -webkit-{<span class="pl-c1">prop</span>} args
+  -moz-{<span class="pl-c1">prop</span>} args
+  {<span class="pl-c1">prop</span>} args
+
+border-radius()
+  vendor('border-radius', arguments)
+
+box-shadow()
+  vendor('box-shadow', arguments)
+
+<span class="pl-ent">button</span>
+  <span class="pl-ent">border-radius</span> 1px 2px / 3px 4px
+
+
+<span class="pl-c"><span class="pl-c">/*</span> Functions</span>
+<span class="pl-c">==============================<span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">/*</span> Functions in Stylus allow you to perform a variety of tasks, such as recalling some data. <span class="pl-c">*/</span></span>
+
+<span class="pl-ent">body</span> {
+  <span class="pl-c1"><span class="pl-c1">background</span></span> <span class="pl-c1">darken</span>(<span class="pl-e">#0088DD</span>, 50%) <span class="pl-c"><span class="pl-c">//</span> Dim color #0088DD by 50%</span>
+}
+
+<span class="pl-c"><span class="pl-c">/*</span> Creating your own function <span class="pl-c">*/</span></span>
+add(<span class="pl-ent">a</span>, <span class="pl-ent">b</span>)
+  <span class="pl-ent">a</span> + <span class="pl-ent">b</span>
+
+<span class="pl-ent">body</span>
+  padding add(10px, 5)
+
+
+<span class="pl-c"><span class="pl-c">/*</span> Conditions</span>
+<span class="pl-c">==============================<span class="pl-c">*/</span></span>
+compare(<span class="pl-ent">a</span>, <span class="pl-ent">b</span>)
+  if <span class="pl-ent">a</span> &gt; <span class="pl-ent">b</span>
+    bigger
+  else if <span class="pl-ent">a</span> &lt; <span class="pl-ent">b</span>
+    smaller
+  else
+    equal
+
+compare(5, 2)   <span class="pl-c"><span class="pl-c">//</span> =&gt; bigger</span>
+compare(1, 5)   <span class="pl-c"><span class="pl-c">//</span> =&gt; smaller</span>
+compare(10, 10) <span class="pl-c"><span class="pl-c">//</span> =&gt; equal</span>
+
+
+<span class="pl-c"><span class="pl-c">/*</span> Iterations</span>
+<span class="pl-c">==============================<span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">Repeat loop syntax for:</span>
+<span class="pl-c">for &lt;val-name&gt; [, &lt;key-name&gt;] in &lt;expression&gt;</span>
+<span class="pl-c"><span class="pl-c">*/</span></span>
+
+for <span class="pl-v">$item</span> in (1.<span class="pl-e">.2</span>) <span class="pl-c"><span class="pl-c">/*</span> Repeat block 12 times <span class="pl-c">*/</span></span>
+  <span class="pl-e">.col-</span>{<span class="pl-v">$item</span>}
+    width (<span class="pl-v">$item</span> / 12) <span class="pl-ent">*</span> 100% <span class="pl-c"><span class="pl-c">/*</span> Calculate row by column number <span class="pl-c">*/</span></span></pre></div>
+<p>Now that you know a little about this powerful CSS preprocessor, you're ready to create more dynamic style sheets. To learn more, visit the official stylus documentation at <a href="http://stylus-lang.com" rel="nofollow">http://stylus-lang.com</a>.</p>
+<hr>
+<h2>Contributors</h2>
+<ul>
+<li>["Salomão Neto", "https://github.com/salomaosnff"]</li>
+<li>["Isaac Henrique", "https://github.com/Isaachi1"]</li>
+</ul>
+<h3>Translators</h3>
+<ul>
+<li>["Divay Prakash", "https://github.com/divayprakash"]</li>
+</ul>

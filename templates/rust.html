@@ -1,0 +1,340 @@
+<h1>Rust</h1>
+<p>Rust is a programming language developed by Mozilla Research.<br>
+Rust combines low-level control over performance with high-level convenience and<br>
+safety guarantees.</p>
+<p>It achieves these goals without requiring a garbage collector or runtime, making<br>
+it possible to use Rust libraries as a "drop-in replacement" for C.</p>
+<p>Rust’s first release, 0.1, occurred in January 2012, and for 3 years development<br>
+moved so quickly that until recently the use of stable releases was discouraged<br>
+and instead the general advice was to use nightly builds.</p>
+<p>On May 15th 2015, Rust 1.0 was released with a complete guarantee of backward<br>
+compatibility. Improvements to compile times and other aspects of the compiler are<br>
+currently available in the nightly builds. Rust has adopted a train-based release<br>
+model with regular releases every six weeks. Rust 1.1 beta was made available at<br>
+the same time of the release of Rust 1.0.</p>
+<p>Although Rust is a relatively low-level language, it has some functional<br>
+concepts that are generally found in higher-level languages. This makes<br>
+Rust not only fast, but also easy and efficient to code in.</p>
+<div class="highlight highlight-source-rust"><pre class="notranslate"><span class="pl-c">// This is a comment. Line comments look like this...</span>
+<span class="pl-c">// and extend multiple lines like this.</span>
+
+<span class="pl-c">/// Documentation comments look like this and support markdown notation.</span>
+<span class="pl-c">/// # Examples</span>
+<span class="pl-c">///</span>
+<span class="pl-c">/// ```</span>
+<span class="pl-c">/// let five = 5</span>
+<span class="pl-c">/// ```</span>
+
+<span class="pl-c">///////////////</span>
+<span class="pl-c">// 1. Basics //</span>
+<span class="pl-c">///////////////</span>
+
+<span class="pl-c1">#<span class="pl-kos">[</span>allow<span class="pl-kos">(</span>dead_code<span class="pl-kos">)</span><span class="pl-kos">]</span></span>
+<span class="pl-c">// Functions</span>
+<span class="pl-c">// `i32` is the type for 32-bit signed integers</span>
+<span class="pl-k">fn</span> <span class="pl-en">add2</span><span class="pl-kos">(</span><span class="pl-s1">x</span><span class="pl-kos">:</span> <span class="pl-smi">i32</span><span class="pl-kos">,</span> <span class="pl-s1">y</span><span class="pl-kos">:</span> <span class="pl-smi">i32</span><span class="pl-kos">)</span> -&gt; <span class="pl-smi">i32</span> <span class="pl-kos">{</span>
+    <span class="pl-c">// Implicit return (no semicolon)</span>
+    x + y
+<span class="pl-kos">}</span>
+
+<span class="pl-c1">#<span class="pl-kos">[</span>allow<span class="pl-kos">(</span>unused_variables<span class="pl-kos">)</span><span class="pl-kos">]</span></span>
+<span class="pl-c1">#<span class="pl-kos">[</span>allow<span class="pl-kos">(</span>unused_assignments<span class="pl-kos">)</span><span class="pl-kos">]</span></span>
+<span class="pl-c1">#<span class="pl-kos">[</span>allow<span class="pl-kos">(</span>dead_code<span class="pl-kos">)</span><span class="pl-kos">]</span></span>
+<span class="pl-c">// Main function</span>
+<span class="pl-k">fn</span> <span class="pl-en">main</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-c">// Numbers //</span>
+
+    <span class="pl-c">// Immutable bindings</span>
+    <span class="pl-k">let</span> x<span class="pl-kos">:</span> <span class="pl-smi">i32</span> = <span class="pl-c1">1</span><span class="pl-kos">;</span>
+
+    <span class="pl-c">// Integer/float suffixes</span>
+    <span class="pl-k">let</span> y<span class="pl-kos">:</span> <span class="pl-smi">i32</span> = <span class="pl-c1">13i32</span><span class="pl-kos">;</span>
+    <span class="pl-k">let</span> f<span class="pl-kos">:</span> <span class="pl-smi">f64</span> = <span class="pl-c1">1.3f64</span><span class="pl-kos">;</span>
+
+    <span class="pl-c">// Type inference</span>
+    <span class="pl-c">// Most of the time, the Rust compiler can infer what type a variable is, so</span>
+    <span class="pl-c">// you don’t have to write an explicit type annotation.</span>
+    <span class="pl-c">// Throughout this tutorial, types are explicitly annotated in many places,</span>
+    <span class="pl-c">// but only for demonstrative purposes. Type inference can handle this for</span>
+    <span class="pl-c">// you most of the time.</span>
+    <span class="pl-k">let</span> implicit_x = <span class="pl-c1">1</span><span class="pl-kos">;</span>
+    <span class="pl-k">let</span> implicit_f = <span class="pl-c1">1.3</span><span class="pl-kos">;</span>
+
+    <span class="pl-c">// Arithmetic</span>
+    <span class="pl-k">let</span> sum = x + y + <span class="pl-c1">13</span><span class="pl-kos">;</span>
+
+    <span class="pl-c">// Mutable variable</span>
+    <span class="pl-k">let</span> <span class="pl-k">mut</span> mutable = <span class="pl-c1">1</span><span class="pl-kos">;</span>
+    mutable = <span class="pl-c1">4</span><span class="pl-kos">;</span>
+    mutable += <span class="pl-c1">2</span><span class="pl-kos">;</span>
+
+    <span class="pl-c">// Strings //</span>
+
+    <span class="pl-c">// String literals</span>
+    <span class="pl-k">let</span> x<span class="pl-kos">:</span> <span class="pl-c1">&amp;</span><span class="pl-smi">str</span> = <span class="pl-s">"hello world!"</span><span class="pl-kos">;</span>
+
+    <span class="pl-c">// Printing</span>
+    <span class="pl-en">println</span><span class="pl-en">!</span><span class="pl-kos">(</span><span class="pl-s">"{} {}"</span>, f, x<span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// 1.3 hello world</span>
+
+    <span class="pl-c">// A `String` – a heap-allocated string</span>
+    <span class="pl-c">// Stored as a `Vec&lt;u8&gt;` and always hold a valid UTF-8 sequence, </span>
+    <span class="pl-c">// which is not null terminated.</span>
+    <span class="pl-k">let</span> s<span class="pl-kos">:</span> <span class="pl-smi">String</span> = <span class="pl-s">"hello world"</span><span class="pl-kos">.</span><span class="pl-en">to_string</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-c">// A string slice – an immutable view into another string</span>
+    <span class="pl-c">// This is basically an immutable pair of pointers to a string – it doesn’t</span>
+    <span class="pl-c">// actually contain the contents of a string, just a pointer to</span>
+    <span class="pl-c">// the begin and a pointer to the end of a string buffer,</span>
+    <span class="pl-c">// statically allocated or contained in another object (in this case, `s`).</span>
+    <span class="pl-c">// The string slice is like a view `&amp;[u8]` into `Vec&lt;T&gt;`.</span>
+    <span class="pl-k">let</span> s_slice<span class="pl-kos">:</span> <span class="pl-c1">&amp;</span><span class="pl-smi">str</span> = <span class="pl-c1">&amp;</span>s<span class="pl-kos">;</span>
+
+    <span class="pl-en">println</span><span class="pl-en">!</span><span class="pl-kos">(</span><span class="pl-s">"{} {}"</span>, s, s_slice<span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// hello world hello world</span>
+
+    <span class="pl-c">// Vectors/arrays //</span>
+
+    <span class="pl-c">// A fixed-size array</span>
+    <span class="pl-k">let</span> four_ints<span class="pl-kos">:</span> <span class="pl-kos">[</span><span class="pl-smi">i32</span><span class="pl-kos">;</span> <span class="pl-c1">4</span><span class="pl-kos">]</span> = <span class="pl-kos">[</span><span class="pl-c1">1</span><span class="pl-kos">,</span> <span class="pl-c1">2</span><span class="pl-kos">,</span> <span class="pl-c1">3</span><span class="pl-kos">,</span> <span class="pl-c1">4</span><span class="pl-kos">]</span><span class="pl-kos">;</span>
+
+    <span class="pl-c">// A dynamic array (vector)</span>
+    <span class="pl-k">let</span> <span class="pl-k">mut</span> vector<span class="pl-kos">:</span> <span class="pl-smi">Vec</span><span class="pl-kos">&lt;</span><span class="pl-smi">i32</span><span class="pl-kos">&gt;</span> = <span class="pl-en">vec</span><span class="pl-en">!</span><span class="pl-kos">[</span><span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span><span class="pl-kos">]</span><span class="pl-kos">;</span>
+    vector<span class="pl-kos">.</span><span class="pl-en">push</span><span class="pl-kos">(</span><span class="pl-c1">5</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-c">// A slice – an immutable view into a vector or array</span>
+    <span class="pl-c">// This is much like a string slice, but for vectors</span>
+    <span class="pl-k">let</span> slice<span class="pl-kos">:</span> <span class="pl-c1">&amp;</span><span class="pl-kos">[</span><span class="pl-smi">i32</span><span class="pl-kos">]</span> = <span class="pl-c1">&amp;</span>vector<span class="pl-kos">;</span>
+
+    <span class="pl-c">// Use `{:?}` to print something debug-style</span>
+    <span class="pl-en">println</span><span class="pl-en">!</span><span class="pl-kos">(</span><span class="pl-s">"{:?} {:?}"</span>, vector, slice<span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// [1, 2, 3, 4, 5] [1, 2, 3, 4, 5]</span>
+
+    <span class="pl-c">// Tuples //</span>
+
+    <span class="pl-c">// A tuple is a fixed-size set of values of possibly different types</span>
+    <span class="pl-k">let</span> x<span class="pl-kos">:</span> <span class="pl-kos">(</span><span class="pl-smi">i32</span><span class="pl-kos">,</span> <span class="pl-c1">&amp;</span><span class="pl-smi">str</span><span class="pl-kos">,</span> <span class="pl-smi">f64</span><span class="pl-kos">)</span> = <span class="pl-kos">(</span><span class="pl-c1">1</span><span class="pl-kos">,</span> <span class="pl-s">"hello"</span><span class="pl-kos">,</span> <span class="pl-c1">3.4</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-c">// Destructuring `let`</span>
+    <span class="pl-k">let</span> <span class="pl-kos">(</span>a<span class="pl-kos">,</span> b<span class="pl-kos">,</span> c<span class="pl-kos">)</span> = x<span class="pl-kos">;</span>
+    <span class="pl-en">println</span><span class="pl-en">!</span><span class="pl-kos">(</span><span class="pl-s">"{} {} {}"</span>, a, b, c<span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// 1 hello 3.4</span>
+
+    <span class="pl-c">// Indexing</span>
+    <span class="pl-en">println</span><span class="pl-en">!</span><span class="pl-kos">(</span><span class="pl-s">"{}"</span>, x.<span class="pl-c1">1</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// hello</span>
+
+    <span class="pl-c">//////////////</span>
+    <span class="pl-c">// 2. Types //</span>
+    <span class="pl-c">//////////////</span>
+
+    <span class="pl-c">// Struct</span>
+    <span class="pl-k">struct</span> <span class="pl-smi">Point</span> <span class="pl-kos">{</span>
+        <span class="pl-c1">x</span><span class="pl-kos">:</span> <span class="pl-smi">i32</span><span class="pl-kos">,</span>
+        <span class="pl-c1">y</span><span class="pl-kos">:</span> <span class="pl-smi">i32</span><span class="pl-kos">,</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-k">let</span> origin<span class="pl-kos">:</span> <span class="pl-smi">Point</span> = <span class="pl-smi">Point</span> <span class="pl-kos">{</span> <span class="pl-c1">x</span><span class="pl-kos">:</span> <span class="pl-c1">0</span><span class="pl-kos">,</span> <span class="pl-c1">y</span><span class="pl-kos">:</span> <span class="pl-c1">0</span> <span class="pl-kos">}</span><span class="pl-kos">;</span>
+
+    <span class="pl-c">// A struct with unnamed fields, called a ‘tuple struct’</span>
+    <span class="pl-k">struct</span> <span class="pl-smi">Point2</span><span class="pl-kos">(</span><span class="pl-smi">i32</span><span class="pl-kos">,</span> <span class="pl-smi">i32</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-k">let</span> origin2 = <span class="pl-v">Point2</span><span class="pl-kos">(</span><span class="pl-c1">0</span><span class="pl-kos">,</span> <span class="pl-c1">0</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-c">// Basic C-like enum</span>
+    <span class="pl-k">enum</span> <span class="pl-smi">Direction</span> <span class="pl-kos">{</span>
+        <span class="pl-v">Left</span><span class="pl-kos">,</span>
+        <span class="pl-v">Right</span><span class="pl-kos">,</span>
+        <span class="pl-v">Up</span><span class="pl-kos">,</span>
+        <span class="pl-v">Down</span><span class="pl-kos">,</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-k">let</span> up = <span class="pl-smi">Direction</span><span class="pl-kos">::</span><span class="pl-v">Up</span><span class="pl-kos">;</span>
+
+    <span class="pl-c">// Enum with fields</span>
+    <span class="pl-k">enum</span> <span class="pl-smi">OptionalI32</span> <span class="pl-kos">{</span>
+        <span class="pl-v">AnI32</span><span class="pl-kos">(</span><span class="pl-smi">i32</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+        <span class="pl-v">Nothing</span><span class="pl-kos">,</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-k">let</span> two<span class="pl-kos">:</span> <span class="pl-smi">OptionalI32</span> = <span class="pl-smi">OptionalI32</span><span class="pl-kos">::</span><span class="pl-v">AnI32</span><span class="pl-kos">(</span><span class="pl-c1">2</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-k">let</span> nothing = <span class="pl-smi">OptionalI32</span><span class="pl-kos">::</span><span class="pl-v">Nothing</span><span class="pl-kos">;</span>
+
+    <span class="pl-c">// Generics //</span>
+
+    <span class="pl-k">struct</span> <span class="pl-smi">Foo</span><span class="pl-kos">&lt;</span><span class="pl-smi">T</span><span class="pl-kos">&gt;</span> <span class="pl-kos">{</span> <span class="pl-c1">bar</span><span class="pl-kos">:</span> <span class="pl-smi">T</span> <span class="pl-kos">}</span>
+
+    <span class="pl-c">// This is defined in the standard library as `Option`</span>
+    <span class="pl-k">enum</span> <span class="pl-smi">Optional</span><span class="pl-kos">&lt;</span><span class="pl-smi">T</span><span class="pl-kos">&gt;</span> <span class="pl-kos">{</span>
+        <span class="pl-v">SomeVal</span><span class="pl-kos">(</span><span class="pl-smi">T</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+        <span class="pl-v">NoVal</span><span class="pl-kos">,</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-c">// Methods //</span>
+
+    <span class="pl-k">impl</span><span class="pl-kos">&lt;</span><span class="pl-smi">T</span><span class="pl-kos">&gt;</span> <span class="pl-smi">Foo</span><span class="pl-kos">&lt;</span><span class="pl-smi">T</span><span class="pl-kos">&gt;</span> <span class="pl-kos">{</span>
+        <span class="pl-c">// Methods take an explicit `self` parameter</span>
+        <span class="pl-k">fn</span> <span class="pl-en">bar</span><span class="pl-kos">(</span><span class="pl-c1">&amp;</span><span class="pl-smi">self</span><span class="pl-kos">)</span> -&gt; <span class="pl-c1">&amp;</span><span class="pl-smi">T</span> <span class="pl-kos">{</span> <span class="pl-c">// self is borrowed</span>
+            <span class="pl-c1">&amp;</span><span class="pl-smi">self</span><span class="pl-kos">.</span><span class="pl-c1">bar</span>
+        <span class="pl-kos">}</span>
+        <span class="pl-k">fn</span> <span class="pl-en">bar_mut</span><span class="pl-kos">(</span><span class="pl-c1">&amp;</span><span class="pl-k">mut</span> <span class="pl-smi">self</span><span class="pl-kos">)</span> -&gt; <span class="pl-c1">&amp;</span><span class="pl-k">mut</span> <span class="pl-smi">T</span> <span class="pl-kos">{</span> <span class="pl-c">// self is mutably borrowed</span>
+            <span class="pl-c1">&amp;</span><span class="pl-k">mut</span> <span class="pl-smi">self</span><span class="pl-kos">.</span><span class="pl-c1">bar</span>
+        <span class="pl-kos">}</span>
+        <span class="pl-k">fn</span> <span class="pl-en">into_bar</span><span class="pl-kos">(</span><span class="pl-smi">self</span><span class="pl-kos">)</span> -&gt; <span class="pl-smi">T</span> <span class="pl-kos">{</span> <span class="pl-c">// here self is consumed</span>
+            <span class="pl-smi">self</span><span class="pl-kos">.</span><span class="pl-c1">bar</span>
+        <span class="pl-kos">}</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-k">let</span> a_foo = <span class="pl-smi">Foo</span> <span class="pl-kos">{</span> <span class="pl-c1">bar</span><span class="pl-kos">:</span> <span class="pl-c1">1</span> <span class="pl-kos">}</span><span class="pl-kos">;</span>
+    <span class="pl-en">println</span><span class="pl-en">!</span><span class="pl-kos">(</span><span class="pl-s">"{}"</span>, a_foo.bar<span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// 1</span>
+
+    <span class="pl-c">// Traits (known as interfaces or typeclasses in other languages) //</span>
+
+    <span class="pl-k">trait</span> <span class="pl-smi">Frobnicate</span><span class="pl-kos">&lt;</span><span class="pl-smi">T</span><span class="pl-kos">&gt;</span> <span class="pl-kos">{</span>
+        <span class="pl-k">fn</span> <span class="pl-en">frobnicate</span><span class="pl-kos">(</span><span class="pl-smi">self</span><span class="pl-kos">)</span> -&gt; <span class="pl-smi">Option</span><span class="pl-kos">&lt;</span><span class="pl-smi">T</span><span class="pl-kos">&gt;</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-k">impl</span><span class="pl-kos">&lt;</span><span class="pl-smi">T</span><span class="pl-kos">&gt;</span> <span class="pl-smi">Frobnicate</span><span class="pl-kos">&lt;</span><span class="pl-smi">T</span><span class="pl-kos">&gt;</span> <span class="pl-k">for</span> <span class="pl-smi">Foo</span><span class="pl-kos">&lt;</span><span class="pl-smi">T</span><span class="pl-kos">&gt;</span> <span class="pl-kos">{</span>
+        <span class="pl-k">fn</span> <span class="pl-en">frobnicate</span><span class="pl-kos">(</span><span class="pl-smi">self</span><span class="pl-kos">)</span> -&gt; <span class="pl-smi">Option</span><span class="pl-kos">&lt;</span><span class="pl-smi">T</span><span class="pl-kos">&gt;</span> <span class="pl-kos">{</span>
+            <span class="pl-v">Some</span><span class="pl-kos">(</span><span class="pl-smi">self</span><span class="pl-kos">.</span><span class="pl-c1">bar</span><span class="pl-kos">)</span>
+        <span class="pl-kos">}</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-k">let</span> another_foo = <span class="pl-smi">Foo</span> <span class="pl-kos">{</span> <span class="pl-c1">bar</span><span class="pl-kos">:</span> <span class="pl-c1">1</span> <span class="pl-kos">}</span><span class="pl-kos">;</span>
+    <span class="pl-en">println</span><span class="pl-en">!</span><span class="pl-kos">(</span><span class="pl-s">"{:?}"</span>, another_foo.frobnicate<span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Some(1)</span>
+
+    <span class="pl-c">// Function pointer types // </span>
+
+    <span class="pl-k">fn</span> <span class="pl-en">fibonacci</span><span class="pl-kos">(</span><span class="pl-s1">n</span><span class="pl-kos">:</span> <span class="pl-smi">u32</span><span class="pl-kos">)</span> -&gt; <span class="pl-smi">u32</span> <span class="pl-kos">{</span>
+        <span class="pl-k">match</span> n <span class="pl-kos">{</span>
+            <span class="pl-c1">0</span> =&gt; <span class="pl-c1">1</span><span class="pl-kos">,</span>
+            <span class="pl-c1">1</span> =&gt; <span class="pl-c1">1</span><span class="pl-kos">,</span>
+            _ =&gt; <span class="pl-en">fibonacci</span><span class="pl-kos">(</span>n - <span class="pl-c1">1</span><span class="pl-kos">)</span> + <span class="pl-en">fibonacci</span><span class="pl-kos">(</span>n - <span class="pl-c1">2</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+        <span class="pl-kos">}</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-k">type</span> <span class="pl-smi">FunctionPointer</span> = <span class="pl-k">fn</span><span class="pl-kos">(</span><span class="pl-smi">u32</span><span class="pl-kos">)</span> -&gt; <span class="pl-smi">u32</span><span class="pl-kos">;</span>
+
+    <span class="pl-k">let</span> fib <span class="pl-kos">:</span> <span class="pl-smi">FunctionPointer</span> = fibonacci<span class="pl-kos">;</span>
+    <span class="pl-en">println</span><span class="pl-en">!</span><span class="pl-kos">(</span><span class="pl-s">"Fib: {}"</span>, fib<span class="pl-kos">(</span><span class="pl-c1">4</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-c">/////////////////////////</span>
+    <span class="pl-c">// 3. Pattern matching //</span>
+    <span class="pl-c">/////////////////////////</span>
+
+    <span class="pl-k">let</span> foo = <span class="pl-smi">OptionalI32</span><span class="pl-kos">::</span><span class="pl-v">AnI32</span><span class="pl-kos">(</span><span class="pl-c1">1</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-k">match</span> foo <span class="pl-kos">{</span>
+        <span class="pl-smi">OptionalI32</span><span class="pl-kos">::</span><span class="pl-v">AnI32</span><span class="pl-kos">(</span>n<span class="pl-kos">)</span> =&gt; <span class="pl-en">println</span><span class="pl-en">!</span><span class="pl-kos">(</span><span class="pl-s">"it’s an i32: {}"</span>, n<span class="pl-kos">)</span><span class="pl-kos">,</span>
+        <span class="pl-smi">OptionalI32</span><span class="pl-kos">::</span><span class="pl-v">Nothing</span>  =&gt; <span class="pl-en">println</span><span class="pl-en">!</span><span class="pl-kos">(</span><span class="pl-s">"it’s nothing!"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-c">// Advanced pattern matching</span>
+    <span class="pl-k">struct</span> <span class="pl-smi">FooBar</span> <span class="pl-kos">{</span> <span class="pl-c1">x</span><span class="pl-kos">:</span> <span class="pl-smi">i32</span><span class="pl-kos">,</span> <span class="pl-c1">y</span><span class="pl-kos">:</span> <span class="pl-smi">OptionalI32</span> <span class="pl-kos">}</span>
+    <span class="pl-k">let</span> bar = <span class="pl-smi">FooBar</span> <span class="pl-kos">{</span> <span class="pl-c1">x</span><span class="pl-kos">:</span> <span class="pl-c1">15</span><span class="pl-kos">,</span> <span class="pl-c1">y</span><span class="pl-kos">:</span> <span class="pl-smi">OptionalI32</span><span class="pl-kos">::</span><span class="pl-v">AnI32</span><span class="pl-kos">(</span><span class="pl-c1">32</span><span class="pl-kos">)</span> <span class="pl-kos">}</span><span class="pl-kos">;</span>
+
+    <span class="pl-k">match</span> bar <span class="pl-kos">{</span>
+        <span class="pl-smi">FooBar</span> <span class="pl-kos">{</span> <span class="pl-c1">x</span><span class="pl-kos">:</span> <span class="pl-c1">0</span><span class="pl-kos">,</span> <span class="pl-c1">y</span><span class="pl-kos">:</span> <span class="pl-smi">OptionalI32</span><span class="pl-kos">::</span><span class="pl-v">AnI32</span><span class="pl-kos">(</span><span class="pl-c1">0</span><span class="pl-kos">)</span> <span class="pl-kos">}</span> =&gt;
+            <span class="pl-en">println</span><span class="pl-en">!</span><span class="pl-kos">(</span><span class="pl-s">"The numbers are zero!"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+        <span class="pl-smi">FooBar</span> <span class="pl-kos">{</span> <span class="pl-c1">x</span><span class="pl-kos">:</span> n<span class="pl-kos">,</span> <span class="pl-c1">y</span><span class="pl-kos">:</span> <span class="pl-smi">OptionalI32</span><span class="pl-kos">::</span><span class="pl-v">AnI32</span><span class="pl-kos">(</span>m<span class="pl-kos">)</span> <span class="pl-kos">}</span> <span class="pl-k">if</span> n == m =&gt;
+            <span class="pl-en">println</span><span class="pl-en">!</span><span class="pl-kos">(</span><span class="pl-s">"The numbers are the same"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+        <span class="pl-smi">FooBar</span> <span class="pl-kos">{</span> <span class="pl-c1">x</span><span class="pl-kos">:</span> n<span class="pl-kos">,</span> <span class="pl-c1">y</span><span class="pl-kos">:</span> <span class="pl-smi">OptionalI32</span><span class="pl-kos">::</span><span class="pl-v">AnI32</span><span class="pl-kos">(</span>m<span class="pl-kos">)</span> <span class="pl-kos">}</span> =&gt;
+            <span class="pl-en">println</span><span class="pl-en">!</span><span class="pl-kos">(</span><span class="pl-s">"Different numbers: {} {}"</span>, n, m<span class="pl-kos">)</span><span class="pl-kos">,</span>
+        <span class="pl-smi">FooBar</span> <span class="pl-kos">{</span> <span class="pl-c1">x</span><span class="pl-kos">:</span> _<span class="pl-kos">,</span> <span class="pl-c1">y</span><span class="pl-kos">:</span> <span class="pl-smi">OptionalI32</span><span class="pl-kos">::</span><span class="pl-v">Nothing</span> <span class="pl-kos">}</span> =&gt;
+            <span class="pl-en">println</span><span class="pl-en">!</span><span class="pl-kos">(</span><span class="pl-s">"The second number is Nothing!"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-c">/////////////////////</span>
+    <span class="pl-c">// 4. Control flow //</span>
+    <span class="pl-c">/////////////////////</span>
+
+    <span class="pl-c">// `for` loops/iteration</span>
+    <span class="pl-k">let</span> array = <span class="pl-kos">[</span><span class="pl-c1">1</span><span class="pl-kos">,</span> <span class="pl-c1">2</span><span class="pl-kos">,</span> <span class="pl-c1">3</span><span class="pl-kos">]</span><span class="pl-kos">;</span>
+    <span class="pl-k">for</span> i <span class="pl-k">in</span> array <span class="pl-kos">{</span>
+        <span class="pl-en">println</span><span class="pl-en">!</span><span class="pl-kos">(</span><span class="pl-s">"{}"</span>, i<span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-c">// Ranges</span>
+    <span class="pl-k">for</span> i <span class="pl-k">in</span> <span class="pl-c1">0u32</span>..<span class="pl-c1">10</span> <span class="pl-kos">{</span>
+        <span class="pl-en">print</span><span class="pl-en">!</span><span class="pl-kos">(</span><span class="pl-s">"{} "</span>, i<span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+    <span class="pl-en">println</span><span class="pl-en">!</span><span class="pl-kos">(</span><span class="pl-s">""</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-c">// prints `0 1 2 3 4 5 6 7 8 9 `</span>
+
+    <span class="pl-c">// `if`</span>
+    <span class="pl-k">if</span> <span class="pl-c1">1</span> == <span class="pl-c1">1</span> <span class="pl-kos">{</span>
+        <span class="pl-en">println</span><span class="pl-en">!</span><span class="pl-kos">(</span><span class="pl-s">"Maths is working!"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span> <span class="pl-k">else</span> <span class="pl-kos">{</span>
+        <span class="pl-en">println</span><span class="pl-en">!</span><span class="pl-kos">(</span><span class="pl-s">"Oh no..."</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-c">// `if` as expression</span>
+    <span class="pl-k">let</span> value = <span class="pl-k">if</span> <span class="pl-c1">true</span> <span class="pl-kos">{</span>
+        <span class="pl-s">"good"</span>
+    <span class="pl-kos">}</span> <span class="pl-k">else</span> <span class="pl-kos">{</span>
+        <span class="pl-s">"bad"</span>
+    <span class="pl-kos">}</span><span class="pl-kos">;</span>
+
+    <span class="pl-c">// `while` loop</span>
+    <span class="pl-k">while</span> <span class="pl-c1">1</span> == <span class="pl-c1">1</span> <span class="pl-kos">{</span>
+        <span class="pl-en">println</span><span class="pl-en">!</span><span class="pl-kos">(</span><span class="pl-s">"The universe is operating normally."</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-c">// break statement gets out of the while loop.</span>
+        <span class="pl-c">//  It avoids useless iterations.</span>
+        <span class="pl-k">break</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-c">// Infinite loop</span>
+    <span class="pl-k">loop</span> <span class="pl-kos">{</span>
+        <span class="pl-en">println</span><span class="pl-en">!</span><span class="pl-kos">(</span><span class="pl-s">"Hello!"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-c">// break statement gets out of the loop</span>
+        <span class="pl-k">break</span>
+    <span class="pl-kos">}</span>
+
+    <span class="pl-c">/////////////////////////////////</span>
+    <span class="pl-c">// 5. Memory safety &amp; pointers //</span>
+    <span class="pl-c">/////////////////////////////////</span>
+
+    <span class="pl-c">// Owned pointer – only one thing can ‘own’ this pointer at a time</span>
+    <span class="pl-c">// This means that when the `Box` leaves its scope, it can be automatically deallocated safely.</span>
+    <span class="pl-k">let</span> <span class="pl-k">mut</span> mine<span class="pl-kos">:</span> <span class="pl-smi">Box</span><span class="pl-kos">&lt;</span><span class="pl-smi">i32</span><span class="pl-kos">&gt;</span> = <span class="pl-smi">Box</span><span class="pl-kos">::</span><span class="pl-en">new</span><span class="pl-kos">(</span><span class="pl-c1">3</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-c1">*</span>mine = <span class="pl-c1">5</span><span class="pl-kos">;</span> <span class="pl-c">// dereference</span>
+    <span class="pl-c">// Here, `now_its_mine` takes ownership of `mine`. In other words, `mine` is moved.</span>
+    <span class="pl-k">let</span> <span class="pl-k">mut</span> now_its_mine = mine<span class="pl-kos">;</span>
+    <span class="pl-c1">*</span>now_its_mine += <span class="pl-c1">2</span><span class="pl-kos">;</span>
+
+    <span class="pl-en">println</span><span class="pl-en">!</span><span class="pl-kos">(</span><span class="pl-s">"{}"</span>, now_its_mine<span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// 7</span>
+    <span class="pl-c">// println!("{}", mine); // this would not compile because `now_its_mine` now owns the pointer</span>
+
+    <span class="pl-c">// Reference – an immutable pointer that refers to other data</span>
+    <span class="pl-c">// When a reference is taken to a value, we say that the value has been ‘borrowed’.</span>
+    <span class="pl-c">// While a value is borrowed immutably, it cannot be mutated or moved.</span>
+    <span class="pl-c">// A borrow is active until the last use of the borrowing variable.</span>
+    <span class="pl-k">let</span> <span class="pl-k">mut</span> var = <span class="pl-c1">4</span><span class="pl-kos">;</span>
+    var = <span class="pl-c1">3</span><span class="pl-kos">;</span>
+    <span class="pl-k">let</span> ref_var<span class="pl-kos">:</span> <span class="pl-c1">&amp;</span><span class="pl-smi">i32</span> = <span class="pl-c1">&amp;</span>var<span class="pl-kos">;</span>
+
+    <span class="pl-en">println</span><span class="pl-en">!</span><span class="pl-kos">(</span><span class="pl-s">"{}"</span>, var<span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// Unlike `mine`, `var` can still be used</span>
+    <span class="pl-en">println</span><span class="pl-en">!</span><span class="pl-kos">(</span><span class="pl-s">"{}"</span>, *ref_var<span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-c">// var = 5; // this would not compile because `var` is borrowed</span>
+    <span class="pl-c">// *ref_var = 6; // this would not either, because `ref_var` is an immutable reference</span>
+    ref_var<span class="pl-kos">;</span> <span class="pl-c">// no-op, but counts as a use and keeps the borrow active</span>
+    var = <span class="pl-c1">2</span><span class="pl-kos">;</span> <span class="pl-c">// ref_var is no longer used after the line above, so the borrow has ended</span>
+
+    <span class="pl-c">// Mutable reference</span>
+    <span class="pl-c">// While a value is mutably borrowed, it cannot be accessed at all.</span>
+    <span class="pl-k">let</span> <span class="pl-k">mut</span> var2 = <span class="pl-c1">4</span><span class="pl-kos">;</span>
+    <span class="pl-k">let</span> ref_var2<span class="pl-kos">:</span> <span class="pl-c1">&amp;</span><span class="pl-k">mut</span> <span class="pl-smi">i32</span> = <span class="pl-c1">&amp;</span><span class="pl-k">mut</span> var2<span class="pl-kos">;</span>
+    <span class="pl-c1">*</span>ref_var2 += <span class="pl-c1">2</span><span class="pl-kos">;</span>         <span class="pl-c">// '*' is used to point to the mutably borrowed var2</span>
+
+    <span class="pl-en">println</span><span class="pl-en">!</span><span class="pl-kos">(</span><span class="pl-s">"{}"</span>, *ref_var2<span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// 6 , // var2 would not compile.</span>
+    <span class="pl-c">// ref_var2 is of type &amp;mut i32, so stores a reference to an i32, not the value.</span>
+    <span class="pl-c">// var2 = 2; // this would not compile because `var2` is borrowed.</span>
+    ref_var2<span class="pl-kos">;</span> <span class="pl-c">// no-op, but counts as a use and keeps the borrow active until here</span>
+<span class="pl-kos">}</span></pre></div>
+<h2>Further reading</h2>
+<p>There’s a lot more to Rust—this is just the basics of Rust so you can understand<br>
+the most important things. To learn more about Rust, read <a href="http://doc.rust-lang.org/book/index.html" rel="nofollow">The Rust Programming<br>
+Language</a> and check out the<br>
+<a href="http://reddit.com/r/rust" rel="nofollow">/r/rust</a> subreddit. The folks on the #rust channel on<br>
+irc.mozilla.org are also always keen to help newcomers.</p>
+<p>You can also try out features of Rust with an online compiler at the official<br>
+<a href="http://play.rust-lang.org" rel="nofollow">Rust playpen</a> or on the main<br>
+<a href="http://rust-lang.org" rel="nofollow">Rust website</a>.</p>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["P1start", "http://p1start.github.io/"]
+</code></pre>

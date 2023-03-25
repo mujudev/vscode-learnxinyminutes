@@ -1,0 +1,183 @@
+<h1>AMD</h1>
+<p>The <strong>Asynchronous Module Definition</strong> API specifies a mechanism for defining<br>
+JavaScript modules such that the module and its dependencies can be asynchronously<br>
+loaded. This is particularly well suited for the browser environment where<br>
+synchronous loading of modules incurs performance, usability, debugging, and<br>
+cross-domain access problems.</p>
+<h3>Basic concept</h3>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-c">// The basic AMD API consists of nothing but two methods: `define` and `require`</span>
+<span class="pl-c">// and is all about module definition and consumption:</span>
+<span class="pl-c">// `define(id?, dependencies?, factory)` defines a module</span>
+<span class="pl-c">// `require(dependencies, callback)` imports a set of dependencies and</span>
+<span class="pl-c">// consumes them in the passed callback</span>
+
+<span class="pl-c">// Let's start by using define to define a new named module</span>
+<span class="pl-c">// that has no dependencies. We'll do so by passing a name</span>
+<span class="pl-c">// and a factory function to define:</span>
+<span class="pl-en">define</span><span class="pl-kos">(</span><span class="pl-s">'awesomeAMD'</span><span class="pl-kos">,</span> <span class="pl-k">function</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+  <span class="pl-k">var</span> <span class="pl-en">isAMDAwesome</span> <span class="pl-c1">=</span> <span class="pl-k">function</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+    <span class="pl-k">return</span> <span class="pl-c1">true</span><span class="pl-kos">;</span>
+  <span class="pl-kos">}</span><span class="pl-kos">;</span>
+  <span class="pl-c">// The return value of a module's factory function is</span>
+  <span class="pl-c">// what other modules or require calls will receive when</span>
+  <span class="pl-c">// requiring our `awesomeAMD` module.</span>
+  <span class="pl-c">// The exported value can be anything, (constructor) functions,</span>
+  <span class="pl-c">// objects, primitives, even undefined (although that won't help too much).</span>
+  <span class="pl-k">return</span> <span class="pl-en">isAMDAwesome</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// Now, let's define another module that depends upon our `awesomeAMD` module.</span>
+<span class="pl-c">// Notice that there's an additional argument defining our</span>
+<span class="pl-c">// module's dependencies now:</span>
+<span class="pl-en">define</span><span class="pl-kos">(</span><span class="pl-s">'loudmouth'</span><span class="pl-kos">,</span> <span class="pl-kos">[</span><span class="pl-s">'awesomeAMD'</span><span class="pl-kos">]</span><span class="pl-kos">,</span> <span class="pl-k">function</span><span class="pl-kos">(</span><span class="pl-s1">awesomeAMD</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+  <span class="pl-c">// dependencies will be passed to the factory's arguments</span>
+  <span class="pl-c">// in the order they are specified</span>
+  <span class="pl-k">var</span> <span class="pl-en">tellEveryone</span> <span class="pl-c1">=</span> <span class="pl-k">function</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+    <span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">awesomeAMD</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+      <span class="pl-en">alert</span><span class="pl-kos">(</span><span class="pl-s">'This is sOoOo rad!'</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span> <span class="pl-k">else</span> <span class="pl-kos">{</span>
+      <span class="pl-en">alert</span><span class="pl-kos">(</span><span class="pl-s">'Pretty dull, isn\'t it?'</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+  <span class="pl-kos">}</span><span class="pl-kos">;</span>
+  <span class="pl-k">return</span> <span class="pl-en">tellEveryone</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// As we do know how to use define now, let's use `require` to</span>
+<span class="pl-c">// kick off our program. `require`'s signature is `(arrayOfDependencies, callback)`.</span>
+<span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-kos">[</span><span class="pl-s">'loudmouth'</span><span class="pl-kos">]</span><span class="pl-kos">,</span> <span class="pl-k">function</span><span class="pl-kos">(</span><span class="pl-s1">loudmouth</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+  <span class="pl-s1">loudmouth</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// To make this tutorial run code, let's implement a very basic</span>
+<span class="pl-c">// (non-asynchronous) version of AMD right here on the spot:</span>
+<span class="pl-k">function</span> <span class="pl-en">define</span><span class="pl-kos">(</span><span class="pl-s1">name</span><span class="pl-kos">,</span> <span class="pl-s1">deps</span><span class="pl-kos">,</span> <span class="pl-s1">factory</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+  <span class="pl-c">// notice how modules without dependencies are handled</span>
+  <span class="pl-s1">define</span><span class="pl-kos">[</span><span class="pl-s1">name</span><span class="pl-kos">]</span> <span class="pl-c1">=</span> <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">factory</span> ? <span class="pl-s1">deps</span> : <span class="pl-kos">[</span><span class="pl-kos">]</span><span class="pl-kos">,</span> <span class="pl-s1">factory</span> <span class="pl-c1">||</span> <span class="pl-s1">deps</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-k">function</span> <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s1">deps</span><span class="pl-kos">,</span> <span class="pl-s1">callback</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+  <span class="pl-k">var</span> <span class="pl-s1">args</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span><span class="pl-kos">]</span><span class="pl-kos">;</span>
+  <span class="pl-c">// first let's retrieve all the dependencies needed</span>
+  <span class="pl-c">// by the require call</span>
+  <span class="pl-k">for</span> <span class="pl-kos">(</span><span class="pl-k">var</span> <span class="pl-s1">i</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span><span class="pl-kos">;</span> <span class="pl-s1">i</span> <span class="pl-c1">&lt;</span> <span class="pl-s1">deps</span><span class="pl-kos">.</span><span class="pl-c1">length</span><span class="pl-kos">;</span> <span class="pl-s1">i</span><span class="pl-c1">++</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+    <span class="pl-s1">args</span><span class="pl-kos">[</span><span class="pl-s1">i</span><span class="pl-kos">]</span> <span class="pl-c1">=</span> <span class="pl-s1">define</span><span class="pl-kos">[</span><span class="pl-s1">deps</span><span class="pl-kos">[</span><span class="pl-s1">i</span><span class="pl-kos">]</span><span class="pl-kos">]</span><span class="pl-kos">;</span>
+  <span class="pl-kos">}</span>
+  <span class="pl-c">// satisfy all the callback's dependencies</span>
+  <span class="pl-k">return</span> <span class="pl-s1">callback</span><span class="pl-kos">.</span><span class="pl-en">apply</span><span class="pl-kos">(</span><span class="pl-c1">null</span><span class="pl-kos">,</span> <span class="pl-s1">args</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span>
+<span class="pl-c">// you can see this code in action here: http://jsfiddle.net/qap949pd/</span></pre></div>
+<h3>Real-world usage with require.js</h3>
+<p>In contrast to the introductory example, <code class="notranslate">require.js</code> (the most popular AMD library) actually implements the <strong>A</strong> in <strong>AMD</strong>, enabling you to load modules and their dependencies asynchronously via XHR:</p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-c">/* file: app/main.js */</span>
+<span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-kos">[</span><span class="pl-s">'modules/someClass'</span><span class="pl-kos">]</span><span class="pl-kos">,</span> <span class="pl-k">function</span><span class="pl-kos">(</span><span class="pl-v">SomeClass</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+  <span class="pl-c">// the callback is deferred until the dependency is loaded</span>
+  <span class="pl-k">var</span> <span class="pl-s1">thing</span> <span class="pl-c1">=</span> <span class="pl-k">new</span> <span class="pl-v">SomeClass</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-en">log</span><span class="pl-kos">(</span><span class="pl-s">'So here we are, waiting!'</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// this will run first</span></pre></div>
+<p>By convention, you usually store one module in one file. <code class="notranslate">require.js</code> can resolve module names based on file paths, so you don't have to name your modules, but can simply reference them using their location. In the example <code class="notranslate">someClass</code> is assumed to be in the <code class="notranslate">modules</code> folder, relative to your configuration's <code class="notranslate">baseUrl</code>:</p>
+<ul>
+<li>app/
+<ul>
+<li>main.js</li>
+<li>modules/
+<ul>
+<li>someClass.js</li>
+<li>someHelpers.js</li>
+<li>...</li>
+</ul>
+</li>
+<li>daos/
+<ul>
+<li>things.js</li>
+<li>...</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>This means we can define <code class="notranslate">someClass</code> without specifying a module id:</p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-c">/* file: app/modules/someClass.js */</span>
+<span class="pl-en">define</span><span class="pl-kos">(</span><span class="pl-kos">[</span><span class="pl-s">'daos/things'</span><span class="pl-kos">,</span> <span class="pl-s">'modules/someHelpers'</span><span class="pl-kos">]</span><span class="pl-kos">,</span> <span class="pl-k">function</span><span class="pl-kos">(</span><span class="pl-s1">thingsDao</span><span class="pl-kos">,</span> <span class="pl-s1">helpers</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+  <span class="pl-c">// module definition, of course, will also happen asynchronously</span>
+  <span class="pl-k">function</span> <span class="pl-v">SomeClass</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-en">method</span> <span class="pl-c1">=</span> <span class="pl-k">function</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">{</span><span class="pl-c">/**/</span><span class="pl-kos">}</span><span class="pl-kos">;</span>
+    <span class="pl-c">// ...</span>
+  <span class="pl-kos">}</span>
+  <span class="pl-k">return</span> <span class="pl-v">SomeClass</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p>To alter the default path mapping behavior use <code class="notranslate">requirejs.config(configObj)</code> in your <code class="notranslate">main.js</code>:</p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-c">/* file: main.js */</span>
+<span class="pl-s1">requirejs</span><span class="pl-kos">.</span><span class="pl-en">config</span><span class="pl-kos">(</span><span class="pl-kos">{</span>
+  <span class="pl-c1">baseUrl</span> : <span class="pl-s">'app'</span><span class="pl-kos">,</span>
+  <span class="pl-c1">paths</span> : <span class="pl-kos">{</span>
+    <span class="pl-c">// you can also load modules from other locations</span>
+    <span class="pl-c1">jquery</span> : <span class="pl-s">'//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min'</span><span class="pl-kos">,</span>
+    <span class="pl-c1">coolLibFromBower</span> : <span class="pl-s">'../bower_components/cool-lib/coollib'</span>
+  <span class="pl-kos">}</span>
+<span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-kos">[</span><span class="pl-s">'jquery'</span><span class="pl-kos">,</span> <span class="pl-s">'coolLibFromBower'</span><span class="pl-kos">,</span> <span class="pl-s">'modules/someHelpers'</span><span class="pl-kos">]</span><span class="pl-kos">,</span> <span class="pl-k">function</span><span class="pl-kos">(</span><span class="pl-s1">$</span><span class="pl-kos">,</span> <span class="pl-s1">coolLib</span><span class="pl-kos">,</span> <span class="pl-s1">helpers</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+  <span class="pl-c">// a `main` file needs to call require at least once,</span>
+  <span class="pl-c">// otherwise no code will ever run</span>
+  <span class="pl-s1">coolLib</span><span class="pl-kos">.</span><span class="pl-en">doFancyStuffWith</span><span class="pl-kos">(</span><span class="pl-s1">helpers</span><span class="pl-kos">.</span><span class="pl-en">transform</span><span class="pl-kos">(</span><span class="pl-s1">$</span><span class="pl-kos">(</span><span class="pl-s">'#foo'</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p><code class="notranslate">require.js</code>-based apps will usually have a single entry point (<code class="notranslate">main.js</code>) that is passed to the <code class="notranslate">require.js</code> script tag as a data-attribute. It will be automatically loaded and executed on pageload:</p>
+<div class="highlight highlight-text-html-basic"><pre class="notranslate"><span class="pl-c1">&lt;!DOCTYPE html<span class="pl-kos">&gt;</span></span>
+<span class="pl-kos">&lt;</span><span class="pl-ent">html</span><span class="pl-kos">&gt;</span>
+<span class="pl-kos">&lt;</span><span class="pl-ent">head</span><span class="pl-kos">&gt;</span>
+  <span class="pl-kos">&lt;</span><span class="pl-ent">title</span><span class="pl-kos">&gt;</span>A hundred script tags? Never again!<span class="pl-kos">&lt;/</span><span class="pl-ent">title</span><span class="pl-kos">&gt;</span>
+<span class="pl-kos">&lt;/</span><span class="pl-ent">head</span><span class="pl-kos">&gt;</span>
+<span class="pl-kos">&lt;</span><span class="pl-ent">body</span><span class="pl-kos">&gt;</span>
+  <span class="pl-kos">&lt;</span><span class="pl-ent">script</span> <span class="pl-c1">src</span>="<span class="pl-s">require.js</span>" <span class="pl-c1">data-main</span>="<span class="pl-s">app/main</span>"<span class="pl-kos">&gt;</span><span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span>
+<span class="pl-kos">&lt;/</span><span class="pl-ent">body</span><span class="pl-kos">&gt;</span>
+<span class="pl-kos">&lt;/</span><span class="pl-ent">html</span><span class="pl-kos">&gt;</span></pre></div>
+<h3>Optimizing a whole project using r.js</h3>
+<p>Many people prefer using AMD for sane code organization during development, but still want to ship a single script file in production instead of performing hundreds of XHRs on page load.</p>
+<p><code class="notranslate">require.js</code> comes with a script called <code class="notranslate">r.js</code> (that you will probably run in node.js, although Rhino is supported too) that can analyse your project's dependency graph, and build a single file containing all your modules (properly named), minified and ready for consumption.</p>
+<p>Install it using <code class="notranslate">npm</code>:</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">$ npm install requirejs -g</pre></div>
+<p>Now you can feed it with a configuration file:</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">$ r.js -o app.build.js</pre></div>
+<p>For our above example the configuration might look like:</p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-c">/* file : app.build.js */</span>
+<span class="pl-kos">(</span><span class="pl-kos">{</span>
+  <span class="pl-c1">name</span> : <span class="pl-s">'main'</span><span class="pl-kos">,</span> <span class="pl-c">// name of the entry point</span>
+  <span class="pl-c1">out</span> : <span class="pl-s">'main-built.js'</span><span class="pl-kos">,</span> <span class="pl-c">// name of the file to write the output to</span>
+  <span class="pl-c1">baseUrl</span> : <span class="pl-s">'app'</span><span class="pl-kos">,</span>
+  <span class="pl-c1">paths</span> : <span class="pl-kos">{</span>
+    <span class="pl-c">// `empty:` tells r.js that this should still be loaded from the CDN, using</span>
+    <span class="pl-c">// the location specified in `main.js`</span>
+    <span class="pl-c1">jquery</span> : <span class="pl-s">'empty:'</span><span class="pl-kos">,</span>
+    <span class="pl-c1">coolLibFromBower</span> : <span class="pl-s">'../bower_components/cool-lib/coollib'</span>
+  <span class="pl-kos">}</span>
+<span class="pl-kos">}</span><span class="pl-kos">)</span></pre></div>
+<p>To use the built file in production, simply swap <code class="notranslate">data-main</code>:</p>
+<div class="highlight highlight-text-html-basic"><pre class="notranslate"><span class="pl-kos">&lt;</span><span class="pl-ent">script</span> <span class="pl-c1">src</span>="<span class="pl-s">require.js</span>" <span class="pl-c1">data-main</span>="<span class="pl-s">app/main-built</span>"<span class="pl-kos">&gt;</span><span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span></pre></div>
+<p>An incredibly detailed <a href="https://github.com/jrburke/r.js/blob/master/build/example.build.js">overview of build options</a> is available in the GitHub repo.</p>
+<h3>Topics not covered in this tutorial</h3>
+<ul>
+<li><a href="http://requirejs.org/docs/plugins.html" rel="nofollow">Loader plugins / transforms</a></li>
+<li><a href="http://requirejs.org/docs/commonjs.html" rel="nofollow">CommonJS style loading and exporting</a></li>
+<li><a href="http://requirejs.org/docs/api.html#config" rel="nofollow">Advanced configuration</a></li>
+<li><a href="http://requirejs.org/docs/api.html#config-shim" rel="nofollow">Shim configuration (loading non-AMD modules)</a></li>
+<li><a href="http://requirejs.org/docs/optimization.html#onecss" rel="nofollow">CSS loading and optimizing with require.js</a></li>
+<li><a href="https://github.com/jrburke/almond">Using almond.js for builds</a></li>
+</ul>
+<h3>Further reading:</h3>
+<ul>
+<li><a href="https://github.com/amdjs/amdjs-api/wiki/AMD">Official Spec</a></li>
+<li><a href="http://requirejs.org/docs/whyamd.html" rel="nofollow">Why AMD?</a></li>
+<li><a href="https://github.com/umdjs/umd">Universal Module Definition</a></li>
+</ul>
+<h3>Implementations:</h3>
+<ul>
+<li><a href="http://requirejs.org" rel="nofollow">require.js</a></li>
+<li><a href="http://dojotoolkit.org/documentation/tutorials/1.9/modules/" rel="nofollow">dojo toolkit</a></li>
+<li><a href="http://cujojs.com/" rel="nofollow">cujo.js</a></li>
+<li><a href="https://github.com/cujojs/curl">curl.js</a></li>
+<li><a href="https://github.com/zazl/lsjs">lsjs</a></li>
+<li><a href="https://github.com/alexlawrence/mmd">mmd</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Frederik Ring", "https://github.com/m90"]
+</code></pre>

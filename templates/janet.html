@@ -1,0 +1,320 @@
+<h1>Janet</h1>
+<p><a href="https://janet-lang.org/" rel="nofollow">Janet</a> is a Lisp-like (Clojure-like),<br>
+lexically-scoped, dynamically-typed, garbage-collected, C-based, high-level<br>
+language. The entire language (core library, interpreter, compiler, assembler,<br>
+PEG) is about 300-500 kB and should run on many constrained systems.</p>
+<p>I encourage you to try out the code snippets below in the Janet<br>
+repl (either by <a href="https://janet-lang.org/docs/index.html" rel="nofollow">installing Janet</a>,<br>
+or else by using the repl embedded in the Janet homepage).</p>
+<p>As we only have a scant <em>y</em> minutes, we'll survey the basics here and<br>
+leave the remaining details for the manual. So please, keep your arms and<br>
+legs inside the vehicle at all times, and on with the scenic tour!</p>
+<div class="highlight highlight-source-python"><pre class="notranslate"><span class="pl-c"># A comment.</span>
+
+<span class="pl-c"># Some literal values.</span>
+<span class="pl-s1">true</span>
+<span class="pl-s1">false</span>
+<span class="pl-s1">nil</span>
+
+<span class="pl-c"># Typical style for symbols (identifiers-for / names-of things).</span>
+<span class="pl-s1">do</span><span class="pl-c1">-</span><span class="pl-s1">stuff</span>
+<span class="pl-s1">pants</span><span class="pl-c1">-</span><span class="pl-s1">on</span><span class="pl-c1">-</span><span class="pl-s1">fire</span>!
+<span class="pl-s1">foo</span><span class="pl-c1">-</span><span class="pl-c1">&gt;</span><span class="pl-s1">bar</span>  <span class="pl-c"># Evidently for converting foos to bars.</span>
+<span class="pl-s1">fully</span><span class="pl-c1">-</span><span class="pl-s1">charged</span>?
+<span class="pl-s1">_</span>  <span class="pl-c"># Usually used as a dummy variable.</span>
+
+<span class="pl-c"># Keywords are like symbols that start with a colon, are treated like</span>
+<span class="pl-c"># constants, and are typically used as map keys or pieces of syntax in</span>
+<span class="pl-c"># macros.</span><span class="pl-s1"></span>
+:<span class="pl-s1">a</span>
+:<span class="pl-s1">some</span><span class="pl-c1">-</span><span class="pl-s1">val</span>
+
+<span class="pl-c"># Numbers #####################################################################</span>
+<span class="pl-c1">5</span>
+<span class="pl-c1">1e3</span>    <span class="pl-c"># =&gt; 1000</span>
+<span class="pl-c1">1_000</span>  <span class="pl-c"># =&gt; 1000</span>
+<span class="pl-c1">2e-03</span>  <span class="pl-c"># =&gt; 0.002</span>
+<span class="pl-c1">0xff</span>   <span class="pl-c"># =&gt; 255</span>
+
+<span class="pl-c"># You can specify a radix (base) like so:</span>
+<span class="pl-c1">16</span><span class="pl-s1">rff</span>   <span class="pl-c"># =&gt; 255 (same as 0xff)</span>
+<span class="pl-c1">2</span><span class="pl-s1">r1101</span>  <span class="pl-c"># =&gt;  13</span>
+
+<span class="pl-c"># Some numbers in the math library:</span>
+<span class="pl-s1">math</span><span class="pl-c1">/</span><span class="pl-s1">pi</span>  <span class="pl-c"># =&gt; 3.14159</span>
+<span class="pl-s1">math</span><span class="pl-c1">/</span><span class="pl-s1">e</span>   <span class="pl-c"># =&gt; 2.71828</span>
+
+<span class="pl-c"># Strings #####################################################################</span>
+<span class="pl-s">"hello"</span>
+<span class="pl-s">"hey<span class="pl-cce">\t</span>there"</span>  <span class="pl-c"># contains a tab</span>
+
+<span class="pl-c"># For multi-line strings, use one or more backticks. No escapes allowed.</span>
+<span class="pl-s">``</span><span class="pl-s1">a</span> <span class="pl-s1">long</span>
+<span class="pl-s1">multi</span><span class="pl-c1">-</span><span class="pl-s1">line</span>
+<span class="pl-s1">string</span><span class="pl-s">``</span>  <span class="pl-c"># =&gt; "a long\nmulti-line\nstring"</span>
+
+<span class="pl-c"># Strings and data structures in Janet come in two varieties: mutable and</span>
+<span class="pl-c"># immutable. The literal for the mutable variety is written with a `@` in</span>
+<span class="pl-c"># front of it.</span>
+
+<span class="pl-c"># A mutable string (aka "buffer").</span>
+<span class="pl-en">@<span class="pl-s">"this"</span></span>
+<span class="pl-en">@`<span class="pl-s1">a</span> <span class="pl-s1">multi</span><span class="pl-c1">-</span><span class="pl-s1">line</span></span>
+<span class="pl-s1">one</span> <span class="pl-s1">here</span>`
+
+(<span class="pl-s1">string</span> <span class="pl-s">"con"</span> <span class="pl-s">"cat"</span> <span class="pl-s">"enate"</span>)  <span class="pl-c"># =&gt; "concatenate"</span>
+
+<span class="pl-c"># To get a substring:</span>
+(<span class="pl-s1">string</span><span class="pl-c1">/</span><span class="pl-s1">slice</span> <span class="pl-s">"abcdefgh"</span> <span class="pl-c1">2</span> <span class="pl-c1">5</span>)  <span class="pl-c"># =&gt; "cde"</span>
+<span class="pl-c"># To find a substring:</span>
+(<span class="pl-s1">string</span><span class="pl-c1">/</span><span class="pl-s1">find</span> <span class="pl-s">"de"</span> <span class="pl-s">"abcdefgh"</span>)  <span class="pl-c"># =&gt; 3</span>
+
+<span class="pl-c"># See the string library for more (splitting, replacement, etc.)</span>
+
+<span class="pl-c"># Arrays and Tuples ###########################################################</span>
+<span class="pl-c"># Arrays are mutable, tuples are immutable.</span>
+
+<span class="pl-c"># Arrays (mutable)</span>
+<span class="pl-en">@(<span class="pl-c1">4</span> <span class="pl-c1">5</span> <span class="pl-c1">6</span>)</span>
+<span class="pl-en">@[<span class="pl-c1">4</span> <span class="pl-c1">5</span> <span class="pl-c1">6</span>]</span>
+
+<span class="pl-c"># Tuples (immutable)</span>
+<span class="pl-c"># Note that an open paren usually indicates a function call, so if you want a</span>
+<span class="pl-c"># literal tuple with parens, you need to "quote" it (with a starting single</span>
+<span class="pl-c"># quote mark).</span>
+'(<span class="pl-c1">4</span> <span class="pl-c1">5</span> <span class="pl-c1">6</span>)
+[<span class="pl-c1">4</span> <span class="pl-c1">5</span> <span class="pl-c1">6</span>]  <span class="pl-c"># ... or just use square brackets.</span>
+
+<span class="pl-c"># Tables and Structs (AKA: "maps", "hashmaps", "dictionaries")</span>
+<span class="pl-en">@{:<span class="pl-s1">a</span> <span class="pl-c1">1</span> :<span class="pl-s1">b</span> <span class="pl-c1">2</span> :<span class="pl-s1">c</span> <span class="pl-c1">3</span>}  <span class="pl-c"># table  (mutable)</span></span>
+{:<span class="pl-s1">a</span> <span class="pl-c1">1</span> :<span class="pl-s1">b</span> <span class="pl-c1">2</span> :<span class="pl-s1">c</span> <span class="pl-c1">3</span>}   <span class="pl-c"># struct (immutable)</span>
+
+<span class="pl-c"># More about how to work with arrays/tuples and tables/structs below.</span>
+
+<span class="pl-c"># Bindings ####################################################################</span>
+<span class="pl-c"># ... or "Name Some Things!" (that is, bind a value to a symbol)</span>
+(<span class="pl-k">def</span> <span class="pl-s1">x</span> <span class="pl-c1">4.7</span>)  <span class="pl-c"># Define a constant, `x`.</span>
+<span class="pl-s1">x</span>            <span class="pl-c"># =&gt; 4.7</span>
+(<span class="pl-s1">quote</span> <span class="pl-s1">x</span>)    <span class="pl-c"># =&gt; x (the symbol x)</span>
+'<span class="pl-s1">x</span>           <span class="pl-c"># =&gt; x (the symbol x (shorthand))</span>
+(<span class="pl-s1">print</span> <span class="pl-s1">x</span>)    <span class="pl-c"># prints 4.7</span>
+
+<span class="pl-c"># Since we used `def`, can't change to what `x` refers:</span>
+(<span class="pl-s1">set</span> <span class="pl-s1">x</span> <span class="pl-c1">5.6</span>)  <span class="pl-c"># Error, `x` is a constant.</span>
+
+(<span class="pl-s1">var</span> <span class="pl-s1">y</span> <span class="pl-c1">10</span>)
+(<span class="pl-s1">set</span> <span class="pl-s1">y</span> <span class="pl-c1">12</span>)  <span class="pl-c"># Works, since `y` was made var.</span>
+
+<span class="pl-c"># Note that bindings are local to the scope they're called in. `let`</span>
+<span class="pl-c"># creates a local scope and makes some bindings all in one shot:</span>
+(<span class="pl-s1">let</span> [<span class="pl-s1">a</span> <span class="pl-c1">2</span>
+      <span class="pl-s1">b</span> <span class="pl-c1">3</span>]
+  (<span class="pl-s1">print</span> <span class="pl-s">"Hello from inside this local scope."</span>)
+  (<span class="pl-c1">*</span> <span class="pl-s1">a</span> <span class="pl-s1">b</span>))  <span class="pl-c"># =&gt; 6</span>
+
+<span class="pl-c"># Destructuring is supported, both for arrays/tuples ...</span>
+(<span class="pl-s1">def</span> <span class="pl-s1">a</span> [<span class="pl-s">"foos"</span> <span class="pl-s">"bars"</span> <span class="pl-s">"moos"</span>])
+(<span class="pl-s1">let</span> [[<span class="pl-s1">s1</span> <span class="pl-s1">_</span> <span class="pl-s1">s2</span>] <span class="pl-s1">a</span>]
+  (<span class="pl-s1">print</span> <span class="pl-s1">s1</span> <span class="pl-s1">s2</span>))  <span class="pl-c"># foosmoos</span>
+
+<span class="pl-c"># ... and for tables/structs.</span>
+(<span class="pl-s1">def</span> <span class="pl-s1">t</span> {:<span class="pl-s1">a</span> <span class="pl-s">"ayy"</span> :<span class="pl-s1">b</span> <span class="pl-s">"bee"</span> :<span class="pl-s1">c</span> <span class="pl-s">"sea"</span>})
+(<span class="pl-s1">let</span> [{:<span class="pl-s1">a</span> <span class="pl-s1">a</span> :<span class="pl-s1">b</span> <span class="pl-s1">b</span>} <span class="pl-s1">t</span>]
+  (<span class="pl-s1">print</span> <span class="pl-s1">a</span> <span class="pl-s1">b</span>))  <span class="pl-c"># ayybee</span>
+
+<span class="pl-c"># You can even destructure right in a `def`:</span>
+(<span class="pl-s1">def</span> [<span class="pl-s1">aa1</span> <span class="pl-s1">aa2</span>] <span class="pl-s1">a</span>)
+<span class="pl-s1">aa1</span>  <span class="pl-c"># =&gt; foos</span>
+<span class="pl-s1">aa2</span>  <span class="pl-c"># =&gt; bars</span>
+
+(<span class="pl-s1">def</span> {:<span class="pl-s1">c</span> <span class="pl-s1">body</span><span class="pl-c1">-</span><span class="pl-s1">of</span><span class="pl-c1">-</span><span class="pl-s1">water</span> :<span class="pl-s1">b</span> <span class="pl-s1">insect</span><span class="pl-c1">-</span><span class="pl-s1">friend</span>} <span class="pl-s1">t</span>)
+<span class="pl-s1">body</span><span class="pl-c1">-</span><span class="pl-s1">of</span><span class="pl-c1">-</span><span class="pl-s1">water</span>  <span class="pl-c"># =&gt; sea</span>
+<span class="pl-s1">insect</span><span class="pl-c1">-</span><span class="pl-s1">friend</span>  <span class="pl-c"># =&gt; bee</span>
+
+<span class="pl-c"># Note that keywords evaluate to themselves, whereas symbols evaluate</span>
+<span class="pl-c"># to whatever value they're bound to (unless you quote them).</span>
+
+<span class="pl-c"># Operators ###################################################################</span>
+<span class="pl-c"># Janet supports the usual ensemble of operators.</span>
+<span class="pl-c"># +, -, *, /, and so on. Note:</span>
+(<span class="pl-c1">/</span> <span class="pl-c1">5</span> <span class="pl-c1">3</span>)  <span class="pl-c"># =&gt;  1.66667</span>
+(<span class="pl-c1">%</span> <span class="pl-c1">5</span> <span class="pl-c1">3</span>)  <span class="pl-c"># =&gt;  2 (remainder)</span>
+(<span class="pl-c1">-</span> <span class="pl-c1">5</span>)    <span class="pl-c"># =&gt; -5 (or you can just write `-5`)</span>
+
+(<span class="pl-c1">+</span><span class="pl-c1">+</span> <span class="pl-s1">i</span>)    <span class="pl-c"># increments</span>
+(<span class="pl-c1">-</span><span class="pl-c1">-</span> <span class="pl-s1">i</span>)    <span class="pl-c"># decrements</span>
+(<span class="pl-c1">+=</span> <span class="pl-s1">i</span> <span class="pl-c1">3</span>)  <span class="pl-c"># add 3 to `i`</span>
+(<span class="pl-c1">*=</span> <span class="pl-s1">i</span> <span class="pl-c1">3</span>)  <span class="pl-c"># triple `i`</span>
+<span class="pl-c"># ... and so on for the other operations on numbers.</span>
+
+<span class="pl-c"># Comparison</span>
+<span class="pl-c"># =  &lt;  &gt;  not=  &lt;=  &gt;=</span>
+(<span class="pl-c1">&lt;</span> <span class="pl-c1">2</span> <span class="pl-c1">7</span> <span class="pl-c1">12</span>)  <span class="pl-c"># =&gt; true</span>
+
+<span class="pl-c"># Functions ###################################################################</span>
+<span class="pl-c"># Call them:</span>
+(<span class="pl-c1">-</span> <span class="pl-c1">5</span> <span class="pl-c1">3</span>)  <span class="pl-c"># =&gt; 2 (Yes, operators and functions work the same.)</span>
+(<span class="pl-s1">math</span><span class="pl-c1">/</span><span class="pl-en">sin</span> (<span class="pl-c1">/</span> <span class="pl-s1">math</span><span class="pl-c1">/</span><span class="pl-s1">pi</span> <span class="pl-c1">2</span>))  <span class="pl-c"># =&gt; 1</span>
+(<span class="pl-s1">range</span> <span class="pl-c1">5</span>)  <span class="pl-c"># =&gt; @[0 1 2 3 4]</span>
+
+<span class="pl-c"># Create them:</span>
+(<span class="pl-s1">defn</span> <span class="pl-s1">mult</span><span class="pl-c1">-</span><span class="pl-s1">by</span><span class="pl-c1">-</span><span class="pl-c1">2</span>
+  ``<span class="pl-v">First</span> <span class="pl-s1">line</span> <span class="pl-s1">of</span> <span class="pl-s1">docstring</span>.
+
+  <span class="pl-v">Some</span> <span class="pl-s1">more</span> <span class="pl-s1">of</span> <span class="pl-s1">the</span> <span class="pl-s1">docstring</span>.
+
+  <span class="pl-v">Possibly</span> <span class="pl-s1">more</span>!<span class="pl-s">``</span>
+  [<span class="pl-s1">x</span>]
+  (<span class="pl-k">print</span> <span class="pl-s">"Hi."</span>)
+  (<span class="pl-k">print</span> <span class="pl-s">"Will compute using: "</span> <span class="pl-s1">x</span>)
+  (<span class="pl-c1">*</span> <span class="pl-c1">2</span> <span class="pl-s1">x</span>))
+
+(<span class="pl-en">print</span> (<span class="pl-s1">mult</span><span class="pl-c1">-</span><span class="pl-s1">by</span><span class="pl-c1">-</span><span class="pl-c1">2</span> <span class="pl-c1">6</span>))  <span class="pl-c"># =&gt; 12 (after printing "Hi" and so forth)</span>
+
+<span class="pl-c"># If you have a function named "main" in your file, `janet` will automatically</span>
+<span class="pl-c"># call it for you when you run the file.</span>
+
+<span class="pl-c"># Interactively read a function's docs from within the repl:</span>
+(<span class="pl-s1">doc</span> <span class="pl-s1">mult</span><span class="pl-c1">-</span><span class="pl-s1">by</span><span class="pl-c1">-</span><span class="pl-c1">2</span>)
+
+<span class="pl-c"># Note, functions have to be defined before they can be used in a function,</span>
+<span class="pl-c"># so if you design top-down, you'll need to write your functions from the</span>
+<span class="pl-c"># bottom of the file up.</span>
+
+<span class="pl-c"># You can make anonymous functions as well:</span>
+(<span class="pl-s1">fn</span> [<span class="pl-s1">x</span>] (<span class="pl-c1">+</span> <span class="pl-s1">x</span> <span class="pl-s1">x</span>))
+(<span class="pl-s1">fn</span> <span class="pl-s1">my</span><span class="pl-c1">-</span><span class="pl-s1">func</span> [<span class="pl-s1">x</span>] (<span class="pl-c1">+</span> <span class="pl-s1">x</span> <span class="pl-s1">x</span>))  <span class="pl-c"># This one's less anonymous.</span>
+
+<span class="pl-c"># Use `do` to make some side-effecting calls and then evaluate to</span>
+<span class="pl-c"># the last form in the `do`:</span>
+(<span class="pl-en">def</span> <span class="pl-s1">n</span> (<span class="pl-en">do</span>
+         (<span class="pl-k">print</span> <span class="pl-s">"hi"</span>)
+         (<span class="pl-s1">do</span><span class="pl-c1">-</span><span class="pl-s1">some</span><span class="pl-c1">-</span><span class="pl-s1">side</span><span class="pl-c1">-</span><span class="pl-s1">effecting</span> <span class="pl-c1">42</span>)
+         <span class="pl-c1">3</span>))
+<span class="pl-s1">n</span>  <span class="pl-c"># =&gt; 3</span>
+
+<span class="pl-c"># You might say that function bodies provide an "implicit do".</span>
+
+<span class="pl-c"># Operations on data structures ###############################################</span>
+<span class="pl-c"># (Making all these mutable so we can ... mutate them.)</span>
+(<span class="pl-s1">def</span> <span class="pl-s1">s</span> @<span class="pl-s">"Hello, World!"</span>)
+(<span class="pl-s1">def</span> <span class="pl-s1">a</span> @[:<span class="pl-s1">a</span> :<span class="pl-s1">b</span> :<span class="pl-s1">c</span> :<span class="pl-s1">d</span> :<span class="pl-s1">e</span>])
+(<span class="pl-s1">def</span> <span class="pl-s1">t</span> @{:<span class="pl-s1">a</span> <span class="pl-c1">1</span> :<span class="pl-s1">b</span> <span class="pl-c1">2</span>})
+
+(<span class="pl-s1">length</span> <span class="pl-s1">s</span>)  <span class="pl-c"># =&gt; 13</span>
+(<span class="pl-s1">length</span> <span class="pl-s1">a</span>)  <span class="pl-c"># =&gt;  5</span>
+(<span class="pl-s1">length</span> <span class="pl-s1">t</span>)  <span class="pl-c"># =&gt;  2</span>
+
+<span class="pl-c"># Getting values:</span>
+(<span class="pl-s1">s</span> <span class="pl-c1">7</span>)   <span class="pl-c"># =&gt; 87 (which is the code point for "W")</span>
+(<span class="pl-s1">a</span> <span class="pl-c1">1</span>)   <span class="pl-c"># =&gt; :b</span>
+(<span class="pl-s1">t</span> :<span class="pl-s1">a</span>)  <span class="pl-c"># =&gt; 1</span>
+(<span class="pl-s1">keys</span> <span class="pl-s1">t</span>)    <span class="pl-c"># =&gt; @[:a :b]</span>
+(<span class="pl-s1">values</span> <span class="pl-s1">t</span>)  <span class="pl-c"># =&gt; @[1 2]</span>
+
+<span class="pl-c"># Changing values (for mutable data structures):</span>
+(<span class="pl-s1">put</span> <span class="pl-s1">s</span> <span class="pl-c1">2</span> <span class="pl-c1">87</span>)   <span class="pl-c"># @"HeWlo, World!"</span>
+(<span class="pl-s1">put</span> <span class="pl-s1">a</span> <span class="pl-c1">2</span> :<span class="pl-s1">x</span>)   <span class="pl-c"># @[:a :b :x :d :e]</span>
+(<span class="pl-s1">put</span> <span class="pl-s1">t</span> :<span class="pl-s1">b</span> <span class="pl-c1">42</span>)  <span class="pl-c"># @{:a 1 :b 42}</span>
+
+<span class="pl-c"># Adding &amp; removing values (again, for mutable data structures):</span>
+(<span class="pl-s1">buffer</span><span class="pl-c1">/</span><span class="pl-s1">push</span><span class="pl-c1">-</span><span class="pl-s1">string</span> <span class="pl-s1">s</span> <span class="pl-s">"??"</span>)  <span class="pl-c"># @"HeWlo, World!??"</span>
+(<span class="pl-s1">array</span><span class="pl-c1">/</span><span class="pl-s1">push</span> <span class="pl-s1">a</span> :<span class="pl-s1">f</span>)  <span class="pl-c"># @[:a :b :x :d :e :f]</span>
+(<span class="pl-s1">array</span><span class="pl-c1">/</span><span class="pl-s1">pop</span> <span class="pl-s1">a</span>)      <span class="pl-c"># =&gt; :f, and it's also removed from `a`.</span>
+(<span class="pl-s1">put</span> <span class="pl-s1">t</span> :<span class="pl-s1">x</span> <span class="pl-c1">88</span>)      <span class="pl-c"># @{:a 1 :b 42 :x 88}</span>
+
+<span class="pl-c"># See the manual for a wide variety of functions for working with</span>
+<span class="pl-c"># buffers/strings, arrays/tuples, and tables/struct.</span>
+
+<span class="pl-c"># Flow control ################################################################</span>
+(<span class="pl-s1">if</span> <span class="pl-s1">some</span><span class="pl-c1">-</span><span class="pl-s1">condition</span>
+  <span class="pl-c1">42</span>
+  <span class="pl-c1">38</span>)
+
+<span class="pl-c"># Only `nil` and `false` are falsey. Everything else is truthy.</span>
+
+(<span class="pl-s1">if</span> <span class="pl-s1">got</span><span class="pl-c1">-</span><span class="pl-s1">it</span>?
+  <span class="pl-c1">71</span>)  <span class="pl-c"># No false-branch value. Returns `nil` if `got-it?` is falsey.</span>
+
+(<span class="pl-s1">var</span> <span class="pl-s1">i</span> <span class="pl-c1">10</span>)
+(<span class="pl-en">while</span> (<span class="pl-s1">pos</span>? <span class="pl-s1">i</span>)
+  (<span class="pl-k">print</span> <span class="pl-s">"... "</span> <span class="pl-s1">i</span>)
+  (<span class="pl-c1">-</span><span class="pl-c1">-</span> <span class="pl-s1">i</span>))
+<span class="pl-c"># Now `i` is 0.</span>
+
+<span class="pl-c"># `case` compares the dispatch value to each of the options.</span>
+(<span class="pl-s1">var</span> <span class="pl-s1">x</span> <span class="pl-c1">2</span>)
+(<span class="pl-s1">case</span> <span class="pl-s1">x</span>
+  <span class="pl-c1">1</span> <span class="pl-s">"won"</span>
+  <span class="pl-c1">2</span> <span class="pl-s">"too"</span>
+  <span class="pl-c1">3</span> <span class="pl-s">"tree"</span>
+  <span class="pl-s">"unknown"</span>)  <span class="pl-c"># =&gt; "too"</span>
+
+<span class="pl-c"># `cond` evaluates conditions until it gets a `true`.</span>
+(<span class="pl-s1">set</span> <span class="pl-s1">x</span> <span class="pl-c1">8</span>)
+(<span class="pl-en">cond</span>
+  (<span class="pl-c1">=</span> <span class="pl-s1">x</span> <span class="pl-c1">1</span>) <span class="pl-s">"won"</span>
+  (<span class="pl-c1">=</span> <span class="pl-s1">x</span> <span class="pl-c1">2</span>) <span class="pl-s">"too"</span>
+  (<span class="pl-c1">&lt;</span> <span class="pl-s1">x</span> <span class="pl-c1">10</span>) <span class="pl-s">"tree"</span>
+  <span class="pl-s">"oof!"</span>)  <span class="pl-c"># =&gt; "tree"</span>
+
+(<span class="pl-en">when</span> (<span class="pl-s1">avoided</span><span class="pl-c1">-</span><span class="pl-s1">wipeout</span>?)
+  (<span class="pl-s1">do</span><span class="pl-c1">-</span><span class="pl-s1">side</span><span class="pl-c1">-</span><span class="pl-s1">effecty</span><span class="pl-c1">-</span><span class="pl-s1">thing</span> <span class="pl-c1">88</span>)
+  (<span class="pl-s1">smell</span><span class="pl-c1">-</span><span class="pl-s1">the</span><span class="pl-c1">-</span><span class="pl-s1">roses</span>)
+  (<span class="pl-s1">paint</span><span class="pl-c1">-</span><span class="pl-s1">fencepost</span><span class="pl-c1">-</span><span class="pl-s1">error</span>))
+
+<span class="pl-c"># Pattern matching.</span>
+<span class="pl-c"># `match` is like a high-powered switch expression. If you switch on a data</span>
+<span class="pl-c"># structure, it can look inside to try and match on its contents. For example,</span>
+<span class="pl-c"># matching on a table or struct:</span>
+(<span class="pl-s1">def</span> <span class="pl-s1">t</span> {:<span class="pl-s1">a</span> <span class="pl-c1">1</span> :<span class="pl-s1">b</span> <span class="pl-c1">2</span> :<span class="pl-s1">c</span> <span class="pl-c1">3</span>})
+(<span class="pl-s1">match</span> <span class="pl-s1">t</span>
+  {:<span class="pl-s1">yar</span> <span class="pl-s1">v</span>} (<span class="pl-k">print</span> <span class="pl-s">"matches key :yar! "</span> <span class="pl-s1">v</span>)
+  {:<span class="pl-en">moo</span> <span class="pl-s1">v</span>} (<span class="pl-k">print</span> <span class="pl-s">"matches key :moo! "</span> <span class="pl-s1">v</span>)
+  {:<span class="pl-s1">c</span>   <span class="pl-en">v</span>} (<span class="pl-k">print</span> <span class="pl-s">"matches key :c! "</span>   <span class="pl-s1">v</span>)
+  <span class="pl-en">_</span> (<span class="pl-k">print</span> <span class="pl-s">"no match"</span>))  <span class="pl-c"># =&gt; prints "matches key :c! 3"</span>
+
+<span class="pl-c"># Iterating ###################################################################</span>
+<span class="pl-c"># Iterate over an integer range:</span>
+(<span class="pl-en">for</span> <span class="pl-s1">i</span> <span class="pl-c1">0</span> <span class="pl-c1">5</span>
+  (<span class="pl-s1">print</span> <span class="pl-s1">i</span>))  <span class="pl-c"># prints 0, 1, 2, 3, 4</span>
+
+<span class="pl-c"># There's also the more general `loop`:</span>
+(<span class="pl-s1">loop</span> [<span class="pl-s1">i</span> :<span class="pl-s1">range</span> [<span class="pl-c1">0</span> <span class="pl-c1">10</span>] :<span class="pl-en">when</span> (<span class="pl-s1">even</span>? <span class="pl-s1">i</span>)]
+  (<span class="pl-s1">print</span> <span class="pl-s1">i</span>))
+
+<span class="pl-c"># Loop over an array/tuple:</span>
+(<span class="pl-s1">def</span> <span class="pl-s1">words</span> [<span class="pl-s">"foo"</span> <span class="pl-s">"bar"</span> <span class="pl-s">"baz"</span>])
+(<span class="pl-s1">each</span> <span class="pl-s1">word</span> <span class="pl-en">words</span>
+  (<span class="pl-s1">print</span> <span class="pl-s1">word</span>))
+
+<span class="pl-c"># Loop over a table/struct:</span>
+(<span class="pl-s1">def</span> <span class="pl-s1">t</span> {:<span class="pl-s1">a</span> <span class="pl-c1">1</span> :<span class="pl-s1">b</span> <span class="pl-c1">2</span>})
+(<span class="pl-s1">eachp</span> [<span class="pl-s1">k</span> <span class="pl-s1">v</span>] <span class="pl-s1">t</span>  <span class="pl-c"># Loop over each pair in `t`.</span>
+  (<span class="pl-k">print</span> <span class="pl-s1">k</span> <span class="pl-s">" --&gt; "</span> <span class="pl-s1">v</span>))
+
+<span class="pl-c"># Can also use `eachk` to loop over keys in a table or struct.</span>
+
+<span class="pl-c"># Functional programming ######################################################</span>
+<span class="pl-c"># You'll find many familiar old friends here.</span>
+(<span class="pl-en">filter</span> <span class="pl-s1">even</span>?
+        (<span class="pl-en">map</span> (<span class="pl-s1">fn</span> [<span class="pl-s1">x</span>]
+               (<span class="pl-c1">*</span> <span class="pl-s1">x</span> <span class="pl-s1">x</span>))
+             (<span class="pl-s1">range</span> <span class="pl-c1">10</span>)))  <span class="pl-c"># =&gt; @[0 4 16 36 64]</span>
+
+(<span class="pl-s1">reduce</span> <span class="pl-c1">+</span> <span class="pl-c1">0</span> (<span class="pl-s1">range</span> <span class="pl-c1">5</span>))  <span class="pl-c"># =&gt; 10</span>
+
+<span class="pl-c"># ...and lots more (see the API docs).</span>
+
+<span class="pl-c"># Errata ######################################################################</span>
+(<span class="pl-s1">type</span> <span class="pl-s1">a</span>)                <span class="pl-c"># =&gt; the type of `a` (as a keyword)</span>
+(<span class="pl-s1">describe</span> <span class="pl-s1">a</span>)            <span class="pl-c"># =&gt; a human-readable description of `a`</span>
+(<span class="pl-s1">string</span><span class="pl-c1">/</span><span class="pl-s1">format</span> <span class="pl-s">"%j"</span> <span class="pl-s1">a</span>)  <span class="pl-c"># =&gt; Janet values, nicely-formatted</span></pre></div>
+<p>This tour didn't cover a number of other features such as modules, fibers,<br>
+PEGs, macros, etc., but should give you a taste of what Janet is like. See<br>
+the <a href="https://janet-lang.org/docs/index.html" rel="nofollow">Janet manual</a> and the <a href="https://janet-lang.org/api/index.html" rel="nofollow">Janet API<br>
+docs</a> for more info.</p>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["John Gabriele", "http://www.unexpected-vortices.com/"]
+</code></pre>

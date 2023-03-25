@@ -1,0 +1,382 @@
+<h1>AWK</h1>
+<p>AWK is a standard tool on every POSIX-compliant UNIX system. It's like<br>
+flex/lex, from the command-line, perfect for text-processing tasks and<br>
+other scripting needs. It has a C-like syntax, but without mandatory<br>
+semicolons (although, you should use them anyway, because they are required<br>
+when you're writing one-liners, something AWK excels at), manual memory<br>
+management, or static typing. It excels at text processing. You can call to<br>
+it from a shell script, or you can use it as a stand-alone scripting language.</p>
+<p>Why use AWK instead of Perl? Readability. AWK is easier to read<br>
+than Perl. For simple text-processing scripts, particularly ones that read<br>
+files line by line and split on delimiters, AWK is probably the right tool for<br>
+the job.</p>
+<div class="highlight highlight-source-awk"><pre class="notranslate"><span class="pl-c">#!/usr/bin/awk -f</span>
+
+<span class="pl-c"># Comments are like this</span>
+
+
+<span class="pl-c"># AWK programs consist of a collection of patterns and actions.</span>
+pattern1 { action; } <span class="pl-c"># just like lex</span>
+pattern2 { action; }
+
+<span class="pl-c"># There is an implied loop and AWK automatically reads and parses each</span>
+<span class="pl-c"># record of each file supplied. Each record is split by the FS delimiter,</span>
+<span class="pl-c"># which defaults to white-space (multiple spaces,tabs count as one)</span>
+<span class="pl-c"># You can assign FS either on the command line (-F C) or in your BEGIN</span>
+<span class="pl-c"># pattern</span>
+
+<span class="pl-c"># One of the special patterns is BEGIN. The BEGIN pattern is true</span>
+<span class="pl-c"># BEFORE any of the files are read. The END pattern is true after</span>
+<span class="pl-c"># an End-of-file from the last file (or standard-in if no files specified)</span>
+<span class="pl-c"># There is also an output field separator (OFS) that you can assign, which</span>
+<span class="pl-c"># defaults to a single space</span>
+
+<span class="pl-c1">BEGIN</span> {
+
+    <span class="pl-c"># BEGIN will run at the beginning of the program. It's where you put all</span>
+    <span class="pl-c"># the preliminary set-up code, before you process any text files. If you</span>
+    <span class="pl-c"># have no text files, then think of BEGIN as the main entry point.</span>
+
+    <span class="pl-c"># Variables are global. Just set them or use them, no need to declare.</span>
+    count <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+
+    <span class="pl-c"># Operators just like in C and friends</span>
+    a <span class="pl-k">=</span> count <span class="pl-k">+</span> <span class="pl-c1">1</span>;
+    b <span class="pl-k">=</span> count <span class="pl-k">-</span> <span class="pl-c1">1</span>;
+    c <span class="pl-k">=</span> count <span class="pl-k">*</span> <span class="pl-c1">1</span>;
+    d <span class="pl-k">=</span> count <span class="pl-k">/</span> <span class="pl-c1">1</span>; <span class="pl-c"># integer division</span>
+    e <span class="pl-k">=</span> count <span class="pl-k">%</span> <span class="pl-c1">1</span>; <span class="pl-c"># modulus</span>
+    f <span class="pl-k">=</span> count <span class="pl-k">^</span> <span class="pl-c1">1</span>; <span class="pl-c"># exponentiation</span>
+
+    a <span class="pl-k">+=</span> <span class="pl-c1">1</span>;
+    b <span class="pl-k">-=</span> <span class="pl-c1">1</span>;
+    c <span class="pl-k">*=</span> <span class="pl-c1">1</span>;
+    d <span class="pl-k">/=</span> <span class="pl-c1">1</span>;
+    e <span class="pl-k">%=</span> <span class="pl-c1">1</span>;
+    f <span class="pl-k">^=</span> <span class="pl-c1">1</span>;
+
+    <span class="pl-c"># Incrementing and decrementing by one</span>
+    a<span class="pl-k">++</span>;
+    b<span class="pl-k">--</span>;
+
+    <span class="pl-c"># As a prefix operator, it returns the incremented value</span>
+    <span class="pl-k">++</span>a;
+    <span class="pl-k">--</span>b;
+
+    <span class="pl-c"># Notice, also, no punctuation such as semicolons to terminate statements</span>
+
+    <span class="pl-c"># Control statements</span>
+    <span class="pl-k">if</span> (count <span class="pl-k">==</span> <span class="pl-c1">0</span>)
+        <span class="pl-k">print</span> <span class="pl-s"><span class="pl-pds">"</span>Starting with count of 0<span class="pl-pds">"</span></span>;
+    <span class="pl-k">else</span>
+        <span class="pl-k">print</span> <span class="pl-s"><span class="pl-pds">"</span>Huh?<span class="pl-pds">"</span></span>;
+
+    <span class="pl-c"># Or you could use the ternary operator</span>
+    <span class="pl-k">print</span> (count <span class="pl-k">==</span> <span class="pl-c1">0</span>) <span class="pl-k">?</span> <span class="pl-s"><span class="pl-pds">"</span>Starting with count of 0<span class="pl-pds">"</span></span> <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Huh?<span class="pl-pds">"</span></span>;
+
+    <span class="pl-c"># Blocks consisting of multiple lines use braces</span>
+    <span class="pl-k">while</span> (a <span class="pl-k">&lt;</span> <span class="pl-c1">10</span>) {
+        <span class="pl-k">print</span> <span class="pl-s"><span class="pl-pds">"</span>String concatenation is done<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span> with a series<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span> of<span class="pl-pds">"</span></span>
+            <span class="pl-s"><span class="pl-pds">"</span> space-separated strings<span class="pl-pds">"</span></span>;
+        <span class="pl-k">print</span> a;
+
+        a<span class="pl-k">++</span>;
+    }
+
+    <span class="pl-k">for</span> (i <span class="pl-k">=</span> <span class="pl-c1">0</span>; i <span class="pl-k">&lt;</span> <span class="pl-c1">10</span>; i<span class="pl-k">++</span>)
+        <span class="pl-k">print</span> <span class="pl-s"><span class="pl-pds">"</span>Good ol' for loop<span class="pl-pds">"</span></span>;
+
+    <span class="pl-c"># As for comparisons, they're the standards:</span>
+    <span class="pl-c"># a &lt; b   # Less than</span>
+    <span class="pl-c"># a &lt;= b  # Less than or equal</span>
+    <span class="pl-c"># a != b  # Not equal</span>
+    <span class="pl-c"># a == b  # Equal</span>
+    <span class="pl-c"># a &gt; b   # Greater than</span>
+    <span class="pl-c"># a &gt;= b  # Greater than or equal</span>
+
+    <span class="pl-c"># Logical operators as well</span>
+    <span class="pl-c"># a &amp;&amp; b  # AND</span>
+    <span class="pl-c"># a || b  # OR</span>
+
+    <span class="pl-c"># In addition, there's the super useful regular expression match</span>
+    <span class="pl-k">if</span> (<span class="pl-s"><span class="pl-pds">"</span>foo<span class="pl-pds">"</span></span> <span class="pl-k">~</span> <span class="pl-s"><span class="pl-pds">"</span>^fo+$<span class="pl-pds">"</span></span>)
+        <span class="pl-k">print</span> <span class="pl-s"><span class="pl-pds">"</span>Fooey!<span class="pl-pds">"</span></span>;
+    <span class="pl-k">if</span> (<span class="pl-s"><span class="pl-pds">"</span>boo<span class="pl-pds">"</span></span> <span class="pl-k">!~</span> <span class="pl-s"><span class="pl-pds">"</span>^fo+$<span class="pl-pds">"</span></span>)
+        <span class="pl-k">print</span> <span class="pl-s"><span class="pl-pds">"</span>Boo!<span class="pl-pds">"</span></span>;
+
+    <span class="pl-c"># Arrays</span>
+    arr<span class="pl-k">[</span><span class="pl-c1">0</span><span class="pl-k">]</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>foo<span class="pl-pds">"</span></span>;
+    arr<span class="pl-k">[</span><span class="pl-c1">1</span><span class="pl-k">]</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>bar<span class="pl-pds">"</span></span>;
+
+    <span class="pl-c"># You can also initialize an array with the built-in function split()</span>
+
+    n <span class="pl-k">=</span> <span class="pl-c1">split</span>(<span class="pl-s"><span class="pl-pds">"</span>foo:bar:baz<span class="pl-pds">"</span></span>, arr, <span class="pl-s"><span class="pl-pds">"</span>:<span class="pl-pds">"</span></span>);
+
+    <span class="pl-c"># You also have associative arrays (indeed, they're all associative arrays)</span>
+    assoc<span class="pl-k">[</span><span class="pl-s"><span class="pl-pds">"</span>foo<span class="pl-pds">"</span></span><span class="pl-k">]</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>bar<span class="pl-pds">"</span></span>;
+    assoc<span class="pl-k">[</span><span class="pl-s"><span class="pl-pds">"</span>bar<span class="pl-pds">"</span></span><span class="pl-k">]</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>baz<span class="pl-pds">"</span></span>;
+
+    <span class="pl-c"># And multi-dimensional arrays, with some limitations I won't mention here</span>
+    multidim<span class="pl-k">[</span><span class="pl-c1">0</span>,<span class="pl-c1">0</span><span class="pl-k">]</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>foo<span class="pl-pds">"</span></span>;
+    multidim<span class="pl-k">[</span><span class="pl-c1">0</span>,<span class="pl-c1">1</span><span class="pl-k">]</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>bar<span class="pl-pds">"</span></span>;
+    multidim<span class="pl-k">[</span><span class="pl-c1">1</span>,<span class="pl-c1">0</span><span class="pl-k">]</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>baz<span class="pl-pds">"</span></span>;
+    multidim<span class="pl-k">[</span><span class="pl-c1">1</span>,<span class="pl-c1">1</span><span class="pl-k">]</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>boo<span class="pl-pds">"</span></span>;
+
+    <span class="pl-c"># You can test for array membership</span>
+    <span class="pl-k">if</span> (<span class="pl-s"><span class="pl-pds">"</span>foo<span class="pl-pds">"</span></span> <span class="pl-k">in</span> assoc)
+        <span class="pl-k">print</span> <span class="pl-s"><span class="pl-pds">"</span>Fooey!<span class="pl-pds">"</span></span>;
+
+    <span class="pl-c"># You can also use the 'in' operator to traverse the keys of an array</span>
+    <span class="pl-k">for</span> (key <span class="pl-k">in</span> assoc)
+        <span class="pl-k">print</span> assoc<span class="pl-k">[</span>key<span class="pl-k">]</span>;
+
+    <span class="pl-c"># The command line is in a special array called ARGV</span>
+    <span class="pl-k">for</span> (argnum <span class="pl-k">in</span> <span class="pl-c1">ARGV</span>)
+        <span class="pl-k">print</span> <span class="pl-c1">ARGV</span><span class="pl-k">[</span>argnum<span class="pl-k">]</span>;
+
+    <span class="pl-c"># You can remove elements of an array</span>
+    <span class="pl-c"># This is particularly useful to prevent AWK from assuming the arguments</span>
+    <span class="pl-c"># are files for it to process</span>
+    <span class="pl-k">delete</span> <span class="pl-c1">ARGV</span><span class="pl-k">[</span><span class="pl-c1">1</span><span class="pl-k">]</span>;
+
+    <span class="pl-c"># The number of command line arguments is in a variable called ARGC</span>
+    <span class="pl-k">print</span> <span class="pl-c1">ARGC</span>;
+
+    <span class="pl-c"># AWK has several built-in functions. They fall into three categories. I'll</span>
+    <span class="pl-c"># demonstrate each of them in their own functions, defined later.</span>
+
+    return_value <span class="pl-k">=</span> arithmetic_functions(a, b, c);
+    string_functions();
+    io_functions();
+}
+
+<span class="pl-c"># Here's how you define a function</span>
+<span class="pl-k">function</span> <span class="pl-en">arithmetic_functions</span>(<span class="pl-smi">a</span>, <span class="pl-smi">b</span>, <span class="pl-smi">c</span>,     <span class="pl-smi">d</span>) {
+
+    <span class="pl-c"># Probably the most annoying part of AWK is that there are no local</span>
+    <span class="pl-c"># variables. Everything is global. For short scripts, this is fine, even</span>
+    <span class="pl-c"># useful, but for longer scripts, this can be a problem.</span>
+
+    <span class="pl-c"># There is a work-around (ahem, hack). Function arguments are local to the</span>
+    <span class="pl-c"># function, and AWK allows you to define more function arguments than it</span>
+    <span class="pl-c"># needs. So just stick local variable in the function declaration, like I</span>
+    <span class="pl-c"># did above. As a convention, stick in some extra whitespace to distinguish</span>
+    <span class="pl-c"># between actual function parameters and local variables. In this example,</span>
+    <span class="pl-c"># a, b, and c are actual parameters, while d is merely a local variable.</span>
+
+    <span class="pl-c"># Now, to demonstrate the arithmetic functions</span>
+
+    <span class="pl-c"># Most AWK implementations have some standard trig functions</span>
+    d <span class="pl-k">=</span> <span class="pl-c1">sin</span>(a);
+    d <span class="pl-k">=</span> <span class="pl-c1">cos</span>(a);
+    d <span class="pl-k">=</span> <span class="pl-c1">atan2</span>(b, a); <span class="pl-c"># arc tangent of b / a</span>
+
+    <span class="pl-c"># And logarithmic stuff</span>
+    d <span class="pl-k">=</span> <span class="pl-c1">exp</span>(a);
+    d <span class="pl-k">=</span> <span class="pl-c1">log</span>(a);
+
+    <span class="pl-c"># Square root</span>
+    d <span class="pl-k">=</span> <span class="pl-c1">sqrt</span>(a);
+
+    <span class="pl-c"># Truncate floating point to integer</span>
+    d <span class="pl-k">=</span> <span class="pl-c1">int</span>(<span class="pl-c1">5.34</span>); <span class="pl-c"># d =&gt; 5</span>
+
+    <span class="pl-c"># Random numbers</span>
+    <span class="pl-c1">srand</span>(); <span class="pl-c"># Supply a seed as an argument. By default, it uses the time of day</span>
+    d <span class="pl-k">=</span> <span class="pl-c1">rand</span>(); <span class="pl-c"># Random number between 0 and 1.</span>
+
+    <span class="pl-c"># Here's how to return a value</span>
+    <span class="pl-k">return</span> d;
+}
+
+<span class="pl-k">function</span> <span class="pl-en">string_functions</span>(    <span class="pl-smi">localvar</span>, <span class="pl-smi">arr</span>) {
+
+    <span class="pl-c"># AWK, being a string-processing language, has several string-related</span>
+    <span class="pl-c"># functions, many of which rely heavily on regular expressions.</span>
+
+    <span class="pl-c"># Search and replace, first instance (sub) or all instances (gsub)</span>
+    <span class="pl-c"># Both return number of matches replaced</span>
+    localvar <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>fooooobar<span class="pl-pds">"</span></span>;
+    <span class="pl-c1">sub</span>(<span class="pl-s"><span class="pl-pds">"</span>fo+<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Meet me at the <span class="pl-pds">"</span></span>, localvar); <span class="pl-c"># localvar =&gt; "Meet me at the bar"</span>
+    <span class="pl-c1">gsub</span>(<span class="pl-s"><span class="pl-pds">"</span>e<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>.<span class="pl-pds">"</span></span>, localvar); <span class="pl-c"># localvar =&gt; "m..t m. at th. bar"</span>
+
+    <span class="pl-c"># Search for a string that matches a regular expression</span>
+    <span class="pl-c"># index() does the same thing, but doesn't allow a regular expression</span>
+    <span class="pl-c1">match</span>(localvar, <span class="pl-s"><span class="pl-pds">"</span>t<span class="pl-pds">"</span></span>); <span class="pl-c"># =&gt; 4, since the 't' is the fourth character</span>
+
+    <span class="pl-c"># Split on a delimiter</span>
+    n <span class="pl-k">=</span> <span class="pl-c1">split</span>(<span class="pl-s"><span class="pl-pds">"</span>foo-bar-baz<span class="pl-pds">"</span></span>, arr, <span class="pl-s"><span class="pl-pds">"</span>-<span class="pl-pds">"</span></span>);
+    <span class="pl-c"># result: a[1] = "foo"; a[2] = "bar"; a[3] = "baz"; n = 3</span>
+
+    <span class="pl-c"># Other useful stuff</span>
+    <span class="pl-c1">sprintf</span>(<span class="pl-s"><span class="pl-pds">"</span>%s %d %d %d<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Testing<span class="pl-pds">"</span></span>, <span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>); <span class="pl-c"># =&gt; "Testing 1 2 3"</span>
+    <span class="pl-c1">substr</span>(<span class="pl-s"><span class="pl-pds">"</span>foobar<span class="pl-pds">"</span></span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>); <span class="pl-c"># =&gt; "oob"</span>
+    <span class="pl-c1">substr</span>(<span class="pl-s"><span class="pl-pds">"</span>foobar<span class="pl-pds">"</span></span>, <span class="pl-c1">4</span>); <span class="pl-c"># =&gt; "bar"</span>
+    <span class="pl-c1">length</span>(<span class="pl-s"><span class="pl-pds">"</span>foo<span class="pl-pds">"</span></span>); <span class="pl-c"># =&gt; 3</span>
+    <span class="pl-c1">tolower</span>(<span class="pl-s"><span class="pl-pds">"</span>FOO<span class="pl-pds">"</span></span>); <span class="pl-c"># =&gt; "foo"</span>
+    <span class="pl-c1">toupper</span>(<span class="pl-s"><span class="pl-pds">"</span>foo<span class="pl-pds">"</span></span>); <span class="pl-c"># =&gt; "FOO"</span>
+}
+
+<span class="pl-k">function</span> <span class="pl-en">io_functions</span>(    <span class="pl-smi">localvar</span>) {
+
+    <span class="pl-c"># You've already seen print</span>
+    <span class="pl-k">print</span> <span class="pl-s"><span class="pl-pds">"</span>Hello world<span class="pl-pds">"</span></span>;
+
+    <span class="pl-c"># There's also printf</span>
+    <span class="pl-k">printf</span>(<span class="pl-s"><span class="pl-pds">"</span>%s %d %d %d<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Testing<span class="pl-pds">"</span></span>, <span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>);
+
+    <span class="pl-c"># AWK doesn't have file handles, per se. It will automatically open a file</span>
+    <span class="pl-c"># handle for you when you use something that needs one. The string you used</span>
+    <span class="pl-c"># for this can be treated as a file handle, for purposes of I/O. This makes</span>
+    <span class="pl-c"># it feel sort of like shell scripting, but to get the same output, the</span>
+    <span class="pl-c"># string must match exactly, so use a variable:</span>
+
+    outfile <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>/tmp/foobar.txt<span class="pl-pds">"</span></span>;
+
+    <span class="pl-k">print</span> <span class="pl-s"><span class="pl-pds">"</span>foobar<span class="pl-pds">"</span></span> <span class="pl-k">&gt;</span> outfile;
+
+    <span class="pl-c"># Now the string outfile is a file handle. You can close it:</span>
+    <span class="pl-k">close</span>(outfile);
+
+    <span class="pl-c"># Here's how you run something in the shell</span>
+    <span class="pl-k">system</span>(<span class="pl-s"><span class="pl-pds">"</span>echo foobar<span class="pl-pds">"</span></span>); <span class="pl-c"># =&gt; prints foobar</span>
+
+    <span class="pl-c"># Reads a line from standard input and stores in localvar</span>
+    <span class="pl-k">getline</span> localvar;
+
+    <span class="pl-c"># Reads a line from a pipe (again, use a string so you close it properly)</span>
+    cmd <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>echo foobar<span class="pl-pds">"</span></span>;
+    cmd | <span class="pl-k">getline</span> localvar; <span class="pl-c"># localvar =&gt; "foobar"</span>
+    <span class="pl-k">close</span>(cmd);
+
+    <span class="pl-c"># Reads a line from a file and stores in localvar</span>
+    infile <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>/tmp/foobar.txt<span class="pl-pds">"</span></span>;
+    <span class="pl-k">getline</span> localvar <span class="pl-k">&lt;</span> infile;
+    <span class="pl-k">close</span>(infile);
+}
+
+<span class="pl-c"># As I said at the beginning, AWK programs consist of a collection of patterns</span>
+<span class="pl-c"># and actions. You've already seen the BEGIN pattern. Other</span>
+<span class="pl-c"># patterns are used only if you're processing lines from files or standard</span>
+<span class="pl-c"># input.</span>
+<span class="pl-c">#</span>
+<span class="pl-c"># When you pass arguments to AWK, they are treated as file names to process.</span>
+<span class="pl-c"># It will process them all, in order. Think of it like an implicit for loop,</span>
+<span class="pl-c"># iterating over the lines in these files. these patterns and actions are like</span>
+<span class="pl-c"># switch statements inside the loop.</span>
+
+/<span class="pl-sr"><span class="pl-k">^</span>fo<span class="pl-k">+</span>bar<span class="pl-k">$</span></span>/ {
+
+    <span class="pl-c"># This action will execute for every line that matches the regular</span>
+    <span class="pl-c"># expression, /^fo+bar$/, and will be skipped for any line that fails to</span>
+    <span class="pl-c"># match it. Let's just print the line:</span>
+
+    <span class="pl-k">print</span>;
+
+    <span class="pl-c"># Whoa, no argument! That's because print has a default argument: $0.</span>
+    <span class="pl-c"># $0 is the name of the current line being processed. It is created</span>
+    <span class="pl-c"># automatically for you.</span>
+
+    <span class="pl-c"># You can probably guess there are other $ variables. Every line is</span>
+    <span class="pl-c"># implicitly split before every action is called, much like the shell</span>
+    <span class="pl-c"># does. And, like the shell, each field can be access with a dollar sign</span>
+
+    <span class="pl-c"># This will print the second and fourth fields in the line</span>
+    <span class="pl-k">print</span> <span class="pl-c1">$2</span>, <span class="pl-c1">$4</span>;
+
+    <span class="pl-c"># AWK automatically defines many other variables to help you inspect and</span>
+    <span class="pl-c"># process each line. The most important one is NF</span>
+
+    <span class="pl-c"># Prints the number of fields on this line</span>
+    <span class="pl-k">print</span> <span class="pl-c1">NF</span>;
+
+    <span class="pl-c"># Print the last field on this line</span>
+    <span class="pl-k">print</span> $<span class="pl-c1">NF</span>;
+}
+
+<span class="pl-c"># Every pattern is actually a true/false test. The regular expression in the</span>
+<span class="pl-c"># last pattern is also a true/false test, but part of it was hidden. If you</span>
+<span class="pl-c"># don't give it a string to test, it will assume $0, the line that it's</span>
+<span class="pl-c"># currently processing. Thus, the complete version of it is this:</span>
+
+<span class="pl-c1">$0</span> <span class="pl-k">~</span> /<span class="pl-sr"><span class="pl-k">^</span>fo<span class="pl-k">+</span>bar<span class="pl-k">$</span></span>/ {
+    <span class="pl-k">print</span> <span class="pl-s"><span class="pl-pds">"</span>Equivalent to the last pattern<span class="pl-pds">"</span></span>;
+}
+
+a <span class="pl-k">&gt;</span> <span class="pl-c1">0</span> {
+    <span class="pl-c"># This will execute once for each line, as long as a is positive</span>
+}
+
+<span class="pl-c"># You get the idea. Processing text files, reading in a line at a time, and</span>
+<span class="pl-c"># doing something with it, particularly splitting on a delimiter, is so common</span>
+<span class="pl-c"># in UNIX that AWK is a scripting language that does all of it for you, without</span>
+<span class="pl-c"># you needing to ask. All you have to do is write the patterns and actions</span>
+<span class="pl-c"># based on what you expect of the input, and what you want to do with it.</span>
+
+<span class="pl-c"># Here's a quick example of a simple script, the sort of thing AWK is perfect</span>
+<span class="pl-c"># for. It will read a name from standard input and then will print the average</span>
+<span class="pl-c"># age of everyone with that first name. Let's say you supply as an argument the</span>
+<span class="pl-c"># name of a this data file:</span>
+<span class="pl-c">#</span>
+<span class="pl-c"># Bob Jones 32</span>
+<span class="pl-c"># Jane Doe 22</span>
+<span class="pl-c"># Steve Stevens 83</span>
+<span class="pl-c"># Bob Smith 29</span>
+<span class="pl-c"># Bob Barker 72</span>
+<span class="pl-c">#</span>
+<span class="pl-c"># Here's the script:</span>
+
+<span class="pl-c1">BEGIN</span> {
+
+    <span class="pl-c"># First, ask the user for the name</span>
+    <span class="pl-k">print</span> <span class="pl-s"><span class="pl-pds">"</span>What name would you like the average age for?<span class="pl-pds">"</span></span>;
+
+    <span class="pl-c"># Get a line from standard input, not from files on the command line</span>
+    <span class="pl-k">getline</span> name <span class="pl-k">&lt;</span> <span class="pl-s"><span class="pl-pds">"</span>/dev/stdin<span class="pl-pds">"</span></span>;
+}
+
+<span class="pl-c"># Now, match every line whose first field is the given name</span>
+<span class="pl-c1">$1</span> <span class="pl-k">==</span> name {
+
+    <span class="pl-c"># Inside here, we have access to a number of useful variables, already</span>
+    <span class="pl-c"># pre-loaded for us:</span>
+    <span class="pl-c"># $0 is the entire line</span>
+    <span class="pl-c"># $3 is the third field, the age, which is what we're interested in here</span>
+    <span class="pl-c"># NF is the number of fields, which should be 3</span>
+    <span class="pl-c"># NR is the number of records (lines) seen so far</span>
+    <span class="pl-c"># FILENAME is the name of the file being processed</span>
+    <span class="pl-c"># FS is the field separator being used, which is " " here</span>
+    <span class="pl-c"># ...etc. There are plenty more, documented in the man page.</span>
+
+    <span class="pl-c"># Keep track of a running total and how many lines matched</span>
+    sum <span class="pl-k">+=</span> <span class="pl-c1">$3</span>;
+    nlines<span class="pl-k">++</span>;
+}
+
+<span class="pl-c"># Another special pattern is called END. It will run after processing all the</span>
+<span class="pl-c"># text files. Unlike BEGIN, it will only run if you've given it input to</span>
+<span class="pl-c"># process. It will run after all the files have been read and processed</span>
+<span class="pl-c"># according to the rules and actions you've provided. The purpose of it is</span>
+<span class="pl-c"># usually to output some kind of final report, or do something with the</span>
+<span class="pl-c"># aggregate of the data you've accumulated over the course of the script.</span>
+
+<span class="pl-c1">END</span> {
+    <span class="pl-k">if</span> (nlines)
+        <span class="pl-k">print</span> <span class="pl-s"><span class="pl-pds">"</span>The average age for <span class="pl-pds">"</span></span> name <span class="pl-s"><span class="pl-pds">"</span> is <span class="pl-pds">"</span></span> sum <span class="pl-k">/</span> nlines;
+}
+</pre></div>
+<p>Further Reading:</p>
+<ul>
+<li><a href="http://www.grymoire.com/Unix/Awk.html" rel="nofollow">Awk tutorial</a></li>
+<li><a href="https://linux.die.net/man/1/awk" rel="nofollow">Awk man page</a></li>
+<li><a href="https://www.gnu.org/software/gawk/manual/gawk.html" rel="nofollow">The GNU Awk User's Guide</a><br>
+GNU Awk is found on most Linux systems.</li>
+<li><a href="http://tuxgraphics.org/~guido/scripts/awk-one-liner.html" rel="nofollow">AWK one-liner collection</a></li>
+<li><a href="https://wiki.alpinelinux.org/wiki/Awk" rel="nofollow">Awk alpinelinux wiki</a> a technical<br>
+summary and list of "gotchas" (places where different implementations may<br>
+behave in different or unexpected ways).</li>
+<li><a href="https://github.com/dubiousjim/awkenough">basic libraries for awk</a></li>
+</ul>
+<hr>
+<p>contributors:<br>
+- ["Marshall Mason", "http://github.com/marshallmason"]</p>

@@ -1,0 +1,138 @@
+<h1>Clojure Macros</h1>
+<p>As with all Lisps, Clojure's inherent <a href="https://en.wikipedia.org/wiki/Homoiconic" rel="nofollow">homoiconicity</a><br>
+gives you access to the full extent of the language to write code-generation routines<br>
+called "macros". Macros provide a powerful way to tailor the language to your needs.</p>
+<p>Be careful though. It's considered bad form to write a macro when a function will do.<br>
+Use a macro only when you need control over when or if the arguments to a form will<br>
+be evaluated.</p>
+<p>You'll want to be familiar with Clojure. Make sure you understand everything in<br>
+<a href="/docs/clojure/">Clojure in Y Minutes</a>.</p>
+<div class="highlight highlight-source-clojure"><pre class="notranslate"><span class="pl-c"><span class="pl-c">;</span>; Define a macro using defmacro. Your macro should output a list that can</span>
+<span class="pl-c"><span class="pl-c">;</span>; be evaluated as clojure code.</span>
+<span class="pl-c"><span class="pl-c">;</span>;</span>
+<span class="pl-c"><span class="pl-c">;</span>; This macro is the same as if you wrote (reverse "Hello World")</span>
+(<span class="pl-k">defmacro</span> <span class="pl-e">my-first-macro</span> []
+  (<span class="pl-en">list</span> reverse <span class="pl-s"><span class="pl-pds">"</span>Hello World<span class="pl-pds">"</span></span>))
+
+<span class="pl-c"><span class="pl-c">;</span>; Inspect the result of a macro using macroexpand or macroexpand-1.</span>
+<span class="pl-c"><span class="pl-c">;</span>;</span>
+<span class="pl-c"><span class="pl-c">;</span>; Note that the call must be quoted.</span>
+(<span class="pl-en">macroexpand</span> '(my-first-macro))
+<span class="pl-c"><span class="pl-c">;</span>; -&gt; (#&lt;core$reverse clojure.core$reverse@xxxxxxxx&gt; "Hello World")</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; You can eval the result of macroexpand directly:</span>
+(<span class="pl-en">eval</span> (<span class="pl-en">macroexpand</span> '(my-first-macro)))
+<span class="pl-c"><span class="pl-c">;</span> -&gt; (\d \l \o \r \W \space \o \l \l \e \H)</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; But you should use this more succinct, function-like syntax:</span>
+(<span class="pl-en">my-first-macro</span>)  <span class="pl-c"><span class="pl-c">;</span> -&gt; (\d \l \o \r \W \space \o \l \l \e \H)</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; You can make things easier on yourself by using the more succinct quote syntax</span>
+<span class="pl-c"><span class="pl-c">;</span>; to create lists in your macros:</span>
+(<span class="pl-k">defmacro</span> <span class="pl-e">my-first-quoted-macro</span> []
+  '(reverse <span class="pl-s"><span class="pl-pds">"</span>Hello World<span class="pl-pds">"</span></span>))
+
+(<span class="pl-en">macroexpand</span> '(my-first-quoted-macro))
+<span class="pl-c"><span class="pl-c">;</span>; -&gt; (reverse "Hello World")</span>
+<span class="pl-c"><span class="pl-c">;</span>; Notice that reverse is no longer function object, but a symbol.</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Macros can take arguments.</span>
+(<span class="pl-k">defmacro</span> <span class="pl-e">inc2</span> [arg]
+  (<span class="pl-en">list</span> + <span class="pl-c1">2</span> arg))
+
+(<span class="pl-en">inc2</span> <span class="pl-c1">2</span>) <span class="pl-c"><span class="pl-c">;</span> -&gt; 4</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; But, if you try to do this with a quoted list, you'll get an error, because</span>
+<span class="pl-c"><span class="pl-c">;</span>; the argument will be quoted too. To get around this, clojure provides a</span>
+<span class="pl-c"><span class="pl-c">;</span>; way of quoting macros: `. Inside `, you can use ~ to get at the outer scope</span>
+(<span class="pl-k">defmacro</span> <span class="pl-e">inc2-quoted</span> [arg]
+  `(+ <span class="pl-c1">2</span> ~arg))
+
+(<span class="pl-en">inc2-quoted</span> <span class="pl-c1">2</span>)
+
+<span class="pl-c"><span class="pl-c">;</span>; You can use the usual destructuring args. Expand list variables using ~@</span>
+(<span class="pl-k">defmacro</span> <span class="pl-e">unless</span> [arg &amp; body]
+  `(<span class="pl-k">if</span> (<span class="pl-en">not</span> ~arg)
+     (<span class="pl-k">do</span> ~@body))) <span class="pl-c"><span class="pl-c">;</span> Remember the do!</span>
+
+(<span class="pl-en">macroexpand</span> '(unless <span class="pl-c1">true</span> (<span class="pl-en">reverse</span> <span class="pl-s"><span class="pl-pds">"</span>Hello World<span class="pl-pds">"</span></span>)))
+<span class="pl-c"><span class="pl-c">;</span>; -&gt;</span>
+<span class="pl-c"><span class="pl-c">;</span>; (if (clojure.core/not true) (do (reverse "Hello World")))</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; (unless) evaluates and returns its body if the first argument is false.</span>
+<span class="pl-c"><span class="pl-c">;</span>; Otherwise, it returns nil</span>
+
+(<span class="pl-en">unless</span> <span class="pl-c1">true</span> <span class="pl-s"><span class="pl-pds">"</span>Hello<span class="pl-pds">"</span></span>) <span class="pl-c"><span class="pl-c">;</span> -&gt; nil</span>
+(<span class="pl-en">unless</span> <span class="pl-c1">false</span> <span class="pl-s"><span class="pl-pds">"</span>Hello<span class="pl-pds">"</span></span>) <span class="pl-c"><span class="pl-c">;</span> -&gt; "Hello"</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; Used without care, macros can do great evil by clobbering your vars</span>
+(<span class="pl-k">defmacro</span> <span class="pl-e">define-x</span> []
+  '(<span class="pl-k">do</span>
+     (<span class="pl-k">def</span> <span class="pl-e">x</span> <span class="pl-c1">2</span>)
+     (<span class="pl-en">list</span> x)))
+
+(<span class="pl-k">def</span> <span class="pl-e">x</span> <span class="pl-c1">4</span>)
+(<span class="pl-k">define-x</span>) <span class="pl-c"><span class="pl-c">;</span> -&gt; (2)</span>
+(<span class="pl-en">list</span> x) <span class="pl-c"><span class="pl-c">;</span> -&gt; (2)</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; To avoid this, use gensym to get a unique identifier</span>
+(<span class="pl-en">gensym</span> 'x) <span class="pl-c"><span class="pl-c">;</span> -&gt; x1281 (or some such thing)</span>
+
+(<span class="pl-k">defmacro</span> <span class="pl-e">define-x-safely</span> []
+  (<span class="pl-k">let</span> [sym (<span class="pl-en">gensym</span> 'x)]
+    `(<span class="pl-k">do</span>
+       (<span class="pl-k">def</span> ~<span class="pl-e">sym</span> <span class="pl-c1">2</span>)
+       (<span class="pl-en">list</span> ~sym))))
+
+(<span class="pl-k">def</span> <span class="pl-e">x</span> <span class="pl-c1">4</span>)
+(<span class="pl-k">define-x-safely</span>) <span class="pl-c"><span class="pl-c">;</span> -&gt; (2)</span>
+(<span class="pl-en">list</span> x) <span class="pl-c"><span class="pl-c">;</span> -&gt; (4)</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; You can use # within ` to produce a gensym for each symbol automatically</span>
+(<span class="pl-k">defmacro</span> <span class="pl-e">define-x-hygienically</span> []
+  `(<span class="pl-k">do</span>
+     (<span class="pl-k">def</span> <span class="pl-e">x</span># <span class="pl-c1">2</span>)
+     (<span class="pl-en">list</span> x#)))
+
+(<span class="pl-k">def</span> <span class="pl-e">x</span> <span class="pl-c1">4</span>)
+(<span class="pl-k">define-x-hygienically</span>) <span class="pl-c"><span class="pl-c">;</span> -&gt; (2)</span>
+(<span class="pl-en">list</span> x) <span class="pl-c"><span class="pl-c">;</span> -&gt; (4)</span>
+
+<span class="pl-c"><span class="pl-c">;</span>; It's typical to use helper functions with macros. Let's create a few to</span>
+<span class="pl-c"><span class="pl-c">;</span>; help us support a (dumb) inline arithmetic syntax</span>
+(<span class="pl-k">declare</span> <span class="pl-e">inline-2-helper</span>)
+(<span class="pl-k">defn</span> <span class="pl-e">clean-arg</span> [arg]
+  (<span class="pl-k">if</span> (<span class="pl-en">seq?</span> arg)
+    (<span class="pl-en">inline-2-helper</span> arg)
+    arg))
+
+(<span class="pl-k">defn</span> <span class="pl-e">apply-arg</span>
+  <span class="pl-s"><span class="pl-pds">"</span>Given args [x (+ y)], return (+ x y)<span class="pl-pds">"</span></span>
+  [val [op arg]]
+  (<span class="pl-en">list</span> op val (<span class="pl-en">clean-arg</span> arg)))
+
+(<span class="pl-k">defn</span> <span class="pl-e">inline-2-helper</span>
+  [[arg1 &amp; ops-and-args]]
+  (<span class="pl-k">let</span> [ops (<span class="pl-en">partition</span> <span class="pl-c1">2</span> ops-and-args)]
+    (<span class="pl-en">reduce</span> apply-arg (<span class="pl-en">clean-arg</span> arg1) ops)))
+
+<span class="pl-c"><span class="pl-c">;</span>; We can test it immediately, without creating a macro</span>
+(<span class="pl-en">inline-2-helper</span> '(a + (<span class="pl-en">b</span> - <span class="pl-c1">2</span>) - (<span class="pl-en">c</span> * <span class="pl-c1">5</span>))) <span class="pl-c"><span class="pl-c">;</span> -&gt; (- (+ a (- b 2)) (* c 5))</span>
+
+<span class="pl-c"><span class="pl-c">;</span> However, we'll need to make it a macro if we want it to be run at compile time</span>
+(<span class="pl-k">defmacro</span> <span class="pl-e">inline-2</span> [form]
+  (<span class="pl-en">inline-2-helper</span> form))
+
+(<span class="pl-en">macroexpand</span> '(inline-2 (<span class="pl-c1">1</span> + (<span class="pl-c1">3</span> / <span class="pl-c1">2</span>) - (<span class="pl-c1">1</span> / <span class="pl-c1">2</span>) + <span class="pl-c1">1</span>)))
+<span class="pl-c"><span class="pl-c">;</span> -&gt; (+ (- (+ 1 (/ 3 2)) (/ 1 2)) 1)</span>
+
+(<span class="pl-en">inline-2</span> (<span class="pl-c1">1</span> + (<span class="pl-c1">3</span> / <span class="pl-c1">2</span>) - (<span class="pl-c1">1</span> / <span class="pl-c1">2</span>) + <span class="pl-c1">1</span>))
+<span class="pl-c"><span class="pl-c">;</span> -&gt; 3 (actually, 3N, since the number got cast to a rational fraction with /)</span></pre></div>
+<h3>Further Reading</h3>
+<p><a href="http://www.braveclojure.com/writing-macros/" rel="nofollow">Writing Macros</a></p>
+<p><a href="http://clojure.org/macros" rel="nofollow">Official docs</a></p>
+<p><a href="https://lispcast.com/when-to-use-a-macro/" rel="nofollow">When to use macros?</a></p>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Adam Bard", "http://adambard.com/"]
+</code></pre>

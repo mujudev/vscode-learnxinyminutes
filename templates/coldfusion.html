@@ -1,0 +1,320 @@
+<h1>ColdFusion</h1>
+<p>ColdFusion is a scripting language for web development.<br>
+<a href="http://www.adobe.com/products/coldfusion-family.html" rel="nofollow">Read more here.</a></p>
+<h3>CFML</h3>
+<p><em><strong>C</strong>old<strong>F</strong>usion <strong>M</strong>arkup <strong>L</strong>anguage</em><br>
+ColdFusion started as a tag-based language. Almost all functionality is available using tags.</p>
+<div class="highlight highlight-text-html-cfm"><pre class="notranslate">&lt;<span class="pl-ent">em</span>&gt;HTML tags have been provided for output readability&lt;/<span class="pl-ent">em</span>&gt;
+
+<span class="pl-c">&lt;!--- Comments start with "&lt;!---" and end with "---&gt;</span>" ---&gt;
+<span class="pl-c"><span class="pl-c">&lt;!---</span></span>
+<span class="pl-c">    Comments can</span>
+<span class="pl-c">    also</span>
+<span class="pl-c">    span</span>
+<span class="pl-c">    multiple lines</span>
+<span class="pl-c"><span class="pl-c">---&gt;</span></span>
+
+<span class="pl-c">&lt;!--- CFML tags have a similar format to HTML tags. ---&gt;</span>
+&lt;<span class="pl-ent">h1</span>&gt;Simple Variables&lt;/<span class="pl-ent">h1</span>&gt;
+<span class="pl-c">&lt;!--- Variable Declaration: Variables are loosely typed, similar to javascript ---&gt;</span>
+&lt;<span class="pl-ent">p</span>&gt;Set &lt;<span class="pl-ent">b</span>&gt;myVariable&lt;/<span class="pl-ent">b</span>&gt; to "myValue"&lt;/<span class="pl-ent">p</span>&gt;
+&lt;<span class="pl-ent">cfset</span><span class="pl-s1"> <span class="pl-smi">myVariable</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>myValue<span class="pl-pds">"</span></span></span> /&gt;
+&lt;<span class="pl-ent">p</span>&gt;Set &lt;<span class="pl-ent">b</span>&gt;myNumber&lt;/<span class="pl-ent">b</span>&gt; to 3.14&lt;/<span class="pl-ent">p</span>&gt;
+&lt;<span class="pl-ent">cfset</span><span class="pl-s1"> <span class="pl-smi">myNumber</span> <span class="pl-k">=</span> <span class="pl-c1">3.14</span></span> /&gt;
+
+<span class="pl-c">&lt;!--- Displaying simple data ---&gt;</span>
+<span class="pl-c">&lt;!--- Use &lt;cfoutput&gt; for simple values such as strings, numbers, and expressions ---&gt;</span>
+&lt;<span class="pl-ent">p</span>&gt;Display &lt;<span class="pl-ent">b</span>&gt;myVariable&lt;/<span class="pl-ent">b</span>&gt;: &lt;<span class="pl-ent">cfoutput</span>&gt;#<span class="pl-s1"><span class="pl-smi">myVariable</span></span>#&lt;/<span class="pl-ent">cfoutput</span>&gt;&lt;/<span class="pl-ent">p</span>&gt;<span class="pl-c">&lt;!--- myValue ---&gt;</span>
+&lt;<span class="pl-ent">p</span>&gt;Display &lt;<span class="pl-ent">b</span>&gt;myNumber&lt;/<span class="pl-ent">b</span>&gt;: &lt;<span class="pl-ent">cfoutput</span>&gt;#<span class="pl-s1"><span class="pl-smi">myNumber</span></span>#&lt;/<span class="pl-ent">cfoutput</span>&gt;&lt;/<span class="pl-ent">p</span>&gt;<span class="pl-c">&lt;!--- 3.14 ---&gt;</span>
+
+&lt;<span class="pl-ent">hr</span> /&gt;
+
+&lt;<span class="pl-ent">h1</span>&gt;Complex Variables&lt;/<span class="pl-ent">h1</span>&gt;
+<span class="pl-c">&lt;!--- Declaring complex variables ---&gt;</span>
+<span class="pl-c">&lt;!--- Declaring an array of 1 dimension: literal or bracket notation ---&gt;</span>
+&lt;<span class="pl-ent">p</span>&gt;Set &lt;<span class="pl-ent">b</span>&gt;myArray1&lt;/<span class="pl-ent">b</span>&gt; to an array of 1 dimension using literal or bracket notation&lt;/<span class="pl-ent">p</span>&gt;
+&lt;<span class="pl-ent">cfset</span><span class="pl-s1"> <span class="pl-smi">myArray1</span> <span class="pl-k">=</span> []</span> /&gt;
+<span class="pl-c">&lt;!--- Declaring an array of 1 dimension: function notation ---&gt;</span>
+&lt;<span class="pl-ent">p</span>&gt;Set &lt;<span class="pl-ent">b</span>&gt;myArray2&lt;/<span class="pl-ent">b</span>&gt; to an array of 1 dimension using function notation&lt;/<span class="pl-ent">p</span>&gt;
+&lt;<span class="pl-ent">cfset</span><span class="pl-s1"> <span class="pl-smi">myArray2</span> <span class="pl-k">=</span> <span class="pl-c1">ArrayNew</span>(<span class="pl-c1">1</span>)</span> /&gt;
+
+<span class="pl-c">&lt;!--- Outputting complex variables ---&gt;</span>
+&lt;<span class="pl-ent">p</span>&gt;Contents of &lt;<span class="pl-ent">b</span>&gt;myArray1&lt;/<span class="pl-ent">b</span>&gt;&lt;/<span class="pl-ent">p</span>&gt;
+&lt;<span class="pl-ent">cfdump</span> <span class="pl-e">var</span>=<span class="pl-s"><span class="pl-pds">"</span>#<span class="pl-s1"><span class="pl-smi">myArray1</span></span>#<span class="pl-pds">"</span></span> /&gt; <span class="pl-c">&lt;!--- An empty array object ---&gt;</span>
+&lt;<span class="pl-ent">p</span>&gt;Contents of &lt;<span class="pl-ent">b</span>&gt;myArray2&lt;/<span class="pl-ent">b</span>&gt;&lt;/<span class="pl-ent">p</span>&gt;
+&lt;<span class="pl-ent">cfdump</span> <span class="pl-e">var</span>=<span class="pl-s"><span class="pl-pds">"</span>#<span class="pl-s1"><span class="pl-smi">myArray2</span></span>#<span class="pl-pds">"</span></span> /&gt; <span class="pl-c">&lt;!--- An empty array object ---&gt;</span>
+
+<span class="pl-c">&lt;!--- Operators ---&gt;</span>
+<span class="pl-c">&lt;!--- Arithmetic ---&gt;</span>
+&lt;<span class="pl-ent">h1</span>&gt;Operators&lt;/<span class="pl-ent">h1</span>&gt;
+&lt;<span class="pl-ent">h2</span>&gt;Arithmetic&lt;/<span class="pl-ent">h2</span>&gt;
+&lt;<span class="pl-ent">p</span>&gt;1 + 1 = &lt;<span class="pl-ent">cfoutput</span>&gt;#<span class="pl-s1"><span class="pl-c1">1</span> <span class="pl-k">+</span> <span class="pl-c1">1</span></span>#&lt;/<span class="pl-ent">cfoutput</span>&gt;&lt;/<span class="pl-ent">p</span>&gt;
+&lt;<span class="pl-ent">p</span>&gt;10 - 7 = &lt;<span class="pl-ent">cfoutput</span>&gt;#<span class="pl-s1"><span class="pl-c1">10</span> <span class="pl-k">-</span> <span class="pl-c1">7</span></span>#&lt;<span class="pl-ent">br</span> /&gt;&lt;/<span class="pl-ent">cfoutput</span>&gt;&lt;/<span class="pl-ent">p</span>&gt;
+&lt;<span class="pl-ent">p</span>&gt;15 * 10 = &lt;<span class="pl-ent">cfoutput</span>&gt;#<span class="pl-s1"><span class="pl-c1">15</span> <span class="pl-k">*</span> <span class="pl-c1">10</span></span>#&lt;<span class="pl-ent">br</span> /&gt;&lt;/<span class="pl-ent">cfoutput</span>&gt;&lt;/<span class="pl-ent">p</span>&gt;
+&lt;<span class="pl-ent">p</span>&gt;100 / 5 = &lt;<span class="pl-ent">cfoutput</span>&gt;#<span class="pl-s1"><span class="pl-c1">100</span> <span class="pl-k">/</span> <span class="pl-c1">5</span></span>#&lt;<span class="pl-ent">br</span> /&gt;&lt;/<span class="pl-ent">cfoutput</span>&gt;&lt;/<span class="pl-ent">p</span>&gt;
+&lt;<span class="pl-ent">p</span>&gt;120 % 5 = &lt;<span class="pl-ent">cfoutput</span>&gt;<span class="pl-ii">#</span>120 % 5<span class="pl-ii">#</span>&lt;<span class="pl-ent">br</span> /&gt;&lt;/<span class="pl-ent">cfoutput</span>&gt;&lt;/<span class="pl-ent">p</span>&gt;
+&lt;<span class="pl-ent">p</span>&gt;120 mod 5 = &lt;<span class="pl-ent">cfoutput</span>&gt;<span class="pl-ii">#</span>120 mod 5<span class="pl-ii">#</span>&lt;<span class="pl-ent">br</span> /&gt;&lt;/<span class="pl-ent">cfoutput</span>&gt;&lt;/<span class="pl-ent">p</span>&gt;
+
+&lt;<span class="pl-ent">hr</span> /&gt;
+
+<span class="pl-c">&lt;!--- Comparison ---&gt;</span>
+&lt;<span class="pl-ent">h2</span>&gt;Comparison&lt;/<span class="pl-ent">h2</span>&gt;
+&lt;<span class="pl-ent">h3</span>&gt;Standard Notation&lt;/<span class="pl-ent">h3</span>&gt;
+&lt;<span class="pl-ent">p</span>&gt;Is 1 eq 1? &lt;<span class="pl-ent">cfoutput</span>&gt;<span class="pl-ii">#</span>1 eq 1<span class="pl-ii">#</span>&lt;/<span class="pl-ent">cfoutput</span>&gt;&lt;/<span class="pl-ent">p</span>&gt;
+&lt;<span class="pl-ent">p</span>&gt;Is 15 neq 1? &lt;<span class="pl-ent">cfoutput</span>&gt;<span class="pl-ii">#</span>15 neq 1<span class="pl-ii">#</span>&lt;/<span class="pl-ent">cfoutput</span>&gt;&lt;/<span class="pl-ent">p</span>&gt;
+&lt;<span class="pl-ent">p</span>&gt;Is 10 gt 8? &lt;<span class="pl-ent">cfoutput</span>&gt;<span class="pl-ii">#</span>10 gt 8<span class="pl-ii">#</span>&lt;/<span class="pl-ent">cfoutput</span>&gt;&lt;/<span class="pl-ent">p</span>&gt;
+&lt;<span class="pl-ent">p</span>&gt;Is 1 lt 2? &lt;<span class="pl-ent">cfoutput</span>&gt;<span class="pl-ii">#</span>1 lt 2<span class="pl-ii">#</span>&lt;/<span class="pl-ent">cfoutput</span>&gt;&lt;/<span class="pl-ent">p</span>&gt;
+&lt;<span class="pl-ent">p</span>&gt;Is 10 gte 5? &lt;<span class="pl-ent">cfoutput</span>&gt;<span class="pl-ii">#</span>10 gte 5<span class="pl-ii">#</span>&lt;/<span class="pl-ent">cfoutput</span>&gt;&lt;/<span class="pl-ent">p</span>&gt;
+&lt;<span class="pl-ent">p</span>&gt;Is 1 lte 5? &lt;<span class="pl-ent">cfoutput</span>&gt;<span class="pl-ii">#</span>1 lte 5<span class="pl-ii">#</span>&lt;/<span class="pl-ent">cfoutput</span>&gt;&lt;/<span class="pl-ent">p</span>&gt;
+
+&lt;<span class="pl-ent">h3</span>&gt;Alternative Notation&lt;/<span class="pl-ent">h3</span>&gt;
+&lt;<span class="pl-ent">p</span>&gt;Is 1 == 1? &lt;<span class="pl-ent">cfoutput</span>&gt;<span class="pl-ii">#</span>1 eq 1<span class="pl-ii">#</span>&lt;/<span class="pl-ent">cfoutput</span>&gt;&lt;/<span class="pl-ent">p</span>&gt;
+&lt;<span class="pl-ent">p</span>&gt;Is 15 != 1? &lt;<span class="pl-ent">cfoutput</span>&gt;<span class="pl-ii">#</span>15 neq 1<span class="pl-ii">#</span>&lt;/<span class="pl-ent">cfoutput</span>&gt;&lt;/<span class="pl-ent">p</span>&gt;
+&lt;<span class="pl-ent">p</span>&gt;Is 10 &gt; 8? &lt;<span class="pl-ent">cfoutput</span>&gt;<span class="pl-ii">#</span>10 gt 8<span class="pl-ii">#</span>&lt;/<span class="pl-ent">cfoutput</span>&gt;&lt;/<span class="pl-ent">p</span>&gt;
+&lt;<span class="pl-ent">p</span>&gt;Is 1 <span class="pl-ii">&lt;</span> 2? &lt;<span class="pl-ent">cfoutput</span>&gt;<span class="pl-ii">#</span>1 lt 2<span class="pl-ii">#</span>&lt;/<span class="pl-ent">cfoutput</span>&gt;&lt;/<span class="pl-ent">p</span>&gt;
+&lt;<span class="pl-ent">p</span>&gt;Is 10 &gt;= 5? &lt;<span class="pl-ent">cfoutput</span>&gt;<span class="pl-ii">#</span>10 gte 5<span class="pl-ii">#</span>&lt;/<span class="pl-ent">cfoutput</span>&gt;&lt;/<span class="pl-ent">p</span>&gt;
+&lt;<span class="pl-ent">p</span>&gt;Is 1 <span class="pl-ii">&lt;</span>= 5? &lt;<span class="pl-ent">cfoutput</span>&gt;<span class="pl-ii">#</span>1 lte 5<span class="pl-ii">#</span>&lt;/<span class="pl-ent">cfoutput</span>&gt;&lt;/<span class="pl-ent">p</span>&gt;
+
+&lt;<span class="pl-ent">hr</span> /&gt;
+
+<span class="pl-c">&lt;!--- Control Structures ---&gt;</span>
+&lt;<span class="pl-ent">h1</span>&gt;Control Structures&lt;/<span class="pl-ent">h1</span>&gt;
+
+&lt;<span class="pl-ent">cfset</span><span class="pl-s1"> <span class="pl-smi">myCondition</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Test<span class="pl-pds">"</span></span></span> /&gt;
+
+&lt;<span class="pl-ent">p</span>&gt;Condition to test for: "&lt;<span class="pl-ent">cfoutput</span>&gt;#<span class="pl-s1"><span class="pl-smi">myCondition</span></span>#&lt;/<span class="pl-ent">cfoutput</span>&gt;"&lt;/<span class="pl-ent">p</span>&gt;
+
+&lt;<span class="pl-ent">cfif</span><span class="pl-s1"> <span class="pl-smi">myCondition</span> <span class="pl-k">eq</span> <span class="pl-s"><span class="pl-pds">"</span>Test<span class="pl-pds">"</span></span></span>&gt;
+    &lt;<span class="pl-ent">cfoutput</span>&gt;#<span class="pl-s1"><span class="pl-smi">myCondition</span></span>#. We're testing.&lt;/<span class="pl-ent">cfoutput</span>&gt;
+&lt;<span class="pl-ent">cfelseif</span><span class="pl-s1"> <span class="pl-smi">myCondition</span> <span class="pl-k">eq</span> <span class="pl-s"><span class="pl-pds">"</span>Production<span class="pl-pds">"</span></span></span>&gt;
+    &lt;<span class="pl-ent">cfoutput</span>&gt;#<span class="pl-s1"><span class="pl-smi">myCondition</span></span>#. Proceed Carefully!!!&lt;/<span class="pl-ent">cfoutput</span>&gt;
+&lt;<span class="pl-ent">cfelse</span>&gt;
+    myCondition is unknown
+&lt;/<span class="pl-ent">cfif</span>&gt;
+
+&lt;<span class="pl-ent">hr</span> /&gt;
+
+<span class="pl-c">&lt;!--- Loops ---&gt;</span>
+&lt;<span class="pl-ent">h1</span>&gt;Loops&lt;/<span class="pl-ent">h1</span>&gt;
+&lt;<span class="pl-ent">h2</span>&gt;For Loop&lt;/<span class="pl-ent">h2</span>&gt;
+&lt;<span class="pl-ent">cfloop</span> <span class="pl-e">from</span>=<span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span> <span class="pl-e">to</span>=<span class="pl-s"><span class="pl-pds">"</span>10<span class="pl-pds">"</span></span> <span class="pl-e">index</span>=<span class="pl-s"><span class="pl-pds">"</span>i<span class="pl-pds">"</span></span>&gt;
+	&lt;<span class="pl-ent">p</span>&gt;Index equals &lt;<span class="pl-ent">cfoutput</span>&gt;#<span class="pl-s1"><span class="pl-smi">i</span></span>#&lt;/<span class="pl-ent">cfoutput</span>&gt;&lt;/<span class="pl-ent">p</span>&gt;
+&lt;/<span class="pl-ent">cfloop</span>&gt;
+
+&lt;<span class="pl-ent">h2</span>&gt;For Each Loop (Complex Variables)&lt;/<span class="pl-ent">h2</span>&gt;
+
+&lt;<span class="pl-ent">p</span>&gt;Set &lt;<span class="pl-ent">b</span>&gt;myArray3&lt;/<span class="pl-ent">b</span>&gt; to [5, 15, 99, 45, 100]&lt;/<span class="pl-ent">p</span>&gt;
+
+&lt;<span class="pl-ent">cfset</span><span class="pl-s1"> <span class="pl-smi">myArray3</span> <span class="pl-k">=</span> [<span class="pl-c1">5</span>, <span class="pl-c1">15</span>, <span class="pl-c1">99</span>, <span class="pl-c1">45</span>, <span class="pl-c1">100</span>]</span> /&gt;
+
+&lt;<span class="pl-ent">cfloop</span> <span class="pl-e">array</span>=<span class="pl-s"><span class="pl-pds">"</span>#<span class="pl-s1"><span class="pl-smi">myArray3</span></span>#<span class="pl-pds">"</span></span> <span class="pl-e">index</span>=<span class="pl-s"><span class="pl-pds">"</span>i<span class="pl-pds">"</span></span>&gt;
+	&lt;<span class="pl-ent">p</span>&gt;Index equals &lt;<span class="pl-ent">cfoutput</span>&gt;#<span class="pl-s1"><span class="pl-smi">i</span></span>#&lt;/<span class="pl-ent">cfoutput</span>&gt;&lt;/<span class="pl-ent">p</span>&gt;
+&lt;/<span class="pl-ent">cfloop</span>&gt;
+
+&lt;<span class="pl-ent">p</span>&gt;Set &lt;<span class="pl-ent">b</span>&gt;myArray4&lt;/<span class="pl-ent">b</span>&gt; to ["Alpha", "Bravo", "Charlie", "Delta", "Echo"]&lt;/<span class="pl-ent">p</span>&gt;
+
+&lt;<span class="pl-ent">cfset</span><span class="pl-s1"> <span class="pl-smi">myArray4</span> <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">"</span>Alpha<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Bravo<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Charlie<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Delta<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Echo<span class="pl-pds">"</span></span>]</span> /&gt;
+
+&lt;<span class="pl-ent">cfloop</span> <span class="pl-e">array</span>=<span class="pl-s"><span class="pl-pds">"</span>#<span class="pl-s1"><span class="pl-smi">myArray4</span></span>#<span class="pl-pds">"</span></span> <span class="pl-e">index</span>=<span class="pl-s"><span class="pl-pds">"</span>s<span class="pl-pds">"</span></span>&gt;
+	&lt;<span class="pl-ent">p</span>&gt;Index equals &lt;<span class="pl-ent">cfoutput</span>&gt;#<span class="pl-s1"><span class="pl-smi">s</span></span>#&lt;/<span class="pl-ent">cfoutput</span>&gt;&lt;/<span class="pl-ent">p</span>&gt;
+&lt;/<span class="pl-ent">cfloop</span>&gt;
+
+&lt;<span class="pl-ent">h2</span>&gt;Switch Statement&lt;/<span class="pl-ent">h2</span>&gt;
+
+&lt;<span class="pl-ent">p</span>&gt;Set &lt;<span class="pl-ent">b</span>&gt;myArray5&lt;/<span class="pl-ent">b</span>&gt; to [5, 15, 99, 45, 100]&lt;/<span class="pl-ent">p</span>&gt;
+
+&lt;<span class="pl-ent">cfset</span><span class="pl-s1"> <span class="pl-smi">myArray5</span> <span class="pl-k">=</span> [<span class="pl-c1">5</span>, <span class="pl-c1">15</span>, <span class="pl-c1">99</span>, <span class="pl-c1">45</span>, <span class="pl-c1">100</span>]</span> /&gt;
+
+&lt;<span class="pl-ent">cfloop</span> <span class="pl-e">array</span>=<span class="pl-s"><span class="pl-pds">"</span>#<span class="pl-s1"><span class="pl-smi">myArray5</span></span>#<span class="pl-pds">"</span></span> <span class="pl-e">index</span>=<span class="pl-s"><span class="pl-pds">"</span>i<span class="pl-pds">"</span></span>&gt;
+	&lt;<span class="pl-ent">cfswitch</span> <span class="pl-e">expression</span>=<span class="pl-s"><span class="pl-pds">"</span>#<span class="pl-s1"><span class="pl-smi">i</span></span>#<span class="pl-pds">"</span></span>&gt;
+		&lt;<span class="pl-ent">cfcase</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>5,15,45<span class="pl-pds">"</span></span> <span class="pl-e">delimiters</span>=<span class="pl-s"><span class="pl-pds">"</span>,<span class="pl-pds">"</span></span>&gt;
+			&lt;<span class="pl-ent">p</span>&gt;&lt;<span class="pl-ent">cfoutput</span>&gt;#<span class="pl-s1"><span class="pl-smi">i</span></span>#&lt;/<span class="pl-ent">cfoutput</span>&gt; is a multiple of 5.&lt;/<span class="pl-ent">p</span>&gt;
+		&lt;/<span class="pl-ent">cfcase</span>&gt;
+		&lt;<span class="pl-ent">cfcase</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>99<span class="pl-pds">"</span></span>&gt;
+			&lt;<span class="pl-ent">p</span>&gt;&lt;<span class="pl-ent">cfoutput</span>&gt;#<span class="pl-s1"><span class="pl-smi">i</span></span>#&lt;/<span class="pl-ent">cfoutput</span>&gt; is ninety-nine.&lt;/<span class="pl-ent">p</span>&gt;
+		&lt;/<span class="pl-ent">cfcase</span>&gt;
+		&lt;<span class="pl-ent">cfdefaultcase</span>&gt;
+			&lt;<span class="pl-ent">p</span>&gt;&lt;<span class="pl-ent">cfoutput</span>&gt;#<span class="pl-s1"><span class="pl-smi">i</span></span>#&lt;/<span class="pl-ent">cfoutput</span>&gt; is not 5, 15, 45, or 99.&lt;/<span class="pl-ent">p</span>&gt;
+		&lt;/<span class="pl-ent">cfdefaultcase</span>&gt; 
+	&lt;/<span class="pl-ent">cfswitch</span>&gt; 
+&lt;/<span class="pl-ent">cfloop</span>&gt;
+
+&lt;<span class="pl-ent">hr</span> /&gt;
+
+&lt;<span class="pl-ent">h1</span>&gt;Converting types&lt;/<span class="pl-ent">h1</span>&gt;
+
+<span class="pl-s1">&lt;<span class="pl-ent">style</span>&gt;</span>
+<span class="pl-s1">	<span class="pl-ent">table</span><span class="pl-e">.table</span> <span class="pl-ent">th</span>, <span class="pl-ent">table</span><span class="pl-e">.table</span> <span class="pl-ent">td</span> {</span>
+<span class="pl-s1">		<span class="pl-c1"><span class="pl-c1">border</span></span>: <span class="pl-c1">1<span class="pl-k">px</span></span> <span class="pl-c1">solid</span> <span class="pl-c1">#000000</span>;</span>
+<span class="pl-s1">		<span class="pl-c1"><span class="pl-c1">padding</span></span>: <span class="pl-c1">2<span class="pl-k">px</span></span>;</span>
+<span class="pl-s1">	}</span>
+<span class="pl-s1">	</span>
+<span class="pl-s1">	<span class="pl-ent">table</span><span class="pl-e">.table</span> <span class="pl-ent">th</span> {</span>
+<span class="pl-s1">		<span class="pl-c1"><span class="pl-c1">background-color</span></span>: <span class="pl-c1">#CCCCCC</span>;</span>
+<span class="pl-s1">	}</span>
+<span class="pl-s1">&lt;/<span class="pl-ent">style</span>&gt;</span>
+
+&lt;<span class="pl-ent">table</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>table<span class="pl-pds">"</span></span> <span class="pl-e">cellspacing</span>=<span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span>&gt;
+	&lt;<span class="pl-ent">thead</span>&gt;
+		&lt;<span class="pl-ent">tr</span>&gt;
+			&lt;<span class="pl-ent">th</span>&gt;Value&lt;/<span class="pl-ent">th</span>&gt;
+			&lt;<span class="pl-ent">th</span>&gt;As Boolean&lt;/<span class="pl-ent">th</span>&gt;
+			&lt;<span class="pl-ent">th</span>&gt;As number&lt;/<span class="pl-ent">th</span>&gt;
+			&lt;<span class="pl-ent">th</span>&gt;As date-time&lt;/<span class="pl-ent">th</span>&gt;
+			&lt;<span class="pl-ent">th</span>&gt;As string&lt;/<span class="pl-ent">th</span>&gt;
+		&lt;/<span class="pl-ent">tr</span>&gt;
+	&lt;/<span class="pl-ent">thead</span>&gt;
+	&lt;<span class="pl-ent">tbody</span>&gt;
+		&lt;<span class="pl-ent">tr</span>&gt;
+			&lt;<span class="pl-ent">th</span>&gt;"Yes"&lt;/<span class="pl-ent">th</span>&gt;
+			&lt;<span class="pl-ent">td</span>&gt;TRUE&lt;/<span class="pl-ent">td</span>&gt;
+			&lt;<span class="pl-ent">td</span>&gt;1&lt;/<span class="pl-ent">td</span>&gt;
+			&lt;<span class="pl-ent">td</span>&gt;Error&lt;/<span class="pl-ent">td</span>&gt;
+			&lt;<span class="pl-ent">td</span>&gt;"Yes"&lt;/<span class="pl-ent">td</span>&gt;
+		&lt;/<span class="pl-ent">tr</span>&gt;
+		&lt;<span class="pl-ent">tr</span>&gt;
+			&lt;<span class="pl-ent">th</span>&gt;"No"&lt;/<span class="pl-ent">th</span>&gt;
+			&lt;<span class="pl-ent">td</span>&gt;FALSE&lt;/<span class="pl-ent">td</span>&gt;
+			&lt;<span class="pl-ent">td</span>&gt;0&lt;/<span class="pl-ent">td</span>&gt;
+			&lt;<span class="pl-ent">td</span>&gt;Error&lt;/<span class="pl-ent">td</span>&gt;
+			&lt;<span class="pl-ent">td</span>&gt;"No"&lt;/<span class="pl-ent">td</span>&gt;
+		&lt;/<span class="pl-ent">tr</span>&gt;
+		&lt;<span class="pl-ent">tr</span>&gt;
+			&lt;<span class="pl-ent">th</span>&gt;TRUE&lt;/<span class="pl-ent">th</span>&gt;
+			&lt;<span class="pl-ent">td</span>&gt;TRUE&lt;/<span class="pl-ent">td</span>&gt;
+			&lt;<span class="pl-ent">td</span>&gt;1&lt;/<span class="pl-ent">td</span>&gt;
+			&lt;<span class="pl-ent">td</span>&gt;Error&lt;/<span class="pl-ent">td</span>&gt;
+			&lt;<span class="pl-ent">td</span>&gt;"Yes"&lt;/<span class="pl-ent">td</span>&gt;
+		&lt;/<span class="pl-ent">tr</span>&gt;
+		&lt;<span class="pl-ent">tr</span>&gt;
+			&lt;<span class="pl-ent">th</span>&gt;FALSE&lt;/<span class="pl-ent">th</span>&gt;
+			&lt;<span class="pl-ent">td</span>&gt;FALSE&lt;/<span class="pl-ent">td</span>&gt;
+			&lt;<span class="pl-ent">td</span>&gt;0&lt;/<span class="pl-ent">td</span>&gt;
+			&lt;<span class="pl-ent">td</span>&gt;Error&lt;/<span class="pl-ent">td</span>&gt;
+			&lt;<span class="pl-ent">td</span>&gt;"No"&lt;/<span class="pl-ent">td</span>&gt;
+		&lt;/<span class="pl-ent">tr</span>&gt;
+		&lt;<span class="pl-ent">tr</span>&gt;
+			&lt;<span class="pl-ent">th</span>&gt;Number&lt;/<span class="pl-ent">th</span>&gt;
+			&lt;<span class="pl-ent">td</span>&gt;True if Number is not 0; False otherwise.&lt;/<span class="pl-ent">td</span>&gt;
+			&lt;<span class="pl-ent">td</span>&gt;Number&lt;/<span class="pl-ent">td</span>&gt;
+			&lt;<span class="pl-ent">td</span>&gt;See <span class="pl-c1">&amp;#34;</span>Date-time values<span class="pl-c1">&amp;#34;</span> earlier in this chapter.&lt;/<span class="pl-ent">td</span>&gt;
+			&lt;<span class="pl-ent">td</span>&gt;String representation of the number (for example, <span class="pl-c1">&amp;#34;</span>8<span class="pl-c1">&amp;#34;</span>).&lt;/<span class="pl-ent">td</span>&gt;
+		&lt;/<span class="pl-ent">tr</span>&gt;
+		&lt;<span class="pl-ent">tr</span>&gt;
+			&lt;<span class="pl-ent">th</span>&gt;String&lt;/<span class="pl-ent">th</span>&gt;
+			&lt;<span class="pl-ent">td</span>&gt;If "Yes", True &lt;<span class="pl-ent">br</span>&gt;If "No", False &lt;<span class="pl-ent">br</span>&gt;If it can be converted to 0, False &lt;<span class="pl-ent">br</span>&gt;If it can be converted to any other number, True&lt;/<span class="pl-ent">td</span>&gt;
+			&lt;<span class="pl-ent">td</span>&gt;If it represents a number (for example, <span class="pl-c1">&amp;#34;</span>1,000<span class="pl-c1">&amp;#34;</span> or <span class="pl-c1">&amp;#34;</span>12.36E-12<span class="pl-c1">&amp;#34;</span>), it is converted to the corresponding number.&lt;/<span class="pl-ent">td</span>&gt;
+			&lt;<span class="pl-ent">td</span>&gt;If it represents a date-time (see next column), it is converted to the numeric value of the corresponding date-time object. &lt;<span class="pl-ent">br</span>&gt;If it is an ODBC date, time, or timestamp (for example <span class="pl-c1">&amp;#34;</span>{ts <span class="pl-c1">&amp;#39;</span>2001-06-14 11:30:13<span class="pl-c1">&amp;#39;</span>}<span class="pl-c1">&amp;#34;</span>, or if it is expressed in a standard U.S. date or time format, including the use of full or abbreviated month names, it is converted to the corresponding date-time value. &lt;<span class="pl-ent">br</span>&gt;Days of the week or unusual punctuation result in an error. &lt;<span class="pl-ent">br</span>&gt;Dashes, forward-slashes, and spaces are generally allowed.&lt;/<span class="pl-ent">td</span>&gt;
+			&lt;<span class="pl-ent">td</span>&gt;String&lt;/<span class="pl-ent">td</span>&gt;
+		&lt;/<span class="pl-ent">tr</span>&gt;
+		&lt;<span class="pl-ent">tr</span>&gt;
+			&lt;<span class="pl-ent">th</span>&gt;Date&lt;/<span class="pl-ent">th</span>&gt;
+			&lt;<span class="pl-ent">td</span>&gt;Error&lt;/<span class="pl-ent">td</span>&gt;
+			&lt;<span class="pl-ent">td</span>&gt;The numeric value of the date-time object.&lt;/<span class="pl-ent">td</span>&gt;
+			&lt;<span class="pl-ent">td</span>&gt;Date&lt;/<span class="pl-ent">td</span>&gt;
+			&lt;<span class="pl-ent">td</span>&gt;An ODBC timestamp.&lt;/<span class="pl-ent">td</span>&gt;
+		&lt;/<span class="pl-ent">tr</span>&gt;
+	&lt;/<span class="pl-ent">tbody</span>&gt;
+&lt;/<span class="pl-ent">table</span>&gt;
+
+&lt;<span class="pl-ent">hr</span> /&gt;
+
+&lt;<span class="pl-ent">h1</span>&gt;Components&lt;/<span class="pl-ent">h1</span>&gt;
+
+&lt;<span class="pl-ent">em</span>&gt;Code for reference (Functions must return something to support IE)&lt;/<span class="pl-ent">em</span>&gt;</pre></div>
+<pre lang="cfs" class="notranslate"><code class="notranslate">&lt;cfcomponent&gt;
+	&lt;cfset this.hello = "Hello" /&gt;
+	&lt;cfset this.world = "world" /&gt;
+
+	&lt;cffunction name="sayHello"&gt;
+		&lt;cfreturn this.hello &amp; ", " &amp; this.world &amp; "!" /&gt;
+	&lt;/cffunction&gt;
+	
+	&lt;cffunction name="setHello"&gt;
+		&lt;cfargument name="newHello" type="string" required="true" /&gt;
+		
+		&lt;cfset this.hello = arguments.newHello /&gt;
+		 
+		&lt;cfreturn true /&gt;
+	&lt;/cffunction&gt;
+	
+	&lt;cffunction name="setWorld"&gt;
+		&lt;cfargument name="newWorld" type="string" required="true" /&gt;
+		
+		&lt;cfset this.world = arguments.newWorld /&gt;
+		 
+		&lt;cfreturn true /&gt;
+	&lt;/cffunction&gt;
+	
+	&lt;cffunction name="getHello"&gt;
+		&lt;cfreturn this.hello /&gt;
+	&lt;/cffunction&gt;
+	
+	&lt;cffunction name="getWorld"&gt;
+		&lt;cfreturn this.world /&gt;
+	&lt;/cffunction&gt;
+&lt;/cfcomponent&gt;
+
+&lt;cfset this.hello = "Hello" /&gt;
+&lt;cfset this.world = "world" /&gt;
+
+&lt;cffunction name="sayHello"&gt;
+	&lt;cfreturn this.hello &amp; ", " &amp; this.world &amp; "!" /&gt;
+&lt;/cffunction&gt;
+
+&lt;cffunction name="setHello"&gt;
+	&lt;cfargument name="newHello" type="string" required="true" /&gt;
+	
+	&lt;cfset this.hello = arguments.newHello /&gt;
+	 
+	&lt;cfreturn true /&gt;
+&lt;/cffunction&gt;
+
+&lt;cffunction name="setWorld"&gt;
+	&lt;cfargument name="newWorld" type="string" required="true" /&gt;
+	
+	&lt;cfset this.world = arguments.newWorld /&gt;
+	 
+	&lt;cfreturn true /&gt;
+&lt;/cffunction&gt;
+
+&lt;cffunction name="getHello"&gt;
+	&lt;cfreturn this.hello /&gt;
+&lt;/cffunction&gt;
+
+&lt;cffunction name="getWorld"&gt;
+	&lt;cfreturn this.world /&gt;
+&lt;/cffunction&gt;
+
+
+&lt;b&gt;sayHello()&lt;/b&gt;
+&lt;cfoutput&gt;&lt;p&gt;#sayHello()#&lt;/p&gt;&lt;/cfoutput&gt;
+&lt;b&gt;getHello()&lt;/b&gt;
+&lt;cfoutput&gt;&lt;p&gt;#getHello()#&lt;/p&gt;&lt;/cfoutput&gt;
+&lt;b&gt;getWorld()&lt;/b&gt;
+&lt;cfoutput&gt;&lt;p&gt;#getWorld()#&lt;/p&gt;&lt;/cfoutput&gt;
+&lt;b&gt;setHello("Hola")&lt;/b&gt;
+&lt;cfoutput&gt;&lt;p&gt;#setHello("Hola")#&lt;/p&gt;&lt;/cfoutput&gt;
+&lt;b&gt;setWorld("mundo")&lt;/b&gt;
+&lt;cfoutput&gt;&lt;p&gt;#setWorld("mundo")#&lt;/p&gt;&lt;/cfoutput&gt;
+&lt;b&gt;sayHello()&lt;/b&gt;
+&lt;cfoutput&gt;&lt;p&gt;#sayHello()#&lt;/p&gt;&lt;/cfoutput&gt;
+&lt;b&gt;getHello()&lt;/b&gt;
+&lt;cfoutput&gt;&lt;p&gt;#getHello()#&lt;/p&gt;&lt;/cfoutput&gt;
+&lt;b&gt;getWorld()&lt;/b&gt;
+&lt;cfoutput&gt;&lt;p&gt;#getWorld()#&lt;/p&gt;&lt;/cfoutput&gt;
+</code></pre>
+<h3>CFScript</h3>
+<p><em><strong>C</strong>old<strong>F</strong>usion <strong>S</strong>cript</em><br>
+In recent years, the ColdFusion language has added script syntax to mirror tag functionality. When using an up-to-date CF server, almost all functionality is available using scrypt syntax.</p>
+<h2>Further Reading</h2>
+<p>The links provided here below are just to get an understanding of the topic, feel free to Google and find specific examples.</p>
+<ol>
+<li><a href="https://helpx.adobe.com/coldfusion/cfml-reference/topics.html" rel="nofollow">Coldfusion Reference From Adobe</a></li>
+<li><a href="http://cfdocs.org/" rel="nofollow">Open Source Documentation</a></li>
+</ol>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Wayne Boka", "http://wboka.github.io"]
+- ["Kevin Morris", "https://twitter.com/kevinmorris"]
+</code></pre>

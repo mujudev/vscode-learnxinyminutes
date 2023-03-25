@@ -1,0 +1,216 @@
+<h1>ShutIt</h1>
+<p>ShutIt is an shell automation framework designed to be easy to use.</p>
+<p>It is a wrapper around a Python-based expect clone (pexpect).</p>
+<p>You can look at it as 'expect without the pain'.</p>
+<p>It is available as a pip install.</p>
+<h2>Hello World</h2>
+<p>Starting with the simplest example. Create a file called example.py:</p>
+<div class="highlight highlight-source-python"><pre class="notranslate"><span class="pl-k">import</span> <span class="pl-s1">shutit</span>
+<span class="pl-s1">session</span> <span class="pl-c1">=</span> <span class="pl-s1">shutit</span>.<span class="pl-en">create_session</span>(<span class="pl-s">'bash'</span>)
+<span class="pl-s1">session</span>.<span class="pl-en">send</span>(<span class="pl-s">'echo Hello World'</span>, <span class="pl-s1">echo</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)</pre></div>
+<p>Running this with:</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">python example.py</pre></div>
+<p>outputs:</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">$ python example.py
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>Hello World<span class="pl-pds">"</span></span>
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>Hello World<span class="pl-pds">"</span></span>
+Hello World
+Ians-MacBook-Air.local:ORIGIN_ENV:RhuebR2T#</pre></div>
+<p>The first argument to 'send' is the command you want to run. The 'echo'<br>
+argument outputs the terminal interactions. By default ShutIt is silent.</p>
+<p>'send' takes care of all the messing around with prompts and 'expects' that<br>
+you might be familiar with from expect.</p>
+<h2>Log Into a Server</h2>
+<p>Let's say you want to log into a server and run a command. Change example.py<br>
+to:</p>
+<div class="highlight highlight-source-python"><pre class="notranslate"><span class="pl-k">import</span> <span class="pl-s1">shutit</span>
+<span class="pl-s1">session</span> <span class="pl-c1">=</span> <span class="pl-s1">shutit</span>.<span class="pl-en">create_session</span>(<span class="pl-s">'bash'</span>)
+<span class="pl-s1">session</span>.<span class="pl-en">login</span>(<span class="pl-s">'ssh you@example.com'</span>, <span class="pl-s1">user</span><span class="pl-c1">=</span><span class="pl-s">'you'</span>, <span class="pl-s1">password</span><span class="pl-c1">=</span><span class="pl-s">'mypassword'</span>)
+<span class="pl-s1">session</span>.<span class="pl-en">send</span>(<span class="pl-s">'hostname'</span>, <span class="pl-s1">echo</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)
+<span class="pl-s1">session</span>.<span class="pl-en">logout</span>()</pre></div>
+<p>which will log you into your server (if you replace with your details) and<br>
+output the hostname.</p>
+<pre class="notranslate"><code class="notranslate">$ python example.py
+hostname
+hostname
+example.com
+example.com:cgoIsdVv:heDa77HB#
+</code></pre>
+<p>Obviously that's insecure! Instead you can run:</p>
+<div class="highlight highlight-source-python"><pre class="notranslate"><span class="pl-k">import</span> <span class="pl-s1">shutit</span>
+<span class="pl-s1">session</span> <span class="pl-c1">=</span> <span class="pl-s1">shutit</span>.<span class="pl-en">create_session</span>(<span class="pl-s">'bash'</span>)
+<span class="pl-s1">password</span> <span class="pl-c1">=</span> <span class="pl-s1">session</span>.<span class="pl-en">get_input</span>(<span class="pl-s">''</span>, <span class="pl-s1">ispass</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)
+<span class="pl-s1">session</span>.<span class="pl-en">login</span>(<span class="pl-s">'ssh you@example.com'</span>, <span class="pl-s1">user</span><span class="pl-c1">=</span><span class="pl-s">'you'</span>, <span class="pl-s1">password</span><span class="pl-c1">=</span><span class="pl-s1">password</span>)
+<span class="pl-s1">session</span>.<span class="pl-en">send</span>(<span class="pl-s">'hostname'</span>, <span class="pl-s1">echo</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)
+<span class="pl-s1">session</span>.<span class="pl-en">logout</span>()</pre></div>
+<p>which forces you to input the password:</p>
+<pre class="notranslate"><code class="notranslate">$ python example.py
+Input Secret:
+hostname
+hostname
+example.com
+example.com:cgoIsdVv:heDa77HB#
+</code></pre>
+<p>Again, the 'login' method handles the changing prompt from a login. You give<br>
+ShutIt the login command, the user you expect to log in as, and a password<br>
+(if needed), and ShutIt takes care of the rest.</p>
+<p>'logout' handles the ending of a 'login', handling any changes to the prompt<br>
+for you.</p>
+<h2>Log Into Multiple Servers</h2>
+<p>Let's say you have a server farm of two servers, and want to log onto both.<br>
+Just create two sessions and run similar login and send commands:</p>
+<div class="highlight highlight-source-python"><pre class="notranslate"><span class="pl-k">import</span> <span class="pl-s1">shutit</span>
+<span class="pl-s1">session1</span> <span class="pl-c1">=</span> <span class="pl-s1">shutit</span>.<span class="pl-en">create_session</span>(<span class="pl-s">'bash'</span>)
+<span class="pl-s1">session2</span> <span class="pl-c1">=</span> <span class="pl-s1">shutit</span>.<span class="pl-en">create_session</span>(<span class="pl-s">'bash'</span>)
+<span class="pl-s1">password1</span> <span class="pl-c1">=</span> <span class="pl-s1">session1</span>.<span class="pl-en">get_input</span>(<span class="pl-s">'Password for server1'</span>, <span class="pl-s1">ispass</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)
+<span class="pl-s1">password2</span> <span class="pl-c1">=</span> <span class="pl-s1">session2</span>.<span class="pl-en">get_input</span>(<span class="pl-s">'Password for server2'</span>, <span class="pl-s1">ispass</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)
+<span class="pl-s1">session1</span>.<span class="pl-en">login</span>(<span class="pl-s">'ssh you@one.example.com'</span>, <span class="pl-s1">user</span><span class="pl-c1">=</span><span class="pl-s">'you'</span>, <span class="pl-s1">password</span><span class="pl-c1">=</span><span class="pl-s1">password1</span>)
+<span class="pl-s1">session2</span>.<span class="pl-en">login</span>(<span class="pl-s">'ssh you@two.example.com'</span>, <span class="pl-s1">user</span><span class="pl-c1">=</span><span class="pl-s">'you'</span>, <span class="pl-s1">password</span><span class="pl-c1">=</span><span class="pl-s1">password2</span>)
+<span class="pl-s1">session1</span>.<span class="pl-en">send</span>(<span class="pl-s">'hostname'</span>, <span class="pl-s1">echo</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)
+<span class="pl-s1">session2</span>.<span class="pl-en">send</span>(<span class="pl-s">'hostname'</span>, <span class="pl-s1">echo</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)
+<span class="pl-s1">session1</span>.<span class="pl-en">logout</span>()
+<span class="pl-s1">session2</span>.<span class="pl-en">logout</span>()</pre></div>
+<p>would output:</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">$ python example.py
+Password <span class="pl-k">for</span> server1
+Input Secret:
+
+Password <span class="pl-k">for</span> server2
+Input Secret:
+hostname
+hostname
+one.example.com
+one.example.com:Fnh2pyFj:qkrsmUNs# hostname
+hostname
+two.example.com
+two.example.com:Gl2lldEo:D3FavQjA#</pre></div>
+<h2>Example: Monitor Multiple Servers</h2>
+<p>We can turn the above into a simple monitoring tool by adding some logic to<br>
+examine the output of a command:</p>
+<div class="highlight highlight-source-python"><pre class="notranslate"><span class="pl-k">import</span> <span class="pl-s1">shutit</span>
+<span class="pl-s1">capacity_command</span><span class="pl-c1">=</span><span class="pl-s">"""df / | awk '{print $5}' | tail -1 | sed s/[^0-9]//"""</span>
+<span class="pl-s1">session1</span> <span class="pl-c1">=</span> <span class="pl-s1">shutit</span>.<span class="pl-en">create_session</span>(<span class="pl-s">'bash'</span>)
+<span class="pl-s1">session2</span> <span class="pl-c1">=</span> <span class="pl-s1">shutit</span>.<span class="pl-en">create_session</span>(<span class="pl-s">'bash'</span>)
+<span class="pl-s1">password1</span> <span class="pl-c1">=</span> <span class="pl-s1">session</span>.<span class="pl-en">get_input</span>(<span class="pl-s">'Password for server1'</span>, <span class="pl-s1">ispass</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)
+<span class="pl-s1">password2</span> <span class="pl-c1">=</span> <span class="pl-s1">session</span>.<span class="pl-en">get_input</span>(<span class="pl-s">'Password for server2'</span>, <span class="pl-s1">ispass</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)
+<span class="pl-s1">session1</span>.<span class="pl-en">login</span>(<span class="pl-s">'ssh you@one.example.com'</span>, <span class="pl-s1">user</span><span class="pl-c1">=</span><span class="pl-s">'you'</span>, <span class="pl-s1">password</span><span class="pl-c1">=</span><span class="pl-s1">password1</span>)
+<span class="pl-s1">session2</span>.<span class="pl-en">login</span>(<span class="pl-s">'ssh you@two.example.com'</span>, <span class="pl-s1">user</span><span class="pl-c1">=</span><span class="pl-s">'you'</span>, <span class="pl-s1">password</span><span class="pl-c1">=</span><span class="pl-s1">password2</span>)
+<span class="pl-s1">capacity</span> <span class="pl-c1">=</span> <span class="pl-s1">session1</span>.<span class="pl-en">send_and_get_output</span>(<span class="pl-s1">capacity_command</span>)
+<span class="pl-k">if</span> <span class="pl-en">int</span>(<span class="pl-s1">capacity</span>) <span class="pl-c1">&lt;</span> <span class="pl-c1">10</span>:
+	<span class="pl-en">print</span>(<span class="pl-s">'RUNNING OUT OF SPACE ON server1!'</span>)
+<span class="pl-s1">capacity</span> <span class="pl-c1">=</span> <span class="pl-s1">session2</span>.<span class="pl-en">send_and_get_output</span>(<span class="pl-s1">capacity_command</span>)
+<span class="pl-k">if</span> <span class="pl-en">int</span>(<span class="pl-s1">capacity</span>) <span class="pl-c1">&lt;</span> <span class="pl-c1">10</span>:
+	<span class="pl-en">print</span>(<span class="pl-s">'RUNNING OUT OF SPACE ON server2!'</span>)
+<span class="pl-s1">session1</span>.<span class="pl-en">logout</span>()
+<span class="pl-s1">session2</span>.<span class="pl-en">logout</span>()</pre></div>
+<p>Here you use the 'send_and_get_output' method to retrieve the output of the<br>
+capacity command (df).</p>
+<p>There are much more elegant ways to do the above (e.g. have a dictionary of the<br>
+servers to iterate over), but it's up to you how clever you need the Python to<br>
+be.</p>
+<h2>More Intricate IO - Expecting</h2>
+<p>Let's say you have an interaction with an interactive command line application<br>
+you want to automate. Here we will use telnet as a trivial example:</p>
+<div class="highlight highlight-source-python"><pre class="notranslate"><span class="pl-k">import</span> <span class="pl-s1">shutit</span>
+<span class="pl-s1">session</span> <span class="pl-c1">=</span> <span class="pl-s1">shutit</span>.<span class="pl-en">create_session</span>(<span class="pl-s">'bash'</span>)
+<span class="pl-s1">session</span>.<span class="pl-en">send</span>(<span class="pl-s">'telnet'</span>, <span class="pl-s1">expect</span><span class="pl-c1">=</span><span class="pl-s">'elnet&gt;'</span>, <span class="pl-s1">echo</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)
+<span class="pl-s1">session</span>.<span class="pl-en">send</span>(<span class="pl-s">'open google.com 80'</span>, <span class="pl-s1">expect</span><span class="pl-c1">=</span><span class="pl-s">'scape character'</span>, <span class="pl-s1">echo</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)
+<span class="pl-s1">session</span>.<span class="pl-en">send</span>(<span class="pl-s">'GET /'</span>, <span class="pl-s1">echo</span><span class="pl-c1">=</span><span class="pl-c1">True</span>, <span class="pl-s1">check_exit</span><span class="pl-c1">=</span><span class="pl-c1">False</span>)
+<span class="pl-s1">session</span>.<span class="pl-en">logout</span>()</pre></div>
+<p>Note the 'expect' argument. You only need to give a subset of telnet's<br>
+prompt to match and continue.</p>
+<p>Note also the 'check_exit' argument in the above, which is new. We'll come back<br>
+to that. The output of the above is:</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">$ python example.py
+telnet
+telnet<span class="pl-k">&gt;</span> open google.com 80
+Trying 216.58.214.14...
+Connected to google.com.
+Escape character is <span class="pl-s"><span class="pl-pds">'</span>^]<span class="pl-pds">'</span></span>.
+GET /
+HTTP/1.0 302 Found
+Cache-Control: private
+Content-Type: text/html<span class="pl-k">;</span> charset=UTF-8
+Referrer-Policy: no-referrer
+Location: http://www.google.co.uk/<span class="pl-k">?</span>gfe_rd=cr<span class="pl-k">&amp;</span>ei=huczWcj3GfTW8gfq0paQDA
+Content-Length: 261
+Date: Sun, 04 Jun 2017 10:57:10 GMT
+
+<span class="pl-k">&lt;</span>HTML&gt;&lt;HEAD&gt;&lt;meta http-equiv=<span class="pl-s"><span class="pl-pds">"</span>content-type<span class="pl-pds">"</span></span> content=<span class="pl-s"><span class="pl-pds">"</span>text/html;charset=utf-8<span class="pl-pds">"</span></span><span class="pl-k">&gt;</span>
+<span class="pl-k">&lt;</span>TITLE<span class="pl-k">&gt;</span>302 Moved<span class="pl-k">&lt;</span>/TITLE&gt;&lt;/HEAD&gt;&lt;BODY<span class="pl-k">&gt;</span>
+<span class="pl-k">&lt;</span>H<span class="pl-k">1&gt;</span>302 Moved<span class="pl-k">&lt;</span>/H<span class="pl-k">1&gt;</span>
+The document has moved
+<span class="pl-k">&lt;</span>A HREF=<span class="pl-s"><span class="pl-pds">"</span>http://www.google.co.uk/?gfe_rd=cr&amp;amp;ei=huczWcj3GfTW8gfq0paQDA<span class="pl-pds">"</span></span><span class="pl-k">&gt;</span>
+here
+<span class="pl-k">&lt;</span>/A<span class="pl-k">&gt;</span>.
+<span class="pl-k">&lt;</span>/BODY&gt;&lt;/HTML<span class="pl-k">&gt;</span>
+Connection closed by foreign host.</pre></div>
+<p>Now back to 'check_exit=False'. Since the telnet command returns a failure exit<br>
+code (1) and we don't want the script to fail, you set 'check_exit=False' to<br>
+let ShutIt know you don't care about the exit code.</p>
+<p>If you didn't pass that argument in, ShutIt gives you an interactive terminal<br>
+if there is a terminal to communicate with. This is called a 'pause point'.</p>
+<h2>Pause Points</h2>
+<p>You can trigger a 'pause point' at any point by calling</p>
+<div class="highlight highlight-source-python"><pre class="notranslate">[...]
+<span class="pl-s1">session</span>.<span class="pl-en">pause_point</span>(<span class="pl-s">'This is a pause point'</span>)
+[...]</pre></div>
+<p>within your script, and then continue with the script by hitting CTRL and ']'<br>
+at the same time. This is great for debugging: add a pause point, have a look<br>
+around, then continue. Try this:</p>
+<div class="highlight highlight-source-python"><pre class="notranslate"><span class="pl-k">import</span> <span class="pl-s1">shutit</span>
+<span class="pl-s1">session</span> <span class="pl-c1">=</span> <span class="pl-s1">shutit</span>.<span class="pl-en">create_session</span>(<span class="pl-s">'bash'</span>)
+<span class="pl-s1">session</span>.<span class="pl-en">pause_point</span>(<span class="pl-s">'Have a look around!'</span>)
+<span class="pl-s1">session</span>.<span class="pl-en">send</span>(<span class="pl-s">'echo "Did you enjoy your pause point?"'</span>, <span class="pl-s1">echo</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)</pre></div>
+<p>with output like this:</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">$ python example.py
+Have a look around<span class="pl-k">!</span>
+
+Ians-Air.home:ORIGIN_ENV:I00LA1Mq#  bash
+imiell@Ians-Air:/space/git/shutit  ⑂ master +    
+CTRL-] caught, continuing with run...
+2017-06-05 15:12:33,577 INFO: Sending:  <span class="pl-c1">exit</span>
+2017-06-05 15:12:33,633 INFO: Output (squashed):  exitexitIans-Air.home:ORIGIN_ENV:I00LA1Mq#  [...]
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>Did you enjoy your pause point?<span class="pl-pds">"</span></span>
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>Did you enjoy your pause point?<span class="pl-pds">"</span></span>
+Did you enjoy your pause point<span class="pl-k">?</span>
+Ians-Air.home:ORIGIN_ENV:I00LA1Mq#</pre></div>
+<h2>More Intricate IO - Backgrounding</h2>
+<p>Returning to our 'monitoring multiple servers' example, let's imagine we<br>
+have a long-running task that we want to run on each server. By default, ShutIt<br>
+works serially which would take a long time. But we can run tasks in the<br>
+background to speed things up.</p>
+<p>Here you can try an example with the trivial command: 'sleep 60'.</p>
+<div class="highlight highlight-source-python"><pre class="notranslate"><span class="pl-k">import</span> <span class="pl-s1">shutit</span>
+<span class="pl-k">import</span> <span class="pl-s1">time</span>
+<span class="pl-s1">long_command</span><span class="pl-c1">=</span><span class="pl-s">"""sleep 60"""</span>
+<span class="pl-s1">session1</span> <span class="pl-c1">=</span> <span class="pl-s1">shutit</span>.<span class="pl-en">create_session</span>(<span class="pl-s">'bash'</span>)
+<span class="pl-s1">session2</span> <span class="pl-c1">=</span> <span class="pl-s1">shutit</span>.<span class="pl-en">create_session</span>(<span class="pl-s">'bash'</span>)
+<span class="pl-s1">password1</span> <span class="pl-c1">=</span> <span class="pl-s1">session1</span>.<span class="pl-en">get_input</span>(<span class="pl-s">'Password for server1'</span>, <span class="pl-s1">ispass</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)
+<span class="pl-s1">password2</span> <span class="pl-c1">=</span> <span class="pl-s1">session2</span>.<span class="pl-en">get_input</span>(<span class="pl-s">'Password for server2'</span>, <span class="pl-s1">ispass</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)
+<span class="pl-s1">session1</span>.<span class="pl-en">login</span>(<span class="pl-s">'ssh you@one.example.com'</span>, <span class="pl-s1">user</span><span class="pl-c1">=</span><span class="pl-s">'you'</span>, <span class="pl-s1">password</span><span class="pl-c1">=</span><span class="pl-s1">password1</span>)
+<span class="pl-s1">session2</span>.<span class="pl-en">login</span>(<span class="pl-s">'ssh you@two.example.com'</span>, <span class="pl-s1">user</span><span class="pl-c1">=</span><span class="pl-s">'you'</span>, <span class="pl-s1">password</span><span class="pl-c1">=</span><span class="pl-s1">password2</span>)
+<span class="pl-s1">start</span> <span class="pl-c1">=</span> <span class="pl-s1">time</span>.<span class="pl-en">time</span>()
+<span class="pl-s1">session1</span>.<span class="pl-en">send</span>(<span class="pl-s1">long_command</span>, <span class="pl-s1">background</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)
+<span class="pl-s1">session2</span>.<span class="pl-en">send</span>(<span class="pl-s1">long_command</span>, <span class="pl-s1">background</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)
+<span class="pl-en">print</span>(<span class="pl-s">'That took: '</span> <span class="pl-c1">+</span> <span class="pl-en">str</span>(<span class="pl-s1">time</span>.<span class="pl-en">time</span>() <span class="pl-c1">-</span> <span class="pl-s1">start</span>) <span class="pl-c1">+</span> <span class="pl-s">' seconds to fire'</span>)
+<span class="pl-s1">session1</span>.<span class="pl-en">wait</span>()
+<span class="pl-s1">session2</span>.<span class="pl-en">wait</span>()
+<span class="pl-en">print</span>(<span class="pl-s">'That took: '</span> <span class="pl-c1">+</span> <span class="pl-en">str</span>(<span class="pl-s1">time</span>.<span class="pl-en">time</span>() <span class="pl-c1">-</span> <span class="pl-s1">start</span>) <span class="pl-c1">+</span> <span class="pl-s">' seconds to complete'</span>)</pre></div>
+<p>My laptop says it took 0.5 seconds to run fire those two commands, and then just<br>
+over a minute to complete (using the 'wait' method).</p>
+<p>Again, this is trivial, but imagine you have hundreds of servers to manage like<br>
+this and you can see the power it can bring in a few lines of code and one<br>
+Python import.</p>
+<h2>Learn More</h2>
+<p>There's a lot more that can be done with ShutIt.</p>
+<p>To learn more, see:</p>
+<p><a href="https://ianmiell.github.io/shutit/" rel="nofollow">ShutIt</a><br>
+<a href="https://github.com/ianmiell/shutit/blob/master/README.md">GitHub</a></p>
+<p>It's a broader automation framework, and the above is its 'standalone mode'.</p>
+<p>Feedback, feature requests, 'how do I?'s highly appreciated! Reach me at<br>
+<a href="https://twitter.com/ianmiell" rel="nofollow">@ianmiell</a></p>
+<hr>
+<h1>Contributors</h1>
+<pre class="notranslate"><code class="notranslate">- ["Ian Miell", "http://ian.meirionconsulting.tk"]
+</code></pre>

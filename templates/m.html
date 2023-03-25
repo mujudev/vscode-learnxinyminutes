@@ -1,0 +1,283 @@
+<h1>M</h1>
+<p>M, or MUMPS (Massachusetts General Hospital Utility Multi-Programming System) is<br>
+a procedural language with a built-in NoSQL database. Or, it’s a database with<br>
+an integrated language optimized for accessing and manipulating that database.<br>
+A key feature of M is that accessing local variables in memory and persistent<br>
+storage use the same basic syntax, so there's no separate query<br>
+language to remember. This makes it fast to program with, especially for<br>
+beginners. M's syntax was designed to be concise in an era where<br>
+computer memory was expensive and limited. This concise style means that a lot<br>
+more fits on one screen without scrolling.</p>
+<p>The M database is a hierarchical key-value store designed for high-throughput<br>
+transaction processing. The database is organized into tree structures called<br>
+"globals", which are sparse data structures with parallels to modern formats<br>
+like JSON.</p>
+<p>Originally designed in 1966 for the healthcare applications, M continues to be<br>
+used widely by healthcare systems and financial institutions for high-throughput<br>
+real-time applications.</p>
+<h3>Example</h3>
+<p>Here's an example M program to calculate the Fibonacci series:</p>
+<pre class="notranslate"><code class="notranslate">fib ; compute the first few Fibonacci terms
+    new i,a,b,sum
+    set (a,b)=1 ; Initial conditions
+    for i=1:1 do  quit:sum&gt;1000
+    . set sum=a+b
+    . write !,sum
+    . set a=b,b=sum
+</code></pre>
+<h3>Comments</h3>
+<pre class="notranslate"><code class="notranslate">;   Comments start with a semicolon (;)
+</code></pre>
+<h3>Data Types</h3>
+<p>M has two data types:</p>
+<pre class="notranslate"><code class="notranslate">;   Numbers - no commas, leading and trailing 0 removed.
+;       Scientific notation with 'E'.
+;       Floats with IEEE 754 double-precision values (15 digits of precision)
+;       Examples: 20, 1e3 (stored as 1000), 0500.20 (stored as 500.2)
+;   Strings - Characters enclosed in double quotes.
+;       "" is the null string. Use "" within a string for "
+;       Examples: "hello", "Scrooge said, ""Bah, Humbug!"""
+</code></pre>
+<h3>Commands</h3>
+<p>Commands are case insensitive, and have a shortened abbreviation, often the first letter. Commands have zero or more arguments,depending on the command. M is whitespace-aware. Spaces are treated as a delimiter between commands and arguments. Each command is separated from its arguments by 1 space. Commands with zero arguments are followed by 2 spaces.</p>
+<h4>W(rite)</h4>
+<p>Print data to the current device.</p>
+<pre class="notranslate"><code class="notranslate">WRITE !,"hello world" 
+</code></pre>
+<p>! is syntax for a new line. Multiple statements can be provided as additional arguments:</p>
+<pre class="notranslate"><code class="notranslate">w !,"foo bar"," ","baz" 
+</code></pre>
+<h4>R(ead)</h4>
+<p>Retrieve input from the user</p>
+<pre class="notranslate"><code class="notranslate">READ var
+r !,"Wherefore art thou Romeo? ",why
+</code></pre>
+<p>Multiple arguments can be passed to a read command. Constants are outputted. Variables are retrieved from the user. The terminal waits for the user to enter the first variable before displaying the second prompt.</p>
+<pre class="notranslate"><code class="notranslate">r !,"Better one, or two? ",lorem," Better two, or three? ",ipsum
+</code></pre>
+<h4>S(et)</h4>
+<p>Assign a value to a variable</p>
+<pre class="notranslate"><code class="notranslate">SET name="Benjamin Franklin"
+s centi=0.01,micro=10E-6
+w !,centi,!,micro
+
+;.01
+;.00001
+</code></pre>
+<h4>K(ill)</h4>
+<p>Remove a variable from memory or remove a database entry from disk.</p>
+<pre class="notranslate"><code class="notranslate">KILL centi
+k micro
+</code></pre>
+<h3>Globals and Arrays</h3>
+<p>In addition to local variables, M has persistent variables stored to disk called <em>globals</em>. Global names must start with a <strong>caret</strong> (<strong>^</strong>). Globals are the built-in database of M.</p>
+<p>Any variable can be an array with the assignment of a <em>subscript</em>. Arrays are sparse and do not have a predefined size. Arrays should be visualized like trees, where subscripts are branches and assigned values are leaves. Not all nodes in an array need to have a value.</p>
+<pre class="notranslate"><code class="notranslate">s ^cars=20
+s ^cars("Tesla",1,"Name")="Model 3"
+s ^cars("Tesla",2,"Name")="Model X"
+s ^cars("Tesla",2,"Doors")=5
+
+w !,^cars 
+; 20
+w !,^cars("Tesla")
+; null value - there's no value assigned to this node but it has children
+w !,^cars("Tesla",1,"Name")
+; Model 3
+</code></pre>
+<p>Arrays are automatically sorted in order. Take advantage of the built-in sorting by setting your value of interest as the last child subscript of an array rather than its value.</p>
+<pre class="notranslate"><code class="notranslate">; A log of temperatures by date and time
+s ^TEMPS("11/12","0600",32)=""
+s ^TEMPS("11/12","1030",48)=""
+s ^TEMPS("11/12","1400",49)=""
+s ^TEMPS("11/12","1700",43)=""
+</code></pre>
+<h3>Operators</h3>
+<div class="highlight highlight-text-html-django"><pre class="notranslate">; Assignment:       =
+; Unary:            +   Convert a string value into a numeric value.
+; Arthmetic:
+;                   +   addition
+­;                   -   subtraction
+;                   *   multiplication
+;                   /   floating-point division
+;                   \   integer division
+;                   #   modulo
+;                   **  exponentiation
+; Logical:  
+;                   &amp;   and
+;                   !   or
+;                   '   not
+; Comparison:
+;                   =   equal 
+;                   '=  not equal
+;                   &gt;   greater than
+;                   &lt;   less than
+;                   '&gt;  not greater / less than or equal to
+;                   '&lt;  not less / greater than or equal to
+; String operators:
+;                   _   concatenate
+;                   [   contains ­          a contains b 
+;                   ]]  sorts after  ­      a comes after b
+;                   '[  does not contain
+;                   ']] does not sort after</pre></div>
+<h4>Order of operations</h4>
+<p>Operations in M are <em>strictly</em> evaluated left to right. No operator has precedence over any other.<br>
+You should use parentheses to group expressions.</p>
+<pre class="notranslate"><code class="notranslate">w 5+3*20
+;160
+;You probably wanted 65
+w 5+(3*20) 
+</code></pre>
+<h3>Flow Control, Blocks, &amp; Code Structure</h3>
+<p>A single M file is called a <em>routine</em>. Within a given routine, you can break your code up into smaller chunks with <em>tags</em>. The tag starts in column 1 and the commands pertaining to that tag are indented.</p>
+<p>A tag can accept parameters and return a value, this is a function. A function is called with '$$':</p>
+<pre class="notranslate"><code class="notranslate">; Execute the 'tag' function, which has two parameters, and write the result.
+w !,$$tag^routine(a,b) 
+</code></pre>
+<p>M has an execution stack. When all levels of the stack have returned, the program ends. Levels are added to the stack with <em>do</em> commands and removed with <em>quit</em> commands.</p>
+<h4>D(o)</h4>
+<p>With an argument: execute a block of code &amp; add a level to the stack.</p>
+<pre class="notranslate"><code class="notranslate">d ^routine    ;run a routine from the beginning. 
+;             ;routines are identified by a caret.
+d tag         ;run a tag in the current routine
+d tag^routine ;run a tag in different routine
+</code></pre>
+<p>Argumentless do: used to create blocks of code. The block is indented with a period for each level of the block:</p>
+<pre class="notranslate"><code class="notranslate">set a=1
+if a=1 do  
+. write !,a
+. read b
+. if b &gt; 10 d
+. . w !, b 
+w "hello"
+</code></pre>
+<h4>Q(uit)</h4>
+<p>Stop executing this block and return to the previous stack level.<br>
+Quit can return a value.</p>
+<h4>N(ew)</h4>
+<p>Clear a given variable's value <em>for just this stack level</em>. Useful for preventing side effects.</p>
+<p>Putting all this together, we can create a full example of an M routine:</p>
+<pre class="notranslate"><code class="notranslate">; RECTANGLE - a routine to deal with rectangle math
+    q ; quit if a specific tag is not called
+
+main 
+    n length,width ; New length and width so any previous value doesn't persist
+    w !,"Welcome to RECTANGLE. Enter the dimensions of your rectangle."
+    r !,"Length? ",length,!,"Width? ",width
+    d area(length,width)            ;Do a tag
+    s per=$$perimeter(length,width) ;Get the value of a function
+    w !,"Perimeter: ",per
+    q
+
+area(length,width)  ; This is a tag that accepts parameters. 
+                    ; It's not a function since it quits with no value.
+    w !, "Area: ",length*width
+    q ; Quit: return to the previous level of the stack.
+
+perimeter(length,width)
+    q 2*(length+width) ; Quits with a value; thus a function
+</code></pre>
+<h3>Conditionals, Looping and $Order()</h3>
+<p>F(or) loops can follow a few different patterns:</p>
+<div class="highlight highlight-text-html-django"><pre class="notranslate">;Finite loop with counter
+;f var=start:increment:stop
+
+f i=0:5:25 w i," " ;0 5 10 15 20 25 
+
+; Infinite loop with counter
+; The counter will keep incrementing forever. Use a conditional with Quit to get out of the loop.
+;f var=start:increment 
+
+f j=1:1 w j," " i j&gt;1E3 q ; Print 1-1000 separated by a space
+
+;Argumentless for - infinite loop. Use a conditional with Quit.
+;   Also read as "forever" - f or for followed by two spaces.
+s var=""
+f  s var=var_"%" w !,var i var="%%%%%%%%%%" q  
+; %
+; %%
+; %%%
+; %%%%
+; %%%%%
+; %%%%%%
+; %%%%%%%
+; %%%%%%%%
+; %%%%%%%%%
+; %%%%%%%%%%
+</pre></div>
+<h4>I(f), E(lse), Postconditionals</h4>
+<p>M has an if/else construct for conditional evaluation, but any command can be conditionally executed without an extra if statement using a <em>postconditional</em>. This is a condition that occurs immediately after the command, separated with a colon (:).</p>
+<div class="highlight highlight-text-html-django"><pre class="notranslate">; Conditional using traditional if/else
+r "Enter a number: ",num
+i num&gt;100 w !,"huge"
+e i num&gt;10 w !,"big"
+e w !,"small"
+
+; Postconditionals are especially useful in a for loop.
+; This is the dominant for loop construct:
+;   a 'for' statement
+;   that tests for a 'quit' condition with a postconditional
+;   then 'do'es an indented block for each iteration
+
+s var=""
+f  s var=var_"%" q:var="%%%%%%%%%%" d  ;Read as "Quit if var equals "%%%%%%%%%%"
+. w !,var
+
+;Bonus points - the $L(ength) built-in function makes this even terser
+
+s var=""
+f  s var=var_"%" q:$L(var)&gt;10  d  ;
+. w !,var
+</pre></div>
+<h4>Array Looping - $Order</h4>
+<p>As we saw in the previous example, M has built-in functions called with a single <math-renderer class="js-inline-math" style="display: inline" data-static-url="https://github.githubassets.com/static" data-run-id="a778c0d0f5e82bed7266b548b08a8d0a">$, compared to user-defined functions called with $</math-renderer>$. These functions have shortened abbreviations, like commands.<br>
+One of the most useful is <strong>$Order()</strong> / $O(). When given an array subscript, $O returns the next subscript in that array. When it reaches the last subscript, it returns "".</p>
+<div class="highlight highlight-text-html-django"><pre class="notranslate">;Let's call back to our ^TEMPS global from earlier:
+; A log of temperatures by date and time
+s ^TEMPS("11/12","0600",32)=""
+s ^TEMPS("11/12","0600",48)=""
+s ^TEMPS("11/12","1400",49)=""
+s ^TEMPS("11/12","1700",43)=""
+; Some more
+s ^TEMPS("11/16","0300",27)=""
+s ^TEMPS("11/16","1130",32)=""
+s ^TEMPS("11/16","1300",47)=""
+
+;Here's a loop to print out all the dates we have temperatures for:
+n date,time ; Initialize these variables with ""
+
+; This line reads: forever; set date as the next date in ^TEMPS.
+; If date was set to "", it means we're at the end, so quit.
+; Do the block below
+f  s date=$ORDER(^TEMPS(date)) q:date="" d
+. w !,date
+
+; Add in times too:
+f  s date=$ORDER(^TEMPS(date)) q:date=""  d
+. w !,"Date: ",date
+. f  s time=$O(^TEMPS(date,time)) q:time=""  d
+. . w !,"Time: ",time
+
+; Build an index that sorts first by temperature - 
+; what dates and times had a given temperature?
+n date,time,temp
+f  s date=$ORDER(^TEMPS(date)) q:date=""  d
+. f  s time=$O(^TEMPS(date,time)) q:time=""  d
+. . f  s temp=$O(^TEMPS(date,time,temp)) q:temp=""  d
+. . . s ^TEMPINDEX(temp,date,time)=""
+
+;This will produce a global like
+^TEMPINDEX(27,"11/16","0300")
+^TEMPINDEX(32,"11/12","0600")
+^TEMPINDEX(32,"11/16","1130")</pre></div>
+<h2>Further Reading</h2>
+<p>There's lots more to learn about M. A great short tutorial comes from the University of Northern Iowa and  Professor Kevin O'Kane's <a href="https://www.cs.uni.edu/~okane/source/MUMPS-MDH/MumpsTutorial.pdf" rel="nofollow">Introduction to the MUMPS Language</a> presentation.</p>
+<p>To install an M interpreter / database on your computer, try a <a href="https://yottadb.com/product/get-started/" rel="nofollow">YottaDB Docker image</a>.</p>
+<p>YottaDB and its precursor, GT.M, have thorough documentation on all the language features including database transactions, locking, and replication:</p>
+<ul>
+<li><a href="https://docs.yottadb.com/ProgrammersGuide/langfeat.html" rel="nofollow">YottaDB Programmer's Guide</a></li>
+<li><a href="http://tinco.pair.com/bhaskar/gtm/doc/books/pg/UNIX_manual/index.html" rel="nofollow">GT.M Programmer's Guide</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Fred Turkington", "http://z3ugma.github.io"] 
+</code></pre>

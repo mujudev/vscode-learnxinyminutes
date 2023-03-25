@@ -1,0 +1,596 @@
+<h1>Haskell</h1>
+<p>Haskell was designed as a practical, purely functional programming<br>
+language. It's famous for its monads and its type system, but I keep coming back<br>
+to it because of its elegance. Haskell makes coding a real joy for me.</p>
+<div class="highlight highlight-source-haskell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">--</span> Single line comments start with two dashes.</span>
+<span class="pl-c"><span class="pl-c">{-</span> Multiline comments can be enclosed</span>
+<span class="pl-c">in a block like this.</span>
+<span class="pl-c"><span class="pl-c">-}</span></span>
+
+<span class="pl-c"><span class="pl-c">----------------------------------------------------</span></span>
+<span class="pl-c"><span class="pl-c">--</span> 1. Primitive Datatypes and Operators</span>
+<span class="pl-c"><span class="pl-c">----------------------------------------------------</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> You have numbers</span>
+<span class="pl-c1">3</span> <span class="pl-c"><span class="pl-c">--</span> 3</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Math is what you would expect</span>
+<span class="pl-c1">1</span> <span class="pl-k">+</span> <span class="pl-c1">1</span> <span class="pl-c"><span class="pl-c">--</span> 2</span>
+<span class="pl-c1">8</span> <span class="pl-k">-</span> <span class="pl-c1">1</span> <span class="pl-c"><span class="pl-c">--</span> 7</span>
+<span class="pl-c1">10</span> <span class="pl-k">*</span> <span class="pl-c1">2</span> <span class="pl-c"><span class="pl-c">--</span> 20</span>
+<span class="pl-c1">35</span> <span class="pl-k">/</span> <span class="pl-c1">5</span> <span class="pl-c"><span class="pl-c">--</span> 7.0</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Division is not integer division by default</span>
+<span class="pl-c1">35</span> <span class="pl-k">/</span> <span class="pl-c1">4</span> <span class="pl-c"><span class="pl-c">--</span> 8.75</span>
+
+<span class="pl-c"><span class="pl-c">--</span> integer division</span>
+<span class="pl-c1">35</span> <span class="pl-k">`div`</span> <span class="pl-c1">4</span> <span class="pl-c"><span class="pl-c">--</span> 8</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Boolean values are primitives</span>
+<span class="pl-ent"><span class="pl-c1">True</span></span>
+<span class="pl-ent"><span class="pl-c1">False</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> Boolean operations</span>
+<span class="pl-c1">not</span> <span class="pl-ent"><span class="pl-c1">True</span></span> <span class="pl-c"><span class="pl-c">--</span> False</span>
+<span class="pl-c1">not</span> <span class="pl-ent"><span class="pl-c1">False</span></span> <span class="pl-c"><span class="pl-c">--</span> True</span>
+<span class="pl-ent"><span class="pl-c1">True</span></span> <span class="pl-k">&amp;&amp;</span> <span class="pl-ent"><span class="pl-c1">False</span></span> <span class="pl-c"><span class="pl-c">--</span> False</span>
+<span class="pl-ent"><span class="pl-c1">True</span></span> <span class="pl-k">||</span> <span class="pl-ent"><span class="pl-c1">False</span></span> <span class="pl-c"><span class="pl-c">--</span> True</span>
+<span class="pl-c1">1</span> <span class="pl-k">==</span> <span class="pl-c1">1</span> <span class="pl-c"><span class="pl-c">--</span> True</span>
+<span class="pl-c1">1</span> <span class="pl-k">/=</span> <span class="pl-c1">1</span> <span class="pl-c"><span class="pl-c">--</span> False</span>
+<span class="pl-c1">1</span> <span class="pl-k">&lt;</span> <span class="pl-c1">10</span> <span class="pl-c"><span class="pl-c">--</span> True</span>
+
+<span class="pl-c"><span class="pl-c">--</span> In the above examples, `not` is a function that takes one value.</span>
+<span class="pl-c"><span class="pl-c">--</span> Haskell doesn't need parentheses for function calls...all the arguments</span>
+<span class="pl-c"><span class="pl-c">--</span> are just listed after the function. So the general pattern is:</span>
+<span class="pl-c"><span class="pl-c">--</span> func arg1 arg2 arg3...</span>
+<span class="pl-c"><span class="pl-c">--</span> See the section on functions for information on how to write your own.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Strings and characters</span>
+<span class="pl-s"><span class="pl-pds">"</span>This is a string.<span class="pl-pds">"</span></span>
+<span class="pl-s"><span class="pl-pds">'</span>a<span class="pl-pds">'</span></span> <span class="pl-c"><span class="pl-c">--</span> character</span>
+'You cant use single quotes for strings<span class="pl-k">.</span>' <span class="pl-c"><span class="pl-c">--</span> error!</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Strings can be concatenated</span>
+<span class="pl-s"><span class="pl-pds">"</span>Hello <span class="pl-pds">"</span></span> <span class="pl-k">++</span> <span class="pl-s"><span class="pl-pds">"</span>world!<span class="pl-pds">"</span></span> <span class="pl-c"><span class="pl-c">--</span> "Hello world!"</span>
+
+<span class="pl-c"><span class="pl-c">--</span> A string is a list of characters</span>
+[<span class="pl-s"><span class="pl-pds">'</span>H<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>e<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>l<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>l<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>o<span class="pl-pds">'</span></span>] <span class="pl-c"><span class="pl-c">--</span> "Hello"</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Lists can be indexed with the `!!` operator followed by an index</span>
+<span class="pl-s"><span class="pl-pds">"</span>This is a string<span class="pl-pds">"</span></span> <span class="pl-k">!!</span> <span class="pl-c1">0</span> <span class="pl-c"><span class="pl-c">--</span> 'T'</span>
+
+
+<span class="pl-c"><span class="pl-c">----------------------------------------------------</span></span>
+<span class="pl-c"><span class="pl-c">--</span> 2. Lists and Tuples</span>
+<span class="pl-c"><span class="pl-c">----------------------------------------------------</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> Every element in a list must have the same type.</span>
+<span class="pl-c"><span class="pl-c">--</span> These two lists are equal:</span>
+[<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span>, <span class="pl-c1">5</span>]
+[<span class="pl-c1">1</span><span class="pl-k">..</span><span class="pl-c1">5</span>]
+
+<span class="pl-c"><span class="pl-c">--</span> Ranges are versatile.</span>
+[<span class="pl-s"><span class="pl-pds">'</span>A<span class="pl-pds">'</span></span><span class="pl-k">..</span><span class="pl-s"><span class="pl-pds">'</span>F<span class="pl-pds">'</span></span>] <span class="pl-c"><span class="pl-c">--</span> "ABCDEF"</span>
+
+<span class="pl-c"><span class="pl-c">--</span> You can create a step in a range.</span>
+[<span class="pl-c1">0</span>,<span class="pl-c1">2</span><span class="pl-k">..</span><span class="pl-c1">10</span>] <span class="pl-c"><span class="pl-c">--</span> [0, 2, 4, 6, 8, 10]</span>
+[<span class="pl-c1">5</span><span class="pl-k">..</span><span class="pl-c1">1</span>] <span class="pl-c"><span class="pl-c">--</span> [] (Haskell defaults to incrementing)</span>
+[<span class="pl-c1">5</span>,<span class="pl-c1">4</span><span class="pl-k">..</span><span class="pl-c1">1</span>] <span class="pl-c"><span class="pl-c">--</span> [5, 4, 3, 2, 1]</span>
+
+<span class="pl-c"><span class="pl-c">--</span> indexing into a list</span>
+[<span class="pl-c1">1</span><span class="pl-k">..</span><span class="pl-c1">10</span>] <span class="pl-k">!!</span> <span class="pl-c1">3</span> <span class="pl-c"><span class="pl-c">--</span> 4 (zero-based indexing)</span>
+
+<span class="pl-c"><span class="pl-c">--</span> You can also have infinite lists in Haskell!</span>
+[<span class="pl-c1">1</span><span class="pl-k">..</span>] <span class="pl-c"><span class="pl-c">--</span> a list of all the natural numbers</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Infinite lists work because Haskell has "lazy evaluation". This means</span>
+<span class="pl-c"><span class="pl-c">--</span> that Haskell only evaluates things when it needs to. So you can ask for</span>
+<span class="pl-c"><span class="pl-c">--</span> the 1000th element of your list and Haskell will give it to you:</span>
+
+[<span class="pl-c1">1</span><span class="pl-k">..</span>] <span class="pl-k">!!</span> <span class="pl-c1">999</span> <span class="pl-c"><span class="pl-c">--</span> 1000</span>
+
+<span class="pl-c"><span class="pl-c">--</span> And now Haskell has evaluated elements 1 - 1000 of this list...but the</span>
+<span class="pl-c"><span class="pl-c">--</span> rest of the elements of this "infinite" list don't exist yet! Haskell won't</span>
+<span class="pl-c"><span class="pl-c">--</span> actually evaluate them until it needs to.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> joining two lists</span>
+[<span class="pl-c1">1</span><span class="pl-k">..</span><span class="pl-c1">5</span>] <span class="pl-k">++</span> [<span class="pl-c1">6</span><span class="pl-k">..</span><span class="pl-c1">10</span>]
+
+<span class="pl-c"><span class="pl-c">--</span> adding to the head of a list</span>
+<span class="pl-c1">0</span><span class="pl-k">:</span>[<span class="pl-c1">1</span><span class="pl-k">..</span><span class="pl-c1">5</span>] <span class="pl-c"><span class="pl-c">--</span> [0, 1, 2, 3, 4, 5]</span>
+
+<span class="pl-c"><span class="pl-c">--</span> more list operations</span>
+<span class="pl-c1">head</span> [<span class="pl-c1">1</span><span class="pl-k">..</span><span class="pl-c1">5</span>] <span class="pl-c"><span class="pl-c">--</span> 1</span>
+<span class="pl-c1">tail</span> [<span class="pl-c1">1</span><span class="pl-k">..</span><span class="pl-c1">5</span>] <span class="pl-c"><span class="pl-c">--</span> [2, 3, 4, 5]</span>
+<span class="pl-c1">init</span> [<span class="pl-c1">1</span><span class="pl-k">..</span><span class="pl-c1">5</span>] <span class="pl-c"><span class="pl-c">--</span> [1, 2, 3, 4]</span>
+<span class="pl-c1">last</span> [<span class="pl-c1">1</span><span class="pl-k">..</span><span class="pl-c1">5</span>] <span class="pl-c"><span class="pl-c">--</span> 5</span>
+
+<span class="pl-c"><span class="pl-c">--</span> list comprehensions</span>
+[x<span class="pl-k">*</span><span class="pl-c1">2</span> <span class="pl-k">|</span> x <span class="pl-k">&lt;-</span> [<span class="pl-c1">1</span><span class="pl-k">..</span><span class="pl-c1">5</span>]] <span class="pl-c"><span class="pl-c">--</span> [2, 4, 6, 8, 10]</span>
+
+<span class="pl-c"><span class="pl-c">--</span> with a conditional</span>
+[x<span class="pl-k">*</span><span class="pl-c1">2</span> <span class="pl-k">|</span> x <span class="pl-k">&lt;-</span> [<span class="pl-c1">1</span><span class="pl-k">..</span><span class="pl-c1">5</span>], x<span class="pl-k">*</span><span class="pl-c1">2</span> <span class="pl-k">&gt;</span> <span class="pl-c1">4</span>] <span class="pl-c"><span class="pl-c">--</span> [6, 8, 10]</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Every element in a tuple can be a different type, but a tuple has a</span>
+<span class="pl-c"><span class="pl-c">--</span> fixed length.</span>
+<span class="pl-c"><span class="pl-c">--</span> A tuple:</span>
+(<span class="pl-s"><span class="pl-pds">"</span>haskell<span class="pl-pds">"</span></span>, <span class="pl-c1">1</span>)
+
+<span class="pl-c"><span class="pl-c">--</span> accessing elements of a pair (i.e. a tuple of length 2)</span>
+<span class="pl-c1">fst</span> (<span class="pl-s"><span class="pl-pds">"</span>haskell<span class="pl-pds">"</span></span>, <span class="pl-c1">1</span>) <span class="pl-c"><span class="pl-c">--</span> "haskell"</span>
+<span class="pl-c1">snd</span> (<span class="pl-s"><span class="pl-pds">"</span>haskell<span class="pl-pds">"</span></span>, <span class="pl-c1">1</span>) <span class="pl-c"><span class="pl-c">--</span> 1</span>
+
+<span class="pl-c"><span class="pl-c">--</span> pair element accessing does not work on n-tuples (i.e. triple, quadruple, etc)</span>
+<span class="pl-c1">snd</span> (<span class="pl-s"><span class="pl-pds">"</span>snd<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>can't touch this<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>da na na na<span class="pl-pds">"</span></span>) <span class="pl-c"><span class="pl-c">--</span> error! see function below</span>
+
+<span class="pl-c"><span class="pl-c">----------------------------------------------------</span></span>
+<span class="pl-c"><span class="pl-c">--</span> 3. Functions</span>
+<span class="pl-c"><span class="pl-c">----------------------------------------------------</span></span>
+<span class="pl-c"><span class="pl-c">--</span> A simple function that takes two variables</span>
+add a b <span class="pl-k">=</span> a <span class="pl-k">+</span> b
+
+<span class="pl-c"><span class="pl-c">--</span> Note that if you are using ghci (the Haskell interpreter)</span>
+<span class="pl-c"><span class="pl-c">--</span> You'll need to use `let`, i.e.</span>
+<span class="pl-c"><span class="pl-c">--</span> let add a b = a + b</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Using the function</span>
+add <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c"><span class="pl-c">--</span> 3</span>
+
+<span class="pl-c"><span class="pl-c">--</span> You can also put the function name between the two arguments</span>
+<span class="pl-c"><span class="pl-c">--</span> with backticks:</span>
+<span class="pl-c1">1</span> <span class="pl-k">`add`</span> <span class="pl-c1">2</span> <span class="pl-c"><span class="pl-c">--</span> 3</span>
+
+<span class="pl-c"><span class="pl-c">--</span> You can also define functions that have no letters! This lets</span>
+<span class="pl-c"><span class="pl-c">--</span> you define your own operators! Here's an operator that does</span>
+<span class="pl-c"><span class="pl-c">--</span> integer division</span>
+<span class="pl-en">(//)</span> a b <span class="pl-k">=</span> a <span class="pl-k">`div`</span> b
+<span class="pl-c1">35</span> <span class="pl-k">//</span> <span class="pl-c1">4</span> <span class="pl-c"><span class="pl-c">--</span> 8</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Guards: an easy way to do branching in functions</span>
+fib x
+  <span class="pl-k">|</span> x <span class="pl-k">&lt;</span> <span class="pl-c1">2</span> <span class="pl-k">=</span> <span class="pl-c1">1</span>
+  <span class="pl-k">|</span> <span class="pl-c1">otherwise</span> <span class="pl-k">=</span> fib (x <span class="pl-k">-</span> <span class="pl-c1">1</span>) <span class="pl-k">+</span> fib (x <span class="pl-k">-</span> <span class="pl-c1">2</span>)
+
+<span class="pl-c"><span class="pl-c">--</span> Pattern matching is similar. Here we have given three different</span>
+<span class="pl-c"><span class="pl-c">--</span> equations that define fib. Haskell will automatically use the first</span>
+<span class="pl-c"><span class="pl-c">--</span> equation whose left hand side pattern matches the value.</span>
+fib <span class="pl-c1">1</span> <span class="pl-k">=</span> <span class="pl-c1">1</span>
+fib <span class="pl-c1">2</span> <span class="pl-k">=</span> <span class="pl-c1">2</span>
+fib x <span class="pl-k">=</span> fib (x <span class="pl-k">-</span> <span class="pl-c1">1</span>) <span class="pl-k">+</span> fib (x <span class="pl-k">-</span> <span class="pl-c1">2</span>)
+
+<span class="pl-c"><span class="pl-c">--</span> Pattern matching on tuples</span>
+sndOfTriple (_, y, _) <span class="pl-k">=</span> y <span class="pl-c"><span class="pl-c">--</span> use a wild card (_) to bypass naming unused value</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Pattern matching on lists. Here `x` is the first element</span>
+<span class="pl-c"><span class="pl-c">--</span> in the list, and `xs` is the rest of the list. We can write</span>
+<span class="pl-c"><span class="pl-c">--</span> our own map function:</span>
+myMap func <span class="pl-c1">[]</span> <span class="pl-k">=</span> <span class="pl-c1">[]</span>
+myMap func (x<span class="pl-k">:</span>xs) <span class="pl-k">=</span> func x<span class="pl-k">:</span>(myMap func xs)
+
+<span class="pl-c"><span class="pl-c">--</span> Anonymous functions are created with a backslash followed by</span>
+<span class="pl-c"><span class="pl-c">--</span> all the arguments.</span>
+myMap (<span class="pl-k">\</span>x <span class="pl-k">-&gt;</span> x <span class="pl-k">+</span> <span class="pl-c1">2</span>) [<span class="pl-c1">1</span><span class="pl-k">..</span><span class="pl-c1">5</span>] <span class="pl-c"><span class="pl-c">--</span> [3, 4, 5, 6, 7]</span>
+
+<span class="pl-c"><span class="pl-c">--</span> using fold (called `inject` in some languages) with an anonymous</span>
+<span class="pl-c"><span class="pl-c">--</span> function. foldl1 means fold left, and use the first value in the</span>
+<span class="pl-c"><span class="pl-c">--</span> list as the initial value for the accumulator.</span>
+<span class="pl-c1">foldl1</span> (<span class="pl-k">\</span>acc x <span class="pl-k">-&gt;</span> acc <span class="pl-k">+</span> x) [<span class="pl-c1">1</span><span class="pl-k">..</span><span class="pl-c1">5</span>] <span class="pl-c"><span class="pl-c">--</span> 15</span>
+
+<span class="pl-c"><span class="pl-c">----------------------------------------------------</span></span>
+<span class="pl-c"><span class="pl-c">--</span> 4. More functions</span>
+<span class="pl-c"><span class="pl-c">----------------------------------------------------</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> partial application: if you don't pass in all the arguments to a function,</span>
+<span class="pl-c"><span class="pl-c">--</span> it gets "partially applied". That means it returns a function that takes the</span>
+<span class="pl-c"><span class="pl-c">--</span> rest of the arguments.</span>
+
+add a b <span class="pl-k">=</span> a <span class="pl-k">+</span> b
+foo <span class="pl-k">=</span> add <span class="pl-c1">10</span> <span class="pl-c"><span class="pl-c">--</span> foo is now a function that takes a number and adds 10 to it</span>
+foo <span class="pl-c1">5</span> <span class="pl-c"><span class="pl-c">--</span> 15</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Another way to write the same thing</span>
+foo <span class="pl-k">=</span> (<span class="pl-c1">10</span><span class="pl-k">+</span>)
+foo <span class="pl-c1">5</span> <span class="pl-c"><span class="pl-c">--</span> 15</span>
+
+<span class="pl-c"><span class="pl-c">--</span> function composition</span>
+<span class="pl-c"><span class="pl-c">--</span> the operator `.` chains functions together.</span>
+<span class="pl-c"><span class="pl-c">--</span> For example, here foo is a function that takes a value. It adds 10 to it,</span>
+<span class="pl-c"><span class="pl-c">--</span> multiplies the result of that by 4, and then returns the final value.</span>
+foo <span class="pl-k">=</span> (<span class="pl-c1">4</span><span class="pl-k">*</span>) <span class="pl-k">.</span> (<span class="pl-c1">10</span><span class="pl-k">+</span>)
+
+<span class="pl-c"><span class="pl-c">--</span> 4*(10+5) = 60</span>
+foo <span class="pl-c1">5</span> <span class="pl-c"><span class="pl-c">--</span> 60</span>
+
+<span class="pl-c"><span class="pl-c">--</span> fixing precedence</span>
+<span class="pl-c"><span class="pl-c">--</span> Haskell has an operator called `$`. This operator applies a function</span>
+<span class="pl-c"><span class="pl-c">--</span> to a given parameter. In contrast to standard function application, which</span>
+<span class="pl-c"><span class="pl-c">--</span> has highest possible priority of 10 and is left-associative, the `$` operator</span>
+<span class="pl-c"><span class="pl-c">--</span> has priority of 0 and is right-associative. Such a low priority means that</span>
+<span class="pl-c"><span class="pl-c">--</span> the expression on its right is applied as a parameter to the function on its left.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> before</span>
+<span class="pl-c1">even</span> (fib <span class="pl-c1">7</span>) <span class="pl-c"><span class="pl-c">--</span> false</span>
+
+<span class="pl-c"><span class="pl-c">--</span> equivalently</span>
+<span class="pl-c1">even</span> <span class="pl-k">$</span> fib <span class="pl-c1">7</span> <span class="pl-c"><span class="pl-c">--</span> false</span>
+
+<span class="pl-c"><span class="pl-c">--</span> composing functions</span>
+<span class="pl-c1">even</span> <span class="pl-k">.</span> fib <span class="pl-k">$</span> <span class="pl-c1">7</span> <span class="pl-c"><span class="pl-c">--</span> false</span>
+
+
+<span class="pl-c"><span class="pl-c">----------------------------------------------------</span></span>
+<span class="pl-c"><span class="pl-c">--</span> 5. Type signatures</span>
+<span class="pl-c"><span class="pl-c">----------------------------------------------------</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> Haskell has a very strong type system, and every valid expression has a type.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Some basic types:</span>
+<span class="pl-c1">5</span> <span class="pl-k">::</span> <span class="pl-en"><span class="pl-c1">Integer</span></span>
+<span class="pl-s"><span class="pl-pds">"</span>hello<span class="pl-pds">"</span></span> <span class="pl-k">::</span> <span class="pl-en"><span class="pl-c1">String</span></span>
+<span class="pl-ent"><span class="pl-c1">True</span></span> <span class="pl-k">::</span> <span class="pl-en"><span class="pl-c1">Bool</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> Functions have types too.</span>
+<span class="pl-c"><span class="pl-c">--</span> `not` takes a boolean and returns a boolean:</span>
+<span class="pl-c"><span class="pl-c">--</span> not :: Bool -&gt; Bool</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Here's a function that takes two arguments:</span>
+<span class="pl-c"><span class="pl-c">--</span> add :: Integer -&gt; Integer -&gt; Integer</span>
+
+<span class="pl-c"><span class="pl-c">--</span> When you define a value, it's good practice to write its type above it:</span>
+<span class="pl-en">double</span> <span class="pl-k">::</span> <span class="pl-en"><span class="pl-c1">Integer</span></span> <span class="pl-k">-&gt;</span> <span class="pl-en"><span class="pl-c1">Integer</span></span>
+double x <span class="pl-k">=</span> x <span class="pl-k">*</span> <span class="pl-c1">2</span>
+
+<span class="pl-c"><span class="pl-c">----------------------------------------------------</span></span>
+<span class="pl-c"><span class="pl-c">--</span> 6. Control Flow and If Expressions</span>
+<span class="pl-c"><span class="pl-c">----------------------------------------------------</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> if-expressions</span>
+haskell <span class="pl-k">=</span> <span class="pl-k">if</span> <span class="pl-c1">1</span> <span class="pl-k">==</span> <span class="pl-c1">1</span> <span class="pl-k">then</span> <span class="pl-s"><span class="pl-pds">"</span>awesome<span class="pl-pds">"</span></span> <span class="pl-k">else</span> <span class="pl-s"><span class="pl-pds">"</span>awful<span class="pl-pds">"</span></span> <span class="pl-c"><span class="pl-c">--</span> haskell = "awesome"</span>
+
+<span class="pl-c"><span class="pl-c">--</span> if-expressions can be on multiple lines too, indentation is important</span>
+haskell <span class="pl-k">=</span> <span class="pl-k">if</span> <span class="pl-c1">1</span> <span class="pl-k">==</span> <span class="pl-c1">1</span>
+            <span class="pl-k">then</span> <span class="pl-s"><span class="pl-pds">"</span>awesome<span class="pl-pds">"</span></span>
+            <span class="pl-k">else</span> <span class="pl-s"><span class="pl-pds">"</span>awful<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> case expressions: Here's how you could parse command line arguments</span>
+<span class="pl-k">case</span> args <span class="pl-k">of</span>
+  <span class="pl-s"><span class="pl-pds">"</span>help<span class="pl-pds">"</span></span> <span class="pl-k">-&gt;</span> printHelp
+  <span class="pl-s"><span class="pl-pds">"</span>start<span class="pl-pds">"</span></span> <span class="pl-k">-&gt;</span> startProgram
+  _ <span class="pl-k">-&gt;</span> <span class="pl-c1">putStrLn</span> <span class="pl-s"><span class="pl-pds">"</span>bad args<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> Haskell doesn't have loops; it uses recursion instead.</span>
+<span class="pl-c"><span class="pl-c">--</span> map applies a function over every element in a list</span>
+
+<span class="pl-c1">map</span> (<span class="pl-k">*</span><span class="pl-c1">2</span>) [<span class="pl-c1">1</span><span class="pl-k">..</span><span class="pl-c1">5</span>] <span class="pl-c"><span class="pl-c">--</span> [2, 4, 6, 8, 10]</span>
+
+<span class="pl-c"><span class="pl-c">--</span> you can make a for function using map</span>
+for array func <span class="pl-k">=</span> <span class="pl-c1">map</span> func array
+
+<span class="pl-c"><span class="pl-c">--</span> and then use it</span>
+for [<span class="pl-c1">0</span><span class="pl-k">..</span><span class="pl-c1">5</span>] <span class="pl-k">$</span> <span class="pl-k">\</span>i <span class="pl-k">-&gt;</span> <span class="pl-c1">show</span> i
+
+<span class="pl-c"><span class="pl-c">--</span> we could've written that like this too:</span>
+for [<span class="pl-c1">0</span><span class="pl-k">..</span><span class="pl-c1">5</span>] <span class="pl-c1">show</span>
+
+<span class="pl-c"><span class="pl-c">--</span> You can use foldl or foldr to reduce a list</span>
+<span class="pl-c"><span class="pl-c">--</span> foldl &lt;fn&gt; &lt;initial value&gt; &lt;list&gt;</span>
+<span class="pl-c1">foldl</span> (<span class="pl-k">\</span>x y <span class="pl-k">-&gt;</span> <span class="pl-c1">2</span><span class="pl-k">*</span>x <span class="pl-k">+</span> y) <span class="pl-c1">4</span> [<span class="pl-c1">1</span>,<span class="pl-c1">2</span>,<span class="pl-c1">3</span>] <span class="pl-c"><span class="pl-c">--</span> 43</span>
+
+<span class="pl-c"><span class="pl-c">--</span> This is the same as</span>
+(<span class="pl-c1">2</span> <span class="pl-k">*</span> (<span class="pl-c1">2</span> <span class="pl-k">*</span> (<span class="pl-c1">2</span> <span class="pl-k">*</span> <span class="pl-c1">4</span> <span class="pl-k">+</span> <span class="pl-c1">1</span>) <span class="pl-k">+</span> <span class="pl-c1">2</span>) <span class="pl-k">+</span> <span class="pl-c1">3</span>)
+
+<span class="pl-c"><span class="pl-c">--</span> foldl is left-handed, foldr is right-handed</span>
+<span class="pl-c1">foldr</span> (<span class="pl-k">\</span>x y <span class="pl-k">-&gt;</span> <span class="pl-c1">2</span><span class="pl-k">*</span>x <span class="pl-k">+</span> y) <span class="pl-c1">4</span> [<span class="pl-c1">1</span>,<span class="pl-c1">2</span>,<span class="pl-c1">3</span>] <span class="pl-c"><span class="pl-c">--</span> 16</span>
+
+<span class="pl-c"><span class="pl-c">--</span> This is now the same as</span>
+(<span class="pl-c1">2</span> <span class="pl-k">*</span> <span class="pl-c1">1</span> <span class="pl-k">+</span> (<span class="pl-c1">2</span> <span class="pl-k">*</span> <span class="pl-c1">2</span> <span class="pl-k">+</span> (<span class="pl-c1">2</span> <span class="pl-k">*</span> <span class="pl-c1">3</span> <span class="pl-k">+</span> <span class="pl-c1">4</span>)))
+
+<span class="pl-c"><span class="pl-c">----------------------------------------------------</span></span>
+<span class="pl-c"><span class="pl-c">--</span> 7. Data Types</span>
+<span class="pl-c"><span class="pl-c">----------------------------------------------------</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> A data type is declared with a 'type constructor' on the left</span>
+<span class="pl-c"><span class="pl-c">--</span> and one or more 'data constructors' on the right, separated by</span>
+<span class="pl-c"><span class="pl-c">--</span> the pipe | symbol. This is a sum/union type. Each data constructor</span>
+<span class="pl-c"><span class="pl-c">--</span> is a (possibly nullary) function that creates an object of the type</span>
+<span class="pl-c"><span class="pl-c">--</span> named by the type constructor.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> This is essentially an enum</span>
+
+<span class="pl-k">data</span> <span class="pl-en">Color</span> <span class="pl-k">=</span> <span class="pl-ent">Red</span> | <span class="pl-ent">Blue</span> | <span class="pl-ent">Green</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Now you can use it in a function:</span>
+
+<span class="pl-en">say</span> <span class="pl-k">::</span> <span class="pl-en">Color</span> <span class="pl-k">-&gt;</span> <span class="pl-en"><span class="pl-c1">String</span></span>
+say <span class="pl-ent">Red</span>   <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>You are Red!<span class="pl-pds">"</span></span>
+say <span class="pl-ent">Blue</span>  <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>You are Blue!<span class="pl-pds">"</span></span>
+say <span class="pl-ent">Green</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>You are Green!<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> Note that the type constructor is used in the type signature</span>
+<span class="pl-c"><span class="pl-c">--</span> and the data constructors are used in the body of the function</span>
+<span class="pl-c"><span class="pl-c">--</span> Data constructors are primarily pattern-matched against</span>
+
+<span class="pl-c"><span class="pl-c">--</span> This next one is a traditional container type holding two fields</span>
+<span class="pl-c"><span class="pl-c">--</span> In a type declaration, data constructors take types as parameters</span>
+<span class="pl-c"><span class="pl-c">--</span> Data constructors can have the same name as type constructors</span>
+<span class="pl-c"><span class="pl-c">--</span> This is common where the type only has a single data constructor</span>
+
+<span class="pl-k">data</span> <span class="pl-en">Point</span> <span class="pl-k">=</span> <span class="pl-ent">Point</span> <span class="pl-en"><span class="pl-c1">Float</span></span> <span class="pl-en"><span class="pl-c1">Float</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> This can be used in a function like:</span>
+
+<span class="pl-en">distance</span> <span class="pl-k">::</span> <span class="pl-en">Point</span> <span class="pl-k">-&gt;</span> <span class="pl-en">Point</span> <span class="pl-k">-&gt;</span> <span class="pl-en"><span class="pl-c1">Float</span></span>
+distance (<span class="pl-ent">Point</span> x y) (<span class="pl-ent">Point</span> x' y') <span class="pl-k">=</span> <span class="pl-c1">sqrt</span> <span class="pl-k">$</span> dx <span class="pl-k">+</span> dy
+    <span class="pl-k">where</span> dx <span class="pl-k">=</span> (x <span class="pl-k">-</span> x') <span class="pl-k">**</span> <span class="pl-c1">2</span>
+          dy <span class="pl-k">=</span> (y <span class="pl-k">-</span> y') <span class="pl-k">**</span> <span class="pl-c1">2</span>
+          
+<span class="pl-c"><span class="pl-c">--</span> Types can have multiple data constructors with arguments, too</span>
+
+<span class="pl-k">data</span> <span class="pl-en">Name</span> <span class="pl-k">=</span> <span class="pl-ent">Mononym</span> <span class="pl-en"><span class="pl-c1">String</span></span>
+          | <span class="pl-ent">FirstLastName</span> <span class="pl-en"><span class="pl-c1">String</span></span> <span class="pl-en"><span class="pl-c1">String</span></span>
+          | <span class="pl-ent">FullName</span> <span class="pl-en"><span class="pl-c1">String</span></span> <span class="pl-en"><span class="pl-c1">String</span></span> <span class="pl-en"><span class="pl-c1">String</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> To make things clearer we can use record syntax</span>
+
+<span class="pl-k">data</span> <span class="pl-en">Point2D</span> <span class="pl-k">=</span> <span class="pl-ent">CartesianPoint2D</span> <span class="pl-k">{</span> <span class="pl-e">x</span> <span class="pl-k">::</span> <span class="pl-en"><span class="pl-c1">Float</span></span>, <span class="pl-e">y</span> <span class="pl-k">::</span> <span class="pl-en"><span class="pl-c1">Float</span></span> <span class="pl-k">}</span> 
+             | <span class="pl-ent">PolarPoint2D</span> <span class="pl-k">{</span> <span class="pl-e">r</span> <span class="pl-k">::</span> <span class="pl-en"><span class="pl-c1">Float</span></span>, <span class="pl-e">theta</span> <span class="pl-k">::</span> <span class="pl-en"><span class="pl-c1">Float</span></span> <span class="pl-k">}</span>
+
+myPoint <span class="pl-k">=</span> <span class="pl-ent">CartesianPoint2D</span> { x <span class="pl-k">=</span> <span class="pl-c1">7.0</span>, y <span class="pl-k">=</span> <span class="pl-c1">10.0</span> }
+
+<span class="pl-c"><span class="pl-c">--</span> Using record syntax automatically creates accessor functions</span>
+<span class="pl-c"><span class="pl-c">--</span> (the name of the field)</span>
+
+xOfMyPoint <span class="pl-k">=</span> x myPoint
+
+<span class="pl-c"><span class="pl-c">--</span> xOfMyPoint is equal to 7.0</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Record syntax also allows a simple form of update</span>
+
+myPoint' <span class="pl-k">=</span> myPoint { x <span class="pl-k">=</span> <span class="pl-c1">9.0</span> }
+
+<span class="pl-c"><span class="pl-c">--</span> myPoint' is CartesianPoint2D { x = 9.0, y = 10.0 }</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Even if a type is defined with record syntax, it can be declared like</span>
+<span class="pl-c"><span class="pl-c">--</span> a simple data constructor. This is fine:</span>
+
+myPoint'2 <span class="pl-k">=</span> <span class="pl-ent">CartesianPoint2D</span> <span class="pl-c1">3.3</span> <span class="pl-c1">4.0</span>
+
+<span class="pl-c"><span class="pl-c">--</span> It's also useful to pattern match data constructors in `case` expressions</span>
+
+distanceFromOrigin x <span class="pl-k">=</span> 
+    <span class="pl-k">case</span> x <span class="pl-k">of</span> (<span class="pl-ent">CartesianPoint2D</span> x y) <span class="pl-k">-&gt;</span> <span class="pl-c1">sqrt</span> <span class="pl-k">$</span> x <span class="pl-k">**</span> <span class="pl-c1">2</span> <span class="pl-k">+</span> y <span class="pl-k">**</span> <span class="pl-c1">2</span>
+              (<span class="pl-ent">PolarPoint2D</span> r _) <span class="pl-k">-&gt;</span> r
+
+<span class="pl-c"><span class="pl-c">--</span> Your data types can have type parameters too:</span>
+
+<span class="pl-k">data</span> <span class="pl-en"><span class="pl-c1">Maybe</span></span> <span class="pl-smi">a</span> <span class="pl-k">=</span> <span class="pl-ent">Nothing</span> | <span class="pl-ent">Just</span> <span class="pl-smi">a</span>
+
+<span class="pl-c"><span class="pl-c">--</span> These are all of type Maybe</span>
+<span class="pl-ent">Just</span> <span class="pl-s"><span class="pl-pds">"</span>hello<span class="pl-pds">"</span></span>    <span class="pl-c"><span class="pl-c">--</span> of type `Maybe String`</span>
+<span class="pl-ent">Just</span> <span class="pl-c1">1</span>          <span class="pl-c"><span class="pl-c">--</span> of type `Maybe Int`</span>
+<span class="pl-ent">Nothing</span>         <span class="pl-c"><span class="pl-c">--</span> of type `Maybe a` for any `a`</span>
+
+<span class="pl-c"><span class="pl-c">--</span> For convenience we can also create type synonyms with the 'type' keyword</span>
+
+<span class="pl-k">type</span> <span class="pl-en"><span class="pl-c1">String</span></span> <span class="pl-k">=</span> [<span class="pl-en"><span class="pl-c1">Char</span></span>]
+
+<span class="pl-c"><span class="pl-c">--</span> Unlike `data` types, type synonyms need no constructor, and can be used </span>
+<span class="pl-c"><span class="pl-c">--</span> anywhere a synonymous data type could be used. Say we have the </span>
+<span class="pl-c"><span class="pl-c">--</span> following type synonyms and items with the following type signatures</span>
+
+<span class="pl-k">type</span> <span class="pl-en">Weight</span> <span class="pl-k">=</span> <span class="pl-en"><span class="pl-c1">Float</span></span>
+<span class="pl-k">type</span> <span class="pl-en">Height</span> <span class="pl-k">=</span> <span class="pl-en"><span class="pl-c1">Float</span></span>
+<span class="pl-k">type</span> <span class="pl-en">Point</span> <span class="pl-k">=</span> (<span class="pl-en"><span class="pl-c1">Float</span></span>, <span class="pl-en"><span class="pl-c1">Float</span></span>)
+<span class="pl-en">getMyHeightAndWeight</span> <span class="pl-k">::</span> <span class="pl-en">Person</span> <span class="pl-k">-&gt;</span> (<span class="pl-en">Height</span>, <span class="pl-en">Weight</span>)
+<span class="pl-en">findCenter</span> <span class="pl-k">::</span> <span class="pl-en">Circle</span> <span class="pl-k">-&gt;</span> <span class="pl-en">Point</span>
+<span class="pl-en">somePerson</span> <span class="pl-k">::</span> <span class="pl-en">Person</span>
+<span class="pl-en">someCircle</span> <span class="pl-k">::</span> <span class="pl-en">Circle</span>
+<span class="pl-en">distance</span> <span class="pl-k">::</span> <span class="pl-en">Point</span> <span class="pl-k">-&gt;</span> <span class="pl-en">Point</span> <span class="pl-k">-&gt;</span> <span class="pl-en"><span class="pl-c1">Float</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> The following would compile and run without issue, </span>
+<span class="pl-c"><span class="pl-c">--</span> even though it does not make sense semantically,</span>
+<span class="pl-c"><span class="pl-c">--</span> because the type synonyms reduce to the same base types</span>
+
+distance (getMyHeightAndWeight somePerson) (findCenter someCircle)
+
+<span class="pl-c"><span class="pl-c">----------------------------------------------------</span></span>
+<span class="pl-c"><span class="pl-c">--</span> 8. Typeclasses</span>
+<span class="pl-c"><span class="pl-c">----------------------------------------------------</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> Typeclasses are one way Haskell does polymorphism</span>
+<span class="pl-c"><span class="pl-c">--</span> They are similar to interfaces in other languages</span>
+<span class="pl-c"><span class="pl-c">--</span> A typeclass defines a set of functions that must </span>
+<span class="pl-c"><span class="pl-c">--</span> work on any type that is in that typeclass.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> The Eq typeclass is for types whose instances can </span>
+<span class="pl-c"><span class="pl-c">--</span> be tested for equality with one another.</span>
+
+<span class="pl-k">class</span> <span class="pl-en"><span class="pl-e">Eq</span></span> <span class="pl-smi">a</span> <span class="pl-k">where</span>  
+    <span class="pl-en">(==)</span> <span class="pl-k">::</span> <span class="pl-smi">a</span> <span class="pl-k">-&gt;</span> <span class="pl-smi">a</span> <span class="pl-k">-&gt;</span> <span class="pl-en"><span class="pl-c1">Bool</span></span>  
+    <span class="pl-en">(/=)</span> <span class="pl-k">::</span> <span class="pl-smi">a</span> <span class="pl-k">-&gt;</span> <span class="pl-smi">a</span> <span class="pl-k">-&gt;</span> <span class="pl-en"><span class="pl-c1">Bool</span></span>  
+    x <span class="pl-k">==</span> y <span class="pl-k">=</span> <span class="pl-c1">not</span> (x <span class="pl-k">/=</span> y)  
+    x <span class="pl-k">/=</span> y <span class="pl-k">=</span> <span class="pl-c1">not</span> (x <span class="pl-k">==</span> y)
+    
+<span class="pl-c"><span class="pl-c">--</span> This defines a typeclass that requires two functions, (==) and (/=)</span>
+<span class="pl-c"><span class="pl-c">--</span> It also declares that one function can be declared in terms of another</span>
+<span class="pl-c"><span class="pl-c">--</span> So it is enough that *either* the (==) function or the (/=) is defined</span>
+<span class="pl-c"><span class="pl-c">--</span> And the other will be 'filled in' based on the typeclass definition</span>
+
+<span class="pl-c"><span class="pl-c">--</span> To make a type a member of a type class, the instance keyword is used</span>
+
+<span class="pl-k">instance</span> <span class="pl-en"><span class="pl-e">Eq</span></span> <span class="pl-en">TrafficLight</span> <span class="pl-k">where</span>  
+    <span class="pl-ent">Red</span> <span class="pl-k">==</span> <span class="pl-ent">Red</span> <span class="pl-k">=</span> <span class="pl-ent"><span class="pl-c1">True</span></span>  
+    <span class="pl-ent">Green</span> <span class="pl-k">==</span> <span class="pl-ent">Green</span> <span class="pl-k">=</span> <span class="pl-ent"><span class="pl-c1">True</span></span>  
+    <span class="pl-ent">Yellow</span> <span class="pl-k">==</span> <span class="pl-ent">Yellow</span> <span class="pl-k">=</span> <span class="pl-ent"><span class="pl-c1">True</span></span>  
+    _ <span class="pl-k">==</span> _ <span class="pl-k">=</span> <span class="pl-ent"><span class="pl-c1">False</span></span> 
+    
+<span class="pl-c"><span class="pl-c">--</span> Now we can use (==) and (/=) with TrafficLight objects</span>
+
+<span class="pl-en">canProceedThrough</span> <span class="pl-k">::</span> <span class="pl-en">TrafficLight</span> <span class="pl-k">-&gt;</span> <span class="pl-en"><span class="pl-c1">Bool</span></span>
+canProceedThrough t <span class="pl-k">=</span> t <span class="pl-k">/=</span> <span class="pl-ent">Red</span>
+
+<span class="pl-c"><span class="pl-c">--</span> You can NOT create an instance definition for a type synonym</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Functions can be written to take typeclasses with type parameters, </span>
+<span class="pl-c"><span class="pl-c">--</span> rather than types, assuming that the function only relies on </span>
+<span class="pl-c"><span class="pl-c">--</span> features of the typeclass</span>
+
+isEqual (<span class="pl-ent">Eq</span> a) <span class="pl-k">=&gt;</span> a <span class="pl-k">-&gt;</span> a <span class="pl-k">-&gt;</span> <span class="pl-ent">Bool</span>
+isEqual x y <span class="pl-k">=</span> x <span class="pl-k">==</span> y
+
+<span class="pl-c"><span class="pl-c">--</span> Note that x and y MUST be the same type, as they are both defined</span>
+<span class="pl-c"><span class="pl-c">--</span> as being of type parameter 'a'.</span>
+<span class="pl-c"><span class="pl-c">--</span> A typeclass does not state that different types in the typeclass can </span>
+<span class="pl-c"><span class="pl-c">--</span> be mixed together.</span>
+<span class="pl-c"><span class="pl-c">--</span> So `isEqual Red 2` is invalid, even though 2 is an Int which is an </span>
+<span class="pl-c"><span class="pl-c">--</span> instance of Eq, and Red is a TrafficLight which is also an instance of Eq</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Other common typeclasses are:</span>
+<span class="pl-c"><span class="pl-c">--</span> Ord for types that can be ordered, allowing you to use &gt;, &lt;=, etc.</span>
+<span class="pl-c"><span class="pl-c">--</span> Read for types that can be created from a string representation</span>
+<span class="pl-c"><span class="pl-c">--</span> Show for types that can be converted to a string for display</span>
+<span class="pl-c"><span class="pl-c">--</span> Num, Real, Integral, Fractional for types that can do math</span>
+<span class="pl-c"><span class="pl-c">--</span> Enum for types that can be stepped through</span>
+<span class="pl-c"><span class="pl-c">--</span> Bounded for types with a maximum and minimum</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Haskell can automatically make types part of Eq, Ord, Read, Show, Enum, </span>
+<span class="pl-c"><span class="pl-c">--</span> and Bounded with the `deriving` keyword at the end of the type declaration</span>
+
+<span class="pl-k">data</span> <span class="pl-en">Point</span> <span class="pl-k">=</span> <span class="pl-ent">Point</span> <span class="pl-en"><span class="pl-c1">Float</span></span> <span class="pl-en"><span class="pl-c1">Float</span></span> <span class="pl-k">deriving</span> (<span class="pl-e">Eq</span>, <span class="pl-e">Read</span>, <span class="pl-e">Show</span>)
+    
+<span class="pl-c"><span class="pl-c">--</span> In this case it is NOT necessary to create an 'instance' definition</span>
+
+<span class="pl-c"><span class="pl-c">----------------------------------------------------</span></span>
+<span class="pl-c"><span class="pl-c">--</span> 9. Haskell IO</span>
+<span class="pl-c"><span class="pl-c">----------------------------------------------------</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> While IO can't be explained fully without explaining monads,</span>
+<span class="pl-c"><span class="pl-c">--</span> it is not hard to explain enough to get going.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> When a Haskell program is executed, `main` is</span>
+<span class="pl-c"><span class="pl-c">--</span> called. It must return a value of type `IO a` for some type `a`. For example:</span>
+
+<span class="pl-en">main</span> <span class="pl-k">::</span> <span class="pl-en"><span class="pl-c1">IO</span></span> <span class="pl-c1">()</span>
+main <span class="pl-k">=</span> <span class="pl-c1">putStrLn</span> <span class="pl-k">$</span> <span class="pl-s"><span class="pl-pds">"</span>Hello, sky! <span class="pl-pds">"</span></span> <span class="pl-k">++</span> (say <span class="pl-ent">Blue</span>)
+<span class="pl-c"><span class="pl-c">--</span> putStrLn has type String -&gt; IO ()</span>
+
+<span class="pl-c"><span class="pl-c">--</span> It is easiest to do IO if you can implement your program as</span>
+<span class="pl-c"><span class="pl-c">--</span> a function from String to String. The function</span>
+<span class="pl-c"><span class="pl-c">--</span>    interact :: (String -&gt; String) -&gt; IO ()</span>
+<span class="pl-c"><span class="pl-c">--</span> inputs some text, runs a function on it, and prints out the</span>
+<span class="pl-c"><span class="pl-c">--</span> output.</span>
+
+<span class="pl-en">countLines</span> <span class="pl-k">::</span> <span class="pl-en"><span class="pl-c1">String</span></span> <span class="pl-k">-&gt;</span> <span class="pl-en"><span class="pl-c1">String</span></span>
+countLines <span class="pl-k">=</span> <span class="pl-c1">show</span> <span class="pl-k">.</span> <span class="pl-c1">length</span> <span class="pl-k">.</span> <span class="pl-c1">lines</span>
+
+main' <span class="pl-k">=</span> <span class="pl-c1">interact</span> countLines
+
+<span class="pl-c"><span class="pl-c">--</span> You can think of a value of type `IO ()` as representing a</span>
+<span class="pl-c"><span class="pl-c">--</span> sequence of actions for the computer to do, much like a</span>
+<span class="pl-c"><span class="pl-c">--</span> computer program written in an imperative language. We can use</span>
+<span class="pl-c"><span class="pl-c">--</span> the `do` notation to chain actions together. For example:</span>
+
+<span class="pl-en">sayHello</span> <span class="pl-k">::</span> <span class="pl-en"><span class="pl-c1">IO</span></span> <span class="pl-c1">()</span>
+sayHello <span class="pl-k">=</span> <span class="pl-k">do</span>
+   <span class="pl-c1">putStrLn</span> <span class="pl-s"><span class="pl-pds">"</span>What is your name?<span class="pl-pds">"</span></span>
+   name <span class="pl-k">&lt;-</span> <span class="pl-c1">getLine</span> <span class="pl-c"><span class="pl-c">--</span> this gets a line and gives it the name "name"</span>
+   <span class="pl-c1">putStrLn</span> <span class="pl-k">$</span> <span class="pl-s"><span class="pl-pds">"</span>Hello, <span class="pl-pds">"</span></span> <span class="pl-k">++</span> name
+
+<span class="pl-c"><span class="pl-c">--</span> Exercise: write your own version of `interact` that only reads</span>
+<span class="pl-c"><span class="pl-c">--</span>           one line of input.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> The code in `sayHello` will never be executed, however. The only</span>
+<span class="pl-c"><span class="pl-c">--</span> action that ever gets executed is the value of `main`.</span>
+<span class="pl-c"><span class="pl-c">--</span> To run `sayHello` comment out the above definition of `main`</span>
+<span class="pl-c"><span class="pl-c">--</span> and replace it with:</span>
+<span class="pl-c"><span class="pl-c">--</span>   main = sayHello</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Let's understand better how the function `getLine` we just</span>
+<span class="pl-c"><span class="pl-c">--</span> used works. Its type is:</span>
+<span class="pl-c"><span class="pl-c">--</span>    getLine :: IO String</span>
+<span class="pl-c"><span class="pl-c">--</span> You can think of a value of type `IO a` as representing a</span>
+<span class="pl-c"><span class="pl-c">--</span> computer program that will generate a value of type `a`</span>
+<span class="pl-c"><span class="pl-c">--</span> when executed (in addition to anything else it does). We can</span>
+<span class="pl-c"><span class="pl-c">--</span> name and reuse this value using `&lt;-`. We can also</span>
+<span class="pl-c"><span class="pl-c">--</span> make our own action of type `IO String`:</span>
+
+<span class="pl-en">action</span> <span class="pl-k">::</span> <span class="pl-en"><span class="pl-c1">IO</span></span> <span class="pl-en"><span class="pl-c1">String</span></span>
+action <span class="pl-k">=</span> <span class="pl-k">do</span>
+   <span class="pl-c1">putStrLn</span> <span class="pl-s"><span class="pl-pds">"</span>This is a line. Duh<span class="pl-pds">"</span></span>
+   input1 <span class="pl-k">&lt;-</span> <span class="pl-c1">getLine</span>
+   input2 <span class="pl-k">&lt;-</span> <span class="pl-c1">getLine</span>
+   <span class="pl-c"><span class="pl-c">--</span> The type of the `do` statement is that of its last line.</span>
+   <span class="pl-c"><span class="pl-c">--</span> `return` is not a keyword, but merely a function</span>
+   <span class="pl-c1">return</span> (input1 <span class="pl-k">++</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span> <span class="pl-k">++</span> input2) <span class="pl-c"><span class="pl-c">--</span> return :: String -&gt; IO String</span>
+
+<span class="pl-c"><span class="pl-c">--</span> We can use this just like we used `getLine`:</span>
+
+main'' <span class="pl-k">=</span> <span class="pl-k">do</span>
+    <span class="pl-c1">putStrLn</span> <span class="pl-s"><span class="pl-pds">"</span>I will echo two lines!<span class="pl-pds">"</span></span>
+    result <span class="pl-k">&lt;-</span> action
+    <span class="pl-c1">putStrLn</span> result
+    <span class="pl-c1">putStrLn</span> <span class="pl-s"><span class="pl-pds">"</span>This was all, folks!<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> The type `IO` is an example of a "monad". The way Haskell uses a monad to</span>
+<span class="pl-c"><span class="pl-c">--</span> do IO allows it to be a purely functional language. Any function that</span>
+<span class="pl-c"><span class="pl-c">--</span> interacts with the outside world (i.e. does IO) gets marked as `IO` in its</span>
+<span class="pl-c"><span class="pl-c">--</span> type signature. This lets us reason about which functions are "pure" (don't</span>
+<span class="pl-c"><span class="pl-c">--</span> interact with the outside world or modify state) and which functions aren't.</span>
+
+<span class="pl-c"><span class="pl-c">--</span> This is a powerful feature, because it's easy to run pure functions</span>
+<span class="pl-c"><span class="pl-c">--</span> concurrently; so, concurrency in Haskell is very easy.</span>
+
+
+<span class="pl-c"><span class="pl-c">----------------------------------------------------</span></span>
+<span class="pl-c"><span class="pl-c">--</span> 10. The Haskell REPL</span>
+<span class="pl-c"><span class="pl-c">----------------------------------------------------</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> Start the repl by typing `ghci`.</span>
+<span class="pl-c"><span class="pl-c">--</span> Now you can type in Haskell code. Any new values</span>
+<span class="pl-c"><span class="pl-c">--</span> need to be created with `let`:</span>
+
+<span class="pl-k">let</span> foo <span class="pl-k">=</span> <span class="pl-c1">5</span>
+
+<span class="pl-c"><span class="pl-c">--</span> You can see the type of any value or expression with `:t`:</span>
+
+<span class="pl-k"><span class="pl-c1">&gt;</span></span> <span class="pl-k">:</span>t foo
+<span class="pl-en">foo</span> <span class="pl-k">::</span> <span class="pl-en"><span class="pl-c1">Integer</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> Operators, such as `+`, `:` and `$`, are functions.</span>
+<span class="pl-c"><span class="pl-c">--</span> Their type can be inspected by putting the operator in parentheses:</span>
+
+<span class="pl-k"><span class="pl-c1">&gt;</span></span> <span class="pl-k">:</span>t <span class="pl-en">(:)</span>
+<span class="pl-en">(:)</span> <span class="pl-k">::</span> <span class="pl-smi">a</span> <span class="pl-k">-&gt;</span> [<span class="pl-smi">a</span>] <span class="pl-k">-&gt;</span> [<span class="pl-smi">a</span>]
+
+<span class="pl-c"><span class="pl-c">--</span> You can get additional information on any `name` using `:i`:</span>
+
+<span class="pl-k"><span class="pl-c1">&gt;</span></span> <span class="pl-k">:</span>i <span class="pl-en">(+)</span>
+<span class="pl-k">class</span> <span class="pl-en"><span class="pl-e">Num</span></span> <span class="pl-smi">a</span> <span class="pl-k">where</span>
+  <span class="pl-en">(+)</span> <span class="pl-k">::</span> <span class="pl-smi">a</span> <span class="pl-k">-&gt;</span> <span class="pl-smi">a</span> <span class="pl-k">-&gt;</span> <span class="pl-smi">a</span>
+  <span class="pl-k">...</span>
+    <span class="pl-c"><span class="pl-c">--</span> Defined in ‘GHC.Num’</span>
+<span class="pl-k">infixl</span> <span class="pl-c1">6</span> <span class="pl-k">+</span>
+
+<span class="pl-c"><span class="pl-c">--</span> You can also run any action of type `IO ()`</span>
+
+<span class="pl-k"><span class="pl-c1">&gt;</span></span> sayHello
+<span class="pl-ent">What</span> is your name<span class="pl-k">?</span>
+<span class="pl-ent">Friend</span><span class="pl-k">!</span>
+<span class="pl-ent">Hello</span>, <span class="pl-ent">Friend</span><span class="pl-k">!</span>
+</pre></div>
+<p>There's a lot more to Haskell, including typeclasses and monads. These are the<br>
+big ideas that make Haskell such fun to code in. I'll leave you with one final<br>
+Haskell example: an implementation of a quicksort variant in Haskell:</p>
+<div class="highlight highlight-source-haskell"><pre class="notranslate">qsort <span class="pl-c1">[]</span> <span class="pl-k">=</span> <span class="pl-c1">[]</span>
+qsort (p<span class="pl-k">:</span>xs) <span class="pl-k">=</span> qsort lesser <span class="pl-k">++</span> [p] <span class="pl-k">++</span> qsort greater
+    <span class="pl-k">where</span> lesser  <span class="pl-k">=</span> <span class="pl-c1">filter</span> (<span class="pl-k">&lt;</span> p) xs
+          greater <span class="pl-k">=</span> <span class="pl-c1">filter</span> (<span class="pl-k">&gt;=</span> p) xs</pre></div>
+<p>There are two popular ways to install Haskell: The traditional <a href="http://www.haskell.org/platform/" rel="nofollow">Cabal-based installation</a>, and the newer <a href="https://www.stackage.org/install" rel="nofollow">Stack-based process</a>.</p>
+<p>You can find a much gentler introduction from the excellent<br>
+<a href="http://learnyouahaskell.com/" rel="nofollow">Learn you a Haskell</a>,<br>
+<a href="http://www.happylearnhaskelltutorial.com/" rel="nofollow">Happy Learn Haskell Tutorial</a> or<br>
+<a href="http://book.realworldhaskell.org/" rel="nofollow">Real World Haskell</a>.</p>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Adit Bhargava", "http://adit.io"]
+</code></pre>

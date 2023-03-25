@@ -1,0 +1,194 @@
+<h1>Pogoscript</h1>
+<p>Pogoscript is a little language that emphasises readability, DSLs and provides excellent asynchronous primitives for writing connected JavaScript applications for the browser or server.</p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-c">// defining a variable</span>
+<span class="pl-s1">water</span> <span class="pl-s1">temperature</span> <span class="pl-c1">=</span> <span class="pl-c1">24</span>
+
+<span class="pl-c">// re-assigning a variable after its definition</span>
+<span class="pl-s1">water</span><span class="pl-kos"></span> <span class="pl-s1">temperature</span> :<span class="pl-c1">=</span> <span class="pl-c1">26</span>
+
+<span class="pl-c">// functions allow their parameters to be placed anywhere</span>
+<span class="pl-en">temperature</span> <span class="pl-s1">at</span> <span class="pl-kos">(</span><span class="pl-s1">a</span><span class="pl-kos">)</span><span class="pl-kos"></span> <span class="pl-s1">altitude</span> <span class="pl-c1">=</span> <span class="pl-c1">32</span> <span class="pl-c1">-</span> <span class="pl-s1">a</span> <span class="pl-c1">/</span> <span class="pl-c1">100</span>
+
+<span class="pl-c">// longer functions are just indented</span>
+<span class="pl-en">temperature</span> <span class="pl-s1">at</span> <span class="pl-kos">(</span><span class="pl-s1">a</span><span class="pl-kos">)</span><span class="pl-kos"></span> altitude :<span class="pl-c1">=</span>
+    <span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">a</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">0</span><span class="pl-kos">)</span>
+        <span class="pl-s1">water</span> <span class="pl-s1">temperature</span>
+    <span class="pl-k">else</span>
+        <span class="pl-c1">32</span> <span class="pl-c1">-</span> <span class="pl-s1">a</span> <span class="pl-c1">/</span> <span class="pl-c1">100</span>
+
+<span class="pl-c">// calling a function</span>
+<span class="pl-s1">current</span><span class="pl-kos"></span> <span class="pl-s1">temperature</span> <span class="pl-c1">=</span> <span class="pl-s1">temperature</span> <span class="pl-s1">at</span> <span class="pl-c1">3200</span> <span class="pl-s1">altitude</span>
+
+<span class="pl-c">// this function constructs a new object with methods</span>
+<span class="pl-en">position</span> <span class="pl-kos">(</span><span class="pl-s1">x</span><span class="pl-kos">,</span> <span class="pl-s1">y</span><span class="pl-kos">)</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span>
+    <span class="pl-s1">x</span> <span class="pl-c1">=</span> <span class="pl-s1">x</span>
+    <span class="pl-s1">y</span> <span class="pl-c1">=</span> <span class="pl-s1">y</span>
+
+    <span class="pl-s1">distance</span> <span class="pl-s1">from</span> <span class="pl-en">position</span> <span class="pl-kos">(</span><span class="pl-s1">p</span><span class="pl-kos">)</span> <span class="pl-c1">=</span>
+        <span class="pl-s1">dx</span> <span class="pl-c1">=</span> <span class="pl-s1">self</span><span class="pl-kos">.</span><span class="pl-c1">x</span> <span class="pl-c1">-</span> <span class="pl-s1">p</span><span class="pl-kos">.</span><span class="pl-c1">x</span>
+        <span class="pl-s1">dy</span> <span class="pl-c1">=</span> <span class="pl-s1">self</span><span class="pl-kos">.</span><span class="pl-c1">y</span> <span class="pl-c1">-</span> <span class="pl-s1">p</span><span class="pl-kos">.</span><span class="pl-c1">y</span>
+        <span class="pl-v">Math</span><span class="pl-kos">.</span><span class="pl-en">sqrt</span> <span class="pl-kos">(</span><span class="pl-s1">dx</span> <span class="pl-c1">*</span> <span class="pl-s1">dx</span> <span class="pl-c1">+</span> <span class="pl-s1">dy</span> <span class="pl-c1">*</span> <span class="pl-s1">dy</span><span class="pl-kos">)</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-c">// `self` is similar to `this` in JavaScript with the</span>
+<span class="pl-c">// exception that `self` isn't redefined in each new</span>
+<span class="pl-c">// function definition</span>
+<span class="pl-c">// `self` just does what you expect</span>
+
+<span class="pl-c">// calling methods</span>
+<span class="pl-en">position</span> <span class="pl-kos">(</span><span class="pl-c1">7</span><span class="pl-kos">,</span> <span class="pl-c1">2</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">distance</span> <span class="pl-s1">from</span> <span class="pl-s1">position</span> <span class="pl-kos">(</span><span class="pl-en">position</span> <span class="pl-kos">(</span><span class="pl-c1">5</span><span class="pl-kos">,</span> <span class="pl-c1">1</span><span class="pl-kos">)</span><span class="pl-kos">)</span>
+
+<span class="pl-c">// as in JavaScript, objects are hashes too</span>
+<span class="pl-s1">position</span><span class="pl-kos">.</span><span class="pl-s">'x'</span> <span class="pl-c1">==</span> <span class="pl-s1">position</span><span class="pl-kos">.</span><span class="pl-c1">x</span> <span class="pl-c1">==</span> <span class="pl-en">position</span><span class="pl-kos">.</span><span class="pl-kos">(</span><span class="pl-s">'x'</span><span class="pl-kos">)</span>
+
+<span class="pl-c">// arrays</span>
+<span class="pl-s1">positions</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span>
+    <span class="pl-en">position</span> <span class="pl-kos">(</span><span class="pl-c1">1</span><span class="pl-kos">,</span> <span class="pl-c1">1</span><span class="pl-kos">)</span>
+    <span class="pl-s1">position</span> <span class="pl-kos">(</span><span class="pl-c1">1</span><span class="pl-kos">,</span> <span class="pl-c1">2</span><span class="pl-kos">)</span>
+    <span class="pl-s1">position</span> <span class="pl-kos">(</span><span class="pl-c1">1</span><span class="pl-kos">,</span> <span class="pl-c1">3</span><span class="pl-kos">)</span>
+<span class="pl-kos">]</span>
+
+<span class="pl-c">// indexing an array</span>
+<span class="pl-s1">positions</span><span class="pl-c1">.0</span><span class="pl-kos">.</span><span class="pl-c1">y</span>
+
+<span class="pl-s1">n</span> <span class="pl-c1">=</span> <span class="pl-c1">2</span>
+<span class="pl-en">positions</span><span class="pl-kos">.</span><span class="pl-kos">(</span><span class="pl-s1">n</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-c1">y</span>
+
+<span class="pl-c">// strings</span>
+<span class="pl-s1">poem</span> <span class="pl-c1">=</span> <span class="pl-s">'Tail turned to red sunset on a juniper crown a lone magpie cawks.</span>
+<span class="pl-s">        Mad at Oryoki in the shrine-room -- Thistles blossomed late afternoon.</span>
+<span class="pl-s">        Put on my shirt and took it off in the sun walking the path to lunch.</span>
+<span class="pl-s">        A dandelion seed floats above the marsh grass with the mosquitos.</span>
+<span class="pl-s">        At 4 A.M. the two middleaged men sleeping together holding hands.</span>
+<span class="pl-s">        In the half-light of dawn a few birds warble under the Pleiades.</span>
+<span class="pl-s">        Sky reddens behind fir trees, larks twitter, sparrows cheep cheep cheep</span>
+<span class="pl-s">        cheep cheep.'</span>
+
+<span class="pl-c">// that's Allen Ginsburg</span>
+
+<span class="pl-c">// interpolation</span>
+<span class="pl-s1">outlook</span> <span class="pl-c1">=</span> <span class="pl-s">'amazing!'</span>
+<span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-c1">log</span><span class="pl-kos"></span> <span class="pl-s">"the weather tomorrow is going to be #(outlook)"</span>
+
+<span class="pl-c">// regular expressions</span>
+<span class="pl-s1">r</span><span class="pl-c1">/</span><span class="pl-kos">(</span>\d<span class="pl-c1">+</span><span class="pl-kos">)</span><span class="pl-s1">m</span><span class="pl-c1">/</span><span class="pl-s1">i</span>
+<span class="pl-s1">r</span><span class="pl-c1">/</span><span class="pl-kos">(</span>\d<span class="pl-c1">+</span><span class="pl-kos">)</span> <span class="pl-s1">degrees</span><span class="pl-c1">/</span><span class="pl-s1">mg</span>
+
+<span class="pl-c">// operators</span>
+<span class="pl-s1">true</span> @<span class="pl-s1">and</span> <span class="pl-c1">true</span>
+<span class="pl-c1">false</span> @<span class="pl-s1">or</span> <span class="pl-c1">true</span>
+@<span class="pl-s1">not</span> <span class="pl-s1">false</span>
+<span class="pl-c1">2</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">4</span>
+<span class="pl-c1">2</span> <span class="pl-c1">&gt;=</span> <span class="pl-c1">2</span>
+<span class="pl-c1">2</span> <span class="pl-c1">&gt;</span> <span class="pl-c1">1</span>
+
+<span class="pl-c">// plus all the javascript ones</span>
+
+<span class="pl-c">// to define your own</span>
+<span class="pl-kos">(</span><span class="pl-s1">p1</span><span class="pl-kos">)</span> <span class="pl-s1">plus</span> <span class="pl-kos">(</span><span class="pl-s1">p2</span><span class="pl-kos">)</span><span class="pl-kos"></span> <span class="pl-c1">=</span>
+    <span class="pl-en">position</span> <span class="pl-kos">(</span><span class="pl-s1">p1</span><span class="pl-kos">.</span><span class="pl-c1">x</span> <span class="pl-c1">+</span> <span class="pl-s1">p2</span><span class="pl-kos">.</span><span class="pl-c1">x</span><span class="pl-kos">,</span> <span class="pl-s1">p1</span><span class="pl-kos">.</span><span class="pl-c1">y</span> <span class="pl-c1">+</span> <span class="pl-s1">p2</span><span class="pl-kos">.</span><span class="pl-c1">y</span><span class="pl-kos">)</span>
+
+<span class="pl-c">// `plus` can be called as an operator</span>
+<span class="pl-s1">position</span> <span class="pl-kos">(</span><span class="pl-c1">1</span><span class="pl-kos">,</span> <span class="pl-c1">1</span><span class="pl-kos">)</span> @<span class="pl-s1">plus</span> <span class="pl-s1">position</span> <span class="pl-kos">(</span><span class="pl-c1">0</span><span class="pl-kos">,</span> <span class="pl-c1">2</span><span class="pl-kos">)</span>
+<span class="pl-c">// or as a function</span>
+<span class="pl-kos">(</span><span class="pl-en">position</span> <span class="pl-kos">(</span><span class="pl-c1">1</span><span class="pl-kos">,</span> <span class="pl-c1">1</span><span class="pl-kos">)</span><span class="pl-kos">)</span> <span class="pl-s1">plus</span> <span class="pl-kos">(</span><span class="pl-en">position</span> <span class="pl-kos">(</span><span class="pl-c1">0</span><span class="pl-kos">,</span> <span class="pl-c1">2</span><span class="pl-kos">)</span><span class="pl-kos">)</span>
+
+<span class="pl-c">// explicit return</span>
+<span class="pl-kos">(</span><span class="pl-s1">x</span><span class="pl-kos">)</span> <span class="pl-s1">times</span> <span class="pl-kos">(</span><span class="pl-s1">y</span><span class="pl-kos">)</span><span class="pl-kos"></span> <span class="pl-c1">=</span> <span class="pl-en">return</span> <span class="pl-kos">(</span><span class="pl-s1">x</span> <span class="pl-c1">*</span> <span class="pl-s1">y</span><span class="pl-kos">)</span>
+
+<span class="pl-c">// new</span>
+<span class="pl-s1">now</span> <span class="pl-c1">=</span> @<span class="pl-s1">new</span> <span class="pl-v">Date</span> <span class="pl-kos">(</span><span class="pl-kos">)</span>
+
+<span class="pl-c">// functions can take named optional arguments</span>
+<span class="pl-s1">spark</span> <span class="pl-kos">(</span><span class="pl-s1">position</span><span class="pl-kos">,</span> <span class="pl-s1">color</span>: <span class="pl-s">'black'</span><span class="pl-kos">,</span> <span class="pl-s1">velocity</span>: <span class="pl-kos">{</span>x <span class="pl-c1">=</span> <span class="pl-c1">0</span><span class="pl-kos">,</span> y <span class="pl-c1">=</span> <span class="pl-c1">0</span><span class="pl-kos">}</span><span class="pl-kos">)</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span>
+    color <span class="pl-c1">=</span> <span class="pl-s1">color</span>
+    <span class="pl-s1">position</span> <span class="pl-c1">=</span> <span class="pl-s1">position</span>
+    <span class="pl-s1">velocity</span> <span class="pl-c1">=</span> <span class="pl-s1">velocity</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-s1">red</span> <span class="pl-c1">=</span> <span class="pl-en">spark</span> <span class="pl-kos">(</span><span class="pl-s1">position</span> <span class="pl-c1">1</span> <span class="pl-c1">1</span><span class="pl-kos">,</span> <span class="pl-s1">color</span>: <span class="pl-s">'red'</span><span class="pl-kos">)</span>
+<span class="pl-s1">fast</span> <span class="pl-s1">black</span> <span class="pl-c1">=</span> <span class="pl-en">spark</span> <span class="pl-kos">(</span><span class="pl-s1">position</span> <span class="pl-c1">1</span> <span class="pl-c1">1</span><span class="pl-kos">,</span> <span class="pl-s1">velocity</span>: <span class="pl-kos">{</span>x <span class="pl-c1">=</span> <span class="pl-c1">10</span><span class="pl-kos">,</span> y <span class="pl-c1">=</span> <span class="pl-c1">0</span><span class="pl-kos">}</span><span class="pl-kos">)</span>
+
+<span class="pl-c">// functions can unsplat arguments too</span>
+<span class="pl-s1">log</span> <span class="pl-kos">(</span><span class="pl-s1">messages</span><span class="pl-kos">,</span> ...<span class="pl-kos">)</span> <span class="pl-c1">=</span>
+    <span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-c1">log</span> <span class="pl-kos">(</span><span class="pl-s1">messages</span><span class="pl-kos">,</span> ...<span class="pl-kos">)</span>
+
+<span class="pl-c">// blocks are functions passed to other functions.</span>
+<span class="pl-c">// This block takes two parameters, `spark` and `c`,</span>
+<span class="pl-c">// the body of the block is the indented code after the</span>
+<span class="pl-c">// function call</span>
+
+<span class="pl-en">render</span> <span class="pl-s1">each</span> @<span class="pl-kos">(</span><span class="pl-s1">spark</span><span class="pl-kos">)</span> <span class="pl-s1">into</span> <span class="pl-s1">canvas</span> <span class="pl-s1">context</span> @<span class="pl-kos">(</span><span class="pl-s1">c</span><span class="pl-kos">)</span>
+    <span class="pl-s1">ctx</span><span class="pl-kos">.</span><span class="pl-en">begin</span> <span class="pl-s1">path</span> <span class="pl-kos">(</span><span class="pl-kos">)</span>
+    <span class="pl-s1">ctx</span><span class="pl-kos">.</span><span class="pl-c1">stroke</span> <span class="pl-s1">style</span> <span class="pl-c1">=</span> <span class="pl-s1">spark</span><span class="pl-kos">.</span><span class="pl-c1">color</span>
+    <span class="pl-s1">ctx</span><span class="pl-kos">.</span><span class="pl-en">arc</span> <span class="pl-kos">(</span>
+        <span class="pl-s1">spark</span><span class="pl-kos">.</span><span class="pl-c1">position</span><span class="pl-kos">.</span><span class="pl-c1">x</span> <span class="pl-c1">+</span> <span class="pl-s1">canvas</span><span class="pl-kos">.</span><span class="pl-c1">width</span> <span class="pl-c1">/</span> <span class="pl-c1">2</span>
+        <span class="pl-s1">spark</span><span class="pl-kos">.</span><span class="pl-c1">position</span><span class="pl-kos">.</span><span class="pl-c1">y</span>
+        <span class="pl-c1">3</span>
+        <span class="pl-c1">0</span>
+        <span class="pl-v">Math</span><span class="pl-kos">.</span><span class="pl-c1">PI</span> <span class="pl-c1">*</span> <span class="pl-c1">2</span>
+    <span class="pl-kos">)</span>
+    <span class="pl-s1">ctx</span><span class="pl-kos">.</span><span class="pl-en">stroke</span> <span class="pl-kos">(</span><span class="pl-kos">)</span>
+
+<span class="pl-c">// asynchronous calls</span>
+
+<span class="pl-c">// JavaScript both in the browser and on the server (with Node.js)</span>
+<span class="pl-c">// makes heavy use of asynchronous IO with callbacks. Async IO is</span>
+<span class="pl-c">// amazing for performance and making concurrency simple but it</span>
+<span class="pl-c">// quickly gets complicated.</span>
+<span class="pl-c">// Pogoscript has a few things to make async IO much much easier</span>
+
+<span class="pl-c">// Node.js includes the `fs` module for accessing the file system.</span>
+<span class="pl-c">// Let's list the contents of a directory</span>
+
+<span class="pl-s1">fs</span> <span class="pl-c1">=</span> <span class="pl-en">require</span> '<span class="pl-s1">fs</span>'
+<span class="pl-s1">directory</span> <span class="pl-s1">listing</span> <span class="pl-c1">=</span> <span class="pl-s1">fs</span><span class="pl-kos">.</span><span class="pl-c1">readdir</span><span class="pl-c1">!</span> '<span class="pl-kos">.</span><span class="pl-s">'</span>
+<span class="pl-s"></span>
+<span class="pl-s">// `fs.readdir()` is an asynchronous function, so we can call it</span>
+<span class="pl-s">// using the `!` operator. The `!` operator allows you to call</span>
+<span class="pl-s">// async functions with the same syntax and largely the same</span>
+<span class="pl-s">// semantics as normal synchronous functions. Pogoscript rewrites</span>
+<span class="pl-s">// it so that all subsequent code is placed in the callback function</span>
+<span class="pl-s">// to `fs.readdir()`.</span>
+<span class="pl-s"></span>
+<span class="pl-s">// to catch asynchronous errors while calling asynchronous functions</span>
+<span class="pl-s"></span>
+<span class="pl-s">try</span>
+<span class="pl-s">    another directory listing = fs.readdir! '</span><span class="pl-s1">a</span><span class="pl-c1">-</span><span class="pl-s1">missing</span><span class="pl-c1">-</span><span class="pl-s1">dir</span><span class="pl-s">'</span>
+<span class="pl-s">catch (ex)</span>
+<span class="pl-s">    console.log (ex)</span>
+<span class="pl-s"></span>
+<span class="pl-s">// in fact, if you don'</span><span class="pl-s1">t</span> <span class="pl-en">use</span> <span class="pl-s">`try catch`</span><span class="pl-kos">,</span> <span class="pl-s1">it</span> <span class="pl-s1">will</span> <span class="pl-s1">raise</span> <span class="pl-s1">the</span> <span class="pl-s1">error</span> <span class="pl-s1">up</span> <span class="pl-s1">the</span>
+<span class="pl-c">// stack to the outer-most `try catch` or to the event loop, as you'd expect</span>
+<span class="pl-c">// with non-async exceptions</span>
+
+<span class="pl-c">// all the other control structures work with asynchronous calls too</span>
+<span class="pl-c">// here's `if else`</span>
+<span class="pl-s1">config</span> <span class="pl-c1">=</span>
+    <span class="pl-en">if</span> <span class="pl-kos">(</span><span class="pl-s1">fs</span><span class="pl-kos">.</span><span class="pl-c1">stat</span><span class="pl-c1">!</span> <span class="pl-s">'config.json'</span><span class="pl-kos">.</span><span class="pl-en">is</span> <span class="pl-s1">file</span> <span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">)</span>
+        <span class="pl-c1">JSON</span><span class="pl-kos">.</span><span class="pl-en">parse</span> <span class="pl-kos">(</span><span class="pl-s1">fs</span><span class="pl-kos">.</span><span class="pl-c1">read</span> <span class="pl-s1">file</span><span class="pl-c1">!</span> <span class="pl-s">'config.json'</span> <span class="pl-s">'utf-8'</span><span class="pl-kos">)</span>
+    <span class="pl-s1">else</span>
+        <span class="pl-kos">{</span>
+            <span class="pl-s1">color</span>: <span class="pl-s">'red'</span>
+        <span class="pl-kos">}</span>
+
+<span class="pl-c">// to run two asynchronous calls concurrently, use the `?` operator.</span>
+<span class="pl-c">// The `?` operator returns a *future* which can be executed to</span>
+<span class="pl-c">// wait for and obtain the result, again using the `!` operator</span>
+
+<span class="pl-c">// we don't wait for either of these calls to finish</span>
+<span class="pl-s1">a</span> <span class="pl-c1">=</span> <span class="pl-s1">fs</span><span class="pl-kos">.</span><span class="pl-c1">stat</span>? <span class="pl-s">'a.txt'</span>
+<span class="pl-s1">b</span> <span class="pl-c1">=</span> <span class="pl-s1">fs</span><span class="pl-kos">.</span><span class="pl-c1">stat</span>? <span class="pl-s">'b.txt'</span>
+
+<span class="pl-c">// now we wait for the calls to finish and print the results</span>
+<span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-c1">log</span> <span class="pl-s">"size of a.txt is #(a!.size)"</span>
+<span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-c1">log</span> <span class="pl-s">"size of b.txt is #(b!.size)"</span>
+
+<span class="pl-c">// futures in Pogoscript are analogous to Promises</span></pre></div>
+<p>That's it.</p>
+<p>Download <a href="http://nodejs.org/" rel="nofollow">Node.js</a> and <code class="notranslate">npm install pogo</code>.</p>
+<p>There is plenty of documentation on <a href="http://pogoscript.org/" rel="nofollow">http://pogoscript.org/</a>, including a <a href="http://pogoscript.org/cheatsheet.html" rel="nofollow">cheat sheet</a>, a <a href="http://pogoscript.org/guide/" rel="nofollow">guide</a>, and how <a href="http://featurist.github.io/pogo-examples/" rel="nofollow">Pogoscript translates to Javascript</a>. Get in touch on the <a href="http://groups.google.com/group/pogoscript" rel="nofollow">google group</a> if you have questions!</p>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Tim Macfarlane", "http://github.com/refractalize"]
+</code></pre>

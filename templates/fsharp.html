@@ -1,0 +1,627 @@
+<h1>F#</h1>
+<p>F# is a general purpose functional/OO programming language.  It's free and open source, and runs on Linux, Mac, Windows and more.</p>
+<p>It has a powerful type system that traps many errors at compile time, but it uses type inference so that it reads more like a dynamic language.</p>
+<p>The syntax of F# is different from C-style languages:</p>
+<ul>
+<li>Curly braces are not used to delimit blocks of code. Instead, indentation is used (like Python).</li>
+<li>Whitespace is used to separate parameters rather than commas.</li>
+</ul>
+<p>If you want to try out the code below, you can go to <a href="https://try.fsharp.org" rel="nofollow">https://try.fsharp.org</a> and paste it into an interactive REPL.</p>
+<div class="highlight highlight-source-cs"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> single line comments use a double slash</span>
+(<span class="pl-k">*</span> <span class="pl-smi">multi</span> <span class="pl-smi">line</span> <span class="pl-smi">comments</span> <span class="pl-en">use</span> (<span class="pl-k">*</span> . . . <span class="pl-k">*</span>) <span class="pl-smi">pair</span>
+
+<span class="pl-k">-</span><span class="pl-smi">end</span> <span class="pl-smi">of</span> <span class="pl-smi">multi</span> <span class="pl-smi">line</span> <span class="pl-smi">comment</span><span class="pl-k">-</span> <span class="pl-k">*</span>)
+
+<span class="pl-c"><span class="pl-c">//</span> ================================================</span>
+<span class="pl-c"><span class="pl-c">//</span> Basic Syntax</span>
+<span class="pl-c"><span class="pl-c">//</span> ================================================</span>
+
+<span class="pl-c"><span class="pl-c">//</span> ------ "Variables" (but not really) ------</span>
+<span class="pl-c"><span class="pl-c">//</span> The "let" keyword defines an (immutable) value</span>
+<span class="pl-en">let</span> <span class="pl-en">myInt</span> <span class="pl-k">=</span> <span class="pl-c1">5</span>
+<span class="pl-smi">let</span> <span class="pl-smi">myFloat</span> <span class="pl-k">=</span> <span class="pl-c1">3</span><span class="pl-c1">.</span><span class="pl-c1">14</span>
+<span class="pl-smi">let</span> <span class="pl-smi">myString</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>hello<span class="pl-pds">"</span></span>           <span class="pl-c"><span class="pl-c">//</span> note that no types needed</span>
+
+<span class="pl-c"><span class="pl-c">//</span> ------ Lists ------</span>
+<span class="pl-smi">let</span> <span class="pl-smi">twoToFive</span> <span class="pl-k">=</span> [<span class="pl-c1">2</span>; <span class="pl-c1">3</span>; <span class="pl-c1">4</span>; <span class="pl-c1">5</span>]     <span class="pl-c"><span class="pl-c">//</span> Square brackets create a list with</span>
+                                 <span class="pl-c"><span class="pl-c">//</span> semicolon delimiters.</span>
+<span class="pl-smi">let</span> <span class="pl-smi">oneToFive</span> <span class="pl-k">=</span> <span class="pl-c1">1</span> :: <span class="pl-smi">twoToFive</span>   <span class="pl-c"><span class="pl-c">//</span> :: creates list with new 1st element</span>
+<span class="pl-c"><span class="pl-c">//</span> The result is [1; 2; 3; 4; 5]</span>
+<span class="pl-smi">let</span> <span class="pl-smi">zeroToFive</span> <span class="pl-k">=</span> [<span class="pl-c1">0</span>; <span class="pl-c1">1</span>] @ <span class="pl-smi">twoToFive</span>   <span class="pl-c"><span class="pl-c">//</span> @ concats two lists</span>
+
+<span class="pl-c"><span class="pl-c">//</span> IMPORTANT: commas are never used as delimiters, only semicolons!</span>
+
+<span class="pl-c"><span class="pl-c">//</span> ------ Functions ------</span>
+<span class="pl-c"><span class="pl-c">//</span> The "let" keyword also defines a named function.</span>
+<span class="pl-smi">let</span> <span class="pl-smi">square</span> <span class="pl-smi">x</span> <span class="pl-k">=</span> <span class="pl-smi">x</span> <span class="pl-k">*</span> <span class="pl-smi">x</span>          <span class="pl-c"><span class="pl-c">//</span> Note that no parens are used.</span>
+<span class="pl-smi">square</span> <span class="pl-c1">3</span>                      <span class="pl-c"><span class="pl-c">//</span> Now run the function. Again, no parens.</span>
+
+<span class="pl-smi">let</span> <span class="pl-smi">add</span> <span class="pl-smi">x</span> <span class="pl-smi">y</span> <span class="pl-k">=</span> <span class="pl-smi">x</span> <span class="pl-k">+</span> <span class="pl-smi">y</span>           <span class="pl-c"><span class="pl-c">//</span> don't use add (x,y)! It means something</span>
+                              <span class="pl-c"><span class="pl-c">//</span> completely different.</span>
+<span class="pl-smi">add</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>                       <span class="pl-c"><span class="pl-c">//</span> Now run the function.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> to define a multiline function, just use indents. No semicolons needed.</span>
+<span class="pl-smi">let</span> <span class="pl-smi">evens</span> <span class="pl-smi">list</span> <span class="pl-k">=</span>
+   <span class="pl-smi">let</span> <span class="pl-smi">isEven</span> <span class="pl-smi">x</span> <span class="pl-k">=</span> <span class="pl-smi">x</span> <span class="pl-k">%</span> <span class="pl-c1">2</span> <span class="pl-k">=</span> <span class="pl-c1">0</span>   <span class="pl-c"><span class="pl-c">//</span> Define "isEven" as a sub function. Note</span>
+                              <span class="pl-c"><span class="pl-c">//</span> that equality operator is single char "=".</span>
+   <span class="pl-smi">List</span>.<span class="pl-smi">filter</span> <span class="pl-smi">isEven</span> <span class="pl-smi">list</span>    <span class="pl-c"><span class="pl-c">//</span> List.filter is a library function</span>
+                              <span class="pl-c"><span class="pl-c">//</span> with two parameters: a boolean function</span>
+                              <span class="pl-c"><span class="pl-c">//</span> and a list to work on</span>
+
+<span class="pl-smi">evens</span> <span class="pl-smi">oneToFive</span>               <span class="pl-c"><span class="pl-c">//</span> Now run the function</span>
+
+<span class="pl-c"><span class="pl-c">//</span> You can use parens to clarify precedence. In this example,</span>
+<span class="pl-c"><span class="pl-c">//</span> do "map" first, with two args, then do "sum" on the result.</span>
+<span class="pl-c"><span class="pl-c">//</span> Without the parens, "List.map" would be passed as an arg to List.sum</span>
+<span class="pl-smi">let</span> <span class="pl-smi">sumOfSquaresTo100</span> <span class="pl-k">=</span>
+   <span class="pl-smi">List</span>.<span class="pl-en">sum</span> ( <span class="pl-smi">List</span>.<span class="pl-smi">map</span> <span class="pl-smi">square</span> [<span class="pl-ii">1..100</span>] )
+
+<span class="pl-c"><span class="pl-c">//</span> You can pipe the output of one operation to the next using "|&gt;"</span>
+<span class="pl-c"><span class="pl-c">//</span> Piping data around is very common in F#, similar to UNIX pipes.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Here is the same sumOfSquares function written using pipes</span>
+<span class="pl-smi">let</span> <span class="pl-smi">sumOfSquaresTo100piped</span> <span class="pl-k">=</span>
+   [<span class="pl-ii">1..100</span>] <span class="pl-k">|</span><span class="pl-k">&gt;</span> <span class="pl-smi">List</span>.<span class="pl-smi">map</span> <span class="pl-smi">square</span> <span class="pl-k">|</span><span class="pl-k">&gt;</span> <span class="pl-smi">List</span>.<span class="pl-smi">sum</span>  <span class="pl-c"><span class="pl-c">//</span> "square" was defined earlier</span>
+
+<span class="pl-c"><span class="pl-c">//</span> you can define lambdas (anonymous functions) using the "fun" keyword</span>
+<span class="pl-smi">let</span> <span class="pl-smi">sumOfSquaresTo100withFun</span> <span class="pl-k">=</span>
+   [<span class="pl-ii">1..100</span>] <span class="pl-k">|</span><span class="pl-k">&gt;</span> <span class="pl-smi">List</span>.<span class="pl-en">map</span> (<span class="pl-smi">fun</span> <span class="pl-smi">x</span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">x</span> <span class="pl-k">*</span> <span class="pl-smi">x</span>) <span class="pl-k">|</span><span class="pl-k">&gt;</span> <span class="pl-smi">List</span>.<span class="pl-smi">sum</span>
+
+<span class="pl-c"><span class="pl-c">//</span> In F# there is no "return" keyword. A function always</span>
+<span class="pl-c"><span class="pl-c">//</span> returns the value of the last expression used.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> ------ Pattern Matching ------</span>
+<span class="pl-c"><span class="pl-c">//</span> Match..with.. is a supercharged case/switch statement.</span>
+<span class="pl-smi">let</span> <span class="pl-smi">simplePatternMatch</span> <span class="pl-k">=</span>
+   <span class="pl-smi">let</span> <span class="pl-smi">x</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>a<span class="pl-pds">"</span></span>
+   <span class="pl-smi">match</span> <span class="pl-smi">x</span> <span class="pl-smi">with</span>
+    <span class="pl-k">|</span> <span class="pl-s"><span class="pl-pds">"</span>a<span class="pl-pds">"</span></span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>x is a<span class="pl-pds">"</span></span>
+    <span class="pl-k">|</span> <span class="pl-s"><span class="pl-pds">"</span>b<span class="pl-pds">"</span></span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>x is b<span class="pl-pds">"</span></span>
+    <span class="pl-k">|</span> <span class="pl-smi">_</span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>x is something else<span class="pl-pds">"</span></span>   <span class="pl-c"><span class="pl-c">//</span> underscore matches anything</span>
+
+<span class="pl-c"><span class="pl-c">//</span> F# doesn't allow nulls by default -- you must use an Option type</span>
+<span class="pl-c"><span class="pl-c">//</span> and then pattern match.</span>
+<span class="pl-c"><span class="pl-c">//</span> Some(..) and None are roughly analogous to Nullable wrappers</span>
+<span class="pl-smi">let</span> <span class="pl-smi">validValue</span> <span class="pl-k">=</span> <span class="pl-en">Some</span>(<span class="pl-c1">99</span>)
+<span class="pl-smi">let</span> <span class="pl-smi">invalidValue</span> <span class="pl-k">=</span> <span class="pl-smi">None</span>
+
+<span class="pl-c"><span class="pl-c">//</span> In this example, match..with matches the "Some" and the "None",</span>
+<span class="pl-c"><span class="pl-c">//</span> and also unpacks the value in the "Some" at the same time.</span>
+<span class="pl-smi">let</span> <span class="pl-smi">optionPatternMatch</span> <span class="pl-smi">input</span> <span class="pl-k">=</span>
+   <span class="pl-smi">match</span> <span class="pl-smi">input</span> <span class="pl-smi">with</span>
+    <span class="pl-k">|</span> <span class="pl-smi">Some</span> <span class="pl-smi">i</span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>input is an int=%d<span class="pl-pds">"</span></span> <span class="pl-smi">i</span>
+    <span class="pl-k">|</span> <span class="pl-smi">None</span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>input is missing<span class="pl-pds">"</span></span>
+
+<span class="pl-smi">optionPatternMatch</span> <span class="pl-smi">validValue</span>
+<span class="pl-smi">optionPatternMatch</span> <span class="pl-smi">invalidValue</span>
+
+<span class="pl-c"><span class="pl-c">//</span> ------ Printing ------</span>
+<span class="pl-c"><span class="pl-c">//</span> The printf/printfn functions are similar to the</span>
+<span class="pl-c"><span class="pl-c">//</span> Console.Write/WriteLine functions in C#.</span>
+<span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>Printing an int %i, a float %f, a bool %b<span class="pl-pds">"</span></span> <span class="pl-c1">1</span> <span class="pl-c1">2</span><span class="pl-c1">.</span><span class="pl-c1">0</span> <span class="pl-c1">true</span>
+<span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>A string %s, and something generic %A<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>hello<span class="pl-pds">"</span></span> [<span class="pl-c1">1</span>; <span class="pl-c1">2</span>; <span class="pl-c1">3</span>; <span class="pl-c1">4</span>]
+
+<span class="pl-c"><span class="pl-c">//</span> There are also sprintf/sprintfn functions for formatting data</span>
+<span class="pl-c"><span class="pl-c">//</span> into a string, similar to String.Format in C#.</span>
+
+<span class="pl-c"><span class="pl-c">//</span> ================================================</span>
+<span class="pl-c"><span class="pl-c">//</span> More on functions</span>
+<span class="pl-c"><span class="pl-c">//</span> ================================================</span>
+
+<span class="pl-c"><span class="pl-c">//</span> F# is a true functional language -- functions are first</span>
+<span class="pl-c"><span class="pl-c">//</span> class entities and can be combined easily to make powerful</span>
+<span class="pl-c"><span class="pl-c">//</span> constructs</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Modules are used to group functions together</span>
+<span class="pl-c"><span class="pl-c">//</span> Indentation is needed for each nested module.</span>
+<span class="pl-smi">module</span> <span class="pl-smi">FunctionExamples</span> <span class="pl-k">=</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> define a simple adding function</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">add</span> <span class="pl-smi">x</span> <span class="pl-smi">y</span> <span class="pl-k">=</span> <span class="pl-smi">x</span> <span class="pl-k">+</span> <span class="pl-smi">y</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> basic usage of a function</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">a</span> <span class="pl-k">=</span> <span class="pl-smi">add</span> <span class="pl-c1">1</span> <span class="pl-c1">2</span>
+    <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>1 + 2 = %i<span class="pl-pds">"</span></span> <span class="pl-smi">a</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> partial application to "bake in" parameters</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">add42</span> <span class="pl-k">=</span> <span class="pl-smi">add</span> <span class="pl-c1">42</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">b</span> <span class="pl-k">=</span> <span class="pl-smi">add42</span> <span class="pl-c1">1</span>
+    <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>42 + 1 = %i<span class="pl-pds">"</span></span> <span class="pl-smi">b</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> composition to combine functions</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">add1</span> <span class="pl-k">=</span> <span class="pl-smi">add</span> <span class="pl-c1">1</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">add2</span> <span class="pl-k">=</span> <span class="pl-smi">add</span> <span class="pl-c1">2</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">add3</span> <span class="pl-k">=</span> <span class="pl-smi">add1</span> <span class="pl-k">&gt;&gt;</span> <span class="pl-smi">add2</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">c</span> <span class="pl-k">=</span> <span class="pl-smi">add3</span> <span class="pl-c1">7</span>
+    <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>3 + 7 = %i<span class="pl-pds">"</span></span> <span class="pl-smi">c</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> higher order functions</span>
+    [<span class="pl-ii">1..10</span>] <span class="pl-k">|</span><span class="pl-k">&gt;</span> <span class="pl-smi">List</span>.<span class="pl-smi">map</span> <span class="pl-smi">add3</span> <span class="pl-k">|</span><span class="pl-k">&gt;</span> <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>new list is %A<span class="pl-pds">"</span></span>
+
+    <span class="pl-c"><span class="pl-c">//</span> lists of functions, and more</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">add6</span> <span class="pl-k">=</span> [<span class="pl-smi">add1</span>; <span class="pl-smi">add2</span>; <span class="pl-smi">add3</span>] <span class="pl-k">|</span><span class="pl-k">&gt;</span> <span class="pl-smi">List</span>.<span class="pl-en">reduce</span> (<span class="pl-k">&gt;&gt;</span>)
+    <span class="pl-smi">let</span> <span class="pl-smi">d</span> <span class="pl-k">=</span> <span class="pl-smi">add6</span> <span class="pl-c1">7</span>
+    <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>1 + 2 + 3 + 7 = %i<span class="pl-pds">"</span></span> <span class="pl-smi">d</span>
+
+<span class="pl-c"><span class="pl-c">//</span> ================================================</span>
+<span class="pl-c"><span class="pl-c">//</span> Lists and collection</span>
+<span class="pl-c"><span class="pl-c">//</span> ================================================</span>
+
+<span class="pl-c"><span class="pl-c">//</span> There are three types of ordered collection:</span>
+<span class="pl-c"><span class="pl-c">//</span> * Lists are most basic immutable collection.</span>
+<span class="pl-c"><span class="pl-c">//</span> * Arrays are mutable and more efficient when needed.</span>
+<span class="pl-c"><span class="pl-c">//</span> * Sequences are lazy and infinite (e.g. an enumerator).</span>
+<span class="pl-c"><span class="pl-c">//</span></span>
+<span class="pl-c"><span class="pl-c">//</span> Other collections include immutable maps and sets</span>
+<span class="pl-c"><span class="pl-c">//</span> plus all the standard .NET collections</span>
+
+<span class="pl-smi">module</span> <span class="pl-smi">ListExamples</span> <span class="pl-k">=</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> lists use square brackets</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">list1</span> <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">"</span>a<span class="pl-pds">"</span></span>; <span class="pl-s"><span class="pl-pds">"</span>b<span class="pl-pds">"</span></span>]
+    <span class="pl-smi">let</span> <span class="pl-smi">list2</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>c<span class="pl-pds">"</span></span> :: <span class="pl-smi">list1</span>    <span class="pl-c"><span class="pl-c">//</span> :: is prepending</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">list3</span> <span class="pl-k">=</span> <span class="pl-smi">list1</span> @ <span class="pl-smi">list2</span>   <span class="pl-c"><span class="pl-c">//</span> @ is concat</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> list comprehensions (aka generators)</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">squares</span> <span class="pl-k">=</span> [<span class="pl-smi">for</span> <span class="pl-smi">i</span> <span class="pl-k">in</span> <span class="pl-ii">1..10</span> <span class="pl-smi">do</span> <span class="pl-smi">yield</span> <span class="pl-smi">i</span> <span class="pl-k">*</span> <span class="pl-smi">i</span>]
+
+    <span class="pl-c"><span class="pl-c">//</span> A prime number generator</span>
+    <span class="pl-c"><span class="pl-c">//</span> - this is using a short notation for the pattern matching syntax</span>
+    <span class="pl-c"><span class="pl-c">//</span> - (p::xs) is 'first :: tail' of the list, could also be written as p :: xs</span>
+    <span class="pl-c"><span class="pl-c">//</span>   this means this matches 'p' (the first item in the list), and xs is the rest of the list</span>
+    <span class="pl-c"><span class="pl-c">//</span>   this is called the 'cons pattern'</span>
+    <span class="pl-c"><span class="pl-c">//</span> - uses 'rec' keyword, which is necessary when using recursion</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">rec</span> <span class="pl-smi">sieve</span> <span class="pl-k">=</span> <span class="pl-smi">function</span>
+        <span class="pl-k">|</span> (<span class="pl-en">p</span>::<span class="pl-smi">xs</span>) <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">p</span> :: <span class="pl-smi">sieve</span> [ <span class="pl-smi">for</span> <span class="pl-smi">x</span> <span class="pl-k">in</span> <span class="pl-smi">xs</span> <span class="pl-smi">do</span> <span class="pl-smi">if</span> <span class="pl-smi">x</span> <span class="pl-k">%</span> <span class="pl-smi">p</span> <span class="pl-k">&gt;</span> <span class="pl-c1">0</span> <span class="pl-smi">then</span> <span class="pl-en">yield</span> <span class="pl-en">x</span> ]
+        <span class="pl-k">|</span> []      <span class="pl-k">-</span><span class="pl-k">&gt;</span> []
+    <span class="pl-smi">let</span> <span class="pl-smi">primes</span> <span class="pl-k">=</span> <span class="pl-smi">sieve</span> [<span class="pl-ii">2..50</span>]
+    <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>%A<span class="pl-pds">"</span></span> <span class="pl-smi">primes</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> pattern matching for lists</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">listMatcher</span> <span class="pl-smi">aList</span> <span class="pl-k">=</span>
+        <span class="pl-smi">match</span> <span class="pl-smi">aList</span> <span class="pl-smi">with</span>
+        <span class="pl-k">|</span> [] <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>the list is empty<span class="pl-pds">"</span></span>
+        <span class="pl-k">|</span> [<span class="pl-smi">first</span>] <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>the list has one element %A <span class="pl-pds">"</span></span> <span class="pl-smi">first</span>
+        <span class="pl-k">|</span> [<span class="pl-smi">first</span>; <span class="pl-smi">second</span>] <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>list is %A and %A<span class="pl-pds">"</span></span> <span class="pl-smi">first</span> <span class="pl-smi">second</span>
+        <span class="pl-k">|</span> <span class="pl-smi">first</span> :: <span class="pl-smi">_</span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>the list has more than two elements, first element %A<span class="pl-pds">"</span></span> <span class="pl-smi">first</span>
+
+    <span class="pl-smi">listMatcher</span> [<span class="pl-c1">1</span>; <span class="pl-c1">2</span>; <span class="pl-c1">3</span>; <span class="pl-c1">4</span>]
+    <span class="pl-smi">listMatcher</span> [<span class="pl-c1">1</span>; <span class="pl-c1">2</span>]
+    <span class="pl-smi">listMatcher</span> [<span class="pl-c1">1</span>]
+    <span class="pl-smi">listMatcher</span> []
+
+    <span class="pl-c"><span class="pl-c">//</span> recursion using lists</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">rec</span> <span class="pl-smi">sum</span> <span class="pl-smi">aList</span> <span class="pl-k">=</span>
+        <span class="pl-smi">match</span> <span class="pl-smi">aList</span> <span class="pl-smi">with</span>
+        <span class="pl-k">|</span> [] <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-c1">0</span>
+        <span class="pl-k">|</span> <span class="pl-smi">x</span>::<span class="pl-smi">xs</span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">x</span> <span class="pl-k">+</span> <span class="pl-smi">sum</span> <span class="pl-smi">xs</span>
+    <span class="pl-smi">sum</span> [<span class="pl-ii">1..10</span>]
+
+    <span class="pl-c"><span class="pl-c">//</span> -----------------------------------------</span>
+    <span class="pl-c"><span class="pl-c">//</span> Standard library functions</span>
+    <span class="pl-c"><span class="pl-c">//</span> -----------------------------------------</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> map</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">add3</span> <span class="pl-smi">x</span> <span class="pl-k">=</span> <span class="pl-smi">x</span> <span class="pl-k">+</span> <span class="pl-c1">3</span>
+    [<span class="pl-ii">1..10</span>] <span class="pl-k">|</span><span class="pl-k">&gt;</span> <span class="pl-smi">List</span>.<span class="pl-smi">map</span> <span class="pl-smi">add3</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> filter</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">even</span> <span class="pl-smi">x</span> <span class="pl-k">=</span> <span class="pl-smi">x</span> <span class="pl-k">%</span> <span class="pl-c1">2</span> <span class="pl-k">=</span> <span class="pl-c1">0</span>
+    [<span class="pl-ii">1..10</span>] <span class="pl-k">|</span><span class="pl-k">&gt;</span> <span class="pl-smi">List</span>.<span class="pl-smi">filter</span> <span class="pl-smi">even</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> many more -- see documentation</span>
+
+<span class="pl-smi">module</span> <span class="pl-smi">ArrayExamples</span> <span class="pl-k">=</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> arrays use square brackets with bar</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">array1</span> <span class="pl-k">=</span> [<span class="pl-k">|</span> <span class="pl-s"><span class="pl-pds">"</span>a<span class="pl-pds">"</span></span>; <span class="pl-s"><span class="pl-pds">"</span>b<span class="pl-pds">"</span></span> <span class="pl-k">|</span>]
+    <span class="pl-smi">let</span> <span class="pl-smi">first</span> <span class="pl-k">=</span> <span class="pl-smi">array1</span>.[<span class="pl-c1">0</span>]        <span class="pl-c"><span class="pl-c">//</span> indexed access using dot</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> pattern matching for arrays is same as for lists</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">arrayMatcher</span> <span class="pl-smi">aList</span> <span class="pl-k">=</span>
+        <span class="pl-smi">match</span> <span class="pl-smi">aList</span> <span class="pl-smi">with</span>
+        <span class="pl-k">|</span> [<span class="pl-k">|</span> <span class="pl-k">|</span>] <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>the array is empty<span class="pl-pds">"</span></span>
+        <span class="pl-k">|</span> [<span class="pl-k">|</span> <span class="pl-smi">first</span> <span class="pl-k">|</span>] <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>the array has one element %A <span class="pl-pds">"</span></span> <span class="pl-smi">first</span>
+        <span class="pl-k">|</span> [<span class="pl-k">|</span> <span class="pl-smi">first</span>; <span class="pl-smi">second</span> <span class="pl-k">|</span>] <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>array is %A and %A<span class="pl-pds">"</span></span> <span class="pl-smi">first</span> <span class="pl-smi">second</span>
+        <span class="pl-k">|</span> <span class="pl-smi">_</span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>the array has more than two elements<span class="pl-pds">"</span></span>
+
+    <span class="pl-smi">arrayMatcher</span> [<span class="pl-k">|</span> <span class="pl-c1">1</span>; <span class="pl-c1">2</span>; <span class="pl-c1">3</span>; <span class="pl-c1">4</span> <span class="pl-k">|</span>]
+
+    <span class="pl-c"><span class="pl-c">//</span> Standard library functions just as for List</span>
+
+    [<span class="pl-k">|</span> <span class="pl-ii">1..10</span> <span class="pl-k">|</span>]
+    <span class="pl-k">|</span><span class="pl-k">&gt;</span> <span class="pl-smi">Array</span>.<span class="pl-en">map</span> (<span class="pl-smi">fun</span> <span class="pl-smi">i</span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">i</span> <span class="pl-k">+</span> <span class="pl-c1">3</span>)
+    <span class="pl-k">|</span><span class="pl-k">&gt;</span> <span class="pl-smi">Array</span>.<span class="pl-en">filter</span> (<span class="pl-smi">fun</span> <span class="pl-smi">i</span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">i</span> <span class="pl-k">%</span> <span class="pl-c1">2</span> <span class="pl-k">=</span> <span class="pl-c1">0</span>)
+    <span class="pl-k">|</span><span class="pl-k">&gt;</span> <span class="pl-smi">Array</span>.<span class="pl-en">iter</span> (<span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>value is %i. <span class="pl-pds">"</span></span>)
+
+
+<span class="pl-smi">module</span> <span class="pl-smi">SequenceExamples</span> <span class="pl-k">=</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> sequences use curly braces</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">seq1</span> <span class="pl-k">=</span> <span class="pl-smi">seq</span> { <span class="pl-smi">yield</span> <span class="pl-s"><span class="pl-pds">"</span>a<span class="pl-pds">"</span></span>; <span class="pl-smi">yield</span> <span class="pl-s"><span class="pl-pds">"</span>b<span class="pl-pds">"</span></span> }
+
+    <span class="pl-c"><span class="pl-c">//</span> sequences can use yield and</span>
+    <span class="pl-c"><span class="pl-c">//</span> can contain subsequences</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">strange</span> <span class="pl-k">=</span> <span class="pl-smi">seq</span> {
+        <span class="pl-c"><span class="pl-c">//</span> "yield" adds one element</span>
+        <span class="pl-smi">yield</span> <span class="pl-c1">1</span>; <span class="pl-smi">yield</span> <span class="pl-c1">2</span>;
+
+        <span class="pl-c"><span class="pl-c">//</span> "yield!" adds a whole subsequence</span>
+        <span class="pl-smi">yield</span><span class="pl-k">!</span> [<span class="pl-ii">5..10</span>]
+        <span class="pl-smi">yield</span><span class="pl-k">!</span> <span class="pl-smi">seq</span> {
+            <span class="pl-smi">for</span> <span class="pl-smi">i</span> <span class="pl-smi">in</span> <span class="pl-ii">1..10</span> <span class="pl-smi">do</span>
+              <span class="pl-smi">if</span> <span class="pl-smi">i</span> <span class="pl-k">%</span> <span class="pl-c1">2</span> <span class="pl-k">=</span> <span class="pl-c1">0</span> <span class="pl-smi">then</span> <span class="pl-smi">yield</span> <span class="pl-smi">i</span> }}
+    <span class="pl-c"><span class="pl-c">//</span> test</span>
+    <span class="pl-smi">strange</span> <span class="pl-k">|</span><span class="pl-k">&gt;</span> <span class="pl-smi">Seq</span>.<span class="pl-smi">toList</span>
+
+
+    <span class="pl-c"><span class="pl-c">//</span> Sequences can be created using "unfold"</span>
+    <span class="pl-c"><span class="pl-c">//</span> Here's the fibonacci series</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">fib</span> <span class="pl-k">=</span> <span class="pl-smi">Seq</span>.<span class="pl-en">unfold</span> (<span class="pl-en">fun</span> (<span class="pl-smi">fst</span>,<span class="pl-smi">snd</span>) <span class="pl-k">-</span><span class="pl-k">&gt;</span>
+        <span class="pl-en">Some</span>(<span class="pl-smi">fst</span> <span class="pl-k">+</span> <span class="pl-smi">snd</span>, (<span class="pl-smi">snd</span>, <span class="pl-smi">fst</span> <span class="pl-k">+</span> <span class="pl-smi">snd</span>))) (<span class="pl-c1">0</span>,<span class="pl-c1">1</span>)
+
+    <span class="pl-c"><span class="pl-c">//</span> test</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">fib10</span> <span class="pl-k">=</span> <span class="pl-smi">fib</span> <span class="pl-k">|</span><span class="pl-k">&gt;</span> <span class="pl-smi">Seq</span>.<span class="pl-smi">take</span> <span class="pl-c1">10</span> <span class="pl-k">|</span><span class="pl-k">&gt;</span> <span class="pl-smi">Seq</span>.<span class="pl-smi">toList</span>
+    <span class="pl-smi">printf</span> <span class="pl-s"><span class="pl-pds">"</span>first 10 fibs are %A<span class="pl-pds">"</span></span> <span class="pl-smi">fib10</span>
+
+
+<span class="pl-c"><span class="pl-c">//</span> ================================================</span>
+<span class="pl-c"><span class="pl-c">//</span> Data Types</span>
+<span class="pl-c"><span class="pl-c">//</span> ================================================</span>
+
+<span class="pl-smi">module</span> <span class="pl-smi">DataTypeExamples</span> <span class="pl-k">=</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> All data is immutable by default</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> Tuples are quick 'n easy anonymous types</span>
+    <span class="pl-c"><span class="pl-c">//</span> -- Use a comma to create a tuple</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">twoTuple</span> <span class="pl-k">=</span> <span class="pl-c1">1</span>, 2
+    <span class="pl-en">let</span> <span class="pl-en">threeTuple</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>a<span class="pl-pds">"</span></span>, 2, <span class="pl-en">true</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> Pattern match to unpack</span>
+    <span class="pl-en">let</span> <span class="pl-en">x</span>, <span class="pl-en">y</span> <span class="pl-k">=</span> <span class="pl-smi">twoTuple</span>  <span class="pl-c"><span class="pl-c">//</span> sets x = 1, y = 2</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> ------------------------------------</span>
+    <span class="pl-c"><span class="pl-c">//</span> Record types have named fields</span>
+    <span class="pl-c"><span class="pl-c">//</span> ------------------------------------</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> Use "type" with curly braces to define a record type</span>
+    <span class="pl-smi">type</span> <span class="pl-smi">Person</span> <span class="pl-k">=</span> {<span class="pl-smi">First</span>:<span class="pl-smi">string</span>; <span class="pl-smi">Last</span>:<span class="pl-smi">string</span>}
+
+    <span class="pl-c"><span class="pl-c">//</span> Use "let" with curly braces to create a record</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">person1</span> <span class="pl-k">=</span> {<span class="pl-smi">First</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>John<span class="pl-pds">"</span></span>; <span class="pl-smi">Last</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>Doe<span class="pl-pds">"</span></span>}
+
+    <span class="pl-c"><span class="pl-c">//</span> Pattern match to unpack</span>
+    <span class="pl-smi">let</span> {<span class="pl-smi">First</span> <span class="pl-k">=</span> <span class="pl-smi">first</span>} <span class="pl-k">=</span> <span class="pl-smi">person1</span>    <span class="pl-c"><span class="pl-c">//</span> sets first="John"</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> ------------------------------------</span>
+    <span class="pl-c"><span class="pl-c">//</span> Union types (aka variants) have a set of choices</span>
+    <span class="pl-c"><span class="pl-c">//</span> Only one case can be valid at a time.</span>
+    <span class="pl-c"><span class="pl-c">//</span> ------------------------------------</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> Use "type" with bar/pipe to define a union type</span>
+    <span class="pl-smi">type</span> <span class="pl-smi">Temp</span> <span class="pl-k">=</span>
+        <span class="pl-k">|</span> <span class="pl-smi">DegreesC</span> <span class="pl-smi">of</span> <span class="pl-smi">float</span>
+        <span class="pl-k">|</span> <span class="pl-smi">DegreesF</span> <span class="pl-smi">of</span> <span class="pl-smi">float</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> Use one of the cases to create one</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">temp1</span> <span class="pl-k">=</span> <span class="pl-smi">DegreesF</span> <span class="pl-c1">98</span><span class="pl-c1">.</span><span class="pl-c1">6</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">temp2</span> <span class="pl-k">=</span> <span class="pl-smi">DegreesC</span> <span class="pl-c1">37</span><span class="pl-c1">.</span><span class="pl-c1">0</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> Pattern match on all cases to unpack</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">printTemp</span> <span class="pl-k">=</span> <span class="pl-smi">function</span>
+       <span class="pl-k">|</span> <span class="pl-smi">DegreesC</span> <span class="pl-smi">t</span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>%f degC<span class="pl-pds">"</span></span> <span class="pl-smi">t</span>
+       <span class="pl-k">|</span> <span class="pl-smi">DegreesF</span> <span class="pl-smi">t</span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>%f degF<span class="pl-pds">"</span></span> <span class="pl-smi">t</span>
+
+    <span class="pl-smi">printTemp</span> <span class="pl-smi">temp1</span>
+    <span class="pl-smi">printTemp</span> <span class="pl-smi">temp2</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> ------------------------------------</span>
+    <span class="pl-c"><span class="pl-c">//</span> Recursive types</span>
+    <span class="pl-c"><span class="pl-c">//</span> ------------------------------------</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> Types can be combined recursively in complex ways</span>
+    <span class="pl-c"><span class="pl-c">//</span> without having to create subclasses</span>
+    <span class="pl-smi">type</span> <span class="pl-smi">Employee</span> <span class="pl-k">=</span>
+      <span class="pl-k">|</span> <span class="pl-smi">Worker</span> <span class="pl-smi">of</span> <span class="pl-smi">Person</span>
+      <span class="pl-k">|</span> <span class="pl-smi">Manager</span> <span class="pl-smi">of</span> <span class="pl-smi">Employee</span> <span class="pl-smi">list</span>
+
+    <span class="pl-smi">let</span> <span class="pl-smi">jdoe</span> <span class="pl-k">=</span> {<span class="pl-smi">First</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>John<span class="pl-pds">"</span></span>; <span class="pl-smi">Last</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>Doe<span class="pl-pds">"</span></span>}
+    <span class="pl-smi">let</span> <span class="pl-smi">worker</span> <span class="pl-k">=</span> <span class="pl-smi">Worker</span> <span class="pl-smi">jdoe</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> ------------------------------------</span>
+    <span class="pl-c"><span class="pl-c">//</span> Modeling with types</span>
+    <span class="pl-c"><span class="pl-c">//</span> ------------------------------------</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> Union types are great for modeling state without using flags</span>
+    <span class="pl-smi">type</span> <span class="pl-smi">EmailAddress</span> <span class="pl-k">=</span>
+        <span class="pl-k">|</span> <span class="pl-smi">ValidEmailAddress</span> <span class="pl-smi">of</span> <span class="pl-smi">string</span>
+        <span class="pl-k">|</span> <span class="pl-smi">InvalidEmailAddress</span> <span class="pl-smi">of</span> <span class="pl-smi">string</span>
+
+    <span class="pl-smi">let</span> <span class="pl-smi">trySendEmail</span> <span class="pl-smi">email</span> <span class="pl-k">=</span>
+        <span class="pl-smi">match</span> <span class="pl-smi">email</span> <span class="pl-smi">with</span> <span class="pl-c"><span class="pl-c">//</span> use pattern matching</span>
+        <span class="pl-k">|</span> <span class="pl-smi">ValidEmailAddress</span> <span class="pl-smi">address</span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> ()   <span class="pl-c"><span class="pl-c">//</span> send</span>
+        <span class="pl-k">|</span> <span class="pl-smi">InvalidEmailAddress</span> <span class="pl-smi">address</span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> () <span class="pl-c"><span class="pl-c">//</span> don't send</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> The combination of union types and record types together</span>
+    <span class="pl-c"><span class="pl-c">//</span> provide a great foundation for domain driven design.</span>
+    <span class="pl-c"><span class="pl-c">//</span> You can create hundreds of little types that accurately</span>
+    <span class="pl-c"><span class="pl-c">//</span> reflect the domain.</span>
+
+    <span class="pl-smi">type</span> <span class="pl-smi">CartItem</span> <span class="pl-k">=</span> { <span class="pl-smi">ProductCode</span>: <span class="pl-smi">string</span>; <span class="pl-smi">Qty</span>: <span class="pl-smi">int</span> }
+    <span class="pl-smi">type</span> <span class="pl-smi">Payment</span> <span class="pl-k">=</span> <span class="pl-smi">Payment</span> <span class="pl-smi">of</span> <span class="pl-smi">float</span>
+    <span class="pl-smi">type</span> <span class="pl-smi">ActiveCartData</span> <span class="pl-k">=</span> { <span class="pl-smi">UnpaidItems</span>: <span class="pl-smi">CartItem</span> <span class="pl-smi">list</span> }
+    <span class="pl-smi">type</span> <span class="pl-smi">PaidCartData</span> <span class="pl-k">=</span> { <span class="pl-smi">PaidItems</span>: <span class="pl-smi">CartItem</span> <span class="pl-smi">list</span>; <span class="pl-smi">Payment</span>: <span class="pl-smi">Payment</span>}
+
+    <span class="pl-smi">type</span> <span class="pl-smi">ShoppingCart</span> <span class="pl-k">=</span>
+        <span class="pl-k">|</span> <span class="pl-smi">EmptyCart</span>  <span class="pl-c"><span class="pl-c">//</span> no data</span>
+        <span class="pl-k">|</span> <span class="pl-smi">ActiveCart</span> <span class="pl-smi">of</span> <span class="pl-smi">ActiveCartData</span>
+        <span class="pl-k">|</span> <span class="pl-smi">PaidCart</span> <span class="pl-smi">of</span> <span class="pl-smi">PaidCartData</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> ------------------------------------</span>
+    <span class="pl-c"><span class="pl-c">//</span> Built in behavior for types</span>
+    <span class="pl-c"><span class="pl-c">//</span> ------------------------------------</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> Core types have useful "out-of-the-box" behavior, no coding needed.</span>
+    <span class="pl-c"><span class="pl-c">//</span> * Immutability</span>
+    <span class="pl-c"><span class="pl-c">//</span> * Pretty printing when debugging</span>
+    <span class="pl-c"><span class="pl-c">//</span> * Equality and comparison</span>
+    <span class="pl-c"><span class="pl-c">//</span> * Serialization</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> Pretty printing using %A</span>
+    <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>twoTuple=%A,<span class="pl-cce">\n</span>Person=%A,<span class="pl-cce">\n</span>Temp=%A,<span class="pl-cce">\n</span>Employee=%A<span class="pl-pds">"</span></span>
+             <span class="pl-smi">twoTuple</span> <span class="pl-smi">person1</span> <span class="pl-smi">temp1</span> <span class="pl-smi">worker</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> Equality and comparison built in.</span>
+    <span class="pl-c"><span class="pl-c">//</span> Here's an example with cards.</span>
+    <span class="pl-smi">type</span> <span class="pl-smi">Suit</span> <span class="pl-k">=</span> <span class="pl-smi">Club</span> <span class="pl-k">|</span> <span class="pl-smi">Diamond</span> <span class="pl-k">|</span> <span class="pl-smi">Spade</span> <span class="pl-k">|</span> <span class="pl-smi">Heart</span>
+    <span class="pl-smi">type</span> <span class="pl-smi">Rank</span> <span class="pl-k">=</span> <span class="pl-smi">Two</span> <span class="pl-k">|</span> <span class="pl-smi">Three</span> <span class="pl-k">|</span> <span class="pl-smi">Four</span> <span class="pl-k">|</span> <span class="pl-smi">Five</span> <span class="pl-k">|</span> <span class="pl-smi">Six</span> <span class="pl-k">|</span> <span class="pl-smi">Seven</span> <span class="pl-k">|</span> <span class="pl-smi">Eight</span>
+                <span class="pl-k">|</span> <span class="pl-smi">Nine</span> <span class="pl-k">|</span> <span class="pl-smi">Ten</span> <span class="pl-k">|</span> <span class="pl-smi">Jack</span> <span class="pl-k">|</span> <span class="pl-smi">Queen</span> <span class="pl-k">|</span> <span class="pl-smi">King</span> <span class="pl-k">|</span> <span class="pl-smi">Ace</span>
+
+    <span class="pl-smi">let</span> <span class="pl-smi">hand</span> <span class="pl-k">=</span> [ <span class="pl-smi">Club</span>, <span class="pl-smi">Ace</span>; <span class="pl-smi">Heart</span>, <span class="pl-smi">Three</span>; <span class="pl-smi">Heart</span>, <span class="pl-smi">Ace</span>;
+                 <span class="pl-smi">Spade</span>, <span class="pl-smi">Jack</span>; <span class="pl-smi">Diamond</span>, <span class="pl-smi">Two</span>; <span class="pl-smi">Diamond</span>, <span class="pl-smi">Ace</span> ]
+
+    <span class="pl-c"><span class="pl-c">//</span> sorting</span>
+    <span class="pl-smi">List</span>.<span class="pl-smi">sort</span> <span class="pl-smi">hand</span> <span class="pl-k">|</span><span class="pl-k">&gt;</span> <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>sorted hand is (low to high) %A<span class="pl-pds">"</span></span>
+    <span class="pl-smi">List</span>.<span class="pl-smi">max</span> <span class="pl-smi">hand</span> <span class="pl-k">|</span><span class="pl-k">&gt;</span> <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>high card is %A<span class="pl-pds">"</span></span>
+    <span class="pl-smi">List</span>.<span class="pl-smi">min</span> <span class="pl-smi">hand</span> <span class="pl-k">|</span><span class="pl-k">&gt;</span> <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>low card is %A<span class="pl-pds">"</span></span>
+
+
+<span class="pl-c"><span class="pl-c">//</span> ================================================</span>
+<span class="pl-c"><span class="pl-c">//</span> Active patterns</span>
+<span class="pl-c"><span class="pl-c">//</span> ================================================</span>
+
+<span class="pl-smi">module</span> <span class="pl-smi">ActivePatternExamples</span> <span class="pl-k">=</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> F# has a special type of pattern matching called "active patterns"</span>
+    <span class="pl-c"><span class="pl-c">//</span> where the pattern can be parsed or detected dynamically.</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> "banana clips" are the syntax for active patterns</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> You can use "elif" instead of "else if" in conditional expressions.</span>
+    <span class="pl-c"><span class="pl-c">//</span> They are equivalent in F#</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> for example, define an "active" pattern to match character types...</span>
+    <span class="pl-en">let</span> (<span class="pl-k">|</span><span class="pl-smi">Digit</span><span class="pl-k">|</span><span class="pl-smi">Letter</span><span class="pl-k">|</span><span class="pl-smi">Whitespace</span><span class="pl-k">|</span><span class="pl-smi">Other</span><span class="pl-k">|</span>) <span class="pl-smi">ch</span> <span class="pl-k">=</span>
+       <span class="pl-smi">if</span> <span class="pl-smi">System</span>.<span class="pl-smi">Char</span>.<span class="pl-en">IsDigit</span>(<span class="pl-smi">ch</span>) <span class="pl-smi">then</span> <span class="pl-smi">Digit</span>
+       <span class="pl-smi">elif</span> <span class="pl-smi">System</span>.<span class="pl-smi">Char</span>.<span class="pl-en">IsLetter</span>(<span class="pl-smi">ch</span>) <span class="pl-smi">then</span> <span class="pl-smi">Letter</span>
+       <span class="pl-smi">elif</span> <span class="pl-smi">System</span>.<span class="pl-smi">Char</span>.<span class="pl-en">IsWhiteSpace</span>(<span class="pl-smi">ch</span>) <span class="pl-smi">then</span> <span class="pl-smi">Whitespace</span>
+       <span class="pl-smi">else</span> <span class="pl-smi">Other</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> ... and then use it to make parsing logic much clearer</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">printChar</span> <span class="pl-smi">ch</span> <span class="pl-k">=</span>
+      <span class="pl-smi">match</span> <span class="pl-smi">ch</span> <span class="pl-smi">with</span>
+      <span class="pl-k">|</span> <span class="pl-smi">Digit</span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>%c is a Digit<span class="pl-pds">"</span></span> <span class="pl-smi">ch</span>
+      <span class="pl-k">|</span> <span class="pl-smi">Letter</span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>%c is a Letter<span class="pl-pds">"</span></span> <span class="pl-smi">ch</span>
+      <span class="pl-k">|</span> <span class="pl-smi">Whitespace</span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>%c is a Whitespace<span class="pl-pds">"</span></span> <span class="pl-smi">ch</span>
+      <span class="pl-k">|</span> <span class="pl-smi">_</span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>%c is something else<span class="pl-pds">"</span></span> <span class="pl-smi">ch</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> print a list</span>
+    [<span class="pl-s">'a'</span>; <span class="pl-s">'b'</span>; <span class="pl-s">'1'</span>; <span class="pl-s">' '</span>; <span class="pl-s">'-'</span>; <span class="pl-s">'c'</span>] <span class="pl-k">|</span><span class="pl-k">&gt;</span> <span class="pl-smi">List</span>.<span class="pl-smi">iter</span> <span class="pl-smi">printChar</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> -----------------------------------</span>
+    <span class="pl-c"><span class="pl-c">//</span> FizzBuzz using active patterns</span>
+    <span class="pl-c"><span class="pl-c">//</span> -----------------------------------</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> You can create partial matching patterns as well</span>
+    <span class="pl-c"><span class="pl-c">//</span> Just use underscore in the definition, and return Some if matched.</span>
+    <span class="pl-en">let</span> (<span class="pl-k">|</span><span class="pl-smi">MultOf3</span><span class="pl-k">|</span><span class="pl-smi">_</span><span class="pl-k">|</span>) <span class="pl-smi">i</span> <span class="pl-k">=</span> <span class="pl-smi">if</span> <span class="pl-smi">i</span> <span class="pl-k">%</span> <span class="pl-c1">3</span> <span class="pl-k">=</span> <span class="pl-c1">0</span> <span class="pl-smi">then</span> <span class="pl-smi">Some</span> <span class="pl-smi">MultOf3</span> <span class="pl-smi">else</span> <span class="pl-smi">None</span>
+    <span class="pl-en">let</span> (<span class="pl-k">|</span><span class="pl-smi">MultOf5</span><span class="pl-k">|</span><span class="pl-smi">_</span><span class="pl-k">|</span>) <span class="pl-smi">i</span> <span class="pl-k">=</span> <span class="pl-smi">if</span> <span class="pl-smi">i</span> <span class="pl-k">%</span> <span class="pl-c1">5</span> <span class="pl-k">=</span> <span class="pl-c1">0</span> <span class="pl-smi">then</span> <span class="pl-smi">Some</span> <span class="pl-smi">MultOf5</span> <span class="pl-smi">else</span> <span class="pl-smi">None</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> the main function</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">fizzBuzz</span> <span class="pl-smi">i</span> <span class="pl-k">=</span>
+      <span class="pl-smi">match</span> <span class="pl-smi">i</span> <span class="pl-smi">with</span>
+      <span class="pl-k">|</span> <span class="pl-smi">MultOf3</span> <span class="pl-k">&amp;</span> <span class="pl-smi">MultOf5</span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">printf</span> <span class="pl-s"><span class="pl-pds">"</span>FizzBuzz, <span class="pl-pds">"</span></span>
+      <span class="pl-k">|</span> <span class="pl-smi">MultOf3</span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">printf</span> <span class="pl-s"><span class="pl-pds">"</span>Fizz, <span class="pl-pds">"</span></span>
+      <span class="pl-k">|</span> <span class="pl-smi">MultOf5</span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">printf</span> <span class="pl-s"><span class="pl-pds">"</span>Buzz, <span class="pl-pds">"</span></span>
+      <span class="pl-k">|</span> <span class="pl-smi">_</span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">printf</span> <span class="pl-s"><span class="pl-pds">"</span>%i, <span class="pl-pds">"</span></span> <span class="pl-smi">i</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> test</span>
+    [<span class="pl-ii">1..20</span>] <span class="pl-k">|</span><span class="pl-k">&gt;</span> <span class="pl-smi">List</span>.<span class="pl-smi">iter</span> <span class="pl-smi">fizzBuzz</span>
+
+<span class="pl-c"><span class="pl-c">//</span> ================================================</span>
+<span class="pl-c"><span class="pl-c">//</span> Conciseness</span>
+<span class="pl-c"><span class="pl-c">//</span> ================================================</span>
+
+<span class="pl-smi">module</span> <span class="pl-smi">AlgorithmExamples</span> <span class="pl-k">=</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> F# has a high signal/noise ratio, so code reads</span>
+    <span class="pl-c"><span class="pl-c">//</span> almost like the actual algorithm</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> ------ Example: define sumOfSquares function ------</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">sumOfSquares</span> <span class="pl-smi">n</span> <span class="pl-k">=</span>
+       [<span class="pl-ii">1..n</span>]              <span class="pl-c"><span class="pl-c">//</span> 1) take all the numbers from 1 to n</span>
+       <span class="pl-k">|</span><span class="pl-k">&gt;</span> <span class="pl-smi">List</span>.<span class="pl-smi">map</span> <span class="pl-smi">square</span>  <span class="pl-c"><span class="pl-c">//</span> 2) square each one</span>
+       <span class="pl-k">|</span><span class="pl-k">&gt;</span> <span class="pl-smi">List</span>.<span class="pl-smi">sum</span>         <span class="pl-c"><span class="pl-c">//</span> 3) sum the results</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> test</span>
+    <span class="pl-smi">sumOfSquares</span> <span class="pl-c1">100</span> <span class="pl-k">|</span><span class="pl-k">&gt;</span> <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>Sum of squares = %A<span class="pl-pds">"</span></span>
+
+    <span class="pl-c"><span class="pl-c">//</span> ------ Example: define a sort function ------</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">rec</span> <span class="pl-smi">sort</span> <span class="pl-smi">list</span> <span class="pl-k">=</span>
+       <span class="pl-smi">match</span> <span class="pl-smi">list</span> <span class="pl-smi">with</span>
+       <span class="pl-c"><span class="pl-c">//</span> If the list is empty</span>
+       <span class="pl-k">|</span> [] <span class="pl-k">-</span><span class="pl-k">&gt;</span>
+            []                            <span class="pl-c"><span class="pl-c">//</span> return an empty list</span>
+       <span class="pl-c"><span class="pl-c">//</span> If the list is not empty</span>
+       <span class="pl-k">|</span> <span class="pl-smi">firstElem</span>::<span class="pl-smi">otherElements</span> <span class="pl-k">-</span><span class="pl-k">&gt;</span>      <span class="pl-c"><span class="pl-c">//</span> take the first element</span>
+            <span class="pl-smi">let</span> <span class="pl-smi">smallerElements</span> <span class="pl-k">=</span>         <span class="pl-c"><span class="pl-c">//</span> extract the smaller elements</span>
+                <span class="pl-smi">otherElements</span>             <span class="pl-c"><span class="pl-c">//</span> from the remaining ones</span>
+                <span class="pl-k">|</span><span class="pl-k">&gt;</span> <span class="pl-smi">List</span>.<span class="pl-en">filter</span> (<span class="pl-smi">fun</span> <span class="pl-smi">e</span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">e</span> <span class="pl-k">&lt;</span> <span class="pl-smi">firstElem</span>)
+                <span class="pl-k">|</span><span class="pl-k">&gt;</span> <span class="pl-smi">sort</span>                   <span class="pl-c"><span class="pl-c">//</span> and sort them</span>
+            <span class="pl-smi">let</span> <span class="pl-smi">largerElements</span> <span class="pl-k">=</span>          <span class="pl-c"><span class="pl-c">//</span> extract the larger ones</span>
+                <span class="pl-smi">otherElements</span>             <span class="pl-c"><span class="pl-c">//</span> from the remaining ones</span>
+                <span class="pl-k">|</span><span class="pl-k">&gt;</span> <span class="pl-smi">List</span>.<span class="pl-en">filter</span> (<span class="pl-smi">fun</span> <span class="pl-smi">e</span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">e</span> <span class="pl-k">&gt;=</span> <span class="pl-smi">firstElem</span>)
+                <span class="pl-k">|</span><span class="pl-k">&gt;</span> <span class="pl-smi">sort</span>                   <span class="pl-c"><span class="pl-c">//</span> and sort them</span>
+            <span class="pl-c"><span class="pl-c">//</span> Combine the 3 parts into a new list and return it</span>
+            <span class="pl-smi">List</span>.<span class="pl-smi">concat</span> [<span class="pl-smi">smallerElements</span>; [<span class="pl-smi">firstElem</span>]; <span class="pl-smi">largerElements</span>]
+
+    <span class="pl-c"><span class="pl-c">//</span> test</span>
+    <span class="pl-smi">sort</span> [<span class="pl-c1">1</span>; <span class="pl-c1">5</span>; <span class="pl-c1">23</span>; <span class="pl-c1">18</span>; <span class="pl-c1">9</span>; <span class="pl-c1">1</span>; <span class="pl-c1">3</span>] <span class="pl-k">|</span><span class="pl-k">&gt;</span> <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>Sorted = %A<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span> ================================================</span>
+<span class="pl-c"><span class="pl-c">//</span> Asynchronous Code</span>
+<span class="pl-c"><span class="pl-c">//</span> ================================================</span>
+
+<span class="pl-smi">module</span> <span class="pl-smi">AsyncExample</span> <span class="pl-k">=</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> F# has built-in features to help with async code</span>
+    <span class="pl-c"><span class="pl-c">//</span> without encountering the "pyramid of doom"</span>
+    <span class="pl-c"><span class="pl-c">//</span></span>
+    <span class="pl-c"><span class="pl-c">//</span> The following example downloads a set of web pages in parallel.</span>
+
+    <span class="pl-smi">open</span> <span class="pl-smi">System</span>.<span class="pl-smi">Net</span>
+    <span class="pl-smi">open</span> <span class="pl-smi">System</span>
+    <span class="pl-smi">open</span> <span class="pl-smi">System</span>.<span class="pl-smi">IO</span>
+    <span class="pl-smi">open</span> <span class="pl-smi">Microsoft</span>.<span class="pl-smi">FSharp</span>.<span class="pl-smi">Control</span>.<span class="pl-smi">CommonExtensions</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> Fetch the contents of a URL asynchronously</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">fetchUrlAsync</span> <span class="pl-smi">url</span> <span class="pl-k">=</span>
+        <span class="pl-smi">async</span> {   <span class="pl-c"><span class="pl-c">//</span> "async" keyword and curly braces</span>
+                  <span class="pl-c"><span class="pl-c">//</span> creates an "async" object</span>
+            <span class="pl-smi">let</span> <span class="pl-smi">req</span> <span class="pl-k">=</span> <span class="pl-smi">WebRequest</span>.<span class="pl-en">Create</span>(<span class="pl-en">Uri</span>(<span class="pl-smi">url</span>))
+            <span class="pl-smi">use</span><span class="pl-k">!</span> <span class="pl-smi">resp</span> <span class="pl-k">=</span> <span class="pl-smi">req</span>.<span class="pl-en">AsyncGetResponse</span>()
+                <span class="pl-c"><span class="pl-c">//</span> use! is async assignment</span>
+            <span class="pl-smi">use</span> <span class="pl-smi">stream</span> <span class="pl-k">=</span> <span class="pl-smi">resp</span>.<span class="pl-en">GetResponseStream</span>()
+                <span class="pl-c"><span class="pl-c">//</span> "use" triggers automatic close()</span>
+                <span class="pl-c"><span class="pl-c">//</span> on resource at end of scope</span>
+            <span class="pl-smi">use</span> <span class="pl-smi">reader</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">IO</span>.<span class="pl-en">StreamReader</span>(<span class="pl-smi">stream</span>)
+            <span class="pl-smi">let</span> <span class="pl-smi">html</span> <span class="pl-k">=</span> <span class="pl-smi">reader</span>.<span class="pl-en">ReadToEnd</span>()
+            <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>finished downloading %s<span class="pl-pds">"</span></span> <span class="pl-smi">url</span>
+            }
+
+    <span class="pl-c"><span class="pl-c">//</span> a list of sites to fetch</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">sites</span> <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">"</span>http://www.bing.com<span class="pl-pds">"</span></span>;
+                 <span class="pl-s"><span class="pl-pds">"</span>http://www.google.com<span class="pl-pds">"</span></span>;
+                 <span class="pl-s"><span class="pl-pds">"</span>http://www.microsoft.com<span class="pl-pds">"</span></span>;
+                 <span class="pl-s"><span class="pl-pds">"</span>http://www.amazon.com<span class="pl-pds">"</span></span>;
+                 <span class="pl-s"><span class="pl-pds">"</span>http://www.yahoo.com<span class="pl-pds">"</span></span>]
+
+    <span class="pl-c"><span class="pl-c">//</span> do it</span>
+    <span class="pl-smi">sites</span>
+    <span class="pl-k">|</span><span class="pl-k">&gt;</span> <span class="pl-smi">List</span>.<span class="pl-smi">map</span> <span class="pl-smi">fetchUrlAsync</span>  <span class="pl-c"><span class="pl-c">//</span> make a list of async tasks</span>
+    <span class="pl-k">|</span><span class="pl-k">&gt;</span> <span class="pl-smi">Async</span>.<span class="pl-smi">Parallel</span>          <span class="pl-c"><span class="pl-c">//</span> set up the tasks to run in parallel</span>
+    <span class="pl-k">|</span><span class="pl-k">&gt;</span> <span class="pl-smi">Async</span>.<span class="pl-smi">RunSynchronously</span>  <span class="pl-c"><span class="pl-c">//</span> start them off</span>
+
+<span class="pl-c"><span class="pl-c">//</span> ================================================</span>
+<span class="pl-c"><span class="pl-c">//</span> .NET compatibility</span>
+<span class="pl-c"><span class="pl-c">//</span> ================================================</span>
+
+<span class="pl-smi">module</span> <span class="pl-smi">NetCompatibilityExamples</span> <span class="pl-k">=</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> F# can do almost everything C# can do, and it integrates</span>
+    <span class="pl-c"><span class="pl-c">//</span> seamlessly with .NET or Mono libraries.</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> ------- work with existing library functions  -------</span>
+
+    <span class="pl-en">let</span> (<span class="pl-smi">i1success</span>, <span class="pl-smi">i1</span>) <span class="pl-k">=</span> <span class="pl-smi">System</span>.<span class="pl-smi">Int32</span>.<span class="pl-en">TryParse</span>(<span class="pl-s"><span class="pl-pds">"</span>123<span class="pl-pds">"</span></span>);
+    <span class="pl-smi">if</span> <span class="pl-smi">i1success</span> <span class="pl-smi">then</span> <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>parsed as %i<span class="pl-pds">"</span></span> <span class="pl-smi">i1</span> <span class="pl-k">else</span> <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>parse failed<span class="pl-pds">"</span></span>
+
+    <span class="pl-c"><span class="pl-c">//</span> ------- Implement interfaces on the fly! -------</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> create a new object that implements IDisposable</span>
+    <span class="pl-smi">let</span> <span class="pl-en">makeResource</span> <span class="pl-en">name</span> <span class="pl-k">=</span>
+       { <span class="pl-k">new</span> <span class="pl-en">System</span>.<span class="pl-en">IDisposable</span>
+         <span class="pl-smi">with</span> <span class="pl-smi">member</span> <span class="pl-k">this</span>.<span class="pl-en">Dispose</span>() <span class="pl-k">=</span> <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>%s disposed<span class="pl-pds">"</span></span> <span class="pl-smi">name</span> }
+
+    <span class="pl-smi">let</span> <span class="pl-smi">useAndDisposeResources</span> <span class="pl-k">=</span>
+        <span class="pl-smi">use</span> <span class="pl-smi">r1</span> <span class="pl-k">=</span> <span class="pl-smi">makeResource</span> <span class="pl-s"><span class="pl-pds">"</span>first resource<span class="pl-pds">"</span></span>
+        <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>using first resource<span class="pl-pds">"</span></span>
+        <span class="pl-smi">for</span> <span class="pl-smi">i</span> <span class="pl-smi">in</span> [<span class="pl-ii">1..3</span>] <span class="pl-smi">do</span>
+            <span class="pl-smi">let</span> <span class="pl-smi">resourceName</span> <span class="pl-k">=</span> <span class="pl-smi">sprintf</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">\t</span>inner resource %d<span class="pl-pds">"</span></span> <span class="pl-smi">i</span>
+            <span class="pl-smi">use</span> <span class="pl-smi">temp</span> <span class="pl-k">=</span> <span class="pl-smi">makeResource</span> <span class="pl-smi">resourceName</span>
+            <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">\t</span>do something with %s<span class="pl-pds">"</span></span> <span class="pl-smi">resourceName</span>
+        <span class="pl-smi">use</span> <span class="pl-smi">r2</span> <span class="pl-k">=</span> <span class="pl-smi">makeResource</span> <span class="pl-s"><span class="pl-pds">"</span>second resource<span class="pl-pds">"</span></span>
+        <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>using second resource<span class="pl-pds">"</span></span>
+        <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>done.<span class="pl-pds">"</span></span>
+
+    <span class="pl-c"><span class="pl-c">//</span> ------- Object oriented code -------</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> F# is also a fully fledged OO language.</span>
+    <span class="pl-c"><span class="pl-c">//</span> It supports classes, inheritance, virtual methods, etc.</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> interface with generic type</span>
+    <span class="pl-smi">type</span> <span class="pl-smi">IEnumerator</span><span class="pl-k">&lt;</span><span class="pl-s">'a&gt; <span class="pl-ii">=</span></span>
+        <span class="pl-smi">abstract</span> <span class="pl-smi">member</span> <span class="pl-smi">Current</span> : <span class="pl-s">'<span class="pl-ii">a</span></span>
+        <span class="pl-smi">abstract</span> <span class="pl-smi">MoveNext</span> : <span class="pl-smi">unit</span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">bool</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> abstract base class with virtual methods</span>
+    [<span class="pl-k">&lt;</span><span class="pl-smi">AbstractClass</span><span class="pl-k">&gt;</span>]
+    <span class="pl-smi">type</span> <span class="pl-en">Shape</span>() <span class="pl-k">=</span>
+        <span class="pl-c"><span class="pl-c">//</span> readonly properties</span>
+        <span class="pl-smi">abstract</span> <span class="pl-smi">member</span> <span class="pl-smi">Width</span> : <span class="pl-smi">int</span> <span class="pl-smi">with</span> <span class="pl-smi">get</span>
+        <span class="pl-smi">abstract</span> <span class="pl-smi">member</span> <span class="pl-smi">Height</span> : <span class="pl-smi">int</span> <span class="pl-smi">with</span> <span class="pl-smi">get</span>
+        <span class="pl-c"><span class="pl-c">//</span> non-virtual method</span>
+        <span class="pl-smi">member</span> <span class="pl-k">this</span>.<span class="pl-smi">BoundingArea</span> <span class="pl-k">=</span> <span class="pl-k">this</span>.<span class="pl-smi">Height</span> <span class="pl-k">*</span> <span class="pl-k">this</span>.<span class="pl-smi">Width</span>
+        <span class="pl-c"><span class="pl-c">//</span> virtual method with base implementation</span>
+        <span class="pl-smi">abstract</span> <span class="pl-smi">member</span> <span class="pl-smi">Print</span> : <span class="pl-smi">unit</span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">unit</span>
+        <span class="pl-smi">default</span> <span class="pl-k">this</span>.<span class="pl-en">Print</span> () <span class="pl-k">=</span> <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>I'm a shape<span class="pl-pds">"</span></span>
+
+    <span class="pl-c"><span class="pl-c">//</span> concrete class that inherits from base class and overrides</span>
+    <span class="pl-smi">type</span> <span class="pl-en">Rectangle</span>(<span class="pl-en">x</span>:<span class="pl-smi">int</span>, <span class="pl-en">y</span>:<span class="pl-smi">int</span>) <span class="pl-k">=</span>
+        <span class="pl-smi">inherit</span> <span class="pl-en">Shape</span>()
+        <span class="pl-smi">override</span> <span class="pl-k">this</span>.<span class="pl-smi">Width</span> <span class="pl-k">=</span> <span class="pl-smi">x</span>
+        <span class="pl-smi">override</span> <span class="pl-k">this</span>.<span class="pl-smi">Height</span> <span class="pl-k">=</span> <span class="pl-smi">y</span>
+        <span class="pl-smi">override</span> <span class="pl-k">this</span>.<span class="pl-en">Print</span> ()  <span class="pl-k">=</span> <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>I'm a Rectangle<span class="pl-pds">"</span></span>
+
+    <span class="pl-c"><span class="pl-c">//</span> test</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">r</span> <span class="pl-k">=</span> <span class="pl-en">Rectangle</span>(<span class="pl-c1">2</span>, <span class="pl-c1">3</span>)
+    <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>The width is %i<span class="pl-pds">"</span></span> <span class="pl-smi">r</span>.<span class="pl-smi">Width</span>
+    <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>The area is %i<span class="pl-pds">"</span></span> <span class="pl-smi">r</span>.<span class="pl-smi">BoundingArea</span>
+    <span class="pl-smi">r</span>.<span class="pl-en">Print</span>()
+
+    <span class="pl-c"><span class="pl-c">//</span> ------- extension methods  -------</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> Just as in C#, F# can extend existing classes with extension methods.</span>
+    <span class="pl-smi">type</span> <span class="pl-smi">System</span>.<span class="pl-smi">String</span> <span class="pl-smi">with</span>
+       <span class="pl-smi">member</span> <span class="pl-k">this</span>.<span class="pl-smi">StartsWithA</span> <span class="pl-k">=</span> <span class="pl-k">this</span>.<span class="pl-smi">StartsWith</span> <span class="pl-s"><span class="pl-pds">"</span>A<span class="pl-pds">"</span></span>
+
+    <span class="pl-c"><span class="pl-c">//</span> test</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">s</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Alice<span class="pl-pds">"</span></span>
+    <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>'%s' starts with an 'A' = %A<span class="pl-pds">"</span></span> <span class="pl-smi">s</span> <span class="pl-smi">s</span>.<span class="pl-smi">StartsWithA</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> ------- events  -------</span>
+
+    <span class="pl-smi">type</span> <span class="pl-en">MyButton</span>() <span class="pl-k">=</span>
+        <span class="pl-smi">let</span> <span class="pl-smi">clickEvent</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Event</span>&lt;<span class="pl-en">_</span>&gt;()
+
+        [<span class="pl-k">&lt;</span><span class="pl-smi">CLIEvent</span><span class="pl-k">&gt;</span>]
+        <span class="pl-smi">member</span> <span class="pl-k">this</span>.<span class="pl-smi">OnClick</span> <span class="pl-k">=</span> <span class="pl-smi">clickEvent</span>.<span class="pl-smi">Publish</span>
+
+        <span class="pl-smi">member</span> <span class="pl-k">this</span>.<span class="pl-en">TestEvent</span>(<span class="pl-smi">arg</span>) <span class="pl-k">=</span>
+            <span class="pl-smi">clickEvent</span>.<span class="pl-en">Trigger</span>(<span class="pl-k">this</span>, <span class="pl-smi">arg</span>)
+
+    <span class="pl-c"><span class="pl-c">//</span> test</span>
+    <span class="pl-smi">let</span> <span class="pl-smi">myButton</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">MyButton</span>()
+    <span class="pl-smi">myButton</span>.<span class="pl-smi">OnClick</span>.<span class="pl-en">Add</span>(<span class="pl-en">fun</span> (<span class="pl-smi">sender</span>, <span class="pl-smi">arg</span>) <span class="pl-k">-</span><span class="pl-k">&gt;</span>
+            <span class="pl-smi">printfn</span> <span class="pl-s"><span class="pl-pds">"</span>Click event with arg=%O<span class="pl-pds">"</span></span> <span class="pl-smi">arg</span>)
+
+    <span class="pl-smi">myButton</span>.<span class="pl-en">TestEvent</span>(<span class="pl-s"><span class="pl-pds">"</span>Hello World!<span class="pl-pds">"</span></span>)
+</pre></div>
+<h2>More Information</h2>
+<p>For more demonstrations of F#, go to my <a href="http://fsharpforfunandprofit.com/why-use-fsharp/" rel="nofollow">why use F#</a> series.</p>
+<p>Read more about F# at <a href="http://fsharp.org/" rel="nofollow">fsharp.org</a> and <a href="https://dotnet.microsoft.com/languages/fsharp" rel="nofollow">dotnet's F# page</a>.</p>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Scott Wlaschin", "http://fsharpforfunandprofit.com/"]
+</code></pre>

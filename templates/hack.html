@@ -1,0 +1,410 @@
+<h1>Hack</h1>
+<p><a href="https://hacklang.org/" rel="nofollow">Hack</a> lets you write code quickly, while also having safety features built in, like static typechecking.</p>
+<p>To run Hack code, <a href="https://docs.hhvm.com/hhvm/installation/introduction" rel="nofollow">install HHVM</a>, the open-source virtual machine.</p>
+<div class="highlight highlight-text-html-php"><pre class="notranslate"><span class="pl-c">/* ==================================</span>
+<span class="pl-c"> *           READ THE DOCS!</span>
+<span class="pl-c"> * ==================================</span>
+<span class="pl-c"> */</span>
+
+<span class="pl-c">/* For more information on the Hack language:</span>
+<span class="pl-c"> * - About Hack: https://hacklang.org/</span>
+<span class="pl-c"> * - Documentation: https://docs.hhvm.com/hack/</span>
+<span class="pl-c"> */</span>
+
+<span class="pl-c">/* ==================================</span>
+<span class="pl-c"> *           A NOTE ON PHP</span>
+<span class="pl-c"> * ==================================</span>
+<span class="pl-c"> */</span>
+
+<span class="pl-c">// The Hack language began as a superset of PHP.</span>
+<span class="pl-c">// Since then, the languages have (largely) diverged.</span>
+<span class="pl-c">// You may encounter the .php extension, which is no longer recommended.</span>
+
+<span class="pl-c">/* ==================================</span>
+<span class="pl-c"> *              COMMENTS</span>
+<span class="pl-c"> * ==================================</span>
+<span class="pl-c"> */</span>
+
+<span class="pl-c">// Hack has single-line comments...</span>
+
+<span class="pl-c">/* Multi-line comments...</span>
+<span class="pl-c"> *</span>
+<span class="pl-c"> */</span>
+
+<span class="pl-c">/**</span>
+<span class="pl-c"> * ... and a special syntax for doc comments.</span>
+<span class="pl-c"> *</span>
+<span class="pl-c"> * Use doc comments to summarize the purpose of a definition, function, class or method.</span>
+<span class="pl-c"> */</span>
+
+<span class="pl-c">/* ==================================</span>
+<span class="pl-c"> *             NAMESPACES</span>
+<span class="pl-c"> * ==================================</span>
+<span class="pl-c"> */</span>
+
+<span class="pl-c">// Namespaces contain definitions of classes, interfaces, traits, functions, and constants.</span>
+
+<span class="pl-k">namespace</span> <span class="pl-v">LearnHackinYMinutes</span> {
+
+  <span class="pl-c">/* ==================================</span>
+<span class="pl-c">   *                TYPES</span>
+<span class="pl-c">   * ==================================</span>
+<span class="pl-c">   */</span>
+
+  <span class="pl-k">function</span> <span class="pl-en">demo_hack_types</span>(): <span class="pl-smi">void</span> {
+
+    <span class="pl-c">// Hack has five primitive types: bool, int, float, string, and null.</span>
+    <span class="pl-s1"><span class="pl-c1">$</span>is_helpful</span> = <span class="pl-c1">true</span>; <span class="pl-c">// bool</span>
+    <span class="pl-s1"><span class="pl-c1">$</span>int_value</span> = <span class="pl-c1">10</span>; <span class="pl-c">// int</span>
+    <span class="pl-s1"><span class="pl-c1">$</span>precise_value</span> = <span class="pl-c1">2.0</span>; <span class="pl-c">// float</span>
+    <span class="pl-s1"><span class="pl-c1">$</span>hello_world</span> = "<span class="pl-s">Hello World!</span>"; <span class="pl-c">// string</span>
+    <span class="pl-s1"><span class="pl-c1">$</span>null_string</span> = <span class="pl-c1">null</span>; <span class="pl-c">// null</span>
+
+    <span class="pl-c">// Create a `shape` with the shape keyword, with a series of field names and values.</span>
+    <span class="pl-s1"><span class="pl-c1">$</span>my_point</span> = shape(<span class="pl-s">'x'</span> =&gt; -<span class="pl-c1">3</span>, <span class="pl-s">'y'</span> =&gt; <span class="pl-c1">6</span>, <span class="pl-s">'visible'</span> =&gt; <span class="pl-c1">true</span>);
+
+    <span class="pl-c">// Create a `tuple` with the tuple keyword, with a series of two or more types as values.</span>
+    <span class="pl-s1"><span class="pl-c1">$</span>apple_basket</span> = tuple("<span class="pl-s">apples</span>", <span class="pl-c1">25</span>); <span class="pl-c">// different types are OK</span>
+
+    <span class="pl-c">// Use `arraykey` to represent either an integer or string.</span>
+    <span class="pl-s1"><span class="pl-c1">$</span>the_answer</span> = <span class="pl-c1">42</span>;
+    <span class="pl-s1"><span class="pl-c1">$</span>is_answer</span> = process_key(<span class="pl-s1"><span class="pl-c1">$</span>the_answer</span>);
+
+    <span class="pl-c">// Similarly, `num` represents either an int or float.</span>
+    <span class="pl-s1"><span class="pl-c1">$</span>lucky_number</span> = <span class="pl-c1">7</span>;
+    <span class="pl-s1"><span class="pl-c1">$</span>lucky_square</span> = calculate_square(<span class="pl-s1"><span class="pl-c1">$</span>lucky_number</span>);
+  }
+
+  <span class="pl-k">function</span> <span class="pl-en">process_key</span>(<span class="pl-smi"><span class="pl-smi">arraykey</span></span> <span class="pl-s1"><span class="pl-c1">$</span>the_answer</span>): <span class="pl-smi">bool</span> {
+    <span class="pl-k">if</span> (<span class="pl-s1"><span class="pl-c1">$</span>the_answer</span> is int) {
+      <span class="pl-k">return</span> <span class="pl-c1">true</span>;
+    } <span class="pl-k">else</span> {
+      <span class="pl-k">return</span> <span class="pl-c1">false</span>;
+    } <span class="pl-c">// true</span>
+  }
+
+  <span class="pl-k">function</span> <span class="pl-en">calculate_square</span>(<span class="pl-smi"><span class="pl-smi">num</span></span> <span class="pl-s1"><span class="pl-c1">$</span>arg</span>)[]: <span class="pl-smi">float</span> {
+    <span class="pl-k">return</span> ((<span class="pl-smi">float</span>)<span class="pl-s1"><span class="pl-c1">$</span>arg</span> * <span class="pl-s1"><span class="pl-c1">$</span>arg</span>);
+  }
+
+  <span class="pl-c">// Enums are limited to int or string (as an Arraykey), or other enum values.</span>
+  enum <span class="pl-v">Permission</span>: <span class="pl-smi">string</span> {
+    <span class="pl-v">Read</span> = '<span class="pl-v">R</span>';
+    <span class="pl-v">Write</span> = '<span class="pl-v">W</span>';
+    <span class="pl-v">Execute</span> = '<span class="pl-v">E</span>';
+    <span class="pl-v">Delete</span> = '<span class="pl-v">D</span><span class="pl-s">';</span>
+<span class="pl-s">  }</span>
+<span class="pl-s"></span>
+<span class="pl-s">  // In contrast, an enum class can be of any value type!</span>
+<span class="pl-s">  enum class Random: mixed {</span>
+<span class="pl-s">    int X = 42;</span>
+<span class="pl-s">    string S = '</span>foo';
+  }
+
+  <span class="pl-c">/* ==================================</span>
+<span class="pl-c">   *            HACK ARRAYS</span>
+<span class="pl-c">   * ==================================</span>
+<span class="pl-c">   */</span>
+
+  <span class="pl-c">// The following line lets us use functions in the `C\` namespace.</span>
+  <span class="pl-k">use</span> <span class="pl-k">namespace</span> <span class="pl-c1">HH</span>\<span class="pl-v">Lib</span>\<span class="pl-v">C</span>; <span class="pl-c">// the `C` library operates on containers</span>
+
+  <span class="pl-k">function</span> <span class="pl-en">demo_hack_arrays</span>(): <span class="pl-smi">void</span> {
+
+    <span class="pl-c">// vec: ordered</span>
+    <span class="pl-s1"><span class="pl-c1">$</span>v</span> = vec[<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>];
+    <span class="pl-s1"><span class="pl-c1">$</span>letters</span> = vec[<span class="pl-s">'a'</span>, '<span class="pl-s">b', '</span>c'];
+
+    <span class="pl-s1"><span class="pl-c1">$</span>letters</span>[<span class="pl-c1">0</span>]; <span class="pl-c">// returns 'a'</span>
+    <span class="pl-s1"><span class="pl-c1">$</span>letters</span>[] = <span class="pl-s">'d'</span>; <span class="pl-c">// appends 'd'</span>
+
+    <span class="pl-c">// `inout` provides pass-by-reference behavior</span>
+    <span class="pl-en"><span class="pl-v">C</span>\pop_back</span>(inout <span class="pl-s1"><span class="pl-c1">$</span>letters</span>); <span class="pl-c">// removes 'd'</span>
+    <span class="pl-en"><span class="pl-v">C</span>\pop_front</span>(inout <span class="pl-s1"><span class="pl-c1">$</span>letters</span>); <span class="pl-c">// removes 'a'</span>
+
+    <span class="pl-c">// keyset: ordered, without duplicates</span>
+    <span class="pl-s1"><span class="pl-c1">$</span>k</span> = keyset[<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>]; <span class="pl-c">// values must be int or string</span>
+    <span class="pl-s1"><span class="pl-c1">$</span>colors</span> = keyset[<span class="pl-s">'red'</span>, <span class="pl-s">'blue'</span>, <span class="pl-s">'green'</span>];
+
+    <span class="pl-c">// keyset keys are identical to their values</span>
+    <span class="pl-s1"><span class="pl-c1">$</span>colors</span>[<span class="pl-s">'blue'</span>]; <span class="pl-c">// returns 'blue'.</span>
+
+    <span class="pl-s1"><span class="pl-c1">$</span>colors</span>[] = <span class="pl-s">'yellow'</span>; <span class="pl-c">// appends 'yellow'</span>
+    unset(<span class="pl-s1"><span class="pl-c1">$</span>colors</span>[<span class="pl-s">'red'</span>]); <span class="pl-c">// removes 'red'</span>
+
+    <span class="pl-c">//  dict: ordered, by key-value</span>
+    <span class="pl-s1"><span class="pl-c1">$</span>d</span> = dict[<span class="pl-s">'a'</span> =&gt; <span class="pl-c1">1</span>, 'b' =&gt; <span class="pl-c1">3</span>]; <span class="pl-c">// keys must be int or string</span>
+    <span class="pl-s1"><span class="pl-c1">$</span>alphabet</span> = dict[<span class="pl-s">'a'</span> =&gt; <span class="pl-c1">1</span>, 'b' =&gt; <span class="pl-c1">2</span>];
+
+    <span class="pl-s1"><span class="pl-c1">$</span>alphabet</span>[<span class="pl-s">'a'</span>]; <span class="pl-c">// indexing at 'a' returns `1`</span>
+    <span class="pl-s1"><span class="pl-c1">$</span>alphabet</span>[<span class="pl-s">'c'</span>] = <span class="pl-c1">3</span>; <span class="pl-c">// adds a new key-value pair of `c =&gt; 3`</span>
+
+    unset(<span class="pl-s1"><span class="pl-c1">$</span>alphabet</span>[<span class="pl-s">'b'</span>]); <span class="pl-c">// removes 'b'</span>
+  }
+
+  <span class="pl-c">/* ==================================</span>
+<span class="pl-c">   *  THE HACK STANDARD LIBRARY (HSL)</span>
+<span class="pl-c">   * ==================================</span>
+<span class="pl-c">   */</span>
+
+  <span class="pl-c">// The Hack Standard Library is a set of functions and classes for the Hack language.</span>
+  <span class="pl-c">// Namespace use declarations are ideally at the top of your file but are placed here for instruction purposes.</span>
+
+  <span class="pl-k">use</span> <span class="pl-k">namespace</span> <span class="pl-c1">HH</span>\<span class="pl-v">Lib</span>\<span class="pl-v">Str</span>; <span class="pl-c">// The `Str` library operates on strings</span>
+
+  <span class="pl-k">function</span> <span class="pl-en">demo_hack_standard_library</span>(): <span class="pl-smi">void</span> {
+
+    <span class="pl-s1"><span class="pl-c1">$</span>letters</span> = vec[<span class="pl-s">'a'</span>, '<span class="pl-s">b', '</span>c'];
+    <span class="pl-s1"><span class="pl-c1">$</span>colors</span> = keyset[<span class="pl-s">'red'</span>, <span class="pl-s">'blue'</span>, <span class="pl-s">'green'</span>];
+    <span class="pl-s1"><span class="pl-c1">$</span>alphabet</span> = dict[<span class="pl-s">'a'</span> =&gt; <span class="pl-c1">1</span>, 'b' =&gt; <span class="pl-c1">2</span>];
+
+    <span class="pl-en"><span class="pl-v">C</span>\contains</span>(<span class="pl-s1"><span class="pl-c1">$</span>letters</span>, <span class="pl-s">'c'</span>); <span class="pl-c">// checks for a value; returns 'true'</span>
+    <span class="pl-en"><span class="pl-v">C</span>\contains</span>(<span class="pl-s1"><span class="pl-c1">$</span>colors</span>, <span class="pl-s">'purple'</span>); <span class="pl-c">// checks for a value; returns 'false'</span>
+    <span class="pl-en"><span class="pl-v">C</span>\contains_key</span>(<span class="pl-s1"><span class="pl-c1">$</span>alphabet</span>, <span class="pl-s">'a'</span>); <span class="pl-c">// checks for a key; returns 'true'</span>
+    <span class="pl-en"><span class="pl-v">C</span>\contains</span>(<span class="pl-s1"><span class="pl-c1">$</span>alphabet</span>, <span class="pl-s">'d'</span>); <span class="pl-c">// checks for a value; returns 'false'</span>
+
+    <span class="pl-en"><span class="pl-v">Str</span>\length</span>("<span class="pl-s">foo</span>"); <span class="pl-c">// returns `3`</span>
+    <span class="pl-en"><span class="pl-v">Str</span>\join</span>(vec[<span class="pl-s">'foo'</span>, <span class="pl-s">'bar'</span>, <span class="pl-s">'baz'</span>], <span class="pl-s">'!'</span>); <span class="pl-c">// returns `foo!bar!baz`</span>
+  }
+
+  <span class="pl-c">/* ==================================</span>
+<span class="pl-c">   *           HELLO WORLD!</span>
+<span class="pl-c">   * ==================================</span>
+<span class="pl-c">   */</span>
+
+  <span class="pl-k">use</span> <span class="pl-k">namespace</span> <span class="pl-c1">HH</span>\<span class="pl-v">Lib</span>\<span class="pl-c1">IO</span>; <span class="pl-c">// the `IO` library is a standard API for input / output</span>
+
+  &lt;&lt;__EntryPoint&gt;&gt; <span class="pl-c">// required attribute for the typical entry/main function</span>
+  async function main(): <span class="pl-v">Awaitable</span>&lt;
+    void,
+  &gt; { <span class="pl-c">// does not need to be named 'main' / is an asynchronous function</span>
+    <span class="pl-en">await <span class="pl-c1">IO</span>\request_output</span>()-&gt;<span class="pl-en">writeAllAsync</span>(
+      "<span class="pl-s">Hello World!</span>\n",
+    ); <span class="pl-c">// prints 'Hello World'!</span>
+  }
+
+  <span class="pl-c">/* ==================================</span>
+<span class="pl-c">   *             FUNCTIONS</span>
+<span class="pl-c">   * ==================================</span>
+<span class="pl-c">   */</span>
+
+  <span class="pl-c">// Functions are defined globally.</span>
+  <span class="pl-c">// When a function is defined in a class, we refer to the function as a method.</span>
+
+  <span class="pl-c">// Functions have return types (here: `int`) and must return a value of</span>
+  <span class="pl-c">// that type or return no value when a void return type annotation was used.</span>
+
+  <span class="pl-k">function</span> <span class="pl-en">add_one</span>(<span class="pl-smi">int</span> <span class="pl-s1"><span class="pl-c1">$</span>x</span>): <span class="pl-smi">int</span> {
+    <span class="pl-k">return</span> <span class="pl-s1"><span class="pl-c1">$</span>x</span> + <span class="pl-c1">1</span>;
+  }
+
+  <span class="pl-c">// Functions can also have defined, default values.</span>
+  <span class="pl-k">function</span> <span class="pl-en">add_value</span>(<span class="pl-smi">int</span> <span class="pl-s1"><span class="pl-c1">$</span>x</span>, <span class="pl-smi">int</span> <span class="pl-s1"><span class="pl-c1">$</span>y</span> = <span class="pl-c1">1</span>): <span class="pl-smi">int</span> {
+    <span class="pl-k">return</span> <span class="pl-s1"><span class="pl-c1">$</span>x</span> + <span class="pl-s1"><span class="pl-c1">$</span>y</span>;
+  }
+
+  <span class="pl-c">// Functions can be variadic (unspecified length of arguments).</span>
+  <span class="pl-k">function</span> <span class="pl-en">sum_ints</span>(<span class="pl-smi">int</span> <span class="pl-s1"><span class="pl-c1">$</span>val</span>, <span class="pl-smi">int</span> ...<span class="pl-s1"><span class="pl-c1">$</span>vals</span>): <span class="pl-smi">int</span> {
+    <span class="pl-s1"><span class="pl-c1">$</span>result</span> = <span class="pl-s1"><span class="pl-c1">$</span>val</span>;
+
+    <span class="pl-k">foreach</span> (<span class="pl-s1"><span class="pl-c1">$</span>vals</span> <span class="pl-k">as</span> <span class="pl-s1"><span class="pl-c1">$</span>v</span>) {
+      <span class="pl-s1"><span class="pl-c1">$</span>result</span> += <span class="pl-s1"><span class="pl-c1">$</span>v</span>;
+    }
+    <span class="pl-k">return</span> <span class="pl-s1"><span class="pl-c1">$</span>result</span>;
+  }
+
+  <span class="pl-c">// Functions can also be anonymous (defined with the `==&gt;` arrow).</span>
+  <span class="pl-c">// $f = (int $x): int ==&gt; $x + 1;</span>
+
+  <span class="pl-c">/* ==================================</span>
+<span class="pl-c">   *           PIPE OPERATOR</span>
+<span class="pl-c">   * ==================================</span>
+<span class="pl-c">   */</span>
+
+  <span class="pl-c">// The pipe operator, `|&gt;`, evaluates the result of a left-hand expression</span>
+  <span class="pl-c">// and stores the result in `$$`, the predefined pipe variable.</span>
+
+  <span class="pl-k">use</span> <span class="pl-k">namespace</span> <span class="pl-c1">HH</span>\<span class="pl-v">Lib</span>\<span class="pl-v">Vec</span>;
+
+  <span class="pl-k">function</span> <span class="pl-en">demo_pipe_operator</span>(): <span class="pl-smi">void</span> {
+
+    <span class="pl-en"><span class="pl-v">Vec</span>\sort</span>(<span class="pl-en"><span class="pl-v">Vec</span>\map</span>(vec[<span class="pl-c1">2</span>, <span class="pl-c1">1</span>, <span class="pl-c1">3</span>], <span class="pl-s1"><span class="pl-c1">$</span>a</span> ==&gt; <span class="pl-s1"><span class="pl-c1">$</span>a</span> * <span class="pl-s1"><span class="pl-c1">$</span>a</span>)); <span class="pl-c">// vec[1,4,9]</span>
+
+    <span class="pl-c">// the same result, but using the pipe operator and pipe variable:</span>
+    <span class="pl-s1"><span class="pl-c1">$</span>x</span> = vec[<span class="pl-c1">2</span>, <span class="pl-c1">1</span>, <span class="pl-c1">3</span>]
+      |&gt; <span class="pl-en"><span class="pl-v">Vec</span>\map</span>(<span class="pl-c1">$</span><span class="pl-c1">$</span>, <span class="pl-s1"><span class="pl-c1">$</span>a</span> ==&gt; <span class="pl-s1"><span class="pl-c1">$</span>a</span> * <span class="pl-s1"><span class="pl-c1">$</span>a</span>) <span class="pl-c">// $$ with value vec[2,1,3]</span>
+      |&gt; <span class="pl-en"><span class="pl-v">Vec</span>\sort</span>(<span class="pl-c1">$</span><span class="pl-s1"><span class="pl-c1">$</span></span>); <span class="pl-c">// $$ with value vec[4,1,9]</span>
+  }
+
+  <span class="pl-c">/* ==================================</span>
+<span class="pl-c">   *             ATTRIBUTES</span>
+<span class="pl-c">   * ==================================</span>
+<span class="pl-c">   */</span>
+
+  <span class="pl-c">// Hack provides built-in attributes that can change runtime or static type checking behavior.</span>
+  <span class="pl-c">// For example, we used the `__EntryPoint` attribute earlier in the "Hello World!" example.</span>
+
+  <span class="pl-c">// As another example, `__Memoize` caches the result of a function.</span>
+  &lt;&lt;__Memoize&gt;&gt;
+  async function do_expensive_task(): <span class="pl-v">Awaitable</span>&lt;string&gt; {
+    <span class="pl-s1"><span class="pl-c1">$</span>site_contents</span> = <span class="pl-en">await \<span class="pl-c1">HH</span>\<span class="pl-v">Asio</span>\curl_exec</span>("<span class="pl-s">http://hacklang.org</span>");
+    <span class="pl-k">return</span> <span class="pl-s1"><span class="pl-c1">$</span>site_contents</span>;
+  }
+
+  <span class="pl-c">/* ==================================</span>
+<span class="pl-c">   *             CONTEXTS</span>
+<span class="pl-c">   * ==================================</span>
+<span class="pl-c">   */</span>
+
+  <span class="pl-c">// Hack functions are attached to different contexts and capabilities.</span>
+  <span class="pl-c">// A context is a grouping of capabilities; that is, a grouping of permissions.</span>
+
+  <span class="pl-c">// To declare allowed contexts (and capabilities), use the Context List `[]`.</span>
+  <span class="pl-c">// If contexts are not defined, your function includes permissions defined in Hack's `defaults` context.</span>
+
+  <span class="pl-c">// Because the context list is NOT defined, the `defaults` context is implicitly declared.</span>
+  async <span class="pl-k">function</span> <span class="pl-en">implicit_defaults_context</span>(): <span class="pl-smi"><span class="pl-smi">Awaitable</span></span>&lt;void&gt; {
+    <span class="pl-en">await <span class="pl-c1">IO</span>\request_output</span>()-&gt;<span class="pl-en">writeAllAsync</span>(
+      "<span class="pl-s">Hello World!</span>\n",
+    ); <span class="pl-c">// prints 'Hello World'!</span>
+  }
+
+  <span class="pl-c">// In the function below, the context list is defined to have the `defaults` context.</span>
+  <span class="pl-c">// A function can have multiple contexts [context1, context2, ...].</span>
+  <span class="pl-c">// `defaults` includes most of the capabilities defined by the Hack language.</span>
+  async function explicit_defaults_context()[defaults]: <span class="pl-v">Awaitable</span>&lt;void&gt; {
+    <span class="pl-en">await <span class="pl-c1">IO</span>\request_output</span>()-&gt;<span class="pl-en">writeAllAsync</span>("<span class="pl-s">Hello World!</span>\n");
+  }
+
+  <span class="pl-c">// You can also specify zero contexts to create a pure function (no capabilities).</span>
+  async function empty_context()[]: <span class="pl-v">Awaitable</span>&lt;void&gt; {
+    <span class="pl-c">// The following line is an error, as the function does not have IO capabilities.</span>
+    <span class="pl-c">// await IO\request_output()-&gt;writeAllAsync("Hello World!\n");</span>
+  }
+
+  <span class="pl-c">/* ==================================</span>
+<span class="pl-c">   *             GENERICS</span>
+<span class="pl-c">   * ==================================</span>
+<span class="pl-c">   */</span>
+
+  <span class="pl-c">// Generics allow classes or methods to be parameterized to any set of types.</span>
+  <span class="pl-c">// That's pretty cool!</span>
+
+  <span class="pl-c">// Hack typically passes by value: use `inout` to pass by reference.</span>
+  <span class="pl-k">function</span> swap&lt;<span class="pl-v">T</span>&gt;(inout <span class="pl-v">T</span> <span class="pl-s1"><span class="pl-c1">$</span>input1</span>, inout <span class="pl-v">T</span> <span class="pl-s1"><span class="pl-c1">$</span>input2</span>): void {
+    <span class="pl-s1"><span class="pl-c1">$</span>temp</span> = <span class="pl-s1"><span class="pl-c1">$</span>input1</span>;
+    <span class="pl-s1"><span class="pl-c1">$</span>input1</span> = <span class="pl-s1"><span class="pl-c1">$</span>input2</span>;
+    <span class="pl-s1"><span class="pl-c1">$</span>input2</span> = <span class="pl-s1"><span class="pl-c1">$</span>temp</span>;
+  }
+
+  <span class="pl-c">/* ==================================</span>
+<span class="pl-c">   *             CLASSES</span>
+<span class="pl-c">   * ==================================</span>
+<span class="pl-c">   */</span>
+
+  <span class="pl-c">// Classes provide a way to group functionality and state together.</span>
+  <span class="pl-c">// To define a class, use the `class` keyword. To instantiate, use `new`.</span>
+  <span class="pl-c">// Like other languages, you can use `$this` to refer to the current instance.</span>
+
+  <span class="pl-k">class</span> <span class="pl-v">Counter</span> {
+    <span class="pl-k">private</span> <span class="pl-smi">int</span> <span class="pl-c1"><span class="pl-c1">$</span>i</span> = <span class="pl-c1">0</span>;
+
+    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">increment</span>(): <span class="pl-smi">void</span> {
+      <span class="pl-s1"><span class="pl-c1">$</span><span class="pl-smi">this</span></span>-&gt;<span class="pl-c1">i</span> += <span class="pl-c1">1</span>;
+    }
+
+    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">get</span>(): <span class="pl-smi">int</span> {
+      <span class="pl-k">return</span> <span class="pl-s1"><span class="pl-c1">$</span><span class="pl-smi">this</span></span>-&gt;<span class="pl-c1">i</span>;
+    }
+  }
+
+  <span class="pl-c">// Properties and Methods can be static (not requiring instantiation).</span>
+  <span class="pl-k">class</span> <span class="pl-v">Person</span> {
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">function</span> <span class="pl-en">favoriteProgrammingLanguage</span>(): <span class="pl-smi">string</span> {
+      <span class="pl-k">return</span> "<span class="pl-s">Hack</span>";
+    }
+  }
+
+  <span class="pl-k">function</span> <span class="pl-en">demo_hack_classes</span>(): <span class="pl-smi">void</span> {
+    <span class="pl-c">// Use `new` to instantiate a class.</span>
+    <span class="pl-s1"><span class="pl-c1">$</span>c1</span> = <span class="pl-k">new</span> <span class="pl-v">Counter</span>();
+
+    <span class="pl-c">// To call a static property or method, use `::`</span>
+    <span class="pl-s1"><span class="pl-c1">$</span>typical_person</span> = tuple("<span class="pl-s">Andrew</span>", <span class="pl-v">Person</span>::<span class="pl-en">favoriteProgrammingLanguage</span>());
+  }
+
+  <span class="pl-c">// Abstract class can be defined, but not instantiated directly.</span>
+  <span class="pl-k">abstract</span> <span class="pl-k">class</span> <span class="pl-v">Machine</span> {
+    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">openDoors</span>(): <span class="pl-smi">void</span> {
+      <span class="pl-k">return</span>;
+    }
+    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">closeDoors</span>(): <span class="pl-smi">void</span> {
+      <span class="pl-k">return</span>;
+    }
+  }
+
+  <span class="pl-c">/* ==================================</span>
+<span class="pl-c">   *             INTERFACES</span>
+<span class="pl-c">   * ==================================</span>
+<span class="pl-c">   */</span>
+
+  <span class="pl-c">// A class can implement a set of requirements via an interface.</span>
+  <span class="pl-c">// An interface is a set of method declarations and constants.</span>
+
+  <span class="pl-k">interface</span> <span class="pl-v">Plane</span> {
+    <span class="pl-c">// A constant is a named value. Once defined, the value cannot be changed.</span>
+    <span class="pl-k">const</span> <span class="pl-c1">MAX_SPEED</span> = <span class="pl-c1">300</span>;
+    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">fly</span>(): <span class="pl-smi">void</span>;
+  }
+
+  <span class="pl-c">/* ==================================</span>
+<span class="pl-c">   *             TRAITS</span>
+<span class="pl-c">   * ==================================</span>
+<span class="pl-c">   */</span>
+
+  <span class="pl-c">// A trait defines properties and method declarations.</span>
+  <span class="pl-c">// Traits are recommended when abstracting code for reuse.</span>
+  <span class="pl-c">// Traits are included in code via the `use` keyword.</span>
+
+  <span class="pl-k">trait</span> <span class="pl-v">Airplane</span> {
+    <span class="pl-c">// Introduce a class or interface requirement with the following syntax:</span>
+    require <span class="pl-k">extends</span> <span class="pl-v">Machine</span>; <span class="pl-c">// abstract class</span>
+    <span class="pl-k">require</span> implements <span class="pl-v">Plane</span>; <span class="pl-c">// interface</span>
+
+    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">takeOff</span>(): <span class="pl-smi">void</span> {
+      <span class="pl-s1"><span class="pl-c1">$</span><span class="pl-smi">this</span></span>-&gt;<span class="pl-en">openDoors</span>();
+      <span class="pl-s1"><span class="pl-c1">$</span><span class="pl-smi">this</span></span>-&gt;<span class="pl-en">closeDoors</span>();
+      <span class="pl-s1"><span class="pl-c1">$</span><span class="pl-smi">this</span></span>-&gt;<span class="pl-en">fly</span>();
+    }
+  }
+
+  <span class="pl-k">class</span> <span class="pl-v">Spaceship</span> <span class="pl-k">extends</span> <span class="pl-v">Machine</span> <span class="pl-k">implements</span> <span class="pl-v">Plane</span> {
+    <span class="pl-k">use</span> <span class="pl-v">Airplane</span>;
+
+    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">fly</span>(): <span class="pl-smi">void</span> {
+      <span class="pl-c">// fly like the wind</span>
+    }
+  }
+
+  <span class="pl-c">/* ==================================</span>
+<span class="pl-c">   *             KEEP READING!</span>
+<span class="pl-c">   * ==================================</span>
+<span class="pl-c">   */</span>
+
+  <span class="pl-c">/*  This is a simplified guide!</span>
+<span class="pl-c">   *  There's much more to learn, including:</span>
+<span class="pl-c">   * - Asynchronous Operations: https://docs.hhvm.com/hack/asynchronous-operations/introduction</span>
+<span class="pl-c">   * - Reified Generics: https://docs.hhvm.com/hack/reified-generics/reified-generics</span>
+<span class="pl-c">   * - XHP: https://docs.hhvm.com/hack/XHP/setup</span>
+<span class="pl-c">   * - ... and more!</span>
+<span class="pl-c">   */</span>
+}</pre></div>
+<h2>More Information</h2>
+<p>Visit the <a href="http://docs.hhvm.com/hack/" rel="nofollow">Hack language reference</a> to learn more about the Hack language.</p>
+<p>For more information on HHVM, including installation instructions, visit the <a href="http://hhvm.com/" rel="nofollow">official HHVM website</a>.</p>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Andrew DiMola", "https://github.com/AndrewDiMola"]
+- ["Stephen Holdaway", "https://github.com/stecman"]
+- ["David Lima", "https://github.com/davelima"]
+</code></pre>

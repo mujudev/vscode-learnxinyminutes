@@ -1,0 +1,714 @@
+<h1>Haxe</h1>
+<p><a href="https://haxe.org/" rel="nofollow">Haxe</a> is a general-purpose language that provides platform support for C++, C#,<br>
+Swf/ActionScript, JavaScript, Java, PHP, Python, Lua, HashLink, and Neko bytecode<br>
+(the latter two being also written by the Haxe author). Note that this guide is for<br>
+Haxe version 3.  Some of the guide may be applicable to older versions, but it is<br>
+recommended to use other references.</p>
+<div class="highlight highlight-source-cs"><pre class="notranslate"><span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">   Welcome to Learn Haxe 3 in 15 minutes.  http://www.haxe.org</span>
+<span class="pl-c">   This is an executable tutorial.  You can compile and run it using the haxe</span>
+<span class="pl-c">   compiler, while in the same directory as LearnHaxe.hx:</span>
+<span class="pl-c">   </span>
+<span class="pl-c">       $ haxe -main LearnHaxe3 --interp</span>
+<span class="pl-c"></span>
+<span class="pl-c">   Look for the slash-star marks surrounding these paragraphs.  We are inside</span>
+<span class="pl-c">   a "Multiline comment".  We can leave some notes here that will get ignored</span>
+<span class="pl-c">   by the compiler.</span>
+<span class="pl-c"></span>
+<span class="pl-c">   Multiline comments are also used to generate javadoc-style documentation for</span>
+<span class="pl-c">   haxedoc.  They will be used for haxedoc if they immediately precede a class,</span>
+<span class="pl-c">   class function, or class variable.</span>
+<span class="pl-c"> <span class="pl-c">*/</span></span>
+
+<span class="pl-c"><span class="pl-c">//</span> Double slashes like this will give a single-line comment.</span>
+
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">   This is your first actual haxe code coming up, it's declaring an empty</span>
+<span class="pl-c">   package.  A package isn't necessary, but it's useful if you want to create</span>
+<span class="pl-c">   a namespace for your code (e.g. org.yourapp.ClassName).</span>
+<span class="pl-c"></span>
+<span class="pl-c">   Omitting package declaration is the same as declaring an empty package.</span>
+<span class="pl-c"> <span class="pl-c">*/</span></span>
+<span class="pl-smi">package</span>; <span class="pl-c"><span class="pl-c">//</span> empty package, no namespace.</span>
+
+<span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">   Packages are directories that contain modules. Each module is a .hx file</span>
+<span class="pl-c">   that contains types defined in a package. Package names (e.g. org.yourapp)</span>
+<span class="pl-c">   must be lower case while module names are capitalized. A module contain one</span>
+<span class="pl-c">   or more types whose names are also capitalized.</span>
+<span class="pl-c"></span>
+<span class="pl-c">   E.g, the class "org.yourapp.Foo" should have the folder structure</span>
+<span class="pl-c">   org/module/Foo.hx, as accessible from the compiler's working directory or</span>
+<span class="pl-c">   class path.</span>
+<span class="pl-c"></span>
+<span class="pl-c">   If you import code from other files, it must be declared before the rest of</span>
+<span class="pl-c">   the code.  Haxe provides a lot of common default classes to get you started:</span>
+<span class="pl-c"> <span class="pl-c">*/</span></span>
+<span class="pl-smi">import</span> <span class="pl-smi">haxe</span>.<span class="pl-smi">ds</span>.<span class="pl-smi">ArraySort</span>;
+
+<span class="pl-c"><span class="pl-c">//</span> you can import many classes/modules at once with "*"</span>
+<span class="pl-smi">import</span> <span class="pl-smi">haxe</span>.<span class="pl-smi">ds</span>.<span class="pl-k">*</span>;
+
+<span class="pl-c"><span class="pl-c">//</span> you can import static fields</span>
+<span class="pl-smi">import</span> <span class="pl-smi">Lambda</span>.<span class="pl-smi">array</span>;
+
+<span class="pl-c"><span class="pl-c">//</span> you can also use "*" to import all static fields</span>
+<span class="pl-smi">import</span> <span class="pl-smi">Math</span>.<span class="pl-k">*</span>;
+
+<span class="pl-c"><span class="pl-c">//</span> You can also import classes in a special way, enabling them to extend the</span>
+<span class="pl-c"><span class="pl-c">//</span> functionality of other classes like a "mixin".  More on 'using' later.</span>
+<span class="pl-k">using</span> <span class="pl-en">StringTools</span>;
+
+<span class="pl-c"><span class="pl-c">//</span> Typedefs are like variables... for types.  They must be declared before any</span>
+<span class="pl-c"><span class="pl-c">//</span> code.  More on this later.</span>
+<span class="pl-en">typedef</span> <span class="pl-en">FooString</span> <span class="pl-k">=</span> <span class="pl-smi">String</span>;
+
+<span class="pl-c"><span class="pl-c">//</span> Typedefs can also reference "structural" types, more on that later as well.</span>
+<span class="pl-en">typedef</span> <span class="pl-en">FooObject</span> <span class="pl-k">=</span> { <span class="pl-smi">foo</span>: <span class="pl-smi">String</span> };
+
+<span class="pl-c"><span class="pl-c">//</span> Here's the class definition.  It's the main class for the file, since it has</span>
+<span class="pl-c"><span class="pl-c">//</span> the same name (LearnHaxe3).</span>
+<span class="pl-k">class</span> <span class="pl-en">LearnHaxe3</span> {
+    <span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">       If you want certain code to run automatically, you need to put it in</span>
+<span class="pl-c">       a static main function, and specify the class in the compiler arguments.</span>
+<span class="pl-c">       In this case, we've specified the "LearnHaxe3" class in the compiler</span>
+<span class="pl-c">       arguments above.</span>
+<span class="pl-c">     <span class="pl-c">*/</span></span>
+    <span class="pl-k">static</span> <span class="pl-en">function</span> <span class="pl-en">main</span>() {
+        <span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">           Trace is the default method of printing haxe expressions to the</span>
+<span class="pl-c">           screen.  Different targets will have different methods of</span>
+<span class="pl-c">           accomplishing this.  E.g., java, c++, c#, etc. will print to std</span>
+<span class="pl-c">           out.  Javascript will print to console.log, and flash will print to</span>
+<span class="pl-c">           an embedded TextField.  All traces come with a default newline.</span>
+<span class="pl-c">           Finally, It's possible to prevent traces from showing by using the</span>
+<span class="pl-c">           "--no-traces" argument on the compiler.</span>
+<span class="pl-c">         <span class="pl-c">*/</span></span>
+        <span class="pl-en">trace</span>(<span class="pl-s"><span class="pl-pds">"</span>Hello World, with trace()!<span class="pl-pds">"</span></span>);
+
+        <span class="pl-c"><span class="pl-c">//</span> Trace can handle any type of value or object.  It will try to print</span>
+        <span class="pl-c"><span class="pl-c">//</span> a representation of the expression as best it can.  You can also</span>
+        <span class="pl-c"><span class="pl-c">//</span> concatenate strings with the "+" operator:</span>
+        <span class="pl-en">trace</span>(<span class="pl-s"><span class="pl-pds">"</span>Integer: <span class="pl-pds">"</span></span> <span class="pl-k">+</span> <span class="pl-c1">10</span> <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> Float: <span class="pl-pds">"</span></span> <span class="pl-k">+</span> <span class="pl-c1">3</span><span class="pl-c1">.</span><span class="pl-c1">14</span> <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> Boolean: <span class="pl-pds">"</span></span> <span class="pl-k">+</span> <span class="pl-c1">true</span>);
+
+        <span class="pl-c"><span class="pl-c">//</span> In Haxe, it's required to separate expressions in the same block with</span>
+        <span class="pl-c"><span class="pl-c">//</span> semicolons.  But, you can put two expressions on one line:</span>
+        <span class="pl-en">trace</span>(<span class="pl-s">'two expressions..'</span>); <span class="pl-en">trace</span>(<span class="pl-s">'one line'</span>);
+
+
+        <span class="pl-c"><span class="pl-c">//</span>////////////////////////////////////////////////////////////////</span>
+        <span class="pl-c"><span class="pl-c">//</span> Types &amp; Variables</span>
+        <span class="pl-c"><span class="pl-c">//</span>////////////////////////////////////////////////////////////////</span>
+        <span class="pl-en">trace</span>(<span class="pl-s"><span class="pl-pds">"</span>***Types &amp; Variables***<span class="pl-pds">"</span></span>);
+
+        <span class="pl-c"><span class="pl-c">//</span> You can save values and references to data structures using the</span>
+        <span class="pl-c"><span class="pl-c">//</span> "var" keyword:</span>
+        <span class="pl-smi">var</span> <span class="pl-en">an_integer</span>:<span class="pl-smi">Int</span> <span class="pl-k">=</span> <span class="pl-c1">1</span>;
+        <span class="pl-en">trace</span>(<span class="pl-smi">an_integer</span> <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> is the value for an_integer<span class="pl-pds">"</span></span>);
+
+        <span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">           Haxe is statically typed, so "an_integer" is declared to have an</span>
+<span class="pl-c">           "Int" type, and the rest of the expression assigns the value "1" to</span>
+<span class="pl-c">           it.  It's not necessary to declare the type in many cases.  Here,</span>
+<span class="pl-c">           the haxe compiler is inferring that the type of another_integer</span>
+<span class="pl-c">           should be "Int".</span>
+<span class="pl-c">         <span class="pl-c">*/</span></span>
+        <span class="pl-k">var</span> <span class="pl-en">another_integer</span> <span class="pl-k">=</span> <span class="pl-c1">2</span>;
+        <span class="pl-en">trace</span>(<span class="pl-smi">another_integer</span> <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> is the value for another_integer<span class="pl-pds">"</span></span>);
+
+        <span class="pl-c"><span class="pl-c">//</span> The $type() method prints the type that the compiler assigns:</span>
+        $<span class="pl-en">type</span>(<span class="pl-smi">another_integer</span>);
+
+        <span class="pl-c"><span class="pl-c">//</span> You can also represent integers with hexadecimal:</span>
+        <span class="pl-k">var</span> <span class="pl-en">hex_integer</span> <span class="pl-k">=</span> <span class="pl-c1">0x</span><span class="pl-c1">ffffff</span>;
+
+        <span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">           Haxe uses platform precision for Int and Float sizes.  It also</span>
+<span class="pl-c">           uses the platform behavior for overflow.</span>
+<span class="pl-c">           (Other numeric types and behavior are possible using special</span>
+<span class="pl-c">           libraries.)</span>
+<span class="pl-c">           </span>
+<span class="pl-c">           In addition to simple values like Integers, Floats, and Booleans,</span>
+<span class="pl-c">           Haxe provides standard library implementations for common data</span>
+<span class="pl-c">           structures like strings, arrays, lists, and maps:</span>
+<span class="pl-c">         <span class="pl-c">*/</span></span>
+
+        <span class="pl-c"><span class="pl-c">//</span> Strings can have double or single quotes.</span>
+        <span class="pl-k">var</span> <span class="pl-en">a_string</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>some<span class="pl-pds">"</span></span> <span class="pl-k">+</span> <span class="pl-s">'string'</span>;
+        <span class="pl-en">trace</span>(<span class="pl-smi">a_string</span> <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> is the value for a_string<span class="pl-pds">"</span></span>);
+
+        <span class="pl-c"><span class="pl-c">//</span> Strings can be "interpolated" by inserting variables into specific</span>
+        <span class="pl-c"><span class="pl-c">//</span> positions.  The string must be single quoted, and the variable must</span>
+        <span class="pl-c"><span class="pl-c">//</span> be preceded with "$".  Expressions can be enclosed in ${...}.</span>
+        <span class="pl-k">var</span> <span class="pl-en">x</span> <span class="pl-k">=</span> <span class="pl-c1">1</span>;
+        <span class="pl-k">var</span> <span class="pl-en">an_interpolated_string</span> <span class="pl-k">=</span> <span class="pl-s">'the value of x is $x'</span>;
+        <span class="pl-k">var</span> <span class="pl-en">another_interpolated_string</span> <span class="pl-k">=</span> <span class="pl-s">'the value of x + 1 is ${x + 1}'</span>;
+
+        <span class="pl-c"><span class="pl-c">//</span> Strings are immutable, instance methods will return a copy of</span>
+        <span class="pl-c"><span class="pl-c">//</span> parts or all of the string. (See also the StringBuf class).</span>
+        <span class="pl-k">var</span> <span class="pl-en">a_sub_string</span> <span class="pl-k">=</span> <span class="pl-smi">a_string</span>.<span class="pl-en">substr</span>(<span class="pl-c1">0</span>,<span class="pl-c1">4</span>);
+        <span class="pl-en">trace</span>(<span class="pl-smi">a_sub_string</span> <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> is the value for a_sub_string<span class="pl-pds">"</span></span>);
+
+        <span class="pl-c"><span class="pl-c">//</span> Regexes are also supported, but there's not enough space here to go</span>
+        <span class="pl-c"><span class="pl-c">//</span> into much detail.</span>
+        <span class="pl-k">var</span> <span class="pl-en">re</span> <span class="pl-k">=</span> <span class="pl-k">~</span><span class="pl-k">/</span><span class="pl-smi">foobar</span><span class="pl-k">/</span>;
+        <span class="pl-en">trace</span>(<span class="pl-smi">re</span>.<span class="pl-en">match</span>(<span class="pl-s">'foo'</span>) <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> is the value for (~/foobar/.match('foo')))<span class="pl-pds">"</span></span>);
+
+        <span class="pl-c"><span class="pl-c">//</span> Arrays are zero-indexed, dynamic, and mutable.  Missing values are</span>
+        <span class="pl-c"><span class="pl-c">//</span> defined as null.</span>
+        <span class="pl-k">var</span> <span class="pl-en">a</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Array</span>&lt;<span class="pl-en">String</span>&gt;(); <span class="pl-c"><span class="pl-c">//</span> an array that contains Strings</span>
+        <span class="pl-smi">a</span>[<span class="pl-c1">0</span>] <span class="pl-k">=</span> <span class="pl-s">'foo'</span>;
+        <span class="pl-en">trace</span>(<span class="pl-smi">a</span>.<span class="pl-smi">length</span> <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> is the value for a.length<span class="pl-pds">"</span></span>);
+        <span class="pl-smi">a</span>[<span class="pl-c1">9</span>] <span class="pl-k">=</span> <span class="pl-s">'bar'</span>;
+        <span class="pl-en">trace</span>(<span class="pl-smi">a</span>.<span class="pl-smi">length</span> <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> is the value for a.length (after modification)<span class="pl-pds">"</span></span>);
+        <span class="pl-en">trace</span>(<span class="pl-smi">a</span>[<span class="pl-c1">3</span>] <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> is the value for a[3]<span class="pl-pds">"</span></span>); <span class="pl-c"><span class="pl-c">//</span>null</span>
+
+        <span class="pl-c"><span class="pl-c">//</span> Arrays are *generic*, so you can indicate which values they contain</span>
+        <span class="pl-c"><span class="pl-c">//</span> with a type parameter:</span>
+        <span class="pl-k">var</span> <span class="pl-en">a2</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Array</span>&lt;<span class="pl-en">Int</span>&gt;(); <span class="pl-c"><span class="pl-c">//</span> an array of Ints</span>
+        <span class="pl-k">var</span> <span class="pl-en">a3</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Array</span>&lt;<span class="pl-en">Array</span>&lt;<span class="pl-en">String</span>&gt;&gt;(); <span class="pl-c"><span class="pl-c">//</span> an Array of Arrays (of Strings).</span>
+
+        <span class="pl-c"><span class="pl-c">//</span> Maps are simple key/value data structures.  The key and the value</span>
+        <span class="pl-c"><span class="pl-c">//</span> can be of any type.</span>
+        <span class="pl-c"><span class="pl-c">//</span> Here, the keys are strings, and the values are Ints:</span>
+        <span class="pl-k">var</span> <span class="pl-en">m</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Map</span>&lt;<span class="pl-en">String</span>, <span class="pl-en">Int</span>&gt;();
+        <span class="pl-smi">m</span>.<span class="pl-en">set</span>(<span class="pl-s">'foo'</span>, <span class="pl-c1">4</span>);
+        <span class="pl-c"><span class="pl-c">//</span> You can also use array notation:</span>
+        <span class="pl-smi">m</span>[<span class="pl-s">'bar'</span>] <span class="pl-k">=</span> <span class="pl-c1">5</span>;
+        <span class="pl-en">trace</span>(<span class="pl-smi">m</span>.<span class="pl-en">exists</span>(<span class="pl-s">'bar'</span>) <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> is the value for m.exists('bar')<span class="pl-pds">"</span></span>);
+        <span class="pl-en">trace</span>(<span class="pl-smi">m</span>.<span class="pl-en">get</span>(<span class="pl-s">'bar'</span>) <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> is the value for m.get('bar')<span class="pl-pds">"</span></span>);
+        <span class="pl-en">trace</span>(<span class="pl-smi">m</span>[<span class="pl-s">'bar'</span>] <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> is the value for m['bar']<span class="pl-pds">"</span></span>);
+
+        <span class="pl-k">var</span> <span class="pl-en">m2</span> <span class="pl-k">=</span> [<span class="pl-s">'foo'</span> <span class="pl-k">=</span><span class="pl-k">&gt;</span> <span class="pl-c1">4</span>, <span class="pl-s">'baz'</span> <span class="pl-k">=</span><span class="pl-k">&gt;</span> <span class="pl-c1">6</span>]; <span class="pl-c"><span class="pl-c">//</span> Alternative map syntax</span>
+        <span class="pl-en">trace</span>(<span class="pl-smi">m2</span> <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> is the value for m2<span class="pl-pds">"</span></span>);
+
+        <span class="pl-c"><span class="pl-c">//</span> Remember, you can use type inference.  The Haxe compiler will</span>
+        <span class="pl-c"><span class="pl-c">//</span> decide the type of the variable the first time you pass an</span>
+        <span class="pl-c"><span class="pl-c">//</span> argument that sets a type parameter.</span>
+        <span class="pl-k">var</span> <span class="pl-en">m3</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Map</span>();
+        <span class="pl-smi">m3</span>.<span class="pl-en">set</span>(<span class="pl-c1">6</span>, <span class="pl-s">'baz'</span>); <span class="pl-c"><span class="pl-c">//</span> m3 is now a Map&lt;Int,String&gt;</span>
+        <span class="pl-en">trace</span>(<span class="pl-smi">m3</span> <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> is the value for m3<span class="pl-pds">"</span></span>);
+
+        <span class="pl-c"><span class="pl-c">//</span> Haxe has some more common datastructures in the haxe.ds module, such</span>
+        <span class="pl-c"><span class="pl-c">//</span> as List, Stack, and BalancedTree.</span>
+
+
+        <span class="pl-c"><span class="pl-c">//</span>////////////////////////////////////////////////////////////////</span>
+        <span class="pl-c"><span class="pl-c">//</span> Operators</span>
+        <span class="pl-c"><span class="pl-c">//</span>////////////////////////////////////////////////////////////////</span>
+        <span class="pl-en">trace</span>(<span class="pl-s"><span class="pl-pds">"</span>***OPERATORS***<span class="pl-pds">"</span></span>);
+
+        <span class="pl-c"><span class="pl-c">//</span> basic arithmetic</span>
+        <span class="pl-en">trace</span>((<span class="pl-c1">4</span> <span class="pl-k">+</span> <span class="pl-c1">3</span>) <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> is the value for (4 + 3)<span class="pl-pds">"</span></span>);
+        <span class="pl-en">trace</span>((<span class="pl-c1">5</span> <span class="pl-k">-</span> <span class="pl-c1">1</span>) <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> is the value for (5 - 1)<span class="pl-pds">"</span></span>);
+        <span class="pl-en">trace</span>((<span class="pl-c1">2</span> <span class="pl-k">*</span> <span class="pl-c1">4</span>) <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> is the value for (2 * 4)<span class="pl-pds">"</span></span>);
+        <span class="pl-c"><span class="pl-c">//</span> Division always produces Floats.</span>
+        <span class="pl-en">trace</span>((<span class="pl-c1">8</span> <span class="pl-k">/</span> <span class="pl-c1">3</span>) <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> is the value for (8 / 3) (a Float)<span class="pl-pds">"</span></span>);
+        <span class="pl-en">trace</span>((<span class="pl-c1">12</span> <span class="pl-k">%</span> <span class="pl-c1">4</span>) <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> is the value for (12 % 4)<span class="pl-pds">"</span></span>);
+
+        <span class="pl-c"><span class="pl-c">//</span> basic comparison</span>
+        <span class="pl-en">trace</span>((<span class="pl-c1">3</span> <span class="pl-k">==</span> <span class="pl-c1">2</span>) <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> is the value for 3 == 2<span class="pl-pds">"</span></span>);
+        <span class="pl-en">trace</span>((<span class="pl-c1">3</span> <span class="pl-k">!=</span> <span class="pl-c1">2</span>) <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> is the value for 3 != 2<span class="pl-pds">"</span></span>);
+        <span class="pl-en">trace</span>((<span class="pl-c1">3</span> <span class="pl-k">&gt;</span>  <span class="pl-c1">2</span>) <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> is the value for 3 &gt; 2<span class="pl-pds">"</span></span>);
+        <span class="pl-en">trace</span>((<span class="pl-c1">3</span> <span class="pl-k">&lt;</span>  <span class="pl-c1">2</span>) <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> is the value for 3 &lt; 2<span class="pl-pds">"</span></span>);
+        <span class="pl-en">trace</span>((<span class="pl-c1">3</span> <span class="pl-k">&gt;=</span> <span class="pl-c1">2</span>) <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> is the value for 3 &gt;= 2<span class="pl-pds">"</span></span>);
+        <span class="pl-en">trace</span>((<span class="pl-c1">3</span> <span class="pl-k">&lt;=</span> <span class="pl-c1">2</span>) <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> is the value for 3 &lt;= 2<span class="pl-pds">"</span></span>);
+
+        <span class="pl-c"><span class="pl-c">//</span> standard bitwise operators</span>
+        <span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">            ~       Unary bitwise complement</span>
+<span class="pl-c">            &lt;&lt;      Signed left shift</span>
+<span class="pl-c">            &gt;&gt;      Signed right shift</span>
+<span class="pl-c">            &gt;&gt;&gt;     Unsigned right shift</span>
+<span class="pl-c">            &amp;       Bitwise AND</span>
+<span class="pl-c">            ^       Bitwise exclusive OR</span>
+<span class="pl-c">            |       Bitwise inclusive OR</span>
+<span class="pl-c">        <span class="pl-c">*/</span></span>
+        
+        <span class="pl-k">var</span> <span class="pl-en">i</span> <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+        <span class="pl-en">trace</span>(<span class="pl-s"><span class="pl-pds">"</span>Pre-/Post- Increments and Decrements<span class="pl-pds">"</span></span>);
+        <span class="pl-en">trace</span>(<span class="pl-smi">i</span><span class="pl-k">++</span>); <span class="pl-c"><span class="pl-c">//</span> i = 1. Post-Increment</span>
+        <span class="pl-en">trace</span>(<span class="pl-k">++</span><span class="pl-smi">i</span>); <span class="pl-c"><span class="pl-c">//</span> i = 2. Pre-Increment</span>
+        <span class="pl-en">trace</span>(<span class="pl-smi">i</span><span class="pl-k">--</span>); <span class="pl-c"><span class="pl-c">//</span> i = 1. Post-Decrement</span>
+        <span class="pl-en">trace</span>(<span class="pl-k">--</span><span class="pl-smi">i</span>); <span class="pl-c"><span class="pl-c">//</span> i = 0. Pre-Decrement</span>
+
+
+        <span class="pl-c"><span class="pl-c">//</span>////////////////////////////////////////////////////////////////</span>
+        <span class="pl-c"><span class="pl-c">//</span> Control Structures</span>
+        <span class="pl-c"><span class="pl-c">//</span>////////////////////////////////////////////////////////////////</span>
+        <span class="pl-en">trace</span>(<span class="pl-s"><span class="pl-pds">"</span>***CONTROL STRUCTURES***<span class="pl-pds">"</span></span>);
+
+        <span class="pl-c"><span class="pl-c">//</span> if statements</span>
+        <span class="pl-k">var</span> <span class="pl-en">j</span> <span class="pl-k">=</span> <span class="pl-c1">10</span>;
+        <span class="pl-k">if</span> (<span class="pl-smi">j</span> <span class="pl-k">==</span> <span class="pl-c1">10</span>) {
+            <span class="pl-en">trace</span>(<span class="pl-s"><span class="pl-pds">"</span>this is printed<span class="pl-pds">"</span></span>);
+        } <span class="pl-k">else</span> <span class="pl-k">if</span> (<span class="pl-smi">j</span> <span class="pl-k">&gt;</span> <span class="pl-c1">10</span>) {
+            <span class="pl-en">trace</span>(<span class="pl-s"><span class="pl-pds">"</span>not greater than 10, so not printed<span class="pl-pds">"</span></span>);
+        } <span class="pl-k">else</span> {
+            <span class="pl-en">trace</span>(<span class="pl-s"><span class="pl-pds">"</span>also not printed.<span class="pl-pds">"</span></span>);
+        }
+
+        <span class="pl-c"><span class="pl-c">//</span> there is also a "ternary" if:</span>
+        (<span class="pl-en">j</span> == 10) ? <span class="pl-en">trace</span>("equals 10") : trace("<span class="pl-en">not</span> <span class="pl-en">equals</span> 10");
+
+        <span class="pl-c"><span class="pl-c">//</span> Finally, there is another form of control structure that operates</span>
+        <span class="pl-c"><span class="pl-c">//</span> at compile time:  conditional compilation.</span>
+#<span class="pl-k">if</span> <span class="pl-en">neko</span>
+        <span class="pl-en">trace</span>(<span class="pl-s">'hello from neko'</span>);
+#elseif js
+        <span class="pl-en">trace</span>(<span class="pl-s">'hello from js'</span>);
+#<span class="pl-k">else</span>
+        <span class="pl-en">trace</span>(<span class="pl-s">'hello from another platform!'</span>);
+#end
+
+        <span class="pl-c"><span class="pl-c">//</span> The compiled code will change depending on the platform target.</span>
+        <span class="pl-c"><span class="pl-c">//</span> Since we're compiling for neko (-x or -neko), we only get the neko</span>
+        <span class="pl-c"><span class="pl-c">//</span> greeting.</span>
+
+
+        <span class="pl-en">trace</span>(<span class="pl-s"><span class="pl-pds">"</span>Looping and Iteration<span class="pl-pds">"</span></span>);
+
+        <span class="pl-c"><span class="pl-c">//</span> while loop</span>
+        <span class="pl-k">var</span> <span class="pl-en">k</span> <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+        <span class="pl-k">while</span> (<span class="pl-smi">k</span> <span class="pl-k">&lt;</span> <span class="pl-c1">100</span>) {
+            <span class="pl-c"><span class="pl-c">//</span> trace(counter); // will print out numbers 0-99</span>
+            <span class="pl-smi">k</span><span class="pl-k">++</span>;
+        }
+
+        <span class="pl-c"><span class="pl-c">//</span> do-while loop</span>
+        <span class="pl-k">var</span> <span class="pl-en">l</span> <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+        <span class="pl-k">do</span> {
+            <span class="pl-en">trace</span>(<span class="pl-s"><span class="pl-pds">"</span>do statement always runs at least once<span class="pl-pds">"</span></span>);
+        } <span class="pl-k">while</span> (<span class="pl-smi">l</span> <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>);
+
+        <span class="pl-c"><span class="pl-c">//</span> for loop</span>
+        <span class="pl-c"><span class="pl-c">//</span> There is no c-style for loop in Haxe, because they are prone</span>
+        <span class="pl-c"><span class="pl-c">//</span> to error, and not necessary.  Instead, Haxe has a much simpler</span>
+        <span class="pl-c"><span class="pl-c">//</span> and safer version that uses Iterators (more on those later).</span>
+        <span class="pl-k">var</span> <span class="pl-en">m</span> <span class="pl-k">=</span> [<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>];
+        <span class="pl-k">for</span> (<span class="pl-smi">val</span> <span class="pl-en">in</span> <span class="pl-en">m</span>) {
+            <span class="pl-en">trace</span>(<span class="pl-smi">val</span> <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> is the value for val in the m array<span class="pl-pds">"</span></span>);
+        }
+
+        <span class="pl-c"><span class="pl-c">//</span> Note that you can iterate on an index using a range</span>
+        <span class="pl-c"><span class="pl-c">//</span> (more on ranges later as well)</span>
+        <span class="pl-k">var</span> <span class="pl-en">n</span> <span class="pl-k">=</span> [<span class="pl-s">'foo'</span>, <span class="pl-s">'bar'</span>, <span class="pl-s">'baz'</span>];
+        <span class="pl-k">for</span> (<span class="pl-smi">val</span> <span class="pl-smi">in</span> <span class="pl-ii">0...n.length</span>) {
+            <span class="pl-en">trace</span>(<span class="pl-smi">val</span> <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> is the value for val (an index for n)<span class="pl-pds">"</span></span>);
+        }
+
+
+        <span class="pl-en">trace</span>(<span class="pl-s"><span class="pl-pds">"</span>Array Comprehensions<span class="pl-pds">"</span></span>);
+
+        <span class="pl-c"><span class="pl-c">//</span> Array comprehensions give you the ability to iterate over arrays</span>
+        <span class="pl-c"><span class="pl-c">//</span> while also creating filters and modifications.</span>
+        <span class="pl-k">var</span> <span class="pl-en">filtered_n</span> <span class="pl-k">=</span> [<span class="pl-en">for</span> (<span class="pl-smi">val</span> <span class="pl-k">in</span> <span class="pl-smi">n</span>) <span class="pl-en">if</span> (<span class="pl-smi">val</span> <span class="pl-k">!=</span> <span class="pl-s"><span class="pl-pds">"</span>foo<span class="pl-pds">"</span></span>) <span class="pl-smi">val</span>];
+        <span class="pl-en">trace</span>(<span class="pl-smi">filtered_n</span> <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> is the value for filtered_n<span class="pl-pds">"</span></span>);
+
+        <span class="pl-k">var</span> <span class="pl-en">modified_n</span> <span class="pl-k">=</span> [<span class="pl-en">for</span> (<span class="pl-smi">val</span> <span class="pl-k">in</span> <span class="pl-smi">n</span>) <span class="pl-smi">val</span> <span class="pl-k">+=</span> <span class="pl-s">'!'</span>];
+        <span class="pl-en">trace</span>(<span class="pl-smi">modified_n</span> <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> is the value for modified_n<span class="pl-pds">"</span></span>);
+
+        <span class="pl-smi">var</span> <span class="pl-smi">filtered_and_modified_n</span>
+            <span class="pl-k">=</span> [<span class="pl-en">for</span> (<span class="pl-smi">val</span> <span class="pl-k">in</span> <span class="pl-smi">n</span>) <span class="pl-en">if</span> (<span class="pl-smi">val</span> <span class="pl-k">!=</span> <span class="pl-s"><span class="pl-pds">"</span>foo<span class="pl-pds">"</span></span>) <span class="pl-smi">val</span> <span class="pl-k">+=</span> <span class="pl-s"><span class="pl-pds">"</span>!<span class="pl-pds">"</span></span>];
+        <span class="pl-en">trace</span>(<span class="pl-smi">filtered_and_modified_n</span>
+                <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> is the value for filtered_and_modified_n<span class="pl-pds">"</span></span>);
+
+
+        <span class="pl-c"><span class="pl-c">//</span>////////////////////////////////////////////////////////////////</span>
+        <span class="pl-c"><span class="pl-c">//</span> Switch Statements (Value Type)</span>
+        <span class="pl-c"><span class="pl-c">//</span>////////////////////////////////////////////////////////////////</span>
+        <span class="pl-en">trace</span>(<span class="pl-s"><span class="pl-pds">"</span>***SWITCH STATEMENTS (VALUE TYPES)***<span class="pl-pds">"</span></span>);
+
+        <span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">           Switch statements in Haxe are very powerful.  In addition to working</span>
+<span class="pl-c">           on basic values like strings and ints, they can also work on the</span>
+<span class="pl-c">           generalized algebraic data types in enums (more on enums later).</span>
+<span class="pl-c">           Here are some basic value examples for now:</span>
+<span class="pl-c">         <span class="pl-c">*/</span></span>
+        <span class="pl-k">var</span> <span class="pl-en">my_dog_name</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>fido<span class="pl-pds">"</span></span>;
+        <span class="pl-k">var</span> <span class="pl-en">favorite_thing</span>  <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>;
+        <span class="pl-k">switch</span> (<span class="pl-smi">my_dog_name</span>) {
+            <span class="pl-k">case</span> <span class="pl-s"><span class="pl-pds">"</span>fido<span class="pl-pds">"</span></span> : <span class="pl-smi">favorite_thing</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>bone<span class="pl-pds">"</span></span>;
+            <span class="pl-k">case</span> <span class="pl-s"><span class="pl-pds">"</span>rex<span class="pl-pds">"</span></span>  : <span class="pl-smi">favorite_thing</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>shoe<span class="pl-pds">"</span></span>;
+            <span class="pl-k">case</span> <span class="pl-s"><span class="pl-pds">"</span>spot<span class="pl-pds">"</span></span> : <span class="pl-smi">favorite_thing</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>tennis ball<span class="pl-pds">"</span></span>;
+            <span class="pl-k">default</span>     : <span class="pl-smi">favorite_thing</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>some unknown treat<span class="pl-pds">"</span></span>;
+            <span class="pl-c"><span class="pl-c">//</span> same as default:</span>
+            <span class="pl-c"><span class="pl-c">//</span> case _   : favorite_thing = "some unknown treat";</span>
+        }
+        <span class="pl-c"><span class="pl-c">//</span> The "_" case above is a "wildcard" value that will match anything.</span>
+
+        <span class="pl-en">trace</span>(<span class="pl-s"><span class="pl-pds">"</span>My dog's name is <span class="pl-pds">"</span></span> <span class="pl-k">+</span> <span class="pl-smi">my_dog_name</span>
+                <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span>, and his favorite thing is a: <span class="pl-pds">"</span></span>
+                <span class="pl-k">+</span> <span class="pl-smi">favorite_thing</span>);
+
+
+        <span class="pl-c"><span class="pl-c">//</span>////////////////////////////////////////////////////////////////</span>
+        <span class="pl-c"><span class="pl-c">//</span> Expression Statements</span>
+        <span class="pl-c"><span class="pl-c">//</span>////////////////////////////////////////////////////////////////</span>
+        <span class="pl-en">trace</span>(<span class="pl-s"><span class="pl-pds">"</span>***EXPRESSION STATEMENTS***<span class="pl-pds">"</span></span>);
+
+        <span class="pl-c"><span class="pl-c">//</span> Haxe control statements are very powerful because every statement</span>
+        <span class="pl-c"><span class="pl-c">//</span> is also an expression, consider:</span>
+
+        <span class="pl-c"><span class="pl-c">//</span> if statements</span>
+        <span class="pl-k">var</span> <span class="pl-en">k</span> <span class="pl-k">=</span> <span class="pl-en">if</span> (<span class="pl-c1">true</span>) <span class="pl-c1">10</span> <span class="pl-smi">else</span> <span class="pl-c1">20</span>;
+
+        <span class="pl-en">trace</span>(<span class="pl-s"><span class="pl-pds">"</span>k equals <span class="pl-pds">"</span></span>, <span class="pl-smi">k</span>); <span class="pl-c"><span class="pl-c">//</span> outputs 10</span>
+
+        <span class="pl-k">var</span> <span class="pl-en">other_favorite_thing</span> <span class="pl-k">=</span> <span class="pl-k">switch</span> (my_dog_name) {
+            case <span class="pl-s"><span class="pl-pds">"</span>fido<span class="pl-pds">"</span></span> : <span class="pl-s"><span class="pl-pds">"</span>teddy<span class="pl-pds">"</span></span>;
+            case <span class="pl-s"><span class="pl-pds">"</span>rex<span class="pl-pds">"</span></span>  : <span class="pl-s"><span class="pl-pds">"</span>stick<span class="pl-pds">"</span></span>;
+            case <span class="pl-s"><span class="pl-pds">"</span>spot<span class="pl-pds">"</span></span> : <span class="pl-s"><span class="pl-pds">"</span>football<span class="pl-pds">"</span></span>;
+            default     : <span class="pl-s"><span class="pl-pds">"</span>some unknown treat<span class="pl-pds">"</span></span>;
+        }
+
+        <span class="pl-en">trace</span>(<span class="pl-s"><span class="pl-pds">"</span>My dog's name is <span class="pl-pds">"</span></span> <span class="pl-k">+</span> <span class="pl-smi">my_dog_name</span>
+                <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span>, and his other favorite thing is a: <span class="pl-pds">"</span></span>
+                <span class="pl-k">+</span> <span class="pl-smi">other_favorite_thing</span>);
+
+
+        <span class="pl-c"><span class="pl-c">//</span>////////////////////////////////////////////////////////////////</span>
+        <span class="pl-c"><span class="pl-c">//</span> Converting Value Types</span>
+        <span class="pl-c"><span class="pl-c">//</span>////////////////////////////////////////////////////////////////</span>
+        <span class="pl-en">trace</span>(<span class="pl-s"><span class="pl-pds">"</span>***CONVERTING VALUE TYPES***<span class="pl-pds">"</span></span>);
+
+        <span class="pl-c"><span class="pl-c">//</span> You can convert strings to ints fairly easily.</span>
+
+        <span class="pl-c"><span class="pl-c">//</span> string to integer</span>
+        <span class="pl-smi">Std</span>.<span class="pl-en">parseInt</span>(<span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span>);     <span class="pl-c"><span class="pl-c">//</span> returns 0</span>
+        <span class="pl-smi">Std</span>.<span class="pl-en">parseFloat</span>(<span class="pl-s"><span class="pl-pds">"</span>0.4<span class="pl-pds">"</span></span>); <span class="pl-c"><span class="pl-c">//</span> returns 0.4</span>
+
+        <span class="pl-c"><span class="pl-c">//</span> integer to string</span>
+        <span class="pl-smi">Std</span>.<span class="pl-en">string</span>(<span class="pl-c1">0</span>); <span class="pl-c"><span class="pl-c">//</span> returns "0"</span>
+        <span class="pl-c"><span class="pl-c">//</span> concatenation with strings will auto-convert to string.</span>
+        <span class="pl-c1">0</span> <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>;    <span class="pl-c"><span class="pl-c">//</span> returns "0"</span>
+        <span class="pl-c1">true</span> <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>; <span class="pl-c"><span class="pl-c">//</span> returns "true"</span>
+        <span class="pl-c"><span class="pl-c">//</span> See documentation for parsing in Std for more details.</span>
+
+
+        <span class="pl-c"><span class="pl-c">//</span>////////////////////////////////////////////////////////////////</span>
+        <span class="pl-c"><span class="pl-c">//</span> Dealing with Types</span>
+        <span class="pl-c"><span class="pl-c">//</span>////////////////////////////////////////////////////////////////</span>
+
+        <span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">           As mentioned before, Haxe is a statically typed language.  All in</span>
+<span class="pl-c">           all, static typing is a wonderful thing.  It enables</span>
+<span class="pl-c">           precise autocompletions, and can be used to thoroughly check the</span>
+<span class="pl-c">           correctness of a program.  Plus, the Haxe compiler is super fast.</span>
+<span class="pl-c"></span>
+<span class="pl-c">           *HOWEVER*, there are times when you just wish the compiler would</span>
+<span class="pl-c">           let something slide, and not throw a type error in a given case.</span>
+<span class="pl-c"></span>
+<span class="pl-c">           To do this, Haxe has two separate keywords.  The first is the</span>
+<span class="pl-c">           "Dynamic" type:</span>
+<span class="pl-c">         <span class="pl-c">*/</span></span>
+        <span class="pl-smi">var</span> <span class="pl-en">dyn</span>: <span class="pl-smi">Dynamic</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>any type of variable, such as this string<span class="pl-pds">"</span></span>;
+
+        <span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">           All that you know for certain with a Dynamic variable is that the</span>
+<span class="pl-c">           compiler will no longer worry about what type it is. It is like a</span>
+<span class="pl-c">           wildcard variable:  You can pass it instead of any variable type,</span>
+<span class="pl-c">           and you can assign any variable type you want.</span>
+<span class="pl-c"></span>
+<span class="pl-c">           The other more extreme option is the "untyped" keyword:</span>
+<span class="pl-c">         <span class="pl-c">*/</span></span>
+        <span class="pl-smi">untyped</span> {
+            <span class="pl-smi">var</span> <span class="pl-en">x</span>:<span class="pl-smi">Int</span> <span class="pl-k">=</span> <span class="pl-s">'foo'</span>; <span class="pl-c"><span class="pl-c">//</span> This can't be right!</span>
+            <span class="pl-smi">var</span> <span class="pl-en">y</span>:<span class="pl-smi">String</span> <span class="pl-k">=</span> <span class="pl-c1">4</span>;  <span class="pl-c"><span class="pl-c">//</span> Madness!</span>
+        }
+
+        <span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">           The untyped keyword operates on entire *blocks* of code, skipping</span>
+<span class="pl-c">           any type checks that might be otherwise required. This keyword should</span>
+<span class="pl-c">           be used very sparingly, such as in limited conditionally-compiled</span>
+<span class="pl-c">           situations where type checking is a hindrance.</span>
+<span class="pl-c"></span>
+<span class="pl-c">           In general, skipping type checks is *not* recommended.  Use the</span>
+<span class="pl-c">           enum, inheritance, or structural type models in order to help ensure</span>
+<span class="pl-c">           the correctness of your program.  Only when you're certain that none</span>
+<span class="pl-c">           of the type models work should you resort to "Dynamic" or "untyped".</span>
+<span class="pl-c">         <span class="pl-c">*/</span></span>
+
+
+        <span class="pl-c"><span class="pl-c">//</span>////////////////////////////////////////////////////////////////</span>
+        <span class="pl-c"><span class="pl-c">//</span> Basic Object Oriented Programming</span>
+        <span class="pl-c"><span class="pl-c">//</span>////////////////////////////////////////////////////////////////</span>
+        <span class="pl-en">trace</span>(<span class="pl-s"><span class="pl-pds">"</span>***BASIC OBJECT ORIENTED PROGRAMMING***<span class="pl-pds">"</span></span>);
+
+        <span class="pl-c"><span class="pl-c">//</span> Create an instance of FooClass.  The classes for this are at the</span>
+        <span class="pl-c"><span class="pl-c">//</span> end of the file.</span>
+        <span class="pl-k">var</span> <span class="pl-en">foo_instance</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">FooClass</span>(<span class="pl-c1">3</span>);
+
+        <span class="pl-c"><span class="pl-c">//</span> read the public variable normally</span>
+        <span class="pl-en">trace</span>(<span class="pl-smi">foo_instance</span>.<span class="pl-smi">public_any</span>
+                <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> is the value for foo_instance.public_any<span class="pl-pds">"</span></span>);
+
+        <span class="pl-c"><span class="pl-c">//</span> we can read this variable</span>
+        <span class="pl-en">trace</span>(<span class="pl-smi">foo_instance</span>.<span class="pl-smi">public_read</span>
+                <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> is the value for foo_instance.public_read<span class="pl-pds">"</span></span>);
+        <span class="pl-c"><span class="pl-c">//</span> but not write it; this will throw an error if uncommented:</span>
+        <span class="pl-c"><span class="pl-c">//</span> foo_instance.public_read = 4;</span>
+        <span class="pl-c"><span class="pl-c">//</span> trace(foo_instance.public_write); // as will this.</span>
+
+        <span class="pl-c"><span class="pl-c">//</span> Calls the toString method:</span>
+        <span class="pl-en">trace</span>(<span class="pl-smi">foo_instance</span> <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> is the value for foo_instance<span class="pl-pds">"</span></span>);
+        <span class="pl-c"><span class="pl-c">//</span> same thing:</span>
+        <span class="pl-en">trace</span>(<span class="pl-smi">foo_instance</span>.<span class="pl-en">toString</span>()
+                <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> is the value for foo_instance.toString()<span class="pl-pds">"</span></span>);
+
+        <span class="pl-c"><span class="pl-c">//</span> The foo_instance has the "FooClass" type, while acceptBarInstance</span>
+        <span class="pl-c"><span class="pl-c">//</span> has the BarClass type.  However, since FooClass extends BarClass, it</span>
+        <span class="pl-c"><span class="pl-c">//</span> is accepted.</span>
+        <span class="pl-smi">BarClass</span>.<span class="pl-en">acceptBarInstance</span>(<span class="pl-smi">foo_instance</span>);
+
+        <span class="pl-c"><span class="pl-c">//</span> The classes below have some more advanced examples, the "example()"</span>
+        <span class="pl-c"><span class="pl-c">//</span> method will just run them here.</span>
+        <span class="pl-smi">SimpleEnumTest</span>.<span class="pl-en">example</span>();
+        <span class="pl-smi">ComplexEnumTest</span>.<span class="pl-en">example</span>();
+        <span class="pl-smi">TypedefsAndStructuralTypes</span>.<span class="pl-en">example</span>();
+        <span class="pl-smi">UsingExample</span>.<span class="pl-en">example</span>();
+    }
+}
+
+<span class="pl-c"><span class="pl-c">//</span> This is the "child class" of the main LearnHaxe3 Class.</span>
+<span class="pl-k">class</span> <span class="pl-en">FooClass</span> extends BarClass implements BarInterface {
+    <span class="pl-k">public</span> var public_any:Int; <span class="pl-c"><span class="pl-c">//</span> public variables are accessible anywhere</span>
+    <span class="pl-k">public</span> <span class="pl-en">var</span> <span class="pl-en">public_read</span> (default, null): Int; <span class="pl-c"><span class="pl-c">//</span> enable only public read</span>
+    <span class="pl-k">public</span> <span class="pl-en">var</span> <span class="pl-en">public_write</span> (null, default): Int; <span class="pl-c"><span class="pl-c">//</span> or only public write</span>
+    <span class="pl-c"><span class="pl-c">//</span> Use this style to enable getters/setters:</span>
+    <span class="pl-k">public</span> <span class="pl-en">var</span> <span class="pl-en">property</span> (get, set): Int;
+
+    <span class="pl-c"><span class="pl-c">//</span> private variables are not available outside the class.</span>
+    <span class="pl-c"><span class="pl-c">//</span> see @:allow for ways around this.</span>
+    var _private:Int; <span class="pl-c"><span class="pl-c">//</span> variables are private if they are not marked public</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> a public constructor</span>
+    <span class="pl-k">public</span> <span class="pl-en">function</span> <span class="pl-en">new</span>(arg:Int) {
+        <span class="pl-c"><span class="pl-c">//</span> call the constructor of the parent object, since we extended BarClass:</span>
+        <span class="pl-en">super</span>();
+
+        <span class="pl-k">this</span>.<span class="pl-smi">public_any</span> <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+        <span class="pl-k">this</span>.<span class="pl-smi">_private</span> <span class="pl-k">=</span> <span class="pl-smi">arg</span>;
+    }
+
+    <span class="pl-c"><span class="pl-c">//</span> getter for _private</span>
+    <span class="pl-en">function</span> <span class="pl-en">get_property</span>() : Int {
+        <span class="pl-k">return</span> <span class="pl-smi">_private</span>;
+    }
+
+    <span class="pl-c"><span class="pl-c">//</span> setter for _private</span>
+    <span class="pl-en">function</span> <span class="pl-en">set_property</span>(val:Int) : Int {
+        <span class="pl-smi">_private</span> <span class="pl-k">=</span> <span class="pl-smi">val</span>;
+        <span class="pl-k">return</span> <span class="pl-smi">val</span>;
+    }
+
+    <span class="pl-c"><span class="pl-c">//</span> Special function that is called whenever an instance is cast to a string.</span>
+    <span class="pl-k">public</span> <span class="pl-en">function</span> <span class="pl-en">toString</span>() {
+        <span class="pl-k">return</span> <span class="pl-smi">_private</span> <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> with toString() method!<span class="pl-pds">"</span></span>;
+    }
+
+    <span class="pl-c"><span class="pl-c">//</span> this class needs to have this function defined, since it implements</span>
+    <span class="pl-c"><span class="pl-c">//</span> the BarInterface interface.</span>
+    <span class="pl-k">public</span> <span class="pl-en">function</span> <span class="pl-en">baseFunction</span>(x: Int) : String {
+        <span class="pl-c"><span class="pl-c">//</span> convert the int to string automatically</span>
+        <span class="pl-k">return</span> <span class="pl-smi">x</span> <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> was passed into baseFunction!<span class="pl-pds">"</span></span>;
+    }
+}
+
+<span class="pl-c"><span class="pl-c">//</span> A simple class to extend.</span>
+<span class="pl-k">class</span> <span class="pl-en">BarClass</span> {
+    var base_variable:Int;
+    <span class="pl-k">public</span> <span class="pl-en">function</span> <span class="pl-en">new</span>() {
+        <span class="pl-smi">base_variable</span> <span class="pl-k">=</span> <span class="pl-c1">4</span>;
+    }
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-en">function</span> <span class="pl-en">acceptBarInstance</span>(b:BarClass) {}
+}
+
+<span class="pl-c"><span class="pl-c">//</span> A simple interface to implement</span>
+<span class="pl-k">interface</span> <span class="pl-en">BarInterface</span> {
+    public <span class="pl-en">function</span> <span class="pl-en">baseFunction</span>(x:Int):String;
+}
+
+
+<span class="pl-c"><span class="pl-c">//</span>////////////////////////////////////////////////////////////////</span>
+<span class="pl-c"><span class="pl-c">//</span> Enums and Switch Statements</span>
+<span class="pl-c"><span class="pl-c">//</span>////////////////////////////////////////////////////////////////</span>
+
+<span class="pl-c"><span class="pl-c">//</span> Enums in Haxe are very powerful.  In their simplest form, enums</span>
+<span class="pl-c"><span class="pl-c">//</span> are a type with a limited number of states:</span>
+<span class="pl-k">enum</span> <span class="pl-en">SimpleEnum</span> {
+    <span class="pl-en">Foo</span>;
+    Bar;
+    Baz;
+}
+
+<span class="pl-c"><span class="pl-c">//</span>   Here's a class that uses it:</span>
+<span class="pl-k">class</span> <span class="pl-en">SimpleEnumTest</span> {
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-en">function</span> <span class="pl-en">example</span>() {
+        <span class="pl-c"><span class="pl-c">//</span> You can specify the "full" name,</span>
+        <span class="pl-smi">var</span> <span class="pl-en">e_explicit</span>:<span class="pl-smi">SimpleEnum</span> <span class="pl-k">=</span> <span class="pl-smi">SimpleEnum</span>.<span class="pl-smi">Foo</span>;
+        <span class="pl-k">var</span> <span class="pl-en">e</span> <span class="pl-k">=</span> <span class="pl-smi">Foo</span>; <span class="pl-c"><span class="pl-c">//</span> but inference will work as well.</span>
+        <span class="pl-k">switch</span> (<span class="pl-smi">e</span>) {
+            <span class="pl-k">case</span> <span class="pl-smi">Foo</span>: <span class="pl-en">trace</span>(<span class="pl-s"><span class="pl-pds">"</span>e was Foo<span class="pl-pds">"</span></span>);
+            <span class="pl-k">case</span> <span class="pl-smi">Bar</span>: <span class="pl-en">trace</span>(<span class="pl-s"><span class="pl-pds">"</span>e was Bar<span class="pl-pds">"</span></span>);
+            <span class="pl-k">case</span> <span class="pl-smi">Baz</span>: <span class="pl-en">trace</span>(<span class="pl-s"><span class="pl-pds">"</span>e was Baz<span class="pl-pds">"</span></span>); <span class="pl-c"><span class="pl-c">//</span> comment this line to throw an error.</span>
+        }
+
+        <span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">           This doesn't seem so different from simple value switches on strings.</span>
+<span class="pl-c">           However, if we don't include *all* of the states, the compiler will</span>
+<span class="pl-c">           complain.  You can try it by commenting out a line above.</span>
+<span class="pl-c"></span>
+<span class="pl-c">           You can also specify a default for enum switches as well:</span>
+<span class="pl-c">         <span class="pl-c">*/</span></span>
+        <span class="pl-k">switch</span> (<span class="pl-smi">e</span>) {
+            <span class="pl-k">case</span> <span class="pl-smi">Foo</span>: <span class="pl-en">trace</span>(<span class="pl-s"><span class="pl-pds">"</span>e was Foo again<span class="pl-pds">"</span></span>);
+            <span class="pl-k">default</span> : <span class="pl-en">trace</span>(<span class="pl-s"><span class="pl-pds">"</span>default works here too<span class="pl-pds">"</span></span>);
+        }
+    }
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Enums go much further than simple states, we can also enumerate</span>
+<span class="pl-c"><span class="pl-c">//</span> *constructors*, but we'll need a more complex enum example.</span>
+<span class="pl-k">enum</span> <span class="pl-en">ComplexEnum</span> {
+    <span class="pl-en">IntEnum</span>(i:Int);
+    MultiEnum(i:Int, <span class="pl-en">j</span>:String, <span class="pl-en">k</span>:Float);
+    SimpleEnumEnum(s:SimpleEnum);
+    ComplexEnumEnum(c:ComplexEnum);
+}
+<span class="pl-c"><span class="pl-c">//</span> Note: The enum above can include *other* enums as well, including itself!</span>
+<span class="pl-c"><span class="pl-c">//</span> Note: This is what's called *Algebraic data type* in some other languages.</span>
+
+<span class="pl-k">class</span> <span class="pl-en">ComplexEnumTest</span> {
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-en">function</span> <span class="pl-en">example</span>() {
+        <span class="pl-smi">var</span> <span class="pl-en">e1</span>:<span class="pl-smi">ComplexEnum</span> <span class="pl-k">=</span> <span class="pl-en">IntEnum</span>(<span class="pl-c1">4</span>); <span class="pl-c"><span class="pl-c">//</span> specifying the enum parameter</span>
+        <span class="pl-c"><span class="pl-c">//</span> Now we can switch on the enum, as well as extract any parameters</span>
+        <span class="pl-c"><span class="pl-c">//</span> it might have had.</span>
+        <span class="pl-k">switch</span> (<span class="pl-smi">e1</span>) {
+            <span class="pl-k">case</span> <span class="pl-en">IntEnum</span>(<span class="pl-smi">x</span>) : <span class="pl-en">trace</span>(<span class="pl-s">'$x was the parameter passed to e1'</span>);
+            <span class="pl-k">default</span>: <span class="pl-en">trace</span>(<span class="pl-s"><span class="pl-pds">"</span>Shouldn't be printed<span class="pl-pds">"</span></span>);
+        }
+
+        <span class="pl-c"><span class="pl-c">//</span> another parameter here that is itself an enum... an enum enum?</span>
+        <span class="pl-k">var</span> <span class="pl-en">e2</span> <span class="pl-k">=</span> <span class="pl-en">SimpleEnumEnum</span>(<span class="pl-smi">Foo</span>);
+        <span class="pl-k">switch</span> (<span class="pl-smi">e2</span>){
+            <span class="pl-k">case</span> <span class="pl-en">SimpleEnumEnum</span>(<span class="pl-smi">s</span>): <span class="pl-en">trace</span>(<span class="pl-s">'$s was the parameter passed to e2'</span>);
+            <span class="pl-k">default</span>: <span class="pl-en">trace</span>(<span class="pl-s"><span class="pl-pds">"</span>Shouldn't be printed<span class="pl-pds">"</span></span>);
+        }
+
+        <span class="pl-c"><span class="pl-c">//</span> enums all the way down</span>
+        <span class="pl-k">var</span> <span class="pl-en">e3</span> <span class="pl-k">=</span> <span class="pl-en">ComplexEnumEnum</span>(<span class="pl-en">ComplexEnumEnum</span>(<span class="pl-en">MultiEnum</span>(<span class="pl-c1">4</span>, <span class="pl-s">'hi'</span>, <span class="pl-c1">4</span><span class="pl-c1">.</span><span class="pl-c1">3</span>)));
+        <span class="pl-k">switch</span> (<span class="pl-smi">e3</span>) {
+            <span class="pl-c"><span class="pl-c">//</span> You can look for certain nested enums by specifying them</span>
+            <span class="pl-c"><span class="pl-c">//</span>  explicitly:</span>
+            <span class="pl-k">case</span> <span class="pl-en">ComplexEnumEnum</span>(<span class="pl-en">ComplexEnumEnum</span>(<span class="pl-en">MultiEnum</span>(<span class="pl-smi">i</span>,<span class="pl-smi">j</span>,<span class="pl-smi">k</span>))) : {
+                <span class="pl-en">trace</span>(<span class="pl-s">'$i, $j, and $k were passed into this nested monster'</span>);
+            }
+            <span class="pl-k">default</span>: <span class="pl-en">trace</span>(<span class="pl-s"><span class="pl-pds">"</span>Shouldn't be printed<span class="pl-pds">"</span></span>);
+        }
+        <span class="pl-c"><span class="pl-c">//</span> Check out "generalized algebraic data types" (GADT) for more details</span>
+        <span class="pl-c"><span class="pl-c">//</span> on why these are so great.</span>
+    }
+}
+
+<span class="pl-k">class</span> <span class="pl-en">TypedefsAndStructuralTypes</span> {
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-en">function</span> <span class="pl-en">example</span>() {
+        <span class="pl-c"><span class="pl-c">//</span> Here we're going to use typedef types, instead of base types.</span>
+        <span class="pl-c"><span class="pl-c">//</span> At the top we've declared the type "FooString" to mean a "String" type.</span>
+        <span class="pl-smi">var</span> <span class="pl-en">t1</span>:<span class="pl-smi">FooString</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>some string<span class="pl-pds">"</span></span>;
+
+        <span class="pl-c"><span class="pl-c">//</span> We can use typedefs for "structural types" as well.  These types are</span>
+        <span class="pl-c"><span class="pl-c">//</span> defined by their field structure, not by class inheritance.  Here's</span>
+        <span class="pl-c"><span class="pl-c">//</span> an anonymous object with a String field named "foo":</span>
+        <span class="pl-k">var</span> <span class="pl-en">anon_obj</span> <span class="pl-k">=</span> { <span class="pl-smi">foo</span>: <span class="pl-s">'hi'</span> };
+
+        <span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">           The anon_obj variable doesn't have a type declared, and is an</span>
+<span class="pl-c">           anonymous object according to the compiler.  However, remember back at</span>
+<span class="pl-c">           the top where we declared the FooObj typedef?  Since anon_obj matches</span>
+<span class="pl-c">           that structure, we can use it anywhere that a "FooObject" type is</span>
+<span class="pl-c">           expected.</span>
+<span class="pl-c">         <span class="pl-c">*/</span></span>
+        <span class="pl-k">var</span> <span class="pl-en">f</span> <span class="pl-k">=</span> <span class="pl-en">function</span>(<span class="pl-en">fo</span>:<span class="pl-smi">FooObject</span>) {
+            <span class="pl-en">trace</span>(<span class="pl-s">'$fo was passed in to this function'</span>);
+        }
+        <span class="pl-en">f</span>(<span class="pl-smi">anon_obj</span>); <span class="pl-c"><span class="pl-c">//</span> call the FooObject signature function with anon_obj.</span>
+
+        <span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">           Note that typedefs can have optional fields as well, marked with "?"</span>
+<span class="pl-c"></span>
+<span class="pl-c">           typedef OptionalFooObj = {</span>
+<span class="pl-c">                ?optionalString: String,</span>
+<span class="pl-c">                requiredInt: Int</span>
+<span class="pl-c">           }</span>
+<span class="pl-c"></span>
+<span class="pl-c">           Typedefs work well with conditional compilation.  For instance,</span>
+<span class="pl-c">           we could have included this at the top of the file:</span>
+<span class="pl-c"></span>
+<span class="pl-c">#if( js )</span>
+<span class="pl-c">        typedef Surface = js.html.CanvasRenderingContext2D;</span>
+<span class="pl-c">#elseif( nme )</span>
+<span class="pl-c">        typedef Surface = nme.display.Graphics;</span>
+<span class="pl-c">#elseif( !flash9 )</span>
+<span class="pl-c">        typedef Surface = flash8.MovieClip;</span>
+<span class="pl-c">#elseif( java )</span>
+<span class="pl-c">        typedef Surface = java.awt.geom.GeneralPath;</span>
+<span class="pl-c">#end</span>
+<span class="pl-c"></span>
+<span class="pl-c">           That would give us a single "Surface" type to work with across</span>
+<span class="pl-c">           all of those platforms.</span>
+<span class="pl-c">         <span class="pl-c">*/</span></span>
+    }
+}
+
+<span class="pl-k">class</span> <span class="pl-en">UsingExample</span> {
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-en">function</span> <span class="pl-en">example</span>() {
+        <span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">           The "using" import keyword is a special type of class import that</span>
+<span class="pl-c">           alters the behavior of any static methods in the class.</span>
+<span class="pl-c"></span>
+<span class="pl-c">           In this file, we've applied "using" to "StringTools", which contains</span>
+<span class="pl-c">           a number of static methods for dealing with String types.</span>
+<span class="pl-c">         <span class="pl-c">*/</span></span>
+        <span class="pl-en">trace</span>(<span class="pl-smi">StringTools</span>.<span class="pl-en">endsWith</span>(<span class="pl-s"><span class="pl-pds">"</span>foobar<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>bar<span class="pl-pds">"</span></span>) <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> should be true!<span class="pl-pds">"</span></span>);
+
+        <span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">           With a "using" import, the first argument type is extended with the</span>
+<span class="pl-c">           method.  What does that mean?  Well, since "endsWith" has a first</span>
+<span class="pl-c">           argument type of "String", that means all String types now have the</span>
+<span class="pl-c">           "endsWith" method:</span>
+<span class="pl-c">         <span class="pl-c">*/</span></span>
+        <span class="pl-en">trace</span>(<span class="pl-s"><span class="pl-pds">"</span>foobar<span class="pl-pds">"</span></span>.<span class="pl-en">endsWith</span>(<span class="pl-s"><span class="pl-pds">"</span>bar<span class="pl-pds">"</span></span>) <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> should be true!<span class="pl-pds">"</span></span>);
+
+        <span class="pl-c"><span class="pl-c">/*</span></span>
+<span class="pl-c">           This technique enables a good deal of expression for certain types,</span>
+<span class="pl-c">           while limiting the scope of modifications to a single file.</span>
+<span class="pl-c"></span>
+<span class="pl-c">           Note that the String instance is *not* modified in the run time.</span>
+<span class="pl-c">           The newly attached method is not really part of the attached</span>
+<span class="pl-c">           instance, and the compiler still generates code equivalent to a</span>
+<span class="pl-c">           static method.</span>
+<span class="pl-c">         <span class="pl-c">*/</span></span>
+    }
+}
+</pre></div>
+<p>We're still only scratching the surface here of what Haxe can do.  For a formal<br>
+overview of all Haxe features, see the <a href="https://haxe.org/manual" rel="nofollow">manual</a> and<br>
+the <a href="https://api.haxe.org/" rel="nofollow">API docs</a>. For a comprehensive directory of available<br>
+third-party Haxe libraries, see <a href="https://lib.haxe.org/" rel="nofollow">Haxelib</a>.</p>
+<p>For more advanced topics, consider checking out:</p>
+<ul>
+<li><a href="https://haxe.org/manual/types-abstract.html" rel="nofollow">Abstract types</a></li>
+<li><a href="https://haxe.org/manual/macro.html" rel="nofollow">Macros</a></li>
+<li><a href="https://haxe.org/manual/cr-features.html" rel="nofollow">Compiler Features</a></li>
+</ul>
+<p>Finally, please join us on <a href="https://community.haxe.org/" rel="nofollow">the Haxe forum</a>,<br>
+on IRC <a href="http://webchat.freenode.net/" rel="nofollow">#haxe on<br>
+freenode</a>, or on the<br>
+<a href="https://gitter.im/HaxeFoundation/haxe" rel="nofollow">Haxe Gitter chat</a>.</p>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Justin Donaldson", "https://github.com/jdonaldson/"]
+- ["Dan Korostelev", "https://github.com/nadako/"]
+</code></pre>

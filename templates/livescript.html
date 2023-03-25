@@ -1,0 +1,337 @@
+<h1>LiveScript</h1>
+<p>LiveScript is a functional compile-to-JavaScript language which shares<br>
+most of the underlying semantics with its host language. Nice additions<br>
+comes with currying, function composition, pattern matching and lots of<br>
+other goodies heavily borrowed from languages like Haskell, F# and<br>
+Scala.</p>
+<p>LiveScript is a fork of <a href="http://satyr.github.io/coco/" rel="nofollow">Coco</a>, which is itself a fork of<br>
+<a href="http://coffeescript.org/" rel="nofollow">CoffeeScript</a>. The language is stable, and a new version is in active<br>
+development to bring a plethora of new niceties!</p>
+<p>Feedback is always welcome, so feel free to reach me over at<br>
+<a href="https://twitter.com/kurisuwhyte" rel="nofollow">@kurisuwhyte</a> :)</p>
+<div class="highlight highlight-source-coffee"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> Just like its CoffeeScript cousin, LiveScript uses number symbols for</span>
+<span class="pl-c"><span class="pl-c">#</span> single-line comments.</span>
+
+<span class="pl-k">/*</span>
+ Multi<span class="pl-k">-</span><span class="pl-en">line</span> <span class="pl-en">comments</span> <span class="pl-en">are</span> <span class="pl-en">written</span> C<span class="pl-k">-</span><span class="pl-smi">style</span>. <span class="pl-en">Use</span> them <span class="pl-k">if</span> <span class="pl-en">you</span> <span class="pl-en">want</span> comments
+ <span class="pl-en">to</span> <span class="pl-en">be</span> preserved <span class="pl-k">in</span> <span class="pl-en">the</span> <span class="pl-en">JavaScript</span> output.
+ <span class="pl-k">*/</span></pre></div>
+<div class="highlight highlight-source-coffee"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> As far as syntax goes, LiveScript uses indentation to delimit blocks,</span>
+<span class="pl-c"><span class="pl-c">#</span> rather than curly braces, and whitespace to apply functions, rather</span>
+<span class="pl-c"><span class="pl-c">#</span> than parenthesis.</span>
+
+
+<span class="pl-c"><span class="pl-c">#</span>#######################################################################</span>
+<span class="pl-c"><span class="pl-c">#</span># 1. Basic values</span>
+<span class="pl-c"><span class="pl-c">#</span>#######################################################################</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Lack of value is defined by the keyword `void` instead of `undefined`</span>
+<span class="pl-k">void</span>            <span class="pl-c"><span class="pl-c">#</span> same as `undefined` but safer (can't be overridden)</span>
+
+<span class="pl-c"><span class="pl-c">#</span> No valid value is represented by Null.</span>
+<span class="pl-c1">null</span>
+
+
+<span class="pl-c"><span class="pl-c">#</span> The most basic actual value is the logical type:</span>
+<span class="pl-c1">true</span>
+<span class="pl-c1">false</span>
+
+<span class="pl-c"><span class="pl-c">#</span> And it has a plethora of aliases that mean the same thing:</span>
+<span class="pl-c1">on</span>; <span class="pl-c1">off</span>
+<span class="pl-c1">yes</span>; <span class="pl-c1">no</span>
+
+
+<span class="pl-c"><span class="pl-c">#</span> Then you get numbers. These are double-precision floats like in JS.</span>
+<span class="pl-c1">10</span>
+<span class="pl-c1">0.4</span>     <span class="pl-c"><span class="pl-c">#</span> Note that the leading `0` is required</span>
+
+<span class="pl-c"><span class="pl-c">#</span> For readability, you may use underscores and letter suffixes in a</span>
+<span class="pl-c"><span class="pl-c">#</span> number, and these will be ignored by the compiler.</span>
+<span class="pl-ii">12_344km</span>
+
+
+<span class="pl-c"><span class="pl-c">#</span> Strings are immutable sequences of characters, like in JS:</span>
+<span class="pl-s"><span class="pl-pds">"</span>Christina<span class="pl-pds">"</span></span>             <span class="pl-c"><span class="pl-c">#</span> apostrophes are okay too!</span>
+<span class="pl-s"><span class="pl-pds">"""</span>Multi-line</span>
+<span class="pl-s">   strings</span>
+<span class="pl-s">   are</span>
+<span class="pl-s">   okay</span>
+<span class="pl-s">   too.<span class="pl-pds">"""</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> Sometimes you want to encode a keyword, the backslash notation makes</span>
+<span class="pl-c"><span class="pl-c">#</span> this easy:</span>
+\keyword                <span class="pl-c"><span class="pl-c">#</span> =&gt; 'keyword'</span>
+
+
+<span class="pl-c"><span class="pl-c">#</span> Arrays are ordered collections of values.</span>
+<span class="pl-v">fruits</span> <span class="pl-k">=</span>
+  <span class="pl-k">*</span> \apple
+  <span class="pl-k">*</span> \orange
+  <span class="pl-k">*</span> \pear
+
+<span class="pl-c"><span class="pl-c">#</span> They can be expressed more concisely with square brackets:</span>
+<span class="pl-v">fruits</span> <span class="pl-k">=</span> [ \apple, \orange, \pear ]
+
+<span class="pl-c"><span class="pl-c">#</span> You also get a convenient way to create a list of strings, using</span>
+<span class="pl-c"><span class="pl-c">#</span> white space to delimit the items.</span>
+<span class="pl-v">fruits</span> <span class="pl-k">=</span> <span class="pl-k">&lt;</span>[ <span class="pl-en">apple</span> <span class="pl-en">orange</span> pear ]<span class="pl-k">&gt;</span>
+
+<span class="pl-c"><span class="pl-c">#</span> You can retrieve an item by their 0-based index:</span>
+fruits[<span class="pl-c1">0</span>]       <span class="pl-c"><span class="pl-c">#</span> =&gt; "apple"</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Objects are a collection of unordered key/value pairs, and a few other</span>
+<span class="pl-c"><span class="pl-c">#</span> things (more on that later).</span>
+<span class="pl-v">person</span> <span class="pl-k">=</span>
+  <span class="pl-v">name</span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Christina<span class="pl-pds">"</span></span>
+  <span class="pl-v">likes</span><span class="pl-k">:</span>
+    <span class="pl-k">*</span> <span class="pl-s"><span class="pl-pds">"</span>kittens<span class="pl-pds">"</span></span>
+    <span class="pl-k">*</span> <span class="pl-s"><span class="pl-pds">"</span>and other cute stuff<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> Again, you can express them concisely with curly brackets:</span>
+<span class="pl-v">person</span> <span class="pl-k">=</span> {<span class="pl-v">name</span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Christina<span class="pl-pds">"</span></span>, <span class="pl-v">likes</span><span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">"</span>kittens<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>and other cute stuff<span class="pl-pds">"</span></span>]}
+
+<span class="pl-c"><span class="pl-c">#</span> You can retrieve an item by their key:</span>
+<span class="pl-smi">person</span>.<span class="pl-smi">name</span>     <span class="pl-c"><span class="pl-c">#</span> =&gt; "Christina"</span>
+person[<span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>]  <span class="pl-c"><span class="pl-c">#</span> =&gt; "Christina"</span>
+
+
+<span class="pl-c"><span class="pl-c">#</span> Regular expressions use the same syntax as JavaScript:</span>
+trailing<span class="pl-k">-</span><span class="pl-v">space</span> <span class="pl-k">=</span> <span class="pl-sr"><span class="pl-pds">/</span><span class="pl-c1">\s</span><span class="pl-k">$</span><span class="pl-pds">/</span></span>          <span class="pl-c"><span class="pl-c">#</span> dashed-words become dashedWords</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Except you can do multi-line expressions too!</span>
+<span class="pl-c"><span class="pl-c">#</span> (comments and whitespace just gets ignored)</span>
+<span class="pl-v">funRE</span> <span class="pl-k">=</span> <span class="pl-k">//</span>
+        <span class="pl-k">function</span><span class="pl-k">\</span>s<span class="pl-k">+</span>(.<span class="pl-k">+</span>)         <span class="pl-c"><span class="pl-c">#</span> name</span>
+        \s<span class="pl-k">*</span> \((.<span class="pl-k">*</span>)\) \s<span class="pl-k">*</span>        <span class="pl-c"><span class="pl-c">#</span> arguments</span>
+        { (.<span class="pl-k">*</span>) }                <span class="pl-c"><span class="pl-c">#</span> body</span>
+        <span class="pl-k">//</span>
+
+
+<span class="pl-c"><span class="pl-c">#</span>#######################################################################</span>
+<span class="pl-c"><span class="pl-c">#</span># 2. Basic operations</span>
+<span class="pl-c"><span class="pl-c">#</span>#######################################################################</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Arithmetic operators are the same as JavaScript's:</span>
+<span class="pl-c1">1</span> <span class="pl-k">+</span> <span class="pl-c1">2</span>   <span class="pl-c"><span class="pl-c">#</span> =&gt; 3</span>
+<span class="pl-c1">2</span> <span class="pl-k">-</span> <span class="pl-c1">1</span>   <span class="pl-c"><span class="pl-c">#</span> =&gt; 1</span>
+<span class="pl-c1">2</span> <span class="pl-k">*</span> <span class="pl-c1">3</span>   <span class="pl-c"><span class="pl-c">#</span> =&gt; 6</span>
+<span class="pl-c1">4</span> <span class="pl-k">/</span> <span class="pl-c1">2</span>   <span class="pl-c"><span class="pl-c">#</span> =&gt; 2</span>
+<span class="pl-c1">3</span> <span class="pl-k">%</span> <span class="pl-c1">2</span>   <span class="pl-c"><span class="pl-c">#</span> =&gt; 1</span>
+
+
+<span class="pl-c"><span class="pl-c">#</span> Comparisons are mostly the same too, except that `==` is the same as</span>
+<span class="pl-c"><span class="pl-c">#</span> JS's `===`, where JS's `==` in LiveScript is `~=`, and `===` enables</span>
+<span class="pl-c"><span class="pl-c">#</span> object and array comparisons, and also stricter comparisons:</span>
+<span class="pl-c1">2</span> <span class="pl-k">==</span> <span class="pl-c1">2</span>          <span class="pl-c"><span class="pl-c">#</span> =&gt; true</span>
+<span class="pl-c1">2</span> <span class="pl-k">==</span> <span class="pl-s"><span class="pl-pds">"</span>2<span class="pl-pds">"</span></span>        <span class="pl-c"><span class="pl-c">#</span> =&gt; false</span>
+<span class="pl-c1">2</span> <span class="pl-k">~</span><span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>2<span class="pl-pds">"</span></span>        <span class="pl-c"><span class="pl-c">#</span> =&gt; true</span>
+<span class="pl-c1">2</span> <span class="pl-k">==</span><span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>2<span class="pl-pds">"</span></span>       <span class="pl-c"><span class="pl-c">#</span> =&gt; false</span>
+
+[<span class="pl-c1">1</span>,<span class="pl-c1">2</span>,<span class="pl-c1">3</span>] <span class="pl-k">==</span> [<span class="pl-c1">1</span>,<span class="pl-c1">2</span>,<span class="pl-c1">3</span>]        <span class="pl-c"><span class="pl-c">#</span> =&gt; false</span>
+[<span class="pl-c1">1</span>,<span class="pl-c1">2</span>,<span class="pl-c1">3</span>] <span class="pl-k">==</span><span class="pl-k">=</span> [<span class="pl-c1">1</span>,<span class="pl-c1">2</span>,<span class="pl-c1">3</span>]       <span class="pl-c"><span class="pl-c">#</span> =&gt; true</span>
+
+<span class="pl-k">+</span><span class="pl-c1">0</span> <span class="pl-k">==</span> <span class="pl-k">-</span><span class="pl-c1">0</span>     <span class="pl-c"><span class="pl-c">#</span> =&gt; true</span>
+<span class="pl-k">+</span><span class="pl-c1">0</span> <span class="pl-k">==</span><span class="pl-k">=</span> <span class="pl-k">-</span><span class="pl-c1">0</span>    <span class="pl-c"><span class="pl-c">#</span> =&gt; false</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Other relational operators include &lt;, &lt;=, &gt; and &gt;=</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Logical values can be combined through the logical operators `or`,</span>
+<span class="pl-c"><span class="pl-c">#</span> `and` and `not`</span>
+<span class="pl-c1">true</span> <span class="pl-k">and</span> <span class="pl-c1">false</span>  <span class="pl-c"><span class="pl-c">#</span> =&gt; false</span>
+<span class="pl-c1">false</span> <span class="pl-k">or</span> <span class="pl-c1">true</span>   <span class="pl-c"><span class="pl-c">#</span> =&gt; true</span>
+<span class="pl-k">not</span> <span class="pl-c1">false</span>       <span class="pl-c"><span class="pl-c">#</span> =&gt; true</span>
+
+
+<span class="pl-c"><span class="pl-c">#</span> Collections also get some nice additional operators</span>
+[<span class="pl-c1">1</span>, <span class="pl-c1">2</span>] <span class="pl-k">++</span> [<span class="pl-c1">3</span>, <span class="pl-c1">4</span>]                <span class="pl-c"><span class="pl-c">#</span> =&gt; [1, 2, 3, 4]</span>
+<span class="pl-s"><span class="pl-pds">'</span>a<span class="pl-pds">'</span></span> <span class="pl-k">in</span> <span class="pl-k">&lt;</span>[ <span class="pl-en">a</span> <span class="pl-en">b</span> c ]<span class="pl-k">&gt;</span>              <span class="pl-c"><span class="pl-c">#</span> =&gt; true</span>
+<span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span> <span class="pl-k">of</span> { <span class="pl-v">name</span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Chris<span class="pl-pds">'</span></span> }     <span class="pl-c"><span class="pl-c">#</span> =&gt; true</span>
+
+
+<span class="pl-c"><span class="pl-c">#</span>#######################################################################</span>
+<span class="pl-c"><span class="pl-c">#</span># 3. Functions</span>
+<span class="pl-c"><span class="pl-c">#</span>#######################################################################</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Since LiveScript is functional, you'd expect functions to get a nice</span>
+<span class="pl-c"><span class="pl-c">#</span> treatment. In LiveScript it's even more apparent that functions are</span>
+<span class="pl-c"><span class="pl-c">#</span> first class:</span>
+<span class="pl-en">add</span> <span class="pl-k">=</span> (<span class="pl-smi">left</span>, <span class="pl-smi">right</span>) <span class="pl-k">-&gt;</span> left <span class="pl-k">+</span> right
+<span class="pl-en">add</span> <span class="pl-c1">1</span>, <span class="pl-c1">2</span>        <span class="pl-c"><span class="pl-c">#</span> =&gt; 3</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Functions which take no arguments are called with a bang!</span>
+<span class="pl-en">two</span> <span class="pl-k">=</span> <span class="pl-k">-&gt;</span> <span class="pl-c1">2</span>
+two<span class="pl-k">!</span>
+
+<span class="pl-c"><span class="pl-c">#</span> LiveScript uses function scope, just like JavaScript, and has proper</span>
+<span class="pl-c"><span class="pl-c">#</span> closures too. Unlike JavaScript, the `=` works as a declaration</span>
+<span class="pl-c"><span class="pl-c">#</span> operator, and will always declare the variable on the left hand side.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> The `:=` operator is available to *reuse* a name from the parent</span>
+<span class="pl-c"><span class="pl-c">#</span> scope.</span>
+
+
+<span class="pl-c"><span class="pl-c">#</span> You can destructure arguments of a function to quickly get to</span>
+<span class="pl-c"><span class="pl-c">#</span> interesting values inside a complex data structure:</span>
+<span class="pl-en">tail</span> <span class="pl-k">=</span> ([head, <span class="pl-k">...</span>rest]) <span class="pl-k">-&gt;</span> rest
+<span class="pl-en">tail</span> [<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>]  <span class="pl-c"><span class="pl-c">#</span> =&gt; [2, 3]</span>
+
+<span class="pl-c"><span class="pl-c">#</span> You can also transform the arguments using binary or unary</span>
+<span class="pl-c"><span class="pl-c">#</span> operators. Default arguments are also possible.</span>
+<span class="pl-en">foo</span> <span class="pl-k">=</span> (<span class="pl-smi">a</span> <span class="pl-k">=</span> <span class="pl-c1">1</span>, <span class="pl-smi">b</span> <span class="pl-k">=</span> <span class="pl-c1">2</span>) <span class="pl-k">-&gt;</span> a <span class="pl-k">+</span> b
+foo<span class="pl-k">!</span>    <span class="pl-c"><span class="pl-c">#</span> =&gt; 3</span>
+
+<span class="pl-c"><span class="pl-c">#</span> You could use it to clone a particular argument to avoid side-effects,</span>
+<span class="pl-c"><span class="pl-c">#</span> for example:</span>
+<span class="pl-en">copy</span> <span class="pl-k">=</span> (<span class="pl-k">^^</span><span class="pl-smi">target</span>, <span class="pl-smi">source</span>) <span class="pl-k">-&gt;</span>
+  <span class="pl-k">for</span> k,v <span class="pl-k">of</span> <span class="pl-en">source</span> <span class="pl-k">=&gt;</span> target[k] <span class="pl-k">=</span> v
+  target
+<span class="pl-v">a</span> <span class="pl-k">=</span> { <span class="pl-v">a</span><span class="pl-k">:</span> <span class="pl-c1">1</span> }
+<span class="pl-en">copy</span> a, { <span class="pl-v">b</span><span class="pl-k">:</span> <span class="pl-c1">2</span> }        <span class="pl-c"><span class="pl-c">#</span> =&gt; { a: 1, b: 2 }</span>
+a                       <span class="pl-c"><span class="pl-c">#</span> =&gt; { a: 1 }</span>
+
+
+<span class="pl-c"><span class="pl-c">#</span> A function may be curried by using a long arrow rather than a short</span>
+<span class="pl-c"><span class="pl-c">#</span> one:</span>
+<span class="pl-v">add</span> <span class="pl-k">=</span> (left, right) <span class="pl-k">--</span><span class="pl-k">&gt;</span> left <span class="pl-k">+</span> right
+<span class="pl-v">add1</span> <span class="pl-k">=</span> <span class="pl-en">add</span> <span class="pl-c1">1</span>
+<span class="pl-en">add1</span> <span class="pl-c1">2</span>          <span class="pl-c"><span class="pl-c">#</span> =&gt; 3</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Functions get an implicit `it` argument, even if you don't declare</span>
+<span class="pl-c"><span class="pl-c">#</span> any.</span>
+<span class="pl-en">identity</span> <span class="pl-k">=</span> <span class="pl-k">-&gt;</span> it
+<span class="pl-en">identity</span> <span class="pl-c1">1</span>      <span class="pl-c"><span class="pl-c">#</span> =&gt; 1</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Operators are not functions in LiveScript, but you can easily turn</span>
+<span class="pl-c"><span class="pl-c">#</span> them into one! Enter the operator sectioning:</span>
+divide<span class="pl-k">-</span><span class="pl-k">by</span><span class="pl-k">-</span><span class="pl-v">two</span> <span class="pl-k">=</span> (<span class="pl-k">/</span> <span class="pl-c1">2</span>)
+[<span class="pl-c1">2</span>, <span class="pl-c1">4</span>, <span class="pl-c1">8</span>, <span class="pl-c1">16</span>].<span class="pl-en">map</span>(divide<span class="pl-k">-</span><span class="pl-k">by</span><span class="pl-k">-</span>two) .<span class="pl-en">reduce</span> (<span class="pl-k">+</span>)
+
+
+<span class="pl-c"><span class="pl-c">#</span> Not only of function application lives LiveScript, as in any good</span>
+<span class="pl-c"><span class="pl-c">#</span> functional language you get facilities for composing them:</span>
+double<span class="pl-k">-</span>minus<span class="pl-k">-</span><span class="pl-v">one</span> <span class="pl-k">=</span> (<span class="pl-k">-</span> <span class="pl-c1">1</span>) . (<span class="pl-k">*</span> <span class="pl-c1">2</span>)
+
+<span class="pl-c"><span class="pl-c">#</span> Other than the usual `f . g` mathematical formulae, you get the `&gt;&gt;`</span>
+<span class="pl-c"><span class="pl-c">#</span> and `&lt;&lt;` operators, that describe how the flow of values through the</span>
+<span class="pl-c"><span class="pl-c">#</span> functions.</span>
+double<span class="pl-k">-</span>minus<span class="pl-k">-</span><span class="pl-v">one</span> <span class="pl-k">=</span> (<span class="pl-k">*</span> <span class="pl-c1">2</span>) <span class="pl-k">&gt;&gt;</span> (<span class="pl-k">-</span> <span class="pl-c1">1</span>)
+double<span class="pl-k">-</span>minus<span class="pl-k">-</span><span class="pl-v">one</span> <span class="pl-k">=</span> (<span class="pl-k">-</span> <span class="pl-c1">1</span>) <span class="pl-k">&lt;&lt;</span> (<span class="pl-k">*</span> <span class="pl-c1">2</span>)
+
+
+<span class="pl-c"><span class="pl-c">#</span> And talking about flow of value, LiveScript gets the `|&gt;` and `&lt;|`</span>
+<span class="pl-c"><span class="pl-c">#</span> operators that apply a value to a function:</span>
+<span class="pl-v">map</span> <span class="pl-k">=</span> (f, xs) <span class="pl-k">--</span><span class="pl-k">&gt;</span> <span class="pl-smi">xs</span>.<span class="pl-en">map</span> f
+[<span class="pl-ii">1</span> <span class="pl-ii">2</span> <span class="pl-c1">3</span>] <span class="pl-k">|</span><span class="pl-k">&gt;</span> map (<span class="pl-k">*</span> <span class="pl-c1">2</span>)            <span class="pl-c"><span class="pl-c">#</span> =&gt; [2 4 6]</span>
+
+<span class="pl-c"><span class="pl-c">#</span> You can also choose where you want the value to be placed, just mark</span>
+<span class="pl-c"><span class="pl-c">#</span> the place with an underscore (_):</span>
+<span class="pl-v">reduce</span> <span class="pl-k">=</span> (f, xs, initial) <span class="pl-k">--</span><span class="pl-k">&gt;</span> <span class="pl-smi">xs</span>.<span class="pl-en">reduce</span> f, initial
+[<span class="pl-ii">1</span> <span class="pl-ii">2</span> <span class="pl-c1">3</span>] <span class="pl-k">|</span><span class="pl-k">&gt;</span> reduce (<span class="pl-k">+</span>), _, <span class="pl-c1">0</span>     <span class="pl-c"><span class="pl-c">#</span> =&gt; 6</span>
+
+
+<span class="pl-c"><span class="pl-c">#</span> The underscore is also used in regular partial application, which you</span>
+<span class="pl-c"><span class="pl-c">#</span> can use for any function:</span>
+<span class="pl-en">div</span> <span class="pl-k">=</span> (<span class="pl-smi">left</span>, <span class="pl-smi">right</span>) <span class="pl-k">-&gt;</span> left <span class="pl-k">/</span> right
+div<span class="pl-k">-</span><span class="pl-k">by</span><span class="pl-k">-</span><span class="pl-v">two</span> <span class="pl-k">=</span> <span class="pl-en">div</span> _, <span class="pl-c1">2</span>
+div<span class="pl-k">-</span><span class="pl-k">by</span><span class="pl-k">-</span><span class="pl-en">two</span> <span class="pl-c1">4</span>      <span class="pl-c"><span class="pl-c">#</span> =&gt; 2</span>
+
+
+<span class="pl-c"><span class="pl-c">#</span> Last, but not least, LiveScript has back-calls, which might help</span>
+<span class="pl-c"><span class="pl-c">#</span> with some callback-based code (though you should try more functional</span>
+<span class="pl-c"><span class="pl-c">#</span> approaches, like Promises):</span>
+<span class="pl-en">readFile</span> <span class="pl-k">=</span> (<span class="pl-smi">name</span>, <span class="pl-smi">f</span>) <span class="pl-k">-&gt;</span> <span class="pl-en">f</span> name
+a &lt;<span class="pl-ent">-</span> readFile <span class="pl-s"><span class="pl-pds">'</span>foo<span class="pl-pds">'</span></span>
+b &lt;- readFile <span class="pl-s"><span class="pl-pds">'</span>bar<span class="pl-pds">'</span></span>
+console.log a + b
+
+# Same as:
+readFile <span class="pl-s"><span class="pl-pds">'</span>foo<span class="pl-pds">'</span></span>, (a) -&gt; <span class="pl-en">readFile</span> <span class="pl-s"><span class="pl-pds">'</span>bar<span class="pl-pds">'</span></span>, (<span class="pl-smi">b</span>) <span class="pl-k">-&gt;</span> <span class="pl-en">console</span>.<span class="pl-en">log</span> a <span class="pl-k">+</span> b
+
+
+<span class="pl-c"><span class="pl-c">#</span>#######################################################################</span>
+<span class="pl-c"><span class="pl-c">#</span># 4. Patterns, guards and control-flow</span>
+<span class="pl-c"><span class="pl-c">#</span>#######################################################################</span>
+
+<span class="pl-c"><span class="pl-c">#</span> You can branch computations with the `if...else` expression:</span>
+<span class="pl-v">x</span> <span class="pl-k">=</span> <span class="pl-k">if</span> n <span class="pl-k">&gt;</span> <span class="pl-c1">0</span> <span class="pl-k">then</span> \positive <span class="pl-k">else</span> \negative
+
+<span class="pl-c"><span class="pl-c">#</span> Instead of `then`, you can use `=&gt;`</span>
+<span class="pl-v">x</span> <span class="pl-k">=</span> <span class="pl-k">if</span> n <span class="pl-k">&gt;</span> <span class="pl-ii">0</span> <span class="pl-k">=&gt;</span> \positive
+    <span class="pl-k">else</span>        \negative
+
+<span class="pl-c"><span class="pl-c">#</span> Complex conditions are better-off expressed with the `switch`</span>
+<span class="pl-c"><span class="pl-c">#</span> expression, though:</span>
+<span class="pl-v">y</span> <span class="pl-k">=</span> {}
+<span class="pl-v">x</span> <span class="pl-k">=</span> <span class="pl-k">switch</span>
+  <span class="pl-k">|</span> (<span class="pl-k">typeof</span> y) <span class="pl-k">is</span> \<span class="pl-en">number</span> <span class="pl-k">=&gt;</span> \number
+  <span class="pl-k">|</span> (<span class="pl-k">typeof</span> y) <span class="pl-k">is</span> \<span class="pl-en">string</span> <span class="pl-k">=&gt;</span> \string
+  <span class="pl-k">|</span> <span class="pl-s"><span class="pl-pds">'</span>length<span class="pl-pds">'</span></span> <span class="pl-k">of</span> <span class="pl-en">y</span>         <span class="pl-k">=&gt;</span> \array
+  <span class="pl-k">|</span> <span class="pl-en">otherwise</span>             <span class="pl-k">=&gt;</span> \object      <span class="pl-c"><span class="pl-c">#</span> `otherwise` and `_` always matches.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Function bodies, declarations and assignments get a free `switch`, so</span>
+<span class="pl-c"><span class="pl-c">#</span> you don't need to type it again:</span>
+<span class="pl-v">take</span> <span class="pl-k">=</span> (n, [x, <span class="pl-k">...</span>xs]) <span class="pl-k">--</span><span class="pl-k">&gt;</span>
+                        <span class="pl-k">|</span> n <span class="pl-k">==</span> <span class="pl-ii">0</span> <span class="pl-k">=&gt;</span> []
+                        <span class="pl-k">|</span> <span class="pl-en">_</span>      <span class="pl-k">=&gt;</span> [x] <span class="pl-k">++</span> take (n <span class="pl-k">-</span> <span class="pl-c1">1</span>), xs
+
+
+<span class="pl-c"><span class="pl-c">#</span>#######################################################################</span>
+<span class="pl-c"><span class="pl-c">#</span># 5. Comprehensions</span>
+<span class="pl-c"><span class="pl-c">#</span>#######################################################################</span>
+
+<span class="pl-c"><span class="pl-c">#</span> While the functional helpers for dealing with lists and objects are</span>
+<span class="pl-c"><span class="pl-c">#</span> right there in the JavaScript's standard library (and complemented on</span>
+<span class="pl-c"><span class="pl-c">#</span> the prelude-ls, which is a "standard library" for LiveScript),</span>
+<span class="pl-c"><span class="pl-c">#</span> comprehensions will usually allow you to do this stuff faster and with</span>
+<span class="pl-c"><span class="pl-c">#</span> a nice syntax:</span>
+<span class="pl-v">oneToTwenty</span> <span class="pl-k">=</span> [<span class="pl-ii">1</span> <span class="pl-en">to</span> <span class="pl-c1">20</span>]
+<span class="pl-v">evens</span>       <span class="pl-k">=</span> [x <span class="pl-k">for</span> x <span class="pl-k">in</span> oneToTwenty <span class="pl-k">when</span> x <span class="pl-k">%</span> <span class="pl-c1">2</span> <span class="pl-k">==</span> <span class="pl-c1">0</span>]
+
+<span class="pl-c"><span class="pl-c">#</span> `when` and `unless` can be used as filters in the comprehension.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Object comprehension works in the same way, except that it gives you</span>
+<span class="pl-c"><span class="pl-c">#</span> back an object rather than an Array:</span>
+<span class="pl-v">copy</span> <span class="pl-k">=</span> { [k, v] <span class="pl-k">for</span> k, v <span class="pl-k">of</span> source }
+
+
+<span class="pl-c"><span class="pl-c">#</span>#######################################################################</span>
+<span class="pl-c"><span class="pl-c">#</span># 4. OOP</span>
+<span class="pl-c"><span class="pl-c">#</span>#######################################################################</span>
+
+<span class="pl-c"><span class="pl-c">#</span> While LiveScript is a functional language in most aspects, it also has</span>
+<span class="pl-c"><span class="pl-c">#</span> some niceties for imperative and object oriented programming. One of</span>
+<span class="pl-c"><span class="pl-c">#</span> them is class syntax and some class sugar inherited from CoffeeScript:</span>
+<span class="pl-k">class</span> <span class="pl-en">Animal</span>
+  (<span class="pl-smi">@name</span>, <span class="pl-smi">kind</span>) <span class="pl-k">-&gt;</span>
+    <span class="pl-smi">@kind</span> <span class="pl-k">=</span> kind
+  <span class="pl-en">action</span><span class="pl-k">:</span> (<span class="pl-smi">what</span>) <span class="pl-k">-&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>*<span class="pl-s1"><span class="pl-pse">#{</span><span class="pl-smi">@name</span><span class="pl-pse">}</span></span> (a <span class="pl-s1"><span class="pl-pse">#{</span><span class="pl-smi">@kind</span><span class="pl-pse">}</span></span>) <span class="pl-s1"><span class="pl-pse">#{</span>what<span class="pl-pse">}</span></span>*<span class="pl-pds">"</span></span>
+
+<span class="pl-k">class</span> <span class="pl-en">Cat</span> <span class="pl-k">extends</span> <span class="pl-e">Animal</span>
+  (<span class="pl-smi">@name</span>) <span class="pl-k">-&gt;</span> <span class="pl-c1">super</span> <span class="pl-smi">@name</span>, <span class="pl-s"><span class="pl-pds">'</span>cat<span class="pl-pds">'</span></span>
+  <span class="pl-en">purr</span><span class="pl-k">:</span> <span class="pl-k">-&gt;</span> <span class="pl-smi">@</span><span class="pl-en">action</span> <span class="pl-s"><span class="pl-pds">'</span>purrs<span class="pl-pds">'</span></span>
+
+<span class="pl-v">kitten</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Cat</span> <span class="pl-s"><span class="pl-pds">'</span>Mei<span class="pl-pds">'</span></span>
+<span class="pl-smi">kitten</span>.<span class="pl-smi">purr</span><span class="pl-k">!</span>      <span class="pl-c"><span class="pl-c">#</span> =&gt; "*Mei (a cat) purrs*"</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Besides the classical single-inheritance pattern, you can also provide</span>
+<span class="pl-c"><span class="pl-c">#</span> as many mixins as you would like for a class. Mixins are just plain</span>
+<span class="pl-c"><span class="pl-c">#</span> objects:</span>
+<span class="pl-v">Huggable</span> <span class="pl-k">=</span>
+  <span class="pl-en">hug</span><span class="pl-k">:</span> <span class="pl-k">-&gt;</span> <span class="pl-smi">@</span><span class="pl-en">action</span> <span class="pl-s"><span class="pl-pds">'</span>is hugged<span class="pl-pds">'</span></span>
+
+<span class="pl-k">class</span> <span class="pl-en">SnugglyCat</span> <span class="pl-k">extends</span> <span class="pl-e">Cat</span> <span class="pl-k">implements</span> Huggable
+
+<span class="pl-v">kitten</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">SnugglyCat</span> <span class="pl-s"><span class="pl-pds">'</span>Purr<span class="pl-pds">'</span></span>
+<span class="pl-smi">kitten</span>.<span class="pl-smi">hug</span><span class="pl-k">!</span>     <span class="pl-c"><span class="pl-c">#</span> =&gt; "*Mei (a cat) is hugged*"</span></pre></div>
+<h2>Further reading</h2>
+<p>There's just so much more to LiveScript, but this should be enough to<br>
+get you started writing little functional things in it. The<br>
+<a href="http://livescript.net/" rel="nofollow">official website</a> has a lot of information on the<br>
+language, and a nice online compiler for you to try stuff out!</p>
+<p>You may also want to grab yourself some<br>
+<a href="http://gkz.github.io/prelude-ls/" rel="nofollow">prelude.ls</a>, and check out the <code class="notranslate">#livescript</code><br>
+channel on the Freenode network.</p>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Christina Whyte", "http://github.com/kurisuwhyte/"]
+</code></pre>

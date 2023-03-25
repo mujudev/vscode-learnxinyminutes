@@ -1,0 +1,445 @@
+<h1>Fortran</h1>
+<p>Fortran is one of the oldest computer languages. It was developed in the 1950s<br>
+by IBM for numeric calculations (Fortran is an abbreviation of "Formula<br>
+Translation"). Despite its age, it is still used for high-performance computing<br>
+such as weather prediction. However, the language has changed considerably over<br>
+the years, although mostly maintaining backwards compatibility; well known<br>
+versions are FORTRAN 77, Fortran 90, Fortran 95, Fortran 2003, Fortran 2008,<br>
+Fortran 2015, and Fortran 2018.</p>
+<p>This overview will discuss the features of Fortran 95 since it is the most<br>
+widely implemented of the more recent specifications and the later versions are<br>
+largely similar (by comparison FORTRAN 77 is a very different language).</p>
+<div class="highlight highlight-source-fortran"><pre class="notranslate">! This is a comment.
+
+
+<span class="pl-k">program</span> example   !declare a <span class="pl-k">program</span> called example.
+
+    ! Code can only exist inside programs, functions, subroutines or modules.
+    ! Using indentation is not required but it is recommended.
+
+
+    ! Declaring Variables
+    ! ===================
+
+    ! All declarations must come before statements and expressions.
+
+    <span class="pl-k">implicit none</span>    !prevents dynamic declaration of variables (recommended!)
+    ! <span class="pl-k">Implicit none</span> must be redeclared <span class="pl-k">in</span> every function<span class="pl-k">/</span><span class="pl-k">program</span><span class="pl-k">/</span>module...
+
+    ! IMPORTANT <span class="pl-k">-</span> Fortran is case insensitive.
+    <span class="pl-k">real</span> z
+    <span class="pl-k">REAL</span> Z2
+
+    <span class="pl-k">real</span> <span class="pl-k">::</span> v,x    ! WARNING: default initial values are compiler dependent!
+    <span class="pl-k">real</span> <span class="pl-k">::</span> a <span class="pl-k">=</span> <span class="pl-c1">3</span>, b<span class="pl-k">=</span><span class="pl-c1">2E12</span>, c <span class="pl-k">=</span> <span class="pl-c1">0.01</span>
+    <span class="pl-k">integer</span> <span class="pl-k">::</span> i, j, k<span class="pl-k">=</span><span class="pl-c1">1</span>, m
+    <span class="pl-k">real</span>, <span class="pl-k">parameter</span> <span class="pl-k">::</span> PI <span class="pl-k">=</span> <span class="pl-c1">3.1415926535897931</span>    !declare a constant.
+    <span class="pl-k">logical</span> <span class="pl-k">::</span> y <span class="pl-k">=</span> <span class="pl-c1">.TRUE.</span> , n <span class="pl-k">=</span> <span class="pl-c1">.FALSE.</span>    !boolean type.
+    <span class="pl-k">complex</span> <span class="pl-k">::</span> w <span class="pl-k">=</span> (<span class="pl-c1">0</span>,<span class="pl-c1">1</span>)    !<span class="pl-k">sqrt</span>(<span class="pl-k">-</span><span class="pl-c1">1</span>)
+    <span class="pl-k">character</span> (len<span class="pl-k">=</span><span class="pl-c1">3</span>) <span class="pl-k">::</span> month    !string of <span class="pl-c1">3</span> characters.
+
+    <span class="pl-k">real</span> <span class="pl-k">::</span> array(<span class="pl-c1">6</span>)     !declare an array of <span class="pl-c1">6</span> reals.
+    <span class="pl-k">real</span>, <span class="pl-k">dimension</span>(<span class="pl-c1">4</span>) <span class="pl-k">::</span> arrayb    !another way <span class="pl-k">to</span> declare an array.
+    <span class="pl-k">integer</span> <span class="pl-k">::</span> arrayc(<span class="pl-k">-</span><span class="pl-c1">10</span>:<span class="pl-c1">10</span>)   !an array with a custom index.
+    <span class="pl-k">real</span> <span class="pl-k">::</span> array2d(<span class="pl-c1">3</span>,<span class="pl-c1">2</span>)    !multidimensional array.
+
+    ! The <span class="pl-s"><span class="pl-pds">'</span>::<span class="pl-pds">'</span></span> separators are not always necessary but are recommended.
+
+    ! many other variable attributes also exist:
+    <span class="pl-k">real</span>, pointer <span class="pl-k">::</span> p    !declare a pointer.
+
+    <span class="pl-k">integer</span>, <span class="pl-k">parameter</span> <span class="pl-k">::</span> LP <span class="pl-k">=</span> <span class="pl-k">selected_real_kind</span>(<span class="pl-c1">20</span>)
+    <span class="pl-k">real</span> (kind <span class="pl-k">=</span> LP) <span class="pl-k">::</span> d    !long precision variable.
+
+    ! WARNING: initialising variables during declaration causes problems
+    ! <span class="pl-k">in</span> functions since this automatically implies the <span class="pl-s"><span class="pl-pds">'</span>save<span class="pl-pds">'</span></span> attribute
+    ! whereby values are saved between function calls. <span class="pl-k">In</span> general, separate
+    ! declaration and initialisation code except for constants!
+
+
+    ! Strings
+    ! =======
+
+    <span class="pl-k">character</span> <span class="pl-k">::</span> a_char <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>i<span class="pl-pds">'</span></span>
+    <span class="pl-k">character</span> (len <span class="pl-k">=</span> <span class="pl-c1">6</span>) <span class="pl-k">::</span> a_str <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>qwerty<span class="pl-pds">"</span></span>
+    <span class="pl-k">character</span> (len <span class="pl-k">=</span> <span class="pl-c1">30</span>) <span class="pl-k">::</span> str_b
+    <span class="pl-k">character</span> (len <span class="pl-k">=</span> <span class="pl-k">*</span>), <span class="pl-k">parameter</span> <span class="pl-k">::</span> a_long_str <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>This is a long string.<span class="pl-pds">"</span></span>
+    !can have automatic counting of length using (len<span class="pl-k">=*</span>) but only for constants.
+
+    str_b <span class="pl-k">=</span> a_str <span class="pl-k">//</span> <span class="pl-s"><span class="pl-pds">"</span> keyboard<span class="pl-pds">"</span></span>    !concatenate strings using <span class="pl-k">//</span> <span class="pl-k">operator</span>.
+
+
+    ! <span class="pl-k">Assignment</span> &amp; Arithmetic
+    ! =======================
+
+    Z <span class="pl-k">=</span> <span class="pl-c1">1</span>    !<span class="pl-k">assign</span> <span class="pl-k">to</span> variable z declared above (case insensitive).
+    j <span class="pl-k">=</span> <span class="pl-c1">10</span> <span class="pl-k">+</span> <span class="pl-c1">2</span> <span class="pl-k">-</span> <span class="pl-c1">3</span>
+    a <span class="pl-k">=</span> <span class="pl-c1">11.54</span>  <span class="pl-k">/</span>  (<span class="pl-c1">2.3</span> <span class="pl-k">*</span> <span class="pl-c1">3.1</span>)
+    b <span class="pl-k">=</span> <span class="pl-c1">2</span><span class="pl-k">**</span><span class="pl-c1">3</span>    !exponentiation
+
+
+    ! Control Flow Statements &amp; Operators
+    ! ===================================
+
+    ! Single<span class="pl-k">-</span>line <span class="pl-k">if</span> statement
+    <span class="pl-k">if</span> (z == a) b <span class="pl-k">=</span> <span class="pl-c1">4</span>  !condition always need surrounding parentheses.
+
+    <span class="pl-k">if</span> (z <span class="pl-k">/=</span> a) <span class="pl-k">then</span> !z not equal <span class="pl-k">to</span> a
+    ! Other symbolic comparisons are &lt; &gt; &lt;<span class="pl-k">=</span> &gt;<span class="pl-k">=</span> == <span class="pl-k">/=</span>
+      b <span class="pl-k">=</span> <span class="pl-c1">4</span>
+    <span class="pl-k">else</span> <span class="pl-k">if</span> (z <span class="pl-k">.GT.</span> a) <span class="pl-k">then</span> !z greater than a
+    ! Text equivalents <span class="pl-k">to</span> symbol operators are <span class="pl-k">.LT.</span> <span class="pl-k">.GT.</span> <span class="pl-k">.LE.</span> <span class="pl-k">.GE.</span> <span class="pl-k">.EQ.</span> <span class="pl-k">.NE.</span>
+      b <span class="pl-k">=</span> <span class="pl-c1">6</span>
+    <span class="pl-k">else</span> <span class="pl-k">if</span> (z &lt; a) <span class="pl-k">then</span> !<span class="pl-s"><span class="pl-pds">'</span>then<span class="pl-pds">'</span></span> must be on this line.
+      b <span class="pl-k">=</span> <span class="pl-c1">5</span> !execution block must be on a new line.
+    <span class="pl-k">else</span>
+      b <span class="pl-k">=</span> <span class="pl-c1">10</span>
+    <span class="pl-k">end if</span> !end statement needs the <span class="pl-s"><span class="pl-pds">'</span>if<span class="pl-pds">'</span></span> (or can use <span class="pl-s"><span class="pl-pds">'</span>endif<span class="pl-pds">'</span></span>).
+
+
+    <span class="pl-k">if</span> (<span class="pl-k">.NOT.</span> (x &lt; c <span class="pl-k">.AND.</span> v &gt;<span class="pl-k">=</span> a <span class="pl-k">.OR.</span> z == z)) <span class="pl-k">then</span>   !boolean operators.
+      inner: <span class="pl-k">if</span> (<span class="pl-c1">.TRUE.</span>) <span class="pl-k">then</span>    !can name <span class="pl-k">if</span><span class="pl-k">-</span>construct.
+        b <span class="pl-k">=</span> <span class="pl-c1">1</span>
+      <span class="pl-k">endif</span> inner    !<span class="pl-k">then</span> must name <span class="pl-k">endif</span> statement.
+    <span class="pl-k">endif</span>
+
+
+    i <span class="pl-k">=</span> <span class="pl-c1">20</span>
+    select case (i)
+      case (<span class="pl-c1">0</span>)    !case i == <span class="pl-c1">0</span>
+        j<span class="pl-k">=</span><span class="pl-c1">0</span>
+      case (<span class="pl-c1">1</span>:<span class="pl-c1">10</span>)    !cases i is <span class="pl-c1">1</span> <span class="pl-k">to</span> <span class="pl-c1">10</span> inclusive.
+        j<span class="pl-k">=</span><span class="pl-c1">1</span>
+      case (<span class="pl-c1">11</span>:)    !all cases <span class="pl-k">where</span> i&gt;<span class="pl-k">=</span><span class="pl-c1">11</span>
+        j<span class="pl-k">=</span><span class="pl-c1">2</span>
+      case default
+        j<span class="pl-k">=</span><span class="pl-c1">3</span>
+    end select
+
+
+    month <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>jan<span class="pl-pds">'</span></span>
+    ! Condition can be <span class="pl-k">integer</span>, <span class="pl-k">logical</span> or <span class="pl-k">character</span> type.
+    ! Select constructions can also be named.
+    monthly: select case (month)
+      case (<span class="pl-s"><span class="pl-pds">"</span>jan<span class="pl-pds">"</span></span>)
+         j <span class="pl-k">=</span> <span class="pl-c1">0</span>
+      case default
+         j <span class="pl-k">=</span> <span class="pl-k">-</span><span class="pl-c1">1</span>
+    end select monthly
+
+
+    <span class="pl-k">do</span> i<span class="pl-k">=</span><span class="pl-c1">2</span>,<span class="pl-c1">10</span>,<span class="pl-c1">2</span>    !loops from <span class="pl-c1">2</span> <span class="pl-k">to</span> <span class="pl-c1">10</span> (inclusive) <span class="pl-k">in</span> increments of <span class="pl-c1">2</span>.
+      innerloop: <span class="pl-k">do</span> j<span class="pl-k">=</span><span class="pl-c1">1</span>,<span class="pl-c1">3</span>    !loops can be named too.
+        exit    !quits the loop.
+      <span class="pl-k">end do</span> innerloop
+    <span class="pl-k">cycle</span>    !jump <span class="pl-k">to</span> next loop iteration.
+    <span class="pl-k">enddo</span>
+
+
+    ! <span class="pl-k">Goto</span> statement exists but it is heavily discouraged though.
+    <span class="pl-k">goto</span> <span class="pl-c1">10</span>
+    <span class="pl-k">stop</span> <span class="pl-c1">1</span>    !stops code immediately (returning specified condition code).
+<span class="pl-c1">10</span>  j <span class="pl-k">=</span> <span class="pl-c1">201</span>    !this line is labeled as line <span class="pl-c1">10</span>
+
+
+    ! Arrays
+    ! ======
+    array <span class="pl-k">=</span> (<span class="pl-k">/</span><span class="pl-c1">1</span>,<span class="pl-c1">2</span>,<span class="pl-c1">3</span>,<span class="pl-c1">4</span>,<span class="pl-c1">5</span>,<span class="pl-c1">6</span><span class="pl-k">/</span>)
+    array <span class="pl-k">=</span> [<span class="pl-c1">1</span>,<span class="pl-c1">2</span>,<span class="pl-c1">3</span>,<span class="pl-c1">4</span>,<span class="pl-c1">5</span>,<span class="pl-c1">6</span>]    !using Fortran <span class="pl-c1">2003</span> notation.
+    arrayb <span class="pl-k">=</span> [<span class="pl-c1">10.2</span>,<span class="pl-c1">3e3</span>,<span class="pl-c1">0.41</span>,<span class="pl-c1">4e-5</span>]
+    array2d <span class="pl-k">=</span>  <span class="pl-k">reshape</span>([<span class="pl-c1">1.0</span>,<span class="pl-c1">2.0</span>,<span class="pl-c1">3.0</span>,<span class="pl-c1">4.0</span>,<span class="pl-c1">5.0</span>,<span class="pl-c1">6.0</span>], [<span class="pl-c1">3</span>,<span class="pl-c1">2</span>])
+
+    ! Fortran array indexing starts from <span class="pl-c1">1</span>.
+    ! (by default but can be defined differently for specific arrays).
+    v <span class="pl-k">=</span> array(<span class="pl-c1">1</span>)    !take first element of array.
+    v <span class="pl-k">=</span> array2d(<span class="pl-c1">2</span>,<span class="pl-c1">2</span>)
+
+    <span class="pl-k">print</span> <span class="pl-k">*</span>, array(<span class="pl-c1">3</span>:<span class="pl-c1">5</span>)    !<span class="pl-k">print</span> all elements from <span class="pl-c1">3rd</span> <span class="pl-k">to</span> <span class="pl-c1">5th</span> (inclusive).
+    <span class="pl-k">print</span> <span class="pl-k">*</span>, array2d(<span class="pl-c1">1</span>,:)    !<span class="pl-k">print</span> first column of <span class="pl-c1">2d</span> array.
+
+    array <span class="pl-k">=</span> array<span class="pl-k">*</span><span class="pl-c1">3</span> <span class="pl-k">+</span> <span class="pl-c1">2</span>    !can apply mathematical expressions <span class="pl-k">to</span> arrays.
+    array <span class="pl-k">=</span> array<span class="pl-k">*</span>array    !array operations occur element<span class="pl-k">-</span>wise.
+    !array <span class="pl-k">=</span> array<span class="pl-k">*</span>array2d    !these arrays would not be compatible.
+
+    ! There are many built<span class="pl-k">-</span><span class="pl-k">in</span> functions that operate on arrays.
+    c <span class="pl-k">=</span> <span class="pl-k">dot_product</span>(array,array)    !this is the dot product.
+    ! Use <span class="pl-k">matmul</span>() for matrix maths.
+    c <span class="pl-k">=</span> <span class="pl-k">sum</span>(array)
+    c <span class="pl-k">=</span> <span class="pl-k">maxval</span>(array)
+    <span class="pl-k">print</span> <span class="pl-k">*</span>, <span class="pl-k">minloc</span>(array)
+    c <span class="pl-k">=</span> <span class="pl-k">size</span>(array)
+    <span class="pl-k">print</span> <span class="pl-k">*</span>, <span class="pl-k">shape</span>(array)
+    m <span class="pl-k">=</span> <span class="pl-k">count</span>(array &gt; <span class="pl-c1">0</span>)
+
+    ! Loop over an array (could have used <span class="pl-k">Product</span>() function normally).
+    v <span class="pl-k">=</span> <span class="pl-c1">1</span>
+    <span class="pl-k">do</span> i <span class="pl-k">=</span> <span class="pl-c1">1</span>, <span class="pl-k">size</span>(array)
+        v <span class="pl-k">=</span> v<span class="pl-k">*</span>array(i)
+    <span class="pl-k">end do</span>
+
+    ! Conditionally execute element<span class="pl-k">-</span>wise assignments.
+    array <span class="pl-k">=</span> [<span class="pl-c1">1</span>,<span class="pl-c1">2</span>,<span class="pl-c1">3</span>,<span class="pl-c1">4</span>,<span class="pl-c1">5</span>,<span class="pl-c1">6</span>]
+    <span class="pl-k">where</span> (array &gt; <span class="pl-c1">3</span>)
+        array <span class="pl-k">=</span> array <span class="pl-k">+</span> <span class="pl-c1">1</span>
+    <span class="pl-k">elsewhere</span> (array == <span class="pl-c1">2</span>)
+        array <span class="pl-k">=</span> <span class="pl-c1">1</span>
+    <span class="pl-k">elsewhere</span>
+        array <span class="pl-k">=</span> <span class="pl-c1">0</span>
+    <span class="pl-k">end where</span>
+
+    ! Implied<span class="pl-k">-</span><span class="pl-k">DO</span> loops are a compact way <span class="pl-k">to</span> create arrays.
+    array <span class="pl-k">=</span> [ (i, i <span class="pl-k">=</span> <span class="pl-c1">1</span>,<span class="pl-c1">6</span>) ]    !creates an array of [<span class="pl-c1">1</span>,<span class="pl-c1">2</span>,<span class="pl-c1">3</span>,<span class="pl-c1">4</span>,<span class="pl-c1">5</span>,<span class="pl-c1">6</span>]
+    array <span class="pl-k">=</span> [ (i, i <span class="pl-k">=</span> <span class="pl-c1">1</span>,<span class="pl-c1">12</span>,<span class="pl-c1">2</span>) ]    !creates an array of [<span class="pl-c1">1</span>,<span class="pl-c1">3</span>,<span class="pl-c1">5</span>,<span class="pl-c1">7</span>,<span class="pl-c1">9</span>,<span class="pl-c1">11</span>]
+    array <span class="pl-k">=</span> [ (i<span class="pl-k">**</span><span class="pl-c1">2</span>, i <span class="pl-k">=</span> <span class="pl-c1">1</span>,<span class="pl-c1">6</span>) ]    !creates an array of  [<span class="pl-c1">1</span>,<span class="pl-c1">4</span>,<span class="pl-c1">9</span>,<span class="pl-c1">16</span>,<span class="pl-c1">25</span>,<span class="pl-c1">36</span>]
+    array <span class="pl-k">=</span> [ (<span class="pl-c1">4</span>,<span class="pl-c1">5</span>, i <span class="pl-k">=</span> <span class="pl-c1">1</span>,<span class="pl-c1">3</span>) ]    !creates an array of [<span class="pl-c1">4</span>,<span class="pl-c1">5</span>,<span class="pl-c1">4</span>,<span class="pl-c1">5</span>,<span class="pl-c1">4</span>,<span class="pl-c1">5</span>]
+
+
+    ! Input<span class="pl-k">/</span>Output
+    ! ============
+
+    <span class="pl-k">print</span> <span class="pl-k">*</span>, b    !<span class="pl-k">print</span> the variable <span class="pl-s"><span class="pl-pds">'</span>b<span class="pl-pds">'</span></span> <span class="pl-k">to</span> the command line
+
+    ! We can <span class="pl-k">format</span> our printed output.
+    <span class="pl-k">print</span> <span class="pl-s"><span class="pl-pds">"</span>(I6)<span class="pl-pds">"</span></span>, <span class="pl-c1">320</span>    !prints <span class="pl-s"><span class="pl-pds">'</span>   320<span class="pl-pds">'</span></span>
+    <span class="pl-k">print</span> <span class="pl-s"><span class="pl-pds">"</span>(I6.4)<span class="pl-pds">"</span></span>, <span class="pl-c1">3</span>    !prints <span class="pl-s"><span class="pl-pds">'</span>  0003<span class="pl-pds">'</span></span>
+    <span class="pl-k">print</span> <span class="pl-s"><span class="pl-pds">"</span>(F6.3)<span class="pl-pds">"</span></span>, <span class="pl-c1">4.32</span>    !prints <span class="pl-s"><span class="pl-pds">'</span> 4.320<span class="pl-pds">'</span></span>
+
+    ! The letter indicates the expected type and the number afterwards gives
+    ! the number of characters <span class="pl-k">to</span> use for printing the value.
+    ! Letters can be I (<span class="pl-k">integer</span>), F (<span class="pl-k">real</span>), E (engineering <span class="pl-k">format</span>),
+    ! L (<span class="pl-k">logical</span>), A (characters) ...
+    <span class="pl-k">print</span> <span class="pl-s"><span class="pl-pds">"</span>(I3)<span class="pl-pds">"</span></span>, <span class="pl-c1">3200</span>    !<span class="pl-k">print</span> <span class="pl-s"><span class="pl-pds">'</span>***<span class="pl-pds">'</span></span> since the number doesn<span class="pl-s"><span class="pl-pds">'</span>t fit.</span>
+<span class="pl-s"></span>
+<span class="pl-s">    ! we can have multiple format specifications.</span>
+<span class="pl-s">    print "(I5,F6.2,E6.2)", 120, 43.41, 43.41</span>
+<span class="pl-s">    print "(3I5)", 10, 20, 30    !3 repeats of integers (field width = 5).</span>
+<span class="pl-s">    print "(2(I5,F6.2))", 120, 43.42, 340, 65.3   !repeated grouping of formats.</span>
+<span class="pl-s"></span>
+<span class="pl-s">    ! We can also read input from the terminal.</span>
+<span class="pl-s">    read *, v</span>
+<span class="pl-s">    read "(2F6.2)", v, x    !read two numbers</span>
+<span class="pl-s"></span>
+<span class="pl-s">    ! To read a file.</span>
+<span class="pl-s">    open(unit=11, file="records.txt", status="old")</span>
+<span class="pl-s">    ! The file is referred to by a <span class="pl-pds">'</span></span>unit number<span class="pl-s"><span class="pl-pds">'</span>, an integer that you pick in</span>
+<span class="pl-s">    ! the range 9:99. Status can be one of {<span class="pl-pds">'</span></span>old<span class="pl-s"><span class="pl-pds">'</span>,<span class="pl-pds">'</span></span>replace<span class="pl-s"><span class="pl-pds">'</span>,<span class="pl-pds">'</span></span>new<span class="pl-s"><span class="pl-pds">'</span>}.</span>
+<span class="pl-s">    read(unit=11, fmt="(3F10.2)") a, b, c</span>
+<span class="pl-s">    close(11)</span>
+<span class="pl-s"></span>
+<span class="pl-s">    ! To write a file.</span>
+<span class="pl-s">    open(unit=12, file="records.txt", status="replace")</span>
+<span class="pl-s">    write(12, "(F10.2,F10.2,F10.2)") c, b, a</span>
+<span class="pl-s">    close(12)</span>
+<span class="pl-s"></span>
+<span class="pl-s">    ! There are more features available than discussed here and alternative</span>
+<span class="pl-s">    ! variants due to backwards compatibility with older Fortran versions.</span>
+<span class="pl-s"></span>
+<span class="pl-s"></span>
+<span class="pl-s">    ! Built-in Functions</span>
+<span class="pl-s">    ! ==================</span>
+<span class="pl-s"></span>
+<span class="pl-s">    ! Fortran has around 200 functions/subroutines intrinsic to the language.</span>
+<span class="pl-s">    ! Examples -</span>
+<span class="pl-s">    call cpu_time(v)    !sets <span class="pl-pds">'</span></span>v<span class="pl-s"><span class="pl-pds">'</span> to a time in seconds.</span>
+<span class="pl-s">    k = ior(i,j)    !bitwise OR of 2 integers.</span>
+<span class="pl-s">    v = log10(x)    !log base 10.</span>
+<span class="pl-s">    i = floor(b)    !returns the closest integer less than or equal to x.</span>
+<span class="pl-s">    v = aimag(w)    !imaginary part of a complex number.</span>
+<span class="pl-s"></span>
+<span class="pl-s"></span>
+<span class="pl-s">    ! Functions &amp; Subroutines</span>
+<span class="pl-s">    ! =======================</span>
+<span class="pl-s"></span>
+<span class="pl-s">    ! A subroutine runs some code on some input values and can cause</span>
+<span class="pl-s">    ! side-effects or modify the input values.</span>
+<span class="pl-s"></span>
+<span class="pl-s">    call routine(a,c,v)    !subroutine call.</span>
+<span class="pl-s"></span>
+<span class="pl-s">    ! A function takes a list of input parameters and returns a single value.</span>
+<span class="pl-s">    ! However the input parameters may still be modified and side effects</span>
+<span class="pl-s">    ! executed.</span>
+<span class="pl-s"></span>
+<span class="pl-s">    m = func(3,2,k)  !function call.</span>
+<span class="pl-s"></span>
+<span class="pl-s">    ! Function calls can also be evoked within expressions.</span>
+<span class="pl-s">    Print *, func2(3,2,k)</span>
+<span class="pl-s"></span>
+<span class="pl-s">    ! A pure function is a function that doesn<span class="pl-pds">'</span></span>t modify its input parameters
+    ! or cause any side<span class="pl-k">-</span>effects.
+    m <span class="pl-k">=</span> func3(<span class="pl-c1">3</span>,<span class="pl-c1">2</span>,k)
+
+
+<span class="pl-k">contains</span> ! Zone for defining sub<span class="pl-k">-</span>programs internal <span class="pl-k">to</span> the <span class="pl-k">program</span>.
+
+    ! Fortran has a couple of slightly different ways <span class="pl-k">to</span> define functions.
+
+    <span class="pl-k">integer</span> <span class="pl-k">function</span> <span class="pl-en">func</span>(<span class="pl-v">a</span>,<span class="pl-v">b</span>,<span class="pl-v">c</span>)    !a function returning an <span class="pl-k">integer</span> value.
+        <span class="pl-k">implicit none</span>   !best <span class="pl-k">to</span> use <span class="pl-k">implicit none</span> <span class="pl-k">in</span> function definitions too.
+        <span class="pl-k">integer</span> <span class="pl-k">::</span> a,b,c !type of input parameters defined inside the function.
+        <span class="pl-k">if</span> (a &gt;<span class="pl-k">=</span> <span class="pl-c1">2</span>) <span class="pl-k">then</span>
+            func <span class="pl-k">=</span> a <span class="pl-k">+</span> b <span class="pl-k">+</span> c !the <span class="pl-k">return</span> variable defaults <span class="pl-k">to</span> the function name.
+            <span class="pl-k">return</span> !can <span class="pl-k">return</span> the current value from the function at any time.
+        <span class="pl-k">endif</span>
+        func <span class="pl-k">=</span> a <span class="pl-k">+</span> c
+        ! Don<span class="pl-s"><span class="pl-pds">'</span>t need a return statement at the end of a function.</span>
+<span class="pl-s">    end function func</span>
+<span class="pl-s"></span>
+<span class="pl-s"></span>
+<span class="pl-s">    function func2(a,b,c) result(f)    !return variable declared to be <span class="pl-pds">'</span></span>f<span class="pl-s"><span class="pl-pds">'</span>.</span>
+<span class="pl-s">        implicit none</span>
+<span class="pl-s">        integer, intent(in) :: a,b    !can declare and enforce that variables</span>
+<span class="pl-s">                                      !are not modified by the function.</span>
+<span class="pl-s">        integer, intent(inout) :: c</span>
+<span class="pl-s">        integer :: f     !function return type declared inside the function.</span>
+<span class="pl-s">        integer :: cnt = 0    !GOTCHA - initialisation implies variable is</span>
+<span class="pl-s">                              !saved between function calls.</span>
+<span class="pl-s">        f = a + b - c</span>
+<span class="pl-s">        c = 4    !altering the value of an input variable.</span>
+<span class="pl-s">        cnt  = cnt + 1    !count number of function calls.</span>
+<span class="pl-s">    end function func2</span>
+<span class="pl-s"></span>
+<span class="pl-s"></span>
+<span class="pl-s">    pure function func3(a,b,c)  !a pure function can have no side-effects.</span>
+<span class="pl-s">        implicit none</span>
+<span class="pl-s">        integer, intent(in) :: a,b,c</span>
+<span class="pl-s">        integer :: func3</span>
+<span class="pl-s">        func3 = a*b*c</span>
+<span class="pl-s">    end function func3</span>
+<span class="pl-s"></span>
+<span class="pl-s"></span>
+<span class="pl-s">    subroutine routine(d,e,f)</span>
+<span class="pl-s">        implicit none</span>
+<span class="pl-s">        real, intent(inout) :: f</span>
+<span class="pl-s">        real, intent(in) :: d,e</span>
+<span class="pl-s">        f = 2*d + 3*e + f</span>
+<span class="pl-s">    end subroutine routine</span>
+<span class="pl-s"></span>
+<span class="pl-s"></span>
+<span class="pl-s">end program example   ! End of Program Definition -----------------------</span>
+<span class="pl-s"></span>
+<span class="pl-s"></span>
+<span class="pl-s">! Functions and Subroutines declared externally to the program listing need</span>
+<span class="pl-s">! to be declared to the program using an Interface declaration (even if they</span>
+<span class="pl-s">! are in the same source file!) (see below). It is easier to define them within</span>
+<span class="pl-s">! the <span class="pl-pds">'</span></span><span class="pl-k">contains</span><span class="pl-s"><span class="pl-pds">'</span> section of a module or program.</span>
+<span class="pl-s"></span>
+<span class="pl-s">elemental real function func4(a) result(res)</span>
+<span class="pl-s">! An elemental function is a Pure function that takes a scalar input variable</span>
+<span class="pl-s">! but can also be used on an array where it will be separately applied to all</span>
+<span class="pl-s">! of the elements of an array and return a new array.</span>
+<span class="pl-s">    real, intent(in) :: a</span>
+<span class="pl-s">    res = a**2 + 1.0</span>
+<span class="pl-s">end function func4</span>
+<span class="pl-s"></span>
+<span class="pl-s"></span>
+<span class="pl-s">! Modules</span>
+<span class="pl-s">! =======</span>
+<span class="pl-s"></span>
+<span class="pl-s">! A module is a useful way to collect related declarations, functions and</span>
+<span class="pl-s">! subroutines together for reusability.</span>
+<span class="pl-s"></span>
+<span class="pl-s">module fruit</span>
+<span class="pl-s">    real :: apple</span>
+<span class="pl-s">    real :: pear</span>
+<span class="pl-s">    real :: orange</span>
+<span class="pl-s">end module fruit</span>
+<span class="pl-s"></span>
+<span class="pl-s"></span>
+<span class="pl-s">module fruity</span>
+<span class="pl-s">    ! Declarations must be in the order: modules, interfaces, variables.</span>
+<span class="pl-s">    ! (can declare modules and interfaces in programs too).</span>
+<span class="pl-s"></span>
+<span class="pl-s">    use fruit, only: apple, pear    ! use apple and pear from fruit module.</span>
+<span class="pl-s">    implicit none    !comes after module imports.</span>
+<span class="pl-s"></span>
+<span class="pl-s">    private    !make things private to the module (default is public).</span>
+<span class="pl-s">    ! Declare some variables/functions explicitly public.</span>
+<span class="pl-s">    public :: apple,mycar,create_mycar</span>
+<span class="pl-s">    ! Declare some variables/functions private to the module (redundant here).</span>
+<span class="pl-s">    private :: func4</span>
+<span class="pl-s"></span>
+<span class="pl-s">    ! Interfaces</span>
+<span class="pl-s">    ! ==========</span>
+<span class="pl-s">    ! Explicitly declare an external function/procedure within the module</span>
+<span class="pl-s">    ! (better in general to put functions/procedures in the <span class="pl-pds">'</span></span><span class="pl-k">contains</span><span class="pl-s"><span class="pl-pds">'</span> section).</span>
+<span class="pl-s">    interface</span>
+<span class="pl-s">        elemental real function func4(a) result(res)</span>
+<span class="pl-s">            real, intent(in) :: a</span>
+<span class="pl-s">        end function func4</span>
+<span class="pl-s">    end interface</span>
+<span class="pl-s"></span>
+<span class="pl-s">    ! Overloaded functions can be defined using named interfaces.</span>
+<span class="pl-s">    interface myabs</span>
+<span class="pl-s">        ! Can use <span class="pl-pds">'</span></span>module procedure<span class="pl-s"><span class="pl-pds">'</span> keyword to include functions already</span>
+<span class="pl-s">        ! defined within the module.</span>
+<span class="pl-s">        module procedure real_abs, complex_abs</span>
+<span class="pl-s">    end interface</span>
+<span class="pl-s"></span>
+<span class="pl-s">    ! Derived Data Types</span>
+<span class="pl-s">    ! ==================</span>
+<span class="pl-s">    ! Can create custom structured data collections.</span>
+<span class="pl-s">    type car</span>
+<span class="pl-s">        character (len=100) :: model</span>
+<span class="pl-s">        real :: weight    !(kg)</span>
+<span class="pl-s">        real :: dimensions(3)    !i.e. length-width-height (metres).</span>
+<span class="pl-s">        character :: colour</span>
+<span class="pl-s">    end type car</span>
+<span class="pl-s"></span>
+<span class="pl-s">    type(car) :: mycar    !declare a variable of your custom type.</span>
+<span class="pl-s">    ! See create_mycar() routine for usage.</span>
+<span class="pl-s"></span>
+<span class="pl-s">    ! Note: There are no executable statements in modules.</span>
+<span class="pl-s"></span>
+<span class="pl-s">contains</span>
+<span class="pl-s"></span>
+<span class="pl-s">    subroutine create_mycar(mycar)</span>
+<span class="pl-s">        ! Demonstrates usage of a derived data type.</span>
+<span class="pl-s">        implicit none</span>
+<span class="pl-s">        type(car),intent(out) :: mycar</span>
+<span class="pl-s"></span>
+<span class="pl-s">        ! Access type elements using <span class="pl-pds">'</span></span>%<span class="pl-s"><span class="pl-pds">'</span> operator.</span>
+<span class="pl-s">        mycar%model = "Ford Prefect"</span>
+<span class="pl-s">        mycar%colour = <span class="pl-pds">'</span></span>r<span class="pl-s"><span class="pl-pds">'</span></span>
+<span class="pl-s">        mycar%weight = 1400</span>
+<span class="pl-s">        mycar%dimensions(1) = 5.0    !default indexing starts from 1!</span>
+<span class="pl-s">        mycar%dimensions(2) = 3.0</span>
+<span class="pl-s">        mycar%dimensions(3) = 1.5</span>
+<span class="pl-s"></span>
+<span class="pl-s">    end subroutine</span>
+<span class="pl-s"></span>
+<span class="pl-s">    real function real_abs(x)</span>
+<span class="pl-s">        real :: x</span>
+<span class="pl-s">        if (x&lt;0) then</span>
+<span class="pl-s">            real_abs = -x</span>
+<span class="pl-s">        else</span>
+<span class="pl-s">            real_abs = x</span>
+<span class="pl-s">        end if</span>
+<span class="pl-s">    end function real_abs</span>
+<span class="pl-s"></span>
+<span class="pl-s">    real function complex_abs(z)</span>
+<span class="pl-s">        complex :: z</span>
+<span class="pl-s">        ! long lines can be continued using the continuation character <span class="pl-pds">'</span></span>&amp;<span class="pl-s"><span class="pl-pds">'</span></span>
+<span class="pl-s">        complex_abs = sqrt(real(z)**2 + &amp;</span>
+<span class="pl-s">                                         aimag(z)**2)</span>
+<span class="pl-s">    end function complex_abs</span>
+<span class="pl-s"></span>
+<span class="pl-s"></span>
+<span class="pl-s">end module fruity</span>
+<span class="pl-s"></span></pre></div>
+<h3>More Resources</h3>
+<p>For more information on Fortran:</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Fortran" rel="nofollow">wikipedia</a></li>
+<li><a href="https://fortran-lang.org/" rel="nofollow">Fortran-lang Organization</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Fortran_95_language_features" rel="nofollow">Fortran_95_language_features</a></li>
+<li><a href="http://fortranwiki.org" rel="nofollow">fortranwiki.org</a></li>
+<li><a href="http://www.fortran90.org" rel="nofollow">www.fortran90.org/</a></li>
+<li><a href="http://www.dmoz.org/Computers/Programming/Languages/Fortran/FAQs%2C_Help%2C_and_Tutorials/Fortran_90_and_95/" rel="nofollow">list of Fortran 95 tutorials</a></li>
+<li><a href="https://en.wikibooks.org/wiki/Fortran" rel="nofollow">Fortran wikibook</a></li>
+<li><a href="http://www.fortranplus.co.uk/resources/fortran_resources.pdf" rel="nofollow">Fortran resources</a></li>
+<li><a href="http://www.cs.rpi.edu/~szymansk/OOF90/bugs.html" rel="nofollow">Mistakes in Fortran 90 Programs That Might Surprise You</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Robert Steed", "https://github.com/robochat"]
+</code></pre>

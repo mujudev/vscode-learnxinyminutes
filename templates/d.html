@@ -1,0 +1,232 @@
+<h1>D</h1>
+<div class="highlight highlight-source-d"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> You know what's coming...</span>
+<span class="pl-k">module</span> <span class="pl-en">hello</span>;
+
+<span class="pl-k">import</span> <span class="pl-c1">std.stdio</span>;
+
+<span class="pl-c"><span class="pl-c">//</span> args is optional</span>
+<span class="pl-k">void</span> <span class="pl-en">main</span>(<span class="pl-c1">string</span>[] args) {
+    writeln(<span class="pl-s"><span class="pl-pds">"</span>Hello, World!<span class="pl-pds">"</span></span>);
+}</pre></div>
+<p>If you're like me and spend way too much time on the internet, odds are you've heard<br>
+about <a href="http://dlang.org/" rel="nofollow">D</a>. The D programming language is a modern, general-purpose,<br>
+multi-paradigm language with support for everything from low-level features to<br>
+expressive high-level abstractions.</p>
+<p>D is actively developed by a large group of super-smart people and is spearheaded by<br>
+<a href="https://en.wikipedia.org/wiki/Walter_Bright" rel="nofollow">Walter Bright</a> and<br>
+<a href="https://en.wikipedia.org/wiki/Andrei_Alexandrescu" rel="nofollow">Andrei Alexandrescu</a>.<br>
+With all that out of the way, let's look at some examples!</p>
+<div class="highlight highlight-source-d"><pre class="notranslate"><span class="pl-k">import</span> <span class="pl-c1">std.stdio</span>;
+
+<span class="pl-k">void</span> <span class="pl-en">main</span>() {
+
+    <span class="pl-c"><span class="pl-c">//</span> Conditionals and loops work as expected.</span>
+    <span class="pl-k">for</span>(<span class="pl-k">int</span> i = <span class="pl-c1">0</span>; i <span class="pl-k">&lt;</span> <span class="pl-c1">10000</span>; i<span class="pl-k">++</span>) {
+        writeln(i);
+    }
+
+    <span class="pl-c"><span class="pl-c">//</span> 'auto' can be used for inferring types.</span>
+    <span class="pl-k">auto</span> n = <span class="pl-c1">1</span>;
+
+    <span class="pl-c"><span class="pl-c">//</span> Numeric literals can use '_' as a digit separator for clarity.</span>
+    <span class="pl-k">while</span>(n <span class="pl-k">&lt;</span> 10_000) {
+        n <span class="pl-k">+=</span> n;
+    }
+
+    <span class="pl-k">do</span> {
+        n <span class="pl-k">-=</span> (n <span class="pl-k">/</span> <span class="pl-c1">2</span>);
+    } <span class="pl-k">while</span>(n <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>);
+
+    <span class="pl-c"><span class="pl-c">//</span> For and while are nice, but in D-land we prefer 'foreach' loops.</span>
+    <span class="pl-c"><span class="pl-c">//</span> The '..' creates a continuous range, including the first value</span>
+    <span class="pl-c"><span class="pl-c">//</span> but excluding the last.</span>
+    <span class="pl-k">foreach</span>(n; <span class="pl-c1">1</span><span class="pl-k">..</span>1_000_000) {
+        <span class="pl-k">if</span>(n <span class="pl-k">%</span> <span class="pl-c1">2</span> <span class="pl-k">==</span> <span class="pl-c1">0</span>)
+            writeln(n);
+    }
+
+    <span class="pl-c"><span class="pl-c">//</span> There's also 'foreach_reverse' when you want to loop backwards.</span>
+    <span class="pl-k">foreach_reverse</span>(n; <span class="pl-c1">1</span><span class="pl-k">..</span><span class="pl-k">int</span>.max) {
+        <span class="pl-k">if</span>(n <span class="pl-k">%</span> <span class="pl-c1">2</span> <span class="pl-k">==</span> <span class="pl-c1">1</span>) {
+            writeln(n);
+        } <span class="pl-k">else</span> {
+            writeln(<span class="pl-s"><span class="pl-pds">"</span>No!<span class="pl-pds">"</span></span>);
+        }
+    }
+}</pre></div>
+<p>We can define new types with <code class="notranslate">struct</code>, <code class="notranslate">class</code>, <code class="notranslate">union</code>, and <code class="notranslate">enum</code>. Structs and unions<br>
+are passed to functions by value (i.e. copied) and classes are passed by reference. Furthermore,<br>
+we can use templates to parameterize all of these on both types and values!</p>
+<div class="highlight highlight-source-d"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> Here, 'T' is a type parameter. Think '&lt;T&gt;' from C++/C#/Java.</span>
+<span class="pl-k">struct</span> <span class="pl-en">LinkedList</span>(T) {
+    T data = <span class="pl-c1">null</span>;
+
+    <span class="pl-c"><span class="pl-c">//</span> Use '!' to instantiate a parameterized type. Again, think '&lt;T&gt;'.</span>
+    LinkedList<span class="pl-k">!</span>(T)<span class="pl-k">*</span> next;
+}
+
+<span class="pl-k">class</span> <span class="pl-en">BinTree</span>(T) {
+    T data = <span class="pl-c1">null</span>;
+
+    <span class="pl-c"><span class="pl-c">//</span> If there is only one template parameter, we can omit the parentheses.</span>
+    BinTree<span class="pl-k">!</span>T left;
+    BinTree<span class="pl-k">!</span>T right;
+}
+
+<span class="pl-k">enum</span> Day {
+    Sunday,
+    Monday,
+    Tuesday,
+    Wednesday,
+    Thursday,
+    Friday,
+    Saturday,
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Use alias to create abbreviations for types.</span>
+<span class="pl-k">alias</span> IntList = LinkedList<span class="pl-k">!</span><span class="pl-k">int</span>;
+<span class="pl-k">alias</span> NumTree = BinTree<span class="pl-k">!</span><span class="pl-k">double</span>;
+
+<span class="pl-c"><span class="pl-c">//</span> We can create function templates as well!</span>
+T <span class="pl-en">max</span>(T)(T a, T b) {
+    <span class="pl-k">if</span>(a <span class="pl-k">&lt;</span> b)
+        <span class="pl-k">return</span> b;
+
+    <span class="pl-k">return</span> a;
+}
+
+<span class="pl-c"><span class="pl-c">//</span> Use the ref keyword to ensure pass by reference. That is, even if 'a' and 'b'</span>
+<span class="pl-c"><span class="pl-c">//</span> are value types, they will always be passed by reference to 'swap()'.</span>
+<span class="pl-k">void</span> <span class="pl-en">swap</span>(T)(<span class="pl-k">ref</span> T a, <span class="pl-k">ref</span> T b) {
+    <span class="pl-k">auto</span> temp = a;
+
+    a = b;
+    b = temp;
+}
+
+<span class="pl-c"><span class="pl-c">//</span> With templates, we can also parameterize on values, not just types.</span>
+<span class="pl-k">class</span> <span class="pl-en">Matrix</span>(<span class="pl-k">uint</span> m, <span class="pl-k">uint</span> n, T = <span class="pl-k">int</span>) {
+    T[m] rows;
+    T[n] columns;
+}
+
+<span class="pl-k">auto</span> mat = <span class="pl-k">new</span> Matrix<span class="pl-k">!</span>(<span class="pl-c1">3</span>, <span class="pl-c1">3</span>); <span class="pl-c"><span class="pl-c">//</span> We've defaulted type 'T' to 'int'.</span>
+</pre></div>
+<p>Speaking of classes, let's talk about properties for a second. A property<br>
+is roughly a function that may act like an lvalue, so we can<br>
+have the syntax of POD structures (<code class="notranslate">structure.x = 7</code>) with the semantics of<br>
+getter and setter methods (<code class="notranslate">object.setX(7)</code>)!</p>
+<div class="highlight highlight-source-d"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> Consider a class parameterized on types 'T' &amp; 'U'.</span>
+<span class="pl-k">class</span> <span class="pl-en">MyClass</span>(T, U) {
+    T _data;
+    U _other;
+}
+
+<span class="pl-c"><span class="pl-c">//</span> And "getter" and "setter" methods like so:</span>
+<span class="pl-k">class</span> <span class="pl-en">MyClass</span>(T, U) {
+    T _data;
+    U _other;
+
+    <span class="pl-c"><span class="pl-c">//</span> Constructors are always named 'this'.</span>
+    <span class="pl-en">this</span>(T t, U u) {
+        <span class="pl-c"><span class="pl-c">//</span> This will call the setter methods below.</span>
+        data = t;
+        other = u;
+    }
+
+    <span class="pl-c"><span class="pl-c">//</span> getters</span>
+    <span class="pl-k">@property</span> T data() {
+        <span class="pl-k">return</span> _data;
+    }
+
+    <span class="pl-k">@property</span> U other() {
+        <span class="pl-k">return</span> _other;
+    }
+
+    <span class="pl-c"><span class="pl-c">//</span> setters</span>
+    <span class="pl-k">@property</span> <span class="pl-k">void</span> data(T t) {
+        _data = t;
+    }
+
+    <span class="pl-k">@property</span> <span class="pl-k">void</span> other(U u) {
+        _other = u;
+    }
+}
+
+<span class="pl-c"><span class="pl-c">//</span> And we use them in this manner:</span>
+<span class="pl-k">void</span> <span class="pl-en">main</span>() {
+    <span class="pl-k">auto</span> mc = <span class="pl-k">new</span> MyClass<span class="pl-k">!</span>(<span class="pl-k">int</span>, <span class="pl-c1">string</span>)(<span class="pl-c1">7</span>, <span class="pl-s"><span class="pl-pds">"</span>seven<span class="pl-pds">"</span></span>);
+
+    <span class="pl-c"><span class="pl-c">//</span> Import the 'stdio' module from the standard library for writing to</span>
+    <span class="pl-c"><span class="pl-c">//</span> console (imports can be local to a scope).</span>
+    <span class="pl-k">import</span> <span class="pl-c1">std.stdio</span>;
+
+    <span class="pl-c"><span class="pl-c">//</span> Call the getters to fetch the values.</span>
+    writefln(<span class="pl-s"><span class="pl-pds">"</span>Earlier: data = %d, str = %s<span class="pl-pds">"</span></span>, mc.data, mc.other);
+
+    <span class="pl-c"><span class="pl-c">//</span> Call the setters to assign new values.</span>
+    mc.data = <span class="pl-c1">8</span>;
+    mc.other = <span class="pl-s"><span class="pl-pds">"</span>eight<span class="pl-pds">"</span></span>;
+
+    <span class="pl-c"><span class="pl-c">//</span> Call the getters again to fetch the new values.</span>
+    writefln(<span class="pl-s"><span class="pl-pds">"</span>Later: data = %d, str = %s<span class="pl-pds">"</span></span>, mc.data, mc.other);
+}</pre></div>
+<p>With properties, we can add any amount of logic to<br>
+our getter and setter methods, and keep the clean syntax of<br>
+accessing members directly!</p>
+<p>Other object-oriented goodies at our disposal<br>
+include interfaces, abstract classes,<br>
+and overriding methods. D does inheritance just like Java:<br>
+Extend one class, implement as many interfaces as you please.</p>
+<p>We've seen D's OOP facilities, but let's switch gears. D offers<br>
+functional programming with first-class functions, <code class="notranslate">pure</code><br>
+functions, and immutable data. In addition, all of your favorite<br>
+functional algorithms (map, filter, reduce and friends) can be<br>
+found in the wonderful <code class="notranslate">std.algorithm</code> module!</p>
+<div class="highlight highlight-source-d"><pre class="notranslate"><span class="pl-k">import</span> <span class="pl-c1">std.algorithm</span> : map, filter, reduce;
+<span class="pl-k">import</span> <span class="pl-c1">std.range</span> : iota; <span class="pl-c"><span class="pl-c">//</span> builds an end-exclusive range</span>
+<span class="pl-k">import</span> <span class="pl-c1">std.stdio</span>;
+
+<span class="pl-k">void</span> <span class="pl-en">main</span>() {
+    <span class="pl-c"><span class="pl-c">//</span> We want to print the sum of a list of squares of even ints</span>
+    <span class="pl-c"><span class="pl-c">//</span> from 1 to 100. Easy!</span>
+
+    <span class="pl-c"><span class="pl-c">//</span> Just pass lambda expressions as template parameters!</span>
+    <span class="pl-c"><span class="pl-c">//</span> You can pass any function you like, but lambdas are convenient here.</span>
+    <span class="pl-k">auto</span> num = iota(<span class="pl-c1">1</span>, <span class="pl-c1">101</span>).filter<span class="pl-k">!</span>(x <span class="pl-k">=&gt;</span> x <span class="pl-k">%</span> <span class="pl-c1">2</span> <span class="pl-k">==</span> <span class="pl-c1">0</span>)
+                           .map<span class="pl-k">!</span>(y <span class="pl-k">=&gt;</span> y <span class="pl-k">^^</span> <span class="pl-c1">2</span>)
+                           .reduce<span class="pl-k">!</span>((a, b) <span class="pl-k">=&gt;</span> a <span class="pl-k">+</span> b);
+
+    writeln(num);
+}</pre></div>
+<p>Notice how we got to build a nice Haskellian pipeline to compute num?<br>
+That's thanks to a D innovation know as Uniform Function Call Syntax (UFCS).<br>
+With UFCS, we can choose whether to write a function call as a method<br>
+or free function call! Walter wrote a nice article on this<br>
+<a href="http://www.drdobbs.com/cpp/uniform-function-call-syntax/232700394" rel="nofollow">here.</a><br>
+In short, you can call functions whose first parameter<br>
+is of some type A on any expression of type A as a method.</p>
+<p>I like parallelism. Anyone else like parallelism? Sure you do. Let's do some!</p>
+<div class="highlight highlight-source-d"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> Let's say we want to populate a large array with the square root of all</span>
+<span class="pl-c"><span class="pl-c">//</span> consecutive integers starting from 1 (up until the size of the array), and we</span>
+<span class="pl-c"><span class="pl-c">//</span> want to do this concurrently taking advantage of as many cores as we have</span>
+<span class="pl-c"><span class="pl-c">//</span> available.</span>
+
+<span class="pl-k">import</span> <span class="pl-c1">std.stdio</span>;
+<span class="pl-k">import</span> <span class="pl-c1">std.parallelism</span> : parallel;
+<span class="pl-k">import</span> <span class="pl-c1">std.math</span> : sqrt;
+
+<span class="pl-k">void</span> <span class="pl-en">main</span>() {
+    <span class="pl-c"><span class="pl-c">//</span> Create your large array</span>
+    <span class="pl-k">auto</span> arr = <span class="pl-k">new</span> <span class="pl-k">double</span>[1_000_000];
+
+    <span class="pl-c"><span class="pl-c">//</span> Use an index, access every array element by reference (because we're</span>
+    <span class="pl-c"><span class="pl-c">//</span> going to change each element) and just call parallel on the array!</span>
+    <span class="pl-k">foreach</span>(i, <span class="pl-k">ref</span> elem; parallel(arr)) {
+        elem = sqrt(i <span class="pl-k">+</span> <span class="pl-c1">1.0</span>);
+    }
+}</pre></div>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Nick Papanastasiou", "www.nickpapanastasiou.github.io"]
+</code></pre>

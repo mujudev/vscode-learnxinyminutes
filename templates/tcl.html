@@ -1,0 +1,582 @@
+<h1>Tcl</h1>
+<p>Tcl was created by <a href="https://wiki.tcl-lang.org/page/John+Ousterhout" rel="nofollow">John Ousterhout</a> as a<br>
+reusable scripting language for circuit design tools that he authored.  In 1997 he<br>
+was awarded the <a href="https://en.wikipedia.org/wiki/ACM_Software_System_Award" rel="nofollow">ACM Software System<br>
+Award</a> for Tcl.   Tcl<br>
+can be used both as an embeddable scripting language and as a general<br>
+programming language.  It can also be used as a portable C library, even in<br>
+cases where no scripting capability is needed, as it provides data structures<br>
+such as dynamic strings, lists, and hash tables.  The C library also provides<br>
+portable functionality for loading dynamic libraries, string formatting and<br>
+code conversion, filesystem operations, network operations, and more.  Various<br>
+features of Tcl stand out:</p>
+<ul>
+<li>
+<p>Convenient cross-platform networking API</p>
+</li>
+<li>
+<p>Fully virtualized filesystem</p>
+</li>
+<li>
+<p>Stackable I/O channels</p>
+</li>
+<li>
+<p>Asynchronous to the core</p>
+</li>
+<li>
+<p>Full coroutines</p>
+</li>
+<li>
+<p>A threading model recognized as robust and easy to use</p>
+</li>
+</ul>
+<p>Tcl has much in common with Lisp, but instead of lists, Tcl uses strings as the<br>
+currency of the language.  All values are strings.  A list is a string with a<br>
+defined format, and the body of a procedure (a script) is also a string rather<br>
+than a block.  To achieve performance, Tcl internally caches structured<br>
+representations of these values.  list routines, for example, operate on<br>
+the internal cached representation, and Tcl takes care of updating the string<br>
+representation if it is ever actually needed in the script.  The copy-on-write<br>
+design of Tcl allows script authors to pass around large data values without<br>
+actually incurring additional memory overhead.  Procedures are automatically<br>
+byte-compiled unless they use the more dynamic routines such as "uplevel",<br>
+"upvar", and "trace".</p>
+<p>Tcl is a pleasure to program in.  It will appeal to hacker types who find Lisp,<br>
+Forth, or Smalltalk interesting, as well as to engineers and scientists who<br>
+just want to get down to business with a tool that bends to their will.  Its<br>
+discipline of exposing all programmatic functionality as routines, including<br>
+things like looping and mathematical operations that are usually baked into the<br>
+syntax of other languages, allows it to fade into the background of whatever<br>
+domain-specific functionality a project needs. Its syntax, which is even<br>
+lighter than that of Lisp, just gets out of the way.</p>
+<div class="highlight highlight-source-tcl"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span>! /bin/env tclsh</span>
+
+<span class="pl-c"><span class="pl-c">#</span>##############################################################################</span>
+<span class="pl-c"><span class="pl-c">#</span># 1. Guidelines</span>
+<span class="pl-c"><span class="pl-c">#</span>##############################################################################</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Tcl is not Sh or C!  This needs to be said because standard shell quoting</span>
+<span class="pl-c"><span class="pl-c">#</span> habits almost work in Tcl and it is common for people to pick up Tcl and try</span>
+<span class="pl-c"><span class="pl-c">#</span> to get by with syntax they know from another language.  It works at first,</span>
+<span class="pl-c"><span class="pl-c">#</span> but soon leads to frustration when scripts become more complex.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Braces are a quoting mechanism, not syntax for the construction of code</span>
+<span class="pl-c"><span class="pl-c">#</span> blocks or lists. Tcl doesn't have either of those things.  Braces are used to</span>
+<span class="pl-c"><span class="pl-c">#</span> escape special characters, which makes them well-suited for quoting procedure</span>
+<span class="pl-c"><span class="pl-c">#</span> bodies and strings that should be interpreted as lists.</span>
+
+
+<span class="pl-c"><span class="pl-c">#</span>##############################################################################</span>
+<span class="pl-c"><span class="pl-c">#</span># 2. Syntax</span>
+<span class="pl-c"><span class="pl-c">#</span>##############################################################################</span>
+
+<span class="pl-c"><span class="pl-c">#</span> A script is made up of commands delimited by newlines or semicolons.  Each</span>
+<span class="pl-c"><span class="pl-c">#</span> command is a call to a routine.  The first word is the name of a routine to</span>
+<span class="pl-c"><span class="pl-c">#</span> call, and subsequent words are arguments to the routine.  Words are delimited</span>
+<span class="pl-c"><span class="pl-c">#</span> by whitespace.  Since each argument is a word in the command it is already a</span>
+<span class="pl-c"><span class="pl-c">#</span> string, and may be unquoted:</span>
+<span class="pl-k">set</span> part1 Sal
+<span class="pl-k">set</span> part2 ut; <span class="pl-k">set</span> part3 ations
+
+
+<span class="pl-c"><span class="pl-c">#</span> a dollar sign introduces variable substitution:</span>
+<span class="pl-k">set</span> greeting <span class="pl-smi">$part1$part2$part3</span>
+
+
+<span class="pl-c"><span class="pl-c">#</span> When "set" is given only the name of a variable, it returns the</span>
+<span class="pl-c"><span class="pl-c">#</span> value of that variable:</span>
+<span class="pl-k">set</span> part3 ;<span class="pl-c"><span class="pl-c">#</span> Returns the value of the variable.</span>
+
+
+<span class="pl-c"><span class="pl-c">#</span> Left and right brackets embed a script to be evaluated for a result to</span>
+<span class="pl-c"><span class="pl-c">#</span> substitute into the word:</span>
+<span class="pl-k">set</span> greeting <span class="pl-smi">$part1$part2</span>[<span class="pl-k">set</span> part3]
+
+
+<span class="pl-c"><span class="pl-c">#</span> An embedded script may be composed of multiple commands, the last of which provides</span>
+<span class="pl-c"><span class="pl-c">#</span> the result for the substitution:</span>
+<span class="pl-k">set</span> greeting <span class="pl-smi">$greeting</span>[
+    <span class="pl-k">incr</span> i
+    <span class="pl-k">incr</span> i
+    <span class="pl-k">incr</span> i
+]
+<span class="pl-k">puts</span> <span class="pl-smi">$greeting</span> ;<span class="pl-c"><span class="pl-c">#</span> The output is "Salutations3"</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Every word in a command is a string, including the name of the routine, so</span>
+<span class="pl-c"><span class="pl-c">#</span> substitutions can be used on it as well. Given this variable</span>
+<span class="pl-c"><span class="pl-c">#</span> assignment,</span>
+<span class="pl-k">set</span> action pu
+
+<span class="pl-c"><span class="pl-c">#</span> , the following three commands are equivalent:</span>
+<span class="pl-k">puts</span> <span class="pl-smi">$greeting</span>
+<span class="pl-smi">${action}</span>ts <span class="pl-smi">$greeting</span> 
+[<span class="pl-k">set</span> action]ts <span class="pl-smi">$greeting</span>
+
+
+<span class="pl-c"><span class="pl-c">#</span> backslash suppresses the special meaning of characters:</span>
+<span class="pl-k">set</span> amount <span class="pl-cce">\$</span>16.42
+
+
+<span class="pl-c"><span class="pl-c">#</span> backslash adds special meaning to certain characters:</span>
+<span class="pl-k">puts</span> lots<span class="pl-cce">\n</span>of<span class="pl-cce">\n\n\n\n\n\n</span>newlines
+
+
+<span class="pl-c"><span class="pl-c">#</span> A word enclosed in braces is not subject to any special interpretation or</span>
+<span class="pl-c"><span class="pl-c">#</span> substitutions, except that a backslash before a brace is not counted when</span>
+<span class="pl-c"><span class="pl-c">#</span> looking for the closing brace:</span>
+<span class="pl-k">set</span> somevar {
+    This is a literal $ sign, and this <span class="pl-cce">\}</span> escaped
+    brace remains uninterpreted
+}
+
+
+<span class="pl-c"><span class="pl-c">#</span> In a word enclosed in double quotes, whitespace characters lose their special</span>
+<span class="pl-c"><span class="pl-c">#</span> meaning:</span>
+<span class="pl-k">set</span> name Neo
+<span class="pl-k">set</span> greeting <span class="pl-s"><span class="pl-pds">"</span>Hello, <span class="pl-smi">$name</span><span class="pl-pds">"</span></span>
+
+
+<span class="pl-c"><span class="pl-c">#</span> A variable name can be any string:</span>
+<span class="pl-k">set</span> {first name} New
+
+
+<span class="pl-c"><span class="pl-c">#</span> The braced form of variable substitution handles more complex variable names:</span>
+<span class="pl-k">set</span> greeting <span class="pl-s"><span class="pl-pds">"</span>Hello, <span class="pl-smi">${first name}</span><span class="pl-pds">"</span></span>
+
+
+<span class="pl-c"><span class="pl-c">#</span> "set" can always be used instead of variable substitution, and can handle all</span>
+<span class="pl-c"><span class="pl-c">#</span> variable names:</span>
+<span class="pl-k">set</span> greeting <span class="pl-s"><span class="pl-pds">"</span>Hello, <span class="pl-s1"><span class="pl-pse">[</span><span class="pl-k">set</span> {first name}<span class="pl-pse">]</span></span><span class="pl-pds">"</span></span>
+
+
+<span class="pl-c"><span class="pl-c">#</span> To unpack a list into the command, use the expansion operator, "{*}".  These</span>
+<span class="pl-c"><span class="pl-c">#</span> two commands are equivalent:</span>
+<span class="pl-k">set</span> name Neo
+<span class="pl-k">set</span> {*}{name Neo}
+
+
+<span class="pl-c"><span class="pl-c">#</span> An array is a special variable that is a container for other variables.</span>
+<span class="pl-k">set</span> person(name) Neo
+<span class="pl-k">set</span> person(destiny) {The One}
+<span class="pl-k">set</span> greeting <span class="pl-s"><span class="pl-pds">"</span>Hello, <span class="pl-smi">$person(name)</span><span class="pl-pds">"</span></span>
+
+
+<span class="pl-c"><span class="pl-c">#</span> "variable" can be used to declare or set variables. In contrast with "set",</span>
+<span class="pl-c"><span class="pl-c">#</span> which uses both the global namespace and the current namespace to resolve a</span>
+<span class="pl-c"><span class="pl-c">#</span> variable name, "variable" uses only the current namespace:</span>
+<span class="pl-k">variable</span> name New
+
+
+<span class="pl-c"><span class="pl-c">#</span> "namespace eval" creates a new namespace if it doesn't exist.  A namespace</span>
+<span class="pl-c"><span class="pl-c">#</span> can contain both routines and variables:</span>
+<span class="pl-k">namespace</span> eval people {
+    <span class="pl-k">namespace</span> eval person1 {
+        <span class="pl-k">variable</span> name Neo
+    }
+}
+
+
+<span class="pl-c"><span class="pl-c">#</span> Use two or more colons to delimit namespace components in variable names:</span>
+<span class="pl-k">namespace</span> eval people {
+    <span class="pl-k">set</span> greeting <span class="pl-s"><span class="pl-pds">"</span>Hello <span class="pl-smi">$person1::name</span><span class="pl-pds">"</span></span>
+}
+
+<span class="pl-c"><span class="pl-c">#</span> Two or more colons also delimit namespace components in routine names:</span>
+<span class="pl-k">proc</span> <span class="pl-en">people::person1::speak</span> {} {
+    <span class="pl-k">puts</span> {I am The One.}
+}
+
+<span class="pl-c"><span class="pl-c">#</span> Fully-qualified names begin with two colons:</span>
+<span class="pl-k">set</span> greeting <span class="pl-s"><span class="pl-pds">"</span>Hello <span class="pl-smi">$::people::person1::name</span><span class="pl-pds">"</span></span>
+
+
+
+<span class="pl-c"><span class="pl-c">#</span>##############################################################################</span>
+<span class="pl-c"><span class="pl-c">#</span># 3. No More Syntax</span>
+<span class="pl-c"><span class="pl-c">#</span>##############################################################################</span>
+
+<span class="pl-c"><span class="pl-c">#</span> All other functionality is implemented via routines.  From this point on,</span>
+<span class="pl-c"><span class="pl-c">#</span> there is no new syntax.  Everything else there is to learn about</span>
+<span class="pl-c"><span class="pl-c">#</span> Tcl is about the behaviour of individual routines and what meaning they</span>
+<span class="pl-c"><span class="pl-c">#</span> assign to their arguments.</span>
+
+
+
+<span class="pl-c"><span class="pl-c">#</span>##############################################################################</span>
+<span class="pl-c"><span class="pl-c">#</span># 4. Variables and Namespaces</span>
+<span class="pl-c"><span class="pl-c">#</span>##############################################################################</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Each variable and routine is associated with some namespace.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> To end up with an interpreter that can do nothing, delete the global</span>
+<span class="pl-c"><span class="pl-c">#</span> namespace.  It's not very useful to do such a thing, but it illustrates the</span>
+<span class="pl-c"><span class="pl-c">#</span> nature of Tcl.  The name of the global namespace is actually the empty</span>
+<span class="pl-c"><span class="pl-c">#</span> string, but the only way to represent it is as a fully-qualified name. To</span>
+<span class="pl-c"><span class="pl-c">#</span> try it out call this routine:</span>
+<span class="pl-k">proc</span> <span class="pl-en">delete_global_namespace</span> {} {
+    <span class="pl-k">namespace</span> delete ::
+}
+
+<span class="pl-c"><span class="pl-c">#</span> Because "set" always keeps its eye on both the global namespace and the</span>
+<span class="pl-c"><span class="pl-c">#</span> current namespace, it's safer to use "variable" to declare a variable or</span>
+<span class="pl-c"><span class="pl-c">#</span> assign a value to a variable.  If a variable called "name" already exists in</span>
+<span class="pl-c"><span class="pl-c">#</span> the global namespace, using "set" here will assign a value to the global</span>
+<span class="pl-c"><span class="pl-c">#</span> variable instead of to a variable in the current namespace, whereas</span>
+<span class="pl-c"><span class="pl-c">#</span> "variable" operates only on the current namespace.</span>
+<span class="pl-k">namespace</span> eval people {
+    <span class="pl-k">namespace</span> eval person1 {
+        <span class="pl-k">variable</span> name Neo
+    }
+}
+
+<span class="pl-c"><span class="pl-c">#</span> Once a variable is declared in a namespace, [set] sees it instead of seeing</span>
+<span class="pl-c"><span class="pl-c">#</span> an identically-named variable in the global namespace:</span>
+<span class="pl-k">namespace</span> eval people {
+    <span class="pl-k">namespace</span> eval person1 {
+        <span class="pl-k">variable</span> name
+        <span class="pl-k">set</span> name Neo
+    }
+}
+
+<span class="pl-c"><span class="pl-c">#</span> But if "set" has to create a new variable, it always does it relative to the</span>
+<span class="pl-c"><span class="pl-c">#</span> current namespace:</span>
+<span class="pl-k">unset</span> name
+<span class="pl-k">namespace</span> eval people {
+    <span class="pl-k">namespace</span> eval person1 {
+        <span class="pl-k">set</span> name neo
+    }
+
+}
+<span class="pl-k">set</span> people::person1::name
+
+
+<span class="pl-c"><span class="pl-c">#</span> An absolute name always begins with the name of the global namespace (the</span>
+<span class="pl-c"><span class="pl-c">#</span> empty string), followed by two colons:</span>
+<span class="pl-k">set</span> ::people::person1::name Neo
+
+
+<span class="pl-c"><span class="pl-c">#</span> Within a procedure, the "variable" links a variable in the current namespace</span>
+<span class="pl-c"><span class="pl-c">#</span> into the local scope:</span>
+<span class="pl-k">namespace</span> eval people::person1 {
+    <span class="pl-k">proc</span> <span class="pl-en">fly</span> {} {
+        <span class="pl-k">variable</span> name
+        <span class="pl-k">puts</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">$name</span> is flying!<span class="pl-pds">"</span></span>
+    }
+}
+
+
+
+
+<span class="pl-c"><span class="pl-c">#</span>##############################################################################</span>
+<span class="pl-c"><span class="pl-c">#</span># 5. Built-in Routines</span>
+<span class="pl-c"><span class="pl-c">#</span>##############################################################################</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Math can be done with the "expr":</span>
+<span class="pl-k">set</span> a 3
+<span class="pl-k">set</span> b 4
+<span class="pl-k">set</span> c [<span class="pl-k">expr</span> {<span class="pl-smi">$a</span> + <span class="pl-smi">$b</span>}]
+
+<span class="pl-c"><span class="pl-c">#</span> Since "expr" performs variable substitution on its own, brace the expression</span>
+<span class="pl-c"><span class="pl-c">#</span> to prevent Tcl from performing variable substitution first.  See</span>
+<span class="pl-c"><span class="pl-c">#</span> "https://wiki.tcl-lang.org/page/Brace+your+expr-essions" for details.</span>
+
+
+<span class="pl-c"><span class="pl-c">#</span> "expr" understands variable and script substitution:</span>
+<span class="pl-k">set</span> c [<span class="pl-k">expr</span> {<span class="pl-smi">$a</span> + [<span class="pl-k">set</span> b]}]
+
+
+<span class="pl-c"><span class="pl-c">#</span> "expr" provides a set of mathematical functions:</span>
+<span class="pl-k">set</span> c [<span class="pl-k">expr</span> {pow(<span class="pl-smi">$a</span>,<span class="pl-smi">$b</span>)}]
+
+
+<span class="pl-c"><span class="pl-c">#</span> Mathematical operators are available as routines in the ::tcl::mathop</span>
+<span class="pl-c"><span class="pl-c">#</span> namespace:</span>
+::tcl::mathop::+ 5 3
+
+<span class="pl-c"><span class="pl-c">#</span> Routines can be imported from other namespaces:</span>
+<span class="pl-k">namespace</span> import ::tcl::mathop::+
+<span class="pl-k">set</span> result [+ 5 3]
+
+
+<span class="pl-c"><span class="pl-c">#</span> Non-numeric values must be quoted, and operators like "eq" can be used to</span>
+<span class="pl-c"><span class="pl-c">#</span> constrain the operation to string comparison:</span>
+<span class="pl-k">set</span> name Neo
+<span class="pl-k">expr</span> {{Bob} eq <span class="pl-smi">$name</span>}
+
+<span class="pl-c"><span class="pl-c">#</span> The general operators fall back to string comparison if numeric</span>
+<span class="pl-c"><span class="pl-c">#</span> operation isn't feasible:</span>
+<span class="pl-k">expr</span> {{Bob} == <span class="pl-smi">$name</span>}
+
+
+<span class="pl-c"><span class="pl-c">#</span> "proc" creates new routines:</span>
+<span class="pl-k">proc</span> <span class="pl-en">greet</span> name {
+    <span class="pl-k">return</span> <span class="pl-s"><span class="pl-pds">"</span>Hello, <span class="pl-smi">$name</span>!<span class="pl-pds">"</span></span>
+}
+
+<span class="pl-c"><span class="pl-c">#</span>multiple parameters can be specified:</span>
+<span class="pl-k">proc</span> <span class="pl-en">greet</span> {greeting name} {
+    <span class="pl-k">return</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">$greeting</span>, <span class="pl-smi">$name</span>!<span class="pl-pds">"</span></span>
+}
+
+
+<span class="pl-c"><span class="pl-c">#</span> As noted earlier, braces do not construct a code block.  Every value, even</span>
+<span class="pl-c"><span class="pl-c">#</span> the third argument to "proc", is a string.  The previous command</span>
+<span class="pl-c"><span class="pl-c">#</span> can be rewritten using no braces:</span>
+<span class="pl-k">proc</span> <span class="pl-en">greet</span> greeting<span class="pl-cce">\ </span>name return<span class="pl-cce">\ \"\$</span>greeting,<span class="pl-cce">\ \$</span>name!<span class="pl-cce">\"</span>
+<span class="pl-c"><span class="pl-c">#</span> "</span>
+
+
+
+<span class="pl-c"><span class="pl-c">#</span> When the last parameter is the literal value "args", all extra arguments</span>
+<span class="pl-c"><span class="pl-c">#</span> passed to the routine are collected into a list and assigned to "args":</span>
+<span class="pl-k">proc</span> <span class="pl-en">fold</span> {cmd first args} {
+    <span class="pl-k">foreach</span> arg <span class="pl-smi">$args</span> {
+        <span class="pl-k">set</span> first [<span class="pl-smi">$cmd</span> <span class="pl-smi">$first</span> <span class="pl-smi">$arg</span>]
+    }
+    <span class="pl-k">return</span> <span class="pl-smi">$first</span>
+}
+fold ::tcl::mathop::* 5 3 3 ;<span class="pl-c"><span class="pl-c">#</span> -&gt;  45</span>
+
+
+<span class="pl-c"><span class="pl-c">#</span> Conditional execution is implemented as a routine:</span>
+<span class="pl-k">if</span> {3 &gt; 4} {
+    <span class="pl-k">puts</span> {This will never happen}
+} <span class="pl-k">elseif</span> {4 &gt; 4} {
+    <span class="pl-k">puts</span> {This will also never happen}
+} <span class="pl-k">else</span> {
+    <span class="pl-k">puts</span> {This will always happen}
+}
+
+
+<span class="pl-c"><span class="pl-c">#</span> Loops are implemented as routines.  The first and third arguments to </span>
+<span class="pl-c"><span class="pl-c">#</span> "for" are treated as scripts, while the second argument is treated as</span>
+<span class="pl-c"><span class="pl-c">#</span> an expression:</span>
+<span class="pl-k">set</span> res 0
+<span class="pl-k">for</span> {<span class="pl-k">set</span> i 0} {<span class="pl-smi">$i</span> &lt; 10} {<span class="pl-k">incr</span> i} {
+    <span class="pl-k">set</span> res [<span class="pl-k">expr</span> {<span class="pl-smi">$res</span> + <span class="pl-smi">$i</span>}]
+}
+<span class="pl-k">unset</span> res
+
+
+<span class="pl-c"><span class="pl-c">#</span> The first argument to "while" is also treated as an expression:</span>
+<span class="pl-k">set</span> i 0
+<span class="pl-k">while</span> {<span class="pl-smi">$i</span> &lt; 10} {
+    <span class="pl-k">incr</span> i 2
+}
+
+
+<span class="pl-c"><span class="pl-c">#</span> A list is a string, and items in the list are delimited by whitespace:</span>
+<span class="pl-k">set</span> amounts 10<span class="pl-cce">\ </span>33<span class="pl-cce">\ </span>18
+<span class="pl-k">set</span> amount [<span class="pl-k">lindex</span> <span class="pl-smi">$amounts</span> 1]
+
+<span class="pl-c"><span class="pl-c">#</span> Whitespace in a list item must be quoted:</span>
+<span class="pl-k">set</span> inventory {<span class="pl-s"><span class="pl-pds">"</span>item 1<span class="pl-pds">"</span></span> item<span class="pl-cce">\ </span>2 {item 3}}
+
+
+<span class="pl-c"><span class="pl-c">#</span> It's generally a better idea to use list routines when modifying lists:</span>
+<span class="pl-k">lappend</span> inventory {item 1} {item 2} {item 3}
+
+
+<span class="pl-c"><span class="pl-c">#</span> Braces and backslash can be used to format more complex values in a list.  A</span>
+<span class="pl-c"><span class="pl-c">#</span> list looks exactly like a script, except that the newline character and the</span>
+<span class="pl-c"><span class="pl-c">#</span> semicolon character lose their special meanings, and there is no script or</span>
+<span class="pl-c"><span class="pl-c">#</span> variable substitution.  This feature makes Tcl homoiconic.  There are three</span>
+<span class="pl-c"><span class="pl-c">#</span> items in the following list:</span>
+<span class="pl-k">set</span> values {
+
+    one<span class="pl-cce">\ </span>two
+
+    {three four}
+
+    five<span class="pl-cce">\{</span>six
+
+}
+
+
+<span class="pl-c"><span class="pl-c">#</span> Since, like all values, a list is a string, string operations could be</span>
+<span class="pl-c"><span class="pl-c">#</span> performed on it, at the risk of corrupting the formatting of the list:</span>
+<span class="pl-k">set</span> values {one two three four}
+<span class="pl-k">set</span> values [<span class="pl-k">string</span> map {two <span class="pl-cce">\{</span>} <span class="pl-smi">$values</span>] ;<span class="pl-c"><span class="pl-c">#</span> $values is no-longer a \</span>
+<span class="pl-c">    properly-formatted list</span>
+
+
+<span class="pl-c"><span class="pl-c">#</span> The sure-fire way to get a properly-formatted list is to use "list" routines:</span>
+<span class="pl-k">set</span> values [<span class="pl-k">list</span> one <span class="pl-cce">\{</span> three four]
+<span class="pl-k">lappend</span> values { } ;<span class="pl-c"><span class="pl-c">#</span> add a single space as an item in the list</span>
+
+
+<span class="pl-c"><span class="pl-c">#</span> Use "eval" to evaluate a value as a script:</span>
+<span class="pl-k">eval</span> {
+    <span class="pl-k">set</span> name Neo
+    <span class="pl-k">set</span> greeting <span class="pl-s"><span class="pl-pds">"</span>Hello, <span class="pl-smi">$name</span><span class="pl-pds">"</span></span>
+}
+
+
+<span class="pl-c"><span class="pl-c">#</span> A list can always be passed to "eval" as a script composed of a single</span>
+<span class="pl-c"><span class="pl-c">#</span> command:</span>
+<span class="pl-k">eval</span> {<span class="pl-k">set</span> name Neo}
+<span class="pl-k">eval</span> [<span class="pl-k">list</span> set greeting <span class="pl-s"><span class="pl-pds">"</span>Hello, <span class="pl-smi">$name</span><span class="pl-pds">"</span></span>]
+
+
+<span class="pl-c"><span class="pl-c">#</span> Therefore, when using "eval", use "list" to build up the desired command:</span>
+<span class="pl-k">set</span> command {<span class="pl-k">set</span> name}
+<span class="pl-k">lappend</span> command {Archibald Sorbisol}
+<span class="pl-k">eval</span> <span class="pl-smi">$command</span>
+
+
+<span class="pl-c"><span class="pl-c">#</span> A common mistake is not to use list functions when building up a command:</span>
+<span class="pl-k">set</span> command {<span class="pl-k">set</span> name}
+<span class="pl-k">append</span> command { Archibald Sorbisol}
+try {
+    <span class="pl-k">eval</span> <span class="pl-smi">$command</span> ;<span class="pl-c"><span class="pl-c">#</span> The error here is that there are too many arguments \</span>
+<span class="pl-c">        to "set" in {set name Archibald Sorbisol}</span>
+} on error {result eoptions} {
+    <span class="pl-k">puts</span> [<span class="pl-k">list</span> {received an error} <span class="pl-smi">$result</span>]
+}
+
+<span class="pl-c"><span class="pl-c">#</span> This mistake can easily occur with "subst":</span>
+
+<span class="pl-k">set</span> replacement {Archibald Sorbisol}
+<span class="pl-k">set</span> command {<span class="pl-k">set</span> name <span class="pl-smi">$replacement</span>}
+<span class="pl-k">set</span> command [<span class="pl-k">subst</span> <span class="pl-smi">$command</span>] 
+try {
+    <span class="pl-k">eval</span> <span class="pl-smi">$command</span> ;<span class="pl-c"><span class="pl-c">#</span> The same error as before:  too many arguments to "set" in \</span>
+<span class="pl-c">        {set name Archibald Sorbisol}</span>
+} trap {TCL WRONGARGS} {result options} {
+    <span class="pl-k">puts</span> [<span class="pl-k">list</span> {received another error} <span class="pl-smi">$result</span>]
+}
+
+
+<span class="pl-c"><span class="pl-c">#</span> "list" correctly formats a value for substitution:</span>
+<span class="pl-k">set</span> replacement [<span class="pl-k">list</span> {Archibald Sorbisol}]
+<span class="pl-k">set</span> command {<span class="pl-k">set</span> name <span class="pl-smi">$replacement</span>}
+<span class="pl-k">set</span> command [<span class="pl-k">subst</span> <span class="pl-smi">$command</span>]
+<span class="pl-k">eval</span> <span class="pl-smi">$command</span>
+
+
+<span class="pl-c"><span class="pl-c">#</span> "list" is commonly used to format values for substitution into scripts: There</span>
+<span class="pl-c"><span class="pl-c">#</span> are several examples of this, below.</span>
+
+
+<span class="pl-c"><span class="pl-c">#</span> "apply" evaluates a two-item list as a routine:</span>
+<span class="pl-k">set</span> cmd {{greeting name} {
+    <span class="pl-k">return</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">$greeting</span>, <span class="pl-smi">$name</span>!<span class="pl-pds">"</span></span>
+}}
+apply <span class="pl-smi">$cmd</span> Whaddup Neo
+
+<span class="pl-c"><span class="pl-c">#</span> A third item can be used to specify the namespace to apply the routine in:</span>
+<span class="pl-k">set</span> cmd [<span class="pl-k">list</span> {greeting name} {
+    <span class="pl-k">return</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">$greeting</span>, <span class="pl-smi">$name</span>!<span class="pl-pds">"</span></span>
+} [<span class="pl-k">namespace</span> current]]
+apply <span class="pl-smi">$cmd</span> Whaddup Neo
+
+
+<span class="pl-c"><span class="pl-c">#</span> "uplevel" evaluates a script at some higher level in the call stack:</span>
+<span class="pl-k">proc</span> <span class="pl-en">greet</span> {} {
+    <span class="pl-k">uplevel</span> {<span class="pl-k">puts</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">$greeting</span>, <span class="pl-smi">$name</span><span class="pl-pds">"</span></span>}
+}
+
+<span class="pl-k">proc</span> <span class="pl-en">set_double</span> {varname value} {
+    <span class="pl-k">if</span> {[<span class="pl-k">string</span> is double <span class="pl-smi">$value</span>]} {
+        <span class="pl-k">uplevel</span> [<span class="pl-k">list</span> variable <span class="pl-smi">$varname</span> <span class="pl-smi">$value</span>]
+    } <span class="pl-k">else</span> {
+        <span class="pl-k">error</span> [<span class="pl-k">list</span> {not a double} <span class="pl-smi">$value</span>]
+    }
+}
+
+
+<span class="pl-c"><span class="pl-c">#</span> "upvar" links a variable at the current level in the call stack to a variable</span>
+<span class="pl-c"><span class="pl-c">#</span> at some higher level:</span>
+<span class="pl-k">proc</span> <span class="pl-en">set_double</span> {varname value} {
+    <span class="pl-k">if</span> {[<span class="pl-k">string</span> is double <span class="pl-smi">$value</span>]} {
+        <span class="pl-k">upvar</span> 1 <span class="pl-smi">$varname</span> var
+        <span class="pl-k">set</span> var <span class="pl-smi">$value</span>
+    } <span class="pl-k">else</span> {
+        <span class="pl-k">error</span> [<span class="pl-k">list</span> {not a double} <span class="pl-smi">$value</span>]
+    }
+}
+
+
+<span class="pl-c"><span class="pl-c">#</span> Get rid of the built-in "while" routine, and use "proc" to define a new one:</span>
+<span class="pl-k">rename</span> ::while {}
+<span class="pl-c"><span class="pl-c">#</span> handling is left as an exercise:</span>
+<span class="pl-k">proc</span> <span class="pl-en">while</span> {condition script} {
+    <span class="pl-k">if</span> {[<span class="pl-k">uplevel</span> 1 [<span class="pl-k">list</span> expr <span class="pl-smi">$condition</span>]]} {
+        <span class="pl-k">uplevel</span> 1 <span class="pl-smi">$script</span>
+        tailcall [<span class="pl-k">namespace</span> which while] <span class="pl-smi">$condition</span> <span class="pl-smi">$script</span>
+    }
+}
+
+
+<span class="pl-c"><span class="pl-c">#</span> "coroutine" creates a new call stack, a new routine to enter that call stack,</span>
+<span class="pl-c"><span class="pl-c">#</span> and then calls that routine.  "yield" suspends evaluation in that stack and</span>
+<span class="pl-c"><span class="pl-c">#</span> returns control to the calling stack:</span>
+<span class="pl-k">proc</span> <span class="pl-en">countdown</span> count {
+    <span class="pl-c"><span class="pl-c">#</span> send something back to the creator of the coroutine, effectively pausing</span>
+    <span class="pl-c"><span class="pl-c">#</span> this call stack for the time being.</span>
+    yield [<span class="pl-k">info</span> coroutine]
+
+    <span class="pl-k">while</span> {<span class="pl-smi">$count</span> &gt; 1} {
+        yield [<span class="pl-k">incr</span> count -1]
+    }
+    <span class="pl-k">return</span> 0
+}
+coroutine countdown1 countdown 3
+coroutine countdown2 countdown 5
+<span class="pl-k">puts</span> [countdown1] ;<span class="pl-c"><span class="pl-c">#</span> -&gt; 2 </span>
+<span class="pl-k">puts</span> [countdown2] ;<span class="pl-c"><span class="pl-c">#</span> -&gt; 4 </span>
+<span class="pl-k">puts</span> [countdown1] ;<span class="pl-c"><span class="pl-c">#</span> -&gt; 1 </span>
+<span class="pl-k">puts</span> [countdown1] ;<span class="pl-c"><span class="pl-c">#</span> -&gt; 0 </span>
+<span class="pl-k">catch</span> {
+    <span class="pl-k">puts</span> [coundown1] ;<span class="pl-c"><span class="pl-c">#</span> -&gt; invalid command name "countdown1"</span>
+} cres copts 
+<span class="pl-k">puts</span> <span class="pl-smi">$cres</span>
+<span class="pl-k">puts</span> [countdown2] ;<span class="pl-c"><span class="pl-c">#</span> -&gt; 3 </span>
+
+
+<span class="pl-c"><span class="pl-c">#</span> Coroutine stacks can yield control to each other:</span>
+
+<span class="pl-k">proc</span> <span class="pl-en">pass</span> {whom args} {
+    <span class="pl-k">return</span> [yieldto <span class="pl-smi">$whom</span> {*}<span class="pl-smi">$args</span>]
+}
+
+coroutine a apply {{} {
+        yield
+        <span class="pl-k">set</span> result [pass b {please pass the salt}]
+        <span class="pl-k">puts</span> [<span class="pl-k">list</span> got the <span class="pl-smi">$result</span>]
+        <span class="pl-k">set</span> result [pass b {please pass the pepper}]
+        <span class="pl-k">puts</span> [<span class="pl-k">list</span> got the <span class="pl-smi">$result</span>]
+}}
+
+coroutine b apply {{} {
+    <span class="pl-k">set</span> request [yield]
+    <span class="pl-k">while</span> 1 {
+        <span class="pl-k">set</span> response [pass c <span class="pl-smi">$request</span>]
+        <span class="pl-k">puts</span> [<span class="pl-k">list</span> [<span class="pl-k">info</span> coroutine] is now yielding]
+        <span class="pl-k">set</span> request [pass a <span class="pl-smi">$response</span>]
+    }
+}}
+
+coroutine c apply {{} {
+    <span class="pl-k">set</span> request [yield]
+    <span class="pl-k">while</span> 1 {
+        <span class="pl-k">if</span> {[<span class="pl-k">string</span> match *salt* <span class="pl-smi">$request</span>]} {
+            <span class="pl-k">set</span> request [pass b salt]
+        } <span class="pl-k">else</span> {
+            <span class="pl-k">set</span> request [pass b huh?]
+        }
+    }
+}}
+
+<span class="pl-c"><span class="pl-c">#</span> get things moving</span>
+a
+
+</pre></div>
+<h2>Reference</h2>
+<p><a href="https://www.tcl-lang.org" rel="nofollow">Official Tcl Documentation</a></p>
+<p><a href="https://wiki.tcl-lang.org" rel="nofollow">Tcl Wiki</a></p>
+<p><a href="http://www.reddit.com/r/Tcl" rel="nofollow">Tcl Subreddit</a></p>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Poor Yorick", "https://pooryorick.com/"]
+</code></pre>

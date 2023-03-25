@@ -1,0 +1,193 @@
+<h1>COBOL</h1>
+<p>COBOL is a business-oriented language revised multiple times since its original design in 1960. It is claimed to still be used in over 80% of<br>
+organizations.</p>
+<div class="highlight highlight-source-cobol"><pre class="notranslate"><span class="pl-c1">      </span><span class="pl-c">*COBOL. Coding like it's 1985. </span>
+<span class="pl-c1">      </span><span class="pl-c">*Compiles with GnuCOBOL in OpenCobolIDE 4.7.6.</span>
+       
+<span class="pl-c1">      </span><span class="pl-c">*COBOL has significant differences between legacy (COBOL-85)</span>
+<span class="pl-c1">      </span><span class="pl-c">*and modern (COBOL-2002 and COBOL-2014) versions.</span>
+<span class="pl-c1">      </span><span class="pl-c">*Legacy versions require columns 1-6 to be blank (they are used</span>
+<span class="pl-c1">      </span><span class="pl-c">*to store the index number of the punched card).</span>
+<span class="pl-c1">      </span><span class="pl-c">*A '*' in column 7 means a comment.</span>
+<span class="pl-c1">      </span><span class="pl-c">*In legacy COBOL, a comment can only be a full line.</span>
+<span class="pl-c1">      </span><span class="pl-c">*Modern COBOL doesn't require fixed columns and uses *&gt; for</span>
+<span class="pl-c1">      </span><span class="pl-c">*a comment, which can appear in the middle of a line.</span>
+<span class="pl-c1">      </span><span class="pl-c">*Legacy COBOL also imposes a limit on maximum line length.</span>
+<span class="pl-c1">      </span><span class="pl-c">*Keywords have to be in capitals in legacy COBOL,</span>
+<span class="pl-c1">      </span><span class="pl-c">*but are case insensitive in modern.</span>
+<span class="pl-c1">      </span><span class="pl-c">*Although modern COBOL allows you to use mixed-case characters</span>
+<span class="pl-c1">      </span><span class="pl-c">*it is still common to use all caps when writing COBOL code.</span>
+<span class="pl-c1">      </span><span class="pl-c">*This is what most professional COBOL developers do.</span>
+<span class="pl-c1">      </span><span class="pl-c">*COBOL statements end with a period.</span>
+<span class="pl-c1">      </span>
+<span class="pl-c1">      </span><span class="pl-c">*COBOL code is broken up into 4 divisions.</span>
+<span class="pl-c1">      </span><span class="pl-c">*Those divisions, in order, are:</span>
+<span class="pl-c1">      </span><span class="pl-c">*IDENTIFICATION DIVISION.</span>
+<span class="pl-c1">      </span><span class="pl-c">*ENVIRONMENT DIVISION.</span>
+<span class="pl-c1">      </span><span class="pl-c">*DATA DIVISION.</span>
+<span class="pl-c1">      </span><span class="pl-c">*PROCEDURE DIVISION.</span>
+
+<span class="pl-c1">      </span><span class="pl-c">*First, we must give our program an ID.</span>
+<span class="pl-c1">      </span><span class="pl-c">*Identification division can include other values too,</span>
+<span class="pl-c1">      </span><span class="pl-c">*but they are comments only. Program-id is the only one that is mandatory.</span>
+       <span class="pl-k">IDENTIFICATION DIVISION</span>.
+           <span class="pl-k">PROGRAM-ID</span>.    <span class="pl-en">LEARN</span>.
+           <span class="pl-c"><span class="pl-k">AUTHOR.</span>        JOHN DOE.</span>
+<span class="pl-c"><span class="pl-c1">      </span>     <span class="pl-k">DATE-WRITTEN.</span>  05/02/2020.</span>
+<span class="pl-c"></span>
+<span class="pl-c"></span><span class="pl-c1">      </span><span class="pl-c">*Let's declare some variables.</span>
+<span class="pl-c1">      </span><span class="pl-c">*We do this in the WORKING-STORAGE section within the DATA DIVISION.</span>
+<span class="pl-c1">      </span><span class="pl-c">*Each data item (aka variable) starts with a level number, </span>
+<span class="pl-c1">      </span><span class="pl-c">*then the name of the item, followed by a picture clause </span>
+<span class="pl-c1">      </span><span class="pl-c">*describing the type of data that the variable will contain.</span>
+<span class="pl-c1">      </span><span class="pl-c">*Almost every COBOL programmer will abbreviate PICTURE as PIC.</span>
+<span class="pl-c1">      </span><span class="pl-c">*A is for alphabetic, X is for alphanumeric, and 9 is for numeric.</span>
+       
+<span class="pl-c1">      </span><span class="pl-c">*example:</span>
+      <span class="pl-c1">01</span>  MYNAME <span class="pl-k">PIC xxxxxxxxxx.</span>    <span class="pl-c">*&gt; A 10 character string.</span>
+       
+<span class="pl-c1">      </span><span class="pl-c">*But counting all those x's can lead to errors, </span>
+<span class="pl-c1">      </span><span class="pl-c">*so the above code can, and should</span>
+<span class="pl-c1">      </span><span class="pl-c">*be re-written as:</span>
+      <span class="pl-c1">01</span> MYNAME <span class="pl-k">PIC X</span>(<span class="pl-c1">10</span>).
+       
+<span class="pl-c1">      </span><span class="pl-c">*Here are some more examples:</span>
+      <span class="pl-c1">01</span>  AGE             <span class="pl-k">PIC      9</span>(<span class="pl-c1">3</span>).   <span class="pl-c">*&gt; A number up to 3 digits.</span>
+      <span class="pl-c1">01</span>  LAST_NAME       <span class="pl-k">PIC      X</span>(<span class="pl-c1">10</span>).  <span class="pl-c">*&gt; A string up to 10 characters.</span>
+       
+<span class="pl-c1">      </span><span class="pl-c">*In COBOL, multiple spaces are the same as a single space, so it is common</span>
+<span class="pl-c1">      </span><span class="pl-c">*to use multiple spaces to line up your code so that it is easier for other</span>
+<span class="pl-c1">      </span><span class="pl-c">*coders to read.</span>
+      <span class="pl-c1">01</span>  inyear <span class="pl-k">picture s9</span>(<span class="pl-c1">7</span>). <span class="pl-c">*&gt; S makes number signed.</span>
+                                 <span class="pl-c">*&gt; Brackets indicate 7 repeats of 9,</span>
+                                 <span class="pl-c">*&gt; ie a 6 digit number (not an array).</span>
+
+<span class="pl-c1">      </span><span class="pl-c">*Now let's write some code. Here is a simple, Hello World program.</span>
+      <span class="pl-k">IDENTIFICATION DIVISION</span>.
+      <span class="pl-k">PROGRAM-ID</span>. <span class="pl-en">HELLO</span>.
+      <span class="pl-k">DATA DIVISION</span>.
+      <span class="pl-k">WORKING-STORAGE SECTION</span>.
+      <span class="pl-c1">01</span> THE-MESSAGE      <span class="pl-k">PIC X</span>(<span class="pl-c1">20</span>).
+      <span class="pl-k">PROCEDURE DIVISION</span>.
+          <span class="pl-k">DISPLAY</span> <span class="pl-s"><span class="pl-pds">"</span>STARTING PROGRAM<span class="pl-pds">"</span></span>.
+          <span class="pl-k">MOVE</span> <span class="pl-s"><span class="pl-pds">"</span>HELLO WORLD<span class="pl-pds">"</span></span> <span class="pl-k">TO</span> THE-MESSAGE.
+          <span class="pl-k">DISPLAY</span> THE-MESSAGE.
+          <span class="pl-k">STOP RUN</span>.
+<span class="pl-c1">      </span>
+<span class="pl-c1">      </span><span class="pl-c">*The above code will output:</span>
+<span class="pl-c1">      </span><span class="pl-c">*STARTING PROGRAM</span>
+<span class="pl-c1">      </span><span class="pl-c">*HELLO WORLD</span>
+<span class="pl-c1">      </span>
+
+<span class="pl-c1">      </span>
+<span class="pl-c1">      </span><span class="pl-c">********COBOL can perform math***************</span>
+      <span class="pl-k">ADD</span> <span class="pl-c1">1</span> <span class="pl-k">TO</span> AGE <span class="pl-k">GIVING</span> NEW-AGE.
+      <span class="pl-k">SUBTRACT</span> <span class="pl-c1">1</span> <span class="pl-k">FROM</span> <span class="pl-k">COUNT</span>.
+      <span class="pl-k">DIVIDE</span> VAR-1 <span class="pl-k">INTO</span> VAR-2 <span class="pl-k">GIVING</span> VAR-3.
+      <span class="pl-k">COMPUTE</span> TOTAL-COUNT <span class="pl-k">=</span> COUNT1 <span class="pl-k">PLUS</span> COUNT2.
+<span class="pl-c1">      </span>
+<span class="pl-c1">      </span>
+<span class="pl-c1">      </span><span class="pl-c">*********PERFORM********************</span>
+<span class="pl-c1">      </span><span class="pl-c">*The PERFORM keyword allows you to jump to another specified section of the code,</span>
+<span class="pl-c1">      </span><span class="pl-c">*and then to return to the next executable</span>
+<span class="pl-c1">      </span><span class="pl-c">*statement once the specified section of code is completed. </span>
+<span class="pl-c1">      </span><span class="pl-c">*You must write the full word, PERFORM, you cannot abbreviate it.</span>
+
+      <span class="pl-k">IDENTIFICATION DIVISION</span>.
+      <span class="pl-k">PROGRAM-ID</span>. <span class="pl-en">HELLOCOBOL</span>.
+
+      <span class="pl-k">PROCEDURE DIVISION</span>.
+         FIRST-PARA.
+             <span class="pl-k">DISPLAY</span> <span class="pl-s"><span class="pl-pds">'</span>THIS IS IN FIRST-PARA<span class="pl-pds">'</span></span>.
+         <span class="pl-k">PERFORM</span> THIRD-PARA <span class="pl-k">THRU</span> FOURTH-PARA. <span class="pl-c">*&gt;skip second-para and perform 3rd &amp; 4th</span>
+         <span class="pl-c">*&gt; then after performing third and fourth,</span>
+         <span class="pl-c">*&gt; return here and continue the program until STOP RUN.</span>
+   
+         SECOND-PARA.
+             <span class="pl-k">DISPLAY</span> <span class="pl-s"><span class="pl-pds">'</span>THIS IS IN SECOND-PARA<span class="pl-pds">'</span></span>.
+         <span class="pl-k">STOP RUN</span>.
+   
+         THIRD-PARA.
+             <span class="pl-k">DISPLAY</span> <span class="pl-s"><span class="pl-pds">'</span>THIS IS IN THIRD-PARA<span class="pl-pds">'</span></span>.
+   
+         FOURTH-PARA.
+             <span class="pl-k">DISPLAY</span> <span class="pl-s"><span class="pl-pds">'</span>THIS IS IN FOURTH-PARA<span class="pl-pds">'</span></span>.
+   
+   
+<span class="pl-c1">      </span><span class="pl-c">*When you compile and execute the above program, it produces the following result: </span>
+          THIS <span class="pl-k">IS</span> <span class="pl-k">IN</span> FIRST-PARA
+          THIS <span class="pl-k">IS</span> <span class="pl-k">IN</span> THIRD-PARA
+          THIS <span class="pl-k">IS</span> <span class="pl-k">IN</span> FOURTH-PARA
+          THIS <span class="pl-k">IS</span> <span class="pl-k">IN</span> SECOND-PARA
+          
+          
+<span class="pl-c1">      </span><span class="pl-c">**********Combining variables together using STRING ***********</span>
+<span class="pl-c1">      </span>
+<span class="pl-c1">      </span><span class="pl-c">*Now it is time to learn about two related COBOL verbs: string and unstring.</span>
+
+<span class="pl-c1">      </span><span class="pl-c">*The string verb is used to concatenate, or put together, two or more strings.</span>
+<span class="pl-c1">      </span><span class="pl-c">*Unstring is used, not surprisingly, to separate a         </span>
+<span class="pl-c1">      </span><span class="pl-c">*string into two or more smaller strings. </span>
+<span class="pl-c1">      </span><span class="pl-c">*It is important that you remember to use ‘delimited by’ when you</span>
+<span class="pl-c1">      </span><span class="pl-c">*are using string or unstring in your program. </span>
+
+      <span class="pl-k">IDENTIFICATION DIVISION</span>.
+      <span class="pl-k">PROGRAM-ID</span>. <span class="pl-en">LEARNING</span>.
+      <span class="pl-k">ENVIRONMENT DIVISION</span>.
+      <span class="pl-k">DATA DIVISION</span>.
+      <span class="pl-k">WORKING-STORAGE SECTION</span>.
+      <span class="pl-c1">01</span> FULL-NAME <span class="pl-k">PIC X</span>(<span class="pl-c1">20</span>).
+      <span class="pl-c1">01</span> FIRST-NAME <span class="pl-k">PIC X</span>(<span class="pl-c1">13</span>) <span class="pl-k">VALUE</span> <span class="pl-s"><span class="pl-pds">"</span>BOB GIBBERISH<span class="pl-pds">"</span></span>.
+      <span class="pl-c1">01</span> LAST-NAME <span class="pl-k">PIC X</span>(<span class="pl-c1">5</span>) <span class="pl-k">VALUE</span> <span class="pl-s"><span class="pl-pds">"</span>COBB<span class="pl-pds">"</span></span>.
+      <span class="pl-k">PROCEDURE DIVISION</span>.
+          <span class="pl-k">STRING</span> FIRST-NAME <span class="pl-k">DELIMITED</span> <span class="pl-k">BY</span> <span class="pl-c1">SPACE</span>
+            <span class="pl-s"><span class="pl-pds">"</span> <span class="pl-pds">"</span></span>
+            LAST-NAME <span class="pl-k">DELIMITED</span> <span class="pl-k">BY</span> <span class="pl-k">SIZE</span>
+            <span class="pl-k">INTO</span> FULL-NAME
+          <span class="pl-k">END-STRING</span>.
+          <span class="pl-k">DISPLAY</span> <span class="pl-s"><span class="pl-pds">"</span>THE FULL NAME IS: <span class="pl-pds">"</span></span>FULL-NAME.
+      <span class="pl-k">STOP RUN</span>.
+
+
+<span class="pl-c1">      </span><span class="pl-c">*The above code will output:</span>
+      THE <span class="pl-k">FULL</span> <span class="pl-k">NAME</span> IS: BOB COBB
+
+
+<span class="pl-c1">      </span><span class="pl-c">*Let’s examine it to see why.</span>
+
+<span class="pl-c1">      </span><span class="pl-c">*First, we declared all of our variables, including the one that we are creating</span>
+<span class="pl-c1">      </span><span class="pl-c">*by the string command, in the DATA DIVISION.</span>
+
+<span class="pl-c1">      </span><span class="pl-c">*The action takes place down in the PROCEDURE DIVISION. </span>
+<span class="pl-c1">      </span><span class="pl-c">*We start with the STRING keyword and end with END-STRING. In between we         </span>
+<span class="pl-c1">      </span><span class="pl-c">*list what we want to combine together into the larger, master variable. </span>
+<span class="pl-c1">      </span><span class="pl-c">*Here, we are combining FIRST-NAME, a space, and LAST-NAME. </span>
+
+<span class="pl-c1">      </span><span class="pl-c">*The DELIMITED BY phrase that follows FIRST-NAME and </span>
+<span class="pl-c1">      </span><span class="pl-c">*LAST-NAME tells the program how much of each variable we want to capture. </span>
+<span class="pl-c1">      </span><span class="pl-c">*DELIMITED BY SPACE tells the program to start at the beginning, </span>
+<span class="pl-c1">      </span><span class="pl-c">*and capture the variable until it runs into a space. </span>
+<span class="pl-c1">      </span><span class="pl-c">*DELIMITED BY SIZE tells the program to capture the full size of the variable. </span>
+<span class="pl-c1">      </span><span class="pl-c">*Since we have DELIMITED BY SPACE after FIRST-NAME, the GIBBERISH part is ignored. </span>
+
+<span class="pl-c1">      </span><span class="pl-c">*To make this clearer, change line 10 in the above code to:</span>
+
+      <span class="pl-k">STRING</span> FIRST-NAME <span class="pl-k">DELIMITED</span> <span class="pl-k">BY</span> <span class="pl-k">SIZE</span>
+
+<span class="pl-c1">      </span><span class="pl-c">*and then re-run the program. This time the output is:</span>
+
+      THE <span class="pl-k">FULL</span> <span class="pl-k">NAME</span> IS: BOB GIBBERISH COBB
+
+
+
+
+
+</pre></div>
+<p>##Ready For More?</p>
+<ul>
+<li><a href="https://sourceforge.net/projects/open-cobol/" rel="nofollow">GnuCOBOL</a></li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Hyphz", "http://github.com/hyphz/"]
+</code></pre>

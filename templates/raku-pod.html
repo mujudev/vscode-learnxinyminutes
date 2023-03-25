@@ -1,0 +1,508 @@
+<h1>Pod</h1>
+<p>Pod is an easy-to-use and purely descriptive mark-up language,<br>
+with no presentational components. Besides its use for documenting<br>
+Raku programs and modules, Pod can be utilized to write language<br>
+documentation, blogs, and other types of document composition as well.</p>
+<p>Pod documents can be easily converted to HTML and many other formats<br>
+(e.g., Markdown, Latex, plain text, etc.) by using the corresponding<br>
+variant of the <code class="notranslate">Pod::To</code> modules (e.g. <code class="notranslate">Pod::To::HTML</code> for HTML conversion).</p>
+<ul>
+<li><a href="#general-info">General Info</a></li>
+<li><a href="#pod-basics">Pod Basics</a>
+<ul>
+<li><a href="#basic-text-formatting">Basic Text Formatting</a></li>
+<li><a href="#headings">Headings</a></li>
+<li><a href="#ordinary-paragraphs">Ordinary Paragraphs</a></li>
+<li><a href="#lists">Lists</a></li>
+<li><a href="#code-blocks">Code Blocks</a></li>
+<li><a href="#comments">Comments</a></li>
+<li><a href="#links">Links</a></li>
+<li><a href="#tables">Tables</a></li>
+</ul>
+</li>
+<li><a href="#block-structures">Block Structures</a>
+<ul>
+<li><a href="#abbreviated-blocks">Abbreviated Blocks</a></li>
+<li><a href="#delimited-blocks">Delimited Blocks</a></li>
+<li><a href="#paragraph-blocks">Paragraph Blocks</a></li>
+</ul>
+</li>
+<li><a href="#configuration-data">Configuration Data</a>
+<ul>
+<li><a href="#standard-configuration-options">Standard Configuration Options</a></li>
+<li><a href="#block-pre-configuration">Block Pre-configuration</a></li>
+</ul>
+</li>
+<li><a href="#semantic-blocks">Semantic Blocks</a></li>
+<li><a href="#miscellaneous">Miscellaneous</a>
+<ul>
+<li><a href="#notes">Notes</a></li>
+<li><a href="#keyboard-input">Keyboard Input</a></li>
+<li><a href="#terminal-output">Terminal Output</a></li>
+<li><a href="#unicode">Unicode</a></li>
+</ul>
+</li>
+<li><a href="#rendering-pod">Rendering Pod</a></li>
+<li><a href="#accessing-pod">Accessing Pod</a></li>
+</ul>
+<h2>General Info</h2>
+<p>Every Pod document has to begin with <code class="notranslate">=begin pod</code> and end with <code class="notranslate">=end pod</code>.<br>
+Everything between these two delimiters will be processed and used to<br>
+generate documentation.</p>
+<pre class="notranslate"><code class="notranslate">=begin pod
+
+A very simple Raku Pod document. All the other directives go here!
+
+=end pod
+</code></pre>
+<p>Pod documents usually coexist with Raku code. If by themselves,<br>
+Pod files often have the <code class="notranslate">.pod6</code> suffix. Moving forward, it's assumed that<br>
+the constructs being discussed are surrounded by the <code class="notranslate">=begin pod ... =end pod</code><br>
+directives.</p>
+<h2>Pod Basics</h2>
+<h3>Basic Text Formatting</h3>
+<p>Text can be easily styled as bold, italic, underlined or verbatim (for code<br>
+formatting) using the following formatting codes: <code class="notranslate">B&lt;&gt;</code>, <code class="notranslate">I&lt;&gt;</code>, <code class="notranslate">U&lt;&gt;</code><br>
+and <code class="notranslate">C&lt;&gt;</code>.</p>
+<pre class="notranslate"><code class="notranslate">B&lt;This text is in Bold.&gt;
+
+I&lt;This text is in Italics.&gt;
+
+U&lt;This text is Underlined.&gt;
+
+The function C&lt;sub sum { $^x + $^y}&gt; is treated as verbatim.
+</code></pre>
+<p>There are more formatting codes (e.g., <code class="notranslate">L&lt;&gt;</code>, <code class="notranslate">T&lt;&gt;</code>, etc.) but they'll be<br>
+discussed later throughout the document. You'll recognize them because they're<br>
+just a single capital letter followed immediately by a set of single or double<br>
+angle brackets. The Unicode variant («») of the angle brackets can also be<br>
+used.</p>
+<h3>Headings</h3>
+<p>Headings are created by using the <code class="notranslate">=headN</code> directive where <code class="notranslate">N</code> is the<br>
+heading level.</p>
+<pre class="notranslate"><code class="notranslate">=head1 This is level 1
+=head2 This is level 2
+=head3 This is level 3
+=head4 This is level 4
+=head5 This is level 5
+=head6 This is level 6
+</code></pre>
+<h3>Ordinary Paragraphs</h3>
+<p>Ordinary paragraphs consist of one or more adjacent lines of text, each of<br>
+which starts with a non-whitespace character. Any paragraph is terminated<br>
+by the first blank line or block directive.</p>
+<pre class="notranslate"><code class="notranslate">=head1 First level heading block
+
+=head2 Paragraph 1
+
+This is an ordinary paragraph. Its text will be squeezed and
+short lines filled. It is terminated by the first blank line.
+
+=head2 Paragraph 2
+
+This is another ordinary paragraph albeit shorter.
+</code></pre>
+<p>Alternatively, the <code class="notranslate">=para</code> directive can be used to explicitly mark adjacent<br>
+lines of text as a paragraph.</p>
+<pre class="notranslate"><code class="notranslate">=head1 First level heading block
+
+=head2 Paragraph 1
+
+=para
+This is an ordinary paragraph. Its text will be squeezed and
+short lines filled. It is terminated by the first blank line.
+
+=head2 Paragraph 2
+
+=para
+This is another ordinary paragraph albeit shorter.
+</code></pre>
+<h3>Lists</h3>
+<p>Unordered lists can be created using the <code class="notranslate">=item</code> directive.</p>
+<pre class="notranslate"><code class="notranslate">=item Item
+=item Item
+=item Another item
+</code></pre>
+<p>Sublists are achieved with items at each level specified using the <code class="notranslate">=item1</code>,<br>
+<code class="notranslate">=item2</code>, <code class="notranslate">=item3</code>, <code class="notranslate">...</code>, <code class="notranslate">=itemN</code> etc. directives. The <code class="notranslate">=item</code> directive<br>
+defaults to <code class="notranslate">=item1</code>.</p>
+<pre class="notranslate"><code class="notranslate">=item1 Item one
+=item1 Item two
+=item1 Item three
+    =item2 Sub-item
+    =item2 Sub-item
+=item1 Item four
+</code></pre>
+<p>Definition lists that define terms or commands use the <code class="notranslate">=defn</code> directive.<br>
+This is equivalent to the <code class="notranslate">&lt;dl&gt;</code> element in HTML.</p>
+<pre class="notranslate"><code class="notranslate">=defn Beast of Bodmin
+A large feline inhabiting Bodmin Moor.
+
+=defn Morgawr
+A sea serpent.
+
+=defn Owlman
+A giant owl-like creature.
+</code></pre>
+<h3>Code Blocks</h3>
+<p>A code block is created (which uses the HTML <code class="notranslate">&lt;code&gt;</code> element) by starting each<br>
+line with one or more whitespace characters.</p>
+<pre class="notranslate"><code class="notranslate">    #`( this is comment )
+    my $sum = -&gt; $x, $y { $x + $y }
+    say $sum(12, 5);
+</code></pre>
+<p>As shown in the <a href="#basic-text-formatting">Basic Text Formatting</a> section,<br>
+inline code can be created using the <code class="notranslate">C&lt;&gt;</code> code.</p>
+<pre class="notranslate"><code class="notranslate">In Raku, there are several functions/methods to output text. Some of them
+are C&lt;print&gt;, C&lt;put&gt; and C&lt;say&gt;.
+</code></pre>
+<h3>Comments</h3>
+<p>Although Pod blocks are ignored by the Rakudo Raku compiler, everything<br>
+identified as a Pod block will be read and interpreted by Pod renderers. In<br>
+order to prevent Pod blocks from being rendered by any renderer, use the<br>
+<code class="notranslate">=comment</code> directive.</p>
+<pre class="notranslate"><code class="notranslate">=comment Add more here about the algorithm.
+
+=comment Pod comments are great for documenting the documentation.
+</code></pre>
+<p>To create inline comments, use the <code class="notranslate">Z&lt;&gt;</code> code.</p>
+<pre class="notranslate"><code class="notranslate">Pod is awesome Z&lt;Of course it is!&gt;. And Raku too!
+</code></pre>
+<p>Given that the Raku interpreter never executes embedded Pod blocks,<br>
+comment blocks can also be used as an alternative form of nestable block<br>
+comments.</p>
+<h3>Links</h3>
+<p>Creating links in Pod is quite easy and is done by enclosing them in<br>
+a <code class="notranslate">L&lt;&gt;</code> code. The general format is <code class="notranslate">L&lt;Label|Url&gt;</code> with <code class="notranslate">Label</code><br>
+being optional.</p>
+<pre class="notranslate"><code class="notranslate">Raku homepage is L&lt;https://raku.org&gt;.
+L&lt;Click me!|http://link.org/&gt;.
+</code></pre>
+<p>Relative paths work too.</p>
+<pre class="notranslate"><code class="notranslate">L&lt;Go to music|/music/&gt;.
+</code></pre>
+<p>Linking to a section in the same document works as well.</p>
+<pre class="notranslate"><code class="notranslate">L&lt;Link to Headings|#Headings&gt;
+</code></pre>
+<h3>Tables</h3>
+<p>The Pod specifications are not completely handled properly yet and this<br>
+includes the handling of table. For simplicity's sake, only one way of<br>
+constructing tables is shown here. To learn about good practices and see<br>
+examples of both good and bad tables, please visit<br>
+<a href="https://docs.raku.org/language/tables" rel="nofollow">https://docs.raku.org/language/tables</a>.</p>
+<pre class="notranslate"><code class="notranslate">=begin table
+Option      | Description     
+============|================  
+data        | path to data files.
+engine      | engine to be used for processing templates.
+ext         | extension to be used for dest files.
+=end table
+</code></pre>
+<h2>Block Structures</h2>
+<p>As mentioned earlier, Pod documents are specified using directives, which are<br>
+used to delimit blocks of textual content and declare optional<br>
+<a href="#configuration-data">configuration information</a>. Every directive starts with<br>
+an equals sign (<code class="notranslate">=</code>) in the first column. The content of a document is<br>
+specified within one or more blocks. Every Pod block may be declared in any of<br>
+three equivalent forms: delimited style, paragraph style, or abbreviated style.</p>
+<p>Up to this point, we have only used the abbreviated style for the block<br>
+types (e.g., <code class="notranslate">=head1</code>, <code class="notranslate">=para</code>, <code class="notranslate">=comment</code>, <code class="notranslate">=item</code>, etc).</p>
+<h3>Abbreviated Blocks</h3>
+<p>Abbreviated blocks are introduced by an <code class="notranslate">=</code> sign in the first column, which<br>
+is followed immediately by the <code class="notranslate">typename</code> of the block and then the content.<br>
+The rest of the line is treated as block data, rather than as configuration.<br>
+The content terminates at the next Pod directive or the first blank line<br>
+(which is not part of the block data). The general syntax is</p>
+<pre class="notranslate"><code class="notranslate">=BLOCK_TYPE  BLOCK_DATA
+</code></pre>
+<p>For example:</p>
+<pre class="notranslate"><code class="notranslate">=head1 Top level heading
+</code></pre>
+<h3>Delimited Blocks</h3>
+<p>Delimited blocks are bounded by <code class="notranslate">=begin</code> and <code class="notranslate">=end</code> markers, both of which are<br>
+followed by a valid Pod identifier, which is the <code class="notranslate">typename</code> of the block.<br>
+The general syntax is</p>
+<pre class="notranslate"><code class="notranslate">=begin BLOCK_TYPE
+BLOCK_DATA
+=end BLOCK_TYPE
+</code></pre>
+<p>For example:</p>
+<pre class="notranslate"><code class="notranslate">=begin head1
+Top level heading
+=end head1
+</code></pre>
+<p>This type of blocks is useful for creating headings, list items, code blocks,<br>
+etc. with multiple paragraphs. For example,</p>
+<ul>
+<li>a multiline item of a list</li>
+</ul>
+<pre class="notranslate"><code class="notranslate">=begin item
+This is a paragraph in list item.
+
+This is another paragraph in the same list item.
+=end item
+</code></pre>
+<ul>
+<li>a code block</li>
+</ul>
+<pre class="notranslate"><code class="notranslate">=begin code
+#`(
+A non-efficient recursive implementation of a power function using multi subs.
+)
+
+multi pow( Real $base, 0 ) { 1 }
+
+multi pow( Real $base, Int $exp where * ≥ 0) {
+	$base * pow($base, $exp - 1)
+}
+
+multi pow( Real $base ) {
+     pow($base, 2)
+}
+
+say pow(3, 0);   #=&gt; 1
+say pow(4.2, 2); #=&gt; 17.64
+say pow(6);      #=&gt; 36
+=end code
+</code></pre>
+<h3>Paragraph Blocks</h3>
+<p>Paragraph blocks are introduced by a <code class="notranslate">=for</code> marker and terminated by<br>
+the next Pod directive or the first blank line (which is not considered to<br>
+be part of the block's contents). The <code class="notranslate">=for</code> marker is followed by the<br>
+<code class="notranslate">typename</code> of the block. The general syntax is</p>
+<pre class="notranslate"><code class="notranslate">=for BLOCK_TYPE
+BLOCK DATA
+</code></pre>
+<p>For example:</p>
+<pre class="notranslate"><code class="notranslate">=for head1
+Top level heading
+</code></pre>
+<h2>Configuration Data</h2>
+<p>Except for abbreviated blocks, both delimited blocks and paragraph<br>
+blocks can be supplied with configuration information about their<br>
+contents right after the <code class="notranslate">typename</code> of the block. Thus the following<br>
+are more general syntaxes for these blocks:</p>
+<ul>
+<li>Delimited blocks</li>
+</ul>
+<pre class="notranslate"><code class="notranslate">=begin BLOCK_TYPE OPTIONAL_CONFIG_INFO
+=                 ADDITIONAL_CONFIG_INFO
+BLOCK_DATA
+=end BLOCK_TYPE
+</code></pre>
+<ul>
+<li>Paragraph blocks</li>
+</ul>
+<pre class="notranslate"><code class="notranslate">=for BLOCK_TYPE OPTIONAL_CONFIG_INFO
+=               ADDITIONAL_CONFIG_INFO
+BLOCK DATA
+</code></pre>
+<p>The configuration information is provided in a format akin to the<br>
+<a href="https://docs.raku.org/language/glossary#index-entry-Colon_Pair" rel="nofollow">"colon pair"</a><br>
+syntax in Raku. The following table is a simplified version of the<br>
+different ways in which configuration info can be supplied. Please go to<br>
+<a href="https://docs.raku.org/language/pod#Configuration_information" rel="nofollow">https://docs.raku.org/language/pod#Configuration_information</a> for a more<br>
+thorough treatment of the subject.</p>
+<table role="table">
+<thead>
+<tr>
+<th align="left">Value</th>
+<th align="left">Specify with...</th>
+<th align="left">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">List</td>
+<td align="left">:key($elem1, $elem2, ...)</td>
+<td align="left">:tags('Pod', 'Raku')</td>
+</tr>
+<tr>
+<td align="left">Hash</td>
+<td align="left">:key{$key1 =&gt; $value1, ...}</td>
+<td align="left">:feeds{url =&gt; 'raku.org'}</td>
+</tr>
+<tr>
+<td align="left">Boolean</td>
+<td align="left">:key/:key(True)</td>
+<td align="left">:skip-test(True)</td>
+</tr>
+<tr>
+<td align="left">Boolean</td>
+<td align="left">:!key/:key(False)</td>
+<td align="left">:!skip-test</td>
+</tr>
+<tr>
+<td align="left">String</td>
+<td align="left">:key('string')</td>
+<td align="left">:nonexec-reason('SyntaxError')</td>
+</tr>
+<tr>
+<td align="left">Int</td>
+<td align="left">:key(2)</td>
+<td align="left">:post-number(6)</td>
+</tr>
+</tbody>
+</table>
+<h3>Standard Configuration Options</h3>
+<p>Pod provides a small number of standard configuration options that can<br>
+be applied uniformly to built-in block types. Some of them are:</p>
+<ul>
+<li><code class="notranslate">:numbered</code></li>
+</ul>
+<p>This option specifies that the block is to be numbered. The most common<br>
+use of this option is to create numbered headings and ordered lists, but it<br>
+can be applied to any block.</p>
+<p>For example:</p>
+<pre class="notranslate"><code class="notranslate">=for head1 :numbered
+The Problem
+=for head1 :numbered
+The Solution
+=for head2 :numbered
+Analysis
+=for head3 :numbered
+Overview
+</code></pre>
+<ul>
+<li><code class="notranslate">:allow</code></li>
+</ul>
+<p>The value of the <code class="notranslate">:allow</code> option must be a list of the (single-letter) names<br>
+of one or more formatting codes. Those codes will then remain active inside<br>
+the code block. The option is most often used on <code class="notranslate">=code</code> blocks to allow<br>
+mark-up within those otherwise verbatim blocks, though it can be used in any<br>
+block that contains verbatim text.</p>
+<p>Given the following snippet:</p>
+<pre class="notranslate"><code class="notranslate">=begin code :allow('B', 'I')
+B&lt;sub&gt; greet( $name ) {
+    B&lt;say&gt; "Hello, $nameI&lt;!&gt;";
+}
+=end code
+</code></pre>
+<p>we get the following output:</p>
+<pre class="notranslate"><strong>sub</strong> greet( $name ) {
+    <strong>say</strong> "Hello, $name<em>!</em>";
+}
+</pre>
+<p>This is highly dependent on the format output. For example, while this works<br>
+when Pod is converted to HTML, it might not be preserved when converted<br>
+to Markdown.</p>
+<h3>Block Pre-configuration</h3>
+<p>The <code class="notranslate">=config</code> directive allows you to prespecify standard configuration<br>
+information that is applied to every block of a particular type.<br>
+The general syntax for configuration directives is:</p>
+<pre class="notranslate"><code class="notranslate">=config BLOCK_TYPE  CONFIG OPTIONS
+=                  ADDITIONAL_CONFIG_INFO
+</code></pre>
+<p>For example, to specify that every heading level 1 be numbered, bold<br>
+and underlined, you preconfigure the <code class="notranslate">=head1</code> as follows:</p>
+<pre class="notranslate"><code class="notranslate">=config head1 :formatted('B', 'U') :numbered
+</code></pre>
+<h2>Semantic Blocks</h2>
+<p>All uppercase block typenames are reserved for specifying standard<br>
+documentation, publishing, source components, or meta-information.<br>
+Some of them are:</p>
+<pre class="notranslate"><code class="notranslate">=NAME
+=AUTHOR
+=VERSION
+=CREATED
+=SYNOPSIS
+=DESCRIPTION
+=USAGE
+</code></pre>
+<p>Most of these blocks would typically be used in their full<br>
+delimited forms. For example,</p>
+<pre class="notranslate"><code class="notranslate">=NAME B&lt;Doc::Magic&gt;
+
+=begin DESCRIPTION
+This module helps you generate documentation automagically.
+Not source code needed! Most of it is outsourced from a black hole.
+=end DESCRIPTION
+
+=begin SYNOPSIS
+=begin code
+	use Doc::Magic;
+
+ 	my Doc::Magic $doc .= new();
+
+    my $result = $doc.create-documentation($fh);
+=end code
+=end SYNOPSIS
+
+=AUTHOR Authorius Docus
+=VERSION 42
+</code></pre>
+<h2>Miscellaneous</h2>
+<h3>Notes</h3>
+<p>Notes are rendered as footnotes and created by enclosing a note in a<br>
+<code class="notranslate">N&lt;&gt;</code> code.</p>
+<pre class="notranslate"><code class="notranslate">In addition, the language is also multi-paradigmatic N&lt;According to Wikipedia,
+this means that it supports procedural, object-oriented, and functional
+programming.&gt;
+</code></pre>
+<h3>Keyboard Input</h3>
+<p>To flag text as keyboard input enclose it in a <code class="notranslate">K&lt;&gt;</code> code.</p>
+<pre class="notranslate"><code class="notranslate">Enter your name K&lt;John Doe&gt;
+</code></pre>
+<h3>Terminal Output</h3>
+<p>To flag text as terminal output enclose it in <code class="notranslate">T&lt;&gt;</code> code.</p>
+<pre class="notranslate"><code class="notranslate">Hello, T&lt;John Doe&gt;
+</code></pre>
+<h3>Unicode</h3>
+<p>To include Unicode code points or HTML5 character references in<br>
+a Pod document, enclose them in a <code class="notranslate">E&lt;&gt;</code> code.</p>
+<p>For example:</p>
+<pre class="notranslate"><code class="notranslate">Raku makes considerable use of the E&lt;171&gt; and E&lt;187&gt; characters.
+Raku makes considerable use of the E&lt;laquo&gt; and E&lt;raquo&gt; characters.
+</code></pre>
+<p>is rendered as:</p>
+<p>Raku makes considerable use of the « and » characters.<br>
+Raku makes considerable use of the « and » characters.</p>
+<h2>Rendering Pod</h2>
+<p>To generate any output (i.e., Markdown, HTML, Text, etc.), you need to<br>
+have the Rakudo Raku compiler installed. In addition, you must install<br>
+a module (e.g., <code class="notranslate">Pod::To::Markdown</code>, <code class="notranslate">Pod::To::HTML</code>, <code class="notranslate">Pod::To::Text</code>, etc.)<br>
+that generates your desired output from Pod.</p>
+<p>For instructions about installing Rakudo for running raku programs,<br>
+<a href="https://raku.org/downloads/" rel="nofollow">look here</a>.</p>
+<p>Run the following command to generate a certain output:</p>
+<pre class="notranslate"><code class="notranslate">raku --doc=TARGET input.pod6 &gt; output.html
+</code></pre>
+<p>with <code class="notranslate">TARGET</code> being <code class="notranslate">Markdown</code>, <code class="notranslate">HTML</code>, <code class="notranslate">Text</code>, etc. Thus to generate<br>
+Markdown from Pod, run this:</p>
+<pre class="notranslate"><code class="notranslate">raku --doc=Markdown input.pod6 &gt; output.html
+</code></pre>
+<h2>Accessing Pod</h2>
+<p>In order to access Pod documentation from within a Raku program,<br>
+it is required to use the special <code class="notranslate">=</code> twigil (e.g., <code class="notranslate">$=pod</code>, <code class="notranslate">$=SYNOPSIS</code>,etc).</p>
+<p>The <code class="notranslate">$=</code> construct provides the introspection over the Pod structure,<br>
+producing a <code class="notranslate">Pod::Block</code> tree root from which it is possible to access<br>
+the whole structure of the Pod document.</p>
+<p>If we place the following piece of Raku code and the Pod documentation<br>
+in the section <a href="#semantic-blocks">Semantic blocks</a> in the same file:</p>
+<pre class="notranslate"><code class="notranslate">my %used-directives;
+for $=pod -&gt; $pod-item {
+    for $pod-item.contents -&gt; $pod-block {
+        next unless $pod-block ~~ Pod::Block::Named;
+        %used-directives{$pod-block.name} = True;
+    }
+}
+
+say %used-directives.keys.join("\n");
+</code></pre>
+<p>we get the following output:</p>
+<pre class="notranslate"><code class="notranslate">SYNOPSIS
+NAME
+VERSION
+AUTHOR
+DESCRIPTION
+</code></pre>
+<h2>Additional Information</h2>
+<ul>
+<li><a href="https://docs.raku.org/language/pod" rel="nofollow">https://docs.raku.org/language/pod</a> for the Pod documentation.</li>
+<li><a href="https://docs.raku.org/language/tables" rel="nofollow">https://docs.raku.org/language/tables</a> for advices about Pod tables.</li>
+<li><a href="https://design.raku.org/S26.html" rel="nofollow">https://design.raku.org/S26.html</a> for the Pod specification.</li>
+</ul>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Luis F. Uceta", "https://uzluisf.gitlab.io/"]
+</code></pre>

@@ -1,0 +1,205 @@
+<h1>PureScript</h1>
+<p>PureScript is a small strongly, statically typed language compiling to JavaScript.</p>
+<ul>
+<li>Learn more at <a href="https://www.purescript.org/" rel="nofollow">https://www.purescript.org/</a></li>
+<li>Documentation: <a href="https://pursuit.purescript.org/" rel="nofollow">https://pursuit.purescript.org/</a></li>
+<li>Book: Purescript by Example, <a href="https://book.purescript.org/" rel="nofollow">https://book.purescript.org/</a></li>
+</ul>
+<p>All the noncommented lines of code can be run in the PSCi REPL, though some<br>
+will require "paste" mode (<code class="notranslate">:paste</code> followed by multiple lines, terminated by<br>
+^D).</p>
+<div class="highlight highlight-source-haskell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">--</span></span>
+<span class="pl-c"><span class="pl-c">--</span> 1. Primitive datatypes that corresponds to their JavaScript</span>
+<span class="pl-c"><span class="pl-c">--</span> equivalents at runtime.</span>
+
+<span class="pl-k">import</span> <span class="pl-c1">Prelude</span>
+<span class="pl-c"><span class="pl-c">--</span> Numbers</span>
+<span class="pl-c1">1.0</span> <span class="pl-k">+</span> <span class="pl-c1">7.2</span><span class="pl-k">*</span><span class="pl-c1">5.5</span> <span class="pl-k">::</span> <span class="pl-en">Number</span> <span class="pl-c"><span class="pl-c">--</span> 40.6</span>
+<span class="pl-c"><span class="pl-c">--</span> Ints</span>
+<span class="pl-c1">1</span> <span class="pl-k">+</span> <span class="pl-c1">2</span><span class="pl-k">*</span><span class="pl-c1">5</span> <span class="pl-k">::</span> <span class="pl-en"><span class="pl-c1">Int</span></span> <span class="pl-c"><span class="pl-c">--</span> 11</span>
+<span class="pl-c"><span class="pl-c">--</span> Types are inferred, so the following works fine</span>
+<span class="pl-c1">9.0</span><span class="pl-k">/</span><span class="pl-c1">2.5</span> <span class="pl-k">+</span> <span class="pl-c1">4.4</span> <span class="pl-c"><span class="pl-c">--</span> 8.0</span>
+<span class="pl-c"><span class="pl-c">--</span> But Ints and Numbers don't mix, so the following won't</span>
+<span class="pl-c1">5</span><span class="pl-k">/</span><span class="pl-c1">2</span> <span class="pl-k">+</span> <span class="pl-c1">2.5</span> <span class="pl-c"><span class="pl-c">--</span> Expression 2.5 does not have type Int</span>
+<span class="pl-c"><span class="pl-c">--</span> Hexadecimal literals</span>
+<span class="pl-c1">0xff</span> <span class="pl-k">+</span> <span class="pl-c1">1</span> <span class="pl-c"><span class="pl-c">--</span> 256</span>
+<span class="pl-c"><span class="pl-c">--</span> Unary negation</span>
+<span class="pl-c1">6</span> <span class="pl-k">*</span> <span class="pl-k">-</span><span class="pl-c1">3</span> <span class="pl-c"><span class="pl-c">--</span> -18</span>
+<span class="pl-c1">6</span> <span class="pl-k">*</span> <span class="pl-c1">negate</span> <span class="pl-c1">3</span> <span class="pl-c"><span class="pl-c">--</span> -18</span>
+<span class="pl-c"><span class="pl-c">--</span> Modulus, from purescript-math (Math)</span>
+<span class="pl-c1">3.0</span> <span class="pl-k">%</span> <span class="pl-c1">2.0</span> <span class="pl-c"><span class="pl-c">--</span> 1.0</span>
+<span class="pl-c1">4.0</span> <span class="pl-k">%</span> <span class="pl-c1">2.0</span> <span class="pl-c"><span class="pl-c">--</span> 0.0</span>
+<span class="pl-c"><span class="pl-c">--</span> Inspect the type of an expression in psci</span>
+<span class="pl-k">:</span>t <span class="pl-c1">9.5</span><span class="pl-k">/</span><span class="pl-c1">2.5</span> <span class="pl-k">+</span> <span class="pl-c1">4.4</span> <span class="pl-c"><span class="pl-c">--</span> Number</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Booleans</span>
+<span class="pl-en">true</span> <span class="pl-k">::</span> <span class="pl-en">Boolean</span> <span class="pl-c"><span class="pl-c">--</span> true</span>
+<span class="pl-en">false</span> <span class="pl-k">::</span> <span class="pl-en">Boolean</span> <span class="pl-c"><span class="pl-c">--</span> false</span>
+<span class="pl-c"><span class="pl-c">--</span> Negation</span>
+<span class="pl-c1">not</span> true <span class="pl-c"><span class="pl-c">--</span> false</span>
+<span class="pl-c1">23</span> <span class="pl-k">==</span> <span class="pl-c1">23</span> <span class="pl-c"><span class="pl-c">--</span> true</span>
+<span class="pl-c1">1</span> <span class="pl-k">/=</span> <span class="pl-c1">4</span> <span class="pl-c"><span class="pl-c">--</span> true</span>
+<span class="pl-c1">1</span> <span class="pl-k">&gt;=</span> <span class="pl-c1">4</span> <span class="pl-c"><span class="pl-c">--</span> false</span>
+<span class="pl-c"><span class="pl-c">--</span> Comparisons &lt; &lt;= &gt; &gt;=</span>
+<span class="pl-c"><span class="pl-c">--</span> are defined in terms of compare</span>
+<span class="pl-c1">compare</span> <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c"><span class="pl-c">--</span> LT</span>
+<span class="pl-c1">compare</span> <span class="pl-c1">2</span> <span class="pl-c1">2</span> <span class="pl-c"><span class="pl-c">--</span> EQ</span>
+<span class="pl-c1">compare</span> <span class="pl-c1">3</span> <span class="pl-c1">2</span> <span class="pl-c"><span class="pl-c">--</span> GT</span>
+<span class="pl-c"><span class="pl-c">--</span> Conjunction and Disjunction</span>
+true <span class="pl-k">&amp;&amp;</span> (<span class="pl-c1">9</span> <span class="pl-k">&gt;=</span> <span class="pl-c1">19</span> <span class="pl-k">||</span> <span class="pl-c1">1</span> <span class="pl-k">&lt;</span> <span class="pl-c1">2</span>) <span class="pl-c"><span class="pl-c">--</span> true</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Strings</span>
+<span class="pl-s"><span class="pl-pds">"</span>Hello<span class="pl-pds">"</span></span> <span class="pl-k">::</span> <span class="pl-en"><span class="pl-c1">String</span></span> <span class="pl-c"><span class="pl-c">--</span> "Hello"</span>
+<span class="pl-c"><span class="pl-c">--</span> Multiline string without newlines, to run in PSCi use "paste" mode.</span>
+<span class="pl-s"><span class="pl-pds">"</span>Hello\</span>
+<span class="pl-s">\orld<span class="pl-pds">"</span></span> <span class="pl-c"><span class="pl-c">--</span> "Helloworld"</span>
+<span class="pl-c"><span class="pl-c">--</span> Multiline string with newlines</span>
+<span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span><span class="pl-pds">"</span>Hello</span>
+<span class="pl-s">world<span class="pl-pds">"</span><span class="pl-pds">"</span><span class="pl-pds">"</span></span> <span class="pl-c"><span class="pl-c">--</span> "Hello\nworld"</span>
+<span class="pl-c"><span class="pl-c">--</span> Concatenate</span>
+<span class="pl-s"><span class="pl-pds">"</span>such <span class="pl-pds">"</span></span> <span class="pl-k">&lt;&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>amaze<span class="pl-pds">"</span></span> <span class="pl-c"><span class="pl-c">--</span> "such amaze"</span>
+
+<span class="pl-c"><span class="pl-c">--</span></span>
+<span class="pl-c"><span class="pl-c">--</span> 2. Arrays are JavaScript arrays, but must be homogeneous</span>
+
+[<span class="pl-c1">1</span>,<span class="pl-c1">1</span>,<span class="pl-c1">2</span>,<span class="pl-c1">3</span>,<span class="pl-c1">5</span>,<span class="pl-c1">8</span>] <span class="pl-k">::</span> <span class="pl-en">Array</span> <span class="pl-en"><span class="pl-c1">Int</span></span> <span class="pl-c"><span class="pl-c">--</span> [1,1,2,3,5,8]</span>
+[<span class="pl-c1">1.2</span>,<span class="pl-c1">2.0</span>,<span class="pl-c1">3.14</span>] <span class="pl-k">::</span> <span class="pl-en">Array</span> <span class="pl-en">Number</span> <span class="pl-c"><span class="pl-c">--</span> [1.2,2.0,3.14]</span>
+[true, true, false] <span class="pl-k">::</span> <span class="pl-en">Array</span> <span class="pl-en">Boolean</span> <span class="pl-c"><span class="pl-c">--</span> [true,true,false]</span>
+<span class="pl-c"><span class="pl-c">--</span> [1,2, true, "false"] won't work</span>
+<span class="pl-c"><span class="pl-c">--</span> `Cannot unify Int with Boolean`</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Requires purescript-arrays (Data.Array)</span>
+<span class="pl-c"><span class="pl-c">--</span> Cons (prepend)</span>
+<span class="pl-c1">1</span> <span class="pl-k">:</span> [<span class="pl-c1">2</span>,<span class="pl-c1">4</span>,<span class="pl-c1">3</span>] <span class="pl-c"><span class="pl-c">--</span> [1,2,4,3]</span>
+
+<span class="pl-c"><span class="pl-c">--</span> and purescript-maybe (Data.Maybe)</span>
+<span class="pl-c"><span class="pl-c">--</span> Safe access return Maybe a</span>
+<span class="pl-c1">head</span> [<span class="pl-c1">1</span>,<span class="pl-c1">2</span>,<span class="pl-c1">3</span>] <span class="pl-c"><span class="pl-c">--</span> (Just 1)</span>
+<span class="pl-c1">tail</span> [<span class="pl-c1">3</span>,<span class="pl-c1">2</span>,<span class="pl-c1">1</span>] <span class="pl-c"><span class="pl-c">--</span> (Just [2,1])</span>
+<span class="pl-c1">init</span> [<span class="pl-c1">1</span>,<span class="pl-c1">2</span>,<span class="pl-c1">3</span>] <span class="pl-c"><span class="pl-c">--</span> (Just [1,2])</span>
+<span class="pl-c1">last</span> [<span class="pl-c1">3</span>,<span class="pl-c1">2</span>,<span class="pl-c1">1</span>] <span class="pl-c"><span class="pl-c">--</span> (Just 1)</span>
+<span class="pl-c"><span class="pl-c">--</span> Array access - indexing</span>
+[<span class="pl-c1">3</span>,<span class="pl-c1">4</span>,<span class="pl-c1">5</span>,<span class="pl-c1">6</span>,<span class="pl-c1">7</span>] <span class="pl-k">!!</span> <span class="pl-c1">2</span> <span class="pl-c"><span class="pl-c">--</span> (Just 5)</span>
+<span class="pl-c"><span class="pl-c">--</span> Range</span>
+<span class="pl-c1">1</span><span class="pl-k">..</span><span class="pl-c1">5</span> <span class="pl-c"><span class="pl-c">--</span> [1,2,3,4,5]</span>
+<span class="pl-c1">length</span> [<span class="pl-c1">2</span>,<span class="pl-c1">2</span>,<span class="pl-c1">2</span>] <span class="pl-c"><span class="pl-c">--</span> 3</span>
+<span class="pl-c1">drop</span> <span class="pl-c1">3</span> [<span class="pl-c1">5</span>,<span class="pl-c1">4</span>,<span class="pl-c1">3</span>,<span class="pl-c1">2</span>,<span class="pl-c1">1</span>] <span class="pl-c"><span class="pl-c">--</span> [2,1]</span>
+<span class="pl-c1">take</span> <span class="pl-c1">3</span> [<span class="pl-c1">5</span>,<span class="pl-c1">4</span>,<span class="pl-c1">3</span>,<span class="pl-c1">2</span>,<span class="pl-c1">1</span>] <span class="pl-c"><span class="pl-c">--</span> [5,4,3]</span>
+append [<span class="pl-c1">1</span>,<span class="pl-c1">2</span>,<span class="pl-c1">3</span>] [<span class="pl-c1">4</span>,<span class="pl-c1">5</span>,<span class="pl-c1">6</span>] <span class="pl-c"><span class="pl-c">--</span> [1,2,3,4,5,6]</span>
+
+<span class="pl-c"><span class="pl-c">--</span></span>
+<span class="pl-c"><span class="pl-c">--</span> 3. Records are JavaScript objects, with zero or more fields, which</span>
+<span class="pl-c"><span class="pl-c">--</span> can have different types.</span>
+book <span class="pl-k">=</span> {title<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Foucault's pendulum<span class="pl-pds">"</span></span>, author<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Umberto Eco<span class="pl-pds">"</span></span>}
+<span class="pl-c"><span class="pl-c">--</span> Access properties</span>
+book<span class="pl-k">.</span>title <span class="pl-c"><span class="pl-c">--</span> "Foucault's pendulum"</span>
+
+getTitle b <span class="pl-k">=</span> b<span class="pl-k">.</span>title
+<span class="pl-c"><span class="pl-c">--</span> Works on all records with a title (but doesn't require any other field)</span>
+getTitle book <span class="pl-c"><span class="pl-c">--</span> "Foucault's pendulum"</span>
+getTitle {title<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Weekend in Monaco<span class="pl-pds">"</span></span>, artist<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>The Rippingtons<span class="pl-pds">"</span></span>} <span class="pl-c"><span class="pl-c">--</span> "Weekend in Monaco"</span>
+<span class="pl-c"><span class="pl-c">--</span> Can use underscores as shorthand</span>
+_<span class="pl-k">.</span>title book <span class="pl-c"><span class="pl-c">--</span> "Foucault's pendulum"</span>
+<span class="pl-c"><span class="pl-c">--</span> Update a record</span>
+changeTitle b t <span class="pl-k">=</span> b {title <span class="pl-k">=</span> t}
+getTitle (changeTitle book <span class="pl-s"><span class="pl-pds">"</span>Ill nome della rosa<span class="pl-pds">"</span></span>) <span class="pl-c"><span class="pl-c">--</span> "Ill nome della rosa"</span>
+
+<span class="pl-c"><span class="pl-c">--</span></span>
+<span class="pl-c"><span class="pl-c">--</span> 4. Functions</span>
+<span class="pl-c"><span class="pl-c">--</span> In PSCi's paste mode</span>
+<span class="pl-en">sumOfSquares</span> <span class="pl-k">::</span> <span class="pl-en"><span class="pl-c1">Int</span></span> <span class="pl-k">-&gt;</span> <span class="pl-en"><span class="pl-c1">Int</span></span> <span class="pl-k">-&gt;</span> <span class="pl-en"><span class="pl-c1">Int</span></span>
+sumOfSquares x y <span class="pl-k">=</span> x<span class="pl-k">*</span>x <span class="pl-k">+</span> y<span class="pl-k">*</span>y
+sumOfSquares <span class="pl-c1">3</span> <span class="pl-c1">4</span> <span class="pl-c"><span class="pl-c">--</span> 25</span>
+
+myMod x y <span class="pl-k">=</span> x <span class="pl-k">%</span> y
+myMod <span class="pl-c1">3.0</span> <span class="pl-c1">2.0</span> <span class="pl-c"><span class="pl-c">--</span> 1.0</span>
+<span class="pl-c"><span class="pl-c">--</span> Infix application of function</span>
+<span class="pl-c1">3</span> <span class="pl-k">`mod`</span> <span class="pl-c1">2</span> <span class="pl-c"><span class="pl-c">--</span> 1</span>
+
+<span class="pl-c"><span class="pl-c">--</span> function application has higher precedence than all other</span>
+<span class="pl-c"><span class="pl-c">--</span> operators</span>
+sumOfSquares <span class="pl-c1">3</span> <span class="pl-c1">4</span> <span class="pl-k">*</span> sumOfSquares <span class="pl-c1">4</span> <span class="pl-c1">5</span> <span class="pl-c"><span class="pl-c">--</span> 1025</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Conditional</span>
+abs' n <span class="pl-k">=</span> <span class="pl-k">if</span> n<span class="pl-k">&gt;=</span><span class="pl-c1">0</span> <span class="pl-k">then</span> n <span class="pl-k">else</span> <span class="pl-k">-</span>n
+abs' (<span class="pl-k">-</span><span class="pl-c1">3</span>) <span class="pl-c"><span class="pl-c">--</span> 3</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Guarded equations</span>
+<span class="pl-c"><span class="pl-c">--</span> In PSCi's paste mode</span>
+abs'' n <span class="pl-k">|</span> n <span class="pl-k">&gt;=</span> <span class="pl-c1">0</span>    <span class="pl-k">=</span> n
+        <span class="pl-k">|</span> <span class="pl-c1">otherwise</span> <span class="pl-k">=</span> <span class="pl-k">-</span>n
+
+<span class="pl-c"><span class="pl-c">--</span> Pattern matching</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Note the type signature, input is a list of numbers. The pattern matching</span>
+<span class="pl-c"><span class="pl-c">--</span> destructures and binds the list into parts.</span>
+<span class="pl-c"><span class="pl-c">--</span> Requires purescript-lists (Data.List) and purescript-maybe (Data.Maybe)</span>
+<span class="pl-en">first</span> <span class="pl-k">::</span> <span class="pl-k">forall</span> <span class="pl-smi">a</span><span class="pl-k">.</span> <span class="pl-en">List</span> <span class="pl-smi">a</span> <span class="pl-k">-&gt;</span> <span class="pl-en"><span class="pl-c1">Maybe</span></span> <span class="pl-smi">a</span>
+first (x <span class="pl-k">:</span> _) <span class="pl-k">=</span> <span class="pl-ent">Just</span> x
+first <span class="pl-ent">Nil</span> <span class="pl-k">=</span> <span class="pl-ent">Nothing</span>
+first (fromFoldable [<span class="pl-c1">3</span>,<span class="pl-c1">4</span>,<span class="pl-c1">5</span>]) <span class="pl-c"><span class="pl-c">--</span> (Just 3)</span>
+
+<span class="pl-en">second</span> <span class="pl-k">::</span> <span class="pl-k">forall</span> <span class="pl-smi">a</span><span class="pl-k">.</span> <span class="pl-en">List</span> <span class="pl-smi">a</span> <span class="pl-k">-&gt;</span> <span class="pl-en"><span class="pl-c1">Maybe</span></span> <span class="pl-smi">a</span>
+second <span class="pl-ent">Nil</span> <span class="pl-k">=</span> <span class="pl-ent">Nothing</span>
+second (_ <span class="pl-k">:</span> <span class="pl-ent">Nil</span>) <span class="pl-k">=</span> <span class="pl-ent">Nothing</span>
+second (_ <span class="pl-k">:</span> (y <span class="pl-k">:</span> _)) <span class="pl-k">=</span> <span class="pl-ent">Just</span> y
+second (fromFoldable [<span class="pl-c1">3</span>,<span class="pl-c1">4</span>,<span class="pl-c1">5</span>]) <span class="pl-c"><span class="pl-c">--</span> (Just 4)</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Complementing patterns to match</span>
+<span class="pl-c"><span class="pl-c">--</span> Good ol' Fibonacci</span>
+fib <span class="pl-c1">1</span> <span class="pl-k">=</span> <span class="pl-c1">1</span>
+fib <span class="pl-c1">2</span> <span class="pl-k">=</span> <span class="pl-c1">2</span>
+fib x <span class="pl-k">=</span> fib (x<span class="pl-k">-</span><span class="pl-c1">1</span>) <span class="pl-k">+</span> fib (x<span class="pl-k">-</span><span class="pl-c1">2</span>)
+fib <span class="pl-c1">10</span> <span class="pl-c"><span class="pl-c">--</span> 89</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Use underscore to match any, where you don't care about the binding name</span>
+isZero <span class="pl-c1">0</span> <span class="pl-k">=</span> true
+isZero _ <span class="pl-k">=</span> false
+isZero <span class="pl-c1">9</span> <span class="pl-c"><span class="pl-c">--</span> false</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Pattern matching on records</span>
+ecoTitle {author<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Umberto Eco<span class="pl-pds">"</span></span>, title<span class="pl-k">:</span> t} <span class="pl-k">=</span> <span class="pl-ent">Just</span> t
+ecoTitle _ <span class="pl-k">=</span> <span class="pl-ent">Nothing</span>
+
+ecoTitle {title<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Foucault's pendulum<span class="pl-pds">"</span></span>, author<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Umberto Eco<span class="pl-pds">"</span></span>} <span class="pl-c"><span class="pl-c">--</span> (Just "Foucault's pendulum")</span>
+ecoTitle {title<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>The Quantum Thief<span class="pl-pds">"</span></span>, author<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Hannu Rajaniemi<span class="pl-pds">"</span></span>} <span class="pl-c"><span class="pl-c">--</span> Nothing</span>
+<span class="pl-c"><span class="pl-c">--</span> ecoTitle requires both field to type check:</span>
+ecoTitle {title<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>The Quantum Thief<span class="pl-pds">"</span></span>} <span class="pl-c"><span class="pl-c">--</span> Object lacks required property "author"</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Lambda expressions</span>
+(<span class="pl-k">\</span>x <span class="pl-k">-&gt;</span> x<span class="pl-k">*</span>x) <span class="pl-c1">3</span> <span class="pl-c"><span class="pl-c">--</span> 9</span>
+(<span class="pl-k">\</span>x y <span class="pl-k">-&gt;</span> x<span class="pl-k">*</span>x <span class="pl-k">+</span> y<span class="pl-k">*</span>y) <span class="pl-c1">4</span> <span class="pl-c1">5</span> <span class="pl-c"><span class="pl-c">--</span> 41</span>
+sqr <span class="pl-k">=</span> <span class="pl-k">\</span>x <span class="pl-k">-&gt;</span> x<span class="pl-k">*</span>x
+
+<span class="pl-c"><span class="pl-c">--</span> Currying</span>
+myAdd x y <span class="pl-k">=</span> x <span class="pl-k">+</span> y <span class="pl-c"><span class="pl-c">--</span> is equivalent with</span>
+myAdd' <span class="pl-k">=</span> <span class="pl-k">\</span>x <span class="pl-k">-&gt;</span> <span class="pl-k">\</span>y <span class="pl-k">-&gt;</span> x <span class="pl-k">+</span> y
+add3 <span class="pl-k">=</span> myAdd <span class="pl-c1">3</span>
+<span class="pl-k">:</span>t add3 <span class="pl-c"><span class="pl-c">--</span> Int -&gt; Int</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Forward and backward function composition</span>
+<span class="pl-c"><span class="pl-c">--</span> drop 3 followed by taking 5</span>
+(<span class="pl-c1">drop</span> <span class="pl-c1">3</span> <span class="pl-k">&gt;&gt;&gt;</span> <span class="pl-c1">take</span> <span class="pl-c1">5</span>) (<span class="pl-c1">1</span><span class="pl-k">..</span><span class="pl-c1">20</span>) <span class="pl-c"><span class="pl-c">--</span> [4,5,6,7,8]</span>
+<span class="pl-c"><span class="pl-c">--</span> take 5 followed by dropping 3</span>
+(<span class="pl-c1">drop</span> <span class="pl-c1">3</span> <span class="pl-k">&lt;&lt;&lt;</span> <span class="pl-c1">take</span> <span class="pl-c1">5</span>) (<span class="pl-c1">1</span><span class="pl-k">..</span><span class="pl-c1">20</span>) <span class="pl-c"><span class="pl-c">--</span> [4,5]</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Operations using higher order functions</span>
+<span class="pl-c1">even</span> x <span class="pl-k">=</span> x <span class="pl-k">`mod`</span> <span class="pl-c1">2</span> <span class="pl-k">==</span> <span class="pl-c1">0</span>
+<span class="pl-c1">filter</span> <span class="pl-c1">even</span> (<span class="pl-c1">1</span><span class="pl-k">..</span><span class="pl-c1">10</span>) <span class="pl-c"><span class="pl-c">--</span> [2,4,6,8,10]</span>
+<span class="pl-c1">map</span> (<span class="pl-k">\</span>x <span class="pl-k">-&gt;</span> x <span class="pl-k">+</span> <span class="pl-c1">11</span>) (<span class="pl-c1">1</span><span class="pl-k">..</span><span class="pl-c1">5</span>) <span class="pl-c"><span class="pl-c">--</span> [12,13,14,15,16]</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Requires purescript-foldable-traversable (Data.Foldable)</span>
+
+<span class="pl-c1">foldr</span> <span class="pl-en">(+)</span> <span class="pl-c1">0</span> (<span class="pl-c1">1</span><span class="pl-k">..</span><span class="pl-c1">10</span>) <span class="pl-c"><span class="pl-c">--</span> 55</span>
+<span class="pl-c1">sum</span> (<span class="pl-c1">1</span><span class="pl-k">..</span><span class="pl-c1">10</span>) <span class="pl-c"><span class="pl-c">--</span> 55</span>
+<span class="pl-c1">product</span> (<span class="pl-c1">1</span><span class="pl-k">..</span><span class="pl-c1">10</span>) <span class="pl-c"><span class="pl-c">--</span> 3628800</span>
+
+<span class="pl-c"><span class="pl-c">--</span> Testing with predicate</span>
+<span class="pl-c1">any</span> <span class="pl-c1">even</span> [<span class="pl-c1">1</span>,<span class="pl-c1">2</span>,<span class="pl-c1">3</span>] <span class="pl-c"><span class="pl-c">--</span> true</span>
+<span class="pl-c1">all</span> <span class="pl-c1">even</span> [<span class="pl-c1">1</span>,<span class="pl-c1">2</span>,<span class="pl-c1">3</span>] <span class="pl-c"><span class="pl-c">--</span> false</span>
+</pre></div>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Fredrik Dyrkell", "http://www.lexicallyscoped.com"]
+- ["Thimoteus", "https://github.com/Thimoteus"]
+</code></pre>

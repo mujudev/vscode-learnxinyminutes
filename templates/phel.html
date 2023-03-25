@@ -1,0 +1,330 @@
+<h1>Phel</h1>
+<p><a href="https://phel-lang.org/" rel="nofollow">Phel</a> is a functional programming language that compiles to PHP.<br>
+It is a dialect of Lisp inspired by Clojure and Janet.</p>
+<h2>Features</h2>
+<ul>
+<li>Built on PHP's ecosystem</li>
+<li>Good error reporting</li>
+<li>Persistent Datastructures (Lists, Vectors, Maps and Sets)</li>
+<li>Macros</li>
+<li>Recursive functions</li>
+<li>Powerful but simple Syntax</li>
+<li>REPL</li>
+</ul>
+<div class="highlight highlight-source-lisp"><pre class="notranslate"># Comments begin with a # character <span class="pl-k">and</span> continue until the end of the line. There are no multi-line comments.
+
+# Phel is written in <span class="pl-s"><span class="pl-pds">"</span>forms<span class="pl-pds">"</span></span>, which are just
+# lists of things inside parentheses, separated by whitespace.
+
+# The first call in a file should be ns, to set the namespace
+(ns learn-phel)
+
+# More basic examples:
+
+# str will create a string out of all its arguments
+(str <span class="pl-s"><span class="pl-pds">"</span>Hello<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span> <span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>World<span class="pl-pds">"</span></span>) <span class="pl-c1">#=&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>Hello World<span class="pl-pds">"</span></span>
+
+# Math is straightforward
+(+ <span class="pl-c1">1</span> <span class="pl-c1">1</span>) <span class="pl-c1">#=&gt;</span> <span class="pl-c1">2</span>
+(- <span class="pl-c1">2</span> <span class="pl-c1">1</span>) <span class="pl-c1">#=&gt;</span> <span class="pl-c1">1</span>
+(* <span class="pl-c1">1</span> <span class="pl-c1">2</span>) <span class="pl-c1">#=&gt;</span> <span class="pl-c1">2</span>
+(/ <span class="pl-c1">2</span> <span class="pl-c1">1</span>) <span class="pl-c1">#=&gt;</span> <span class="pl-c1">2</span>
+
+# Equality is =
+(= <span class="pl-c1">1</span> <span class="pl-c1">1</span>) <span class="pl-c1">#=&gt;</span> true
+(= <span class="pl-c1">2</span> <span class="pl-c1">1</span>) <span class="pl-c1">#=&gt;</span> false
+
+# You need <span class="pl-k">not</span> for logic, too
+(<span class="pl-k">not</span> true) <span class="pl-c1">#=&gt;</span> false
+
+# Nesting forms works as you expect
+(+ <span class="pl-c1">1</span> (- <span class="pl-c1">3</span> <span class="pl-c1">2</span>)) # = <span class="pl-c1">1</span> + (<span class="pl-c1">3</span> - <span class="pl-c1">2</span>) =&gt; <span class="pl-c1">2</span>
+
+# Phel inherits PHP under the hood, so it can use native PHP (functions <span class="pl-k">and</span> classes) without 
+# any additional cost by using the `php/` prefix to all PHP native functions.
+
+# Types
+<span class="pl-c1">#############</span>
+
+# Booleans are similar as the native PHP ones
+
+<span class="pl-c1">nil</span>
+true
+false 
+
+# Symbols are used to name functions <span class="pl-k">and</span> variables in Phel
+# For example: symbol, snake_case_symbol, my-module/my-function
+
+# Keywords are like symbols that begin with a colon character. However, they are used as constants rather than a name for something.
+
+:keyword
+:0x0x0x
+::
+
+# Numbers in Phel are equivalent to numbers in PHP
+
+<span class="pl-c1">1337</span> # integer
++<span class="pl-c1">1337</span> # positive integer
+-<span class="pl-c1">1337</span> # negative integer
+
+<span class="pl-c1">1.234</span> # float
++<span class="pl-c1">1.234</span> # positive float
+-<span class="pl-c1">1.234</span> # negative float
+<span class="pl-c1">1.2e3</span> # float
+<span class="pl-c1">7E-10</span> # float
+
+# Strings are surrounded by double quotes. They almost work the same as PHP double quoted strings.
+# A string can be written in multiple lines. The line break character is then ignored by the reader.
+
+<span class="pl-s"><span class="pl-pds">"</span>hello world<span class="pl-pds">"</span></span>
+
+<span class="pl-s"><span class="pl-pds">"</span>this is<span class="pl-cce">\n</span>a<span class="pl-cce">\n</span>string<span class="pl-pds">"</span></span>
+
+<span class="pl-s"><span class="pl-pds">"</span>this</span>
+<span class="pl-s">is</span>
+<span class="pl-s">a</span>
+<span class="pl-s">string.<span class="pl-pds">"</span></span>
+
+<span class="pl-s"><span class="pl-pds">"</span>use backslack to escape <span class="pl-cce">\"</span> string<span class="pl-pds">"</span></span>
+
+<span class="pl-s"><span class="pl-pds">"</span>the dollar must not be escaped: $ or $abc just works<span class="pl-pds">"</span></span>
+
+
+# Collections &amp; Sequences
+<span class="pl-c1">#############</span>
+
+# Lists are linked-list data structures, while vectors are array-backed
+(type '(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)) <span class="pl-c1">#=&gt;</span> :<span class="pl-c1">list</span>
+(type [<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>])  <span class="pl-c1">#=&gt;</span> :vector
+
+# A <span class="pl-c1">list</span> would be written as just (<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>), but we have to <span class="pl-c1">quote</span>
+# it to stop the reader thinking it's a function.
+# Also, (<span class="pl-c1">list</span> <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>) is the same as '(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)
+
+# You can produce a (non-lazy) sequence between a range. 
+(range <span class="pl-c1">1</span> <span class="pl-c1">10</span> <span class="pl-c1">2</span>) <span class="pl-c1">#=&gt;</span> (range from to step)
+(take <span class="pl-c1">4</span> (range <span class="pl-c1">10</span>))
+
+# Use <span class="pl-c1">cons</span> to add an item to the beginning of a <span class="pl-c1">list</span>
+(<span class="pl-c1">cons</span> <span class="pl-c1">4</span> '(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)) <span class="pl-c1">#=&gt;</span> (<span class="pl-c1">4</span> <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)
+
+# Use push to add, <span class="pl-k">and</span> put to replace an item in a vector 
+(push [<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>] <span class="pl-c1">4</span>)  <span class="pl-c1">#=&gt;</span> (<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span>)
+(put [<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>] <span class="pl-c1">1</span> <span class="pl-c1">4</span>) <span class="pl-c1">#=&gt;</span> (<span class="pl-c1">1</span> <span class="pl-c1">4</span> <span class="pl-c1">3</span>)
+
+# Use concat to add lists <span class="pl-k">or</span> vectors together
+(concat [<span class="pl-c1">1</span> <span class="pl-c1">2</span>] '(<span class="pl-c1">3</span> <span class="pl-c1">4</span>)) <span class="pl-c1">#=&gt;</span> [<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span>]
+
+# Use filter, map to interact with collections
+(map inc [<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>])      <span class="pl-c1">#=&gt;</span> [<span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span>]
+(filter even? [<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>]) <span class="pl-c1">#=&gt;</span> [<span class="pl-c1">2</span>]
+
+# Use reduce to reduce them. The initial-value is mandatory
+(reduce + <span class="pl-c1">0</span> [<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span>])
+<span class="pl-c1">#=&gt;</span> (+ (+ (+ <span class="pl-c1">1</span> <span class="pl-c1">2</span>) <span class="pl-c1">3</span>) <span class="pl-c1">4</span>)
+<span class="pl-c1">#=&gt;</span> <span class="pl-c1">10</span>
+
+(reduce push [] '(<span class="pl-c1">3</span> <span class="pl-c1">2</span> <span class="pl-c1">1</span>))
+<span class="pl-c1">#=&gt;</span> (push (push (push [] <span class="pl-c1">3</span>) <span class="pl-c1">2</span>) <span class="pl-c1">1</span>)
+<span class="pl-c1">#=&gt;</span> [<span class="pl-c1">3</span> <span class="pl-c1">2</span> <span class="pl-c1">1</span>]
+
+# Functions
+<span class="pl-c1">#############</span>
+
+# Use fn to create new functions
+# A function always returns its last statement
+(fn [] <span class="pl-s"><span class="pl-pds">"</span>Hello World<span class="pl-pds">"</span></span>) <span class="pl-c1">#=&gt;</span> &lt;function&gt;
+
+# You need extra parens to call it
+((fn [] <span class="pl-s"><span class="pl-pds">"</span>Hello World<span class="pl-pds">"</span></span>)) <span class="pl-c1">#=&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>Hello World<span class="pl-pds">"</span></span>
+
+# You can bind a value to a symbol using def for definition
+(def x <span class="pl-c1">1</span>)
+x <span class="pl-c1">#=&gt;</span> <span class="pl-c1">1</span>
+
+# Variables provide a way to manage mutable state
+(def foo (var <span class="pl-c1">10</span>)) # Define a variable with value <span class="pl-c1">10</span>
+
+# Assign a function to a definition
+(def hello-world (fn [] <span class="pl-s"><span class="pl-pds">"</span>Hello World<span class="pl-pds">"</span></span>))
+(hello-world) <span class="pl-c1">#=&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>Hello World<span class="pl-pds">"</span></span>
+
+# You can shorten this process by using defn
+(defn hello-world [] <span class="pl-s"><span class="pl-pds">"</span>Hello World<span class="pl-pds">"</span></span>)
+
+# The [] is the <span class="pl-c1">list</span> of arguments for the function
+(defn hello [name]
+  (str <span class="pl-s"><span class="pl-pds">"</span>Hello <span class="pl-pds">"</span></span> name))
+(hello <span class="pl-s"><span class="pl-pds">"</span>Jens<span class="pl-pds">"</span></span>) <span class="pl-c1">#=&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>Hello Jens<span class="pl-pds">"</span></span>
+
+# You can also use this shorthand to create functions
+(def hello2 |(str <span class="pl-s"><span class="pl-pds">"</span>Hello <span class="pl-pds">"</span></span> $<span class="pl-c1">1</span>))
+(hello2 <span class="pl-s"><span class="pl-pds">"</span>Anna<span class="pl-pds">"</span></span>) <span class="pl-c1">#=&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>Hello Anna<span class="pl-pds">"</span></span>
+
+# Functions can pack extra arguments up in a seq for you
+(defn count-args [&amp; args]
+  (str <span class="pl-s"><span class="pl-pds">"</span>You passed <span class="pl-pds">"</span></span> (count args) <span class="pl-s"><span class="pl-pds">"</span> args: <span class="pl-pds">"</span></span> args))
+(count-args <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>) <span class="pl-c1">#=&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>You passed 3 args: @[1 2 3]<span class="pl-pds">"</span></span>
+
+# You can mix regular <span class="pl-k">and</span> packed arguments
+(defn hello-count [name &amp; args]
+  (str <span class="pl-s"><span class="pl-pds">"</span>Hello <span class="pl-pds">"</span></span> name <span class="pl-s"><span class="pl-pds">"</span>, you passed <span class="pl-pds">"</span></span> (count args) <span class="pl-s"><span class="pl-pds">"</span> extra args<span class="pl-pds">"</span></span>))
+(hello-count <span class="pl-s"><span class="pl-pds">"</span>Jesus<span class="pl-pds">"</span></span> <span class="pl-c1">1</span> <span class="pl-c1">2</span>) <span class="pl-c1">#=&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>Hello Jesus, you passed 2 extra args<span class="pl-pds">"</span></span>
+
+
+# Maps
+<span class="pl-c1">#############</span>
+
+# Hash maps have faster lookups but don'<span class="pl-c1">t</span> retain key order
+(type {:a <span class="pl-c1">1</span> :b <span class="pl-c1">2</span> :c <span class="pl-c1">3</span>})          <span class="pl-c1">#=&gt;</span> :hash-map
+(type (hash-map :a <span class="pl-c1">1</span> :b <span class="pl-c1">2</span> :c <span class="pl-c1">3</span>)) <span class="pl-c1">#=&gt;</span> :hash-map
+
+# Maps can use any hashable type as a key, but usually keywords are best
+# Keywords are like strings with some efficiency bonuses <span class="pl-k">and</span> they start with `:`
+(type :a) <span class="pl-c1">#=&gt;</span> :keyword
+
+(def stringmap {<span class="pl-s"><span class="pl-pds">"</span>a<span class="pl-pds">"</span></span> <span class="pl-c1">1</span> <span class="pl-s"><span class="pl-pds">"</span>b<span class="pl-pds">"</span></span> <span class="pl-c1">2</span> <span class="pl-s"><span class="pl-pds">"</span>c<span class="pl-pds">"</span></span> <span class="pl-c1">3</span>})
+stringmap  <span class="pl-c1">#=&gt;</span> {<span class="pl-s"><span class="pl-pds">"</span>a<span class="pl-pds">"</span></span> <span class="pl-c1">1</span> <span class="pl-s"><span class="pl-pds">"</span>b<span class="pl-pds">"</span></span> <span class="pl-c1">2</span> <span class="pl-s"><span class="pl-pds">"</span>c<span class="pl-pds">"</span></span> <span class="pl-c1">3</span>}
+
+(def keymap {:a <span class="pl-c1">1</span> :b <span class="pl-c1">2</span> :c <span class="pl-c1">3</span>})
+keymap  <span class="pl-c1">#=&gt;</span> {:a <span class="pl-c1">1</span> :c <span class="pl-c1">3</span> :b <span class="pl-c1">2</span>}
+
+# Retrieve a value from a map by calling it as a function
+(stringmap <span class="pl-s"><span class="pl-pds">"</span>a<span class="pl-pds">"</span></span>) <span class="pl-c1">#=&gt;</span> <span class="pl-c1">1</span>
+(keymap :a)     <span class="pl-c1">#=&gt;</span> <span class="pl-c1">1</span>
+
+# Keywords can be used to retrieve their value from a map, too!
+(:b keymap) <span class="pl-c1">#=&gt;</span> <span class="pl-c1">2</span>
+
+# Don'<span class="pl-c1">t</span> try this with strings
+# (<span class="pl-s"><span class="pl-pds">"</span>a<span class="pl-pds">"</span></span> stringmap)
+# ...Exception: Call to undefined function a()
+
+# Retrieving a non-present key returns <span class="pl-c1">nil</span>
+(stringmap <span class="pl-s"><span class="pl-pds">"</span>d<span class="pl-pds">"</span></span>) <span class="pl-c1">#=&gt;</span> <span class="pl-c1">nil</span>
+
+# Use put to add new keys to hash-maps
+(def newkeymap (put keymap :d <span class="pl-c1">4</span>))
+newkeymap <span class="pl-c1">#=&gt;</span> {:a <span class="pl-c1">1</span> :b <span class="pl-c1">2</span> :c <span class="pl-c1">3</span> :d <span class="pl-c1">4</span>}
+
+# But remember, phel types are immutable!
+keymap <span class="pl-c1">#=&gt;</span> {:a <span class="pl-c1">1</span> :b <span class="pl-c1">2</span> :c <span class="pl-c1">3</span>}
+
+# Use unset to remove keys
+(unset keymap :a) <span class="pl-c1">#=&gt;</span> {:b <span class="pl-c1">2</span> :c <span class="pl-c1">3</span>}
+
+# Sets
+<span class="pl-c1">#############</span>
+
+# A Set contains unique values in random order
+
+(type (set <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)) <span class="pl-c1">#=&gt;</span> :set
+(set <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">3</span> <span class="pl-c1">2</span> <span class="pl-c1">1</span> <span class="pl-c1">3</span> <span class="pl-c1">2</span> <span class="pl-c1">1</span>) <span class="pl-c1">#=&gt;</span> (set <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)
+
+# Add a member with push
+(push (set <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>) <span class="pl-c1">4</span>) <span class="pl-c1">#=&gt;</span> (set <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span>)
+
+# Remove one with unset
+(unset (set <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>) <span class="pl-c1">1</span>) <span class="pl-c1">#=&gt;</span> (set <span class="pl-c1">2</span> <span class="pl-c1">3</span>)
+
+# Test for existence by using the set as a function
+((set <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>) <span class="pl-c1">1</span>) <span class="pl-c1">#=&gt;</span> <span class="pl-c1">1</span>
+((set <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>) <span class="pl-c1">4</span>) <span class="pl-c1">#=&gt;</span> <span class="pl-c1">nil</span>
+
+# There are more functions like: count, union, intersection, difference, etc
+
+
+# Useful forms
+<span class="pl-c1">#############</span>
+
+# `<span class="pl-k">If</span>` conditionals in phel are special forms
+(<span class="pl-k">if</span> false <span class="pl-s"><span class="pl-pds">"</span>a<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>b<span class="pl-pds">"</span></span>) <span class="pl-c1">#=&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>b<span class="pl-pds">"</span></span>
+(<span class="pl-k">if</span> false <span class="pl-s"><span class="pl-pds">"</span>a<span class="pl-pds">"</span></span>) <span class="pl-c1">#=&gt;</span> <span class="pl-c1">nil</span>
+
+# Use <span class="pl-k">let</span> to create temporary bindings
+(<span class="pl-k">let</span> [a <span class="pl-c1">1</span> b <span class="pl-c1">2</span>]
+  (&gt; a b)) <span class="pl-c1">#=&gt;</span> false
+
+# Group statements together with <span class="pl-k">do</span>
+(<span class="pl-k">do</span>
+  (print <span class="pl-s"><span class="pl-pds">"</span>Hello<span class="pl-pds">"</span></span>)
+  <span class="pl-s"><span class="pl-pds">"</span>World<span class="pl-pds">"</span></span>) <span class="pl-c1">#=&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>World<span class="pl-pds">"</span></span> (prints <span class="pl-s"><span class="pl-pds">"</span>Hello<span class="pl-pds">"</span></span>)
+
+# Functions have an implicit <span class="pl-k">do</span>
+(defn print-<span class="pl-k">and</span>-say-hello [name]
+  (print <span class="pl-s"><span class="pl-pds">"</span>Saying hello to <span class="pl-pds">"</span></span> name)
+  (str <span class="pl-s"><span class="pl-pds">"</span>Hello <span class="pl-pds">"</span></span> name))
+(print-<span class="pl-k">and</span>-say-hello <span class="pl-s"><span class="pl-pds">"</span>Jeff<span class="pl-pds">"</span></span>) <span class="pl-c1">#=&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>Hello Jeff<span class="pl-pds">"</span></span> (prints <span class="pl-s"><span class="pl-pds">"</span>Saying hello to Jeff<span class="pl-pds">"</span></span>)
+
+# So does <span class="pl-k">let</span>
+(<span class="pl-k">let</span> [name <span class="pl-s"><span class="pl-pds">"</span>Urkel<span class="pl-pds">"</span></span>]
+  (print <span class="pl-s"><span class="pl-pds">"</span>Saying hello to <span class="pl-pds">"</span></span> name)
+  (str <span class="pl-s"><span class="pl-pds">"</span>Hello <span class="pl-pds">"</span></span> name)) <span class="pl-c1">#=&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>Hello Urkel<span class="pl-pds">"</span></span> (prints <span class="pl-s"><span class="pl-pds">"</span>Saying hello to Urkel<span class="pl-pds">"</span></span>)
+
+# Use the threading macros (-&gt; <span class="pl-k">and</span> -&gt;&gt;) to express transformations of
+# data more clearly.
+
+# The <span class="pl-s"><span class="pl-pds">"</span>Thread-first<span class="pl-pds">"</span></span> macro (-&gt;) inserts into each form the result of
+# the previous, as the first argument (second item)
+(-&gt;
+   {:a <span class="pl-c1">1</span> :b <span class="pl-c1">2</span>}
+   (put :c <span class="pl-c1">3</span>)  <span class="pl-c1">#=&gt;</span> (put {:a <span class="pl-c1">1</span> :b <span class="pl-c1">2</span>} :c <span class="pl-c1">3</span>)
+   (unset :b)) <span class="pl-c1">#=&gt;</span> (unset (put {:a <span class="pl-c1">1</span> :b <span class="pl-c1">2</span>} :c <span class="pl-c1">3</span>) :b)
+
+
+# The double arrow does the same thing, but inserts the result of
+# each line at the <span class="pl-smi">*end*</span> of the form. This is useful for collection
+# operations in particular:
+(-&gt;&gt;
+   (range <span class="pl-c1">10</span>)
+   (map inc)      <span class="pl-c1">#=&gt;</span> (map inc (range <span class="pl-c1">10</span>))
+   (filter odd?)) <span class="pl-c1">#=&gt;</span> (filter odd? (map inc (range <span class="pl-c1">10</span>)))
+                  # Result: [<span class="pl-c1">1</span> <span class="pl-c1">3</span> <span class="pl-c1">5</span> <span class="pl-c1">7</span> <span class="pl-c1">9</span>]
+
+
+# <span class="pl-k">When</span> you are in a situation where you want more freedom as where to
+# put the result of previous data transformations in an
+# expression, you can use the as-&gt; macro. With it, you can assign a
+# specific name to transformations' output <span class="pl-k">and</span> use it as a
+# placeholder in your chained expressions:
+
+(as-&gt; [<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>] input
+  (map inc input)     <span class="pl-c1">#=&gt;</span> You can use last transform's output at the last position
+  (get input <span class="pl-c1">2</span>)       <span class="pl-c1">#=&gt;</span> <span class="pl-k">and</span> at the second position, in the same expression
+  (push [<span class="pl-c1">4</span> <span class="pl-c1">5</span> <span class="pl-c1">6</span>] input <span class="pl-c1">8</span> <span class="pl-c1">9</span> <span class="pl-c1">10</span>)) <span class="pl-c1">#=&gt;</span> <span class="pl-k">or</span> in the middle !
+                               # Result: [<span class="pl-c1">4</span> <span class="pl-c1">5</span> <span class="pl-c1">6</span> <span class="pl-c1">4</span> <span class="pl-c1">8</span> <span class="pl-c1">9</span> <span class="pl-c1">10</span>]
+
+# PHP
+<span class="pl-c1">#################</span>
+
+# PHP has a huge <span class="pl-k">and</span> useful standard library, <span class="pl-k">and</span> you're able to use
+# all native functions with the prefix `php/`.
+(php/+ <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)
+
+# With :use you can use different namespaces. Similar as `use` in PHP
+(ns my\module
+  (:use \DateTimeImmutable))
+
+# You can import functions from other phel files with :require
+(ns my\module
+  (:require phel\test :refer [deftest is]))
+
+# Use the class name with a <span class="pl-s"><span class="pl-pds">"</span>php/new<span class="pl-pds">"</span></span> to make a new instance
+(php/new \DateTime) # &lt;a date-time object&gt;
+
+# Use php/-&gt; to call methods of an object
+(def d (php/new \DateTime))
+(php/-&gt; d (getTimestamp)) # &lt;a timestamp&gt;
+
+# you can <span class="pl-k">do</span> it in one line too
+(php/-&gt; (php/new \DateTime) (getTimestamp))
+
+# Use php/:: to call static methods
+(php/:: \DateTimeImmutable ATOM) # &lt;a timestamp&gt;</pre></div>
+<h3>Further Reading</h3>
+<p>This is far from exhaustive, but hopefully it's enough to get you on your feet.</p>
+<p>Read the full documentation in the website: <a href="https://phel-lang.org/documentation/getting-started/" rel="nofollow">https://phel-lang.org/</a></p>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["Chemaclass", "https://github.com/Chemaclass"]
+</code></pre>

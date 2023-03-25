@@ -1,0 +1,296 @@
+<h1>Fish</h1>
+<p>Fish (<strong>f</strong>riendly <strong>i</strong>nteractive <strong>sh</strong>ell) is the name of an exotic shell. That is a shell with a syntax that is derived from neither the Bourne-Shell nor the C-Shell.</p>
+<p>The advantage of fish is that many features that you want in a modern shell come out-of-the-box, so you don't have to install additional software like zsh and oh-my-zsh.</p>
+<p>Examples of these features are autosuggestions, 24-bit colors, Man Page Completions (meaning fish automatically parses your man pages and suggests additional options for your commands) or the ability to make options through a web page (when a GUI is installed).</p>
+<p>It was released in February 2005.</p>
+<p><a href="https://fishshell.com/docs/current/language.html" rel="nofollow">Read more</a></p>
+<p><a href="https://github.com/fish-shell/fish-shell#getting-fish">Installation guide</a></p>
+<h1>Guide</h1>
+<p>Be sure you have the newest fish shell. This was made with version 3.3.0. To test, type:</p>
+<blockquote>
+<p>fish -v</p>
+</blockquote>
+<p>To start the fish shell, type:</p>
+<blockquote>
+<p>fish</p>
+</blockquote>
+<p>to exit, type:</p>
+<blockquote>
+<p>exit</p>
+</blockquote>
+<p>or press <kbd>Ctrl + D</kbd></p>
+<p>Now, right out of the gate, there's one annoying thing in fish. It's the welcome message. Who needs that, right? When your shell is started, just type:</p>
+<blockquote>
+<p>set -U fish_greeting ""</p>
+</blockquote>
+<p>To set that to the wanted value,  .</p>
+<p>If you want to execute a single command written in bash, without switching to that shell, you can type:</p>
+<blockquote>
+<p>bash -c 'echo "fish is better than bash"'</p>
+</blockquote>
+<p>In fish, you can use single or double quotes.<br>
+The escape character is a <code class="notranslate">\</code></p>
+<p>You can change your configuration of fish either by editing the config file</p>
+<blockquote>
+<p>vim ~/.config/fish/config.fish</p>
+</blockquote>
+<p>or by opening the aforementioned web settings:</p>
+<blockquote>
+<p>fish_config</p>
+</blockquote>
+<p>Adding something to your fish PATH Variable is easy:</p>
+<blockquote>
+<p>fish_path_add ~/cowsay</p>
+</blockquote>
+<p>Can you do that with bash, huh? No, you always have to look it up... It's just that easy!</p>
+<p>But there's more. Most fish-specific commands start, you guessed it, with 'fish'. Just type in <code class="notranslate">fish</code> and press <kbd>TAB</kbd>. And there you have one of the many cool features of fish: The autocompletion that <strong>just works.</strong><br>
+Now you can navigate with <kbd>TAB</kbd>, <kbd>Shift + TAB</kbd> and your Arrow-Keys <kbd>←</kbd><kbd>↑</kbd><kbd>→</kbd><kbd>↓</kbd>.</p>
+<p>To get help, contact your local psychiatrist or type <code class="notranslate">man</code>. That will bring up the manual for that command, for example:</p>
+<blockquote>
+<p>man set</p>
+</blockquote>
+<p>If you finally tried fish, you can see something other in fish that's really cool. Everything has cool colors, if you type in something wrong, it is red, without even executing, if you put something in quotes, you see where it ends and why that quote doesn't work, because there's another qoutation mark in the quote at position 26.</p>
+<p>fish has even more cool things, like wildcards.<br>
+For example, type</p>
+<blockquote>
+<p>ls *.fish</p>
+</blockquote>
+<p>That will list all fish files in your current directory.</p>
+<p>You can have multiple wildcards per command or even a recursive wildcard, <code class="notranslate">**</code>, which basically means it includes files and directories, that fit.<br>
+For example the following command would return (in your case):</p>
+<blockquote>
+<p>ls ~/images/**.jpg</p>
+</blockquote>
+<pre class="notranslate"><code class="notranslate">~/images/nudes/pewdiepie.jpg
+~/images/nudes/peppa.jpg
+~/images/screenshots/2020-42-69.jpg
+~/images/omegalul.jpg
+</code></pre>
+<p>Of course, you can also pipe the output of a command to another command</p>
+<blockquote>
+<p>echo sick egg, nadia. no u do really goofy shit.   | grep [udense]</p>
+</blockquote>
+<p>write to a file:</p>
+<blockquote>
+<p>echo This\ is\ text &gt; file.txt</p>
+</blockquote>
+<p>(noticed the escape character?)<br>
+Add to a file:</p>
+<blockquote>
+<p>echo This\ is\ a\ line &gt;&gt; file.txt</p>
+</blockquote>
+<blockquote>
+<p>echo This\ is\ a\ second\ line &gt;&gt; file.txt</p>
+</blockquote>
+<p>For Autocompletion, just always press <kbd>TAB</kbd>. You will be surprised how many things fish knows.</p>
+<p>To use variables, just type <code class="notranslate">$VAR</code>, like in bash.</p>
+<blockquote>
+<p>echo "My home is $HOME"</p>
+</blockquote>
+<blockquote>
+<p>My home is /home/myuser</p>
+</blockquote>
+<p>Here comes a difference between single and double quotes. If you use a variable in single quotes, it will not substitute it.</p>
+<blockquote>
+<p>echo 'My home is $HOME'</p>
+</blockquote>
+<blockquote>
+<p>My home is $HOME</p>
+</blockquote>
+<p>More on variables later.</p>
+<p>To execute two commands, separate them with <code class="notranslate">;</code></p>
+<blockquote>
+<p>echo Lol; echo this is fun</p>
+</blockquote>
+<p>The status code of the last command is stored in <code class="notranslate">$status</code></p>
+<p>You can use &amp;&amp; for two commands that depend on each other.</p>
+<blockquote>
+<p>set var lol &amp;&amp; echo $var</p>
+</blockquote>
+<p>You can also use and,<br>
+which executes if the previous command was successful</p>
+<p>or<br>
+which executes if the previous command was not successful</p>
+<p>and not<br>
+which inverts the exit status of a command.</p>
+<p>For example:</p>
+<blockquote>
+<p>if not  echo It's very late I should not waste my time with this</p>
+</blockquote>
+<blockquote>
+<blockquote>
+<p>echo Nobody heard you</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<p>end</p>
+</blockquote>
+<p>(You can of course do all of that in the shell)</p>
+<hr>
+<p>Now let's start with the scripting part of fish.</p>
+<p>As with every shell, you can not only execute commands in the shell, but also as files, saved as a  <code class="notranslate">.fish</code> file.<br>
+(You can also execute <code class="notranslate">.sh</code> files with fish syntax, but I always use <code class="notranslate">.fish</code> for fish-syntax scripts to distinguish them from bash script files)</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> This is a comment in fish.</span>
+<span class="pl-c"><span class="pl-c">#</span> </span>
+<span class="pl-c"><span class="pl-c">#</span> If you execute a file without specifying an interpreter, </span>
+<span class="pl-c"><span class="pl-c">#</span> meaning the software that runs your script, you need to tell the shell, </span>
+<span class="pl-c"><span class="pl-c">#</span> where that interpreter is. </span>
+<span class="pl-c"><span class="pl-c">#</span> For fish you just add the following comment as the first line in your script:</span>
+
+<span class="pl-c"><span class="pl-c">#!</span>/bin/fish</span>
+
+<span class="pl-c"><span class="pl-c">#</span> When executing via e.g. fish /path/to/script.fish</span>
+<span class="pl-c"><span class="pl-c">#</span> you don't need that, because you specified fish as an interpreter</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Let's start with variables.</span>
+<span class="pl-c"><span class="pl-c">#</span> for use inside a program, you can use the syntax</span>
+<span class="pl-c1">set</span> name = <span class="pl-s"><span class="pl-pds">'</span>My Variable<span class="pl-pds">'</span></span>
+
+
+<span class="pl-c"><span class="pl-c">#</span> use</span>
+<span class="pl-c1">set</span> -x name value
+<span class="pl-c"><span class="pl-c">#</span> to eXport</span>
+<span class="pl-c1">set</span> -e name
+<span class="pl-c"><span class="pl-c">#</span> to Erase</span>
+
+<span class="pl-c"><span class="pl-c">#</span> a variable set with a space doesn't get sent as two arguments, but as one, as you would expect it. </span>
+<span class="pl-c1">set</span> turtlefolder <span class="pl-s"><span class="pl-pds">'</span>Turtle Folder<span class="pl-pds">'</span></span>
+mkdir <span class="pl-smi">$turtlefolder</span>
+
+<span class="pl-c"><span class="pl-c">#</span> This will create one folder, as expected, not two, like in bash... </span>
+<span class="pl-c"><span class="pl-c">#</span> Who would even want that? tHiS iS a fEaTurE, nOt a bUg...</span>
+
+<span class="pl-c"><span class="pl-c">#</span> you can even have lists as variables. This actually makes sense, because if you want to have a variable that would create two folders, you just give mkdir a list of your foldernames.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> you can then count the entries in that list with:</span>
+count <span class="pl-smi">$PATH</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Not only is everything awesome, but in fish, everything is also a list. </span>
+<span class="pl-c"><span class="pl-c">#</span> So $PWD for example is a list of length 1. </span>
+<span class="pl-c"><span class="pl-c">#</span> To make a list, just give the set command multiple arguments:</span>
+<span class="pl-c1">set</span> list entry1 entry2 entry3
+<span class="pl-c"><span class="pl-c">#</span> that way you can also append something to an existing variable:</span>
+<span class="pl-c1">set</span> PATH <span class="pl-smi">$PATH</span> <span class="pl-k">~</span>/cowsay/
+
+<span class="pl-c"><span class="pl-c">#</span> But, as previously mentioned, we also have a simpler way to do that specifically in fish.</span>
+<span class="pl-c"><span class="pl-c">#</span> As with every Array/List, you can access it with </span>
+<span class="pl-smi">$listvar</span>[2]
+<span class="pl-c"><span class="pl-c">#</span> there's also ranges with </span>
+<span class="pl-smi">$listvar</span>[1..5] 
+<span class="pl-c"><span class="pl-c">#</span> and you can use negative numbers like </span>
+<span class="pl-smi">$listvar</span>[-1]
+<span class="pl-c"><span class="pl-c">#</span> e.g to access the last element.</span>
+
+
+
+<span class="pl-c"><span class="pl-c">#</span> You can also do fancy cartesian products when you combine two list variables:</span>
+<span class="pl-c1">set</span> a 1 2 3
+<span class="pl-c1">set</span> 1 a b c
+<span class="pl-c1">echo</span> <span class="pl-smi">$a</span><span class="pl-smi">$1</span>
+<span class="pl-c"><span class="pl-c">#</span> Will output : 1a 2a 3a 1b 2b 3b 1c 2c 3c</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Of course, if you separate them, it will see them as two separate arguments and echo them one after the other. THAT is expected behavior @bash.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> There are also other useful things, like command substitutions. For example, when you want to output the returns of two commands in one line. In bash you would do that with</span>
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-s"><span class="pl-pds">`</span>ls<span class="pl-pds">`</span></span> is in <span class="pl-smi">$PWD</span><span class="pl-pds">"</span></span> 
+<span class="pl-c"><span class="pl-c">#</span> or </span>
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-s"><span class="pl-pds">$(</span>ls<span class="pl-pds">)</span></span> is in <span class="pl-smi">$PWD</span><span class="pl-pds">"</span></span> 
+
+<span class="pl-c"><span class="pl-c">#</span> if you ask me, that's unnecessary. I always type in the wrong apostrophe. Why not just use two parenthesis, like in fish?</span>
+<span class="pl-c1">echo</span> (ls) is <span class="pl-k">in</span> <span class="pl-smi">$PWD</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Yep, that easy. And thanks to fish's highlighting you can instantly see, if you typed it in correctly.</span>
+
+<span class="pl-c"><span class="pl-c">#</span> And, as you would expect, if you ask me, your commands don't work in quotes. I mean why bash? Ok I'll stop now. But in fish, just do:</span>
+<span class="pl-c1">echo</span> (ls)<span class="pl-s"><span class="pl-pds">"</span> is in <span class="pl-smi">$PWD</span><span class="pl-pds">"</span></span>
+<span class="pl-c"><span class="pl-c">#</span> or</span>
+<span class="pl-c1">set</span> myvar <span class="pl-s"><span class="pl-pds">"</span>The file<span class="pl-pds">"</span></span>(ls -a)<span class="pl-s"><span class="pl-pds">"</span> is in the directory <span class="pl-smi">$PWD</span><span class="pl-pds">"</span></span>
+<span class="pl-c"><span class="pl-c">#</span> will make a List with the string and all files. Try it out. Isn't that cool?</span>
+
+<span class="pl-c"><span class="pl-c">#</span> And to separate these variables in separate arguments, just put a space between them:</span>
+
+<span class="pl-c1">set</span> myvar <span class="pl-s"><span class="pl-pds">"</span>The files<span class="pl-pds">"</span></span> (ls -a) <span class="pl-s"><span class="pl-pds">"</span> are in the directory <span class="pl-smi">$PWD</span><span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> There's also if, else if, else</span>
+<span class="pl-k">if</span> grep fish /etc/shells
+    <span class="pl-c1">echo</span> Found fish
+<span class="pl-k">else</span> <span class="pl-k">if</span> grep bash /etc/shells
+    <span class="pl-c1">echo</span> Found bash
+<span class="pl-k">else</span>
+    <span class="pl-c1">echo</span> Got nothing
+end
+
+<span class="pl-c"><span class="pl-c">#</span> A little weird is that you compare stuff with one = sign , of course because we don't need it to set variables, but still... and the keyword "test":</span>
+<span class="pl-k">if</span> <span class="pl-c1">test</span> <span class="pl-smi">$var</span> = <span class="pl-s"><span class="pl-pds">"</span>test<span class="pl-pds">"</span></span>
+    <span class="pl-c1">echo</span> yes 
+<span class="pl-k">else</span> 
+    <span class="pl-c1">echo</span> no
+end
+
+<span class="pl-c"><span class="pl-c">#</span> Of course, there's also switch case with</span>
+switch <span class="pl-smi">$OS</span>
+<span class="pl-k">case</span> Linux
+    <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>you're good<span class="pl-pds">"</span></span>
+<span class="pl-k">case</span> Windows
+    <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>install Gentoo<span class="pl-pds">"</span></span>
+<span class="pl-k">case</span> Arch
+    <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>I use arch btw<span class="pl-pds">"</span></span>
+<span class="pl-k">case</span> <span class="pl-s"><span class="pl-pds">'</span>*<span class="pl-pds">'</span></span>
+    <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>what OS is <span class="pl-smi">$OS</span>, please?<span class="pl-pds">"</span></span>
+end
+
+
+<span class="pl-c"><span class="pl-c">#</span> functions in fish get their arguments through the $argv variable. The syntax is following:</span>
+
+<span class="pl-k">function</span> <span class="pl-en">print</span>
+    <span class="pl-c1">echo</span> <span class="pl-smi">$argv</span>
+end
+
+<span class="pl-c"><span class="pl-c">#</span> There are also events, like the "fish_exit"-event (What may that be, hmm?).</span>
+
+<span class="pl-c"><span class="pl-c">#</span> You can use them by adding them to the function definition:</span>
+
+<span class="pl-k">function</span> <span class="pl-en">on_exit</span> --on-event fish_exit
+    <span class="pl-c1">echo</span> fish is now exiting
+end
+
+<span class="pl-c"><span class="pl-c">#</span> find events with the command</span>
+functions --handlers
+
+
+<span class="pl-c"><span class="pl-c">#</span> You can use the functions command to learn more about, well, functions. </span>
+<span class="pl-c"><span class="pl-c">#</span> For example you can print the source code of every function:</span>
+functions <span class="pl-c1">cd</span>
+functions print
+<span class="pl-c"><span class="pl-c">#</span> or get the names of all functions:</span>
+functions
+
+<span class="pl-c"><span class="pl-c">#</span> There's while Loops, of course</span>
+<span class="pl-k">while</span> <span class="pl-c1">test</span> <span class="pl-smi">$var</span> = lol
+    <span class="pl-c1">echo</span> lol
+end
+
+<span class="pl-c"><span class="pl-c">#</span> for Loops (with wildcards, they are even cooler):</span>
+<span class="pl-k">for</span> <span class="pl-smi">image</span> <span class="pl-k">in</span> <span class="pl-k">*</span>.jpg
+    <span class="pl-c1">echo</span> <span class="pl-smi">$image</span>
+end
+
+<span class="pl-c"><span class="pl-c">#</span> there's an equivalent to the range(0, 5) in Python, so you can also do the standard for loops with numbers:</span>
+
+<span class="pl-c1">set</span> files (ls)
+<span class="pl-k">for</span> <span class="pl-smi">number</span> <span class="pl-k">in</span> (seq 10)
+    <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">$files</span>[<span class="pl-smi">$number</span>] is file number <span class="pl-smi">$number</span><span class="pl-pds">"</span></span>
+end
+
+<span class="pl-c"><span class="pl-c">#</span> Cool!</span>
+
+<span class="pl-c"><span class="pl-c">#</span> The bashrc equivalent is not fishrc, but the previously mentioned config.fish file in ~/.config/fish/</span>
+
+<span class="pl-c"><span class="pl-c">#</span> To add a function to fish, though, you should create a simple .fish file in that directory. Don't just paste that function in the config.fish. That's ugly. </span>
+
+<span class="pl-c"><span class="pl-c">#</span> If you have more, just add it, but those are the most important basics.</span>
+</pre></div>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["MySurmise", "https://github.com/MySurmise"]
+</code></pre>

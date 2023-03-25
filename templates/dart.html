@@ -1,0 +1,713 @@
+<h1>Dart</h1>
+<p><strong>Dart</strong> is a single threaded, general purpose programming language.<br>
+It borrows a lot from other mainstream languages.<br>
+It supports Streams, Futures(known as Promises in JavaScript), Generics, First-class functions(closures) and static type checking.<br>
+Dart can run in any platform such as Web, CLI, Desktop, Mobile and IoT devices.</p>
+<p>Dart's most controversial feature is its <del>Optional Typing</del> Static Type safety and <a href="https://dart.dev/guides/language/sound-dart" rel="nofollow">Sound Type checks</a>.</p>
+<div class="highlight highlight-source-dart"><pre class="notranslate"><span class="pl-k">import</span> <span class="pl-s">"dart:collection"</span>;
+<span class="pl-k">import</span> <span class="pl-s">"dart:math"</span> <span class="pl-k">as</span> math;
+
+<span class="pl-c">/// Welcome to Learn Dart in 15 minutes. http://dart.dev/</span>
+<span class="pl-c">/// This is an executable tutorial. You can run it with Dart or on</span>
+<span class="pl-c">/// the Try Dart! site if you copy/paste it there. http://dartpad.dev/</span>
+<span class="pl-c">/// You can also run Flutter in DartPad by click the <span class="pl-smi">`&lt; &gt; New Pad `</span> and choose Flutter</span>
+<span class="pl-c"></span>
+
+<span class="pl-c">/// In Dart, Everything is an Object.</span>
+<span class="pl-c">/// Every declaration of an object is an instance of Null and</span>
+<span class="pl-c">/// Null is also an object.</span>
+<span class="pl-c"></span>
+
+<span class="pl-c">/// 3 Types of comments in dart</span>
+<span class="pl-c"></span><span class="pl-c">// Single line comment</span>
+<span class="pl-c">/**</span>
+<span class="pl-c">* Multi-line comment</span>
+<span class="pl-c">* Can comment more than 2 lines</span>
+<span class="pl-c">*/</span>
+<span class="pl-c">/// Code doc comment</span>
+<span class="pl-c">/// It uses markdown syntax to generate code docs when making an API.</span>
+<span class="pl-c">/// Code doc comment is the recommended choice when documenting your APIs, classes and methods.</span>
+<span class="pl-c"></span>
+<span class="pl-c">/// 4 types of variable declaration.</span>
+<span class="pl-c">/// Constants are variables that are immutable cannot be change or altered.</span>
+<span class="pl-c">/// <span class="pl-smi">`const`</span> in dart should practice SCREAMING_SNAKE_CASE name declaration.</span>
+<span class="pl-c"></span><span class="pl-k">const</span> <span class="pl-c1">CONSTANT_VALUE</span> <span class="pl-k">=</span> <span class="pl-s">"I CANNOT CHANGE"</span>;
+<span class="pl-c1">CONSTANT_VALUE</span> <span class="pl-k">=</span> <span class="pl-s">"DID I?"</span>; <span class="pl-c">//Error</span>
+<span class="pl-c">/// Final is another variable declaration that cannot be change once it has been instantiated. Commonly used in classes and functions</span>
+<span class="pl-c">/// <span class="pl-smi">`final`</span> can be declared in pascalCase.</span>
+<span class="pl-c"></span><span class="pl-k">final</span> finalValue <span class="pl-k">=</span> <span class="pl-s">"value cannot be change once instantiated"</span>;
+finalValue <span class="pl-k">=</span> <span class="pl-s">"Seems not"</span>; <span class="pl-c">//Error</span>
+
+<span class="pl-c">/// <span class="pl-smi">`var`</span> is another variable declaration that is mutable and can change its value. Dart will infer types and will not change its data type</span>
+<span class="pl-c"></span><span class="pl-k">var</span> mutableValue <span class="pl-k">=</span> <span class="pl-s">"Variable string"</span>;
+mutableValue <span class="pl-k">=</span> <span class="pl-s">"this is valid"</span>;
+mutableValue <span class="pl-k">=</span> <span class="pl-c1">false</span>; <span class="pl-c">// Error.</span>
+
+<span class="pl-c">/// <span class="pl-smi">`dynamic`</span> is another variable declaration in which the type is not evaluated by the dart static type checking.</span>
+<span class="pl-c">/// It can change its value and data type.</span>
+<span class="pl-c">/// Some dartisans uses dynamic cautiously as it cannot keep track of its data type. so use it at your own risk</span>
+<span class="pl-c"></span><span class="pl-c1">dynamic</span> dynamicValue <span class="pl-k">=</span> <span class="pl-s">"I'm a string"</span>;
+dynamicValue <span class="pl-k">=</span> <span class="pl-c1">false</span>; <span class="pl-c">// false</span>
+
+
+<span class="pl-c">/// Functions can be declared in a global space</span>
+<span class="pl-c">/// Function declaration and method declaration look the same. Function</span>
+<span class="pl-c">/// declarations can be nested. The declaration takes the form of</span>
+<span class="pl-c">/// name() {} or name() =&gt; singleLineExpression;</span>
+<span class="pl-c">/// The fat arrow function declaration can be an implicit or</span>
+<span class="pl-c">/// explicit return for the result of the expression.</span>
+<span class="pl-c">/// Dart will execute a function called <span class="pl-smi">`main()`</span> anywhere in the dart project.</span>
+<span class="pl-c">///</span>
+<span class="pl-c"></span><span class="pl-en">example1</span>() {
+  <span class="pl-en">nested1</span>() {
+    <span class="pl-en">nested2</span>() <span class="pl-k">=&gt;</span> <span class="pl-en">print</span>(<span class="pl-s">"Example1 nested 1 nested 2"</span>);
+    <span class="pl-en">nested2</span>();
+  }
+
+  <span class="pl-en">nested1</span>();
+}
+
+<span class="pl-c">/// Anonymous functions don't include a name</span>
+<span class="pl-c"></span><span class="pl-en">example2</span>() {
+  <span class="pl-en">nested1</span>(fn) {
+    <span class="pl-en">fn</span>();
+  }
+  <span class="pl-en">nested1</span>(() <span class="pl-k">=&gt;</span> <span class="pl-en">print</span>(<span class="pl-s">"Example2 nested 1"</span>));
+}
+
+<span class="pl-c">/// When a function parameter is declared, the declaration can include the</span>
+<span class="pl-c">/// number of parameters the function takes by explicitly specifying the names of the</span>
+<span class="pl-c">/// parameters it takes.</span>
+<span class="pl-c"></span><span class="pl-en">example3</span>() {
+  <span class="pl-en">planA</span>(<span class="pl-en">fn</span>(<span class="pl-c1">String</span> informSomething)) {
+    <span class="pl-en">fn</span>(<span class="pl-s">"Example3 plan A"</span>);
+  }
+  <span class="pl-en">planB</span>(fn) {
+    <span class="pl-c">// Or don't declare number of parameters.</span>
+    <span class="pl-en">fn</span>(<span class="pl-s">"Example3 plan B"</span>);
+  }
+
+  <span class="pl-en">planA</span>((s) <span class="pl-k">=&gt;</span> <span class="pl-en">print</span>(s));
+  <span class="pl-en">planB</span>((s) <span class="pl-k">=&gt;</span> <span class="pl-en">print</span>(s));
+}
+
+<span class="pl-c">/// Functions have closure access to outer variables.</span>
+<span class="pl-c">/// Dart will infer types when the variable has a value of something.</span>
+<span class="pl-c">/// In this example dart knows that this variable is a String.</span>
+<span class="pl-c"></span><span class="pl-k">var</span> example4Something <span class="pl-k">=</span> <span class="pl-s">"Example4 nested 1"</span>;
+<span class="pl-en">example4</span>() {
+  <span class="pl-en">nested1</span>(<span class="pl-en">fn</span>(informSomething)) {
+    <span class="pl-en">fn</span>(example4Something);
+  }
+
+  <span class="pl-en">nested1</span>((s) <span class="pl-k">=&gt;</span> <span class="pl-en">print</span>(s));
+}
+
+<span class="pl-c">/// Class declaration with a sayIt method, which also has closure access</span>
+<span class="pl-c">/// to the outer variable as though it were a function as seen before.</span>
+<span class="pl-c"></span><span class="pl-k">var</span> example5method <span class="pl-k">=</span> <span class="pl-s">"Example5 sayIt"</span>;
+
+<span class="pl-k">class</span> <span class="pl-c1">Example5Class</span> {
+  <span class="pl-en">sayIt</span>() {
+    <span class="pl-en">print</span>(example5method);
+  }
+}
+
+<span class="pl-en">example5</span>() {
+  <span class="pl-c">/// Create an anonymous instance of the Example5Class and call the sayIt</span>
+<span class="pl-c">  /// method on it.</span>
+<span class="pl-c">  /// the <span class="pl-smi">`new`</span> keyword is optional in Dart.</span>
+<span class="pl-c"></span>  <span class="pl-k">new</span> <span class="pl-c1">Example5Class</span>().<span class="pl-en">sayIt</span>();
+}
+
+<span class="pl-c">/// Class declaration takes the form of class name { <span class="pl-v">[classBody]</span> }.</span>
+<span class="pl-c">/// Where classBody can include instance methods and variables, but also</span>
+<span class="pl-c">/// class methods and variables.</span>
+<span class="pl-c"></span><span class="pl-k">class</span> <span class="pl-c1">Example6Class</span> {
+  <span class="pl-k">var</span> instanceVariable <span class="pl-k">=</span> <span class="pl-s">"Example6 instance variable"</span>;
+  <span class="pl-en">sayIt</span>() {
+    <span class="pl-en">print</span>(instanceVariable);
+  }
+}
+
+<span class="pl-en">example6</span>() {
+   <span class="pl-c1">Example6Class</span>().<span class="pl-en">sayIt</span>();
+}
+
+<span class="pl-c">/// Class methods and variables are declared with "static" terms.</span>
+<span class="pl-c"></span><span class="pl-k">class</span> <span class="pl-c1">Example7Class</span> {
+  <span class="pl-k">static</span> <span class="pl-k">var</span> classVariable <span class="pl-k">=</span> <span class="pl-s">"Example7 class variable"</span>;
+  <span class="pl-k">static</span> <span class="pl-en">sayItFromClass</span>() {
+    <span class="pl-en">print</span>(classVariable);
+  }
+
+  <span class="pl-en">sayItFromInstance</span>() {
+    <span class="pl-en">print</span>(classVariable);
+  }
+}
+
+<span class="pl-en">example7</span>() {
+  <span class="pl-c1">Example7Class</span>.<span class="pl-en">sayItFromClass</span>();
+  <span class="pl-k">new</span> <span class="pl-c1">Example7Class</span>().<span class="pl-en">sayItFromInstance</span>();
+}
+
+<span class="pl-c">/// Dart supports Generics.</span>
+<span class="pl-c">/// Generics refers to the technique of writing the code for a class</span>
+<span class="pl-c">/// without specifying the data type(s) that the class works on.</span>
+<span class="pl-c">/// Source: https://stackoverflow.com/questions/4560890/what-are-generics-in-c</span>
+<span class="pl-c"></span>
+<span class="pl-c">/// Type <span class="pl-smi">`T`</span> refers to any type that has been instantiated</span>
+<span class="pl-c">/// you can call whatever you want</span>
+<span class="pl-c">/// Programmers uses the convention in the following</span>
+<span class="pl-c">/// T - Type(used for class and primitype types)</span>
+<span class="pl-c">/// E - Element(used for List, Set, or Iterable)</span>
+<span class="pl-c">/// K,V - Key Value(used for Map)</span>
+<span class="pl-c"></span><span class="pl-k">class</span> <span class="pl-c1">GenericExample</span>&lt;<span class="pl-c1">T</span>&gt;{
+  <span class="pl-k">void</span> <span class="pl-en">printType</span>(){
+    <span class="pl-en">print</span>(<span class="pl-s">"$<span class="pl-v">T</span>"</span>)
+  }
+  <span class="pl-c">// methods can also have generics</span>
+  <span class="pl-en">genericMethod</span>&lt;<span class="pl-c1">M</span>&gt;(){
+    <span class="pl-en">print</span>(<span class="pl-s">"class:$<span class="pl-v">T</span>, method: $<span class="pl-v">M</span>"</span>);
+  }
+}
+
+
+<span class="pl-c">/// List are similar to arrays but list is a child of Iterable&lt;E&gt;</span>
+<span class="pl-c">/// Therefore Maps, List, LinkedList are all child of Iterable&lt;E&gt; to be able to loop using the keyword <span class="pl-smi">`for`</span></span>
+<span class="pl-c">/// Important things to remember:</span>
+<span class="pl-c">/// () - Iterable&lt;E&gt;</span>
+<span class="pl-c">/// <span class="pl-v">[]</span> - List&lt;E&gt;</span>
+<span class="pl-c">/// {} - Map&lt;K,V&gt;</span>
+<span class="pl-c"></span>
+
+<span class="pl-c">/// List are great, but there's a restriction for what List can be</span>
+<span class="pl-c">/// outside of function/method bodies. List on the outer scope of class</span>
+<span class="pl-c">/// or outside of class have to be constant. Strings and numbers are constant</span>
+<span class="pl-c">/// by default. But arrays and maps are not. They can be made constant by</span>
+<span class="pl-c">/// declaring them "const". Kind of similar to Javascript's Object.freeze()</span>
+<span class="pl-c"></span><span class="pl-k">const</span> example8List <span class="pl-k">=</span> [<span class="pl-s">"Example8 const array"</span>];
+<span class="pl-k">const</span>  example8Map <span class="pl-k">=</span> {<span class="pl-s">"someKey"</span><span class="pl-k">:</span> <span class="pl-s">"Example8 const map"</span>};
+<span class="pl-c">/// Declare List or Maps as Objects.</span>
+<span class="pl-c"></span> <span class="pl-c1">List</span>&lt;<span class="pl-c1">String</span>&gt; explicitList <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">List</span>&lt;<span class="pl-c1">String</span>&gt;();
+ <span class="pl-c1">Map</span>&lt;<span class="pl-c1">String</span>,<span class="pl-c1">dynamic</span>&gt; explicitMaps <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">Map</span>&lt;<span class="pl-c1">String</span>,<span class="pl-c1">dynamic</span>&gt;();
+
+ explicitList.<span class="pl-en">add</span>(<span class="pl-s">"SomeArray"</span>);
+<span class="pl-en">example8</span>() {
+  <span class="pl-en">print</span>(example8Map[<span class="pl-s">"someKey"</span>]);
+  <span class="pl-en">print</span>(explicitList[<span class="pl-c1">0</span>]);
+}
+
+<span class="pl-c">/// Assigning a list from one variable to another will not be the same result.</span>
+<span class="pl-c">/// Because dart is pass-reference-by-value.</span>
+<span class="pl-c">/// So when you assign an existing list to a new variable.</span>
+<span class="pl-c">/// Instead of List, it becomes an Iterable</span>
+<span class="pl-c"></span><span class="pl-k">var</span> iterableExplicitList <span class="pl-k">=</span> explicitList;
+<span class="pl-en">print</span>(iterableExplicitList) <span class="pl-c">// ("SomeArray"); "[]" becomes "()"</span>
+<span class="pl-k">var</span> newExplicitLists <span class="pl-k">=</span> explicitList.<span class="pl-en">toList</span>() <span class="pl-c">// Converts Iterable&lt;E&gt; to List&lt;E&gt;</span>
+
+<span class="pl-c">/// Loops in Dart take the form of standard for () {} or while () {} loops,</span>
+<span class="pl-c">/// slightly more modern for (.. in ..) {}, or functional callbacks with many</span>
+<span class="pl-c">/// supported features, starting with forEach,map and where.</span>
+<span class="pl-c"></span><span class="pl-k">var</span> example9Array <span class="pl-k">=</span> <span class="pl-k">const</span> [<span class="pl-s">"a"</span>, <span class="pl-s">"b"</span>];
+<span class="pl-en">example9</span>() {
+  <span class="pl-k">for</span> (<span class="pl-c1">int</span> i <span class="pl-k">=</span> <span class="pl-c1">0</span>; i <span class="pl-k">&lt;</span> example9Array.length; i<span class="pl-k">++</span>) {
+    <span class="pl-en">print</span>(<span class="pl-s">"Example9 for loop '<span class="pl-s">${<span class="pl-v">example9Array</span>[<span class="pl-v">i</span>]}</span>'"</span>);
+  }
+  <span class="pl-k">var</span> i <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+  <span class="pl-k">while</span> (i <span class="pl-k">&lt;</span> example9Array.length) {
+    <span class="pl-en">print</span>(<span class="pl-s">"Example9 while loop '<span class="pl-s">${<span class="pl-v">example9Array</span>[<span class="pl-v">i</span>]}</span>'"</span>);
+    i<span class="pl-k">++</span>;
+  }
+  <span class="pl-k">for</span> (<span class="pl-k">final</span> e <span class="pl-k">in</span> example9Array) {
+    <span class="pl-en">print</span>(<span class="pl-s">"Example9 for-in loop '<span class="pl-s">${<span class="pl-v">e</span>}</span>'"</span>);
+  }
+
+  example9Array.<span class="pl-en">forEach</span>((e) <span class="pl-k">=&gt;</span> <span class="pl-en">print</span>(<span class="pl-s">"Example9 forEach loop '<span class="pl-s">${<span class="pl-v">e</span>}</span>'"</span>));
+
+}
+
+<span class="pl-c">/// To loop over the characters of a string or to extract a substring.</span>
+<span class="pl-c"></span><span class="pl-k">var</span> example10String <span class="pl-k">=</span> <span class="pl-s">"ab"</span>;
+<span class="pl-en">example10</span>() {
+  <span class="pl-k">for</span> (<span class="pl-k">var</span> i <span class="pl-k">=</span> <span class="pl-c1">0</span>; i <span class="pl-k">&lt;</span> example10String.length; i<span class="pl-k">++</span>) {
+    <span class="pl-en">print</span>(<span class="pl-s">"Example10 String character loop '<span class="pl-s">${<span class="pl-v">example10String</span>[<span class="pl-v">i</span>]}</span>'"</span>);
+  }
+  <span class="pl-k">for</span> (<span class="pl-k">var</span> i <span class="pl-k">=</span> <span class="pl-c1">0</span>; i <span class="pl-k">&lt;</span> example10String.length; i<span class="pl-k">++</span>) {
+    <span class="pl-en">print</span>(<span class="pl-s">"Example10 substring loop '<span class="pl-s">${<span class="pl-v">example10String</span>.<span class="pl-en">substring</span>(<span class="pl-v">i</span>, <span class="pl-v">i</span> + <span class="pl-c1">1</span>)}</span>'"</span>);
+  }
+}
+
+<span class="pl-c">/// <span class="pl-smi">`int`</span>, <span class="pl-smi">`double`</span>  and <span class="pl-smi">`num`</span> are the three supported number formats.</span>
+<span class="pl-c">/// <span class="pl-smi">`num`</span> can be either <span class="pl-smi">`int`</span> or <span class="pl-smi">`double`</span>.</span>
+<span class="pl-c">/// <span class="pl-smi">`int`</span> and <span class="pl-smi">`double`</span> are children of type <span class="pl-smi">`num`</span></span>
+<span class="pl-c"></span><span class="pl-en">example11</span>() {
+  <span class="pl-k">var</span> i <span class="pl-k">=</span> <span class="pl-c1">1</span> <span class="pl-k">+</span> <span class="pl-c1">320</span>, d <span class="pl-k">=</span> <span class="pl-c1">3.2</span> <span class="pl-k">+</span> <span class="pl-c1">0.01</span>;
+  <span class="pl-c1">num</span> myNumDouble <span class="pl-k">=</span> <span class="pl-c1">2.2</span>;
+  <span class="pl-c1">num</span> myNumInt <span class="pl-k">=</span> <span class="pl-c1">2</span>;
+  <span class="pl-c1">int</span> myInt <span class="pl-k">=</span> <span class="pl-c1">1</span>;
+  <span class="pl-c1">double</span> myDouble <span class="pl-k">=</span> <span class="pl-c1">0</span>; <span class="pl-c">// Dart will add decimal prefix, becomes 0.0;</span>
+  myNumDouble <span class="pl-k">=</span> myInt; <span class="pl-c">// valid</span>
+  myNumDouble <span class="pl-k">=</span> myDouble; <span class="pl-c">//valid</span>
+  myNumDouble <span class="pl-k">=</span> myNumInt; <span class="pl-c">//valid</span>
+
+  myNumInt <span class="pl-k">=</span> myInt; <span class="pl-c">// valid</span>
+  myNumInt <span class="pl-k">=</span> myDouble; <span class="pl-c">// valid</span>
+  myNumInt <span class="pl-k">=</span> myNumDouble; <span class="pl-c">// valid</span>
+
+  myInt <span class="pl-k">=</span> myNumDouble; <span class="pl-c">//Error</span>
+  myInt <span class="pl-k">=</span> myDouble; <span class="pl-c">//Error</span>
+  myInt <span class="pl-k">=</span> myNumInt; <span class="pl-c">//valid</span>
+
+  myDouble <span class="pl-k">=</span> myInt; <span class="pl-c">//error</span>
+  myDouble <span class="pl-k">=</span> myNumInt; <span class="pl-c">//valid</span>
+  myDouble <span class="pl-k">=</span> myNumDouble; <span class="pl-c">//valid</span>
+
+  <span class="pl-en">print</span>(<span class="pl-s">"Example11 int <span class="pl-s">${<span class="pl-v">i</span>}</span>"</span>);
+  <span class="pl-en">print</span>(<span class="pl-s">"Example11 double <span class="pl-s">${<span class="pl-v">d</span>}</span>"</span>);
+
+}
+
+<span class="pl-c">/// DateTime provides date/time arithmetic.</span>
+<span class="pl-c"></span><span class="pl-en">example12</span>() {
+  <span class="pl-k">var</span> now <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">DateTime</span>.<span class="pl-en">now</span>();
+  <span class="pl-en">print</span>(<span class="pl-s">"Example12 now '<span class="pl-s">${<span class="pl-v">now</span>}</span>'"</span>);
+  now <span class="pl-k">=</span> now.<span class="pl-en">add</span>(<span class="pl-k">new</span> <span class="pl-c1">Duration</span>(days<span class="pl-k">:</span> <span class="pl-c1">1</span>));
+  <span class="pl-en">print</span>(<span class="pl-s">"Example12 tomorrow '<span class="pl-s">${<span class="pl-v">now</span>}</span>'"</span>);
+}
+
+<span class="pl-c">/// Regular expressions are supported.</span>
+<span class="pl-c"></span><span class="pl-en">example13</span>() {
+  <span class="pl-k">var</span> s1 <span class="pl-k">=</span> <span class="pl-s">"some string"</span>, s2 <span class="pl-k">=</span> <span class="pl-s">"some"</span>, re <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">RegExp</span>(<span class="pl-s">"^s.+?g<span class="pl-cce">\$</span>"</span>);
+  <span class="pl-en">match</span>(s) {
+    <span class="pl-k">if</span> (re.<span class="pl-en">hasMatch</span>(s)) {
+      <span class="pl-en">print</span>(<span class="pl-s">"Example13 regexp matches '<span class="pl-s">${<span class="pl-v">s</span>}</span>'"</span>);
+    } <span class="pl-k">else</span> {
+      <span class="pl-en">print</span>(<span class="pl-s">"Example13 regexp doesn't match '<span class="pl-s">${<span class="pl-v">s</span>}</span>'"</span>);
+    }
+  }
+
+  <span class="pl-en">match</span>(s1);
+  <span class="pl-en">match</span>(s2);
+}
+
+<span class="pl-c">/// Boolean expressions support implicit conversions and dynamic type</span>
+<span class="pl-c"></span><span class="pl-en">example14</span>() {
+  <span class="pl-k">var</span> a <span class="pl-k">=</span> <span class="pl-c1">true</span>;
+  <span class="pl-k">if</span> (a) {
+    <span class="pl-en">print</span>(<span class="pl-s">"true, a is $<span class="pl-v">a</span>"</span>);
+  }
+  a <span class="pl-k">=</span> <span class="pl-c1">null</span>;
+  <span class="pl-k">if</span> (a) {
+    <span class="pl-en">print</span>(<span class="pl-s">"true, a is $<span class="pl-v">a</span>"</span>);
+  } <span class="pl-k">else</span> {
+    <span class="pl-en">print</span>(<span class="pl-s">"false, a is $<span class="pl-v">a</span>"</span>); <span class="pl-c">/// runs here</span>
+<span class="pl-c"></span>  }
+
+  <span class="pl-c">/// dynamic typed null can be convert to bool</span>
+<span class="pl-c"></span>  <span class="pl-k">var</span> b;<span class="pl-c">/// b is dynamic type</span>
+<span class="pl-c"></span>  b <span class="pl-k">=</span> <span class="pl-s">"abc"</span>;
+  <span class="pl-k">try</span> {
+    <span class="pl-k">if</span> (b) {
+      <span class="pl-en">print</span>(<span class="pl-s">"true, b is $<span class="pl-v">b</span>"</span>);
+    } <span class="pl-k">else</span> {
+      <span class="pl-en">print</span>(<span class="pl-s">"false, b is $<span class="pl-v">b</span>"</span>);
+    }
+  } <span class="pl-k">catch</span> (e) {
+    <span class="pl-en">print</span>(<span class="pl-s">"error, b is $<span class="pl-v">b</span>"</span>); <span class="pl-c">/// this could be run but got error</span>
+<span class="pl-c"></span>  }
+  b <span class="pl-k">=</span> <span class="pl-c1">null</span>;
+  <span class="pl-k">if</span> (b) {
+    <span class="pl-en">print</span>(<span class="pl-s">"true, b is $<span class="pl-v">b</span>"</span>);
+  } <span class="pl-k">else</span> {
+    <span class="pl-en">print</span>(<span class="pl-s">"false, b is $<span class="pl-v">b</span>"</span>); <span class="pl-c">/// runs here</span>
+<span class="pl-c"></span>  }
+
+  <span class="pl-c">/// statically typed null can not be convert to bool</span>
+<span class="pl-c"></span>  <span class="pl-k">var</span> c <span class="pl-k">=</span> <span class="pl-s">"abc"</span>;
+  c <span class="pl-k">=</span> <span class="pl-c1">null</span>;
+  <span class="pl-c">/// complie failed</span>
+<span class="pl-c">  /// if (c) {</span>
+<span class="pl-c">  ///   print("true, c is $c");</span>
+<span class="pl-c">  /// } else {</span>
+<span class="pl-c">  ///   print("false, c is $c");</span>
+<span class="pl-c">  /// }</span>
+<span class="pl-c"></span>}
+
+<span class="pl-c">/// try/catch/finally and throw are used for exception handling.</span>
+<span class="pl-c">/// throw takes any object as parameter;</span>
+<span class="pl-c"></span><span class="pl-en">example15</span>() {
+  <span class="pl-k">try</span> {
+    <span class="pl-k">try</span> {
+      <span class="pl-k">throw</span> <span class="pl-s">"Some unexpected error."</span>;
+    } <span class="pl-k">catch</span> (e) {
+      <span class="pl-en">print</span>(<span class="pl-s">"Example15 an exception: '<span class="pl-s">${<span class="pl-v">e</span>}</span>'"</span>);
+      <span class="pl-k">throw</span> e; <span class="pl-c">/// Re-throw</span>
+<span class="pl-c"></span>    }
+  } <span class="pl-k">catch</span> (e) {
+    <span class="pl-en">print</span>(<span class="pl-s">"Example15 catch exception being re-thrown: '<span class="pl-s">${<span class="pl-v">e</span>}</span>'"</span>);
+  } <span class="pl-k">finally</span> {
+    <span class="pl-en">print</span>(<span class="pl-s">"Example15 Still run finally"</span>);
+  }
+}
+
+<span class="pl-c">/// To be efficient when creating a long string dynamically, use</span>
+<span class="pl-c">/// StringBuffer. Or you could join a string array.</span>
+<span class="pl-c"></span><span class="pl-en">example16</span>() {
+  <span class="pl-k">var</span> sb <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">StringBuffer</span>(), a <span class="pl-k">=</span> [<span class="pl-s">"a"</span>, <span class="pl-s">"b"</span>, <span class="pl-s">"c"</span>, <span class="pl-s">"d"</span>], e;
+  <span class="pl-k">for</span> (e <span class="pl-k">in</span> a) {
+    sb.<span class="pl-en">write</span>(e);
+  }
+  <span class="pl-en">print</span>(<span class="pl-s">"Example16 dynamic string created with "</span>
+      <span class="pl-s">"StringBuffer '<span class="pl-s">${<span class="pl-v">sb</span>.<span class="pl-en">toString</span>()}</span>'"</span>);
+  <span class="pl-en">print</span>(<span class="pl-s">"Example16 join string array '<span class="pl-s">${<span class="pl-v">a</span>.<span class="pl-en">join</span>()}</span>'"</span>);
+}
+
+<span class="pl-c">/// Strings can be concatenated by just having string List next to</span>
+<span class="pl-c">/// one another with no further operator needed.</span>
+<span class="pl-c"></span>
+<span class="pl-en">example17</span>() {
+  <span class="pl-en">print</span>(<span class="pl-s">"Example17 "</span>
+      <span class="pl-s">"concatenate "</span>
+      <span class="pl-s">"strings "</span>
+      <span class="pl-s">"just like that"</span>);
+}
+
+<span class="pl-c">/// Strings have single-quote or double-quote for delimiters with no</span>
+<span class="pl-c">/// actual difference between the two. The given flexibility can be good</span>
+<span class="pl-c">/// to avoid the need to escape content that matches the delimiter being</span>
+<span class="pl-c">/// used. For example, double-quotes of HTML attributes if the string</span>
+<span class="pl-c">/// contains HTML content.</span>
+<span class="pl-c"></span><span class="pl-en">example18</span>() {
+  <span class="pl-en">print</span>(<span class="pl-s">'Example18 &lt;a href="etc"&gt;'</span>
+      <span class="pl-s">"Don't can't I'm Etc"</span>
+      <span class="pl-s">'&lt;/a&gt;'</span>);
+}
+
+<span class="pl-c">/// Strings with triple single-quotes or triple double-quotes span</span>
+<span class="pl-c">/// multiple lines and include line delimiters.</span>
+<span class="pl-c"></span><span class="pl-en">example19</span>() {
+  <span class="pl-en">print</span>(<span class="pl-s">'''Example19 &lt;a href="etc"&gt;</span>
+<span class="pl-s">Example19 Don't can't I'm Etc</span>
+<span class="pl-s">Example19 &lt;/a&gt;'''</span>);
+}
+
+<span class="pl-c">/// Strings have the nice interpolation feature with the $ character.</span>
+<span class="pl-c">/// With $ { <span class="pl-v">[expression]</span> }, the return of the expression is interpolated.</span>
+<span class="pl-c">/// $ followed by a variable name interpolates the content of that variable.</span>
+<span class="pl-c">/// $ can be escaped like so \$ to just add it to the string instead.</span>
+<span class="pl-c"></span><span class="pl-en">example20</span>() {
+  <span class="pl-k">var</span> s1 <span class="pl-k">=</span> <span class="pl-s">"'<span class="pl-cce">\$</span>{s}'"</span>, s2 <span class="pl-k">=</span> <span class="pl-s">"'<span class="pl-cce">\$</span>s'"</span>;
+  <span class="pl-en">print</span>(<span class="pl-s">"Example20 <span class="pl-cce">\$</span> interpolation <span class="pl-s">${<span class="pl-v">s1</span>}</span> or $<span class="pl-v">s2</span> works."</span>);
+}
+
+<span class="pl-c">/// Optional types allow for the annotation of APIs and come to the aid of</span>
+<span class="pl-c">/// IDEs so the IDEs can better refactor, auto-complete and check for</span>
+<span class="pl-c">/// errors. So far we haven't declared any types and the programs have</span>
+<span class="pl-c">/// worked just fine. In fact, types are disregarded during runtime.</span>
+<span class="pl-c">/// Types can even be wrong and the program will still be given the</span>
+<span class="pl-c">/// benefit of the doubt and be run as though the types didn't matter.</span>
+<span class="pl-c">/// There's a runtime parameter that checks for type errors which is</span>
+<span class="pl-c">/// the checked mode, which is said to be useful during development time,</span>
+<span class="pl-c">/// but which is also slower because of the extra checking and is thus</span>
+<span class="pl-c">/// avoided during deployment runtime.</span>
+<span class="pl-c"></span><span class="pl-k">class</span> <span class="pl-c1">Example21</span> {
+  <span class="pl-c1">List</span>&lt;<span class="pl-c1">String</span>&gt; _names;
+  <span class="pl-c1">Example21</span>() {
+    _names <span class="pl-k">=</span> [<span class="pl-s">"a"</span>, <span class="pl-s">"b"</span>];
+  }
+  <span class="pl-c1">List</span>&lt;<span class="pl-c1">String</span>&gt; <span class="pl-k">get</span> names <span class="pl-k">=&gt;</span> _names;
+  <span class="pl-k">set</span> <span class="pl-en">names</span>(<span class="pl-c1">List</span>&lt;<span class="pl-c1">String</span>&gt; list) {
+    _names <span class="pl-k">=</span> list;
+  }
+
+  <span class="pl-c1">int</span> <span class="pl-k">get</span> length <span class="pl-k">=&gt;</span> _names.length;
+  <span class="pl-k">void</span> <span class="pl-en">add</span>(<span class="pl-c1">String</span> name) {
+    _names.<span class="pl-en">add</span>(name);
+  }
+}
+
+<span class="pl-k">void</span> <span class="pl-en">example21</span>() {
+  <span class="pl-c1">Example21</span> o <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">Example21</span>();
+  o.<span class="pl-en">add</span>(<span class="pl-s">"c"</span>);
+  <span class="pl-en">print</span>(<span class="pl-s">"Example21 names '<span class="pl-s">${<span class="pl-v">o</span>.<span class="pl-v">names</span>}</span>' and length '<span class="pl-s">${<span class="pl-v">o</span>.<span class="pl-v">length</span>}</span>'"</span>);
+  o.names <span class="pl-k">=</span> [<span class="pl-s">"d"</span>, <span class="pl-s">"e"</span>];
+  <span class="pl-en">print</span>(<span class="pl-s">"Example21 names '<span class="pl-s">${<span class="pl-v">o</span>.<span class="pl-v">names</span>}</span>' and length '<span class="pl-s">${<span class="pl-v">o</span>.<span class="pl-v">length</span>}</span>'"</span>);
+}
+
+<span class="pl-c">/// Class inheritance takes the form of class name extends AnotherClassName {}.</span>
+<span class="pl-c"></span><span class="pl-k">class</span> <span class="pl-c1">Example22A</span> {
+  <span class="pl-k">var</span> _name <span class="pl-k">=</span> <span class="pl-s">"Some Name!"</span>;
+  <span class="pl-k">get</span> name <span class="pl-k">=&gt;</span> _name;
+}
+
+<span class="pl-k">class</span> <span class="pl-c1">Example22B</span> <span class="pl-k">extends</span> <span class="pl-c1">Example22A</span> {}
+
+<span class="pl-en">example22</span>() {
+  <span class="pl-k">var</span> o <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">Example22B</span>();
+  <span class="pl-en">print</span>(<span class="pl-s">"Example22 class inheritance '<span class="pl-s">${<span class="pl-v">o</span>.<span class="pl-v">name</span>}</span>'"</span>);
+}
+
+<span class="pl-c">/// Class mixin is also available, and takes the form of</span>
+<span class="pl-c">/// class name extends SomeClass with AnotherClassName {}.</span>
+<span class="pl-c">/// It's necessary to extend some class to be able to mixin another one.</span>
+<span class="pl-c">/// The template class of mixin cannot at the moment have a constructor.</span>
+<span class="pl-c">/// Mixin is mostly used to share methods with distant classes, so the</span>
+<span class="pl-c">/// single inheritance doesn't get in the way of reusable code.</span>
+<span class="pl-c">/// Mixins follow the "with" statement during the class declaration.</span>
+<span class="pl-c"></span><span class="pl-k">class</span> <span class="pl-c1">Example23A</span> {}
+
+<span class="pl-k">class</span> <span class="pl-c1">Example23Utils</span> {
+  <span class="pl-en">addTwo</span>(n1, n2) {
+    <span class="pl-k">return</span> n1 <span class="pl-k">+</span> n2;
+  }
+}
+
+<span class="pl-k">class</span> <span class="pl-c1">Example23B</span> <span class="pl-k">extends</span> <span class="pl-c1">Example23A</span> <span class="pl-k">with</span> <span class="pl-c1">Example23Utils</span> {
+  <span class="pl-en">addThree</span>(n1, n2, n3) {
+    <span class="pl-k">return</span> <span class="pl-en">addTwo</span>(n1, n2) <span class="pl-k">+</span> n3;
+  }
+}
+
+<span class="pl-en">example23</span>() {
+  <span class="pl-k">var</span> o <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">Example23B</span>(), r1 <span class="pl-k">=</span> o.<span class="pl-en">addThree</span>(<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>), r2 <span class="pl-k">=</span> o.<span class="pl-en">addTwo</span>(<span class="pl-c1">1</span>, <span class="pl-c1">2</span>);
+  <span class="pl-en">print</span>(<span class="pl-s">"Example23 addThree(1, 2, 3) results in '<span class="pl-s">${<span class="pl-v">r1</span>}</span>'"</span>);
+  <span class="pl-en">print</span>(<span class="pl-s">"Example23 addTwo(1, 2) results in '<span class="pl-s">${<span class="pl-v">r2</span>}</span>'"</span>);
+}
+
+<span class="pl-c">/// The Class constructor method uses the same name of the class and</span>
+<span class="pl-c">/// takes the form of SomeClass() : super() {}, where the ": super()"</span>
+<span class="pl-c">/// part is optional and it's used to delegate constant parameters to the</span>
+<span class="pl-c">/// super-parent's constructor.</span>
+<span class="pl-c"></span><span class="pl-k">class</span> <span class="pl-c1">Example24A</span> {
+  <span class="pl-k">var</span> _value;
+  <span class="pl-c1">Example24A</span>({value<span class="pl-k">:</span> <span class="pl-s">"someValue"</span>}) {
+    _value <span class="pl-k">=</span> value;
+  }
+  <span class="pl-k">get</span> value <span class="pl-k">=&gt;</span> _value;
+}
+
+<span class="pl-k">class</span> <span class="pl-c1">Example24B</span> <span class="pl-k">extends</span> <span class="pl-c1">Example24A</span> {
+  <span class="pl-c1">Example24B</span>({value<span class="pl-k">:</span> <span class="pl-s">"someOtherValue"</span>}) <span class="pl-k">:</span> <span class="pl-c1">super</span>(value<span class="pl-k">:</span> value);
+}
+
+<span class="pl-en">example24</span>() {
+  <span class="pl-k">var</span> o1 <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">Example24B</span>(), o2 <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">Example24B</span>(value<span class="pl-k">:</span> <span class="pl-s">"evenMore"</span>);
+  <span class="pl-en">print</span>(<span class="pl-s">"Example24 calling super during constructor '<span class="pl-s">${<span class="pl-v">o1</span>.<span class="pl-v">value</span>}</span>'"</span>);
+  <span class="pl-en">print</span>(<span class="pl-s">"Example24 calling super during constructor '<span class="pl-s">${<span class="pl-v">o2</span>.<span class="pl-v">value</span>}</span>'"</span>);
+}
+
+<span class="pl-c">/// There's a shortcut to set constructor parameters in case of simpler classes.</span>
+<span class="pl-c">/// Just use the this.parameterName prefix and it will set the parameter on</span>
+<span class="pl-c">/// an instance variable of same name.</span>
+<span class="pl-c"></span><span class="pl-k">class</span> <span class="pl-c1">Example25</span> {
+  <span class="pl-k">var</span> value, anotherValue;
+  <span class="pl-c1">Example25</span>({<span class="pl-c1">this</span>.value, <span class="pl-c1">this</span>.anotherValue});
+}
+
+<span class="pl-en">example25</span>() {
+  <span class="pl-k">var</span> o <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">Example25</span>(value<span class="pl-k">:</span> <span class="pl-s">"a"</span>, anotherValue<span class="pl-k">:</span> <span class="pl-s">"b"</span>);
+  <span class="pl-en">print</span>(<span class="pl-s">"Example25 shortcut for constructor '<span class="pl-s">${<span class="pl-v">o</span>.<span class="pl-v">value</span>}</span>' and "</span>
+      <span class="pl-s">"'<span class="pl-s">${<span class="pl-v">o</span>.<span class="pl-v">anotherValue</span>}</span>'"</span>);
+}
+
+<span class="pl-c">/// Named parameters are available when declared between {}.</span>
+<span class="pl-c">/// Parameter order can be optional when declared between {}.</span>
+<span class="pl-c">/// Parameters can be made optional when declared between <span class="pl-v">[]</span>.</span>
+<span class="pl-c"></span><span class="pl-en">example26</span>() {
+  <span class="pl-k">var</span> _name, _surname, _email;
+  <span class="pl-en">setConfig1</span>({name, surname}) {
+    _name <span class="pl-k">=</span> name;
+    _surname <span class="pl-k">=</span> surname;
+  }
+
+  <span class="pl-en">setConfig2</span>(name, [surname, email]) {
+    _name <span class="pl-k">=</span> name;
+    _surname <span class="pl-k">=</span> surname;
+    _email <span class="pl-k">=</span> email;
+  }
+
+  <span class="pl-en">setConfig1</span>(surname<span class="pl-k">:</span> <span class="pl-s">"Doe"</span>, name<span class="pl-k">:</span> <span class="pl-s">"John"</span>);
+  <span class="pl-en">print</span>(<span class="pl-s">"Example26 name '<span class="pl-s">${<span class="pl-v">_name</span>}</span>', surname '<span class="pl-s">${<span class="pl-v">_surname</span>}</span>', "</span>
+      <span class="pl-s">"email '<span class="pl-s">${<span class="pl-v">_email</span>}</span>'"</span>);
+  <span class="pl-en">setConfig2</span>(<span class="pl-s">"Mary"</span>, <span class="pl-s">"Jane"</span>);
+  <span class="pl-en">print</span>(<span class="pl-s">"Example26 name '<span class="pl-s">${<span class="pl-v">_name</span>}</span>', surname '<span class="pl-s">${<span class="pl-v">_surname</span>}</span>', "</span>
+      <span class="pl-s">"email '<span class="pl-s">${<span class="pl-v">_email</span>}</span>'"</span>);
+}
+
+<span class="pl-c">/// Variables declared with final can only be set once.</span>
+<span class="pl-c">/// In case of classes, final instance variables can be set via constant</span>
+<span class="pl-c">/// constructor parameter.</span>
+<span class="pl-c"></span><span class="pl-k">class</span> <span class="pl-c1">Example27</span> {
+  <span class="pl-k">final</span> color1, color2;
+  <span class="pl-c">/// A little flexibility to set final instance variables with syntax</span>
+<span class="pl-c">  /// that follows the :</span>
+<span class="pl-c"></span>  <span class="pl-c1">Example27</span>({<span class="pl-c1">this</span>.color1, color2}) <span class="pl-k">:</span> color2 <span class="pl-k">=</span> color2;
+}
+
+<span class="pl-en">example27</span>() {
+  <span class="pl-k">final</span> color <span class="pl-k">=</span> <span class="pl-s">"orange"</span>, o <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">Example27</span>(color1<span class="pl-k">:</span> <span class="pl-s">"lilac"</span>, color2<span class="pl-k">:</span> <span class="pl-s">"white"</span>);
+  <span class="pl-en">print</span>(<span class="pl-s">"Example27 color is '<span class="pl-s">${<span class="pl-v">color</span>}</span>'"</span>);
+  <span class="pl-en">print</span>(<span class="pl-s">"Example27 color is '<span class="pl-s">${<span class="pl-v">o</span>.<span class="pl-v">color1</span>}</span>' and '<span class="pl-s">${<span class="pl-v">o</span>.<span class="pl-v">color2</span>}</span>'"</span>);
+}
+
+<span class="pl-c">/// To import a library, use import "libraryPath" or if it's a core library,</span>
+<span class="pl-c">/// import "dart:libraryName". There's also the "pub" package management with</span>
+<span class="pl-c">/// its own convention of import "package:packageName".</span>
+<span class="pl-c">/// See import "dart:collection"; at the top. Imports must come before</span>
+<span class="pl-c">/// other code declarations. IterableBase comes from dart:collection.</span>
+<span class="pl-c"></span><span class="pl-k">class</span> <span class="pl-c1">Example28</span> <span class="pl-k">extends</span> <span class="pl-c1">IterableBase</span> {
+  <span class="pl-k">var</span> names;
+  <span class="pl-c1">Example28</span>() {
+    names <span class="pl-k">=</span> [<span class="pl-s">"a"</span>, <span class="pl-s">"b"</span>];
+  }
+  <span class="pl-k">get</span> iterator <span class="pl-k">=&gt;</span> names.iterator;
+}
+
+<span class="pl-en">example28</span>() {
+  <span class="pl-k">var</span> o <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">Example28</span>();
+  o.<span class="pl-en">forEach</span>((name) <span class="pl-k">=&gt;</span> <span class="pl-en">print</span>(<span class="pl-s">"Example28 '<span class="pl-s">${<span class="pl-v">name</span>}</span>'"</span>));
+}
+
+<span class="pl-c">/// For control flow we have:</span>
+<span class="pl-c">/// * standard switch with must break statements</span>
+<span class="pl-c">/// * if-else if-else and ternary ..?..:.. operator</span>
+<span class="pl-c">/// * closures and anonymous functions</span>
+<span class="pl-c">/// * break, continue and return statements</span>
+<span class="pl-c"></span><span class="pl-en">example29</span>() {
+  <span class="pl-k">var</span> v <span class="pl-k">=</span> <span class="pl-c1">true</span> <span class="pl-k">?</span> <span class="pl-c1">30</span> <span class="pl-k">:</span> <span class="pl-c1">60</span>;
+  <span class="pl-k">switch</span> (v) {
+    <span class="pl-k">case</span> <span class="pl-c1">30</span><span class="pl-k">:</span>
+      <span class="pl-en">print</span>(<span class="pl-s">"Example29 switch statement"</span>);
+      <span class="pl-k">break</span>;
+  }
+  <span class="pl-k">if</span> (v <span class="pl-k">&lt;</span> <span class="pl-c1">30</span>) {
+  } <span class="pl-k">else</span> <span class="pl-k">if</span> (v <span class="pl-k">&gt;</span> <span class="pl-c1">30</span>) {
+  } <span class="pl-k">else</span> {
+    <span class="pl-en">print</span>(<span class="pl-s">"Example29 if-else statement"</span>);
+  }
+  <span class="pl-en">callItForMe</span>(<span class="pl-en">fn</span>()) {
+    <span class="pl-k">return</span> <span class="pl-en">fn</span>();
+  }
+
+  <span class="pl-en">rand</span>() {
+    v <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">DM</span>.<span class="pl-c1">Random</span>().<span class="pl-en">nextInt</span>(<span class="pl-c1">50</span>);
+    <span class="pl-k">return</span> v;
+  }
+
+  <span class="pl-k">while</span> (<span class="pl-c1">true</span>) {
+    <span class="pl-en">print</span>(<span class="pl-s">"Example29 callItForMe(rand) '<span class="pl-s">${<span class="pl-en">callItForMe</span>(<span class="pl-v">rand</span>)}</span>'"</span>);
+    <span class="pl-k">if</span> (v <span class="pl-k">!=</span> <span class="pl-c1">30</span>) {
+      <span class="pl-k">break</span>;
+    } <span class="pl-k">else</span> {
+      <span class="pl-k">continue</span>;
+    }
+    <span class="pl-c">/// Never gets here.</span>
+<span class="pl-c"></span>  }
+}
+
+<span class="pl-c">/// Parse int, convert double to int, or just keep int when dividing numbers</span>
+<span class="pl-c">/// by using the ~/ operation. Let's play a guess game too.</span>
+<span class="pl-c"></span><span class="pl-en">example30</span>() {
+  <span class="pl-k">var</span> gn,
+      tooHigh <span class="pl-k">=</span> <span class="pl-c1">false</span>,
+      n,
+      n2 <span class="pl-k">=</span> (<span class="pl-c1">2.0</span>).<span class="pl-en">toInt</span>(),
+      top <span class="pl-k">=</span> <span class="pl-c1">int</span>.<span class="pl-en">parse</span>(<span class="pl-s">"123"</span>) <span class="pl-k">~</span><span class="pl-k">/</span> n2,
+      bottom <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+  top <span class="pl-k">=</span> top <span class="pl-k">~</span><span class="pl-k">/</span> <span class="pl-c1">6</span>;
+  gn <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">DM</span>.<span class="pl-c1">Random</span>().<span class="pl-en">nextInt</span>(top <span class="pl-k">+</span> <span class="pl-c1">1</span>); <span class="pl-c">/// +1 because nextInt top is exclusive</span>
+<span class="pl-c"></span>  <span class="pl-en">print</span>(<span class="pl-s">"Example30 Guess a number between 0 and <span class="pl-s">${<span class="pl-v">top</span>}</span>"</span>);
+  <span class="pl-en">guessNumber</span>(i) {
+    <span class="pl-k">if</span> (n <span class="pl-k">==</span> gn) {
+      <span class="pl-en">print</span>(<span class="pl-s">"Example30 Guessed right! The number is <span class="pl-s">${<span class="pl-v">gn</span>}</span>"</span>);
+    } <span class="pl-k">else</span> {
+      tooHigh <span class="pl-k">=</span> n <span class="pl-k">&gt;</span> gn;
+      <span class="pl-en">print</span>(<span class="pl-s">"Example30 Number <span class="pl-s">${<span class="pl-v">n</span>}</span> is too "</span>
+          <span class="pl-s">"<span class="pl-s">${<span class="pl-v">tooHigh</span> ? <span class="pl-s">'high'</span> : <span class="pl-s">'low'</span>}</span>. Try again"</span>);
+    }
+    <span class="pl-k">return</span> n <span class="pl-k">==</span> gn;
+  }
+
+  n <span class="pl-k">=</span> (top <span class="pl-k">-</span> bottom) <span class="pl-k">~</span><span class="pl-k">/</span> <span class="pl-c1">2</span>;
+  <span class="pl-k">while</span> (<span class="pl-k">!</span><span class="pl-en">guessNumber</span>(n)) {
+    <span class="pl-k">if</span> (tooHigh) {
+      top <span class="pl-k">=</span> n <span class="pl-k">-</span> <span class="pl-c1">1</span>;
+    } <span class="pl-k">else</span> {
+      bottom <span class="pl-k">=</span> n <span class="pl-k">+</span> <span class="pl-c1">1</span>;
+    }
+    n <span class="pl-k">=</span> bottom <span class="pl-k">+</span> ((top <span class="pl-k">-</span> bottom) <span class="pl-k">~</span><span class="pl-k">/</span> <span class="pl-c1">2</span>);
+  }
+}
+
+<span class="pl-c">/// Optional Positional Parameter:</span>
+<span class="pl-c">/// parameter will be disclosed with square bracket <span class="pl-v">[ ]</span> &amp; square bracketed parameter are optional.</span>
+<span class="pl-c"></span><span class="pl-en">example31</span>() {
+    <span class="pl-en">findVolume31</span>(<span class="pl-c1">int</span> length, <span class="pl-c1">int</span> breath, [<span class="pl-c1">int</span> height]) {
+      <span class="pl-en">print</span>(<span class="pl-s">'length = $<span class="pl-v">length</span>, breath = $<span class="pl-v">breath</span>, height = $<span class="pl-v">height</span>'</span>);
+    }
+
+    <span class="pl-en">findVolume31</span>(<span class="pl-c1">10</span>,<span class="pl-c1">20</span>,<span class="pl-c1">30</span>); <span class="pl-c">//valid</span>
+    <span class="pl-en">findVolume31</span>(<span class="pl-c1">10</span>,<span class="pl-c1">20</span>); <span class="pl-c">//also valid</span>
+}
+
+<span class="pl-c">/// Optional Named Parameter:</span>
+<span class="pl-c">/// parameter will be disclosed with curly bracket { }</span>
+<span class="pl-c">/// curly bracketed parameter are optional.</span>
+<span class="pl-c">/// have to use parameter name to assign a value which separated with colan :</span>
+<span class="pl-c">/// in curly bracketed parameter order does not matter</span>
+<span class="pl-c">/// these type parameter help us to avoid confusion while passing value for a function which has many parameter.</span>
+<span class="pl-c"></span><span class="pl-en">example32</span>() {
+    <span class="pl-en">findVolume32</span>(<span class="pl-c1">int</span> length, <span class="pl-c1">int</span> breath, {<span class="pl-c1">int</span> height}) {
+    <span class="pl-en">print</span>(<span class="pl-s">'length = $<span class="pl-v">length</span>, breath = $<span class="pl-v">breath</span>, height = $<span class="pl-v">height</span>'</span>);
+    }
+
+    <span class="pl-en">findVolume32</span>(<span class="pl-c1">10</span>,<span class="pl-c1">20</span>,height<span class="pl-k">:</span><span class="pl-c1">30</span>);<span class="pl-c">//valid &amp; we can see the parameter name is mentioned here.</span>
+    <span class="pl-en">findVolume32</span>(<span class="pl-c1">10</span>,<span class="pl-c1">20</span>);<span class="pl-c">//also valid</span>
+}
+
+<span class="pl-c">/// Optional Default Parameter:</span>
+<span class="pl-c">/// same like optional named parameter in addition we can assign default value for this parameter.</span>
+<span class="pl-c">/// which means no value is passed this default value will be taken.</span>
+<span class="pl-c"></span><span class="pl-en">example33</span>() {
+    <span class="pl-en">findVolume33</span>(<span class="pl-c1">int</span> length, <span class="pl-c1">int</span> breath, {<span class="pl-c1">int</span> height<span class="pl-k">=</span><span class="pl-c1">10</span>}) {
+     <span class="pl-en">print</span>(<span class="pl-s">'length = $<span class="pl-v">length</span>, breath = $<span class="pl-v">breath</span>, height = $<span class="pl-v">height</span>'</span>);
+    }
+
+    <span class="pl-en">findVolume33</span>(<span class="pl-c1">10</span>,<span class="pl-c1">20</span>,height<span class="pl-k">:</span><span class="pl-c1">30</span>);<span class="pl-c">//valid</span>
+    <span class="pl-en">findVolume33</span>(<span class="pl-c1">10</span>,<span class="pl-c1">20</span>);<span class="pl-c">//valid</span>
+}
+
+<span class="pl-c">/// Dart has also added feature such as Null aware operators</span>
+<span class="pl-c"></span><span class="pl-k">var</span> isBool <span class="pl-k">=</span> <span class="pl-c1">true</span>;
+<span class="pl-k">var</span> hasString <span class="pl-k">=</span> isBool <span class="pl-k">??</span> <span class="pl-s">"default String"</span>;
+
+<span class="pl-c">/// Programs have only one entry point in the main function.</span>
+<span class="pl-c">/// Nothing is expected to be executed on the outer scope before a program</span>
+<span class="pl-c">/// starts running with what's in its main function.</span>
+<span class="pl-c">/// This helps with faster loading and even lazily loading of just what</span>
+<span class="pl-c">/// the program needs to startup with.</span>
+<span class="pl-c"></span><span class="pl-en">main</span>() {
+  <span class="pl-en">print</span>(<span class="pl-s">"Learn Dart in 15 minutes!"</span>);
+  [
+    example1, example2, example3, example4, example5,
+    example6, example7, example8, example9, example10,
+    example11, example12, example13, example14, example15,
+    example16, example17, example18, example19, example20,
+    example21, example22, example23, example24, example25,
+    example26, example27, example28, example29,
+    example30 <span class="pl-c">// Adding this comment stops the dart formatter from putting all items on a new line</span>
+  ].<span class="pl-en">forEach</span>((ef) <span class="pl-k">=&gt;</span> <span class="pl-en">ef</span>());
+}
+</pre></div>
+<h2>Further Reading</h2>
+<p>Dart has a comprehensive web-site. It covers API reference, tutorials, articles and more, including a<br>
+useful DartPad (a cloud-based Dart coding playground).<br>
+<a href="https://dart.dev" rel="nofollow">https://dart.dev/</a><br>
+<a href="https://dartpad.dev" rel="nofollow">https://dartpad.dev/</a></p>
+<hr>
+<h2>Contributors</h2>
+<ul>
+<li>["Joao Pedrosa", "https://github.com/jpedrosa/"]</li>
+<li>["Vince Ramces Oliveros", "https://github.com/ram231"]</li>
+</ul>

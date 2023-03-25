@@ -1,0 +1,714 @@
+<h1>Racket</h1>
+<p>Racket is a general purpose, multi-paradigm programming language in the Lisp/Scheme family.</p>
+<p>Feedback is appreciated! You can reach me at <a href="http://twitter.com/th3rac25" rel="nofollow">@th3rac25</a> or th3rac25 [at] [google's email service]</p>
+<div class="highlight highlight-source-racket"><pre class="notranslate">#lang racket <span class="pl-c">; defines the language we are using</span>
+
+<span class="pl-c">;;; Comments</span>
+
+<span class="pl-c">;; Single line comments start with a semicolon</span>
+
+<span class="pl-c">#|<span class="pl-c"> Block comments</span></span>
+<span class="pl-c"><span class="pl-c">   can span multiple lines and...</span></span>
+<span class="pl-c"><span class="pl-c">    <span class="pl-c">#|<span class="pl-c"></span></span></span></span>
+<span class="pl-c"><span class="pl-c"><span class="pl-c"><span class="pl-c">       they can be nested!</span></span></span></span>
+<span class="pl-c"><span class="pl-c"><span class="pl-c"><span class="pl-c">    </span>|#</span></span></span>
+<span class="pl-c"><span class="pl-c"></span>|#</span>
+
+<span class="pl-c">;; S-expression comments discard the following expression,</span>
+<span class="pl-c">;; useful to comment expressions when debugging</span>
+<span class="pl-c">#;</span> (<span class="pl-en">this</span> expression is discarded)
+
+<span class="pl-c">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c">;; 1. Primitive Datatypes and Operators</span>
+<span class="pl-c">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="pl-c">;;; Numbers</span>
+<span class="pl-c1">9999999999999999999999</span> <span class="pl-c">; integers</span>
+<span class="pl-c1">#b111</span>                  <span class="pl-c">; binary =&gt; 7</span>
+<span class="pl-c1">#o111</span>                  <span class="pl-c">; octal =&gt; 73</span>
+<span class="pl-c1">#x111</span>                  <span class="pl-c">; hexadecimal =&gt; 273</span>
+<span class="pl-c1">3.14</span>                   <span class="pl-c">; reals</span>
+<span class="pl-c1">6.02e+23</span>
+<span class="pl-c1">1/2</span>                    <span class="pl-c">; rationals</span>
+<span class="pl-c1">1+2i</span>                   <span class="pl-c">; complex numbers</span>
+
+<span class="pl-c">;; Function application is written (f x y z ...)</span>
+<span class="pl-c">;; where f is a function and x, y, z, ... are operands</span>
+<span class="pl-c">;; If you want to create a literal list of data, use ' to stop it from</span>
+<span class="pl-c">;; being evaluated</span>
+'(+ <span class="pl-c1">1</span> <span class="pl-c1">2</span>) <span class="pl-c">; =&gt; (+ 1 2)</span>
+<span class="pl-c">;; Now, some arithmetic operations</span>
+(+ <span class="pl-c1">1</span> <span class="pl-c1">1</span>)  <span class="pl-c">; =&gt; 2</span>
+(- <span class="pl-c1">8</span> <span class="pl-c1">1</span>)  <span class="pl-c">; =&gt; 7</span>
+(* <span class="pl-c1">10</span> <span class="pl-c1">2</span>) <span class="pl-c">; =&gt; 20</span>
+(expt <span class="pl-c1">2</span> <span class="pl-c1">3</span>) <span class="pl-c">; =&gt; 8</span>
+(quotient <span class="pl-c1">5</span> <span class="pl-c1">2</span>) <span class="pl-c">; =&gt; 2</span>
+(remainder <span class="pl-c1">5</span> <span class="pl-c1">2</span>) <span class="pl-c">; =&gt; 1</span>
+(/ <span class="pl-c1">35</span> <span class="pl-c1">5</span>) <span class="pl-c">; =&gt; 7</span>
+(/ <span class="pl-c1">1</span> <span class="pl-c1">3</span>) <span class="pl-c">; =&gt; 1/3</span>
+(exact-&gt;inexact <span class="pl-c1">1/3</span>) <span class="pl-c">; =&gt; 0.3333333333333333</span>
+(+ <span class="pl-c1">1+2i</span>  <span class="pl-c1">2-3i</span>) <span class="pl-c">; =&gt; 3-1i</span>
+
+<span class="pl-c">;;; Booleans</span>
+<span class="pl-c1">#t</span> <span class="pl-c">; for true</span>
+<span class="pl-c1">#f</span> <span class="pl-c">; for false -- any value other than #f is true</span>
+(not <span class="pl-c1">#t</span>) <span class="pl-c">; =&gt; #f</span>
+(<span class="pl-en">and</span> <span class="pl-c1">0</span> <span class="pl-c1">#f</span> (error <span class="pl-c1">"<span class="pl-c1">doesn't get here</span>"</span>)) <span class="pl-c">; =&gt; #f</span>
+(<span class="pl-en">or</span> <span class="pl-c1">#f</span> <span class="pl-c1">0</span> (error <span class="pl-c1">"<span class="pl-c1">doesn't get here</span>"</span>))  <span class="pl-c">; =&gt; 0</span>
+
+<span class="pl-c">;;; Characters</span>
+<span class="pl-c1">#\A</span> <span class="pl-c">; =&gt; #\A</span>
+<span class="pl-c1">#\λ</span> <span class="pl-c">; =&gt; #\λ</span>
+<span class="pl-c1">#\u03BB</span> <span class="pl-c">; =&gt; #\λ</span>
+
+<span class="pl-c">;;; Strings are fixed-length array of characters.</span>
+<span class="pl-c1">"<span class="pl-c1">Hello, world!</span>"</span>
+<span class="pl-c1">"<span class="pl-c1">Benjamin \"Bugsy\" Siegel</span>"</span>   <span class="pl-c">; backslash is an escaping character</span>
+<span class="pl-c1">"<span class="pl-c1">Foo\tbar\41\x21\u0021\a\r\n</span>"</span> <span class="pl-c">; includes C escapes, Unicode</span>
+<span class="pl-c1">"<span class="pl-c1">λx:(μα.α→α).xx</span>"</span>              <span class="pl-c">; can include Unicode characters</span>
+
+<span class="pl-c">;; Strings can be added too!</span>
+(string-append <span class="pl-c1">"<span class="pl-c1">Hello </span>"</span> <span class="pl-c1">"<span class="pl-c1">world!</span>"</span>) <span class="pl-c">; =&gt; "Hello world!"</span>
+
+<span class="pl-c">;; A string can be treated like a list of characters</span>
+(string-ref <span class="pl-c1">"<span class="pl-c1">Apple</span>"</span> <span class="pl-c1">0</span>) <span class="pl-c">; =&gt; #\A</span>
+
+<span class="pl-c">;; format can be used to format strings:</span>
+(format <span class="pl-c1">"<span class="pl-c1">~a can be ~a</span>"</span> <span class="pl-c1">"<span class="pl-c1">strings</span>"</span> <span class="pl-c1">"<span class="pl-c1">formatted</span>"</span>)
+
+<span class="pl-c">;; Printing is pretty easy</span>
+(printf <span class="pl-c1">"<span class="pl-c1">I'm Racket. Nice to meet you!\n</span>"</span>)
+
+<span class="pl-c">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c">;; 2. Variables</span>
+<span class="pl-c">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c">;; You can create a variable using define</span>
+<span class="pl-c">;; a variable name can use any character except: ()[]{}",'`;#|\</span>
+(<span class="pl-en">define</span> some-var <span class="pl-c1">5</span>)
+some-var <span class="pl-c">; =&gt; 5</span>
+
+<span class="pl-c">;; You can also use unicode characters</span>
+(<span class="pl-en">define</span> ⊆ subset?)
+(⊆ (set <span class="pl-c1">3</span> <span class="pl-c1">2</span>) (set <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)) <span class="pl-c">; =&gt; #t</span>
+
+<span class="pl-c">;; Accessing a previously unassigned variable is an exception</span>
+<span class="pl-c">; x ; =&gt; x: undefined ...</span>
+
+<span class="pl-c">;; Local binding: `me' is bound to "Bob" only within the (let ...)</span>
+(<span class="pl-en">let</span> ([me <span class="pl-c1">"<span class="pl-c1">Bob</span>"</span>])
+  <span class="pl-c1">"<span class="pl-c1">Alice</span>"</span>
+  me) <span class="pl-c">; =&gt; "Bob"</span>
+
+<span class="pl-c">;; let* is like let, but allows you to use previous bindings in creating later bindings</span>
+(<span class="pl-en">let*</span> ([x <span class="pl-c1">1</span>]
+       [y (+ x <span class="pl-c1">1</span>)])
+  (* x y))
+
+<span class="pl-c">;; finally, letrec allows you to define recursive and mutually recursive functions</span>
+(<span class="pl-en">letrec</span> ([is-even? (<span class="pl-en">lambda</span> (n)
+                     (<span class="pl-en">or</span> (zero? n)
+                         (is-odd? (sub1 n))))]
+         [is-odd? (<span class="pl-en">lambda</span> (n)
+                    (<span class="pl-en">and</span> (not (zero? n))
+                         (is-even? (sub1 n))))])
+  (is-odd? <span class="pl-c1">11</span>))
+
+<span class="pl-c">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c">;; 3. Structs and Collections</span>
+<span class="pl-c">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="pl-c">;; Structs</span>
+<span class="pl-c">; By default, structs are immutable</span>
+(<span class="pl-en">struct</span> dog (name breed age))
+(<span class="pl-en">define</span> my-pet
+  (dog <span class="pl-c1">"<span class="pl-c1">lassie</span>"</span> <span class="pl-c1">"<span class="pl-c1">collie</span>"</span> <span class="pl-c1">5</span>))
+my-pet <span class="pl-c">; =&gt; #&lt;dog&gt;</span>
+<span class="pl-c">; returns whether the variable was constructed with the dog constructor</span>
+(dog? my-pet) <span class="pl-c">; =&gt; #t</span>
+<span class="pl-c">; accesses the name field of the variable constructed with the dog constructor</span>
+(dog-name my-pet) <span class="pl-c">; =&gt; "lassie"</span>
+
+<span class="pl-c">; You can explicitly declare a struct to be mutable with the #:mutable option</span>
+(<span class="pl-en">struct</span> rgba-color (red green blue alpha) <span class="pl-c1">#:mutable</span>)
+(<span class="pl-en">define</span> burgundy
+   (rgba-color <span class="pl-c1">144</span> <span class="pl-c1">0</span> <span class="pl-c1">32</span> <span class="pl-c1">1.0</span>))
+(set-rgba-color-green! burgundy <span class="pl-c1">10</span>)
+(rgba-color-green burgundy) <span class="pl-c">; =&gt; 10</span>
+
+<span class="pl-c">;;; Pairs (immutable)</span>
+<span class="pl-c">;; `cons' constructs pairs, `car' and `cdr' extract the first</span>
+<span class="pl-c">;; and second elements</span>
+(cons <span class="pl-c1">1</span> <span class="pl-c1">2</span>) <span class="pl-c">; =&gt; '(1 . 2)</span>
+(car (cons <span class="pl-c1">1</span> <span class="pl-c1">2</span>)) <span class="pl-c">; =&gt; 1</span>
+(cdr (cons <span class="pl-c1">1</span> <span class="pl-c1">2</span>)) <span class="pl-c">; =&gt; 2</span>
+
+<span class="pl-c">;;; Lists</span>
+
+<span class="pl-c">;; Lists are linked-list data structures, made of `cons' pairs and end</span>
+<span class="pl-c">;; with a `null' (or '()) to mark the end of the list</span>
+(cons <span class="pl-c1">1</span> (cons <span class="pl-c1">2</span> (cons <span class="pl-c1">3</span> null))) <span class="pl-c">; =&gt; '(1 2 3)</span>
+<span class="pl-c">;; `list' is a convenience variadic constructor for lists</span>
+(list <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>) <span class="pl-c">; =&gt; '(1 2 3)</span>
+<span class="pl-c">;; a quote can also be used for a literal list value</span>
+'(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>) <span class="pl-c">; =&gt; '(1 2 3)</span>
+<span class="pl-c">;; a quasiquote (represented by the backtick character) with commas </span>
+<span class="pl-c">;; can be used to evaluate functions</span>
+`(<span class="pl-c1">1</span> ,(+ <span class="pl-c1">1</span> <span class="pl-c1">1</span>) <span class="pl-c1">3</span>) <span class="pl-c">; =&gt; '(1 2 3)</span>
+
+<span class="pl-c">;; With lists, car/cdr work slightly differently</span>
+(car '(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)) <span class="pl-c">; =&gt; 1</span>
+(cdr '(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)) <span class="pl-c">; =&gt; '(2 3)</span>
+
+<span class="pl-c">;; Racket also has predefined functions on top of car and cdr, to extract parts of a list</span>
+(cadr (list <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)) <span class="pl-c">; =&gt; 2</span>
+(car (cdr (list <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>))) <span class="pl-c">; =&gt; 2</span>
+
+(cddr (list <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)) <span class="pl-c">; =&gt; '(3)</span>
+(cdr (cdr (list <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>))) <span class="pl-c">; =&gt; '(3)</span>
+
+(caddr (list <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)) <span class="pl-c">; =&gt; 3</span>
+(car (cdr (cdr (list <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)))) <span class="pl-c">; =&gt; 3</span>
+
+<span class="pl-c">;; Can still use `cons' to add an item to the beginning of a list</span>
+(cons <span class="pl-c1">4</span> '(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)) <span class="pl-c">; =&gt; '(4 1 2 3)</span>
+
+<span class="pl-c">;; Use `append' to add lists together</span>
+(append '(<span class="pl-c1">1</span> <span class="pl-c1">2</span>) '(<span class="pl-c1">3</span> <span class="pl-c1">4</span>)) <span class="pl-c">; =&gt; '(1 2 3 4)</span>
+
+<span class="pl-c">;; Lists are a very basic type, so there is a *lot* of functionality for</span>
+<span class="pl-c">;; them, a few examples:</span>
+(map add1 '(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>))          <span class="pl-c">; =&gt; '(2 3 4)</span>
+(map + '(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>) '(<span class="pl-c1">10</span> <span class="pl-c1">20</span> <span class="pl-c1">30</span>)) <span class="pl-c">; =&gt; '(11 22 33)</span>
+(filter even? '(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span>))    <span class="pl-c">; =&gt; '(2 4)</span>
+(count even? '(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span>))     <span class="pl-c">; =&gt; 2</span>
+(take '(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span>) <span class="pl-c1">2</span>)          <span class="pl-c">; =&gt; '(1 2)</span>
+(drop '(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span>) <span class="pl-c1">2</span>)          <span class="pl-c">; =&gt; '(3 4)</span>
+
+<span class="pl-c">;;; Vectors</span>
+
+<span class="pl-c">;; Vectors are fixed-length arrays</span>
+#(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>) <span class="pl-c">; =&gt; '#(1 2 3)</span>
+
+<span class="pl-c">;; Use `vector-append' to add vectors together</span>
+(vector-append #(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>) #(<span class="pl-c1">4</span> <span class="pl-c1">5</span> <span class="pl-c1">6</span>)) <span class="pl-c">; =&gt; #(1 2 3 4 5 6)</span>
+
+<span class="pl-c">;;; Sets</span>
+
+<span class="pl-c">;; Create a set from a list</span>
+(list-&gt;set '(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">3</span> <span class="pl-c1">2</span> <span class="pl-c1">1</span> <span class="pl-c1">3</span> <span class="pl-c1">2</span> <span class="pl-c1">1</span>)) <span class="pl-c">; =&gt; (set 1 2 3)</span>
+
+<span class="pl-c">;; Add a member with `set-add'</span>
+<span class="pl-c">;; (Functional: returns the extended set rather than mutate the input)</span>
+(set-add (set <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>) <span class="pl-c1">4</span>) <span class="pl-c">; =&gt; (set 1 2 3 4)</span>
+
+<span class="pl-c">;; Remove one with `set-remove'</span>
+(set-remove (set <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>) <span class="pl-c1">1</span>) <span class="pl-c">; =&gt; (set 2 3)</span>
+
+<span class="pl-c">;; Test for existence with `set-member?'</span>
+(set-member? (set <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>) <span class="pl-c1">1</span>) <span class="pl-c">; =&gt; #t</span>
+(set-member? (set <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>) <span class="pl-c1">4</span>) <span class="pl-c">; =&gt; #f</span>
+
+<span class="pl-c">;;; Hashes</span>
+
+<span class="pl-c">;; Create an immutable hash table (mutable example below)</span>
+(<span class="pl-en">define</span> m (hash <span class="pl-c1">'a</span> <span class="pl-c1">1</span> <span class="pl-c1">'b</span> <span class="pl-c1">2</span> <span class="pl-c1">'c</span> <span class="pl-c1">3</span>))
+
+<span class="pl-c">;; Retrieve a value</span>
+(hash-ref m <span class="pl-c1">'a</span>) <span class="pl-c">; =&gt; 1</span>
+
+<span class="pl-c">;; Retrieving a non-present value is an exception</span>
+<span class="pl-c">; (hash-ref m 'd) =&gt; no value found</span>
+
+<span class="pl-c">;; You can provide a default value for missing keys</span>
+(hash-ref m <span class="pl-c1">'d</span> <span class="pl-c1">0</span>) <span class="pl-c">; =&gt; 0</span>
+
+<span class="pl-c">;; Use `hash-set' to extend an immutable hash table</span>
+<span class="pl-c">;; (Returns the extended hash instead of mutating it)</span>
+(<span class="pl-en">define</span> m2 (hash-set m <span class="pl-c1">'d</span> <span class="pl-c1">4</span>))
+m2 <span class="pl-c">; =&gt; '#hash((b . 2) (a . 1) (d . 4) (c . 3))</span>
+
+<span class="pl-c">;; Remember, these hashes are immutable!</span>
+m <span class="pl-c">; =&gt; '#hash((b . 2) (a . 1) (c . 3))  &lt;-- no `d'</span>
+
+<span class="pl-c">;; Use `hash-remove' to remove keys (functional too)</span>
+(hash-remove m <span class="pl-c1">'a</span>) <span class="pl-c">; =&gt; '#hash((b . 2) (c . 3))</span>
+
+<span class="pl-c">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c">;; 4. Functions</span>
+<span class="pl-c">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="pl-c">;; Use `lambda' to create functions.</span>
+<span class="pl-c">;; A function always returns the value of its last expression</span>
+(<span class="pl-en">lambda</span> () <span class="pl-c1">"<span class="pl-c1">Hello World</span>"</span>) <span class="pl-c">; =&gt; #&lt;procedure&gt;</span>
+<span class="pl-c">;; Can also use a unicode `λ'</span>
+(<span class="pl-en">λ</span> () <span class="pl-c1">"<span class="pl-c1">Hello World</span>"</span>)     <span class="pl-c">; =&gt; same function</span>
+
+<span class="pl-c">;; Use parens to call all functions, including a lambda expression</span>
+((<span class="pl-en">lambda</span> () <span class="pl-c1">"<span class="pl-c1">Hello World</span>"</span>)) <span class="pl-c">; =&gt; "Hello World"</span>
+((<span class="pl-en">λ</span> () <span class="pl-c1">"<span class="pl-c1">Hello World</span>"</span>))      <span class="pl-c">; =&gt; "Hello World"</span>
+
+<span class="pl-c">;; Assign a function to a var</span>
+(<span class="pl-en">define</span> hello-world (<span class="pl-en">lambda</span> () <span class="pl-c1">"<span class="pl-c1">Hello World</span>"</span>))
+(hello-world) <span class="pl-c">; =&gt; "Hello World"</span>
+
+<span class="pl-c">;; You can shorten this using the function definition syntactic sugar:</span>
+(<span class="pl-en">define</span> (hello-world2) <span class="pl-c1">"<span class="pl-c1">Hello World</span>"</span>)
+
+<span class="pl-c">;; The () in the above is the list of arguments for the function</span>
+(<span class="pl-en">define</span> hello
+  (<span class="pl-en">lambda</span> (name)
+    (string-append <span class="pl-c1">"<span class="pl-c1">Hello </span>"</span> name)))
+(hello <span class="pl-c1">"<span class="pl-c1">Steve</span>"</span>) <span class="pl-c">; =&gt; "Hello Steve"</span>
+<span class="pl-c">;; ... or equivalently, using a sugared definition:</span>
+(<span class="pl-en">define</span> (hello2 name)
+  (string-append <span class="pl-c1">"<span class="pl-c1">Hello </span>"</span> name))
+
+<span class="pl-c">;; You can have multi-variadic functions too, using `case-lambda'</span>
+(<span class="pl-en">define</span> hello3
+  (<span class="pl-en">case-lambda</span>
+    [() <span class="pl-c1">"<span class="pl-c1">Hello World</span>"</span>]
+    [(name) (string-append <span class="pl-c1">"<span class="pl-c1">Hello </span>"</span> name)]))
+(hello3 <span class="pl-c1">"<span class="pl-c1">Jake</span>"</span>) <span class="pl-c">; =&gt; "Hello Jake"</span>
+(hello3) <span class="pl-c">; =&gt; "Hello World"</span>
+<span class="pl-c">;; ... or specify optional arguments with a default value expression</span>
+(<span class="pl-en">define</span> (hello4 [name <span class="pl-c1">"<span class="pl-c1">World</span>"</span>])
+  (string-append <span class="pl-c1">"<span class="pl-c1">Hello </span>"</span> name))
+
+<span class="pl-c">;; Functions can pack extra arguments up in a list</span>
+(<span class="pl-en">define</span> (count-args . args)
+  (format <span class="pl-c1">"<span class="pl-c1">You passed ~a args: ~a</span>"</span> (length args) args))
+(count-args <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>) <span class="pl-c">; =&gt; "You passed 3 args: (1 2 3)"</span>
+<span class="pl-c">;; ... or with the unsugared `lambda' form:</span>
+(<span class="pl-en">define</span> count-args2
+  (<span class="pl-en">lambda</span> args
+    (format <span class="pl-c1">"<span class="pl-c1">You passed ~a args: ~a</span>"</span> (length args) args)))
+
+<span class="pl-c">;; You can mix regular and packed arguments</span>
+(<span class="pl-en">define</span> (hello-count name . args)
+  (format <span class="pl-c1">"<span class="pl-c1">Hello ~a, you passed ~a extra args</span>"</span> name (length args)))
+(hello-count <span class="pl-c1">"<span class="pl-c1">Finn</span>"</span> <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)
+<span class="pl-c">; =&gt; "Hello Finn, you passed 3 extra args"</span>
+<span class="pl-c">;; ... unsugared:</span>
+(<span class="pl-en">define</span> hello-count2
+  (<span class="pl-en">lambda</span> (name . args)
+    (format <span class="pl-c1">"<span class="pl-c1">Hello ~a, you passed ~a extra args</span>"</span> name (length args))))
+
+<span class="pl-c">;; And with keywords</span>
+(<span class="pl-en">define</span> (hello-k <span class="pl-c1">#:name</span> [name <span class="pl-c1">"<span class="pl-c1">World</span>"</span>] <span class="pl-c1">#:greeting</span> [g <span class="pl-c1">"<span class="pl-c1">Hello</span>"</span>] . args)
+  (format <span class="pl-c1">"<span class="pl-c1">~a ~a, ~a extra args</span>"</span> g name (length args)))
+(hello-k)                 <span class="pl-c">; =&gt; "Hello World, 0 extra args"</span>
+(hello-k <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)           <span class="pl-c">; =&gt; "Hello World, 3 extra args"</span>
+(hello-k <span class="pl-c1">#:greeting</span> <span class="pl-c1">"<span class="pl-c1">Hi</span>"</span>) <span class="pl-c">; =&gt; "Hi World, 0 extra args"</span>
+(hello-k <span class="pl-c1">#:name</span> <span class="pl-c1">"<span class="pl-c1">Finn</span>"</span> <span class="pl-c1">#:greeting</span> <span class="pl-c1">"<span class="pl-c1">Hey</span>"</span>) <span class="pl-c">; =&gt; "Hey Finn, 0 extra args"</span>
+(hello-k <span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">#:greeting</span> <span class="pl-c1">"<span class="pl-c1">Hi</span>"</span> <span class="pl-c1">#:name</span> <span class="pl-c1">"<span class="pl-c1">Finn</span>"</span> <span class="pl-c1">4</span> <span class="pl-c1">5</span> <span class="pl-c1">6</span>)
+                                         <span class="pl-c">; =&gt; "Hi Finn, 6 extra args"</span>
+
+<span class="pl-c">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c">;; 5. Equality</span>
+<span class="pl-c">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="pl-c">;; for numbers use `='</span>
+(= <span class="pl-c1">3</span> <span class="pl-c1">3.0</span>) <span class="pl-c">; =&gt; #t</span>
+(= <span class="pl-c1">2</span> <span class="pl-c1">1</span>)   <span class="pl-c">; =&gt; #f</span>
+
+<span class="pl-c">;; `eq?' returns #t if 2 arguments refer to the same object (in memory),</span>
+<span class="pl-c">;; #f otherwise.</span>
+<span class="pl-c">;; In other words, it's a simple pointer comparison.</span>
+(eq? <span class="pl-c1">'()</span> <span class="pl-c1">'()</span>) <span class="pl-c">; =&gt; #t, since there exists only one empty list in memory</span>
+(<span class="pl-en">let</span> ([x <span class="pl-c1">'()</span>] [y <span class="pl-c1">'()</span>])
+  (eq? x y))  <span class="pl-c">; =&gt; #t, same as above</span>
+
+(eq? (list <span class="pl-c1">3</span>) (list <span class="pl-c1">3</span>)) <span class="pl-c">; =&gt; #f</span>
+(<span class="pl-en">let</span> ([x (list <span class="pl-c1">3</span>)] [y (list <span class="pl-c1">3</span>)])
+  (eq? x y))            <span class="pl-c">; =&gt; #f — not the same list in memory!</span>
+
+(<span class="pl-en">let*</span> ([x (list <span class="pl-c1">3</span>)] [y x])
+  (eq? x y)) <span class="pl-c">; =&gt; #t, since x and y now point to the same stuff</span>
+
+(eq? <span class="pl-c1">'yes</span> <span class="pl-c1">'yes</span>) <span class="pl-c">; =&gt; #t</span>
+(eq? <span class="pl-c1">'yes</span> <span class="pl-c1">'no</span>)  <span class="pl-c">; =&gt; #f</span>
+
+(eq? <span class="pl-c1">3</span> <span class="pl-c1">3</span>)   <span class="pl-c">; =&gt; #t — be careful here</span>
+            <span class="pl-c">; It’s better to use `=' for number comparisons.</span>
+(eq? <span class="pl-c1">3</span> <span class="pl-c1">3.0</span>) <span class="pl-c">; =&gt; #f</span>
+
+(eq? (expt <span class="pl-c1">2</span> <span class="pl-c1">100</span>) (expt <span class="pl-c1">2</span> <span class="pl-c1">100</span>))               <span class="pl-c">; =&gt; #f</span>
+(eq? (integer-&gt;char <span class="pl-c1">955</span>) (integer-&gt;char <span class="pl-c1">955</span>)) <span class="pl-c">; =&gt; #f</span>
+
+(eq? (string-append <span class="pl-c1">"<span class="pl-c1">foo</span>"</span> <span class="pl-c1">"<span class="pl-c1">bar</span>"</span>) (string-append <span class="pl-c1">"<span class="pl-c1">foo</span>"</span> <span class="pl-c1">"<span class="pl-c1">bar</span>"</span>)) <span class="pl-c">; =&gt; #f</span>
+
+<span class="pl-c">;; `eqv?' supports the comparison of number and character datatypes.</span>
+<span class="pl-c">;; for other datatypes, `eqv?' and `eq?' return the same result.</span>
+(eqv? <span class="pl-c1">3</span> <span class="pl-c1">3.0</span>)                                   <span class="pl-c">; =&gt; #f</span>
+(eqv? (expt <span class="pl-c1">2</span> <span class="pl-c1">100</span>) (expt <span class="pl-c1">2</span> <span class="pl-c1">100</span>))               <span class="pl-c">; =&gt; #t</span>
+(eqv? (integer-&gt;char <span class="pl-c1">955</span>) (integer-&gt;char <span class="pl-c1">955</span>)) <span class="pl-c">; =&gt; #t</span>
+
+(eqv? (string-append <span class="pl-c1">"<span class="pl-c1">foo</span>"</span> <span class="pl-c1">"<span class="pl-c1">bar</span>"</span>) (string-append <span class="pl-c1">"<span class="pl-c1">foo</span>"</span> <span class="pl-c1">"<span class="pl-c1">bar</span>"</span>))   <span class="pl-c">; =&gt; #f</span>
+
+<span class="pl-c">;; `equal?' supports the comparison of the following datatypes:</span>
+<span class="pl-c">;; strings, byte strings, pairs, mutable pairs, vectors, boxes,</span>
+<span class="pl-c">;; hash tables, and inspectable structures.</span>
+<span class="pl-c">;; for other datatypes, `equal?' and `eqv?' return the same result.</span>
+(equal? <span class="pl-c1">3</span> <span class="pl-c1">3.0</span>)                                                   <span class="pl-c">; =&gt; #f</span>
+(equal? (string-append <span class="pl-c1">"<span class="pl-c1">foo</span>"</span> <span class="pl-c1">"<span class="pl-c1">bar</span>"</span>) (string-append <span class="pl-c1">"<span class="pl-c1">foo</span>"</span> <span class="pl-c1">"<span class="pl-c1">bar</span>"</span>)) <span class="pl-c">; =&gt; #t</span>
+(equal? (list <span class="pl-c1">3</span>) (list <span class="pl-c1">3</span>))                                       <span class="pl-c">; =&gt; #t</span>
+
+<span class="pl-c">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c">;; 6. Control Flow</span>
+<span class="pl-c">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="pl-c">;;; Conditionals</span>
+
+(<span class="pl-en">if</span> <span class="pl-c1">#t</span>               <span class="pl-c">; test expression</span>
+    <span class="pl-c1">"<span class="pl-c1">this is true</span>"</span>   <span class="pl-c">; then expression</span>
+    <span class="pl-c1">"<span class="pl-c1">this is false</span>"</span>) <span class="pl-c">; else expression</span>
+<span class="pl-c">; =&gt; "this is true"</span>
+
+<span class="pl-c">;; In conditionals, all non-#f values are treated as true</span>
+(member <span class="pl-c1">'Groucho</span> '(Harpo Groucho Zeppo)) <span class="pl-c">; =&gt; '(Groucho Zeppo)</span>
+(<span class="pl-en">if</span> (member <span class="pl-c1">'Groucho</span> '(Harpo Groucho Zeppo))
+    <span class="pl-c1">'yep</span>
+    <span class="pl-c1">'nope</span>)
+<span class="pl-c">; =&gt; 'yep</span>
+
+<span class="pl-c">;; `cond' chains a series of tests to select a result</span>
+(<span class="pl-en">cond</span> [(&gt; <span class="pl-c1">2</span> <span class="pl-c1">2</span>) (error <span class="pl-c1">"<span class="pl-c1">wrong!</span>"</span>)]
+      [(&lt; <span class="pl-c1">2</span> <span class="pl-c1">2</span>) (error <span class="pl-c1">"<span class="pl-c1">wrong again!</span>"</span>)]
+      [<span class="pl-en">else</span> <span class="pl-c1">'ok</span>]) <span class="pl-c">; =&gt; 'ok</span>
+
+<span class="pl-c">;;; Pattern Matching</span>
+
+(<span class="pl-en">define</span> (fizzbuzz? n)
+  (<span class="pl-en">match</span> (list (remainder n <span class="pl-c1">3</span>) (remainder n <span class="pl-c1">5</span>))
+    [(list <span class="pl-c1">0</span> <span class="pl-c1">0</span>) <span class="pl-c1">'fizzbuzz</span>]
+    [(list <span class="pl-c1">0</span> <span class="pl-en">_</span>) <span class="pl-c1">'fizz</span>]
+    [(list <span class="pl-en">_</span> <span class="pl-c1">0</span>) <span class="pl-c1">'buzz</span>]
+    [<span class="pl-en">_</span>          <span class="pl-c1">#f</span>]))
+
+(fizzbuzz? <span class="pl-c1">15</span>) <span class="pl-c">; =&gt; 'fizzbuzz</span>
+(fizzbuzz? <span class="pl-c1">37</span>) <span class="pl-c">; =&gt; #f</span>
+
+<span class="pl-c">;;; Loops</span>
+
+<span class="pl-c">;; Looping can be done through (tail-) recursion</span>
+(<span class="pl-en">define</span> (loop i)
+  (<span class="pl-en">when</span> (&lt; i <span class="pl-c1">10</span>)
+    (printf <span class="pl-c1">"<span class="pl-c1">i=~a\n</span>"</span> i)
+    (loop (add1 i))))
+(loop <span class="pl-c1">5</span>) <span class="pl-c">; =&gt; i=5, i=6, ...</span>
+
+<span class="pl-c">;; Similarly, with a named let</span>
+(<span class="pl-en">let</span> loop ([i <span class="pl-c1">0</span>])
+  (<span class="pl-en">when</span> (&lt; i <span class="pl-c1">10</span>)
+    (printf <span class="pl-c1">"<span class="pl-c1">i=~a\n</span>"</span> i)
+    (loop (add1 i)))) <span class="pl-c">; =&gt; i=0, i=1, ...</span>
+
+<span class="pl-c">;; See below how to add a new `loop' form, but Racket already has a very</span>
+<span class="pl-c">;; flexible `for' form for loops:</span>
+(<span class="pl-en">for</span> ([i <span class="pl-c1">10</span>])
+  (printf <span class="pl-c1">"<span class="pl-c1">i=~a\n</span>"</span> i)) <span class="pl-c">; =&gt; i=0, i=1, ...</span>
+(<span class="pl-en">for</span> ([i (in-range <span class="pl-c1">5</span> <span class="pl-c1">10</span>)])
+  (printf <span class="pl-c1">"<span class="pl-c1">i=~a\n</span>"</span> i)) <span class="pl-c">; =&gt; i=5, i=6, ...</span>
+
+<span class="pl-c">;;; Iteration Over Other Sequences</span>
+<span class="pl-c">;; `for' allows iteration over many other kinds of sequences:</span>
+<span class="pl-c">;; lists, vectors, strings, sets, hash tables, etc...</span>
+
+(<span class="pl-en">for</span> ([i (in-list '(l i s t))])
+  (displayln i))
+
+(<span class="pl-en">for</span> ([i (in-vector #(v e c t o r))])
+  (displayln i))
+
+(<span class="pl-en">for</span> ([i (in-string <span class="pl-c1">"<span class="pl-c1">string</span>"</span>)])
+  (displayln i))
+
+(<span class="pl-en">for</span> ([i (in-set (set <span class="pl-c1">'x</span> <span class="pl-c1">'y</span> <span class="pl-c1">'z</span>))])
+  (displayln i))
+
+(<span class="pl-en">for</span> ([(k v) (in-hash (hash <span class="pl-c1">'a</span> <span class="pl-c1">1</span> <span class="pl-c1">'b</span> <span class="pl-c1">2</span> <span class="pl-c1">'c</span> <span class="pl-c1">3</span>))])
+  (printf <span class="pl-c1">"<span class="pl-c1">key:~a value:~a\n</span>"</span> k v))
+
+<span class="pl-c">;;; More Complex Iterations</span>
+
+<span class="pl-c">;; Parallel scan of multiple sequences (stops on shortest)</span>
+(<span class="pl-en">for</span> ([i <span class="pl-c1">10</span>] [j '(x y z)]) 
+  (printf <span class="pl-c1">"<span class="pl-c1">~a:~a\n</span>"</span> i j))
+<span class="pl-c">; =&gt; 0:x 1:y 2:z</span>
+
+<span class="pl-c">;; Nested loops</span>
+(<span class="pl-en">for*</span> ([i <span class="pl-c1">2</span>] [j '(x y z)]) 
+  (printf <span class="pl-c1">"<span class="pl-c1">~a:~a\n</span>"</span> i j))
+<span class="pl-c">; =&gt; 0:x, 0:y, 0:z, 1:x, 1:y, 1:z</span>
+
+<span class="pl-c">;; Conditions</span>
+(<span class="pl-en">for</span> ([i <span class="pl-c1">1000</span>]
+      <span class="pl-c1">#:when</span> (&gt; i <span class="pl-c1">5</span>)
+      <span class="pl-c1">#:unless</span> (odd? i)
+      <span class="pl-c1">#:break</span> (&gt; i <span class="pl-c1">10</span>))
+  (printf <span class="pl-c1">"<span class="pl-c1">i=~a\n</span>"</span> i))
+<span class="pl-c">; =&gt; i=6, i=8, i=10</span>
+
+<span class="pl-c">;;; Comprehensions</span>
+<span class="pl-c">;; Very similar to `for' loops -- just collect the results</span>
+
+(<span class="pl-en">for/list</span> ([i '(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)])
+  (add1 i)) <span class="pl-c">; =&gt; '(2 3 4)</span>
+
+(<span class="pl-en">for/list</span> ([i '(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)] <span class="pl-c1">#:when</span> (even? i))
+  i) <span class="pl-c">; =&gt; '(2)</span>
+
+(<span class="pl-en">for/list</span> ([i <span class="pl-c1">10</span>] [j '(x y z)])
+  (list i j)) <span class="pl-c">; =&gt; '((0 x) (1 y) (2 z))</span>
+
+(<span class="pl-en">for/list</span> ([i <span class="pl-c1">1000</span>] <span class="pl-c1">#:when</span> (&gt; i <span class="pl-c1">5</span>) <span class="pl-c1">#:unless</span> (odd? i) <span class="pl-c1">#:break</span> (&gt; i <span class="pl-c1">10</span>))
+  i) <span class="pl-c">; =&gt; '(6 8 10)</span>
+
+(<span class="pl-en">for/hash</span> ([i '(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span>)])
+  (values i (number-&gt;string i)))
+<span class="pl-c">; =&gt; '#hash((1 . "1") (2 . "2") (3 . "3"))</span>
+
+<span class="pl-c">;; There are many kinds of other built-in ways to collect loop values:</span>
+(<span class="pl-en">for/sum</span> ([i <span class="pl-c1">10</span>]) (* i i)) <span class="pl-c">; =&gt; 285</span>
+(<span class="pl-en">for/product</span> ([i (in-range <span class="pl-c1">1</span> <span class="pl-c1">11</span>)]) (* i i)) <span class="pl-c">; =&gt; 13168189440000</span>
+(<span class="pl-en">for/and</span> ([i <span class="pl-c1">10</span>] [j (in-range <span class="pl-c1">10</span> <span class="pl-c1">20</span>)]) (&lt; i j)) <span class="pl-c">; =&gt; #t</span>
+(<span class="pl-en">for/or</span> ([i <span class="pl-c1">10</span>] [j (in-range <span class="pl-c1">0</span> <span class="pl-c1">20</span> <span class="pl-c1">2</span>)]) (= i j)) <span class="pl-c">; =&gt; #t</span>
+<span class="pl-c">;; And to use any arbitrary combination, use `for/fold'</span>
+(<span class="pl-en">for/fold</span> ([sum <span class="pl-c1">0</span>]) ([i '(<span class="pl-c1">1</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span>)]) (+ sum i)) <span class="pl-c">; =&gt; 10</span>
+<span class="pl-c">;; (This can often replace common imperative loops)</span>
+
+<span class="pl-c">;;; Exceptions</span>
+
+<span class="pl-c">;; To catch exceptions, use the `with-handlers' form</span>
+(<span class="pl-en">with-handlers</span> ([exn:fail? (<span class="pl-en">lambda</span> (exn) <span class="pl-c1">999</span>)])
+  (+ <span class="pl-c1">1</span> <span class="pl-c1">"<span class="pl-c1">2</span>"</span>)) <span class="pl-c">; =&gt; 999</span>
+(<span class="pl-en">with-handlers</span> ([exn:break? (<span class="pl-en">lambda</span> (exn) <span class="pl-c1">"<span class="pl-c1">no time</span>"</span>)])
+  (sleep <span class="pl-c1">3</span>)
+  <span class="pl-c1">"<span class="pl-c1">phew</span>"</span>) <span class="pl-c">; =&gt; "phew", but if you break it =&gt; "no time"</span>
+
+<span class="pl-c">;; Use `raise' to throw exceptions or any other value</span>
+(<span class="pl-en">with-handlers</span> ([number?    <span class="pl-c">; catch numeric values raised</span>
+                 identity]) <span class="pl-c">; return them as plain values</span>
+  (+ <span class="pl-c1">1</span> (raise <span class="pl-c1">2</span>))) <span class="pl-c">; =&gt; 2</span>
+
+<span class="pl-c">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c">;; 7. Mutation</span>
+<span class="pl-c">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="pl-c">;; Use `set!' to assign a new value to an existing variable</span>
+(<span class="pl-en">define</span> n <span class="pl-c1">5</span>)
+(<span class="pl-en">set!</span> n (add1 n))
+n <span class="pl-c">; =&gt; 6</span>
+
+<span class="pl-c">;; Use boxes for explicitly mutable values (similar to pointers or</span>
+<span class="pl-c">;; references in other languages)</span>
+(<span class="pl-en">define</span> n* (box <span class="pl-c1">5</span>))
+(set-box! n* (add1 (unbox n*)))
+(unbox n*) <span class="pl-c">; =&gt; 6</span>
+
+<span class="pl-c">;; Many Racket datatypes are immutable (pairs, lists, etc), some come in</span>
+<span class="pl-c">;; both mutable and immutable flavors (strings, vectors, hash tables,</span>
+<span class="pl-c">;; etc...)</span>
+
+<span class="pl-c">;; Use `vector' or `make-vector' to create mutable vectors</span>
+(<span class="pl-en">define</span> vec (vector <span class="pl-c1">2</span> <span class="pl-c1">2</span> <span class="pl-c1">3</span> <span class="pl-c1">4</span>))
+(<span class="pl-en">define</span> wall (make-vector <span class="pl-c1">100</span> <span class="pl-c1">'bottle-of-beer</span>))
+<span class="pl-c">;; Use vector-set! to update a slot</span>
+(vector-set! vec <span class="pl-c1">0</span> <span class="pl-c1">1</span>)
+(vector-set! wall <span class="pl-c1">99</span> <span class="pl-c1">'down</span>)
+vec <span class="pl-c">; =&gt; #(1 2 3 4)</span>
+
+<span class="pl-c">;; Create an empty mutable hash table and manipulate it</span>
+(<span class="pl-en">define</span> m3 (make-hash))
+(hash-set! m3 <span class="pl-c1">'a</span> <span class="pl-c1">1</span>)
+(hash-set! m3 <span class="pl-c1">'b</span> <span class="pl-c1">2</span>)
+(hash-set! m3 <span class="pl-c1">'c</span> <span class="pl-c1">3</span>)
+(hash-ref m3 <span class="pl-c1">'a</span>)   <span class="pl-c">; =&gt; 1</span>
+(hash-ref m3 <span class="pl-c1">'d</span> <span class="pl-c1">0</span>) <span class="pl-c">; =&gt; 0</span>
+(hash-remove! m3 <span class="pl-c1">'a</span>)
+
+<span class="pl-c">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c">;; 8. Modules</span>
+<span class="pl-c">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="pl-c">;; Modules let you organize code into multiple files and reusable</span>
+<span class="pl-c">;; libraries; here we use sub-modules, nested in the whole module that</span>
+<span class="pl-c">;; this text makes (starting from the "#lang" line)</span>
+
+(<span class="pl-en">module</span> cake racket/base <span class="pl-c">; define a `cake' module based on racket/base</span>
+
+  (<span class="pl-en">provide</span> print-cake) <span class="pl-c">; function exported by the module</span>
+
+  (<span class="pl-en">define</span> (print-cake n)
+    (show <span class="pl-c1">"<span class="pl-c1">   ~a   </span>"</span> n <span class="pl-c1">#\.</span>)
+    (show <span class="pl-c1">"<span class="pl-c1"> .-~a-. </span>"</span> n <span class="pl-c1">#\|</span>)
+    (show <span class="pl-c1">"<span class="pl-c1"> | ~a | </span>"</span> n <span class="pl-c1">#\space</span>)
+    (show <span class="pl-c1">"<span class="pl-c1">---~a---</span>"</span> n <span class="pl-c1">#\-</span>))
+
+  (<span class="pl-en">define</span> (show fmt n ch) <span class="pl-c">; internal function</span>
+    (printf fmt (make-string n ch))
+    (newline)))
+
+<span class="pl-c">;; Use `require' to get all `provide'd names from a module</span>
+(<span class="pl-en">require</span> <span class="pl-c1">'cake</span>) <span class="pl-c">; the ' is for a local submodule</span>
+(print-cake <span class="pl-c1">3</span>)
+<span class="pl-c">; (show "~a" 1 #\A) ; =&gt; error, `show' was not exported</span>
+
+<span class="pl-c">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c">;; 9. Classes and Objects</span>
+<span class="pl-c">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="pl-c">;; Create a class fish% (-% is idiomatic for class bindings)</span>
+(<span class="pl-en">define</span> fish%
+  (<span class="pl-en">class</span> object%
+    (<span class="pl-en">init</span> size) <span class="pl-c">; initialization argument</span>
+    (<span class="pl-en">super-new</span>) <span class="pl-c">; superclass initialization</span>
+    <span class="pl-c">;; Field</span>
+    (<span class="pl-en">define</span> current-size size)
+    <span class="pl-c">;; Public methods</span>
+    (<span class="pl-en">define/public</span> (get-size)
+      current-size)
+    (<span class="pl-en">define/public</span> (grow amt)
+      (<span class="pl-en">set!</span> current-size (+ amt current-size)))
+    (<span class="pl-en">define/public</span> (eat other-fish)
+      (grow (<span class="pl-en">send</span> other-fish get-size)))))
+
+<span class="pl-c">;; Create an instance of fish%</span>
+(<span class="pl-en">define</span> charlie
+  (<span class="pl-en">new</span> fish% [size <span class="pl-c1">10</span>]))
+
+<span class="pl-c">;; Use `send' to call an object's methods</span>
+(<span class="pl-en">send</span> charlie get-size) <span class="pl-c">; =&gt; 10</span>
+(<span class="pl-en">send</span> charlie grow <span class="pl-c1">6</span>)
+(<span class="pl-en">send</span> charlie get-size) <span class="pl-c">; =&gt; 16</span>
+
+<span class="pl-c">;; `fish%' is a plain "first class" value, which can get us mixins</span>
+(<span class="pl-en">define</span> (add-color c%)
+  (<span class="pl-en">class</span> c%
+    (<span class="pl-en">init</span> color)
+    (<span class="pl-en">super-new</span>)
+    (<span class="pl-en">define</span> my-color color)
+    (<span class="pl-en">define/public</span> (get-color) my-color)))
+(<span class="pl-en">define</span> colored-fish% (add-color fish%))
+(<span class="pl-en">define</span> charlie2 (<span class="pl-en">new</span> colored-fish% [size <span class="pl-c1">10</span>] [color <span class="pl-c1">'red</span>]))
+(<span class="pl-en">send</span> charlie2 get-color)
+<span class="pl-c">;; or, with no names:</span>
+(<span class="pl-en">send</span> (<span class="pl-en">new</span> (add-color fish%) [size <span class="pl-c1">10</span>] [color <span class="pl-c1">'red</span>]) get-color)
+
+<span class="pl-c">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c">;; 10. Macros</span>
+<span class="pl-c">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="pl-c">;; Macros let you extend the syntax of the language</span>
+
+<span class="pl-c">;; Let's add a while loop</span>
+(<span class="pl-en">define-syntax-rule</span> (while condition body <span class="pl-en">...</span>)
+  (<span class="pl-en">let</span> loop ()
+    (<span class="pl-en">when</span> condition
+      body <span class="pl-en">...</span>
+      (loop))))
+
+(<span class="pl-en">let</span> ([i <span class="pl-c1">0</span>])
+  (while (&lt; i  <span class="pl-c1">10</span>)
+    (displayln i)
+    (<span class="pl-en">set!</span> i (add1 i))))
+
+<span class="pl-c">;; Macros are hygienic, you cannot clobber existing variables!</span>
+(<span class="pl-en">define-syntax-rule</span> (swap! x y) <span class="pl-c">; -! is idiomatic for mutation</span>
+  (<span class="pl-en">let</span> ([tmp x])
+    (<span class="pl-en">set!</span> x y)
+    (<span class="pl-en">set!</span> y tmp)))
+
+(<span class="pl-en">define</span> tmp <span class="pl-c1">2</span>)
+(<span class="pl-en">define</span> other <span class="pl-c1">3</span>)
+(swap! tmp other)
+(printf <span class="pl-c1">"<span class="pl-c1">tmp = ~a; other = ~a\n</span>"</span> tmp other)
+<span class="pl-c">;; The variable `tmp` is renamed to `tmp_1`</span>
+<span class="pl-c">;; in order to avoid name conflict</span>
+<span class="pl-c">;; (let ([tmp_1 tmp])</span>
+<span class="pl-c">;;   (set! tmp other)</span>
+<span class="pl-c">;;   (set! other tmp_1))</span>
+
+<span class="pl-c">;; But they are still code transformations, for example:</span>
+(<span class="pl-en">define-syntax-rule</span> (bad-while condition body <span class="pl-en">...</span>)
+  (<span class="pl-en">when</span> condition
+    body <span class="pl-en">...</span>
+    (bad-while condition body <span class="pl-en">...</span>)))
+<span class="pl-c">;; this macro is broken: it generates infinite code, if you try to use</span>
+<span class="pl-c">;; it, the compiler will get in an infinite loop</span>
+
+<span class="pl-c">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c">;; 11. Contracts</span>
+<span class="pl-c">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="pl-c">;; Contracts impose constraints on values exported from modules</span>
+
+(<span class="pl-en">module</span> bank-account racket
+  (<span class="pl-en">provide</span> (<span class="pl-en">contract-out</span>
+            [deposit (<span class="pl-en">-&gt;</span> positive? <span class="pl-en">any</span>)] <span class="pl-c">; amounts are always positive</span>
+            [balance (<span class="pl-en">-&gt;</span> positive?)]))
+
+  (<span class="pl-en">define</span> amount <span class="pl-c1">0</span>)
+  (<span class="pl-en">define</span> (deposit a) (<span class="pl-en">set!</span> amount (+ amount a)))
+  (<span class="pl-en">define</span> (balance) amount))
+
+(<span class="pl-en">require</span> <span class="pl-c1">'bank-account</span>)
+(deposit <span class="pl-c1">5</span>)
+
+(balance) <span class="pl-c">; =&gt; 5</span>
+
+<span class="pl-c">;; Clients that attempt to deposit a non-positive amount are blamed</span>
+<span class="pl-c">;; (deposit -5) ; =&gt; deposit: contract violation</span>
+<span class="pl-c">;; expected: positive?</span>
+<span class="pl-c">;; given: -5</span>
+<span class="pl-c">;; more details....</span>
+
+<span class="pl-c">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="pl-c">;; 12. Input &amp; output</span>
+<span class="pl-c">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="pl-c">;; Racket has this concept of "port", which is very similar to file</span>
+<span class="pl-c">;; descriptors in other languages</span>
+
+<span class="pl-c">;; Open "/tmp/tmp.txt" and write "Hello World"</span>
+<span class="pl-c">;; This would trigger an error if the file's already existed</span>
+(<span class="pl-en">define</span> out-port (open-output-file <span class="pl-c1">"<span class="pl-c1">/tmp/tmp.txt</span>"</span>))
+(displayln <span class="pl-c1">"<span class="pl-c1">Hello World</span>"</span> out-port)
+(close-output-port out-port)
+
+<span class="pl-c">;; Append to "/tmp/tmp.txt"</span>
+(<span class="pl-en">define</span> out-port (open-output-file <span class="pl-c1">"<span class="pl-c1">/tmp/tmp.txt</span>"</span>
+                                   <span class="pl-c1">#:exists</span> <span class="pl-c1">'append</span>))
+(displayln <span class="pl-c1">"<span class="pl-c1">Hola mundo</span>"</span> out-port)
+(close-output-port out-port)
+
+<span class="pl-c">;; Read from the file again</span>
+(<span class="pl-en">define</span> in-port (open-input-file <span class="pl-c1">"<span class="pl-c1">/tmp/tmp.txt</span>"</span>))
+(displayln (read-line in-port))
+<span class="pl-c">; =&gt; "Hello World"</span>
+(displayln (read-line in-port))
+<span class="pl-c">; =&gt; "Hola mundo"</span>
+(close-input-port in-port)
+
+<span class="pl-c">;; Alternatively, with call-with-output-file you don't need to explicitly</span>
+<span class="pl-c">;; close the file</span>
+(call-with-output-file <span class="pl-c1">"<span class="pl-c1">/tmp/tmp.txt</span>"</span>
+  <span class="pl-c1">#:exists</span> <span class="pl-c1">'update</span> <span class="pl-c">; Rewrite the content</span>
+  (<span class="pl-en">λ</span> (out-port)
+    (displayln <span class="pl-c1">"<span class="pl-c1">World Hello!</span>"</span> out-port)))
+
+<span class="pl-c">;; And call-with-input-file does the same thing for input</span>
+(call-with-input-file <span class="pl-c1">"<span class="pl-c1">/tmp/tmp.txt</span>"</span>
+  (<span class="pl-en">λ</span> (in-port)
+    (displayln (read-line in-port))))</pre></div>
+<h2>Further Reading</h2>
+<p>Still up for more? Try <a href="http://docs.racket-lang.org/getting-started/" rel="nofollow">Getting Started with Racket</a></p>
+<hr>
+<h2>Contributors</h2>
+<ul>
+<li>["th3rac25", "https://github.com/voila"]</li>
+<li>["Eli Barzilay", "https://github.com/elibarzilay"]</li>
+<li>["Gustavo Schmidt", "https://github.com/gustavoschmidt"]</li>
+<li>["Duong H. Nguyen", "https://github.com/cmpitg"]</li>
+<li>["Keyan Zhang", "https://github.com/keyanzhang"]</li>
+</ul>

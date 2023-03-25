@@ -1,0 +1,654 @@
+<h1>Vim script</h1>
+<div class="highlight highlight-source-viml"><pre class="notranslate"><span class="pl-c"><span class="pl-c">"</span> ##############</span>
+<span class="pl-c"><span class="pl-c">"</span>  Introduction</span>
+<span class="pl-c"><span class="pl-c">"</span> ##############</span>
+<span class="pl-c"><span class="pl-c">"</span></span>
+<span class="pl-c"><span class="pl-c">"</span> Vim script (also called VimL) is the subset of Vim's ex-commands which</span>
+<span class="pl-c"><span class="pl-c">"</span> supplies a number of features one would expect from a scripting language,</span>
+<span class="pl-c"><span class="pl-c">"</span> such as values, variables, functions or loops. Always keep in the back of</span>
+<span class="pl-c"><span class="pl-c">"</span> your mind that a Vim script file is just a sequence of ex-commands. It is</span>
+<span class="pl-c"><span class="pl-c">"</span> very common for a script to mix programming-language features and raw</span>
+<span class="pl-c"><span class="pl-c">"</span> ex-commands.</span>
+<span class="pl-c"><span class="pl-c">"</span></span>
+<span class="pl-c"><span class="pl-c">"</span> You can run Vim script directly by entering the commands in command-line mode</span>
+<span class="pl-c"><span class="pl-c">"</span> (press `:` to enter command-line mode), or you can write them to a file</span>
+<span class="pl-c"><span class="pl-c">"</span> (without the leading `:`) and source it in a running Vim instance (`:source</span>
+<span class="pl-c"><span class="pl-c">"</span> path/to/file`). Some files are sourced automatically as part of your</span>
+<span class="pl-c"><span class="pl-c">"</span> configuration (see |startup|). This guide assumes that you are familiar</span>
+<span class="pl-c"><span class="pl-c">"</span> with ex-commands and will only cover the scripting. Help topics to the</span>
+<span class="pl-c"><span class="pl-c">"</span> relevant manual sections are included.</span>
+<span class="pl-c"><span class="pl-c">"</span></span>
+<span class="pl-c"><span class="pl-c">"</span> See |usr_41.txt| for the official introduction to Vim script. A comment is</span>
+<span class="pl-c"><span class="pl-c">"</span> anything following an unmatched `"` until the end of the line, and `|`</span>
+<span class="pl-c"><span class="pl-c">"</span> separates instructions (what `;` does in most other languages). References to</span>
+<span class="pl-c"><span class="pl-c">"</span> the manual as surrounded with `|`, such as |help.txt|.</span>
+
+<span class="pl-c"><span class="pl-c">"</span> This is a comment</span>
+
+<span class="pl-c"><span class="pl-c">"</span> The vertical line '|' (pipe) separates commands</span>
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>Hello<span class="pl-pds">'</span></span> | <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>world!<span class="pl-pds">'</span></span>
+
+<span class="pl-c"><span class="pl-c">"</span> Putting a comment after a command usually works</span>
+<span class="pl-c1">pwd</span><span class="pl-c">                   <span class="pl-c">"</span> Displays the current working directory</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Except for some commands it does not; use the command delimiter before the</span>
+<span class="pl-c"><span class="pl-c">"</span> comment (echo assumes that the quotation mark begins a string)</span>
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>Hello world!<span class="pl-pds">'</span></span>  |<span class="pl-c"> <span class="pl-c">"</span> Displays a message</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Line breaks can be escaped by placing a backslash as the first non-whitespace</span>
+<span class="pl-c"><span class="pl-c">"</span> character on the *following* line. Only works in script files, not on the</span>
+<span class="pl-c"><span class="pl-c">"</span> command line</span>
+<span class="pl-c1">echo</span><span class="pl-c"> <span class="pl-c">"</span> Hello</span>
+    <span class="pl-cce">\ </span>world<span class="pl-c"> <span class="pl-c">"</span></span>
+
+<span class="pl-c1">echo</span> [<span class="pl-c1">1</span>, 
+    <span class="pl-cce">\ </span><span class="pl-c1">2</span>]
+
+<span class="pl-c1">echo</span> {
+    <span class="pl-cce">\ </span><span class="pl-s"><span class="pl-pds">'</span>a<span class="pl-pds">'</span></span>: <span class="pl-c1">1</span>,
+    <span class="pl-cce">\ </span><span class="pl-s"><span class="pl-pds">'</span>b<span class="pl-pds">'</span></span>: <span class="pl-c1">2</span>
+<span class="pl-cce">\}</span>
+
+
+<span class="pl-c"><span class="pl-c">"</span> #######</span>
+<span class="pl-c"><span class="pl-c">"</span>  Types</span>
+<span class="pl-c"><span class="pl-c">"</span> #######</span>
+<span class="pl-c"><span class="pl-c">"</span></span>
+<span class="pl-c"><span class="pl-c">"</span> For an overview of types see |E712|. For an overview of operators see</span>
+<span class="pl-c"><span class="pl-c">"</span> |expression-syntax|</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Numbers (|expr-number|)</span>
+<span class="pl-c"><span class="pl-c">"</span> #######</span>
+
+<span class="pl-c1">echo</span>  <span class="pl-c1">123</span>         |<span class="pl-c"> <span class="pl-c">"</span> Decimal</span>
+<span class="pl-c1">echo</span>  <span class="pl-c1">0</span>b1111011   |<span class="pl-c"> <span class="pl-c">"</span> Binary</span>
+<span class="pl-c1">echo</span>  <span class="pl-c1">0173</span>        |<span class="pl-c"> <span class="pl-c">"</span> Octal</span>
+<span class="pl-c1">echo</span>  <span class="pl-c1">0x7B</span>        |<span class="pl-c"> <span class="pl-c">"</span> Hexadecimal</span>
+<span class="pl-c1">echo</span>  <span class="pl-c1">123.0</span>       |<span class="pl-c"> <span class="pl-c">"</span> Floating-point</span>
+<span class="pl-c1">echo</span>  <span class="pl-c1">1.23e2</span>      |<span class="pl-c"> <span class="pl-c">"</span> Floating-point (scientific notation)</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Note that an *integer* number with a leading `0` is in octal notation. The</span>
+<span class="pl-c"><span class="pl-c">"</span> usual arithmetic operations are supported.</span>
+
+<span class="pl-c1">echo</span>  <span class="pl-c1">1</span> <span class="pl-k">+</span> <span class="pl-c1">2</span>       |<span class="pl-c"> <span class="pl-c">"</span> Addition</span>
+<span class="pl-c1">echo</span>  <span class="pl-c1">1</span> <span class="pl-k">-</span> <span class="pl-c1">2</span>       |<span class="pl-c"> <span class="pl-c">"</span> Subtraction</span>
+<span class="pl-c1">echo</span>  <span class="pl-k">-</span> <span class="pl-c1">1</span>         |<span class="pl-c"> <span class="pl-c">"</span> Negation (unary minus)</span>
+<span class="pl-c1">echo</span>  <span class="pl-k">+</span> <span class="pl-c1">1</span>         |<span class="pl-c"> <span class="pl-c">"</span> Unary plus (does nothing really, but still legal)</span>
+<span class="pl-c1">echo</span>  <span class="pl-c1">1</span> <span class="pl-k">*</span> <span class="pl-c1">2</span>       |<span class="pl-c"> <span class="pl-c">"</span> Multiplication</span>
+<span class="pl-c1">echo</span>  <span class="pl-c1">1</span> / <span class="pl-c1">2</span>       |<span class="pl-c"> <span class="pl-c">"</span> Division</span>
+<span class="pl-c1">echo</span>  <span class="pl-c1">1</span> <span class="pl-k">%</span> <span class="pl-c1">2</span>       |<span class="pl-c"> <span class="pl-c">"</span> Modulo (remainder)</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Booleans (|Boolean|)</span>
+<span class="pl-c"><span class="pl-c">"</span> ########</span>
+<span class="pl-c"><span class="pl-c">"</span></span>
+<span class="pl-c"><span class="pl-c">"</span> The number 0 is false, every other number is true. Strings are implicitly</span>
+<span class="pl-c"><span class="pl-c">"</span> converted to numbers (see below). There are two pre-defined semantic</span>
+<span class="pl-c"><span class="pl-c">"</span> constants.</span>
+
+<span class="pl-c1">echo</span>  <span class="pl-smi"><span class="pl-k">v:</span>true</span>      |<span class="pl-c"> <span class="pl-c">"</span> Evaluates to 1 or the string 'v:true'</span>
+<span class="pl-c1">echo</span>  <span class="pl-smi"><span class="pl-k">v:</span>false</span>     |<span class="pl-c"> <span class="pl-c">"</span> Evaluates to 0 or the string 'v:false'</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Boolean values can result from comparison of two objects.</span>
+
+<span class="pl-c1">echo</span>  <span class="pl-c1">x</span> <span class="pl-k">==</span> <span class="pl-c1">y</span>             |<span class="pl-c"> <span class="pl-c">"</span> Equality by value</span>
+<span class="pl-c1">echo</span>  <span class="pl-c1">x</span> <span class="pl-k">!=</span> <span class="pl-c1">y</span>             |<span class="pl-c"> <span class="pl-c">"</span> Inequality</span>
+<span class="pl-c1">echo</span>  <span class="pl-c1">x</span><span class="pl-k"> &gt; </span> <span class="pl-c1">y</span>             |<span class="pl-c"> <span class="pl-c">"</span> Greater than</span>
+<span class="pl-c1">echo</span>  <span class="pl-c1">x</span> <span class="pl-k">&gt;=</span> <span class="pl-c1">y</span>             |<span class="pl-c"> <span class="pl-c">"</span> Greater than or equal</span>
+<span class="pl-c1">echo</span>  <span class="pl-c1">x</span><span class="pl-k"> &lt; </span> <span class="pl-c1">y</span>             |<span class="pl-c"> <span class="pl-c">"</span> Smaller than</span>
+<span class="pl-c1">echo</span>  <span class="pl-c1">x</span> <span class="pl-k">&lt;=</span> <span class="pl-c1">y</span>             |<span class="pl-c"> <span class="pl-c">"</span> Smaller than or equal</span>
+<span class="pl-c1">echo</span>  <span class="pl-c1">x</span> <span class="pl-k">is</span> <span class="pl-c1">y</span>             |<span class="pl-c"> <span class="pl-c">"</span> Instance identity (lists and dictionaries)</span>
+<span class="pl-c1">echo</span>  <span class="pl-c1">x</span> <span class="pl-k">isnot</span> <span class="pl-c1">y</span>          |<span class="pl-c"> <span class="pl-c">"</span> Instance non-identity (lists and dictionaries)</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Strings are compared based on their alphanumerical ordering</span>
+<span class="pl-c"><span class="pl-c">"</span> echo 'a' &lt; 'b'. Case sensitivity depends on the setting of 'ignorecase'</span>
+<span class="pl-c"><span class="pl-c">"</span></span>
+<span class="pl-c"><span class="pl-c">"</span> Explicit case-sensitivity is specified by appending '#' (match case) or '?'</span>
+<span class="pl-c"><span class="pl-c">"</span> (ignore case) to the operator. Prefer explicitly case sensitivity when writing</span>
+<span class="pl-c"><span class="pl-c">"</span> portable scripts.</span>
+
+<span class="pl-c1">echo</span>  <span class="pl-s"><span class="pl-pds">'</span>a<span class="pl-pds">'</span></span><span class="pl-k"> &lt; </span> <span class="pl-s"><span class="pl-pds">'</span>B<span class="pl-pds">'</span></span>         |<span class="pl-c"> <span class="pl-c">"</span> True or false depending on 'ignorecase'</span>
+<span class="pl-c1">echo</span>  <span class="pl-s"><span class="pl-pds">'</span>a<span class="pl-pds">'</span></span> <span class="pl-k">&lt;?</span> <span class="pl-s"><span class="pl-pds">'</span>B<span class="pl-pds">'</span></span>         |<span class="pl-c"> <span class="pl-c">"</span> True</span>
+<span class="pl-c1">echo</span>  <span class="pl-s"><span class="pl-pds">'</span>a<span class="pl-pds">'</span></span> <span class="pl-k">&lt;#</span> <span class="pl-s"><span class="pl-pds">'</span>B<span class="pl-pds">'</span></span>         |<span class="pl-c"> <span class="pl-c">"</span> False</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Regular expression matching</span>
+<span class="pl-c1">echo</span>  <span class="pl-s"><span class="pl-pds">"</span>hi<span class="pl-pds">"</span></span> <span class="pl-k">=</span>~  <span class="pl-s"><span class="pl-pds">"</span>hello<span class="pl-pds">"</span></span>    |<span class="pl-c"> <span class="pl-c">"</span> Regular expression match, uses 'ignorecase'</span>
+<span class="pl-c1">echo</span>  <span class="pl-s"><span class="pl-pds">"</span>hi<span class="pl-pds">"</span></span> <span class="pl-k">=</span>~# <span class="pl-s"><span class="pl-pds">"</span>hello<span class="pl-pds">"</span></span>    |<span class="pl-c"> <span class="pl-c">"</span> Regular expression match, case sensitive</span>
+<span class="pl-c1">echo</span>  <span class="pl-s"><span class="pl-pds">"</span>hi<span class="pl-pds">"</span></span> <span class="pl-k">=</span>~? <span class="pl-s"><span class="pl-pds">"</span>hello<span class="pl-pds">"</span></span>    |<span class="pl-c"> <span class="pl-c">"</span> Regular expression match, case insensitive</span>
+<span class="pl-c1">echo</span>  <span class="pl-s"><span class="pl-pds">"</span>hi<span class="pl-pds">"</span></span> <span class="pl-k">!~</span>  <span class="pl-s"><span class="pl-pds">"</span>hello<span class="pl-pds">"</span></span>    |<span class="pl-c"> <span class="pl-c">"</span> Regular expression unmatch, use 'ignorecase'</span>
+<span class="pl-c1">echo</span>  <span class="pl-s"><span class="pl-pds">"</span>hi<span class="pl-pds">"</span></span> <span class="pl-k">!~#</span> <span class="pl-s"><span class="pl-pds">"</span>hello<span class="pl-pds">"</span></span>    |<span class="pl-c"> <span class="pl-c">"</span> Regular expression unmatch, case sensitive</span>
+<span class="pl-c1">echo</span>  <span class="pl-s"><span class="pl-pds">"</span>hi<span class="pl-pds">"</span></span> <span class="pl-k">!~?</span> <span class="pl-s"><span class="pl-pds">"</span>hello<span class="pl-pds">"</span></span>    |<span class="pl-c"> <span class="pl-c">"</span> Regular expression unmatch, case insensitive</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Boolean operations are possible.</span>
+
+<span class="pl-c1">echo</span>  <span class="pl-smi"><span class="pl-k">v:</span>true</span> <span class="pl-k">&amp;&amp;</span> <span class="pl-smi"><span class="pl-k">v:</span>false</span>       |<span class="pl-c"> <span class="pl-c">"</span> Logical AND</span>
+<span class="pl-c1">echo</span>  <span class="pl-smi"><span class="pl-k">v:</span>true</span> <span class="pl-k">||</span> <span class="pl-smi"><span class="pl-k">v:</span>false</span>       |<span class="pl-c"> <span class="pl-c">"</span> Logical OR</span>
+<span class="pl-c1">echo</span>  ! <span class="pl-smi"><span class="pl-k">v:</span>true</span>                |<span class="pl-c"> <span class="pl-c">"</span> Logical NOT</span>
+<span class="pl-c1">echo</span>  <span class="pl-smi"><span class="pl-k">v:</span>true</span> ? <span class="pl-s"><span class="pl-pds">'</span>yes<span class="pl-pds">'</span></span> : <span class="pl-s"><span class="pl-pds">'</span>no<span class="pl-pds">'</span></span>   |<span class="pl-c"> <span class="pl-c">"</span> Ternary operator</span>
+
+
+<span class="pl-c"><span class="pl-c">"</span> Strings (|String|)</span>
+<span class="pl-c"><span class="pl-c">"</span> #######</span>
+<span class="pl-c"><span class="pl-c">"</span></span>
+<span class="pl-c"><span class="pl-c">"</span> An ordered zero-indexed sequence of bytes. The encoding of text into bytes</span>
+<span class="pl-c"><span class="pl-c">"</span> depends on the option |'encoding'|.</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Literal constructors</span>
+<span class="pl-c1">echo</span>  <span class="pl-s"><span class="pl-pds">"</span>Hello world<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>   |<span class="pl-c"> <span class="pl-c">"</span> The last two characters stand for newline</span>
+<span class="pl-c1">echo</span>  <span class="pl-s"><span class="pl-pds">'</span>Hello world\n<span class="pl-pds">'</span></span>   |<span class="pl-c"> <span class="pl-c">"</span> The last two characters are literal</span>
+<span class="pl-c1">echo</span>  <span class="pl-s"><span class="pl-pds">'</span>Let<span class="pl-cce">''</span>s go!<span class="pl-pds">'</span></span>      |<span class="pl-c"> <span class="pl-c">"</span> Two single quotes become one quote character</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Single-quote strings take all characters are literal, except two single</span>
+<span class="pl-c"><span class="pl-c">"</span> quotes, which are taken to be a single quote in the string itself. See </span>
+<span class="pl-c"><span class="pl-c">"</span> |expr-quote| for all possible escape sequences.</span>
+
+<span class="pl-c"><span class="pl-c">"</span> String concatenation</span>
+<span class="pl-c"><span class="pl-c">"</span> The .. operator is preferred, but only supported in since Vim 8.1.1114</span>
+<span class="pl-c1">echo</span>  <span class="pl-s"><span class="pl-pds">'</span>Hello <span class="pl-pds">'</span></span> .  <span class="pl-s"><span class="pl-pds">'</span>world<span class="pl-pds">'</span></span>  |<span class="pl-c"> <span class="pl-c">"</span> String concatenation</span>
+<span class="pl-c1">echo</span>  <span class="pl-s"><span class="pl-pds">'</span>Hello <span class="pl-pds">'</span></span> .. <span class="pl-s"><span class="pl-pds">'</span>world<span class="pl-pds">'</span></span>  |<span class="pl-c"> <span class="pl-c">"</span> String concatenation (new variant)</span>
+
+<span class="pl-c"><span class="pl-c">"</span> String indexing</span>
+<span class="pl-c1">echo</span>  <span class="pl-s"><span class="pl-pds">'</span>Hello<span class="pl-pds">'</span></span>[<span class="pl-c1">0</span>]           |<span class="pl-c"> <span class="pl-c">"</span> First byte</span>
+<span class="pl-c1">echo</span>  <span class="pl-s"><span class="pl-pds">'</span>Hello<span class="pl-pds">'</span></span>[<span class="pl-c1">1</span>]           |<span class="pl-c"> <span class="pl-c">"</span> Second byte</span>
+<span class="pl-c1">echo</span>  <span class="pl-s"><span class="pl-pds">'</span>Hellö<span class="pl-pds">'</span></span>[<span class="pl-c1">4</span>]           |<span class="pl-c"> <span class="pl-c">"</span> Returns a byte, not the character 'ö'</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Substrings (second index is inclusive)</span>
+<span class="pl-c1">echo</span>  <span class="pl-s"><span class="pl-pds">'</span>Hello<span class="pl-pds">'</span></span>[:]           |<span class="pl-c"> <span class="pl-c">"</span> Copy of entire string</span>
+<span class="pl-c1">echo</span>  <span class="pl-s"><span class="pl-pds">'</span>Hello<span class="pl-pds">'</span></span>[<span class="pl-c1">1</span>:<span class="pl-c1">3</span>]         |<span class="pl-c"> <span class="pl-c">"</span> Substring, second to fourth byte</span>
+<span class="pl-c1">echo</span>  <span class="pl-s"><span class="pl-pds">'</span>Hello<span class="pl-pds">'</span></span>[<span class="pl-c1">1</span>:<span class="pl-c1">-2</span>]        |<span class="pl-c"> <span class="pl-c">"</span> Substring until second to last byte</span>
+<span class="pl-c1">echo</span>  <span class="pl-s"><span class="pl-pds">'</span>Hello<span class="pl-pds">'</span></span>[<span class="pl-c1">1</span>:]          |<span class="pl-c"> <span class="pl-c">"</span> Substring with starting index</span>
+<span class="pl-c1">echo</span>  <span class="pl-s"><span class="pl-pds">'</span>Hello<span class="pl-pds">'</span></span>[:<span class="pl-c1">2</span>]          |<span class="pl-c"> <span class="pl-c">"</span> Substring with ending index</span>
+<span class="pl-c1">echo</span>  <span class="pl-s"><span class="pl-pds">'</span>Hello<span class="pl-pds">'</span></span>[<span class="pl-c1">-2</span>:]         |<span class="pl-c"> <span class="pl-c">"</span> Substring relative to end of string</span>
+
+<span class="pl-c"><span class="pl-c">"</span> A negative index is relative to the end of the string. See</span>
+<span class="pl-c"><span class="pl-c">"</span> |string-functions| for all string-related functions.</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Lists (|List|)</span>
+<span class="pl-c"><span class="pl-c">"</span> #####</span>
+<span class="pl-c"><span class="pl-c">"</span></span>
+<span class="pl-c"><span class="pl-c">"</span> An ordered zero-indexed heterogeneous sequence of arbitrary Vim script</span>
+<span class="pl-c"><span class="pl-c">"</span> objects.</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Literal constructor</span>
+<span class="pl-c1">echo</span>  []                   |<span class="pl-c"> <span class="pl-c">"</span> Empty list</span>
+<span class="pl-c1">echo</span>  [<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-s"><span class="pl-pds">'</span>Hello<span class="pl-pds">'</span></span>]      |<span class="pl-c"> <span class="pl-c">"</span> List with elements</span>
+<span class="pl-c1">echo</span>  [<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-s"><span class="pl-pds">'</span>Hello<span class="pl-pds">'</span></span>, ]    |<span class="pl-c"> <span class="pl-c">"</span> Trailing comma permitted</span>
+<span class="pl-c1">echo</span>  [[<span class="pl-c1">1</span>, <span class="pl-c1">2</span>], <span class="pl-s"><span class="pl-pds">'</span>Hello<span class="pl-pds">'</span></span>]    |<span class="pl-c"> <span class="pl-c">"</span> Lists can be nested arbitrarily</span>
+
+<span class="pl-c"><span class="pl-c">"</span> List concatenation</span>
+<span class="pl-c1">echo</span>  [<span class="pl-c1">1</span>, <span class="pl-c1">2</span>] <span class="pl-k">+</span> [<span class="pl-c1">3</span>, <span class="pl-c1">4</span>]      |<span class="pl-c"> <span class="pl-c">"</span> Creates a new list</span>
+
+<span class="pl-c"><span class="pl-c">"</span> List indexing, negative is relative to end of list (|list-index|)</span>
+<span class="pl-c1">echo</span>  [<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span>][<span class="pl-c1">2</span>]      |<span class="pl-c"> <span class="pl-c">"</span> Third element</span>
+<span class="pl-c1">echo</span>  [<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span>][<span class="pl-c1">-1</span>]     |<span class="pl-c"> <span class="pl-c">"</span> Last element</span>
+
+<span class="pl-c"><span class="pl-c">"</span> List slicing (|sublist|)</span>
+<span class="pl-c1">echo</span>  [<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span>][:]      |<span class="pl-c"> <span class="pl-c">"</span> Shallow copy of entire list</span>
+<span class="pl-c1">echo</span>  [<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span>][:<span class="pl-c1">2</span>]     |<span class="pl-c"> <span class="pl-c">"</span> Sublist until third item (inclusive)</span>
+<span class="pl-c1">echo</span>  [<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span>][<span class="pl-c1">2</span>:]     |<span class="pl-c"> <span class="pl-c">"</span> Sublist from third item (inclusive)</span>
+<span class="pl-c1">echo</span>  [<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span>][:<span class="pl-c1">-2</span>]    |<span class="pl-c"> <span class="pl-c">"</span> Sublist until second-to-last item (inclusive)</span>
+
+<span class="pl-c"><span class="pl-c">"</span> All slicing operations create new lists. To modify a list in-place use list</span>
+<span class="pl-c"><span class="pl-c">"</span> functions (|list-functions|) or assign directly to an item (see below about</span>
+<span class="pl-c"><span class="pl-c">"</span> variables).</span>
+
+
+<span class="pl-c"><span class="pl-c">"</span> Dictionaries (|Dictionary|)</span>
+<span class="pl-c"><span class="pl-c">"</span> ############</span>
+<span class="pl-c"><span class="pl-c">"</span></span>
+<span class="pl-c"><span class="pl-c">"</span> An unordered sequence of key-value pairs, keys are always strings (numbers</span>
+<span class="pl-c"><span class="pl-c">"</span> are implicitly converted to strings).</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Dictionary literal</span>
+<span class="pl-c1">echo</span>  {}                       |<span class="pl-c"> <span class="pl-c">"</span> Empty dictionary</span>
+<span class="pl-c1">echo</span>  {<span class="pl-s"><span class="pl-pds">'</span>a<span class="pl-pds">'</span></span>: <span class="pl-c1">1</span>, <span class="pl-s"><span class="pl-pds">'</span>b<span class="pl-pds">'</span></span>: <span class="pl-c1">2</span>}         |<span class="pl-c"> <span class="pl-c">"</span> Dictionary literal</span>
+<span class="pl-c1">echo</span>  {<span class="pl-s"><span class="pl-pds">'</span>a<span class="pl-pds">'</span></span>: <span class="pl-c1">1</span>, <span class="pl-s"><span class="pl-pds">'</span>b<span class="pl-pds">'</span></span>: <span class="pl-c1">2</span>, }       |<span class="pl-c"> <span class="pl-c">"</span> Trailing comma permitted</span>
+<span class="pl-c1">echo</span>  {<span class="pl-s"><span class="pl-pds">'</span>x<span class="pl-pds">'</span></span>: {<span class="pl-s"><span class="pl-pds">'</span>a<span class="pl-pds">'</span></span>: <span class="pl-c1">1</span>, <span class="pl-s"><span class="pl-pds">'</span>b<span class="pl-pds">'</span></span>: <span class="pl-c1">2</span>}}  |<span class="pl-c"> <span class="pl-c">"</span> Nested dictionary</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Indexing a dictionary</span>
+<span class="pl-c1">echo</span>  {<span class="pl-s"><span class="pl-pds">'</span>a<span class="pl-pds">'</span></span>: <span class="pl-c1">1</span>, <span class="pl-s"><span class="pl-pds">'</span>b<span class="pl-pds">'</span></span>: <span class="pl-c1">2</span>}[<span class="pl-s"><span class="pl-pds">'</span>a<span class="pl-pds">'</span></span>]    |<span class="pl-c"> <span class="pl-c">"</span> Literal index</span>
+<span class="pl-c1">echo</span>  {<span class="pl-s"><span class="pl-pds">'</span>a<span class="pl-pds">'</span></span>: <span class="pl-c1">1</span>, <span class="pl-s"><span class="pl-pds">'</span>b<span class="pl-pds">'</span></span>: <span class="pl-c1">2</span>}.<span class="pl-c1">a</span>       |<span class="pl-c"> <span class="pl-c">"</span> Syntactic sugar for simple keys</span>
+
+<span class="pl-c"><span class="pl-c">"</span> See |dict-functions| for dictionary manipulation functions.</span>
+
+
+<span class="pl-c"><span class="pl-c">"</span> Funcref (|Funcref|)</span>
+<span class="pl-c"><span class="pl-c">"</span> #######</span>
+<span class="pl-c"><span class="pl-c">"</span></span>
+<span class="pl-c"><span class="pl-c">"</span> Reference to a function, uses the function name as a string for construction.</span>
+<span class="pl-c"><span class="pl-c">"</span> When stored in a variable the name of the variable has the same restrictions</span>
+<span class="pl-c"><span class="pl-c">"</span> as a function name (see below).</span>
+
+<span class="pl-c1">echo</span>  <span class="pl-k">function</span>(<span class="pl-s"><span class="pl-pds">'</span>type<span class="pl-pds">'</span></span>)                   |<span class="pl-c"> <span class="pl-c">"</span> Reference to function type()</span>
+<span class="pl-c"><span class="pl-c">"</span> Note that `funcref('type')` will throw an error because the argument must be</span>
+<span class="pl-c"><span class="pl-c">"</span> a user-defined function; see further below for defining your own functions.</span>
+<span class="pl-c1">echo</span>  <span class="pl-en">funcref</span>(<span class="pl-s"><span class="pl-pds">'</span>type<span class="pl-pds">'</span></span>)                    |<span class="pl-c"> <span class="pl-c">"</span> Reference by identity, not name</span>
+<span class="pl-c"><span class="pl-c">"</span> A lambda (|lambda|) is an anonymous function; it can only contain one</span>
+<span class="pl-c"><span class="pl-c">"</span> expression in its body, which is also its implicit return value.</span>
+<span class="pl-c1">echo</span>  {<span class="pl-c1">x</span> <span class="pl-k">-</span>&gt; <span class="pl-c1">x</span> <span class="pl-k">*</span> <span class="pl-c1">x</span>}                       |<span class="pl-c"> <span class="pl-c">"</span> Anonymous function</span>
+<span class="pl-c1">echo</span>  <span class="pl-k">function</span>(<span class="pl-s"><span class="pl-pds">'</span>substitute<span class="pl-pds">'</span></span>, [<span class="pl-s"><span class="pl-pds">'</span>hello<span class="pl-pds">'</span></span>])  |<span class="pl-c"> <span class="pl-c">"</span> Partial function</span>
+
+
+<span class="pl-c"><span class="pl-c">"</span> Regular expression (|regular-expression|)</span>
+<span class="pl-c"><span class="pl-c">"</span> ##################</span>
+<span class="pl-c"><span class="pl-c">"</span></span>
+<span class="pl-c"><span class="pl-c">"</span> A regular expression pattern is generally a string, but in some cases you can</span>
+<span class="pl-c"><span class="pl-c">"</span> also use a regular expression between a pair of delimiters (usually `/`, but</span>
+<span class="pl-c"><span class="pl-c">"</span> you can choose anything).</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Substitute 'hello' for 'Hello'</span>
+<span class="pl-c1">substitute</span><span class="pl-sr">/hello/</span>Hello/
+
+
+<span class="pl-c"><span class="pl-c">"</span> ###########################</span>
+<span class="pl-c"><span class="pl-c">"</span>  Implicit type conversions</span>
+<span class="pl-c"><span class="pl-c">"</span> ###########################</span>
+<span class="pl-c"><span class="pl-c">"</span></span>
+<span class="pl-c"><span class="pl-c">"</span> Strings are converted to numbers, and numbers to strings when necessary. A</span>
+<span class="pl-c"><span class="pl-c">"</span> number becomes its decimal notation as a string. A string becomes its</span>
+<span class="pl-c"><span class="pl-c">"</span> numerical value if it can be parsed to a number, otherwise it becomes zero.</span>
+
+<span class="pl-c1">echo</span>  <span class="pl-s"><span class="pl-pds">"</span>1<span class="pl-pds">"</span></span> <span class="pl-k">+</span> <span class="pl-c1">1</span>         |<span class="pl-c"> <span class="pl-c">"</span> Number</span>
+<span class="pl-c1">echo</span>  <span class="pl-s"><span class="pl-pds">"</span>1<span class="pl-pds">"</span></span> .. <span class="pl-c1">1</span>        |<span class="pl-c"> <span class="pl-c">"</span> String</span>
+<span class="pl-c1">echo</span>  <span class="pl-s"><span class="pl-pds">"</span>0xA<span class="pl-pds">"</span></span> <span class="pl-k">+</span> <span class="pl-c1">1</span>       |<span class="pl-c"> <span class="pl-c">"</span> Number</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Strings are treated like numbers when used as booleans</span>
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span> ? <span class="pl-c1">1</span> : <span class="pl-c1">0</span>   |<span class="pl-c"> <span class="pl-c">"</span> This string is parsed to 0, which is false</span>
+
+<span class="pl-c"><span class="pl-c">"</span> ###########</span>
+<span class="pl-c"><span class="pl-c">"</span>  Variables</span>
+<span class="pl-c"><span class="pl-c">"</span> ###########</span>
+<span class="pl-c"><span class="pl-c">"</span> </span>
+<span class="pl-c"><span class="pl-c">"</span> Variables are bound within a scope; if no scope is provided a default is</span>
+<span class="pl-c"><span class="pl-c">"</span> chosen by Vim. Use `:let` and `:const` to bind a value and `:unlet` to unbind</span>
+<span class="pl-c"><span class="pl-c">"</span> it.</span>
+
+<span class="pl-k">let</span> <span class="pl-smi"><span class="pl-k">b:</span>my_var</span> <span class="pl-k">=</span> <span class="pl-c1">1</span>        |<span class="pl-c"> <span class="pl-c">"</span> Local to current buffer</span>
+<span class="pl-k">let</span> <span class="pl-smi"><span class="pl-k">w:</span>my_var</span> <span class="pl-k">=</span> <span class="pl-c1">1</span>        |<span class="pl-c"> <span class="pl-c">"</span> Local to current window</span>
+<span class="pl-k">let</span> <span class="pl-c1">t</span>:my_var <span class="pl-k">=</span> <span class="pl-c1">1</span>        |<span class="pl-c"> <span class="pl-c">"</span> Local to current tab page</span>
+<span class="pl-k">let</span> <span class="pl-smi"><span class="pl-k">g:</span>my_var</span> <span class="pl-k">=</span> <span class="pl-c1">1</span>        |<span class="pl-c"> <span class="pl-c">"</span> Global variable</span>
+<span class="pl-k">let</span> <span class="pl-smi"><span class="pl-k">l:</span>my_var</span> <span class="pl-k">=</span> <span class="pl-c1">1</span>        |<span class="pl-c"> <span class="pl-c">"</span> Local to current function (see functions below)</span>
+<span class="pl-k">let</span> <span class="pl-smi"><span class="pl-k">s:</span>my_var</span> <span class="pl-k">=</span> <span class="pl-c1">1</span>        |<span class="pl-c"> <span class="pl-c">"</span> Local to current script file</span>
+<span class="pl-k">let</span> <span class="pl-smi"><span class="pl-k">a:</span>my_arg</span> <span class="pl-k">=</span> <span class="pl-c1">1</span>        |<span class="pl-c"> <span class="pl-c">"</span> Function argument (see functions below)</span>
+
+<span class="pl-c"><span class="pl-c">"</span> The Vim scope is read-only</span>
+<span class="pl-c1">echo</span>  <span class="pl-smi"><span class="pl-k">v:</span>true</span>            |<span class="pl-c"> <span class="pl-c">"</span> Special built-in Vim variables (|v:var|)</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Access special Vim memory like variables</span>
+<span class="pl-k">let</span> <span class="pl-smi">@a</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>Hello<span class="pl-pds">'</span></span>        |<span class="pl-c"> <span class="pl-c">"</span> Register</span>
+<span class="pl-k">let</span> <span class="pl-c1">$PATH</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>            |<span class="pl-c"> <span class="pl-c">"</span> Environment variable</span>
+<span class="pl-k">let</span> &amp;<span class="pl-c1">textwidth</span> <span class="pl-k">=</span> <span class="pl-c1">79</span>     |<span class="pl-c"> <span class="pl-c">"</span> Option</span>
+<span class="pl-k">let</span> &amp;<span class="pl-smi"><span class="pl-k">l:</span>textwidth</span> <span class="pl-k">=</span> <span class="pl-c1">79</span>   |<span class="pl-c"> <span class="pl-c">"</span> Local option</span>
+<span class="pl-k">let</span> &amp;<span class="pl-smi"><span class="pl-k">g:</span>textwidth</span> <span class="pl-k">=</span> <span class="pl-c1">79</span>   |<span class="pl-c"> <span class="pl-c">"</span> Global option</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Access scopes as dictionaries (can be modified like all dictionaries)</span>
+<span class="pl-c"><span class="pl-c">"</span> See the |dict-functions|, especially |get()|, for access and manipulation</span>
+<span class="pl-c1">echo</span>  <span class="pl-smi"><span class="pl-k">b:</span></span>                |<span class="pl-c"> <span class="pl-c">"</span> All buffer variables</span>
+<span class="pl-c1">echo</span>  <span class="pl-smi"><span class="pl-k">w:</span></span>                |<span class="pl-c"> <span class="pl-c">"</span> All window variables</span>
+<span class="pl-c1">echo</span>  <span class="pl-c1">t</span>:                |<span class="pl-c"> <span class="pl-c">"</span> All tab page variables</span>
+<span class="pl-c1">echo</span>  <span class="pl-smi"><span class="pl-k">g:</span></span>                |<span class="pl-c"> <span class="pl-c">"</span> All global variables</span>
+<span class="pl-c1">echo</span>  <span class="pl-smi"><span class="pl-k">l:</span></span>                |<span class="pl-c"> <span class="pl-c">"</span> All local variables</span>
+<span class="pl-c1">echo</span>  <span class="pl-smi"><span class="pl-k">s:</span></span>                |<span class="pl-c"> <span class="pl-c">"</span> All script variables</span>
+<span class="pl-c1">echo</span>  <span class="pl-smi"><span class="pl-k">a:</span></span>                |<span class="pl-c"> <span class="pl-c">"</span> All function arguments</span>
+<span class="pl-c1">echo</span>  <span class="pl-smi"><span class="pl-k">v:</span></span>                |<span class="pl-c"> <span class="pl-c">"</span> All Vim variables</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Constant variables</span>
+<span class="pl-c1">const</span> <span class="pl-c1">x</span> <span class="pl-k">=</span> <span class="pl-c1">10</span>            |<span class="pl-c"> <span class="pl-c">"</span> See |:const|, |:lockvar|</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Function reference variables have the same restrictions as function names</span>
+<span class="pl-k">let</span> IsString <span class="pl-k">=</span> {<span class="pl-c1">x</span> <span class="pl-k">-</span>&gt; <span class="pl-en">type</span>(<span class="pl-c1">x</span>) <span class="pl-k">==</span> <span class="pl-en">type</span>(<span class="pl-s"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>)}    |<span class="pl-c"> <span class="pl-c">"</span> Global: capital letter</span>
+<span class="pl-k">let</span> <span class="pl-smi"><span class="pl-k">s:</span>isNumber</span> <span class="pl-k">=</span> {<span class="pl-c1">x</span> <span class="pl-k">-</span>&gt; <span class="pl-en">type</span>(<span class="pl-c1">x</span>) <span class="pl-k">==</span> <span class="pl-en">type</span>(<span class="pl-c1">0</span>)}   |<span class="pl-c"> <span class="pl-c">"</span> Local: any name allowed</span>
+
+<span class="pl-c"><span class="pl-c">"</span> When omitted the scope `g:` is implied, except in functions, there `l:` is</span>
+<span class="pl-c"><span class="pl-c">"</span> implied.</span>
+
+
+<span class="pl-c"><span class="pl-c">"</span> Multiple value binding (list unpacking)</span>
+<span class="pl-c"><span class="pl-c">"</span> #######################################</span>
+<span class="pl-c"><span class="pl-c">"</span></span>
+<span class="pl-c"><span class="pl-c">"</span> Assign values of list to multiple variables (number of items must match)</span>
+<span class="pl-k">let</span> [<span class="pl-c1">x</span>, <span class="pl-c1">y</span>] <span class="pl-k">=</span> [<span class="pl-c1">1</span>, <span class="pl-c1">2</span>]
+
+<span class="pl-c"><span class="pl-c">"</span> Assign the remainder to a rest variable (note the semicolon)</span>
+<span class="pl-k">let</span> [mother, father; children] <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">'</span>Alice<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>Bob<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>Carol<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>Dennis<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>Emily<span class="pl-pds">'</span></span>]
+
+
+<span class="pl-c"><span class="pl-c">"</span> ##############</span>
+<span class="pl-c"><span class="pl-c">"</span>  Flow control</span>
+<span class="pl-c"><span class="pl-c">"</span> ##############</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Conditional (|:if|, |:elseif|, |:else|, |:endif|)</span>
+<span class="pl-c"><span class="pl-c">"</span> ###########</span>
+<span class="pl-c"><span class="pl-c">"</span> </span>
+<span class="pl-c"><span class="pl-c">"</span> Conditions are set between `if` and `endif`. They can be nested.</span>
+
+<span class="pl-k">let</span> condition <span class="pl-k">=</span> <span class="pl-smi"><span class="pl-k">v:</span>true</span>
+
+<span class="pl-k">if</span> condition
+    <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>First condition<span class="pl-pds">'</span></span>
+<span class="pl-k">elseif</span> another_condition
+    <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>Second condition<span class="pl-pds">'</span></span>
+<span class="pl-k">else</span>
+    <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>Fail<span class="pl-pds">'</span></span>
+<span class="pl-k">endif</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Loops (|:for|, |:endfor|, |:while|, |:endwhile|, |:break|, |:continue|)</span>
+<span class="pl-c"><span class="pl-c">"</span> #####</span>
+<span class="pl-c"><span class="pl-c">"</span></span>
+<span class="pl-c"><span class="pl-c">"</span> Two types of loops: `:for` and `:while`. Use `:continue` to skip to the next</span>
+<span class="pl-c"><span class="pl-c">"</span> iteration, `:break` to break out of the loop.</span>
+
+<span class="pl-c"><span class="pl-c">"</span> For-loop (|:for|, |:endfor|)</span>
+<span class="pl-c"><span class="pl-c">"</span> ========</span>
+<span class="pl-c"><span class="pl-c">"</span></span>
+<span class="pl-c"><span class="pl-c">"</span> For-loops iterate over lists and nothing else. If you want to iterate over</span>
+<span class="pl-c"><span class="pl-c">"</span> another sequence you need to use a function which will create a list.</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Iterate over a list</span>
+<span class="pl-k">for</span> person <span class="pl-k">in</span> [<span class="pl-s"><span class="pl-pds">'</span>Alice<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>Bob<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>Carol<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>Dennis<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>Emily<span class="pl-pds">'</span></span>]
+    <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>Hello <span class="pl-pds">'</span></span> .. person
+<span class="pl-k">endfor</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Iterate over a nested list by unpacking it</span>
+<span class="pl-k">for</span> [<span class="pl-c1">x</span>, <span class="pl-c1">y</span>] <span class="pl-k">in</span> [[<span class="pl-c1">1</span>, <span class="pl-c1">0</span>], [<span class="pl-c1">0</span>, <span class="pl-c1">1</span>], [<span class="pl-c1">-1</span>, <span class="pl-c1">0</span>], [<span class="pl-c1">0</span>, <span class="pl-c1">-1</span>]]
+    <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>Position: x =<span class="pl-pds">'</span></span>  .. <span class="pl-c1">x</span> .. <span class="pl-s"><span class="pl-pds">'</span>, y = <span class="pl-pds">'</span></span> .. <span class="pl-c1">y</span>
+<span class="pl-k">endfor</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Iterate over a range of numbers</span>
+<span class="pl-k">for</span> <span class="pl-c1">i</span> <span class="pl-k">in</span> <span class="pl-en">range</span>(<span class="pl-c1">10</span>, <span class="pl-c1">0</span>, <span class="pl-c1">-1</span>)<span class="pl-c">  <span class="pl-c">"</span> Count down from 10</span>
+    <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>T minus<span class="pl-pds">'</span></span>  .. <span class="pl-c1">i</span>
+<span class="pl-k">endfor</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Iterate over the keys of a dictionary</span>
+<span class="pl-k">for</span> symbol <span class="pl-k">in</span> <span class="pl-en">keys</span>({<span class="pl-s"><span class="pl-pds">'</span>π<span class="pl-pds">'</span></span>: <span class="pl-c1">3.14</span>, <span class="pl-s"><span class="pl-pds">'</span>e<span class="pl-pds">'</span></span>: <span class="pl-c1">2.71</span>})
+    <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>The constant <span class="pl-pds">'</span></span> .. symbol .. <span class="pl-s"><span class="pl-pds">'</span> is a transcendent number<span class="pl-pds">'</span></span>
+<span class="pl-k">endfor</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Iterate over the values of a dictionary</span>
+<span class="pl-k">for</span> value <span class="pl-k">in</span> <span class="pl-en">values</span>({<span class="pl-s"><span class="pl-pds">'</span>π<span class="pl-pds">'</span></span>: <span class="pl-c1">3.14</span>, <span class="pl-s"><span class="pl-pds">'</span>e<span class="pl-pds">'</span></span>: <span class="pl-c1">2.71</span>})
+    <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>The value <span class="pl-pds">'</span></span> .. value .. <span class="pl-s"><span class="pl-pds">'</span> approximates a transcendent number<span class="pl-pds">'</span></span>
+<span class="pl-k">endfor</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Iterate over the keys and values of a dictionary</span>
+<span class="pl-k">for</span> [symbol, value] <span class="pl-k">in</span> <span class="pl-en">items</span>({<span class="pl-s"><span class="pl-pds">'</span>π<span class="pl-pds">'</span></span>: <span class="pl-c1">3.14</span>, <span class="pl-s"><span class="pl-pds">'</span>e<span class="pl-pds">'</span></span>: <span class="pl-c1">2.71</span>})
+    <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>The number <span class="pl-pds">'</span></span> .. symbol .. <span class="pl-s"><span class="pl-pds">'</span> is approximately <span class="pl-pds">'</span></span> .. value
+<span class="pl-k">endfor</span>
+
+<span class="pl-c"><span class="pl-c">"</span> While-loops (|:while|, |:endwhile|)</span>
+
+<span class="pl-k">let</span> there_yet <span class="pl-k">=</span> <span class="pl-smi"><span class="pl-k">v:</span>true</span>
+<span class="pl-k">while</span> <span class="pl-k">!</span>there_yet
+    <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>Are we there yet?<span class="pl-pds">'</span></span>
+<span class="pl-k">endwhile</span>
+
+
+<span class="pl-c"><span class="pl-c">"</span> Exception handling (|exception-handling|)</span>
+<span class="pl-c"><span class="pl-c">"</span> ##################</span>
+<span class="pl-c"><span class="pl-c">"</span></span>
+<span class="pl-c"><span class="pl-c">"</span> Throw new exceptions as strings, catch them by pattern-matching a regular</span>
+<span class="pl-c"><span class="pl-c">"</span> expression against the string</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Throw new exception</span>
+<span class="pl-c1">throw</span> <span class="pl-s"><span class="pl-pds">"</span>Wrong arguments<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">"</span> Guard against an exception (the second catch matches any exception)</span>
+<span class="pl-k">try</span>
+    <span class="pl-c1">source</span> <span class="pl-c1">path</span><span class="pl-sr">/to/</span><span class="pl-c1">file</span>
+<span class="pl-k">catch</span> <span class="pl-sr">/Cannot open/</span>
+    <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>Looks like that file does not exist<span class="pl-pds">'</span></span>
+<span class="pl-k">catch</span> <span class="pl-sr">/.*/</span>
+    <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>Something went wrong, but I do not know what<span class="pl-pds">'</span></span>
+<span class="pl-k">finally</span>
+    <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>I am done trying<span class="pl-pds">'</span></span>
+<span class="pl-k">endtry</span>
+
+
+<span class="pl-c"><span class="pl-c">"</span> ##########</span>
+<span class="pl-c"><span class="pl-c">"</span>  Functions</span>
+<span class="pl-c"><span class="pl-c">"</span> ##########</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Defining functions (|:function|, |:endfunction|)</span>
+<span class="pl-c"><span class="pl-c">"</span> ##################</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Unscoped function names have to start with a capital letter</span>
+<span class="pl-k">function</span><span class="pl-k">!</span> <span class="pl-en">AddNumbersLoudly</span>(<span class="pl-c1">x</span>, <span class="pl-c1">y</span>)
+<span class="pl-c">    <span class="pl-c">"</span> Use a: scope to access arguments</span>
+    <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>Adding<span class="pl-pds">'</span></span>  .. <span class="pl-smi"><span class="pl-k">a:</span>x</span> ..  <span class="pl-s"><span class="pl-pds">'</span>and<span class="pl-pds">'</span></span>  .. <span class="pl-smi"><span class="pl-k">a:</span>y</span>   |<span class="pl-c"> <span class="pl-c">"</span> A side effect</span>
+    <span class="pl-k">return</span> <span class="pl-smi"><span class="pl-k">a:</span>x</span> <span class="pl-k">+</span> <span class="pl-smi"><span class="pl-k">a:</span>y</span>                          |<span class="pl-c"> <span class="pl-c">"</span> A return value</span>
+<span class="pl-k">endfunction</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Scoped function names may start with a lower-case letter</span>
+<span class="pl-k">function</span><span class="pl-k">!</span> <span class="pl-en"><span class="pl-k">s:</span>addNumbersLoudly</span>(<span class="pl-c1">x</span>, <span class="pl-c1">y</span>)
+    <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>Adding<span class="pl-pds">'</span></span>  .. <span class="pl-smi"><span class="pl-k">a:</span>x</span> ..  <span class="pl-s"><span class="pl-pds">'</span>and<span class="pl-pds">'</span></span>  .. <span class="pl-smi"><span class="pl-k">a:</span>y</span>
+    <span class="pl-k">return</span> <span class="pl-smi"><span class="pl-k">a:</span>x</span> <span class="pl-k">+</span> <span class="pl-smi"><span class="pl-k">a:</span>y</span>
+<span class="pl-k">endfunction</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Without the exclamation mark it would be an error to re-define a function,</span>
+<span class="pl-c"><span class="pl-c">"</span> with the exclamation mark the new definition can replace the old one. Since</span>
+<span class="pl-c"><span class="pl-c">"</span> Vim script files can be reloaded several times over the course of a session</span>
+<span class="pl-c"><span class="pl-c">"</span> it is best to use the exclamation mark unless you really know what you are</span>
+<span class="pl-c"><span class="pl-c">"</span> doing.</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Function definitions can have special qualifiers following the argument list.</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Range functions define two implicit arguments, which will be set to the range</span>
+<span class="pl-c"><span class="pl-c">"</span> of the ex-command</span>
+<span class="pl-k">function</span><span class="pl-k">!</span> <span class="pl-en">FirstAndLastLine</span>() <span class="pl-k">range</span>
+    <span class="pl-c1">echo</span> [<span class="pl-smi"><span class="pl-k">a:</span>firstline</span>, <span class="pl-smi"><span class="pl-k">a:</span>lastline</span>]
+<span class="pl-k">endfunction</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Prints the first and last line that match a pattern (|cmdline-ranges|)</span>
+<span class="pl-sr">/^#!/</span>,<span class="pl-sr">/!#$/</span><span class="pl-c1">call</span> <span class="pl-en">FirstAndLastLine</span>()
+
+<span class="pl-c"><span class="pl-c">"</span> Aborting functions, abort once error occurs (|:func-abort|)</span>
+<span class="pl-k">function</span><span class="pl-k">!</span> <span class="pl-en">SourceMyFile</span>() <span class="pl-k">abort</span>
+    <span class="pl-c1">source</span> my<span class="pl-k">-</span><span class="pl-c1">file</span>.<span class="pl-c1">vim</span>        |<span class="pl-c"> <span class="pl-c">"</span> Try sourcing non-existing file</span>
+    <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">'</span>This will never be printed<span class="pl-pds">'</span></span>
+<span class="pl-k">endfunction</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Closures, functions carrying values from outer scope (|:func-closure|)</span>
+<span class="pl-k">function</span><span class="pl-k">!</span> <span class="pl-en">MakeAdder</span>(<span class="pl-c1">x</span>)
+    <span class="pl-k">function</span><span class="pl-k">!</span> <span class="pl-en">Adder</span>(<span class="pl-c1">n</span>) <span class="pl-k">closure</span>
+        <span class="pl-k">return</span> <span class="pl-smi"><span class="pl-k">a:</span>n</span> <span class="pl-k">+</span> <span class="pl-smi"><span class="pl-k">a:</span>x</span>
+    <span class="pl-k">endfunction</span>
+    <span class="pl-k">return</span> <span class="pl-en">funcref</span>(<span class="pl-s"><span class="pl-pds">'</span>Adder<span class="pl-pds">'</span></span>)
+<span class="pl-k">endfunction</span>
+<span class="pl-k">let</span> AddFive <span class="pl-k">=</span> <span class="pl-en">MakeAdder</span>(<span class="pl-c1">5</span>)
+<span class="pl-c1">echo</span> <span class="pl-en">AddFive</span>(<span class="pl-c1">3</span>)               |<span class="pl-c"> <span class="pl-c">"</span> Prints 8</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Dictionary functions, poor man's OOP methods (|Dictionary-function|)</span>
+<span class="pl-k">function</span><span class="pl-k">!</span> <span class="pl-en">Mylen</span>() <span class="pl-k">dict</span>
+    <span class="pl-k">return</span> <span class="pl-en">len</span>(<span class="pl-c1">self</span>.data)     |<span class="pl-c"> <span class="pl-c">"</span> Implicit variable self</span>
+<span class="pl-k">endfunction</span>
+<span class="pl-k">let</span> mydict <span class="pl-k">=</span> {<span class="pl-s"><span class="pl-pds">'</span>data<span class="pl-pds">'</span></span>: [<span class="pl-c1">0</span>, <span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>], <span class="pl-s"><span class="pl-pds">'</span>len<span class="pl-pds">'</span></span>: <span class="pl-k">function</span>(<span class="pl-s"><span class="pl-pds">"</span>Mylen<span class="pl-pds">"</span></span>)}
+<span class="pl-c1">echo</span> mydict.<span class="pl-en">len</span>()
+
+<span class="pl-c"><span class="pl-c">"</span> Alternatively, more concise</span>
+<span class="pl-k">let</span> mydict <span class="pl-k">=</span> {<span class="pl-s"><span class="pl-pds">'</span>data<span class="pl-pds">'</span></span>: [<span class="pl-c1">0</span>, <span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>]}
+<span class="pl-k">function</span><span class="pl-k">!</span> mydict.<span class="pl-en">len</span>()
+    <span class="pl-k">return</span> <span class="pl-en">len</span>(<span class="pl-c1">self</span>.data)
+<span class="pl-k">endfunction</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Calling functions (|:call|)</span>
+<span class="pl-c"><span class="pl-c">"</span> #################</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Call a function for its return value, and possibly for its side effects</span>
+<span class="pl-k">let</span> animals <span class="pl-k">=</span> <span class="pl-en">keys</span>({<span class="pl-s"><span class="pl-pds">'</span>cow<span class="pl-pds">'</span></span>: <span class="pl-s"><span class="pl-pds">'</span>moo<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>dog<span class="pl-pds">'</span></span>: <span class="pl-s"><span class="pl-pds">'</span>woof<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>cat<span class="pl-pds">'</span></span>: <span class="pl-s"><span class="pl-pds">'</span>meow<span class="pl-pds">'</span></span>})
+
+<span class="pl-c"><span class="pl-c">"</span> Call a function for its side effects only, ignore potential return value</span>
+<span class="pl-c1">call</span> <span class="pl-en">sign_undefine</span>()
+
+<span class="pl-c"><span class="pl-c">"</span> The call() function calls a function reference and passes parameters as a</span>
+<span class="pl-c"><span class="pl-c">"</span> list, and returns the function's result.</span>
+<span class="pl-c1">echo</span>  <span class="pl-en">call</span>(<span class="pl-k">function</span>(<span class="pl-s"><span class="pl-pds">'</span>get<span class="pl-pds">'</span></span>), [{<span class="pl-s"><span class="pl-pds">'</span>a<span class="pl-pds">'</span></span>: <span class="pl-c1">1</span>, <span class="pl-s"><span class="pl-pds">'</span>b<span class="pl-pds">'</span></span>: <span class="pl-c1">2</span>}, <span class="pl-s"><span class="pl-pds">'</span>c<span class="pl-pds">'</span></span>, <span class="pl-c1">3</span>])   |<span class="pl-c"> <span class="pl-c">"</span> Prints 3</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Recall that Vim script is embedded within the ex-commands, that is why we</span>
+<span class="pl-c"><span class="pl-c">"</span> cannot just call a function directly, we have to use the `:call` ex-command.</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Function namespaces (|write-library-script|, |autoload|)</span>
+<span class="pl-c"><span class="pl-c">"</span> ###################</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Must be defined in autoload/foo/bar.vim</span>
+<span class="pl-c"><span class="pl-c">"</span> Namspaced function names do not have to start with a capital letter</span>
+<span class="pl-k">function</span><span class="pl-k">!</span> <span class="pl-en">foo#bar#log</span>(value)
+    <span class="pl-c1">echomsg</span> value
+<span class="pl-k">endfunction</span>
+
+<span class="pl-c1">call</span> <span class="pl-en">foo#bar#log</span>(<span class="pl-s"><span class="pl-pds">'</span>Hello<span class="pl-pds">'</span></span>)
+
+
+<span class="pl-c"><span class="pl-c">"</span> #############################</span>
+<span class="pl-c"><span class="pl-c">"</span>  Frequently used ex-commands</span>
+<span class="pl-c"><span class="pl-c">"</span> #############################</span>
+
+
+<span class="pl-c"><span class="pl-c">"</span> Sourcing runtime files (|'runtimepath'|)</span>
+<span class="pl-c"><span class="pl-c">"</span> ######################</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Source first match among runtime paths</span>
+<span class="pl-c1">runtime</span> <span class="pl-c1">plugin</span>/my<span class="pl-k">-</span><span class="pl-c1">plugin</span>.<span class="pl-c1">vim</span>
+
+
+<span class="pl-c"><span class="pl-c">"</span> Defining new ex-commands (|40.2|, |:command|)</span>
+<span class="pl-c"><span class="pl-c">"</span> ########################</span>
+
+<span class="pl-c"><span class="pl-c">"</span> First argument here is the name of the command, rest is the command body</span>
+<span class="pl-c1">command</span><span class="pl-k">!</span> SwapAdjacentLines <span class="pl-c1">normal</span><span class="pl-k">!</span> ddp
+
+<span class="pl-c"><span class="pl-c">"</span> The exclamation mark works the same as with `:function`. User-defined</span>
+<span class="pl-c"><span class="pl-c">"</span> commands must start with a capital letter. The `:command` command can take a</span>
+<span class="pl-c"><span class="pl-c">"</span> number of attributes (some of which have their own parameters with `=`), such</span>
+<span class="pl-c"><span class="pl-c">"</span> as `-nargs`, all of them start with a dash to set them apart from the command</span>
+<span class="pl-c"><span class="pl-c">"</span> name.</span>
+
+<span class="pl-c1">command</span><span class="pl-k">!</span> -<span class="pl-en">nargs</span>=<span class="pl-c1">1</span> <span class="pl-c1">Error</span> <span class="pl-c1">echoerr</span> <span class="pl-e">&lt;args&gt;</span>
+
+
+<span class="pl-c"><span class="pl-c">"</span> Defining auto-commands (|40.3|, |autocmd|, |autocommand-events|)</span>
+<span class="pl-c"><span class="pl-c">"</span> ######################</span>
+
+<span class="pl-c"><span class="pl-c">"</span> The arguments are "events", "patterns", rest is "commands"</span>
+<span class="pl-k">autocmd</span> <span class="pl-c1">BufWritePost</span> <span class="pl-s">$MYVIMRC</span> <span class="pl-c1">source</span> <span class="pl-c1">$MYVIMRC</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Events and patterns are separated by commas with no space between. See</span>
+<span class="pl-c"><span class="pl-c">"</span> |autocmd-events| for standard events, |User| for custom events. Everything</span>
+<span class="pl-c"><span class="pl-c">"</span> else are the ex-commands which will be executed.</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Auto groups</span>
+<span class="pl-c"><span class="pl-c">"</span> ===========</span>
+<span class="pl-c"><span class="pl-c">"</span></span>
+<span class="pl-c"><span class="pl-c">"</span> When a file is sourced multiple times the auto-commands are defined anew,</span>
+<span class="pl-c"><span class="pl-c">"</span> without deleting the old ones, causing auto-commands to pile up over time.</span>
+<span class="pl-c"><span class="pl-c">"</span> Use auto-groups and the following ritual to guard against this.</span>
+
+<span class="pl-k">augroup</span> <span class="pl-en">auto</span><span class="pl-k">-</span><span class="pl-c1">source</span>   |<span class="pl-c"> <span class="pl-c">"</span> The name of the group is arbitrary</span>
+    <span class="pl-c1">autocmd</span><span class="pl-k">!</span>          |<span class="pl-c"> <span class="pl-c">"</span> Deletes all auto-commands in the current group</span>
+    <span class="pl-k">autocmd</span> <span class="pl-c1">BufWritePost</span> <span class="pl-s">$MYVIMRC</span> <span class="pl-c1">source</span> <span class="pl-c1">$MYVIMRC</span>
+<span class="pl-k">augroup</span> <span class="pl-k">END</span>           |<span class="pl-c"> <span class="pl-c">"</span> Switch back to default auto-group</span>
+
+<span class="pl-c"><span class="pl-c">"</span> It is also possible to assign a group directly. This is useful if the</span>
+<span class="pl-c"><span class="pl-c">"</span> definition of the group is in one script and the definition of the</span>
+<span class="pl-c"><span class="pl-c">"</span> auto-command is in another script.</span>
+
+<span class="pl-c"><span class="pl-c">"</span> In one file</span>
+<span class="pl-k">augroup</span> <span class="pl-en">auto</span><span class="pl-k">-</span><span class="pl-c1">source</span>
+    <span class="pl-c1">autocmd</span><span class="pl-k">!</span>
+<span class="pl-k">augroup</span> <span class="pl-k">END</span>
+
+<span class="pl-c"><span class="pl-c">"</span> In another file</span>
+<span class="pl-k">autocmd</span> auto<span class="pl-k">-</span><span class="pl-c1">source</span> <span class="pl-s">BufWritePost</span> <span class="pl-c1">$MYVIMRC</span> <span class="pl-c1">source</span> <span class="pl-c1">$MYVIMRC</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Executing (run-time macros of sorts)</span>
+<span class="pl-c"><span class="pl-c">"</span> ####################################</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Sometimes we need to construct an ex-command where part of the command is not</span>
+<span class="pl-c"><span class="pl-c">"</span> known until runtime.</span>
+
+<span class="pl-k">let</span> <span class="pl-c1">line</span> <span class="pl-k">=</span> <span class="pl-c1">3</span>                |<span class="pl-c"> <span class="pl-c">"</span> Line number determined at runtime</span>
+<span class="pl-c1">execute</span> <span class="pl-c1">line</span> .. <span class="pl-s"><span class="pl-pds">'</span>delete<span class="pl-pds">'</span></span>    |<span class="pl-c"> <span class="pl-c">"</span> Delete a line</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Executing normal-mode commands</span>
+<span class="pl-c"><span class="pl-c">"</span> ##############################</span>
+<span class="pl-c"><span class="pl-c">"</span></span>
+<span class="pl-c"><span class="pl-c">"</span> Use `:normal` to play back a sequence of normal mode commands from the</span>
+<span class="pl-c"><span class="pl-c">"</span> command-line. Add an exclamation mark to ignore user mappings.</span>
+
+<span class="pl-c1">normal</span><span class="pl-k">!</span> ggddGp             |<span class="pl-c"> <span class="pl-c">"</span> Transplant first line to end of buffer</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Window commands can be used with :normal, or with :wincmd if :normal would</span>
+<span class="pl-c"><span class="pl-c">"</span> not work</span>
+<span class="pl-c1">wincmd</span> L                   |<span class="pl-c"> <span class="pl-c">"</span> Move current window all the way to the right</span>
+
+
+<span class="pl-c"><span class="pl-c">"</span> ###########################</span>
+<span class="pl-c"><span class="pl-c">"</span>  Frequently used functions</span>
+<span class="pl-c"><span class="pl-c">"</span> ###########################</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Feature check</span>
+<span class="pl-c1">echo</span>  <span class="pl-en">has</span>(<span class="pl-s"><span class="pl-pds">'</span>nvim<span class="pl-pds">'</span></span>)                  |<span class="pl-c"> <span class="pl-c">"</span> Running Neovim</span>
+<span class="pl-c1">echo</span>  <span class="pl-en">has</span>(<span class="pl-s"><span class="pl-pds">'</span>python3<span class="pl-pds">'</span></span>)               |<span class="pl-c"> <span class="pl-c">"</span> Support for Python 3 plugins</span>
+<span class="pl-c1">echo</span>  <span class="pl-en">has</span>(<span class="pl-s"><span class="pl-pds">'</span>unix<span class="pl-pds">'</span></span>)                  |<span class="pl-c"> <span class="pl-c">"</span> Running on a Unix system</span>
+<span class="pl-c1">echo</span>  <span class="pl-en">has</span>(<span class="pl-s"><span class="pl-pds">'</span>win32<span class="pl-pds">'</span></span>)                 |<span class="pl-c"> <span class="pl-c">"</span> Running on a Windows system</span>
+
+
+<span class="pl-c"><span class="pl-c">"</span> Test if something exists</span>
+<span class="pl-c1">echo</span>  <span class="pl-en">exists</span>(<span class="pl-s"><span class="pl-pds">'</span>&amp;mouse<span class="pl-pds">'</span></span>)             |<span class="pl-c"> <span class="pl-c">"</span> Option (exists only)</span>
+<span class="pl-c1">echo</span>  <span class="pl-en">exists</span>(<span class="pl-s"><span class="pl-pds">'</span>+mouse<span class="pl-pds">'</span></span>)             |<span class="pl-c"> <span class="pl-c">"</span> Option (exists and works)</span>
+<span class="pl-c1">echo</span>  <span class="pl-en">exists</span>(<span class="pl-s"><span class="pl-pds">'</span>$HOSTNAME<span class="pl-pds">'</span></span>)          |<span class="pl-c"> <span class="pl-c">"</span> Environment variable</span>
+<span class="pl-c1">echo</span>  <span class="pl-en">exists</span>(<span class="pl-s"><span class="pl-pds">'</span>*strftime<span class="pl-pds">'</span></span>)          |<span class="pl-c"> <span class="pl-c">"</span> Built-in function</span>
+<span class="pl-c1">echo</span>  <span class="pl-en">exists</span>(<span class="pl-s"><span class="pl-pds">'</span>**s:MyFunc<span class="pl-pds">'</span></span>)         |<span class="pl-c"> <span class="pl-c">"</span> User-defined function</span>
+<span class="pl-c1">echo</span>  <span class="pl-en">exists</span>(<span class="pl-s"><span class="pl-pds">'</span>bufcount<span class="pl-pds">'</span></span>)           |<span class="pl-c"> <span class="pl-c">"</span> Variable (scope optional)</span>
+<span class="pl-c1">echo</span>  <span class="pl-en">exists</span>(<span class="pl-s"><span class="pl-pds">'</span>my_dict["foo"]<span class="pl-pds">'</span></span>)     |<span class="pl-c"> <span class="pl-c">"</span> Variable (dictionary entry)</span>
+<span class="pl-c1">echo</span>  <span class="pl-en">exists</span>(<span class="pl-s"><span class="pl-pds">'</span>my_dict["foo"]<span class="pl-pds">'</span></span>)     |<span class="pl-c"> <span class="pl-c">"</span> Variable (dictionary entry)</span>
+<span class="pl-c1">echo</span>  <span class="pl-en">exists</span>(<span class="pl-s"><span class="pl-pds">'</span>:Make<span class="pl-pds">'</span></span>)              |<span class="pl-c"> <span class="pl-c">"</span> Command</span>
+<span class="pl-c1">echo</span>  <span class="pl-en">exists</span>(<span class="pl-s"><span class="pl-pds">"</span>#CursorHold<span class="pl-pds">"</span></span>)        |<span class="pl-c"> <span class="pl-c">"</span> Auto-command defined for event</span>
+<span class="pl-c1">echo</span>  <span class="pl-en">exists</span>(<span class="pl-s"><span class="pl-pds">"</span>#BufReadPre#*.gz<span class="pl-pds">"</span></span>)   |<span class="pl-c"> <span class="pl-c">"</span> Event and pattern</span>
+<span class="pl-c1">echo</span>  <span class="pl-en">exists</span>(<span class="pl-s"><span class="pl-pds">"</span>#filetypeindent<span class="pl-pds">"</span></span>)    |<span class="pl-c"> <span class="pl-c">"</span> Auto-command group</span>
+<span class="pl-c1">echo</span>  <span class="pl-en">exists</span>(<span class="pl-s"><span class="pl-pds">"</span>##ColorScheme<span class="pl-pds">"</span></span>)      |<span class="pl-c"> <span class="pl-c">"</span> Auto-command supported for event</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Various dynamic values (see |expand()|)</span>
+<span class="pl-c1">echo</span>  <span class="pl-en">expand</span>(<span class="pl-s"><span class="pl-pds">'</span>%<span class="pl-pds">'</span></span>)                  |<span class="pl-c"> <span class="pl-c">"</span> Current file name</span>
+<span class="pl-c1">echo</span>  <span class="pl-en">expand</span>(<span class="pl-s"><span class="pl-pds">'</span>&lt;cword&gt;<span class="pl-pds">'</span></span>)            |<span class="pl-c"> <span class="pl-c">"</span> Current word under cursor</span>
+<span class="pl-c1">echo</span>  <span class="pl-en">expand</span>(<span class="pl-s"><span class="pl-pds">'</span>%:p<span class="pl-pds">'</span></span>)                |<span class="pl-c"> <span class="pl-c">"</span> Modifier are possible</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Type tests</span>
+<span class="pl-c"><span class="pl-c">"</span> There are unique constants defined for the following types. Older versions</span>
+<span class="pl-c"><span class="pl-c">"</span> of Vim lack the type variables, see the reference " documentation for a</span>
+<span class="pl-c"><span class="pl-c">"</span> workaround</span>
+<span class="pl-c1">echo</span>  <span class="pl-en">type</span>(my_var) <span class="pl-k">==</span> <span class="pl-smi"><span class="pl-k">v:</span>t_number</span>      |<span class="pl-c"> <span class="pl-c">"</span> Number</span>
+<span class="pl-c1">echo</span>  <span class="pl-en">type</span>(my_var) <span class="pl-k">==</span> <span class="pl-smi"><span class="pl-k">v:</span>t_string</span>      |<span class="pl-c"> <span class="pl-c">"</span> String</span>
+<span class="pl-c1">echo</span>  <span class="pl-en">type</span>(my_var) <span class="pl-k">==</span> <span class="pl-smi"><span class="pl-k">v:</span>t_func</span>        |<span class="pl-c"> <span class="pl-c">"</span> Funcref</span>
+<span class="pl-c1">echo</span>  <span class="pl-en">type</span>(my_var) <span class="pl-k">==</span> <span class="pl-smi"><span class="pl-k">v:</span>t_list</span>        |<span class="pl-c"> <span class="pl-c">"</span> List</span>
+<span class="pl-c1">echo</span>  <span class="pl-en">type</span>(my_var) <span class="pl-k">==</span> <span class="pl-smi"><span class="pl-k">v:</span>t_dict</span>        |<span class="pl-c"> <span class="pl-c">"</span> Dictionary</span>
+<span class="pl-c1">echo</span>  <span class="pl-en">type</span>(my_var) <span class="pl-k">==</span> <span class="pl-smi"><span class="pl-k">v:</span>t_float</span>       |<span class="pl-c"> <span class="pl-c">"</span> Float</span>
+<span class="pl-c1">echo</span>  <span class="pl-en">type</span>(my_var) <span class="pl-k">==</span> <span class="pl-smi"><span class="pl-k">v:</span>t_bool</span>        |<span class="pl-c"> <span class="pl-c">"</span> Explicit Boolean</span>
+<span class="pl-c"><span class="pl-c">"</span> For the null object should compare it against itself</span>
+<span class="pl-c1">echo</span>  my_var <span class="pl-k">is</span> <span class="pl-smi"><span class="pl-k">v:</span>null</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Format strings</span>
+<span class="pl-c1">echo</span>  <span class="pl-en">printf</span>(<span class="pl-s"><span class="pl-pds">'</span>%d in hexadecimal is %X<span class="pl-pds">'</span></span>, <span class="pl-c1">123</span>, <span class="pl-c1">123</span>)
+
+
+<span class="pl-c"><span class="pl-c">"</span> #####################</span>
+<span class="pl-c"><span class="pl-c">"</span>  Tricks of the trade</span>
+<span class="pl-c"><span class="pl-c">"</span> #####################</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Source guard</span>
+<span class="pl-c"><span class="pl-c">"</span> ############</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Prevent a file from being sourced multiple times; users can set the variable</span>
+<span class="pl-c"><span class="pl-c">"</span> in their configuration to prevent the plugin from loading at all.</span>
+<span class="pl-k">if</span> <span class="pl-en">exists</span>(<span class="pl-s"><span class="pl-pds">'</span>g:loaded_my_plugin<span class="pl-pds">'</span></span>)
+    <span class="pl-k">finish</span>
+<span class="pl-k">endif</span>
+<span class="pl-k">let</span> <span class="pl-smi"><span class="pl-k">g:</span>loaded_my_plugin</span> <span class="pl-k">=</span> <span class="pl-smi"><span class="pl-k">v:</span>true</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Default values</span>
+<span class="pl-c"><span class="pl-c">"</span> ##############</span>
+
+<span class="pl-c"><span class="pl-c">"</span> Get a default value: if the user defines a variable use it, otherwise use a</span>
+<span class="pl-c"><span class="pl-c">"</span> hard-coded default. Uses the fact that a scope is also a dictionary.</span>
+<span class="pl-k">let</span> <span class="pl-smi"><span class="pl-k">s:</span>greeting</span> <span class="pl-k">=</span> <span class="pl-en">get</span>(<span class="pl-smi"><span class="pl-k">g:</span></span>, <span class="pl-s"><span class="pl-pds">'</span>my_plugin_greeting<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>Hello<span class="pl-pds">'</span></span>)</pre></div>
+<hr>
+<h2>Contributors</h2>
+<pre class="notranslate"><code class="notranslate">- ["HiPhish", "http://hiphish.github.io/"]
+</code></pre>
