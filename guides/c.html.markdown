@@ -1,17 +1,4 @@
----
-language: C
-filename: learnc.c
-contributors:
-  - ["Adam Bard", "http://adambard.com/"]
-  - ["Árpád Goretity", "http://twitter.com/H2CO3_iOS"]
-  - ["Jakub Trzebiatowski", "http://cbs.stgn.pl"]
-  - ["Marco Scannadinari", "https://marcoms.github.io"]
-  - ["Zachary Ferguson", "https://github.io/zfergus2"]
-  - ["himanshu", "https://github.com/himanshu81494"]
-  - ["Joshua Li", "https://github.com/JoshuaRLi"]
-  - ["Dragos B. Chirila", "https://github.com/dchirila"]
-  - ["Heitor P. de Bittencourt", "https://github.com/heitorPB/"]
----
+# C
 
 Ah, C. Still **the** language of modern high-performance computing.
 
@@ -925,3 +912,17 @@ Readable code is better than clever code and fast code. For a good, sane coding 
 Other than that, Google is your friend.
 
 [1] [Why isn't sizeof for a struct equal to the sum of sizeof of each member?](https://stackoverflow.com/questions/119123/why-isnt-sizeof-for-a-struct-equal-to-the-sum-of-sizeof-of-each-member)
+
+---
+
+## Contributors
+
+  - ["Adam Bard", "http://adambard.com/"]
+  - ["Árpád Goretity", "http://twitter.com/H2CO3_iOS"]
+  - ["Jakub Trzebiatowski", "http://cbs.stgn.pl"]
+  - ["Marco Scannadinari", "https://marcoms.github.io"]
+  - ["Zachary Ferguson", "https://github.io/zfergus2"]
+  - ["himanshu", "https://github.com/himanshu81494"]
+  - ["Joshua Li", "https://github.com/JoshuaRLi"]
+  - ["Dragos B. Chirila", "https://github.com/dchirila"]
+  - ["Heitor P. de Bittencourt", "https://github.com/heitorPB/"]

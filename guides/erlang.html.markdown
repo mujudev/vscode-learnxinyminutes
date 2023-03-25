@@ -1,9 +1,4 @@
----
-language: erlang
-contributors:
-    - ["Giovanni Cappellotto", "http://giovanni.curlybrackets.it/"]
-filename: learnerlang.erl
----
+# Erlang
 
 ```erlang
 % Percent sign starts a one-line comment.
@@ -344,3 +339,9 @@ fib:test()
 * ["Programming Erlang: Software for a Concurrent World" by Joe Armstrong](http://pragprog.com/book/jaerlang/programming-erlang)
 * [Erlang/OTP Reference Documentation](http://www.erlang.org/doc/)
 * [Erlang - Programming Rules and Conventions](http://www.erlang.se/doc/programming_rules.shtml)
+
+---
+
+## Contributors
+
+    - ["Giovanni Cappellotto", "http://giovanni.curlybrackets.it/"]

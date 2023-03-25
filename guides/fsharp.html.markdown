@@ -1,9 +1,4 @@
----
-language: F#
-contributors:
-    - ["Scott Wlaschin", "http://fsharpforfunandprofit.com/"]
-filename: learnfsharp.fs
----
+# F#
 
 F# is a general purpose functional/OO programming language.  It's free and open source, and runs on Linux, Mac, Windows and more.
 
@@ -636,3 +631,9 @@ module NetCompatibilityExamples =
 For more demonstrations of F#, go to my [why use F#](http://fsharpforfunandprofit.com/why-use-fsharp/) series.
 
 Read more about F# at [fsharp.org](http://fsharp.org/) and [dotnet's F# page](https://dotnet.microsoft.com/languages/fsharp).
+
+---
+
+## Contributors
+
+    - ["Scott Wlaschin", "http://fsharpforfunandprofit.com/"]

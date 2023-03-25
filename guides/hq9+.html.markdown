@@ -1,9 +1,4 @@
----
-language: HQ9+
-filename: hq9+.html
-contributors:
-    - ["Alexey Nazaroff", "https://github.com/rogaven"]
----
+# HQ9+
 
 HQ9+ is a joke programming language created by Cliff Biffle. It has only four commands and it isn't Turing-complete.
 
@@ -37,3 +32,9 @@ And that's all. There are a lot of interpreters for HQ9+. Below you can find one
 
 + [One of online interpreters](https://almnet.de/esolang/hq9plus.php)
 + [HQ9+ official website](http://cliffle.com/esoterica/hq9plus.html)
+
+---
+
+# Contributors
+
+    - ["Alexey Nazaroff", "https://github.com/rogaven"]

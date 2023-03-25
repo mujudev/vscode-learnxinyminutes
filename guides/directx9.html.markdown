@@ -1,10 +1,4 @@
----
-category: tool
-tool: DirectX 9
-filename: learndirectx9.cpp
-contributors:
-    - ["Simon Deitermann", "s.f.deitermann@t-online.de"]
----
+# DirectX 9
 
 **Microsoft DirectX** is a collection of application programming interfaces (APIs) for handling tasks related to
 multimedia, especially game programming and video, on Microsoft platforms. Originally, the names of these APIs
@@ -825,3 +819,9 @@ float4 main(PS_INPUT input) : COLOR{
 
 ## Quotes
 <sup>[1]</sup>[DirectX - Wikipedia](https://en.wikipedia.org/wiki/DirectX)
+
+---
+
+## Contributors
+
+    - ["Simon Deitermann", "s.f.deitermann@t-online.de"]

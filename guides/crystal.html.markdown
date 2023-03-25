@@ -1,12 +1,4 @@
----
-language: crystal
-filename: learncrystal.cr
-contributors:
-    - ["Vitalii Elenhaupt", "http://veelenga.com"]
-    - ["Arnaud Fernandés", "https://github.com/TechMagister/"]
-    - ["Valentin Baca", "https://github.com/valbaca/"]
-
----
+# Crystal
 
 ```crystal
 
@@ -562,3 +554,11 @@ ex #=> "ex2"
 ## Additional resources
 
 - [Official Documentation](https://crystal-lang.org/)
+
+---
+
+## Contributors
+
+    - ["Vitalii Elenhaupt", "http://veelenga.com"]
+    - ["Arnaud Fernandés", "https://github.com/TechMagister/"]
+    - ["Valentin Baca", "https://github.com/valbaca/"]

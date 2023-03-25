@@ -1,11 +1,4 @@
----
-category: tool
-tool: ruby ecosystem
-contributors:
-    - ["Jon Smock", "http://github.com/jonsmock"]
-    - ["Rafal Chmiel", "http://github.com/rafalchmiel"]
-
----
+# Ruby Ecosystem
 
 People using Ruby generally have a way to install different Ruby versions,
 manage their packages (or gems), and manage their gem dependencies.
@@ -124,3 +117,9 @@ are many testing libraries with different goals.
 The Ruby community takes pride in being an open, diverse, welcoming community.
 Matz himself is extremely friendly, and the generosity of rubyists on the whole
 is amazing.
+
+---
+
+contributors:
+    - ["Jon Smock", "http://github.com/jonsmock"]
+    - ["Rafal Chmiel", "http://github.com/rafalchmiel"]

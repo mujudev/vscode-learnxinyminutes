@@ -1,10 +1,4 @@
----
-language: elisp
-contributors:
-    - ["Bastien Guerry", "https://bzg.fr"]
-    - ["Saurabh Sandav", "http://github.com/SaurabhSandav"]
-filename: learn-emacs-lisp.el
----
+# Elisp
 
 ```scheme
 ;; This gives an introduction to Emacs Lisp in 15 minutes (v0.2d)
@@ -343,3 +337,10 @@ filename: learn-emacs-lisp.el
 ;; To read an online introduction to Emacs Lisp:
 ;; https://www.gnu.org/software/emacs/manual/html_node/eintr/index.html
 ```
+
+---
+
+## Contributors
+
+    - ["Bastien Guerry", "https://bzg.fr"]
+    - ["Saurabh Sandav", "http://github.com/SaurabhSandav"]

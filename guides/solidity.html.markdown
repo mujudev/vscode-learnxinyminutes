@@ -1,13 +1,4 @@
----
-language: Solidity
-filename: learnSolidity.sol
-contributors:
-  - ["Nemil Dalal", "https://www.nemil.com"]
-  - ["Joseph Chow", ""]
-  - ["Bhoomtawath Plinsut", "https://github.com/varshard"]
-  - ["Shooter", "https://github.com/liushooter"]
-  - ["Patrick Collins", "https://gist.github.com/PatrickAlphaC"]
----
+# Solidity
 
 Solidity lets you program on [Ethereum](https://www.ethereum.org/), a
 blockchain-based virtual machine that allows the creation and
@@ -978,3 +969,13 @@ someContractAddress.callcode('function_name');
 - Common security anti patterns
 
 Feel free to send a pull request with any edits - or email nemild -/at-/ gmail
+
+---
+
+## Contributors
+
+  - ["Nemil Dalal", "https://www.nemil.com"]
+  - ["Joseph Chow", ""]
+  - ["Bhoomtawath Plinsut", "https://github.com/varshard"]
+  - ["Shooter", "https://github.com/liushooter"]
+  - ["Patrick Collins", "https://gist.github.com/PatrickAlphaC"]

@@ -1,9 +1,4 @@
----
-language: WebAssembly
-filename: learn-wasm.wast
-contributors:
-    - ["Dean Shaff", "http://dean-shaff.github.io"]
----
+# WebAssembly
 
 ```
 ;; learn-wasm.wast
@@ -310,3 +305,8 @@ contributors:
 )
 
 ```
+---
+
+## Contributors
+
+    - ["Dean Shaff", "http://dean-shaff.github.io"]

@@ -1,13 +1,4 @@
----
-category: tool
-tool: docker
-filename: docker.bat
-contributors:
-    - ["Ruslan López", "http://javapro.org/"]
-    - ["Michael Chen", "https://github.com/ML-Chen"]
-    - ["Akshita Dixit", "https://github.com/akshitadixit"]
-    - ["Marcel Ribeiro-Dantas", "https://github.com/mribeirodantas"]
----
+# Docker
 
 Docker is a tool that helps you build, test, ship and run applications
 seamlessly across various machines. It replicates the environment our software
@@ -279,3 +270,12 @@ $docker push <target-image>[:<target-tag>]
 # `https://hub.docker.com/r/username/image-name`
 
 ```
+
+---
+
+## Contributors
+
+    - ["Ruslan López", "http://javapro.org/"]
+    - ["Michael Chen", "https://github.com/ML-Chen"]
+    - ["Akshita Dixit", "https://github.com/akshitadixit"]
+    - ["Marcel Ribeiro-Dantas", "https://github.com/mribeirodantas"]

@@ -1,9 +1,4 @@
----
-language: vala
-contributors:
-    - ["Milo Gilad", "https://github.com/Myl0g"]
-filename: LearnVala.vala
----
+# Vala
 
 In GNOME's own words, "Vala is a programming language that aims to bring modern programming language features to GNOME developers without imposing any additional runtime requirements and without using a different ABI compared to applications and libraries written in C."
 
@@ -501,3 +496,9 @@ int indirection_demo = more_pointer*; // indirection
 * [Multithreading](https://wiki.gnome.org/Projects/Vala/Tutorial#Multi-Threading)
 * Read about [building GUIs with GTK+ and Vala](http://archive.is/7C7bw).
 * [D-Bus integration](https://wiki.gnome.org/Projects/Vala/Tutorial#D-Bus_Integration)
+
+---
+
+## Contributors
+
+    - ["Milo Gilad", "https://github.com/Myl0g"]

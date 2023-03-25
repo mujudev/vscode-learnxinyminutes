@@ -1,11 +1,4 @@
----
-category: tool
-tool: make
-contributors:
-    - ["Robert Steed", "https://github.com/robochat"]
-    - ["Stephan Fuhrmann", "https://github.com/sfuhrm"]
-filename: Makefile
----
+# Make
 
 A Makefile defines a graph of rules for creating a target (or targets).
 Its purpose is to do the minimum amount of work needed to update a
@@ -244,3 +237,10 @@ endif
 + [gnu make documentation](https://www.gnu.org/software/make/manual/)
 + [software carpentry tutorial](http://swcarpentry.github.io/make-novice/)
 + learn C the hard way [ex2](http://c.learncodethehardway.org/book/ex2.html) [ex28](http://c.learncodethehardway.org/book/ex28.html)
+
+---
+
+## Contributors
+
+    - ["Robert Steed", "https://github.com/robochat"]
+    - ["Stephan Fuhrmann", "https://github.com/sfuhrm"]

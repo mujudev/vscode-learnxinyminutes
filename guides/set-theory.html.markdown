@@ -1,8 +1,5 @@
----
-category: Algorithms & Data Structures
-name: Set theory
-contributors:
----
+# Set Theory
+
 Set theory is a branch of mathematics that studies sets, their operations, and their properties.
 
 * A set is a collection of disjoint items.
@@ -130,3 +127,7 @@ Given two sets `A` and `B`, the cartesian product between `A` and `B` consists o
 ```
 A × B = { (x, y) | x ∈ A, y ∈ B }
 ```
+
+---
+
+## Contributors

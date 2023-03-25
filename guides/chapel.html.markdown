@@ -1,10 +1,4 @@
----
-language: chapel
-filename: learnchapel.chpl
-contributors:
-    - ["Ian J. Bertolacci", "https://www.cs.arizona.edu/~ianbertolacci/"]
-    - ["Ben Harshbarger", "https://github.com/benharsh/"]
----
+# Chapel
 
 You can read all about Chapel at [Cray's official Chapel website](https://chapel-lang.org).
 In short, Chapel is an open-source, high-productivity, parallel-programming
@@ -1192,3 +1186,10 @@ Notable arguments:
  * `--main-module <Module Name>`: use the main() procedure found in the module
    `<Module Name>` as the executable's main.
  * `--module-dir <Directory>`: includes `<Directory>` in the module search path.
+
+---
+
+## Contributors
+
+    - ["Ian J. Bertolacci", "https://www.cs.arizona.edu/~ianbertolacci/"]
+    - ["Ben Harshbarger", "https://github.com/benharsh/"]

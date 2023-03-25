@@ -1,9 +1,4 @@
----
-language: Dhall
-filename: learndhall.dhall
-contributors:
-    - ["Gabriel Gonzalez", "http://www.haskellforall.com/"]
----
+# Dhall
 
 Dhall is a programmable configuration language that provides a non-repetitive
 alternative to YAML.
@@ -360,3 +355,9 @@ To learn more, visit the official website, which also lets you try the
 language live in your browser:
 
 * [https://dhall-lang.org](http://dhall-lang.org/)
+
+---
+
+## Contributors
+
+    - ["Gabriel Gonzalez", "http://www.haskellforall.com/"]

@@ -1,9 +1,4 @@
----
-language: cypher
-filename: LearnCypher.cql
-contributors:
-    - ["Théo Gauchoux", "https://github.com/TheoGauchoux"]
----
+# Cypher
 
 Cypher is the Neo4j’s query language to manipulate graphs easily. It reuses syntax from SQL and mixes it with kind of ascii-art to represent graphs.
 This tutorial assumes that you already know graph concepts like nodes and relationships.
@@ -247,3 +242,9 @@ Special hints
 - You can execute a Cypher script stored in a **.cql** file directly in Neo4j (it's an import). However, you can't have multiple statements in this file (separated by **;**).
 - Use the Neo4j shell to write Cypher, it's really awesome.
 - The Cypher will be the standard query language for all graph databases (known as **OpenCypher**).
+
+---
+
+## Contributors
+
+    - ["Théo Gauchoux", "https://github.com/TheoGauchoux"]

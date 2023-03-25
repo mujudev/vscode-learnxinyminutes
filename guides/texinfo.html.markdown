@@ -1,9 +1,4 @@
----
-language: Texinfo
-contributors:
-    - ["Julien Lepiller", "https://github.com/roptat"]
-filename: learntexinfo.texi
----
+# Texinfo
 
 Texinfo is a documentation format you can use to create various types of
 documents from the same source.  Its main usage is to create documentation
@@ -181,3 +176,9 @@ e.g. HTML with `make doc/simple-manual.html`.
 ## Readings
 
 - [Official manual](https://www.gnu.org/software/texinfo/manual/texinfo/html_node/)
+
+---
+
+## Contributors
+
+    - ["Julien Lepiller", "https://github.com/roptat"]

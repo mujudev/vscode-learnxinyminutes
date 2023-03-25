@@ -1,12 +1,4 @@
----
-language: stylus
-filename: learnStylus.styl
-contributors:
-  - ["Salomão Neto", "https://github.com/salomaosnff"]
-  - ["Isaac Henrique", "https://github.com/Isaachi1"]
-translators:
-  - ["Divay Prakash", "https://github.com/divayprakash"]
----
+# Stylus
 
 Stylus is a dynamic stylesheet preprocessor language that is compiled into CSS. It aims to add functionality to CSS without breaking compatibility across web browsers.
 It does this using variables, nesting, mixins, functions and more.
@@ -226,3 +218,14 @@ for $item in (1..2) /* Repeat block 12 times */
 ```
 
 Now that you know a little about this powerful CSS preprocessor, you're ready to create more dynamic style sheets. To learn more, visit the official stylus documentation at http://stylus-lang.com.
+
+---
+
+## Contributors
+  
+  - ["Salomão Neto", "https://github.com/salomaosnff"]
+  - ["Isaac Henrique", "https://github.com/Isaachi1"]
+
+### Translators
+ 
+  - ["Divay Prakash", "https://github.com/divayprakash"]

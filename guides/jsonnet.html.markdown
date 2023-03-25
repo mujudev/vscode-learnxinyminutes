@@ -1,9 +1,4 @@
----
-language: jsonnet
-filename: learnjsonnet.jsonnet
-contributors:
-  - ["Huan Wang", "https://github.com/fredwangwang"]
----
+# Jsonnet
 
 Jsonnet is a powerful templating language for JSON. Any valid JSON
 document is a valid Jsonnet object. For an interactive demo/tutorial,
@@ -137,3 +132,9 @@ There are a few but important concepts that are not touched in this example, inc
 - Import other jsonnet libraries/files: [Imports](https://jsonnet.org/learning/tutorial.html#imports)
 - In depth example of OOP aspect of Jsonnet: [Object-Orientation](https://jsonnet.org/learning/tutorial.html#Object-Orientation)
 - Useful standard library: [Stdlib](https://jsonnet.org/ref/stdlib.html)
+
+---
+
+## Contributors
+
+  - ["Huan Wang", "https://github.com/fredwangwang"]

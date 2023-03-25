@@ -1,11 +1,4 @@
----
-category: tool
-tool: awk
-filename: learnawk.awk
-contributors:
-     - ["Marshall Mason", "http://github.com/marshallmason"]
-
----
+# AWK
 
 AWK is a standard tool on every POSIX-compliant UNIX system. It's like
 flex/lex, from the command-line, perfect for text-processing tasks and
@@ -389,3 +382,8 @@ Further Reading:
   summary and list of "gotchas" (places where different implementations may
   behave in different or unexpected ways).
 * [basic libraries for awk](https://github.com/dubiousjim/awkenough)
+
+---
+
+contributors:
+     - ["Marshall Mason", "http://github.com/marshallmason"]

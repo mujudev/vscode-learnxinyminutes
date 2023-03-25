@@ -1,9 +1,4 @@
----
-language: Pod
-contributors:
-    - ["Luis F. Uceta", "https://uzluisf.gitlab.io/"]
-filename: learnpod.pod6
----
+# Pod
 
 Pod is an easy-to-use and purely descriptive mark-up language,
 with no presentational components. Besides its use for documenting
@@ -620,3 +615,9 @@ DESCRIPTION
 * <https://docs.raku.org/language/pod> for the Pod documentation.
 * <https://docs.raku.org/language/tables> for advices about Pod tables.
 * <https://design.raku.org/S26.html> for the Pod specification.
+
+---
+
+## Contributors
+
+    - ["Luis F. Uceta", "https://uzluisf.gitlab.io/"]

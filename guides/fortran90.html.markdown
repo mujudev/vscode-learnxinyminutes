@@ -1,9 +1,4 @@
----
-language: Fortran
-contributors:
-    - ["Robert Steed", "https://github.com/robochat"]
-filename: learnfortran.f90
----
+# Fortran
 
 Fortran is one of the oldest computer languages. It was developed in the 1950s
 by IBM for numeric calculations (Fortran is an abbreviation of "Formula
@@ -451,3 +446,9 @@ For more information on Fortran:
 + [Fortran wikibook](https://en.wikibooks.org/wiki/Fortran)
 + [Fortran resources](http://www.fortranplus.co.uk/resources/fortran_resources.pdf)
 + [Mistakes in Fortran 90 Programs That Might Surprise You](http://www.cs.rpi.edu/~szymansk/OOF90/bugs.html)
+
+---
+
+## Contributors
+    
+    - ["Robert Steed", "https://github.com/robochat"]

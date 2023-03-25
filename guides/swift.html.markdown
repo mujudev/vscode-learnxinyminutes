@@ -1,16 +1,4 @@
----
-language: swift
-contributors:
-  - ["Grant Timmerman", "http://github.com/grant"]
-  - ["Christopher Bess", "http://github.com/cbess"]
-  - ["Joey Huang", "http://github.com/kamidox"]
-  - ["Anthony Nguyen", "http://github.com/anthonyn60"]
-  - ["Clayton Walker", "https://github.com/cwalk"]
-  - ["Fernando Valverde", "http://visualcosita.xyz"]
-  - ["Alexey Nazaroff", "https://github.com/rogaven"]
-  - ["@Samasaur1", "https://github.com/Samasaur1"]
-filename: learnswift.swift
----
+# Swift
 
 Swift is a programming language for iOS and macOS development created by Apple. Designed to coexist with Objective-C and to be more resilient against erroneous code, Swift was introduced in 2014 at Apple's developer conference WWDC. It is built with the LLVM compiler included in Xcode 6+.
 
@@ -1004,3 +992,16 @@ func testTryStuff() {
 }
 testTryStuff()
 ```
+
+---
+
+## Contributors
+  
+  - ["Grant Timmerman", "http://github.com/grant"]
+  - ["Christopher Bess", "http://github.com/cbess"]
+  - ["Joey Huang", "http://github.com/kamidox"]
+  - ["Anthony Nguyen", "http://github.com/anthonyn60"]
+  - ["Clayton Walker", "https://github.com/cwalk"]
+  - ["Fernando Valverde", "http://visualcosita.xyz"]
+  - ["Alexey Nazaroff", "https://github.com/rogaven"]
+  - ["@Samasaur1", "https://github.com/Samasaur1"]

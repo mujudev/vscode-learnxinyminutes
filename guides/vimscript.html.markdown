@@ -1,9 +1,4 @@
----
-language: Vimscript
-filename: learnvimscript.vim
-contributors:
-    - ["HiPhish", "http://hiphish.github.io/"]
----
+# Vim script
 
 ```vim
 " ##############
@@ -656,3 +651,9 @@ let g:loaded_my_plugin = v:true
 " hard-coded default. Uses the fact that a scope is also a dictionary.
 let s:greeting = get(g:, 'my_plugin_greeting', 'Hello')
 ```
+
+---
+
+## Contributors
+
+    - ["HiPhish", "http://hiphish.github.io/"]

@@ -1,12 +1,4 @@
----
-category: tool
-tool: vim
-contributors:
-    - ["RadhikaG", "https://github.com/RadhikaG"]
-    - ["kaymmm", "https://github.com/kaymmm"]
-filename: LearnVim.txt
----
-
+# Vim
 
 [Vim](http://www.vim.org)
 (Vi IMproved) is a clone of the popular vi editor for Unix. It is a text
@@ -290,3 +282,10 @@ set smarttab
 [What are the dark corners of Vim your mom never told you about? (Stack Overflow thread)](http://stackoverflow.com/questions/726894/what-are-the-dark-corners-of-vim-your-mom-never-told-you-about)
 
 [Arch Linux Wiki](https://wiki.archlinux.org/index.php/Vim)
+
+---
+
+## Contributors
+    
+    - ["RadhikaG", "https://github.com/RadhikaG"]
+    - ["kaymmm", "https://github.com/kaymmm"]

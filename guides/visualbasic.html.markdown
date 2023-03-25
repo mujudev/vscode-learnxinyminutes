@@ -1,9 +1,4 @@
----
-language: Visual Basic
-contributors:
-    - ["Brian Martin", "http://brianmartin.biz"]
-filename: learnvisualbasic.vb
----
+# Visual Basic
 
 ```
 Module Module1
@@ -273,3 +268,9 @@ Module Module1
 End Module
 
 ```
+
+---
+
+## Contributors
+    
+    - ["Brian Martin", "http://brianmartin.biz"]

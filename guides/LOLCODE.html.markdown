@@ -1,9 +1,4 @@
----
-language: LOLCODE
-filename: learnLOLCODE.lol
-contributors:
-    - ["abactel", "https://github.com/abactel"]
----
+# LOLCODE
 
 LOLCODE is an esoteric programming language designed to resemble the speech of [lolcats](https://upload.wikimedia.org/wikipedia/commons/a/ab/Lolcat_in_folder.jpg?1493656347257).
 
@@ -183,3 +178,9 @@ KTHXBYE
 
 -   [LCI compiler](https://github.com/justinmeza/lci)
 -   [Official spec](https://github.com/justinmeza/lolcode-spec/blob/master/v1.2/lolcode-spec-v1.2.md)
+
+---
+
+## Contributors
+
+    - ["abactel", "https://github.com/abactel"]

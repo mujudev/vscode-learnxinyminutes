@@ -1,14 +1,4 @@
----
-category: tool
-tool: ansible
-contributors:
-    - ["Jakub Muszynski" , "http://github.com/sirkubax"]
-    - ["Pat Myron" , "https://github.com/patmyron"]
-    - ["Divay Prakash", "https://github.com/divayprakash"]
-filename: LearnAnsible.txt
----
-
-## Introduction
+# Ansible
 
 ```yaml
 ---
@@ -754,3 +744,10 @@ the `register` command.
 * [Ansible Tower](https://www.ansible.com/products/tower) - Ansible Tower provides a web UI, dashboard and rest interface to ansible.
 * [Ansible AWX](https://github.com/ansible/awx) - The Open Source version of Ansible Tower.
 * [Ansible Tutorial for Beginners: Ultimate Playbook & Examples](https://spacelift.io/blog/ansible-tutorial)
+
+---
+
+## Contributors
+    - ["Jakub Muszynski" , "http://github.com/sirkubax"]
+    - ["Pat Myron" , "https://github.com/patmyron"]
+    - ["Divay Prakash", "https://github.com/divayprakash"]

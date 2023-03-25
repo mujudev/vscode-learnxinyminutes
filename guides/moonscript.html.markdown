@@ -1,10 +1,4 @@
----
-language: moonscript
-contributors:
-  - ["RyanSquared", "https://ryansquared.github.io/"]
-  - ["Job van der Zwan", "https://github.com/JobLeonard"]
-filename: moonscript.moon
----
+# MoonScript
 
 MoonScript is a dynamic scripting language that compiles into Lua. It gives
 you the power of one of the fastest scripting languages combined with a
@@ -568,3 +562,10 @@ for {left, right} in *{{"hello", "world"}, {"egg", "head"}}
 
 - [Language Guide](https://moonscript.org/reference/)
 - [Online Compiler](https://moonscript.org/compiler/)
+
+---
+
+## Contributors
+
+- ["RyanSquared", "https://ryansquared.github.io/"]
+  - ["Job van der Zwan", "https://github.com/JobLeonard"]

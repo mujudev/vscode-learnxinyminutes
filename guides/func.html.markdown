@@ -1,10 +1,4 @@
----
-language: FunC
-filename: learnFunC.fc
-contributors:
-  - ["Ivan Romanovich", "https://t.me/ton_learn"]
-  - ["Kirill Malev", "https://fslabs.io"]
----
+# FunC
 
 The FunC language is used to program smart contracts on the [The Open Network](https://ton.org) blockchain. Contract logic is executed in TVM, the stack-based TON Virtual Machine.
 
@@ -336,3 +330,10 @@ do {
 This file is mostly copied from [TonFunClessons 15 minutes intro](https://github.com/romanovichim/TonFunClessons_Eng/blob/main/13lesson/15min.md).
 
 P.S. If by any chance you're familiar with [Forth](https://learnxinyminutes.com/docs/forth/), you can also take a look at [Fift](https://ton-blockchain.github.io/docs/fiftbase.pdf).
+
+---
+
+## Contributors
+
+  - ["Ivan Romanovich", "https://t.me/ton_learn"]
+  - ["Kirill Malev", "https://fslabs.io"]

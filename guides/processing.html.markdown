@@ -1,10 +1,4 @@
----
-language: processing
-filename: learnprocessing.pde
-contributors:
-    - ["Phone Than Ko", "http://github.com/phonethantko"]
-    - ["Divay Prakash", "https://github.com/divayprakash"]
----
+# Processing
 
 ## Introduction
 
@@ -467,3 +461,10 @@ and even your own classes. (Trust me! Processing projects can get real humongous
 
  - [Processing Website](http://processing.org)
  - [Processing Sketches](http://openprocessing.org)
+
+---
+
+## Contributors
+
+    - ["Phone Than Ko", "http://github.com/phonethantko"]
+    - ["Divay Prakash", "https://github.com/divayprakash"]

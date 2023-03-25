@@ -1,10 +1,4 @@
----
-category: tool
-tool: composer
-contributors:
-    - ["Brett Taylor", "https://github.com/glutnix"]
-filename: LearnComposer.sh
----
+# Composer
 
 [Composer](https://getcomposer.org/) is a tool for dependency management in PHP. It allows you to declare the libraries your project depends on and it will manage (install/update) them for you.
 
@@ -165,3 +159,9 @@ composer clear-cache
 
 * [Composer - Dependency Manager for PHP](https://getcomposer.org/)
 * [Packagist.org](https://packagist.org/)
+
+---
+
+## Contributors
+    
+    - ["Brett Taylor", "https://github.com/glutnix"]

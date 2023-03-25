@@ -1,10 +1,4 @@
----
-language: "CHICKEN"
-filename: CHICKEN.scm
-contributors:
-  - ["Diwakar Wagle", "https://github.com/deewakar"]
----
-
+# CHICKEN
 
 CHICKEN is an implementation of Scheme programming language that can
 compile Scheme programs to C code as well as interpret them. CHICKEN
@@ -515,3 +509,9 @@ sqr                        ;; => #<procedure (sqr x)>
 
 * [For programmers of other languages](https://wiki.call-cc.org/chicken-for-programmers-of-other-languages)
 * [Compare CHICKEN syntax with other languages](http://plr.sourceforge.net/cgi-bin/plr/launch.py)
+
+---
+
+## Contributors
+
+  - ["Diwakar Wagle", "https://github.com/deewakar"]

@@ -1,9 +1,4 @@
----
-language: pogoscript
-contributors:
-    - ["Tim Macfarlane", "http://github.com/refractalize"]
-filename: learnPogo.pogo
----
+# Pogoscript
 
 Pogoscript is a little language that emphasises readability, DSLs and provides excellent asynchronous primitives for writing connected JavaScript applications for the browser or server.
 
@@ -200,3 +195,9 @@ That's it.
 Download [Node.js](http://nodejs.org/) and `npm install pogo`.
 
 There is plenty of documentation on [http://pogoscript.org/](http://pogoscript.org/), including a [cheat sheet](http://pogoscript.org/cheatsheet.html), a [guide](http://pogoscript.org/guide/), and how [Pogoscript translates to Javascript](http://featurist.github.io/pogo-examples/). Get in touch on the [google group](http://groups.google.com/group/pogoscript) if you have questions!
+
+---
+
+## Contributors
+
+    - ["Tim Macfarlane", "http://github.com/refractalize"]

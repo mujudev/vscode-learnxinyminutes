@@ -1,12 +1,4 @@
----
-category: tool
-tool: AngularJS
-contributors:
-    - ["Walter Cordero", "http://waltercordero.com"]
-filename: learnangular.html
----
-
-## AngularJS Tutorial.
+# AngularJS
 
 AngularJS version 1.0 was released in 2012.
 Miško Hevery, a Google employee, started to work with AngularJS in 2009.
@@ -706,3 +698,8 @@ app.controller('myCtrl', function($scope) {
 - [http://www.w3schools.com/angular/angular_ref_directives.asp](http://www.w3schools.com/angular/angular_ref_directives.asp)
 - [http://www.w3schools.com/angular/default.asp](http://www.w3schools.com/angular/default.asp)
 - [https://teamtreehouse.com/library/angular-basics/](https://teamtreehouse.com/library/angular-basics/)
+
+---
+
+## Contributors:
+    - ["Walter Cordero", "http://waltercordero.com"]

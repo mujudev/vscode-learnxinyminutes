@@ -1,13 +1,4 @@
----
-language: json
-filename: learnjson.json
-contributors:
-  - ["Anna Harren", "https://github.com/iirelu"]
-  - ["Marco Scannadinari", "https://github.com/marcoms"]
-  - ["himanshu", "https://github.com/himanshu81494"]
-  - ["Michael Neth", "https://github.com/infernocloud"]
-  - ["Athanasios Emmanouilidis", "https://github.com/athanasiosem"]
----
+# JSON
 
 JSON is an extremely simple data-interchange format. As [json.org](https://json.org) says, it is easy for humans to read and write and for machines to parse and generate.
 
@@ -82,3 +73,13 @@ Supported data types:
 
 * [JSON.org](https://json.org) All of JSON beautifully explained using flowchart-like graphics.
 * [JSON Tutorial](https://www.youtube.com/watch?v=wI1CWzNtE-M) A concise introduction to JSON.
+
+---
+
+## Contributors
+
+  - ["Anna Harren", "https://github.com/iirelu"]
+  - ["Marco Scannadinari", "https://github.com/marcoms"]
+  - ["himanshu", "https://github.com/himanshu81494"]
+  - ["Michael Neth", "https://github.com/infernocloud"]
+  - ["Athanasios Emmanouilidis", "https://github.com/athanasiosem"]

@@ -1,9 +1,4 @@
----
-language: RDF
-filename: learnrdf.ttl
-contributors:
-- ["Bob DuCharme", "http://bobdc.com/"]
----
+# RDF
 
 RDF (Resource Description Framework) is a [W3C
 standard](https://www.w3.org/TR/2014/REC-rdf11-concepts-20140225/) data
@@ -158,3 +153,8 @@ ex:birthday rdf:type rdf:Property ;
 * [What is RDFS?](https://www.bobdc.com/blog/whatisrdfs/) on bobdc.com 
 * [Introduction to RDF and SPARQL](https://data.europa.eu/sites/default/files/d2.1.2_training_module_1.3_introduction_to_rdf_sparql_en_edp.pdf) at data.europa.eu
 
+---
+
+## Contributors
+
+- ["Bob DuCharme", "http://bobdc.com/"]

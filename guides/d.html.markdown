@@ -1,10 +1,4 @@
----
-language: D
-filename: learnd.d
-contributors:
-    - ["Nick Papanastasiou", "www.nickpapanastasiou.github.io"]
-
----
+# D
 
 ```d
 // You know what's coming...
@@ -259,3 +253,9 @@ void main() {
     }
 }
 ```
+
+---
+
+## Contributors
+
+    - ["Nick Papanastasiou", "www.nickpapanastasiou.github.io"]

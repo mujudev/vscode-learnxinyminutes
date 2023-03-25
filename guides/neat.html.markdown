@@ -1,9 +1,4 @@
----
-language: neat
-contributors:
-    - ["Feep", "https://github.com/FeepingCreature"]
-filename: LearnNeat.nt
----
+# Neat
 
 Neat is basically a smaller version of D1 with some experimental syntax and a focus on terseness without losing the basic C-like syntax.
 
@@ -295,3 +290,9 @@ void main(string[] args) {
  * Standard library
  * Conditions (error handling)
  * Macros
+
+---
+
+## Contributors
+    
+    - ["Feep", "https://github.com/FeepingCreature"]

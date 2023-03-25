@@ -1,12 +1,4 @@
----
-language: html
-filename: learnhtml.txt
-contributors:
-    - ["Christophe THOMAS", "https://github.com/WinChris"]
-translators:
-    - ["Robert Steed", "https://github.com/robochat"]
-    - ["Dimitri Kokkonis", "https://github.com/kokkonisd"]
----
+# HTML
 
 HTML stands for Hypertext Markup Language.
 
@@ -174,3 +166,14 @@ HTML is written in files ending with `.html` or `.htm`. The mime type is
 * [Wikipedia](https://en.wikipedia.org/wiki/HTML)
 * [HTML Tutorial](https://developer.mozilla.org/en-US/docs/Web/HTML)
 * [W3Schools](http://www.w3schools.com/html/html_intro.asp)
+
+---
+
+## Contributors
+   
+    - ["Christophe THOMAS", "https://github.com/WinChris"]
+
+### Translators
+
+    - ["Robert Steed", "https://github.com/robochat"]
+    - ["Dimitri Kokkonis", "https://github.com/kokkonisd"]

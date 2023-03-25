@@ -1,9 +1,4 @@
----
-language: less
-filename: learnless.less
-contributors:
-  - ["Saravanan Ganesh", "http://srrvnn.me"]
----
+# Less
 
 Less is a CSS pre-processor, that adds features such as variables, nesting, mixins and more.
 Less (and other preprocessors, such as [Sass](http://sass-lang.com/)) help developers to write maintainable and DRY (Don't Repeat Yourself) code.
@@ -387,3 +382,9 @@ Less can be used in any project as long as you have a program to compile it into
 ## Further reading
 * [Official Documentation](http://lesscss.org/features/)
 * [Less CSS - Beginner's Guide](http://www.hongkiat.com/blog/less-basic/)
+
+---
+
+## Contributors
+
+  - ["Saravanan Ganesh", "http://srrvnn.me"]

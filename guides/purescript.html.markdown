@@ -1,10 +1,4 @@
----
-language: PureScript
-filename: purescript.purs
-contributors:
-    - ["Fredrik Dyrkell", "http://www.lexicallyscoped.com"]
-    - ["Thimoteus", "https://github.com/Thimoteus"]
----
+# PureScript
 
 PureScript is a small strongly, statically typed language compiling to JavaScript.
 
@@ -209,3 +203,10 @@ any even [1,2,3] -- true
 all even [1,2,3] -- false
 
 ```
+
+---
+
+## Contributors
+
+    - ["Fredrik Dyrkell", "http://www.lexicallyscoped.com"]
+    - ["Thimoteus", "https://github.com/Thimoteus"]

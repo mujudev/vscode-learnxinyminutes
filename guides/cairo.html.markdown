@@ -1,10 +1,3 @@
----
-language: Cairo
-filename: learnCairo.sol
-contributors:
-    - ["Darlington Nnam", "https://github.com/Darlington02"]
----
-
 # Cairo
 
 Cairo is a Turing-complete language that allows you write provable programs
@@ -862,3 +855,9 @@ func get_opposite_token(token_type: felt) -> (t: felt) {
 ## Future TO-DOs
 
 Update tutorial to fit Cairo 1.0
+
+---
+
+## Contributors
+
+    - ["Darlington Nnam", "https://github.com/Darlington02"]

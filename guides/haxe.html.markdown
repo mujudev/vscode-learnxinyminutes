@@ -1,10 +1,4 @@
----
-language: haxe
-filename: LearnHaxe3.hx
-contributors:
-    - ["Justin Donaldson", "https://github.com/jdonaldson/"]
-    - ["Dan Korostelev", "https://github.com/nadako/"]
----
+# Haxe
 
 [Haxe](https://haxe.org/) is a general-purpose language that provides platform support for C++, C#,
 Swf/ActionScript, JavaScript, Java, PHP, Python, Lua, HashLink, and Neko bytecode
@@ -720,3 +714,10 @@ Finally, please join us on [the Haxe forum](https://community.haxe.org/),
 on IRC [#haxe on
 freenode](http://webchat.freenode.net/), or on the
 [Haxe Gitter chat](https://gitter.im/HaxeFoundation/haxe).
+
+---
+
+## Contributors
+
+    - ["Justin Donaldson", "https://github.com/jdonaldson/"]
+    - ["Dan Korostelev", "https://github.com/nadako/"]

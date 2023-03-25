@@ -1,11 +1,5 @@
----
-category: tool
-tool: OpenCV
-filename: learnopencv.py
-contributors:
-    - ["Yogesh Ojha", "http://github.com/yogeshojha"]
----
-### Opencv
+# OpenCV
+
 
 OpenCV (Open Source Computer Vision) is a library of programming functions mainly aimed at real-time computer vision. 
 Originally developed by Intel, it was later supported by Willow Garage then Itseez (which was later acquired by Intel). 
@@ -141,3 +135,9 @@ cv2.destroyAllWindows()
     * [https://realpython.com/python-opencv-color-spaces](https://realpython.com/python-opencv-color-spaces)
     * [https://pyimagesearch.com](https://pyimagesearch.com)
     * [https://www.learnopencv.com](https://www.learnopencv.com)
+
+---
+
+## Contributors
+
+    - ["Yogesh Ojha", "http://github.com/yogeshojha"]

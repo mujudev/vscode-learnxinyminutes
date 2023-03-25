@@ -1,10 +1,4 @@
----
-language: kdb+
-contributors:
-    - ["Matt Doherty", "https://github.com/picodoc"]
-    - ["Jonny Press", "https://github.com/jonnypress"]
-filename: learnkdb.q
----
+# kdb+
 
 The q language and its database component kdb+ were developed by Arthur Whitney
 and released by Kx systems in 2003. q is a descendant of APL and as such is
@@ -774,3 +768,10 @@ select from splayed / (the columns are read from disk on request)
 * [q language reference](https://code.kx.com/q/ref/)
 * [Online training courses](http://training.aquaq.co.uk/)
 * [TorQ production framework](https://github.com/AquaQAnalytics/TorQ)
+
+---
+
+## Contributors
+
+    - ["Matt Doherty", "https://github.com/picodoc"]
+    - ["Jonny Press", "https://github.com/jonnypress"]

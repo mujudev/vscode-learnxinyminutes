@@ -1,11 +1,4 @@
----
-
-language: "Common Lisp"
-filename: commonlisp.lisp
-contributors:
-  - ["Paul Nathan", "https://github.com/pnathan"]
-  - ["Rommel Martinez", "https://ebzzry.io"]
----
+# Common Lisp
 
 Common Lisp is a general-purpose, multi-paradigm programming language suited for a wide variety of
 industry applications. It is frequently referred to as a programmable programming language.
@@ -689,3 +682,10 @@ Lots of thanks to the Scheme people for rolling up a great starting
 point which could be easily moved to Common Lisp.
 
 - [Paul Khuong](https://github.com/pkhuong) for some great reviewing.
+
+---
+
+## Contributors
+
+  - ["Paul Nathan", "https://github.com/pnathan"]
+  - ["Rommel Martinez", "https://ebzzry.io"]

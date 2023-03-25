@@ -1,9 +1,4 @@
----
-language: MongoDB 
-filename: mongo.js 
-contributors:
-  - ["Raj Piskala", "https://www.rajpiskala.ml/"]
----
+# MongoDB
 
 MongoDB is a NoSQL document database for high volume data storage.
 
@@ -403,3 +398,9 @@ features, I would look at
 - Indexing allows for caching, which allows for much faster execution of queries
 - Sharding allows for horizontal data scaling and distribution between multiple
   machines.
+
+---
+
+## Contributors
+
+  - ["Raj Piskala", "https://www.rajpiskala.ml/"]

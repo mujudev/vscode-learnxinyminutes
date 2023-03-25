@@ -1,10 +1,4 @@
----
-category: tool
-tool: messagepack
-filename: learnmessagepack.mpac
-contributors:
-  - ["Gabriel Chuan", "https://github.com/gczh"]
----
+# MessagePack
 
 MessagePack is an efficient binary serialization format. It lets you exchange data among multiple languages like JSON. The benefits over other formats is that it's faster and smaller. 
 
@@ -170,3 +164,9 @@ function mytipeDecode(data) {
 
 - [MessagePack](http://msgpack.org/index.html)
 - [MsgPack vs. JSON: Cut your client-server exchange traffic by 50% with one line of code](http://indiegamr.com/cut-your-data-exchange-traffic-by-up-to-50-with-one-line-of-code-msgpack-vs-json/)
+
+---
+
+## Contributors
+
+  - ["Gabriel Chuan", "https://github.com/gczh"]

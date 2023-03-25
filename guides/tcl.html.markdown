@@ -1,9 +1,4 @@
----
-language: Tcl
-contributors:
-    - ["Poor Yorick", "https://pooryorick.com/"]
-filename: learntcl.tcl
----
+# Tcl
 
 Tcl was created by [John Ousterhout](https://wiki.tcl-lang.org/page/John+Ousterhout) as a
 reusable scripting language for circuit design tools that he authored.  In 1997 he
@@ -586,3 +581,9 @@ a
 [Tcl Wiki](https://wiki.tcl-lang.org)
 
 [Tcl Subreddit](http://www.reddit.com/r/Tcl)
+
+---
+
+## Contributors
+
+    - ["Poor Yorick", "https://pooryorick.com/"]

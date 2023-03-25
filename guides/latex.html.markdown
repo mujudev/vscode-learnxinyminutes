@@ -1,3 +1,5 @@
+# LaTeX
+
 ---
 language: latex
 contributors:
@@ -322,3 +324,10 @@ That's all for now!
 * A quick guide for learning LaTeX: [Learn LaTeX in 30 minutes](https://www.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes)
 * An interactive platform to learn LaTeX (installationfree) [learnlatex.org/](https://www.learnlatex.org/)
 * Stack Exchange's question and answer site about TeX, LaTeX, ConTeXt, etc. [tex.stackexchange.com](https://tex.stackexchange.com/)
+
+---
+
+## Contributors
+
+    - ["Max Sun", "http://github.com/maxsun"]
+    - ["Yan Hui Hang", "http://github.com/yanhh0"]

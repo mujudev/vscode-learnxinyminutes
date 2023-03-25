@@ -1,12 +1,4 @@
----
-language: sass
-filename: learnsass.scss
-contributors:
-  - ["Laura Kyle", "https://github.com/LauraNK"]
-  - ["Sean Corrales", "https://github.com/droidenator"]
-  - ["Kyle Mendes", "https://github.com/pink401k"]
-  - ["Keith Miyake", "https://github.com/kaymmm"]
----
+# Sass
 
 Sass is a CSS extension language that adds features such as variables, nesting, mixins and more.
 Sass (and other preprocessors, such as [Less](http://lesscss.org/)) help developers write maintainable and DRY (Don't Repeat Yourself) code.
@@ -585,3 +577,12 @@ Sass can be used in any project as long as you have a program to compile it into
 ## Further reading
 * [Official Documentation](http://sass-lang.com/documentation/file.SASS_REFERENCE.html)
 * [The Sass Way](http://thesassway.com/) provides tutorials (beginner-advanced) and articles.
+
+---
+
+## Contributors
+
+  - ["Laura Kyle", "https://github.com/LauraNK"]
+  - ["Sean Corrales", "https://github.com/droidenator"]
+  - ["Kyle Mendes", "https://github.com/pink401k"]
+  - ["Keith Miyake", "https://github.com/kaymmm"]

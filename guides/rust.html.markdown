@@ -1,9 +1,4 @@
----
-language: Rust
-contributors:
-    - ["P1start", "http://p1start.github.io/"]
-filename: learnrust.rs
----
+# Rust
 
 Rust is a programming language developed by Mozilla Research.
 Rust combines low-level control over performance with high-level convenience and
@@ -350,3 +345,9 @@ irc.mozilla.org are also always keen to help newcomers.
 You can also try out features of Rust with an online compiler at the official
 [Rust playpen](http://play.rust-lang.org) or on the main
 [Rust website](http://rust-lang.org).
+
+---
+
+## Contributors
+    
+    - ["P1start", "http://p1start.github.io/"]

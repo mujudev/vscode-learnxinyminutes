@@ -1,9 +1,4 @@
----
-language: LiveScript
-filename: learnLivescript.ls
-contributors:
-    - ["Christina Whyte", "http://github.com/kurisuwhyte/"]
----
+# LiveScript
 
 LiveScript is a functional compile-to-JavaScript language which shares
 most of the underlying semantics with its host language. Nice additions
@@ -351,3 +346,9 @@ language, and a nice online compiler for you to try stuff out!
 You may also want to grab yourself some
 [prelude.ls](http://gkz.github.io/prelude-ls/), and check out the `#livescript`
 channel on the Freenode network.
+
+---
+
+## Contributors
+
+    - ["Christina Whyte", "http://github.com/kurisuwhyte/"]

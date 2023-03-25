@@ -1,9 +1,4 @@
----
-language: zig
-filename: learnzig.zig
-contributors:
-    - ["Philippe Pittoli", "https://karchnu.fr/"]
----
+# Zig
 
 
 [Zig][ziglang] aims to be a replacement for the C programming language.
@@ -978,3 +973,9 @@ For now, documentation for standard library is WIP.
 [ziglang]: https://ziglang.org
 [ziglearn]: https://ziglearn.org/
 [zigdoc]: https://ziglang.org/documentation/
+
+---
+
+## Contributors
+
+    - ["Philippe Pittoli", "https://karchnu.fr/"]

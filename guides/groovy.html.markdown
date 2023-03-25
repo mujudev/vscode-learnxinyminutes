@@ -1,10 +1,4 @@
----
-language: Groovy
-filename: learngroovy.groovy
-contributors:
-    - ["Roberto Pérez Alcolea", "http://github.com/rpalcolea"]
-filename: learngroovy.groovy
----
+# Groovy
 
 Groovy - A dynamic language for the Java platform [Read more here.](http://www.groovy-lang.org/)
 
@@ -447,3 +441,9 @@ Join a [Groovy user group](http://www.groovy-lang.org/usergroups.html)
 [1] http://roshandawrani.wordpress.com/2010/10/18/groovy-new-feature-closures-can-now-memorize-their-results/
 [2] http://www.solutionsiq.com/resources/agileiq-blog/bid/72880/Programming-with-Groovy-Trampoline-and-Memoize
 [3] http://mrhaki.blogspot.mx/2011/05/groovy-goodness-cache-closure-results.html
+
+---
+
+## Contributors
+
+    - ["Roberto Pérez Alcolea", "http://github.com/rpalcolea"]

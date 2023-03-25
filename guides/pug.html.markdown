@@ -1,9 +1,4 @@
----
-language: Pug
-contributors:
-  - ["Michael Warner", "https://github.com/MichaelJGW"]
-filename: index.pug
----
+# Pug
 
 ## Getting Started with Pug
 
@@ -206,3 +201,9 @@ mixin comment(name, comment)
 - [The Site](https://pugjs.org/)
 - [The Docs](https://pugjs.org/api/getting-started.html)
 - [Github Repo](https://github.com/pugjs/pug)
+
+---
+
+## Contributors
+
+  - ["Michael Warner", "https://github.com/MichaelJGW"]

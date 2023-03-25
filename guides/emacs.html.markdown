@@ -1,10 +1,4 @@
----
-category: tool
-tool: emacs
-filename: emacs.txt
-contributors:
-    - ["Joseph Riad", "https://github.com/Joseph-Riad"]
----
+# Emacs
 
 Emacs started its life as ["the extensible, customizable display
 editor"](https://www.gnu.org/software/emacs/emacs-paper.html) and grew
@@ -318,3 +312,9 @@ incrementally while increasing your knowledge of Emacs along the way.
   - [The GNU Emacs Manual](https://www.gnu.org/software/emacs/manual/emacs.html)
   - [Emacs Stack Exchange](https://emacs.stackexchange.com/)
   - [Emacs Wiki](https://www.emacswiki.org/emacs/EmacsWiki)
+
+---
+
+## Contributors
+
+    - ["Joseph Riad", "https://github.com/Joseph-Riad"]

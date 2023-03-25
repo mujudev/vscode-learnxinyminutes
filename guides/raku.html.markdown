@@ -1,11 +1,4 @@
----
-category: language
-language: Raku
-filename: learnraku.raku
-contributors:
-    - ["vendethiel", "http://github.com/vendethiel"]
-    - ["Samantha McVey", "https://cry.nu"]
----
+# Raku
 
 Raku (formerly Perl 6) is a highly capable, feature-rich programming language
 made for at least the next hundred years.
@@ -2272,3 +2265,10 @@ easier to implement and optimize).
 
 - Read [the language design documents](https://design.raku.org/). They explain
 Raku from an implementor point-of-view, but it's still very interesting.
+
+---
+
+## Contributors
+
+    - ["vendethiel", "http://github.com/vendethiel"]
+    - ["Samantha McVey", "https://cry.nu"]

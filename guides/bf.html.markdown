@@ -1,11 +1,4 @@
----
-language: bf
-filename: bf.bf
-contributors:
-    - ["Prajit Ramachandran", "http://prajitr.github.io/"]
-    - ["Mathias Bynens", "http://mathiasbynens.be/"]
-    - ["rilysh", "https://github.com/rilysh"]
----
+# Brainfuck
 
 Brainfuck (not capitalized except at the start of a sentence) is an extremely
 minimal Turing-complete programming language with just 8 commands.
@@ -86,3 +79,10 @@ masochist, try writing a brainfuck interpreter… in brainfuck.
  * [esolang-wiki](https://esolangs.org/wiki/Brainfuck)
  * [learn brainfuck](http://cydathria.com/bf/brainfuck.html)
  * [other resources](http://www.muppetlabs.com/~breadbox/bf/)
+
+---
+
+## Contributors
+    - ["Prajit Ramachandran", "http://prajitr.github.io/"]
+    - ["Mathias Bynens", "http://mathiasbynens.be/"]
+    - ["rilysh", "https://github.com/rilysh"]

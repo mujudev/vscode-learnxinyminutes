@@ -1,12 +1,4 @@
----
-language: R
-contributors:
-    - ["e99n09", "http://github.com/e99n09"]
-    - ["isomorphismes", "http://twitter.com/isomorphisms"]
-    - ["kalinn", "http://github.com/kalinn"]
-    - ["mribeirodantas", "http://github.com/mribeirodantas"]
-filename: learnr.r
----
+# R
 
 R is a statistical computing language. It has lots of libraries for uploading and cleaning data sets, running statistical procedures, and making graphs. You can also run `R` commands within a LaTeX document.
 
@@ -804,3 +796,12 @@ pp + geom_point()
 
 * Get R and the R GUI from [http://www.r-project.org/](http://www.r-project.org/)
 * [RStudio](http://www.rstudio.com/ide/) is another GUI
+
+---
+
+## Contributors
+
+    - ["e99n09", "http://github.com/e99n09"]
+    - ["isomorphismes", "http://twitter.com/isomorphisms"]
+    - ["kalinn", "http://github.com/kalinn"]
+    - ["mribeirodantas", "http://github.com/mribeirodantas"]

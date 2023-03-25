@@ -1,11 +1,4 @@
----
-language: Q#
-contributors:
-    - ["Vincent van Wingerden", "https://github.com/vivanwin"]
-    - ["Mariia Mykhailova", "https://github.com/tcNickolas"]
-    - ["Andrew Ryan Davis", "https://github.com/AndrewDavis1191"]
-filename: LearnQSharp.qs
----
+# Q#
 
 Q# is a high-level domain-specific language which enables developers to write quantum algorithms. Q# programs can be executed on a quantum simulator running on a classical computer and (in future) on quantum computers.
 
@@ -202,3 +195,11 @@ The [Quantum Katas][1] offer great self-paced tutorials and programming exercise
 
 [1]: https://github.com/microsoft/QuantumKatas
 [2]: https://docs.microsoft.com/quantum/
+
+---
+
+## Contributors
+    
+    - ["Vincent van Wingerden", "https://github.com/vivanwin"]
+    - ["Mariia Mykhailova", "https://github.com/tcNickolas"]
+    - ["Andrew Ryan Davis", "https://github.com/AndrewDavis1191"]

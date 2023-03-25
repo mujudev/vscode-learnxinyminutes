@@ -1,10 +1,4 @@
----
-language: Smalltalk
-filename: smalltalk.st
-contributors:
-    - ["Jigyasa Grover", "https://github.com/jigyasa-grover"]
-    - ["tim Rowledge", "tim@rowledge.org"]
----
+# Smalltalk
 
 - Smalltalk is a fully object-oriented, dynamically typed, reflective programming language with no 'non-object' types.
 - Smalltalk was created as the language to underpin the "new world" of computing exemplified by "human–computer symbiosis."
@@ -1041,3 +1035,10 @@ Most Smalltalks are either free as in OSS or have a free downloadable version wi
 * [Smalltalk-72 Manual](http://www.bitsavers.org/pdf/xerox/parc/techReports/Smalltalk-72_Instruction_Manual_Mar76.pdf)
 * [Smalltalk, Objects, and Design](https://books.google.co.in/books?id=W8_Une9cbbgC&printsec=frontcover&dq=smalltalk&hl=en&sa=X&ved=0CCIQ6AEwAWoVChMIw63Vo6CpyAIV0HGOCh3S2Alf#v=onepage&q=smalltalk&f=false)
 * [Smalltalk: An Introduction to Application Development Using VisualWorks](https://books.google.co.in/books?id=zalQAAAAMAAJ&q=smalltalk&dq=smalltalk&hl=en&sa=X&ved=0CCgQ6AEwAmoVChMIw63Vo6CpyAIV0HGOCh3S2Alf/)
+
+---
+
+## Contributors
+
+    - ["Jigyasa Grover", "https://github.com/jigyasa-grover"]
+    - ["tim Rowledge", "tim@rowledge.org"]

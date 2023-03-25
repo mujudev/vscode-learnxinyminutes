@@ -1,14 +1,4 @@
----
-language: C++
-filename: learncpp.cpp
-contributors:
-    - ["Steven Basart", "https://github.com/xksteven"]
-    - ["Matt Kline", "https://github.com/mrkline"]
-    - ["Geoff Liu", "http://geoffliu.me"]
-    - ["Connor Waters", "https://github.com/connorwaters"]
-    - ["Ankush Goyal", "https://github.com/ankushg07"]
-    - ["Jatin Dhankhar", "https://github.com/jatindhankhar"]
----
+# C++
 
 C++ is a systems programming language that,
 [according to its inventor Bjarne Stroustrup](https://channel9.msdn.com/Events/Lang-NEXT/Lang-NEXT-2014/Keynote),
@@ -1205,3 +1195,14 @@ Further Reading:
 * A tutorial  for beginners or experts, covering many modern features and good practices: [LearnCpp.com](https://www.learncpp.com/)
 * A tutorial covering basics of language and setting up coding environment is available at [TheChernoProject - C++](https://www.youtube.com/playlist?list=PLlrATfBNZ98dudnM48yfGUldqGD0S4FFb).
 * Additional resources may be found at [CPlusPlus](http://cplusplus.com).
+
+---
+
+## Contributors
+
+    - ["Steven Basart", "https://github.com/xksteven"]
+    - ["Matt Kline", "https://github.com/mrkline"]
+    - ["Geoff Liu", "http://geoffliu.me"]
+    - ["Connor Waters", "https://github.com/connorwaters"]
+    - ["Ankush Goyal", "https://github.com/ankushg07"]
+    - ["Jatin Dhankhar", "https://github.com/jatindhankhar"]

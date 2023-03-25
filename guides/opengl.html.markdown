@@ -1,10 +1,4 @@
----
-category: tool
-tool: OpenGL
-filename: learnopengl.cpp
-contributors:
-    - ["Simon Deitermann", "s.f.deitermann@t-online.de"]
----
+# OpenGL
 
 **Open Graphics Library** (**OpenGL**) is a cross-language cross-platform application programming interface
 (API) for rendering 2D computer graphics and 3D vector graphics.<sup>[1]</sup> In this tutorial we will be
@@ -763,3 +757,9 @@ red, green and blue on each vertex.
 
 - OpenGL Superbible - Fifth Edition (covering OpenGL 3.3)
 - OpenGL Programming Guide - Eighth Edition (covering OpenGL 4.3)
+
+---
+
+## Contributors
+    
+    - ["Simon Deitermann", "s.f.deitermann@t-online.de"]

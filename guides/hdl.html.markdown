@@ -1,9 +1,4 @@
----
-language: hdl
-filename: learnhdl.hdl
-contributors:
-  - ["Jack Smith", "https://github.com/JSmithTech2019"]
----
+# HDL
 
 HDL (hardware description language) is a specialized language used to describe the structure/behavior of real world circuits. 
 
@@ -229,3 +224,9 @@ Good luck and happy coding!
 * [Hardware Description Language](https://en.wikipedia.org/wiki/Hardware_description_language)
 
 * [HDL Programming Fundamentals](https://www.electronicdesign.com/products/hdl-programming-fundamentals)
+
+---
+
+## Contributors
+
+  - ["Jack Smith", "https://github.com/JSmithTech2019"]

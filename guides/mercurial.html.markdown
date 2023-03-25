@@ -1,10 +1,4 @@
----
-category: tool
-tool: Mercurial
-contributors:
-  - ["Will L. Fife", "http://github.com/sarlalian"]
-filename: LearnMercurial.txt
----
+# Mercurial
 
 Mercurial is a free, distributed source control management tool. It offers
 you the power to efficiently handle projects of any size while using an
@@ -353,3 +347,9 @@ $ hg remove *.txt
 * [Learning Mercurial in Workflows](https://www.mercurial-scm.org/guide)
 * [Mercurial Quick Start](https://www.mercurial-scm.org/wiki/QuickStart)
 * [Mercurial: The Definitive Guide by Bryan O'Sullivan](http://hgbook.red-bean.com/)
+
+---
+
+## Contributors
+
+  - ["Will L. Fife", "http://github.com/sarlalian"]

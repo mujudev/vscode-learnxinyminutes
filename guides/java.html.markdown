@@ -1,19 +1,4 @@
----
-language: java
-contributors:
-    - ["Jake Prather", "https://github.com/JakeHP"]
-    - ["Jakukyo Friel", "https://weakish.github.io"]
-    - ["Madison Dickson", "https://github.com/mix3d"]
-    - ["Simon Morgan", "https://sjm.io/"]
-    - ["Zachary Ferguson", "https://github.com/zfergus2"]
-    - ["Cameron Schermerhorn", "https://github.com/cschermerhorn"]
-    - ["Rachel Stiyer", "https://github.com/rstiyer"]
-    - ["Michael Dähnert", "https://github.com/JaXt0r"]
-    - ["Rob Rose", "https://github.com/RobRoseKnows"]
-    - ["Sean Nam", "https://github.com/seannam"]
-    - ["Shawn M. Hanes", "https://github.com/smhanes15"]
-filename: LearnJava.java
----
+# Java
 
 Java is a general-purpose, concurrent, class-based, object-oriented computer
 programming language.
@@ -1048,3 +1033,19 @@ The links provided here below are just to get an understanding of the topic, fee
 * [Objects First with Java](https://www.amazon.com/Objects-First-Java-Practical-Introduction/dp/0132492660)
 
 * [Java The Complete Reference](https://www.amazon.com/gp/product/0071606300)
+
+---
+
+## Contributors
+    
+    - ["Jake Prather", "https://github.com/JakeHP"]
+    - ["Jakukyo Friel", "https://weakish.github.io"]
+    - ["Madison Dickson", "https://github.com/mix3d"]
+    - ["Simon Morgan", "https://sjm.io/"]
+    - ["Zachary Ferguson", "https://github.com/zfergus2"]
+    - ["Cameron Schermerhorn", "https://github.com/cschermerhorn"]
+    - ["Rachel Stiyer", "https://github.com/rstiyer"]
+    - ["Michael Dähnert", "https://github.com/JaXt0r"]
+    - ["Rob Rose", "https://github.com/RobRoseKnows"]
+    - ["Sean Nam", "https://github.com/seannam"]
+    - ["Shawn M. Hanes", "https://github.com/smhanes15"]

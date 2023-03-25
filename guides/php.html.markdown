@@ -1,10 +1,4 @@
----
-language: PHP
-contributors:
-    - ["Malcolm Fell", "http://emarref.net/"]
-    - ["Trismegiste", "https://github.com/Trismegiste"]
-filename: learnphp.php
----
+# PHP
 
 This document describes PHP 5+.
 
@@ -892,3 +886,10 @@ If you're coming from a language with good package management, check out
 
 For common standards, visit the PHP Framework Interoperability Group's
 [PSR standards](https://github.com/php-fig/fig-standards).
+
+---
+
+## Contributors
+
+    - ["Malcolm Fell", "http://emarref.net/"]
+    - ["Trismegiste", "https://github.com/Trismegiste"]

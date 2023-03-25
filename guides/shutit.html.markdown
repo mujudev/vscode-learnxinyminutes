@@ -1,12 +1,4 @@
----
-category: tool
-tool: ShutIt
-contributors:
-    - ["Ian Miell", "http://ian.meirionconsulting.tk"]
-filename: learnshutit.html
----
-
-## ShutIt
+# ShutIt
 
 ShutIt is an shell automation framework designed to be easy to use.
 
@@ -316,3 +308,9 @@ It's a broader automation framework, and the above is its 'standalone mode'.
 
 Feedback, feature requests, 'how do I?'s highly appreciated! Reach me at
 [@ianmiell](https://twitter.com/ianmiell)
+
+---
+
+# Contributors
+
+    - ["Ian Miell", "http://ian.meirionconsulting.tk"]

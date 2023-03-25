@@ -1,9 +1,4 @@
----
-language: uxntal
-contributors:
-    - ["Devine Lu Linvega", "https://wiki.xxiivv.com"]
-filename: learnuxn.tal
----
+# Uxntal
 
 Uxntal is a stack-machine assembly language targeting the [Uxn virtual machine](https://wiki.xxiivv.com/site/uxn.html).
 
@@ -172,3 +167,9 @@ JMP2r
 * [Uxntal Lessons](https://compudanzas.net/uxn_tutorial.html)
 * [Uxntal Assembly](https://wiki.xxiivv.com/site/uxntal.html)
 * [Uxntal Resources](https://github.com/hundredrabbits/awesome-uxn)
+
+---
+
+## Contributors
+
+    - ["Devine Lu Linvega", "https://wiki.xxiivv.com"]

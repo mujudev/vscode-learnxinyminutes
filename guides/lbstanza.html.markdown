@@ -1,9 +1,4 @@
----
-language: LB Stanza
-filename: learn-stanza.stanza
-contributors: 
-  - ["Mike Hilgendorf", "https://github.com/m-hilgendorf"]
----
+# LB Stanza
 
 LB Stanza (or Stanza for short) is a new optionally-typed general purpose programming language from the University of California, Berkeley. Stanza was designed to help programmers tackle the complexity of architecting large programs and significantly increase the productivity of application programmers across the entire software development life cycle.
 
@@ -280,3 +275,9 @@ doc: \<doc>
 \<doc>
 defn docfn () : false 
 ```
+
+---
+
+## Contributors
+
+  - ["Mike Hilgendorf", "https://github.com/m-hilgendorf"]

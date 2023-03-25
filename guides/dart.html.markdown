@@ -1,10 +1,4 @@
----
-language: dart
-filename: learndart.dart
-contributors:
-  - ["Joao Pedrosa", "https://github.com/jpedrosa/"]
-  - ["Vince Ramces Oliveros", "https://github.com/ram231"]
----
+# Dart
 
 **Dart** is a single threaded, general purpose programming language.
 It borrows a lot from other mainstream languages.
@@ -718,3 +712,10 @@ Dart has a comprehensive web-site. It covers API reference, tutorials, articles 
 useful DartPad (a cloud-based Dart coding playground).
 [https://dart.dev/](https://dart.dev)
 [https://dartpad.dev/](https://dartpad.dev)
+
+---
+
+## Contributors
+
+  - ["Joao Pedrosa", "https://github.com/jpedrosa/"]
+  - ["Vince Ramces Oliveros", "https://github.com/ram231"]

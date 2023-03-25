@@ -1,9 +1,3 @@
----
-language: protocol-buffers
-filename: protocol-buffers.proto
-contributors:
-    - ["Shankar Shastri", "https://github.com/shankarshastri"]
----
 # Protocol Buffers
 
 ## Why Protocol Buffers
@@ -245,3 +239,9 @@ protoc --proto_path=IMPORT_PATH --cpp_out=DST_DIR --java_out=DST_DIR --python_ou
 ## References
 
 [Google Protocol Buffers](https://developers.google.com/protocol-buffers/)
+
+---
+
+## Contributors
+
+    - ["Shankar Shastri", "https://github.com/shankarshastri"]

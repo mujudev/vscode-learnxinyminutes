@@ -1,20 +1,4 @@
----
-name: Go
-category: language
-language: Go
-filename: learngo.go
-contributors:
-    - ["Sonia Keys", "https://github.com/soniakeys"]
-    - ["Christopher Bess", "https://github.com/cbess"]
-    - ["Jesse Johnson", "https://github.com/holocronweaver"]
-    - ["Quint Guvernator", "https://github.com/qguv"]
-    - ["Jose Donizetti", "https://github.com/josedonizetti"]
-    - ["Alexej Friesen", "https://github.com/heyalexej"]
-    - ["Clayton Walker", "https://github.com/cwalk"]
-    - ["Leonid Shevtsov", "https://github.com/leonid-shevtsov"]
-    - ["Michael Graf", "https://github.com/maerf0x0"]
-    - ["John Arundel", "https://github.com/bitfield"]
----
+# Go
 
 Go was created out of the need to get work done. It's not the latest trend
 in programming language theory, but it is a way to solve real-world
@@ -481,3 +465,18 @@ There are many excellent conference talks and video tutorials on Go available on
 - [Golang University 301](https://www.youtube.com/playlist?list=PLEcwzBXTPUE8KvXRFmmfPEUmKoy9LfmAf) dives into more advanced topics like the Go scheduler, implementation of maps and channels, and optimisation techniques
 
 Go Mobile adds support for mobile platforms (Android and iOS). You can write all-Go native mobile apps or write a library that contains bindings from a Go package, which can be invoked via Java (Android) and Objective-C (iOS). Check out the [Go Mobile page](https://github.com/golang/go/wiki/Mobile) for more information.
+
+---
+
+## Contributors
+
+    - ["Sonia Keys", "https://github.com/soniakeys"]
+    - ["Christopher Bess", "https://github.com/cbess"]
+    - ["Jesse Johnson", "https://github.com/holocronweaver"]
+    - ["Quint Guvernator", "https://github.com/qguv"]
+    - ["Jose Donizetti", "https://github.com/josedonizetti"]
+    - ["Alexej Friesen", "https://github.com/heyalexej"]
+    - ["Clayton Walker", "https://github.com/cwalk"]
+    - ["Leonid Shevtsov", "https://github.com/leonid-shevtsov"]
+    - ["Michael Graf", "https://github.com/maerf0x0"]
+    - ["John Arundel", "https://github.com/bitfield"]

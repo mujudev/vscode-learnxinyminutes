@@ -1,9 +1,5 @@
----
-language: COBOL
-contributors:
-    - ["Hyphz", "http://github.com/hyphz/"]
-filename: learn.COB
----
+# COBOL
+
 COBOL is a business-oriented language revised multiple times since its original design in 1960. It is claimed to still be used in over 80% of 
 organizations.
 
@@ -196,3 +192,8 @@ organizations.
 
 * [GnuCOBOL](https://sourceforge.net/projects/open-cobol/)
 
+---
+
+## Contributors
+
+    - ["Hyphz", "http://github.com/hyphz/"]

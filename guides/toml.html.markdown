@@ -1,9 +1,4 @@
----
-language: toml
-filename: learntoml.toml
-contributors:
-  - ["Alois de Gouvello", "https://github.com/aloisdg"]
----
+# TOML
 
 TOML stands for Tom's Obvious, Minimal Language. It is a data serialisation language designed to be a minimal configuration file format that's easy to read due to obvious semantics.
 
@@ -299,3 +294,9 @@ The equivalent in JSON would be:
 ### More Resources
 
 + [TOML official repository](https://github.com/toml-lang/toml)
+
+---
+
+## Contributors
+
+  - ["Alois de Gouvello", "https://github.com/aloisdg"]

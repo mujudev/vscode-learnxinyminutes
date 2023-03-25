@@ -1,16 +1,4 @@
----
-category: tool
-tool: git
-contributors:
-    - ["Jake Prather", "http://github.com/JakeHP"]
-    - ["Leo Rudberg" , "http://github.com/LOZORD"]
-    - ["Betsy Lorton" , "http://github.com/schbetsy"]
-    - ["Bruno Volcov", "http://github.com/volcov"]
-    - ["Andrew Taylor", "http://github.com/andrewjt71"]
-    - ["Jason Stathopulos", "http://github.com/SpiritBreaker226"]
-    - ["Milo Gilad", "http://github.com/Myl0g"]
-filename: LearnGit.txt
----
+# Git
 
 Git is a distributed version control and source code management system.
 
@@ -619,3 +607,15 @@ b88c6a1b (Google Python team  2019-12-30 13:45:23 -0800 14)
 * [An introduction to Git and GitHub for Beginners (Tutorial)](http://product.hubspot.com/blog/git-and-github-tutorial-for-beginners)
 
 * [The New Boston tutorial to Git covering basic commands and workflow](https://www.youtube.com/playlist?list=PL6gx4Cwl9DGAKWClAD_iKpNC0bGHxGhcx)
+
+---
+
+## Contributors
+
+    - ["Jake Prather", "http://github.com/JakeHP"]
+    - ["Leo Rudberg" , "http://github.com/LOZORD"]
+    - ["Betsy Lorton" , "http://github.com/schbetsy"]
+    - ["Bruno Volcov", "http://github.com/volcov"]
+    - ["Andrew Taylor", "http://github.com/andrewjt71"]
+    - ["Jason Stathopulos", "http://github.com/SpiritBreaker226"]
+    - ["Milo Gilad", "http://github.com/Myl0g"]

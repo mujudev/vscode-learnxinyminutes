@@ -1,4 +1,4 @@
-## Bash
+# Bash
 
 Bash is a name of the unix shell, which was also distributed as the shell
 for the GNU operating system and as the default shell on most Linux distros.
@@ -500,7 +500,6 @@ info --apropos bash
 ---
 
 ## Contributors
-
     - ["Max Yankov", "https://github.com/golergka"]
     - ["Darren Lin", "https://github.com/CogBear"]
     - ["Alexandre Medeiros", "http://alemedeiros.sdf.org"]
@@ -518,7 +517,3 @@ info --apropos bash
     - ["Martin Nicholson", "https://github.com/mn113"]
     - ["Mark Grimwood", "https://github.com/MarkGrimwood"]
     - ["Emily Grace Seville", "https://github.com/EmilySeville7cfg"]
-
-### Translators:
-
-    - ["Dimitri Kokkonis", "https://github.com/kokkonisd"]

@@ -1,10 +1,4 @@
----
-language: Hjson
-filename: learnhjson.hjson
-contributors:
-  - ["MrTeferi", "https://github.com/MrTeferi"]
-lang: en
----
+# Hjson
 
 Hjson is an attempt to make [JSON](https://learnxinyminutes.com/docs/json/) more human readable.
 
@@ -92,3 +86,9 @@ Let's take a look at examples to see the key syntax differences!
 
 * [Hjson.github.io](https://hjson.github.io/) Main Hjson site including editor support, how-to, etc.
 * [Hjson Packages](https://github.com/hjson/) Various Hjson packages for different applications.
+
+---
+
+# Contributors
+
+  - ["MrTeferi", "https://github.com/MrTeferi"]

@@ -1,10 +1,4 @@
----
-language: coldfusion
-filename: learncoldfusion.cfm
-contributors:
-    - ["Wayne Boka", "http://wboka.github.io"]
-    - ["Kevin Morris", "https://twitter.com/kevinmorris"]
----
+# ColdFusion
 
 ColdFusion is a scripting language for web development.
 [Read more here.](http://www.adobe.com/products/coldfusion-family.html)
@@ -327,3 +321,10 @@ The links provided here below are just to get an understanding of the topic, fee
 
 1. [Coldfusion Reference From Adobe](https://helpx.adobe.com/coldfusion/cfml-reference/topics.html)
 2. [Open Source Documentation](http://cfdocs.org/)
+
+---
+
+## Contributors
+
+    - ["Wayne Boka", "http://wboka.github.io"]
+    - ["Kevin Morris", "https://twitter.com/kevinmorris"]

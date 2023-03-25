@@ -1,9 +1,5 @@
----
-language: bc
-contributors:
-    - ["Btup"]
-filename: learnbc.bc
----
+# bc
+
 ```c
 /*This is a multi-
 line comment.*/
@@ -96,3 +92,8 @@ that your program exits. This line of code is optional.*/
 Enjoy this simple calculator! (Or this programming language, to be exact.)
 
 This whole program is written in GNU bc. To run it, use ```bc learnbc.bc```.
+
+---
+
+## Contributors
+    - ["Btup"]

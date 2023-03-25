@@ -1,9 +1,4 @@
----
-language: Elm
-contributors:
-    - ["Max Goldstein", "http://maxgoldste.in/"]
-filename: learnelm.elm
----
+# Elm
 
 Elm is a functional reactive programming language that compiles to (client-side)
 JavaScript. Elm is statically typed, meaning that the compiler catches most
@@ -367,3 +362,9 @@ Here are some useful resources.
 * [Scope in Elm](https://github.com/elm-guides/elm-for-js/blob/master/Scope.md#scope-in-elm) and [How to Read a Type Annotation](https://github.com/elm-guides/elm-for-js/blob/master/How%20to%20Read%20a%20Type%20Annotation.md#how-to-read-a-type-annotation). More community guides on the basics of Elm, written for JavaScript developers.
 
 Go out and write some Elm!
+
+---
+
+## Contributors
+
+    - ["Max Goldstein", "http://maxgoldste.in/"]

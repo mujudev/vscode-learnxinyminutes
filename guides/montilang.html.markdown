@@ -1,9 +1,4 @@
----
-language: "montilang"
-filename: montilang.ml
-contributors:
-  - ["Leo Whitehead", "https://github.com/lduck11007"]
----
+# MontiLang
 
 MontiLang is a Stack-Oriented concatenative imperative programming language. Its syntax
 is roughly based off of forth with similar style for doing arithmetic in [reverse polish notation.](https://en.wikipedia.org/wiki/Reverse_Polish_notation)
@@ -231,3 +226,9 @@ DEL 1 PRINT . /# [1, 3] #/
 
 - [MontiLang.ml](http://montilang.ml/)
 - [Github Page](https://github.com/lduck11007/MontiLang)
+
+---
+
+## Contributors
+
+  - ["Leo Whitehead", "https://github.com/lduck11007"]

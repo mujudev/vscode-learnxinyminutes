@@ -1,9 +1,5 @@
----
-language: Inform7
-contributors:
-    - ["Hyphz", "http://github.com/hyphz/"]
-filename: LearnInform.Inform
----
+# Inform 7
+
 Inform 7 is a natural language based language created by Graham Nelson and Emily Short for writing text adventures, but also potentially usable for other text based applications, especially data backed ones.
 
 ```
@@ -193,3 +189,9 @@ Instead of switching on the robot:
 ##Ready For More?
 
 * [Inform 7](http://www.inform7.com/)
+
+---
+
+## Contributors
+
+    - ["Hyphz", "http://github.com/hyphz/"]

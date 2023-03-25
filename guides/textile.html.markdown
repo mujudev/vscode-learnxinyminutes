@@ -1,9 +1,4 @@
----
-language: textile
-contributors:
-    - ["Keith Miyake", "https://github.com/kaymmm"]
-filename: learn-textile.textile
----
+# Textile
 
 
 Textile is a lightweight markup language that uses a text formatting syntax to
@@ -503,3 +498,9 @@ div. Divs are indicated by the 'div.' shorthand
 * TxStyle Textile Documentation: [https://txstyle.org/](https://txstyle.org/)
 * promptworks Textile Reference Manual: [https://www.promptworks.com/textile](https://www.promptworks.com/textile)
 * Redmine Textile Formatting: [http://www.redmine.org/projects/redmine/wiki/RedmineTextFormattingTextile](http://www.redmine.org/projects/redmine/wiki/RedmineTextFormattingTextile)
+
+---
+
+## Contributors
+
+    - ["Keith Miyake", "https://github.com/kaymmm"]

@@ -1,11 +1,4 @@
----
-
-language: Paren
-filename: learnparen.paren
-contributors:
-  - ["KIM Taegyoon", "https://github.com/kimtg"]
-  - ["Claudson Martins", "https://github.com/claudsonm"]
----
+# Paren
 
 [Paren](https://bitbucket.org/ktg/paren) is a dialect of Lisp. It is designed to be an embedded language.
 
@@ -192,3 +185,10 @@ a ; => (3 2)
 ;; Macros are not hygienic, you can clobber existing variables!
 ;; They are code transformations.
 ```
+
+---
+
+## Contributors
+
+  - ["KIM Taegyoon", "https://github.com/kimtg"]
+  - ["Claudson Martins", "https://github.com/claudsonm"]

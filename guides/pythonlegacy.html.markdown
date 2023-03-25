@@ -1,15 +1,4 @@
----
-language: Python 2 (legacy)
-contributors:
-    - ["Louie Dinh", "http://ldinh.ca"]
-    - ["Amin Bandali", "https://aminb.org"]
-    - ["Andre Polykanine", "https://github.com/Oire"]
-    - ["evuez", "http://github.com/evuez"]
-    - ["asyne", "https://github.com/justblah"]
-    - ["habi", "http://github.com/habi"]
-    - ["Rommel Martinez", "https://ebzzry.io"]
-filename: learnpythonlegacy.py
----
+# Python 2 (Legacy)
 
 Python was created by Guido Van Rossum in the early 90s. It is now one of the
 most popular languages in existence. I fell in love with Python for its
@@ -825,3 +814,15 @@ print say(say_please=True)  # Can you buy me a beer? Please! I am poor :(
 * [Programming Python](http://www.amazon.com/gp/product/0596158106/ref=as_li_qf_sp_asin_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0596158106&linkCode=as2&tag=homebits04-20)
 * [Dive Into Python](http://www.amazon.com/gp/product/1441413022/ref=as_li_tf_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1441413022&linkCode=as2&tag=homebits04-20)
 * [Python Essential Reference](http://www.amazon.com/gp/product/0672329786/ref=as_li_tf_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0672329786&linkCode=as2&tag=homebits04-20)
+
+---
+
+## Contributors
+
+    - ["Louie Dinh", "http://ldinh.ca"]
+    - ["Amin Bandali", "https://aminb.org"]
+    - ["Andre Polykanine", "https://github.com/Oire"]
+    - ["evuez", "http://github.com/evuez"]
+    - ["asyne", "https://github.com/justblah"]
+    - ["habi", "http://github.com/habi"]
+    - ["Rommel Martinez", "https://ebzzry.io"]

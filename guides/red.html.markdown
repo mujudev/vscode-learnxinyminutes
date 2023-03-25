@@ -1,11 +1,4 @@
----
-name: Red
-category: language
-language: Red
-filename: learnred.red
-contributors:
-    - ["Arnold van Hofwegen", "https://github.com/iArnold"]
----
+# Red
 
 
 Red was created out of the need to get work done, and the tool the author wanted to use, the language of REBOL, had a couple of drawbacks.
@@ -221,3 +214,9 @@ Browse or ask questions on [Stack Overflow](https://stackoverflow.com/questions/
 Maybe you want to try Red right away? That is possible on the [try Rebol and Red site](http://tryrebol.esperconsultancy.nl).
 
 You can also learn Red by learning some [Rebol](http://www.rebol.com/docs.html).
+
+---
+
+## Contributors
+
+    - ["Arnold van Hofwegen", "https://github.com/iArnold"]

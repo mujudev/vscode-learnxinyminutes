@@ -1,10 +1,4 @@
----
-
-language: "Lisp Flavoured Erlang(LFE)"
-filename: lispflavourederlang.lfe
-contributors:
-  - ["Pratik Karki", "https://github.com/prertik"]
----
+# LFE
 
 Lisp Flavoured Erlang(LFE) is a functional, concurrent, general-purpose programming 
 language and Lisp dialect(Lisp-2) built on top of Core Erlang and the Erlang Virtual Machine(BEAM). 
@@ -457,3 +451,8 @@ apply _F/3 ( a1, a2, a3 )
 
 Lots of thanks to Robert Virding for creating LFE, Duncan McGreggor for documenting it and other LFE contributors who made LFE awesome.
 
+---
+
+## Contributors:
+
+- ["Pratik Karki", "https://github.com/prertik"]

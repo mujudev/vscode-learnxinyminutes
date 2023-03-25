@@ -1,9 +1,4 @@
----
-language: kotlin
-contributors:
-    - ["S Webber", "https://github.com/s-webber"]
-filename: LearnKotlin.kt
----
+# Kotlin
 
 Kotlin is a statically typed programming language for the JVM, Android and the
 browser. It is 100% interoperable with Java.
@@ -452,3 +447,9 @@ fun operatorOverloadingDemo() {
 * [Kotlin tutorials](https://kotlinlang.org/docs/tutorials/)
 * [Try Kotlin in your browser](https://play.kotlinlang.org/)
 * [A list of Kotlin resources](http://kotlin.link/)
+
+---
+
+## Contributors
+
+    - ["S Webber", "https://github.com/s-webber"]

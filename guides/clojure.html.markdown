@@ -1,9 +1,4 @@
----
-language: clojure
-filename: learnclojure.clj
-contributors:
-    - ["Adam Bard", "http://adambard.com/"]
----
+# Clojure
 
 Clojure is a Lisp family language developed for the Java Virtual Machine. It has
 a much stronger emphasis on pure [functional programming](https://en.wikipedia.org/wiki/Functional_programming) than
@@ -419,3 +414,9 @@ Clojure-doc.org (yes, really) has a number of getting started articles:
 
 Clojure for the Brave and True has a great introduction to Clojure and a free online version:
 [https://www.braveclojure.com/clojure-for-the-brave-and-true/](https://www.braveclojure.com/clojure-for-the-brave-and-true/)
+
+---
+
+## Contributors
+
+    - ["Adam Bard", "http://adambard.com/"]

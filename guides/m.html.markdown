@@ -1,9 +1,4 @@
---- 
-language: M (MUMPS)
-contributors: 
-    - ["Fred Turkington", "http://z3ugma.github.io"] 
-filename: LEARNM.m 
----
+# M
 
 M, or MUMPS (Massachusetts General Hospital Utility Multi-Programming System) is
 a procedural language with a built-in NoSQL database. Or, it’s a database with
@@ -368,3 +363,9 @@ YottaDB and its precursor, GT.M, have thorough documentation on all the language
 [2]: https://yottadb.com/product/get-started/
 [3]: https://docs.yottadb.com/ProgrammersGuide/langfeat.html
 [4]: http://tinco.pair.com/bhaskar/gtm/doc/books/pg/UNIX_manual/index.html
+
+--- 
+
+## Contributors
+
+    - ["Fred Turkington", "http://z3ugma.github.io"] 

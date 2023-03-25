@@ -1,11 +1,3 @@
----
-category: Algorithms & Data Structures
-name: Dynamic Programming
-contributors:
-    - ["Akashdeep Goel", "http://github.com/akashdeepgoel"]
-    - ["Miltiadis Stouras", "https://github.com/mstou"]
----
-
 # Dynamic Programming
 
 ## Introduction
@@ -61,3 +53,10 @@ for i=0 to n-1
 * [How to write DP solutions](https://www.quora.com/Are-there-any-good-resources-or-tutorials-for-dynamic-programming-DP-besides-the-TopCoder-tutorial/answer/Michal-Danilák)
 
 And a [quiz](https://www.commonlounge.com/discussion/cdbbfe83bcd64281964b788969247253) to test your knowledge.
+
+---
+
+## Contributors
+
+    - ["Akashdeep Goel", "http://github.com/akashdeepgoel"]
+    - ["Miltiadis Stouras", "https://github.com/mstou"]

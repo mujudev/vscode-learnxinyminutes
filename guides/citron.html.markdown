@@ -1,10 +1,5 @@
----
-language: citron
-filename: learncitron.ctr
-contributors:
-    - ["AnotherTest", ""]
-lang: en-us
----
+# Citron
+
 ```ruby
 # Comments start with a '#'
 # All comments encompass a single line
@@ -210,3 +205,9 @@ Pen writeln: 'Hello, ocean!' # prints 'Hello, ocean!\n' to the terminal
 
 Pen writeln: Program waitForInput. # reads a line and prints it back
 ```
+
+---
+
+## Contributors
+
+    - ["AnotherTest", ""]

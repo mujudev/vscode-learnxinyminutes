@@ -1,11 +1,3 @@
----
-category: Algorithms & Data Structures
-name: Lambda Calculus
-contributors:
-    - ["Max Sun", "http://github.com/maxsun"]
-    - ["Yan Hui Hang", "http://github.com/yanhh0"]
----
-
 # Lambda Calculus
 
 Lambda calculus (λ-calculus), originally created by 
@@ -217,3 +209,10 @@ S = ι(K) = ι(ι(ι(ιι)))
 3. [Wikipedia - Lambda Calculus](https://en.wikipedia.org/wiki/Lambda_calculus)
 4. [Wikipedia - SKI combinator calculus](https://en.wikipedia.org/wiki/SKI_combinator_calculus)
 5. [Wikipedia - Iota and Jot](https://en.wikipedia.org/wiki/Iota_and_Jot)
+
+---
+
+## Contributors
+
+    - ["Max Sun", "http://github.com/maxsun"]
+    - ["Yan Hui Hang", "http://github.com/yanhh0"]

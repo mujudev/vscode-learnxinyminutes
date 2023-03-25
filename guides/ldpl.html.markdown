@@ -1,10 +1,4 @@
----
-language: LDPL
-filename: learnLDPL.ldpl
-contributors:
-    - ["Martín del Río", "https://github.com/lartu"]
-    - ["John Paul Wohlscheid", "https://github.com/JohnBlood"]
----
+# LDPL
 
 **LDPL** is a powerful, C++ transpiled, open-source programming language designed
 from the ground up to be excessively expressive, readable, fast and easy to learn.
@@ -169,3 +163,10 @@ exit
 ## Further Reading
 
  * [LDPL Docs](https://docs.ldpl-lang.org)
+
+---
+
+## Contributors
+
+    - ["Martín del Río", "https://github.com/lartu"]
+    - ["John Paul Wohlscheid", "https://github.com/JohnBlood"]

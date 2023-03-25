@@ -1,13 +1,4 @@
----
-language: "Standard ML"
-filename: standardml.sml
-contributors:
-    - ["Simon Shine", "https://simonshine.dk/"]
-    - ["David Pedersen", "https://github.com/davidpdrsn"]
-    - ["James Baker", "http://www.jbaker.io/"]
-    - ["Leo Zovic", "http://langnostic.inaimathi.ca/"]
-    - ["Chris Wilson", "http://sencjw.com/"]
----
+# Standard ML
 
 Standard ML is a functional programming language with type inference and some
 side-effects.  Some of the hard parts of learning Standard ML are: Recursion,
@@ -480,3 +471,13 @@ fun decrement_ret x y = (x := !x - 1; y)
 * Read *[ML for the Working Programmer](https://www.cl.cam.ac.uk/~lp15/MLbook/pub-details.html)* by Larry C. Paulson.
 * Use [StackOverflow's sml tag](http://stackoverflow.com/questions/tagged/sml).
 * Solve exercises on [Exercism.io's Standard ML track](https://exercism.io/tracks/sml).
+
+---
+
+## Contributors
+
+    - ["Simon Shine", "https://simonshine.dk/"]
+    - ["David Pedersen", "https://github.com/davidpdrsn"]
+    - ["James Baker", "http://www.jbaker.io/"]
+    - ["Leo Zovic", "http://langnostic.inaimathi.ca/"]
+    - ["Chris Wilson", "http://sencjw.com/"]

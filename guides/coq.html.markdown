@@ -1,9 +1,4 @@
----
-language: Coq
-filename: learncoq.v
-contributors:
-    - ["Philip Zucker", "http://www.philipzucker.com/"]
----
+# Coq
 
 The Coq system is a proof assistant. It is designed to build and verify mathematical proofs. The Coq system contains the functional programming language Gallina and is capable of proving properties about programs written in this language.
 
@@ -508,3 +503,9 @@ to modern research.
 * [Mathematical Components](https://math-comp.github.io/mcb/)
 * [Coq'Art: The Calculus of Inductive Constructions](http://www.cse.chalmers.se/research/group/logic/TypesSS05/resources/coq/CoqArt/)
 * [FRAP](http://adam.chlipala.net/frap/)
+
+---
+
+## Contributors
+
+    - ["Philip Zucker", "http://www.philipzucker.com/"]

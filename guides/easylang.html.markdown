@@ -1,9 +1,4 @@
----
-language: Easylang
-contributors:
-    - ["chkas", "https://github.com/chkas"]
-filename: easylang.el
----
+# Easylang
 
 **Easylang** is a simple programming language with built-in graphical functions and an easy-to-use and offline usable browser IDE. Its simple syntax and semantics make it well suited as a teaching and learning programming language. You can also use it to write graphical applications that you can embed in a web page. 
 
@@ -219,3 +214,9 @@ ang = 10
 
 * [Source code](https://github.com/chkas/easylang)
 
+
+---
+
+## Contributors
+    
+    - ["chkas", "https://github.com/chkas"]

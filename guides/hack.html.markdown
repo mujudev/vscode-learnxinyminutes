@@ -1,11 +1,4 @@
----
-language: Hack
-contributors:
-    - ["Andrew DiMola", "https://github.com/AndrewDiMola"]
-    - ["Stephen Holdaway", "https://github.com/stecman"]
-    - ["David Lima", "https://github.com/davelima"]
-filename: learnhack.hh
----
+# Hack
 
 [Hack](https://hacklang.org/) lets you write code quickly, while also having safety features built in, like static typechecking.
 
@@ -418,3 +411,11 @@ namespace LearnHackinYMinutes {
 Visit the [Hack language reference](http://docs.hhvm.com/hack/) to learn more about the Hack language.
 
 For more information on HHVM, including installation instructions, visit the [official HHVM website](http://hhvm.com/).
+
+---
+
+## Contributors
+
+    - ["Andrew DiMola", "https://github.com/AndrewDiMola"]
+    - ["Stephen Holdaway", "https://github.com/stecman"]
+    - ["David Lima", "https://github.com/davelima"]

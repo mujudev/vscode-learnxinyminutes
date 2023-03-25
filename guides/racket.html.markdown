@@ -1,14 +1,4 @@
----
-
-language: racket
-filename: learnracket.rkt
-contributors:
-  - ["th3rac25", "https://github.com/voila"]
-  - ["Eli Barzilay", "https://github.com/elibarzilay"]
-  - ["Gustavo Schmidt", "https://github.com/gustavoschmidt"]
-  - ["Duong H. Nguyen", "https://github.com/cmpitg"]
-  - ["Keyan Zhang", "https://github.com/keyanzhang"]
----
+# Racket
 
 Racket is a general purpose, multi-paradigm programming language in the Lisp/Scheme family.
 
@@ -721,3 +711,13 @@ vec ; => #(1 2 3 4)
 ## Further Reading
 
 Still up for more? Try [Getting Started with Racket](http://docs.racket-lang.org/getting-started/)
+
+---
+
+## Contributors
+
+  - ["th3rac25", "https://github.com/voila"]
+  - ["Eli Barzilay", "https://github.com/elibarzilay"]
+  - ["Gustavo Schmidt", "https://github.com/gustavoschmidt"]
+  - ["Duong H. Nguyen", "https://github.com/cmpitg"]
+  - ["Keyan Zhang", "https://github.com/keyanzhang"]

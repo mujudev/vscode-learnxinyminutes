@@ -1,9 +1,4 @@
----
-language: wolfram
-contributors:
-    - ["hyphz", "http://github.com/hyphz/"]
-filename: learnwolfram.nb
----
+# Wolfram
 
 The Wolfram Language is the underlying language originally used in Mathematica, but now available for use in multiple contexts.
 
@@ -135,3 +130,9 @@ Manipulate[y^2, {y, 0, 20}] (* Return a reactive user interface that displays y^
 ##Ready For More?
 
 * [Wolfram Language Documentation Center](http://reference.wolfram.com/language/)
+
+---
+
+## Contributors
+
+    - ["hyphz", "http://github.com/hyphz/"]

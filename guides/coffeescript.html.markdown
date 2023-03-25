@@ -1,10 +1,4 @@
----
-language: coffeescript
-contributors:
-  - ["Tenor Biel", "http://github.com/L8D"]
-  - ["Xavier Yao", "http://github.com/xavieryao"]
-filename: coffeescript.coffee
----
+# CoffeeScript
 
 CoffeeScript is a little language that compiles one-to-one into the equivalent
 JavaScript, and there is no interpretation at runtime. As one of the successors
@@ -102,3 +96,10 @@ eat food for food in foods when food isnt 'chocolate'
 
 - [Smooth CoffeeScript](http://autotelicum.github.io/Smooth-CoffeeScript/)
 - [CoffeeScript Ristretto](https://leanpub.com/coffeescript-ristretto/read)
+
+---
+
+## Contributors
+
+  - ["Tenor Biel", "http://github.com/L8D"]
+  - ["Xavier Yao", "http://github.com/xavieryao"]

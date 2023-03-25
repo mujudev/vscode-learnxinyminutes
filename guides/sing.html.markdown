@@ -1,11 +1,4 @@
----
-name: Sing
-category: language
-language: Sing
-filename: learnsing.sing
-contributors:
-    - ["Maurizio De Girolami", "https://github.com/mdegirolami"]
----
+# Sing
 
 The purpose of sing is to provide a simple, safe, fast language that 
 can be a good replacement for c++ for high performance applications.
@@ -444,3 +437,9 @@ fn conditionals(in object intface, in objptr *intface) void
 
 If you want to play with sing you are recommended to download the vscode plugin. Please
 follow the instructions at [Getting Started](https://mdegirolami.wixsite.com/singlang/copy-of-interfacing-sing-and-c-2)
+
+---
+
+## Contributors
+
+    - ["Maurizio De Girolami", "https://github.com/mdegirolami"]

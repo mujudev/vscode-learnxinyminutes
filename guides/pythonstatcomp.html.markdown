@@ -1,15 +1,8 @@
----
-category: tool
-tool: Statistical Computing with Python
-contributors:
-    - ["e99n09", "https://github.com/e99n09"]
----
+# Statistical Computing with Python
 
 This is a tutorial on how to do some typical statistical programming tasks using Python. It's intended for people basically familiar with Python and experienced at statistical programming in a language like R, Stata, SAS, SPSS, or MATLAB.
 
 ```python
-
-
 
 # 0. Getting set up ====
 
@@ -236,3 +229,9 @@ You can also find plenty of interactive IPython tutorials on subjects specific t
 Some more modules to research:
    - text analysis and natural language processing: nltk, http://www.nltk.org
    - social network analysis: igraph, http://igraph.org/python/
+
+---
+
+## Contributors
+
+    - ["e99n09", "https://github.com/e99n09"]

@@ -1,10 +1,4 @@
----
-category: tool
-tool: zfs
-contributors:
-    - ["sarlalian", "http://github.com/sarlalian"]
-filename: LearnZfs.txt
----
+# ZFS
 
 
 [ZFS](http://open-zfs.org/wiki/Main_Page)
@@ -403,3 +397,9 @@ echo "RESET SLAVE;" | /usr/local/bin/mysql -u root -pmyrootpassword -h staging
 * [Oracle's Tuning Guide](http://www.oracle.com/technetwork/articles/servers-storage-admin/sto-recommended-zfs-settings-1951715.html)
 * [OpenZFS Tuning Guide](http://open-zfs.org/wiki/Performance_tuning)
 * [FreeBSD ZFS Tuning Guide](https://wiki.freebsd.org/ZFSTuningGuide)
+
+---
+
+## Contributors
+
+    - ["sarlalian", "http://github.com/sarlalian"]

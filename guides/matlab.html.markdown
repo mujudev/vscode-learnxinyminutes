@@ -1,12 +1,4 @@
----
-language: Matlab
-filename: learnmatlab.mat
-contributors:
-    - ["mendozao", "http://github.com/mendozao"]
-    - ["jamesscottbrown", "http://jamesscottbrown.com"]
-    - ["Colton Kohnke", "http://github.com/voltnor"]
-    - ["Claudson Martins", "http://github.com/claudsonm"]
----
+# MATLAB
 
 MATLAB stands for MATrix LABoratory. It is a powerful numerical computing language commonly used in engineering and mathematics.
 
@@ -562,3 +554,11 @@ c = a + b
 * [Loren on the Art of MATLAB](http://blogs.mathworks.com/loren/)
 * [Cleve's Corner](http://blogs.mathworks.com/cleve/)
 
+---
+
+## Contributors
+
+    - ["mendozao", "http://github.com/mendozao"]
+    - ["jamesscottbrown", "http://jamesscottbrown.com"]
+    - ["Colton Kohnke", "http://github.com/voltnor"]
+    - ["Claudson Martins", "http://github.com/claudsonm"]

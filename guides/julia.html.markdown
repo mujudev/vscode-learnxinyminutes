@@ -1,11 +1,4 @@
----
-language: Julia
-contributors:
-    - ["Leah Hanson", "http://leahhanson.us"]
-    - ["Pranit Bauva", "https://github.com/pranitbauva1997"]
-    - ["Daniel YC Lin", "https://github.com/dlintw"]
-filename: learnjulia.jl
----
+# Julia
 
 Julia is a new homoiconic functional language focused on technical computing.
 While having the full power of homoiconic macros, first-class functions,
@@ -889,3 +882,11 @@ code_native(circle_area, (Float64,), syntax = :intel)
 You can get a lot more detail from the [Julia Documentation](https://docs.julialang.org/)
 
 The best place to get help with Julia is the (very friendly) [Discourse forum](https://discourse.julialang.org/).
+
+---
+
+## Contributors
+
+    - ["Leah Hanson", "http://leahhanson.us"]
+    - ["Pranit Bauva", "https://github.com/pranitbauva1997"]
+    - ["Daniel YC Lin", "https://github.com/dlintw"]

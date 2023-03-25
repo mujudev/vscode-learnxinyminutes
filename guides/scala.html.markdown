@@ -1,12 +1,4 @@
----
-language: Scala
-filename: learnscala.scala
-contributors:
-    - ["George Petrov", "http://github.com/petrovg"]
-    - ["Dominic Bou-Samra", "http://dbousamra.github.com"]
-    - ["Geoff Liu", "http://geoffliu.me"]
-    - ["Ha-Duong Nguyen", "http://reference-error.org"]
----
+# Scala
 
 Scala - the scalable language
 
@@ -752,3 +744,12 @@ writer.close()
 * [The scala documentation](http://docs.scala-lang.org/)
 * [Try Scala in your browser](http://scalatutorials.com/tour/)
 * Join the [Scala user group](https://groups.google.com/forum/#!forum/scala-user)
+
+---
+
+## Contributors
+
+    - ["George Petrov", "http://github.com/petrovg"]
+    - ["Dominic Bou-Samra", "http://dbousamra.github.com"]
+    - ["Geoff Liu", "http://geoffliu.me"]
+    - ["Ha-Duong Nguyen", "http://reference-error.org"]

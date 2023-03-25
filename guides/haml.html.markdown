@@ -1,10 +1,4 @@
----
-language: haml
-filename: learnhaml.haml
-contributors:
-  - ["Simon Neveu", "https://github.com/sneveu"]
-  - ["Vasiliy Petrov", "https://github.com/Saugardas"]
----
+# Haml
 
 Haml is a markup language predominantly used with Ruby that cleanly and simply describes the HTML of any web document without the use of inline code. It is a popular alternative to using Rails templating language (.erb) and allows you to embed Ruby code into your markup.
 
@@ -220,3 +214,10 @@ $ haml input_file.haml output_file.html
 
 - [What is HAML?](http://haml.info/) - A good introduction that does a much better job of explaining the benefits of using HAML.
 - [Official Docs](http://haml.info/docs/yardoc/file.REFERENCE.html) - If you'd like to go a little deeper.
+
+---
+
+## Contributors
+
+  - ["Simon Neveu", "https://github.com/sneveu"]
+  - ["Vasiliy Petrov", "https://github.com/Saugardas"]

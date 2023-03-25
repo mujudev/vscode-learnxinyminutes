@@ -1,10 +1,4 @@
----
-category: tool
-tool: raylib
-filename: learnraylib.c
-contributors:
-    - ["Nikolas Wipper", "https://notnik.cc"]
----
+# raylib
 
 **raylib** is a cross-platform easy-to-use graphics library, built around
 OpenGL 1.1, 2.1, 3.3 and OpenGL ES 2.0. Even though it is written in C
@@ -144,3 +138,9 @@ int main(void)
 ## Further reading
 raylib has some [great examples](https://www.raylib.com/examples.html)
 If you don't like C check out the [raylib bindings](https://github.com/raysan5/raylib/blob/master/BINDINGS.md)
+
+---
+
+## Contributors
+
+    - ["Nikolas Wipper", "https://notnik.cc"]

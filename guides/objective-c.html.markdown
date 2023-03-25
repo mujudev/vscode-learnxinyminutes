@@ -1,13 +1,4 @@
----
-language: Objective-C
-contributors:
-    - ["Eugene Yagrushkin", "www.about.me/yagrushkin"]
-    - ["Yannick Loriot", "https://github.com/YannickL"]
-    - ["Levi Bostian", "https://github.com/levibostian"]
-    - ["Clayton Walker", "https://github.com/cwalk"]
-    - ["Fernando Valverde", "http://visualcosita.xyz"]
-filename: LearnObjectiveC.m
----
+# Objective-C
 
 Objective-C is the main programming language used by Apple for the macOS and iOS operating systems and their respective frameworks, Cocoa and Cocoa Touch.
 It is a general-purpose, object-oriented programming language that adds Smalltalk-style messaging to the C programming language.
@@ -817,3 +808,13 @@ __unsafe_unretained NSArray *unsafeArray; // Like __weak, but unsafeArray not se
 [Programming with Objective-C for Mac OSX](https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ProgrammingWithObjectiveC/Introduction/Introduction.html)
 
 [iOS For High School Students: Getting Started](http://www.raywenderlich.com/5600/ios-for-high-school-students-getting-started)
+
+---
+
+## Contributors
+
+    - ["Eugene Yagrushkin", "www.about.me/yagrushkin"]
+    - ["Yannick Loriot", "https://github.com/YannickL"]
+    - ["Levi Bostian", "https://github.com/levibostian"]
+    - ["Clayton Walker", "https://github.com/cwalk"]
+    - ["Fernando Valverde", "http://visualcosita.xyz"]

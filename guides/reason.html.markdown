@@ -1,9 +1,4 @@
----
-language: reason
-filename: reason.re
-contributors:
-  - ["Seth Corker", "https://sethcorker.com"]
----
+# Reason
 
 Reason is a syntax over OCaml that is easier to get started for programmers who are familiar with C-style syntax like JavaScript. BuckleScript is part of the toolchain which compiles Reason to JavaScript so you can write statically typed code for anywhere that JavaScript runs.
 
@@ -542,3 +537,9 @@ module SpecializedStaff = {
 - [Official BuckleScript Docs](https://bucklescript.github.io/docs/en/what-why)
 - [Try Reason](https://reasonml.github.io/en/try)
 - [Get Started with Reason by Nik Graf](https://egghead.io/courses/get-started-with-reason)
+
+---
+
+## Contributors
+  
+  - ["Seth Corker", "https://sethcorker.com"]

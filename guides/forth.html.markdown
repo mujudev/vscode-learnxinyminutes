@@ -1,9 +1,4 @@
----
-language: forth
-contributors:
-    - ["Horse M.D.", "http://github.com/HorseMD/"]
-filename: learnforth.fs
----
+# Forth
 
 Forth was created by Charles H. Moore in the 70s. It is an imperative,
 stack-based language and programming environment, being used in projects
@@ -223,3 +218,9 @@ page
 * [Starting Forth](http://www.forth.com/starting-forth/)
 * [Simple Forth](http://www.murphywong.net/hello/simple.htm)
 * [Thinking Forth](http://thinking-forth.sourceforge.net/)
+
+---
+
+## Contributors
+
+    - ["Horse M.D.", "http://github.com/HorseMD/"]

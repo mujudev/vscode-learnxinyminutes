@@ -1,13 +1,4 @@
----
-language: whip
-contributors:
-  - ["Tenor Biel", "http://github.com/L8D"]
-  - ["Saurabh Sandav", "http://github.com/SaurabhSandav"]
-  - ["Paulo Henrique Rodrigues Pinheiro", "https://github.com/paulohrpinheiro"]
-author: Tenor Biel
-author_url: http://github.com/L8D
-filename: whip.lisp
----
+# Whip
 
 Whip is a LISP-dialect made for scripting and simplified concepts.
 It has also borrowed a lot of functions and syntax from Haskell (a non-related language).
@@ -239,3 +230,11 @@ undefined ; user to indicate a value that hasn't been set
 ```
 
 For more info, check out the [repo](http://github.com/L8D/whip)
+
+---
+
+## Contributors
+
+  - ["Tenor Biel", "http://github.com/L8D"]
+  - ["Saurabh Sandav", "http://github.com/SaurabhSandav"]
+  - ["Paulo Henrique Rodrigues Pinheiro", "https://github.com/paulohrpinheiro"]

@@ -1,9 +1,4 @@
----
-language: Logtalk
-contributors:
-    - ["Paulo Moura", "http://github.com/pmoura"]
-filename: learnlogtalk.lgt
----
+# Logtalk
 
 Logtalk is an object-oriented logic programming language that extends and leverages Prolog with modern code encapsulation and code reuse mechanisms without compromising its declarative programming features. Logtalk is implemented in highly portable code and can use most modern and standards compliant Prolog implementations as a back-end compiler.
 
@@ -546,3 +541,9 @@ The Logtalk library provides support for combining hook objects using different 
 # Further information
 
 Visit the [Logtalk website](http://logtalk.org) for more information.
+
+---
+
+## Contributors
+    
+	- ["Paulo Moura", "http://github.com/pmoura"]

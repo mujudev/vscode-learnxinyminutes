@@ -1,10 +1,4 @@
----
-language: asciidoc
-contributors:
-    - ["Ryan Mavilia", "http://unoriginality.rocks/"]
-    - ["Abel Salgado Romero", "https://twitter.com/abelsromero"]
-filename: asciidoc.md
----
+# AsciiDoc
 
 AsciiDoc is a markup language similar to Markdown and it can be used for anything from books to blogs. Created in 2002 by Stuart Rackham the language is simple but it allows for a great amount of customization.
 
@@ -130,3 +124,9 @@ Following links are related to `Asciidoctor` implementation:
 * [Markdown - AsciiDoc syntax comparison](http://asciidoctor.org/docs/user-manual/#comparison-by-example): side-by-side comparison of common Markdown and AsciiDoc elements.
 * [Getting started](http://asciidoctor.org/docs/#get-started-with-asciidoctor): installation and quick start guides to render simple documents.
 * [Asciidoctor User Manual](http://asciidoctor.org/docs/user-manual/): complete single-document manual with syntax reference, examples, rendering tools, amongst others.
+
+---
+
+## Contributors
+    - ["Ryan Mavilia", "http://unoriginality.rocks/"]
+    - ["Abel Salgado Romero", "https://twitter.com/abelsromero"]

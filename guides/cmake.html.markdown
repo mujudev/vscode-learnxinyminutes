@@ -1,10 +1,4 @@
----
-category: tool
-tool: cmake
-contributors:
-    - ["Bruno Alano", "https://github.com/brunoalano"]
-filename: CMake
----
+# CMake
 
 CMake is a cross-platform, open-source build system. This tool allows you to test, 
 compile, and create packages of your source code.
@@ -176,3 +170,9 @@ endif()
 + [CMake documentation](https://cmake.org/documentation/)
 + [Mastering CMake](http://amzn.com/1930934319/)
 + [An Introduction to Modern CMake](https://cliutils.gitlab.io/modern-cmake/)
+
+---
+
+## Contributors
+
+    - ["Bruno Alano", "https://github.com/brunoalano"]

@@ -1,9 +1,4 @@
----
-language: "clojure macros"
-filename: learnclojuremacros.clj
-contributors:
-    - ["Adam Bard", "http://adambard.com/"]
----
+# Clojure Macros
 
 As with all Lisps, Clojure's inherent [homoiconicity](https://en.wikipedia.org/wiki/Homoiconic)
 gives you access to the full extent of the language to write code-generation routines
@@ -147,3 +142,9 @@ You'll want to be familiar with Clojure. Make sure you understand everything in
 [Official docs](http://clojure.org/macros)
 
 [When to use macros?](https://lispcast.com/when-to-use-a-macro/)
+
+---
+
+## Contributors
+    
+    - ["Adam Bard", "http://adambard.com/"]

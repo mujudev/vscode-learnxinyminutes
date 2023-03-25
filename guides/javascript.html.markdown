@@ -1,10 +1,4 @@
----
-language: javascript
-contributors:
-    - ["Leigh Brenecki", "https://leigh.net.au"]
-    - ["Ariel Krakowski", "http://www.learneroo.com"]
-filename: javascript.js
----
+# JavaScript
 
 JavaScript was created by Netscape's Brendan Eich in 1995. It was originally
 intended as a simpler scripting language for websites, complementing the use of
@@ -674,3 +668,10 @@ Mozilla Developer Network.
 [8]: http://eloquentjavascript.net/
 [10]: http://jstherightway.org/
 [11]: https://javascript.info/
+
+---
+
+## Contributors
+
+    - ["Leigh Brenecki", "https://leigh.net.au"]
+    - ["Ariel Krakowski", "http://www.learneroo.com"]

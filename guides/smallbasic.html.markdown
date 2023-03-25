@@ -1,9 +1,4 @@
----
-language: SmallBASIC
-filename: learnsmallbasic.bas
-contributors:
-    - ["Chris Warren-Smith", "http://smallbasic.sourceforge.net"]
----
+# SmallBASIC
 
 ## About
 
@@ -129,3 +124,8 @@ PAUSE
 * [Source code](https://github.com/smallbasic/SmallBASIC)
 * [Reference snapshot](http://smallbasic.github.io/)
 
+---
+
+## Contributors
+
+    - ["Chris Warren-Smith", "http://smallbasic.sourceforge.net"]

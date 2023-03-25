@@ -1,9 +1,4 @@
----
-language: OCaml
-filename: learnocaml.ml
-contributors:
-    - ["Daniil Baturin", "http://baturin.org/"]
----
+# OCaml
 
 OCaml is a strictly evaluated functional language with some imperative
 features.
@@ -375,3 +370,9 @@ sum_int_list t ;;
 
 * Visit the official website to get the compiler and read the docs: <http://ocaml.org/>
 * Try interactive tutorials and a web-based interpreter by OCaml Pro: <http://try.ocamlpro.com/>
+
+---
+
+## Contributors
+
+    - ["Daniil Baturin", "http://baturin.org/"]

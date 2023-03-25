@@ -1,12 +1,4 @@
----
-language: yaml
-filename: learnyaml.yaml
-contributors:
-
-- [Leigh Brenecki, 'https://leigh.net.au']
-- [Suhas SG, 'https://github.com/jargnar']
-
----
+# YAML
 
 YAML is a data serialisation language designed to be directly writable and
 readable by humans.
@@ -237,3 +229,10 @@ set2:
 + [YAML official website](https://yaml.org/)
 + [Online YAML Validator](http://www.yamllint.com/)
 + [JSON ⇆ YAML](https://www.json2yaml.com/)
+
+---
+
+## Contributors
+
+  - [Leigh Brenecki, 'https://leigh.net.au']
+  - [Suhas SG, 'https://github.com/jargnar']

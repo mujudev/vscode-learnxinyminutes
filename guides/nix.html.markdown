@@ -1,11 +1,4 @@
----
-language: nix
-filename: learn.nix
-contributors:
-    - ["Chris Martin", "http://chris-martin.org/"]
-    - ["Rommel Martinez", "https://ebzzry.io"]
-    - ["Javier Candeira", "https://candeira.com/"]
----
+# Nix
 
 Nix is a simple functional language developed for the
 [Nix package manager](https://nixos.org/nix/) and
@@ -378,3 +371,12 @@ with builtins; [
   
 * [Rommel Martinez - A Gentle Introduction to the Nix Family]
   (https://web.archive.org/web/20210121042658/https://ebzzry.io/en/nix/#nix)
+
+
+---
+
+## Contributors
+
+    - ["Chris Martin", "http://chris-martin.org/"]
+    - ["Rommel Martinez", "https://ebzzry.io"]
+    - ["Javier Candeira", "https://candeira.com/"]

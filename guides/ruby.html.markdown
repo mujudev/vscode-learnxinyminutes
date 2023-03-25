@@ -1,24 +1,4 @@
----
-language: ruby
-filename: learnruby.rb
-contributors:
-  - ["David Underwood", "http://theflyingdeveloper.com"]
-  - ["Joel Walden", "http://joelwalden.net"]
-  - ["Luke Holder", "http://twitter.com/lukeholder"]
-  - ["Tristan Hume", "http://thume.ca/"]
-  - ["Nick LaMuro", "https://github.com/NickLaMuro"]
-  - ["Marcos Brizeno", "http://www.about.me/marcosbrizeno"]
-  - ["Ariel Krakowski", "http://www.learneroo.com"]
-  - ["Dzianis Dashkevich", "https://github.com/dskecse"]
-  - ["Levi Bostian", "https://github.com/levibostian"]
-  - ["Rahil Momin", "https://github.com/iamrahil"]
-  - ["Gabriel Halley", "https://github.com/ghalley"]
-  - ["Persa Zula", "http://persazula.com"]
-  - ["Jake Faris", "https://github.com/farisj"]
-  - ["Corey Ward", "https://github.com/coreyward"]
-  - ["Jannik Siebert", "https://github.com/janniks"]
-  - ["Keith Miyake", "https://github.com/kaymmm"]
----
+# Ruby
 
 ```ruby
 # This is a comment
@@ -671,3 +651,24 @@ Something.new.qux #=> "qux"
 - [Programming Ruby](http://www.amazon.com/Programming-Ruby-1-9-2-0-Programmers/dp/1937785491/) - An older [free edition](http://ruby-doc.com/docs/ProgrammingRuby/) is available online.
 - [Ruby Style Guide](https://github.com/bbatsov/ruby-style-guide) - A community-driven Ruby coding style guide.
 - [Try Ruby](https://try.ruby-lang.org/) - Learn the basic of Ruby programming language, interactive in the browser.
+
+---
+
+## Contributors
+
+  - ["David Underwood", "http://theflyingdeveloper.com"]
+  - ["Joel Walden", "http://joelwalden.net"]
+  - ["Luke Holder", "http://twitter.com/lukeholder"]
+  - ["Tristan Hume", "http://thume.ca/"]
+  - ["Nick LaMuro", "https://github.com/NickLaMuro"]
+  - ["Marcos Brizeno", "http://www.about.me/marcosbrizeno"]
+  - ["Ariel Krakowski", "http://www.learneroo.com"]
+  - ["Dzianis Dashkevich", "https://github.com/dskecse"]
+  - ["Levi Bostian", "https://github.com/levibostian"]
+  - ["Rahil Momin", "https://github.com/iamrahil"]
+  - ["Gabriel Halley", "https://github.com/ghalley"]
+  - ["Persa Zula", "http://persazula.com"]
+  - ["Jake Faris", "https://github.com/farisj"]
+  - ["Corey Ward", "https://github.com/coreyward"]
+  - ["Jannik Siebert", "https://github.com/janniks"]
+  - ["Keith Miyake", "https://github.com/kaymmm"]

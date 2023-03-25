@@ -1,8 +1,4 @@
----
-language: mercury
-contributors:
-    - ["Julian Fondren", "https://mercury-in.space/"]
----
+# Mercury
 
 Mercury is a strict, pure functional/logic programming language, with
 influences from Prolog, ML, and Haskell.
@@ -261,3 +257,9 @@ received(crypto(Type, _Wallet, Amount)) = S :-  % _Wallet is named throwaway
 
 * Language manual, user's guide, and library reference are all at
   [mercurylang.org](https://mercurylang.org/documentation/documentation.html)
+
+---
+
+# Contributors
+
+    - ["Julian Fondren", "https://mercury-in.space/"]

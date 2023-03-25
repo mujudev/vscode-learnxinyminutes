@@ -1,9 +1,4 @@
----
-language: factor
-contributors:
-    - ["hyphz", "http://github.com/hyphz/"]
-filename: learnfactor.factor
----
+# Factor
 
 Factor is a modern stack-based language, based on Forth, created by Slava Pestov.
 
@@ -180,3 +175,10 @@ name get-global .       ! "Bob"
 ##Ready For More?
 
 * [Factor Documentation](http://docs.factorcode.org/content/article-help.home.html)
+
+---
+
+## Contributors
+
+    - ["hyphz", "http://github.com/hyphz/"]
+    

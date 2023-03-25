@@ -1,9 +1,4 @@
----
-language: Lua
-contributors:
-    - ["Tyler Neylon", "http://tylerneylon.com/"]
-filename: learnlua.lua
----
+# Lua
 
 ```lua
 -- Two dashes start a one-line comment.
@@ -422,3 +417,9 @@ as learn.lua and run it with "lua learn.lua" !
 
 This was first written for tylerneylon.com, and is
 also available as a <a href="https://gist.github.com/tylerneylon/5853042">github gist</a>. Have fun with Lua!
+
+---
+
+## Contributors
+
+    - ["Tyler Neylon", "http://tylerneylon.com/"]

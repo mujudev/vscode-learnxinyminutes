@@ -1,10 +1,4 @@
----
-language: edn
-filename: learnedn.edn
-contributors:
-  - ["Jason Yeo", "https://github.com/jsyeo"]
-  - ["Jonathan D Johnston", "https://github.com/jdjohnston"]
----
+# EDN
 
 Extensible Data Notation (EDN) is a format for serializing data.
 
@@ -113,3 +107,10 @@ github/fork   ; you can't eat with this
 - [EDN spec](https://github.com/edn-format/edn)
 - [Implementations](https://github.com/edn-format/edn/wiki/Implementations)
 - [Tagged Elements](http://www.compoundtheory.com/clojure-edn-walkthrough/)
+
+---
+
+## Contributors
+
+  - ["Jason Yeo", "https://github.com/jsyeo"]
+  - ["Jonathan D Johnston", "https://github.com/jdjohnston"]

@@ -1,11 +1,4 @@
----
-category: tool
-tool: powershell
-contributors:
-    - ["Wouter Van Schandevijl", "https://github.com/laoujin"]
-    - ["Andrew Ryan Davis", "https://github.com/AndrewDavis1191"]
-filename: LearnPowershell.ps1
----
+# PowerShell
 
 PowerShell is the Windows scripting language and configuration management
 framework from Microsoft built on the .NET Framework. Windows 7 and up ship
@@ -805,3 +798,10 @@ Interesting Projects
 * [ZLocation](https://github.com/vors/ZLocation) Powershell `cd` that reads your mind
 * [PowerShell Community Extensions](https://github.com/Pscx/Pscx)
 * [More on the Powershell Pipeline Issue](https://github.com/PowerShell/PowerShell/issues/1908)
+
+---
+
+## Contributors
+
+    - ["Wouter Van Schandevijl", "https://github.com/laoujin"]
+    - ["Andrew Ryan Davis", "https://github.com/AndrewDavis1191"]

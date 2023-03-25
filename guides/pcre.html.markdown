@@ -1,10 +1,4 @@
----
-language: PCRE
-filename: pcre.txt
-contributors:
-    - ["Sachin Divekar", "http://github.com/ssd532"]
-
----
+# PCRE
 
 A regular expression (regex or regexp for short) is a special text string for describing a search pattern. e.g. to extract domain name from a string we can say `/^[a-z]+:/` and it will match `http:` from `http://github.com/`.
 
@@ -81,3 +75,9 @@ We will test our examples on the following string:
 
 ## Further Reading
 [Regex101](https://regex101.com/) - Regular Expression tester and debugger
+
+---
+
+## Contributors
+
+    - ["Sachin Divekar", "http://github.com/ssd532"]

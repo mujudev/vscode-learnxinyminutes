@@ -1,9 +1,4 @@
----
-language: Vyper
-filename: learnVyper.vy
-contributors:
-  - ["Kenny Peluso", "kennyp.herokuapp.com"]
----
+# Vyper
 
 > The content of this document is largely inspired by ["Learn Solidity in Y Minutes"](https:#github.com/adambard/learnxinyminutes-docs/blob/master/solidity.html.markdown)
 
@@ -870,3 +865,8 @@ protecting you from.
 
 *Feel free to send a pull request with any edits - or email* `pelusoken -/at-/ gmail`
 
+---
+
+## Contributors
+  
+  - ["Kenny Peluso", "kennyp.herokuapp.com"]

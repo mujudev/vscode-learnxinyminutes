@@ -1,12 +1,4 @@
----
-name: perl
-category: language
-language: perl
-filename: learnperl.pl
-contributors:
-    - ["Korjavin Ivan", "http://github.com/korjavin"]
-    - ["Dan Book", "http://github.com/Grinnz"]
----
+# Perl
 
 Perl is a highly capable, feature-rich programming language with over 25 years of development.
 
@@ -350,3 +342,10 @@ perlfaq contains questions and answers related to many common tasks, and often p
  - [Learn at www.perl.com](http://www.perl.org/learn.html)
  - [perldoc](http://perldoc.perl.org/)
  - and perl built-in : `perldoc perlintro`
+
+---
+
+## Contributors
+
+    - ["Korjavin Ivan", "http://github.com/korjavin"]
+    - ["Dan Book", "http://github.com/Grinnz"]

@@ -1,4 +1,18 @@
-## Python
+---
+language: Python
+contributors:
+    - ["Louie Dinh", "http://pythonpracticeprojects.com"]
+    - ["Steven Basart", "http://github.com/xksteven"]
+    - ["Andre Polykanine", "https://github.com/Oire"]
+    - ["Zachary Ferguson", "http://github.com/zfergus2"]
+    - ["evuez", "http://github.com/evuez"]
+    - ["Rommel Martinez", "https://ebzzry.io"]
+    - ["Roberto Fernandez Diaz", "https://github.com/robertofd1995"]
+    - ["caminsha", "https://github.com/caminsha"]
+    - ["Stanislav Modrak", "https://stanislav.gq"]
+    - ["John Paul Wohlscheid", "https://gitpi.us"]
+filename: learnpython.py
+---
 
 Python was created by Guido van Rossum in the early 90s. It is now one of the
 most popular languages in existence. I fell in love with Python for its
@@ -1031,32 +1045,17 @@ print(say(say_please=True))  # Can you buy me a beer? Please! I am poor :(
 
 ### Free Online
 
-- [Automate the Boring Stuff with Python](https://automatetheboringstuff.com)
-- [The Official Docs](https://docs.python.org/3/)
-- [Hitchhiker's Guide to Python](https://docs.python-guide.org/en/latest/)
-- [Python Course](https://www.python-course.eu)
-- [Free Interactive Python Course](http://www.Kikodo.io)
-- [First Steps With Python](https://realpython.com/learn/python-first-steps/)
-- [A curated list of awesome Python frameworks, libraries and software](https://github.com/vinta/awesome-python)
-- [30 Python Language Features and Tricks You May Not Know About](https://sahandsaba.com/thirty-python-language-features-and-tricks-you-may-not-know.html)
-- [Official Style Guide for Python](https://www.python.org/dev/peps/pep-0008/)
-- [Python 3 Computer Science Circles](https://cscircles.cemc.uwaterloo.ca/)
-- [Dive Into Python 3](https://www.diveintopython3.net/index.html)
-- [A Crash Course in Python for Scientists](https://nbviewer.jupyter.org/gist/anonymous/5924718)
-- [Python Tutorial for Intermediates](https://pythonbasics.org/)
-- [Build a Desktop App with Python](https://pythonpyqt.com/)
-
----
-
-## Contributors
-
-    - ["Louie Dinh", "http://pythonpracticeprojects.com"]
-    - ["Steven Basart", "http://github.com/xksteven"]
-    - ["Andre Polykanine", "https://github.com/Oire"]
-    - ["Zachary Ferguson", "http://github.com/zfergus2"]
-    - ["evuez", "http://github.com/evuez"]
-    - ["Rommel Martinez", "https://ebzzry.io"]
-    - ["Roberto Fernandez Diaz", "https://github.com/robertofd1995"]
-    - ["caminsha", "https://github.com/caminsha"]
-    - ["Stanislav Modrak", "https://stanislav.gq"]
-    - ["John Paul Wohlscheid", "https://gitpi.us"]
+* [Automate the Boring Stuff with Python](https://automatetheboringstuff.com)
+* [The Official Docs](https://docs.python.org/3/)
+* [Hitchhiker's Guide to Python](https://docs.python-guide.org/en/latest/)
+* [Python Course](https://www.python-course.eu)
+* [Free Interactive Python Course](http://www.Kikodo.io)
+* [First Steps With Python](https://realpython.com/learn/python-first-steps/)
+* [A curated list of awesome Python frameworks, libraries and software](https://github.com/vinta/awesome-python)
+* [30 Python Language Features and Tricks You May Not Know About](https://sahandsaba.com/thirty-python-language-features-and-tricks-you-may-not-know.html)
+* [Official Style Guide for Python](https://www.python.org/dev/peps/pep-0008/)
+* [Python 3 Computer Science Circles](https://cscircles.cemc.uwaterloo.ca/)
+* [Dive Into Python 3](https://www.diveintopython3.net/index.html)
+* [A Crash Course in Python for Scientists](https://nbviewer.jupyter.org/gist/anonymous/5924718)
+* [Python Tutorial for Intermediates](https://pythonbasics.org/)
+* [Build a Desktop App with Python](https://pythonpyqt.com/)

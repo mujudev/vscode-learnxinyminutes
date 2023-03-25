@@ -1,12 +1,6 @@
----
-category: tool
-tool: compojure
-contributors:
-    - ["Adam Bard", "http://adambard.com/"]
-filename: learncompojure.clj
----
+# Compojure
 
-## Getting Started with Compojure
+## Getting Started
 
 Compojure is a DSL for *quickly* creating *performant* web applications
 in Clojure with minimal effort:
@@ -278,3 +272,9 @@ Further reading:
 * [Official Compojure Documentation](https://github.com/weavejester/compojure/wiki)
 
 * [Clojure for the Brave and True](http://www.braveclojure.com/)
+
+---
+
+## Contributors
+
+    - ["Adam Bard", "http://adambard.com/"]

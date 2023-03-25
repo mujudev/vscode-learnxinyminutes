@@ -1,12 +1,4 @@
----
-language: elixir
-contributors:
-    - ["Joao Marques", "https://github.com/mrshankly"]
-    - ["Dzianis Dashkevich", "https://github.com/dskecse"]
-    - ["Ryan Plant", "https://github.com/ryanplant-au"]
-    - ["Ev Bogdanov", "https://github.com/evbogdanov"]
-filename: learnelixir.ex
----
+# Elixir
 
 Elixir is a modern functional language built on top of the Erlang VM.
 It's fully compatible with Erlang, but features a more standard syntax
@@ -458,3 +450,12 @@ Agent.update(my_agent, fn colors -> ["blue" | colors] end)
 * ["Learn You Some Erlang for Great Good!"](https://learnyousomeerlang.com/) by Fred Hebert
 * ["Programming Erlang: Software for a Concurrent World"](https://pragprog.com/book/jaerlang2/programming-erlang) by Joe Armstrong
 * [Introduction to Elixir](https://learn-elixir.com/)
+
+---
+
+## Contributors
+
+    - ["Joao Marques", "https://github.com/mrshankly"]
+    - ["Dzianis Dashkevich", "https://github.com/dskecse"]
+    - ["Ryan Plant", "https://github.com/ryanplant-au"]
+    - ["Ev Bogdanov", "https://github.com/evbogdanov"]

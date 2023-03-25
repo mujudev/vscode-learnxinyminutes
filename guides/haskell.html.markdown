@@ -1,9 +1,4 @@
----
-language: Haskell
-filename: learnhaskell.hs
-contributors:
-    - ["Adit Bhargava", "http://adit.io"]
----
+# Haskell
 
 Haskell was designed as a practical, purely functional programming
 language. It's famous for its monads and its type system, but I keep coming back
@@ -605,3 +600,9 @@ You can find a much gentler introduction from the excellent
 [Learn you a Haskell](http://learnyouahaskell.com/),
 [Happy Learn Haskell Tutorial](http://www.happylearnhaskelltutorial.com/) or
 [Real World Haskell](http://book.realworldhaskell.org/).
+
+---
+
+## Contributors
+
+    - ["Adit Bhargava", "http://adit.io"]

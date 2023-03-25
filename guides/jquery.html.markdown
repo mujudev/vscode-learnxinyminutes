@@ -1,11 +1,4 @@
----
-category: tool
-tool: jquery
-contributors:
-    - ["Sawyer Charles", "https://github.com/xssc"]
-    - ["Devansh Patil", "https://github.com/subtra3t"]
-filename: jquery.js
----
+# jQuery
 
 jQuery is a JavaScript library that helps you "do more, write less". It makes many common JavaScript tasks and makes them easier to write. jQuery is used by many big companies and developers everywhere. It makes AJAX, event handling, document manipulation, and much more, easier and faster.
 
@@ -132,3 +125,10 @@ $('p').each(function() {
 ## Further Reading
 
 * [Codecademy - jQuery](https://www.codecademy.com/learn/learn-jquery) A good introduction to jQuery in a "learn by doing it" format.
+
+---
+
+## Contributors
+    
+    - ["Sawyer Charles", "https://github.com/xssc"]
+    - ["Devansh Patil", "https://github.com/subtra3t"]

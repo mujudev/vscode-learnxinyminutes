@@ -1,10 +1,4 @@
----
-language: hy
-filename: learnhy.hy
-contributors:
-    - ["Abhishek L", "http://twitter.com/abhishekl"]
-    - ["Zirak", "http://zirak.me"]
----
+# Hy
 
 Hy is a lisp dialect built on top of python. This is achieved by
 converting hy code to python's abstract syntax tree (ast). This allows
@@ -209,3 +203,10 @@ Hy docs are here: [http://hy.readthedocs.org](http://hy.readthedocs.org)
 Hy's GitHub repo: [http://github.com/hylang/hy](http://github.com/hylang/hy)
 
 On freenode irc #hy, twitter hashtag #hylang
+
+---
+
+## Contributors
+    
+    - ["Abhishek L", "http://twitter.com/abhishekl"]
+    - ["Zirak", "http://zirak.me"]

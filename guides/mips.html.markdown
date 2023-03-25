@@ -1,9 +1,4 @@
----
-language: "MIPS Assembly"
-filename: MIPS.asm
-contributors:
-  - ["Stanley Lim", "https://github.com/Spiderpig86"]
----
+# MIPS
 
 The MIPS (Microprocessor without Interlocked Pipeline Stages) Assembly language
 is designed to work with the MIPS microprocessor paradigm designed by J. L. 
@@ -375,3 +370,9 @@ gateways and routers.
 .include "somefile.asm"
 
 ```
+
+---
+
+## Contributors
+
+  - ["Stanley Lim", "https://github.com/Spiderpig86"]

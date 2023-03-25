@@ -1,10 +1,4 @@
----
-language: Pascal
-filename: learnpascal.pas
-contributors:
-    - ["Ganesha Danu", "http://github.com/blinfoldking"]
-    - ["Keith Miyake", "https://github.com/kaymmm"]
----
+# Pascal
 
 
 >Pascal is an imperative and procedural programming language, which Niklaus Wirth designed in 1968–69 and published in 1970, as a small, efficient language intended to encourage good programming practices using structured programming and data structuring. It is named in honor of the French mathematician, philosopher and physicist Blaise Pascal. 
@@ -204,3 +198,9 @@ End.
 
 ```
 
+---
+
+## Contributors
+
+    - ["Ganesha Danu", "http://github.com/blinfoldking"]
+    - ["Keith Miyake", "https://github.com/kaymmm"]

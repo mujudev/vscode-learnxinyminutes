@@ -1,10 +1,4 @@
----
-category: tool
-tool: PyQT
-filename: learnpyqt.py
-contributors:
-    - ["Nathan Hughes", "https://github.com/sirsharpest"]
----
+# PyQt
 
 **Qt** is a widely-known framework for developing cross-platform software that can be run on various software and hardware platforms with little or no change in the code, while having the power and speed of native applications. Though **Qt** was originally written in *C++*.
 
@@ -80,3 +74,9 @@ def showdialog():
 if __name__ == '__main__':
     window()
 ```
+
+---
+
+## Contributors
+
+    - ["Nathan Hughes", "https://github.com/sirsharpest"]

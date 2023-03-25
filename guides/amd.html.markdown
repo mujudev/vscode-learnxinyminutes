@@ -1,12 +1,4 @@
----
-category: tool
-tool: amd
-contributors:
-    - ["Frederik Ring", "https://github.com/m90"]
-filename: learnamd.js
----
-
-## Getting Started with AMD
+# AMD
 
 The **Asynchronous Module Definition** API specifies a mechanism for defining
 JavaScript modules such that the module and its dependencies can be asynchronously
@@ -210,3 +202,8 @@ An incredibly detailed [overview of build options](https://github.com/jrburke/r.
 * [curl.js](https://github.com/cujojs/curl)
 * [lsjs](https://github.com/zazl/lsjs)
 * [mmd](https://github.com/alexlawrence/mmd)
+
+---
+
+## Contributors
+    - ["Frederik Ring", "https://github.com/m90"]

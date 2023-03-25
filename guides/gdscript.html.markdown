@@ -1,9 +1,4 @@
----
-language: GDScript
-contributors:
-    - ["Wichamir", "https://github.com/Wichamir/"]
-filename: learngdscript.gd
----
+# GDScript
 
 GDScript is a dynamically typed scripting language made specifically for
 free and open source game engine Godot. GDScript's syntax is similar to
@@ -323,3 +318,9 @@ signal example(arg: int) # ERROR! Signals can't take typed arguments!
 * [Signals](https://docs.godotengine.org/en/stable/getting_started/step_by_step/signals.html)
 * [GDQuest](https://www.gdquest.com/)
 * [GDScript.com](https://gdscript.com/)
+
+---
+
+## Contributors
+
+    - ["Wichamir", "https://github.com/Wichamir/"]

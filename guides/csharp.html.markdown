@@ -1,16 +1,4 @@
----
-language: C#
-contributors:
-    - ["Irfan Charania", "https://github.com/irfancharania"]
-    - ["Max Yankov", "https://github.com/golergka"]
-    - ["Melvyn Laïly", "http://x2a.yt"]
-    - ["Shaun McCarthy", "http://www.shaunmccarthy.com"]
-    - ["Wouter Van Schandevijl", "http://github.com/laoujin"]
-    - ["Jo Pearce", "http://github.com/jdpearce"]
-    - ["Chris Zimmerman", "https://github.com/chriszimmerman"]
-    - ["Shawn McGuire", "https://github.com/bigbash"]
-filename: LearnCSharp.cs
----
+# C#
 
 C# is an elegant and type-safe object-oriented language that enables developers to build a variety of secure and robust applications that run on the cross-platform .NET framework.
 
@@ -1349,3 +1337,15 @@ namespace Csharp7
  * [Windows Forms Programming in C#](http://www.amazon.com/Windows-Forms-Programming-Chris-Sells/dp/0321116208)
  * [freeCodeCamp - C# Tutorial for Beginners](https://www.youtube.com/watch?v=GhQdlIFylQ8)
  
+---
+
+## Contributors
+
+    - ["Irfan Charania", "https://github.com/irfancharania"]
+    - ["Max Yankov", "https://github.com/golergka"]
+    - ["Melvyn Laïly", "http://x2a.yt"]
+    - ["Shaun McCarthy", "http://www.shaunmccarthy.com"]
+    - ["Wouter Van Schandevijl", "http://github.com/laoujin"]
+    - ["Jo Pearce", "http://github.com/jdpearce"]
+    - ["Chris Zimmerman", "https://github.com/chriszimmerman"]
+    - ["Shawn McGuire", "https://github.com/bigbash"]

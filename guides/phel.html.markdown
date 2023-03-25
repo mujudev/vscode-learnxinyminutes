@@ -1,9 +1,4 @@
----
-language: phel
-filename: learnphel.phel
-contributors:
-    - ["Chemaclass", "https://github.com/Chemaclass"]
----
+# Phel
 
 [Phel](https://phel-lang.org/) is a functional programming language that compiles to PHP.
 It is a dialect of Lisp inspired by Clojure and Janet.
@@ -335,3 +330,9 @@ keymap #=> {:a 1 :b 2 :c 3}
 This is far from exhaustive, but hopefully it's enough to get you on your feet.
 
 Read the full documentation in the website: [https://phel-lang.org/](https://phel-lang.org/documentation/getting-started/)
+
+---
+
+## Contributors
+
+    - ["Chemaclass", "https://github.com/Chemaclass"]

@@ -1,11 +1,4 @@
----
-language: markdown
-contributors:
-    - ["Dan Turkel", "http://danturkel.com/"]
-    - ["Jacob Ward", "http://github.com/JacobCWard/"]
-    - ["Tomáš Hartman", "https://github.com/tomas-hartman"]
-filename: markdown.md
----
+# Markdown
 
 
 Markdown was created by John Gruber in 2004. It's meant to be an easy to read
@@ -385,3 +378,11 @@ If you want to learn more on some major Markdown flavors' features, see:
 
 - [GitHub flavored Markdown](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
 - [GitLab flavored Markdown](https://docs.gitlab.com/ee/user/markdown.html)
+
+---
+
+## Contributors
+
+    - ["Dan Turkel", "http://danturkel.com/"]
+    - ["Jacob Ward", "http://github.com/JacobCWard/"]
+    - ["Tomáš Hartman", "https://github.com/tomas-hartman"]

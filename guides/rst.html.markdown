@@ -1,10 +1,4 @@
----
-language: restructured text (RST)
-contributors:
-    - ["DamienVGN", "https://github.com/martin-damien"]
-    - ["Andre Polykanine", "https://github.com/Oire"]
-filename: restructuredtext.rst
----
+# RST
 
 RST, Restructured Text, is a file format created by the Python community to write documentation. It is part of [Docutils](https://docutils.sourceforge.io/rst.html).
 
@@ -113,3 +107,10 @@ But there are more complex applications that use the RST format:
 ## Readings
 
 - [Official quick reference](http://docutils.sourceforge.net/docs/user/rst/quickref.html)
+
+---
+
+## Contributors
+
+    - ["DamienVGN", "https://github.com/martin-damien"]
+    - ["Andre Polykanine", "https://github.com/Oire"]
