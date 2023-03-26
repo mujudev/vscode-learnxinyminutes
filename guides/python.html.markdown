@@ -1,18 +1,4 @@
----
-language: Python
-contributors:
-    - ["Louie Dinh", "http://pythonpracticeprojects.com"]
-    - ["Steven Basart", "http://github.com/xksteven"]
-    - ["Andre Polykanine", "https://github.com/Oire"]
-    - ["Zachary Ferguson", "http://github.com/zfergus2"]
-    - ["evuez", "http://github.com/evuez"]
-    - ["Rommel Martinez", "https://ebzzry.io"]
-    - ["Roberto Fernandez Diaz", "https://github.com/robertofd1995"]
-    - ["caminsha", "https://github.com/caminsha"]
-    - ["Stanislav Modrak", "https://stanislav.gq"]
-    - ["John Paul Wohlscheid", "https://gitpi.us"]
-filename: learnpython.py
----
+# Python
 
 Python was created by Guido van Rossum in the early 90s. It is now one of the
 most popular languages in existence. I fell in love with Python for its
@@ -1059,3 +1045,18 @@ print(say(say_please=True))  # Can you buy me a beer? Please! I am poor :(
 * [A Crash Course in Python for Scientists](https://nbviewer.jupyter.org/gist/anonymous/5924718)
 * [Python Tutorial for Intermediates](https://pythonbasics.org/)
 * [Build a Desktop App with Python](https://pythonpyqt.com/)
+
+---
+
+## Contributors
+
+    - ["Louie Dinh", "http://pythonpracticeprojects.com"]
+    - ["Steven Basart", "http://github.com/xksteven"]
+    - ["Andre Polykanine", "https://github.com/Oire"]
+    - ["Zachary Ferguson", "http://github.com/zfergus2"]
+    - ["evuez", "http://github.com/evuez"]
+    - ["Rommel Martinez", "https://ebzzry.io"]
+    - ["Roberto Fernandez Diaz", "https://github.com/robertofd1995"]
+    - ["caminsha", "https://github.com/caminsha"]
+    - ["Stanislav Modrak", "https://stanislav.gq"]
+    - ["John Paul Wohlscheid", "https://gitpi.us"]
