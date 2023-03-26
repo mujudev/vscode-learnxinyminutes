@@ -1,7 +1,7 @@
 {
   "name": "learnxinyminutes",
   "displayName": "learnxinyminutes",
-  "description": "",
+  "description": "Open cheatsheets from 'Learn X in Y Minutes' within VS Code",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.76.0"
@@ -14,8 +14,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "learnxinyminutes.helloWorld",
-        "title": "Hello World"
+        "command": "learnxinyminutes.autoOpenTemplate",
+        "title": "Open Cheatsheet (auto)"
       }
     ]
   },
