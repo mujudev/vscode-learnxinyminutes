@@ -1,11 +1,8 @@
 # TODO
 
-This is the todo file for the `learnxinyminutes` VS Code Extension
-
-## Code
-
-- [ ] Create map for managing languageIds and corresponding cheatsheets
-- [ ] Add option to manually choose cheatsheet
+### Release 1.0
+- [x] Create script for converting all markdown files into GFM in HTML form
+- [x] Create map for managing languageIds and corresponding cheatsheets
 - [ ] Template Cleanup
   - [ ] Command names
   - [ ] Remove guide comments
@@ -13,13 +10,7 @@ This is the todo file for the `learnxinyminutes` VS Code Extension
   - [ ] Remove quickstart guide
   - [ ] Remove unused npm packages
 
-## Release
+### BACKLOG
+- [ ] Add ability to configure default cheatsheet for each language
 
-- [ ] Push repo to GitHub
-- [ ] Publish to the VS Code Extension Marketplace
-
-# BACKLOG
-
-# DONE
-
-- [x] Create script for converting all markdown files into GFM in HTML form
+## DONE
