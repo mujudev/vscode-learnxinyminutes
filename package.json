@@ -4,6 +4,7 @@
   "description": "Open cheatsheets from 'Learn X in Y Minutes' within VS Code",
   "icon": "images/icon.png",
   "version": "0.1.0",
+  "publisher": "mujundi",
   "license": "CC BY-SA 3.0",
   "repository": {
     "type": "git",
