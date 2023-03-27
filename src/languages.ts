@@ -1,7 +1,7 @@
 // keys: vscode language ID
 // values: template file prefix
 
-export const preset = new Map<string, string>([
+export const presets = new Map<string, string>([
     ["bibtex", "latex"],
     ["clojure", "clojure"],
     ["coffeescript", "coffeescript"],
@@ -55,5 +55,6 @@ export const preset = new Map<string, string>([
     ["vb", "visualbasic"],
     ["xml", "xml"],
     ["yaml", "yaml"],
-    ["zig", "zig"]
+    ["zig", "zig"],
+    ["CONTRIBUTING", "CONTRIBUTING"] // for if a language ID is not found
 ]);
