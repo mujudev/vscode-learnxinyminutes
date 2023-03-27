@@ -7,10 +7,11 @@ The open source repository behind the cheatsheets on [learnxinyminutes](https://
 
 ## Features
 
-![Demo](images/demo.gif)
-
 - Searchable cheatsheets
 - Automatic file associations
+
+![Demo](images/demo.gif)
+
 
 ### Commands
 
