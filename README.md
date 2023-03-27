@@ -1,25 +1,27 @@
 # learnxinyminutes (VS Code Extension)
 
-This extension uses the materials from [learnxinyminutes](https://learnxinyminutes.com/), a site with cheatsheets that can get you quickly up and running in an unfamiliar language.
+This extension uses the materials from [learnxinyminutes](https://learnxinyminutes.com/), a site with cheatsheets that can get you quickly up and running in an unfamiliar language. Instead of having to navigate to a browser, the cheatsheets can now be opened directly within VS Code.
+
+The open source repository behind the cheatsheets on [learnxinyminutes](https://learnxinyminutes.com/) can be found at [learnxinyminutes-docs](https://github.com/adambard/learnxinyminutes-docs). As cheatsheets get added and improved, they will be ported into this extension!
 
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+![Demo](images/demo.gif)
 
-For example if there is an image subfolder under your extension project workspace:
+- Searchable cheatsheets
+- Automatic file associations
 
-\!\[feature X\]\(images/feature-x.png\)
+### Commands
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+- `LearnXinYMinutes: Open Cheatsheet (auto)`
+    - Opens the default cheatsheet for the file type that is active.
+- Coming soon:
+    - Command for manually opening cheatsheets
+    - Command for manually configuring a file type association
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+- Coming soon:
+    - Configure auto focus when opening a cheatsheet
+    - Configure whether the cheat sheet opens as side view, new tab, or new window. 

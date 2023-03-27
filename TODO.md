@@ -3,14 +3,18 @@
 ### Release 1.0
 - [x] Create script for converting all markdown files into GFM in HTML form
 - [x] Create map for managing languageIds and corresponding cheatsheets
-- [ ] Template Cleanup
+- [x] Write README
+- [x] Template Cleanup
   - [x] Command names
-  - [ ] Remove guide comments
-  - [ ] Remove console logs
-  - [ ] Remove quickstart guide
+  - [x] Remove guide comments
+  - [x] Remove console logs
+  - [x] Remove quickstart guide
   - [x] Remove unused npm packages
 
 ### BACKLOG
-- [ ] Add ability to configure default cheatsheet for each language
+- [ ] Add ability to configure custom cheatsheet associations for each languageId
+- [ ] Add webview content persistence on restart/reload using a serializer
+- [ ] Write tests for HTML content generation
+- [ ] Support guides written in non-english languages
 
 ## DONE

@@ -2,7 +2,13 @@
   "name": "learnxinyminutes",
   "displayName": "learnxinyminutes",
   "description": "Open cheatsheets from 'Learn X in Y Minutes' within VS Code",
-  "version": "0.0.1",
+  "icon": "images/icon.png",
+  "version": "0.1.0",
+  "license": "CC BY-SA 3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mujundi/vscode-learnxinyminutes"
+  },
   "engines": {
     "vscode": "^1.76.0"
   },
@@ -15,7 +21,7 @@
     "commands": [
       {
         "command": "learnxinyminutes.autoOpenTemplate",
-        "title": "Open Cheatsheet (auto)"
+        "title": "LearnXinYMinutes: Open Cheatsheet (auto)"
       }
     ]
   },
