@@ -1,6 +1,9 @@
 # TODO
 
+- [ ] Create and update CHANGELOG
+
 ### Release 0.2.0
+
 - [ ] Add ability to configure custom cheatsheet associations for each languageId
 - [ ] Add webview content persistence on restart/reload using a serializer
 - [ ] Write tests for HTML content generation
@@ -12,6 +15,7 @@
 ## DONE
 
 ### Release 0.1.0
+
 - [x] Create script for converting all markdown files into GFM in HTML form
 - [x] Create map for managing languageIds and corresponding cheatsheets
 - [x] Write README
