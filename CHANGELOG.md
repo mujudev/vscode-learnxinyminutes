@@ -6,4 +6,13 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
-- Initial release
+- 
+
+## [0.1.0] - 2023-03-27
+
+### Added
+
+- Ability to render cheatsheets in webview window
+- Automatic file type recognition
+- Command: `LearnXinYMinutes: Open Cheatsheet (auto)`
+    - Uses automatic file type recognition to select and render cheatsheet in a webview
