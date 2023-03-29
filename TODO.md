@@ -1,10 +1,11 @@
 # TODO
 
-- [ ] Create and update CHANGELOG
-
 ### Release 0.2.0
 
-- [ ] Add ability to configure custom cheatsheet associations for each languageId
+- [x] Add configuration for custom cheatsheet associations for each languageId
+- [ ] Extract configuration descriptions to `package.nls.json` file
+- [ ] Overwrite default assocations with custom assocations from config
+- [ ] Add command that sets custom file assocation
 - [ ] Add webview content persistence on restart/reload using a serializer
 - [ ] Write tests for HTML content generation
 

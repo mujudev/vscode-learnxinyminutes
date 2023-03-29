@@ -22,9 +22,22 @@
     "commands": [
       {
         "command": "learnxinyminutes.autoOpenTemplate",
-        "title": "LearnXinYMinutes: Open Cheatsheet (auto)"
+        "title": "learnxinyminutes: Open Cheatsheet (auto)"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "learnxinyminutes",
+      "properties": {
+        "customFileAssocations": {
+          "type":"object",
+          "default": {},
+          "description": "Custom file associations can be configured and will overwrite default mappings.",
+          "additionalProperties": {
+            "type":"string"
+          }
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
