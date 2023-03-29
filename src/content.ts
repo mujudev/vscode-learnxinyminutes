@@ -1,16 +1,16 @@
-import { presets } from "./languages";
+import fileAssociations from "./fileAssociations";
 import * as fs from 'fs';
 import * as path from 'path';
 
 
 export function getLanguageTemplate(extensionPath: string, languageId: string): string {
     let errorMsg = "";
-    if (!presets.has(languageId)) {
+    if (!fileAssociations.has(languageId)) {
         let gap = "<br><br><br><br><br>"; // lol
         errorMsg = `<h2>Uh, oh! It looks like there is no cheatsheet associated with this file type.</h2>${gap}<hr>`;
     }
 
-    const prefix = presets.get(languageId) || "CONTRIBUTING";
+    const prefix = fileAssociations.get(languageId) || "CONTRIBUTING";
     const templatePath = path.join(extensionPath, "templates/", prefix + ".html");
     const templateHtml = fs.readFileSync(templatePath, 'utf8');
 

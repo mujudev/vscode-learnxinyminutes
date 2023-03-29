@@ -14,7 +14,7 @@
     "vscode": "^1.76.0"
   },
   "categories": [
-    "Other"
+    "Education"
   ],
   "activationEvents": [],
   "main": "./dist/extension.js",
@@ -28,10 +28,10 @@
     "configuration": {
       "title": "learnxinyminutes",
       "properties": {
-        "customFileAssocations": {
+        "learnxinyminutes.customFileAssociations": {
           "type":"object",
           "default": {},
-          "description": "Custom file associations can be configured and will overwrite default mappings.",
+          "markdownDescription": "The custom mappings here will take priority over default mappings.\n\n Key: `{language identifier}`\n\n Value: `{cheatsheet prefix}`",
           "additionalProperties": {
             "type":"string"
           }

@@ -1,7 +1,12 @@
+import { workspace as ws } from "vscode";
+
+// key-value pairs from 'customMap' will win over those in 'presets'
+const customAssociations: object = ws.getConfiguration('learnxinyminutes').get('customFileAssociations') || {};
+const customMap = new Map(Object.entries(customAssociations));
+
 // keys: vscode language ID
 // values: template file prefix
-
-export const presets = new Map<string, string>([
+const presets = new Map<string, string>([
     ["bibtex", "latex"],
     ["clojure", "clojure"],
     ["coffeescript", "coffeescript"],
@@ -58,3 +63,5 @@ export const presets = new Map<string, string>([
     ["zig", "zig"],
     ["CONTRIBUTING", "CONTRIBUTING"] // for if a language ID is not found
 ]);
+
+export default new Map([...presets, ...customMap]);
