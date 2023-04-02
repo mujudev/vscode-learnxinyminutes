@@ -1,11 +1,31 @@
 import * as vscode from "vscode";
-import { join } from "path";
 import { getLanguageTemplate } from "./content";
+import { presets } from "./fileAssociations";
 
 
 export function activate(context: vscode.ExtensionContext) {
-	let disposable = vscode.commands.registerCommand(
-		"learnxinyminutes.autoOpenTemplate",
+	let setFileAssociation = vscode.commands.registerCommand(
+		"learnxinyminutes.setAssociation",
+		async () => {
+			const languageId = vscode.window.activeTextEditor?.document.languageId || "";
+			const config = vscode.workspace.getConfiguration('learnxinyminutes');
+			let customMap = config.get('customFileAssociations') || {};
+
+			let options: vscode.QuickPickOptions = {
+				title: "Set Custom Cheatsheet Association",
+				onDidSelectItem: (item) => {
+					customMap[languageId] = item;
+					config.update('customFileAssociations', customMap);
+				}
+			};
+
+			const items = Array.from(presets.keys());
+			vscode.window.showQuickPick(items, options);
+		}
+	);
+
+	let autoOpen = vscode.commands.registerCommand(
+		"learnxinyminutes.autoOpen",
 		() => {
 			const languageId = vscode.window.activeTextEditor?.document.languageId || "";
 			const panelTitle = "Learn " + languageId[0].toUpperCase() + languageId.slice(1);
@@ -26,7 +46,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	);
 
-	context.subscriptions.push(disposable);
+	context.subscriptions.push(setFileAssociation, autoOpen);
 }
 
 export function deactivate() { }

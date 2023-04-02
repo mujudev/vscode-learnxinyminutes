@@ -2,10 +2,10 @@
 
 ### Release 0.2.0
 
-- [x] Add configuration for custom cheatsheet associations for each languageId
-- [x] Overwrite default assocations with custom assocations from config
-- [ ] Add command that sets custom file assocation
-- [ ] Add webview content persistence on restart/reload using a serializer
+- [x] feat: Add configuration for custom cheatsheet associations for each languageId
+- [x] feat: Overwrite default assocations with custom assocations from config
+- [x] feat: Add command that sets custom file assocation
+- [ ] fix: Add webview content persistence on restart/reload using a serializer
 
 ### BACKLOG
 
