@@ -16,13 +16,17 @@
   "categories": [
     "Education"
   ],
-  "activationEvents": [],
+  "activationEvents": ["*"],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "learnxinyminutes.autoOpenTemplate",
+        "command": "learnxinyminutes.autoOpen",
         "title": "learnxinyminutes: Open Cheatsheet (auto)"
+      },
+      {
+        "command": "learnxinyminutes.setAssociation",
+        "title": "learnxinyminutes: Set File Association"
       }
     ],
     "configuration": {

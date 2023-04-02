@@ -6,7 +6,7 @@ const customMap = new Map(Object.entries(customAssociations));
 
 // keys: vscode language ID
 // values: template file prefix
-const presets = new Map<string, string>([
+export const presets = new Map<string, string>([
     ["bibtex", "latex"],
     ["clojure", "clojure"],
     ["coffeescript", "coffeescript"],
@@ -61,7 +61,7 @@ const presets = new Map<string, string>([
     ["xml", "xml"],
     ["yaml", "yaml"],
     ["zig", "zig"],
-    ["CONTRIBUTING", "CONTRIBUTING"] // for if a language ID is not found
+    ["FAQ", "FAQ"] // for if a language ID is not found
 ]);
 
 export default new Map([...presets, ...customMap]);
