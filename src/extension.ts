@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { getLanguageTemplate } from "./content";
-import { presets } from "./fileAssociations";
+import fileAssociations, { presets } from "./fileAssociations";
 
 
 export function activate(context: vscode.ExtensionContext) {
@@ -28,7 +28,8 @@ export function activate(context: vscode.ExtensionContext) {
 		"learnxinyminutes.autoOpen",
 		() => {
 			const languageId = vscode.window.activeTextEditor?.document.languageId || "";
-			const panelTitle = "Learn " + languageId[0].toUpperCase() + languageId.slice(1);
+			const header = fileAssociations.get(languageId) || "FAQ";
+			const panelTitle = "Learn " + header[0].toUpperCase() + header.slice(1);
 			const panel = vscode.window.createWebviewPanel(
 				"markdown.preview",
 				panelTitle,
@@ -43,6 +44,9 @@ export function activate(context: vscode.ExtensionContext) {
 			);
 
 			panel.webview.html = getLanguageTemplate(context.extensionPath, languageId);
+			panel.onDidDispose(() => {
+				panel.dispose();
+			});
 		}
 	);
 

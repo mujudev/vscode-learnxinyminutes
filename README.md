@@ -8,7 +8,7 @@ The open source repository behind the cheatsheets on [learnxinyminutes](https://
 ## Features
 
 - Searchable cheatsheets
-- Automatic file associations
+- Automatic and configurable file associations
 
 ![Demo](images/demo.gif)
 
@@ -17,12 +17,15 @@ The open source repository behind the cheatsheets on [learnxinyminutes](https://
 
 - `LearnXinYMinutes: Open Cheatsheet (auto)`
     - Opens the default cheatsheet for the file type that is active.
+- `LearnXinYMinutes: Set File Association`
+    - Sets the file type association with a specific cheatsheet
 - Coming soon:
     - Command for manually opening cheatsheets
-    - Command for manually configuring a file type association
 
 ## Extension Settings
 
+- `LearnXinYMinutes: Custom File Associations`
+    - Key-value pairs that will override any file associations.
+    - (Recommended) Set new associations with the `LearnXinYMinutes: Set File Association` command
 - Coming soon:
-    - Configure auto focus when opening a cheatsheet
     - Configure whether the cheat sheet opens as side view, new tab, or new window. 
